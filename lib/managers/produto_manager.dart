@@ -37,6 +37,9 @@ class ProdutoManager {
     file.writeAsStringSync(jsonString);
   }
 
+  /// Public method to save data (for Flutter GUI)
+  void salvarDados() => _salvarDados();
+
   /// Adiciona um novo produto
   void adicionarProduto() {
     print('\n--- Cadastro de Produto ---');

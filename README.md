@@ -1,10 +1,10 @@
 # System Loja
 
-Sistema de gerenciamento de loja desenvolvido em Dart com persistência de dados em JSON.
+Sistema de gerenciamento de loja desenvolvido em Flutter com persistência de dados em JSON.
 
 ## Descrição
 
-Sistema CLI (Command Line Interface) para gerenciamento de loja com as seguintes funcionalidades:
+Aplicação Flutter com interface gráfica para gerenciamento de loja com as seguintes funcionalidades:
 
 ### Funcionalidades
 
@@ -29,24 +29,24 @@ Sistema CLI (Command Line Interface) para gerenciamento de loja com as seguintes
 
 ## Requisitos
 
-- Dart SDK 3.10.1 ou superior
+- Flutter SDK 3.10 ou superior
+- Dart SDK 3.10.1 ou superior (incluído no Flutter)
 
-## Como Instalar o Dart
+## Como Instalar o Flutter
 
 ### Linux/macOS
 ```bash
-# Usando Homebrew (macOS)
-brew tap dart-lang/dart
-brew install dart
+# Baixe o Flutter SDK
+wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.27.1-stable.tar.xz
+tar xf flutter_linux_3.27.1-stable.tar.xz
+export PATH="$PATH:`pwd`/flutter/bin"
 
-# Ou baixe diretamente
-wget https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-x64-release.zip
-unzip dartsdk-linux-x64-release.zip
-export PATH="$PATH:/path/to/dart-sdk/bin"
+# Verifique a instalação
+flutter doctor
 ```
 
 ### Windows
-Baixe o instalador em: https://dart.dev/get-dart
+Baixe o instalador em: https://flutter.dev/docs/get-started/install/windows
 
 ## Como Executar
 
@@ -56,9 +56,24 @@ git clone https://github.com/saulogatti/system_loja.git
 cd system_loja
 ```
 
-2. Execute o sistema:
+2. Instale as dependências:
 ```bash
-dart run
+flutter pub get
+```
+
+3. Execute o aplicativo:
+```bash
+# Para executar no Chrome (Web)
+flutter run -d chrome
+
+# Para executar no Windows
+flutter run -d windows
+
+# Para executar no Linux
+flutter run -d linux
+
+# Para executar no Android/iOS (com emulador/dispositivo conectado)
+flutter run
 ```
 
 ## Estrutura de Dados
@@ -72,10 +87,13 @@ Todos os dados são salvos em formato JSON no diretório `data/`:
 
 ```
 system_loja/
-├── bin/
-│   └── system_loja.dart       # Ponto de entrada do sistema
 ├── lib/
-│   ├── system_loja.dart       # Biblioteca principal
+│   ├── main.dart              # Ponto de entrada do aplicativo Flutter
+│   ├── screens/
+│   │   ├── home_screen.dart           # Tela inicial com menu
+│   │   ├── cliente_screen.dart        # Tela de cadastro de clientes
+│   │   ├── produto_screen.dart        # Tela de cadastro de produtos
+│   │   └── nota_fiscal_screen.dart    # Tela de cadastro de notas fiscais
 │   ├── models/
 │   │   ├── cliente.dart       # Modelo de dados Cliente
 │   │   ├── produto.dart       # Modelo de dados Produto
@@ -85,20 +103,40 @@ system_loja/
 │   │   ├── produto_manager.dart      # Gerenciador de produtos
 │   │   └── nota_fiscal_manager.dart  # Gerenciador de notas fiscais
 │   └── utils/
-│       └── input_helper.dart  # Helper para entrada de dados
+│       └── input_helper.dart  # Helper para entrada de dados (CLI legacy)
 ├── data/                      # Diretório para arquivos JSON
 ├── pubspec.yaml
 └── README.md
 ```
 
-## Exemplo de Uso
+## Funcionalidades da Interface
 
-1. Selecione a opção 1 para cadastrar um cliente
-2. Selecione a opção 2 para cadastrar produtos
-3. Selecione a opção 3 para criar uma nota fiscal de compra
-4. Selecione a opção 4 para sair do sistema
+### Tela Inicial
+- Menu principal com acesso às 3 funcionalidades
+- Cards interativos com ícones e cores diferenciadas
+
+### Tela de Clientes
+- Formulário para cadastro de novos clientes
+- Lista de clientes cadastrados
+- Detalhes do cliente em modal
+
+### Tela de Produtos
+- Formulário para cadastro de novos produtos
+- Lista de produtos cadastrados
+- Detalhes do produto em modal
+- Controle de estoque
+
+### Tela de Notas Fiscais
+- Listagem de todas as notas fiscais
+- Botão flutuante para criar nova nota
+- Formulário com seleção de cliente
+- Adição de múltiplos produtos
+- Cálculo automático do valor total
+- Detalhes da nota em modal
 
 ## Tecnologias
 
+- **Flutter 3.27**: Framework de UI multiplataforma
 - **Dart 3.10.1**: Linguagem de programação
+- **Material Design 3**: Sistema de design
 - **JSON**: Formato de persistência de dados

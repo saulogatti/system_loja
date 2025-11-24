@@ -39,6 +39,9 @@ class NotaFiscalManager {
     file.writeAsStringSync(jsonString);
   }
 
+  /// Public method to save data (for Flutter GUI)
+  void salvarDados() => _salvarDados();
+
   /// Carrega clientes do arquivo JSON
   List<Cliente> _carregarClientes() {
     final file = File('data/clientes.json');

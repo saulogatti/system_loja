@@ -37,6 +37,9 @@ class ClienteManager {
     file.writeAsStringSync(jsonString);
   }
 
+  /// Public method to save data (for Flutter GUI)
+  void salvarDados() => _salvarDados();
+
   /// Adiciona um novo cliente
   void adicionarCliente() {
     print('\n--- Cadastro de Cliente ---');
