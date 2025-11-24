@@ -1,2 +1,1 @@
-# system_loja
-Sistema de gerenciamento de loja
+A simple command-line application.
