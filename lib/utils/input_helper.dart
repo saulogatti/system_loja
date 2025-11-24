@@ -57,10 +57,10 @@ class InputHelper {
         continue;
       }
       
-      // Substitui vírgula por ponto para aceitar ambos os formatos
-      final inputNormalizado = input.replaceAll(',', '.');
+      // Replace comma with dot to accept both formats
+      final normalizedInput = input.replaceAll(',', '.');
       
-      final valor = double.tryParse(inputNormalizado);
+      final valor = double.tryParse(normalizedInput);
       if (valor == null) {
         print('Erro: Valor inválido! Digite um número decimal.');
         continue;

@@ -90,6 +90,7 @@ class ClienteManager {
     final cpf = InputHelper.lerString('Digite o CPF do cliente', obrigatorio: true);
     if (cpf == null) return;
 
+    // Using where().firstOrNull for null-safety pattern
     final cliente = clientes.where((c) => c.cpf == cpf).firstOrNull;
     if (cliente != null) {
       print('\nCliente encontrado:');

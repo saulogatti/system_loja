@@ -104,6 +104,7 @@ class ProdutoManager {
     final codigo = InputHelper.lerString('Digite o código do produto', obrigatorio: true);
     if (codigo == null) return;
 
+    // Using where().firstOrNull for null-safety pattern
     final produto = produtos.where((p) => p.codigo == codigo).firstOrNull;
     if (produto != null) {
       print('\nProduto encontrado:');

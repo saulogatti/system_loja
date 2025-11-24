@@ -95,6 +95,7 @@ class NotaFiscalManager {
     final clienteId = InputHelper.lerInt('Digite o ID do cliente', obrigatorio: true);
     if (clienteId == null) return;
 
+    // Using where().firstOrNull for null-safety pattern
     final clienteSelecionado = clientes.where((c) => c.id == clienteId).firstOrNull;
     if (clienteSelecionado == null) {
       print('Erro: Cliente não encontrado!');
@@ -123,6 +124,7 @@ class NotaFiscalManager {
       if (produtoId == null) continue;
       if (produtoId == 0) break;
 
+      // Using where().firstOrNull for null-safety pattern
       final produtoSelecionado = produtos.where((p) => p.id == produtoId).firstOrNull;
       if (produtoSelecionado == null) {
         print('Erro: Produto não encontrado!');
@@ -195,6 +197,7 @@ class NotaFiscalManager {
     final numeroNota = InputHelper.lerString('Digite o número da nota fiscal', obrigatorio: true);
     if (numeroNota == null) return;
 
+    // Using where().firstOrNull for null-safety pattern
     final notaFiscal = notasFiscais.where((nf) => nf.numeroNota == numeroNota).firstOrNull;
     if (notaFiscal != null) {
       print('\nNota Fiscal encontrada:');
