@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../managers/cliente_manager.dart';
-import '../models/cliente.dart';
+import '../core/managers/cliente_manager.dart';
+import '../core/models/cliente.dart';
 
 class ClienteScreen extends StatefulWidget {
   const ClienteScreen({super.key});
@@ -31,7 +31,7 @@ class _ClienteScreenState extends State<ClienteScreen> {
   void _adicionarCliente() {
     if (_formKey.currentState!.validate()) {
       final cpf = _cpfController.text.trim();
-      
+
       // Check if CPF already exists
       if (_manager.clientes.any((c) => c.cpf == cpf)) {
         ScaffoldMessenger.of(context).showSnackBar(

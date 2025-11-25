@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../managers/nota_fiscal_manager.dart';
-import '../managers/cliente_manager.dart';
-import '../managers/produto_manager.dart';
-import '../models/nota_fiscal.dart';
-import '../models/cliente.dart';
-import '../models/produto.dart';
+import '../core/managers/nota_fiscal_manager.dart';
+import '../core/managers/cliente_manager.dart';
+import '../core/managers/produto_manager.dart';
+import '../core/models/nota_fiscal.dart';
+import '../core/models/cliente.dart';
+import '../core/models/produto.dart';
 
 class NotaFiscalScreen extends StatefulWidget {
   const NotaFiscalScreen({super.key});
@@ -17,7 +17,7 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
   final NotaFiscalManager _manager = NotaFiscalManager();
   final ClienteManager _clienteManager = ClienteManager();
   final ProdutoManager _produtoManager = ProdutoManager();
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -321,7 +321,7 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
       }
 
       final numeroNota = _numeroNotaController.text.trim();
-      
+
       // Check if invoice number already exists
       if (widget.notaFiscalManager.notasFiscais.any((nf) => nf.numeroNota == numeroNota)) {
         ScaffoldMessenger.of(context).showSnackBar(

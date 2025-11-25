@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-import '../models/nota_fiscal.dart';
-import '../models/cliente.dart';
-import '../models/produto.dart';
-import '../utils/input_helper.dart';
+
+import 'package:system_loja/core/models/cliente.dart';
+import 'package:system_loja/core/models/nota_fiscal.dart';
+import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/utils/input_helper.dart';
 
 /// Gerenciador de Notas Fiscais
 class NotaFiscalManager {
@@ -12,64 +13,6 @@ class NotaFiscalManager {
 
   NotaFiscalManager({this.dataFile = 'data/notas_fiscais.json'}) {
     _carregarDados();
-  }
-
-  /// Carrega dados do arquivo JSON
-  void _carregarDados() {
-    final file = File(dataFile);
-    if (file.existsSync()) {
-      try {
-        final jsonString = file.readAsStringSync();
-        final List<dynamic> jsonList = jsonDecode(jsonString);
-        notasFiscais = jsonList.map((json) => NotaFiscal.fromJson(json)).toList();
-      } catch (e) {
-        print('Erro ao carregar dados de notas fiscais: $e');
-        notasFiscais = [];
-      }
-    }
-  }
-
-  /// Salva dados no arquivo JSON
-  void _salvarDados() {
-    final file = File(dataFile);
-    file.parent.createSync(recursive: true);
-    final jsonString = jsonEncode(
-      notasFiscais.map((nf) => nf.toJson()).toList(),
-    );
-    file.writeAsStringSync(jsonString);
-  }
-
-  /// Public method to save data (for Flutter GUI)
-  void salvarDados() => _salvarDados();
-
-  /// Carrega clientes do arquivo JSON
-  List<Cliente> _carregarClientes() {
-    final file = File('data/clientes.json');
-    if (file.existsSync()) {
-      try {
-        final jsonString = file.readAsStringSync();
-        final List<dynamic> jsonList = jsonDecode(jsonString);
-        return jsonList.map((json) => Cliente.fromJson(json)).toList();
-      } catch (e) {
-        return [];
-      }
-    }
-    return [];
-  }
-
-  /// Carrega produtos do arquivo JSON
-  List<Produto> _carregarProdutos() {
-    final file = File('data/produtos.json');
-    if (file.existsSync()) {
-      try {
-        final jsonString = file.readAsStringSync();
-        final List<dynamic> jsonList = jsonDecode(jsonString);
-        return jsonList.map((json) => Produto.fromJson(json)).toList();
-      } catch (e) {
-        return [];
-      }
-    }
-    return [];
   }
 
   /// Adiciona uma nova nota fiscal
@@ -120,7 +63,9 @@ class NotaFiscalManager {
     while (true) {
       print('\n--- Produtos Disponíveis ---');
       for (var produto in produtos) {
-        print('ID: ${produto.id} - Nome: ${produto.nome} (Código: ${produto.codigo}) - R\$ ${produto.preco.toStringAsFixed(2)} - Estoque: ${produto.estoque}');
+        print(
+          'ID: ${produto.id} - Nome: ${produto.nome} (Código: ${produto.codigo}) - R\$ ${produto.preco.toStringAsFixed(2)} - Estoque: ${produto.estoque}',
+        );
       }
 
       final produtoId = InputHelper.lerInt('Digite o ID do produto (0 para finalizar)', obrigatorio: true);
@@ -134,7 +79,10 @@ class NotaFiscalManager {
         continue;
       }
 
-      final quantidade = InputHelper.lerInt('Quantidade de \'${produtoSelecionado.nome}\'', obrigatorio: true);
+      final quantidade = InputHelper.lerInt(
+        'Quantidade de \'${produtoSelecionado.nome}\'',
+        obrigatorio: true,
+      );
       if (quantidade == null) continue;
       if (quantidade <= 0) {
         print('Erro: Quantidade deve ser maior que zero!');
@@ -155,7 +103,9 @@ class NotaFiscalManager {
       );
 
       itens.add(item);
-      print('\nItem adicionado: ${quantidade}x ${produtoSelecionado.nome} - R\$ ${item.valorTotal.toStringAsFixed(2)}');
+      print(
+        '\nItem adicionado: ${quantidade}x ${produtoSelecionado.nome} - R\$ ${item.valorTotal.toStringAsFixed(2)}',
+      );
     }
 
     if (itens.isEmpty) {
@@ -163,7 +113,9 @@ class NotaFiscalManager {
       return;
     }
 
-    final formaPagamento = InputHelper.lerString('Forma de Pagamento (Dinheiro/Cartão/Pix)', obrigatorio: true) ?? 'Não informado';
+    final formaPagamento =
+        InputHelper.lerString('Forma de Pagamento (Dinheiro/Cartão/Pix)', obrigatorio: true) ??
+        'Não informado';
 
     final notaFiscal = NotaFiscal(
       id: notasFiscais.isEmpty ? 1 : notasFiscais.map((nf) => nf.id!).reduce((a, b) => a > b ? a : b) + 1,
@@ -181,20 +133,6 @@ class NotaFiscalManager {
     print('Valor Total: R\$ ${notaFiscal.valorTotal.toStringAsFixed(2)}');
   }
 
-  /// Lista todas as notas fiscais
-  void listarNotasFiscais() {
-    if (notasFiscais.isEmpty) {
-      print('\nNenhuma nota fiscal cadastrada.');
-      return;
-    }
-
-    print('\n--- Lista de Notas Fiscais ---');
-    for (var nf in notasFiscais) {
-      print(nf);
-      print('-' * 40);
-    }
-  }
-
   /// Busca uma nota fiscal por número
   void buscarNotaFiscal() {
     final numeroNota = InputHelper.lerString('Digite o número da nota fiscal', obrigatorio: true);
@@ -210,6 +148,20 @@ class NotaFiscalManager {
     }
   }
 
+  /// Lista todas as notas fiscais
+  void listarNotasFiscais() {
+    if (notasFiscais.isEmpty) {
+      print('\nNenhuma nota fiscal cadastrada.');
+      return;
+    }
+
+    print('\n--- Lista de Notas Fiscais ---');
+    for (var nf in notasFiscais) {
+      print(nf);
+      print('-' * 40);
+    }
+  }
+
   /// Menu de gerenciamento de notas fiscais
   void menu() {
     while (true) {
@@ -220,7 +172,7 @@ class NotaFiscalManager {
       print('4. Voltar ao Menu Principal');
 
       final opcao = InputHelper.lerString('Escolha uma opção');
-      
+
       switch (opcao) {
         case '1':
           adicionarNotaFiscal();
@@ -237,5 +189,61 @@ class NotaFiscalManager {
           print('\nOpção inválida! Tente novamente.');
       }
     }
+  }
+
+  /// Public method to save data (for Flutter GUI)
+  void salvarDados() => _salvarDados();
+
+  /// Carrega clientes do arquivo JSON
+  List<Cliente> _carregarClientes() {
+    final file = File('data/clientes.json');
+    if (file.existsSync()) {
+      try {
+        final jsonString = file.readAsStringSync();
+        final List<dynamic> jsonList = jsonDecode(jsonString);
+        return jsonList.map((json) => Cliente.fromJson(json)).toList();
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  }
+
+  /// Carrega dados do arquivo JSON
+  void _carregarDados() {
+    final file = File(dataFile);
+    if (file.existsSync()) {
+      try {
+        final jsonString = file.readAsStringSync();
+        final List<dynamic> jsonList = jsonDecode(jsonString);
+        notasFiscais = jsonList.map((json) => NotaFiscal.fromJson(json)).toList();
+      } catch (e) {
+        print('Erro ao carregar dados de notas fiscais: $e');
+        notasFiscais = [];
+      }
+    }
+  }
+
+  /// Carrega produtos do arquivo JSON
+  List<Produto> _carregarProdutos() {
+    final file = File('data/produtos.json');
+    if (file.existsSync()) {
+      try {
+        final jsonString = file.readAsStringSync();
+        final List<dynamic> jsonList = jsonDecode(jsonString);
+        return jsonList.map((json) => Produto.fromJson(json)).toList();
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  }
+
+  /// Salva dados no arquivo JSON
+  void _salvarDados() {
+    final file = File(dataFile);
+    file.parent.createSync(recursive: true);
+    final jsonString = jsonEncode(notasFiscais.map((nf) => nf.toJson()).toList());
+    file.writeAsStringSync(jsonString);
   }
 }

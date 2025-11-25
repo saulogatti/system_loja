@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import '../models/produto.dart';
-import '../utils/input_helper.dart';
+
+import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/utils/input_helper.dart';
 
 /// Gerenciador de Produtos
 class ProdutoManager {
@@ -11,34 +12,6 @@ class ProdutoManager {
   ProdutoManager({this.dataFile = 'data/produtos.json'}) {
     _carregarDados();
   }
-
-  /// Carrega dados do arquivo JSON
-  void _carregarDados() {
-    final file = File(dataFile);
-    if (file.existsSync()) {
-      try {
-        final jsonString = file.readAsStringSync();
-        final List<dynamic> jsonList = jsonDecode(jsonString);
-        produtos = jsonList.map((json) => Produto.fromJson(json)).toList();
-      } catch (e) {
-        print('Erro ao carregar dados de produtos: $e');
-        produtos = [];
-      }
-    }
-  }
-
-  /// Salva dados no arquivo JSON
-  void _salvarDados() {
-    final file = File(dataFile);
-    file.parent.createSync(recursive: true);
-    final jsonString = jsonEncode(
-      produtos.map((produto) => produto.toJson()).toList(),
-    );
-    file.writeAsStringSync(jsonString);
-  }
-
-  /// Public method to save data (for Flutter GUI)
-  void salvarDados() => _salvarDados();
 
   /// Adiciona um novo produto
   void adicionarProduto() {
@@ -88,20 +61,6 @@ class ProdutoManager {
     print('\nProduto \'$nome\' cadastrado com sucesso! ID: ${produto.id}');
   }
 
-  /// Lista todos os produtos
-  void listarProdutos() {
-    if (produtos.isEmpty) {
-      print('\nNenhum produto cadastrado.');
-      return;
-    }
-
-    print('\n--- Lista de Produtos ---');
-    for (var produto in produtos) {
-      print(produto);
-      print('-' * 40);
-    }
-  }
-
   /// Busca um produto por código
   void buscarProduto() {
     final codigo = InputHelper.lerString('Digite o código do produto', obrigatorio: true);
@@ -117,6 +76,20 @@ class ProdutoManager {
     }
   }
 
+  /// Lista todos os produtos
+  void listarProdutos() {
+    if (produtos.isEmpty) {
+      print('\nNenhum produto cadastrado.');
+      return;
+    }
+
+    print('\n--- Lista de Produtos ---');
+    for (var produto in produtos) {
+      print(produto);
+      print('-' * 40);
+    }
+  }
+
   /// Menu de gerenciamento de produtos
   void menu() {
     while (true) {
@@ -127,7 +100,7 @@ class ProdutoManager {
       print('4. Voltar ao Menu Principal');
 
       final opcao = InputHelper.lerString('Escolha uma opção');
-      
+
       switch (opcao) {
         case '1':
           adicionarProduto();
@@ -154,5 +127,31 @@ class ProdutoManager {
   /// Obtém todos os produtos
   List<Produto> obterTodosProdutos() {
     return produtos;
+  }
+
+  /// Public method to save data (for Flutter GUI)
+  void salvarDados() => _salvarDados();
+
+  /// Carrega dados do arquivo JSON
+  void _carregarDados() {
+    final file = File(dataFile);
+    if (file.existsSync()) {
+      try {
+        final jsonString = file.readAsStringSync();
+        final List<dynamic> jsonList = jsonDecode(jsonString);
+        produtos = jsonList.map((json) => Produto.fromJson(json)).toList();
+      } catch (e) {
+        print('Erro ao carregar dados de produtos: $e');
+        produtos = [];
+      }
+    }
+  }
+
+  /// Salva dados no arquivo JSON
+  void _salvarDados() {
+    final file = File(dataFile);
+    file.parent.createSync(recursive: true);
+    final jsonString = jsonEncode(produtos.map((produto) => produto.toJson()).toList());
+    file.writeAsStringSync(jsonString);
   }
 }

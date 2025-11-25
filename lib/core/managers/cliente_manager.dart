@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import '../models/cliente.dart';
-import '../utils/input_helper.dart';
+import '../../utils/input_helper.dart';
 
 /// Gerenciador de Clientes
 class ClienteManager {
@@ -113,7 +113,7 @@ class ClienteManager {
       print('4. Voltar ao Menu Principal');
 
       final opcao = InputHelper.lerString('Escolha uma opção');
-      
+
       switch (opcao) {
         case '1':
           adicionarCliente();

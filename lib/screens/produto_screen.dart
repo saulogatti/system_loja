@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../managers/produto_manager.dart';
-import '../models/produto.dart';
+import '../core/managers/produto_manager.dart';
+import '../core/models/produto.dart';
 
 class ProdutoScreen extends StatefulWidget {
   const ProdutoScreen({super.key});
@@ -33,7 +33,7 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
   void _adicionarProduto() {
     if (_formKey.currentState!.validate()) {
       final codigo = _codigoController.text.trim();
-      
+
       // Check if product code already exists
       if (_manager.produtos.any((p) => p.codigo == codigo)) {
         ScaffoldMessenger.of(context).showSnackBar(
