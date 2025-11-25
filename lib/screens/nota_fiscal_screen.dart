@@ -412,7 +412,7 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<Cliente>(
-                value: _clienteSelecionado,
+                initialValue: _clienteSelecionado,
                 decoration: const InputDecoration(
                   labelText: 'Cliente *',
                   border: OutlineInputBorder(),
