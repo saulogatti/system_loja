@@ -36,6 +36,9 @@ class CacheManager {
   /// Instância única do [CacheManager].
   static final CacheManager instance = CacheManager._privateConstructor();
 
+  /// Encoder JSON reutilizável para formatação consistente.
+  static const JsonEncoder _jsonEncoder = JsonEncoder.withIndent('  ');
+
   /// Diretório onde os arquivos de cache são armazenados.
   String _cacheDirectory = '';
 
@@ -489,8 +492,7 @@ class CacheManager {
         await file.parent.create(recursive: true);
       }
 
-      final jsonString = const JsonEncoder.withIndent('  ')
-          .convert(_memoryCache[type]);
+      final jsonString = _jsonEncoder.convert(_memoryCache[type]);
       await file.writeAsString(jsonString);
     } on FileSystemException catch (e) {
       throw CacheWriteException(

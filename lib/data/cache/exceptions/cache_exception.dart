@@ -46,7 +46,7 @@ class CacheKeyNotFoundException extends CacheException {
   /// Cria uma nova instância de [CacheKeyNotFoundException].
   ///
   /// [key] é a chave que não foi encontrada no cache.
-  CacheKeyNotFoundException(this.key)
+  const CacheKeyNotFoundException(this.key)
       : super('Chave não encontrada no cache: $key');
 }
 
