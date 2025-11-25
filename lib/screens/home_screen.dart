@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'cliente_screen.dart';
-import 'produto_screen.dart';
 import 'nota_fiscal_screen.dart';
+import 'produto_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -19,27 +20,17 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Icon(
-              Icons.store,
-              size: 100,
-              color: Colors.blue,
-            ),
+            const Icon(Icons.store, size: 100, color: Colors.blue),
             const SizedBox(height: 40),
             const Text(
               'Bem-vindo!',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
             const Text(
               'Selecione uma opção para continuar',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
@@ -49,10 +40,7 @@ class HomeScreen extends StatelessWidget {
               icon: Icons.person,
               color: Colors.blue,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ClienteScreen()),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ClienteScreen()));
               },
             ),
             const SizedBox(height: 16),
@@ -62,10 +50,7 @@ class HomeScreen extends StatelessWidget {
               icon: Icons.inventory,
               color: Colors.green,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProdutoScreen()),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ProdutoScreen()));
               },
             ),
             const SizedBox(height: 16),
@@ -75,10 +60,7 @@ class HomeScreen extends StatelessWidget {
               icon: Icons.receipt_long,
               color: Colors.orange,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NotaFiscalScreen()),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const NotaFiscalScreen()));
               },
             ),
           ],
@@ -106,29 +88,16 @@ class HomeScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  icon,
-                  size: 32,
-                  color: color,
-                ),
+                child: Icon(icon, size: 32, color: color),
               ),
               const SizedBox(width: 20),
               Expanded(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
               ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.grey[400],
-              ),
+              Icon(Icons.arrow_forward_ios, color: Colors.grey[400]),
             ],
           ),
         ),
