@@ -125,7 +125,7 @@ class ProdutoManager {
   }
 
   /// Public method to save data (for Flutter GUI)
-  /// @deprecated Use salvarDadosSincronizado() para operações seguras
+  @Deprecated('Use salvarDadosSincronizado() para operações seguras')
   void salvarDados() => _salvarDados();
 
   /// Adiciona um novo produto
