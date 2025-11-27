@@ -4,8 +4,8 @@
 
 System Loja is a Flutter multiplatform store management app (Windows, macOS, iOS, Android) using **JSON file persistence** instead of a database. The codebase follows a **Manager Pattern** with clear separation of concerns:
 
-- **Models** (`lib/models/`): Data classes with `toJson()`/`fromJson()` serialization
-- **Managers** (`lib/managers/`): Business logic classes that handle JSON file I/O and CRUD operations
+- **Models** (`lib/core/models/`): Data classes with `toJson()`/`fromJson()` serialization
+- **Managers** (`lib/core/managers/`): Business logic classes that handle JSON file I/O and CRUD operations
 - **Screens** (`lib/screens/`): Material 3 UI screens with forms and lists
 - **Data Persistence**: JSON files in `data/` directory (created automatically)
 
@@ -30,15 +30,15 @@ class ClienteManager {
 ### Flutter UI Patterns
 - Material 3 design with `ColorScheme.fromSeed()`
 - Form validation using `GlobalKey<FormState>()`
-- Dialog popups for details with `showDialog()`
+- Modal bottom sheets for details with `showModalBottomSheet()`
 - SnackBar feedback for user actions
-- Card-based layouts with `ListTile` for interactions
+- Card-based layouts with `InkWell` for interactions
 
 ## Development Workflow
 
 ### Adding New Features
-1. **Model**: Create in `lib/models/` with JSON serialization
-2. **Manager**: Create in `lib/managers/` with file I/O and business logic
+1. **Model**: Create in `lib/core/models/` with JSON serialization
+2. **Manager**: Create in `lib/core/managers/` with file I/O and business logic
 3. **Screen**: Create in `lib/screens/` with form and list UI
 4. **Navigation**: Add to `home_screen.dart` menu
 
@@ -107,7 +107,7 @@ void dispose() {
 Use consistent validation patterns:
 - Check for duplicates before saving (CPF, product codes)
 - Show SnackBar with red background for errors
-- Validate required fields with form validators returning error messages
+- Validate required fields with `obrigatorio: true` pattern
 
 ### Dependencies
 - `path_provider`: For file system access
@@ -117,8 +117,8 @@ Use consistent validation patterns:
 ## Common Tasks
 
 ### Adding New Entity Type
-1. Create model in `lib/models/new_entity.dart`
-2. Create manager in `lib/managers/new_entity_manager.dart`
+1. Create model in `lib/core/models/new_entity.dart`
+2. Create manager in `lib/core/managers/new_entity_manager.dart`
 3. Create screen in `lib/screens/new_entity_screen.dart`
 4. Add navigation card to `home_screen.dart`
 
