@@ -30,7 +30,7 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
     super.dispose();
   }
 
-  void _adicionarProduto() {
+  void _adicionarProduto() async {
     if (_formKey.currentState!.validate()) {
       final codigo = _codigoController.text.trim();
 
@@ -81,7 +81,9 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
       );
 
       _manager.produtos.add(produto);
-      _manager.salvarDados();
+      await _manager.salvarDadosSincronizado();
+
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

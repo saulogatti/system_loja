@@ -298,7 +298,7 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
     return quantidade;
   }
 
-  void _salvarNotaFiscal() {
+  void _salvarNotaFiscal() async {
     if (_formKey.currentState!.validate()) {
       if (_clienteSelecionado == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -360,7 +360,9 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
       );
 
       widget.notaFiscalManager.notasFiscais.add(notaFiscal);
-      widget.notaFiscalManager.salvarDados();
+      await widget.notaFiscalManager.salvarDadosSincronizado();
+
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

@@ -5,9 +5,20 @@ import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/utils/input_helper.dart';
 
 /// Gerenciador de Produtos
+///
+/// Utiliza um mecanismo de sincronização para evitar condições de corrida
+/// e recarrega dados antes de salvar para prevenir perda de dados.
 class ProdutoManager {
   final String dataFile;
   List<Produto> produtos = [];
+
+  /// Lock estático por arquivo para serializar o acesso entre múltiplas instâncias
+  static final Map<String, Lock> _fileLocks = {};
+
+  /// Obtém ou cria um lock para o arquivo específico
+  Lock _getLock() {
+    return _fileLocks.putIfAbsent(dataFile, () => Lock());
+  }
 
   ProdutoManager({this.dataFile = 'data/produtos.json'}) {
     _carregarDados();

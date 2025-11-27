@@ -7,9 +7,20 @@ import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/utils/input_helper.dart';
 
 /// Gerenciador de Notas Fiscais
+///
+/// Utiliza um mecanismo de sincronização para evitar condições de corrida
+/// e recarrega dados antes de salvar para prevenir perda de dados.
 class NotaFiscalManager {
   final String dataFile;
   List<NotaFiscal> notasFiscais = [];
+
+  /// Lock estático por arquivo para serializar o acesso entre múltiplas instâncias
+  static final Map<String, Lock> _fileLocks = {};
+
+  /// Obtém ou cria um lock para o arquivo específico
+  Lock _getLock() {
+    return _fileLocks.putIfAbsent(dataFile, () => Lock());
+  }
 
   NotaFiscalManager({this.dataFile = 'data/notas_fiscais.json'}) {
     _carregarDados();

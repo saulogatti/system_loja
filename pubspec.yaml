@@ -10,7 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  path_provider: ^2.1.5
+  path_provider: ^2.1.4
+  synchronized: ^3.3.0+3
   path: ^1.9.1
 
 dev_dependencies:
