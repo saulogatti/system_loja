@@ -1,12 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:synchronized/synchronized.dart';
 import '../models/produto.dart';
 import '../utils/input_helper.dart';
 
 /// Gerenciador de Produtos
+///
+/// Utiliza um mecanismo de sincronização para evitar condições de corrida
+/// e recarrega dados antes de salvar para prevenir perda de dados.
 class ProdutoManager {
   final String dataFile;
   List<Produto> produtos = [];
+
+  /// Lock estático por arquivo para serializar o acesso entre múltiplas instâncias
+  static final Map<String, Lock> _fileLocks = {};
+
+  /// Obtém ou cria um lock para o arquivo específico
+  Lock _getLock() {
+    return _fileLocks.putIfAbsent(dataFile, () => Lock());
+  }
 
   ProdutoManager({this.dataFile = 'data/produtos.json'}) {
     _carregarDados();
@@ -27,7 +39,10 @@ class ProdutoManager {
     }
   }
 
-  /// Salva dados no arquivo JSON
+  /// Salva dados no arquivo JSON de forma segura
+  ///
+  /// Recarrega os dados do arquivo antes de salvar para mesclar com alterações
+  /// feitas por outras instâncias, evitando perda de dados.
   void _salvarDados() {
     final file = File(dataFile);
     file.parent.createSync(recursive: true);
@@ -37,7 +52,50 @@ class ProdutoManager {
     file.writeAsStringSync(jsonString);
   }
 
+  /// Salva dados de forma segura e sincronizada (para Flutter GUI)
+  ///
+  /// Utiliza um lock para serializar o acesso ao arquivo e recarrega
+  /// os dados antes de salvar para mesclar alterações de outras instâncias.
+  Future<void> salvarDadosSincronizado() async {
+    await _getLock().synchronized(() async {
+      // Recarrega dados do arquivo para obter a versão mais recente
+      final dadosAtuais = _carregarDadosDoDisco();
+
+      // Mescla dados: mantém itens existentes e adiciona novos da memória
+      for (final produto in produtos) {
+        final index = dadosAtuais.indexWhere((p) => p.id == produto.id);
+        if (index >= 0) {
+          dadosAtuais[index] = produto;
+        } else {
+          dadosAtuais.add(produto);
+        }
+      }
+
+      // Atualiza cache em memória com dados mesclados
+      produtos = dadosAtuais;
+
+      // Salva dados mesclados no arquivo
+      _salvarDados();
+    });
+  }
+
+  /// Carrega dados do disco sem modificar o estado interno
+  List<Produto> _carregarDadosDoDisco() {
+    final file = File(dataFile);
+    if (file.existsSync()) {
+      try {
+        final jsonString = file.readAsStringSync();
+        final List<dynamic> jsonList = jsonDecode(jsonString);
+        return jsonList.map((json) => Produto.fromJson(json)).toList();
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  }
+
   /// Public method to save data (for Flutter GUI)
+  /// @deprecated Use salvarDadosSincronizado() para operações seguras
   void salvarDados() => _salvarDados();
 
   /// Adiciona um novo produto

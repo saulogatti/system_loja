@@ -28,7 +28,7 @@ class _ClienteScreenState extends State<ClienteScreen> {
     super.dispose();
   }
 
-  void _adicionarCliente() {
+  void _adicionarCliente() async {
     if (_formKey.currentState!.validate()) {
       final cpf = _cpfController.text.trim();
       
@@ -55,7 +55,9 @@ class _ClienteScreenState extends State<ClienteScreen> {
       );
 
       _manager.clientes.add(cliente);
-      _manager.salvarDados();
+      await _manager.salvarDadosSincronizado();
+
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
