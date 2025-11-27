@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:synchronized/synchronized.dart';
 import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/utils/input_helper.dart';
 
@@ -9,16 +10,11 @@ import 'package:system_loja/utils/input_helper.dart';
 /// Utiliza um mecanismo de sincronização para evitar condições de corrida
 /// e recarrega dados antes de salvar para prevenir perda de dados.
 class ProdutoManager {
-  final String dataFile;
-  List<Produto> produtos = [];
-
   /// Lock estático por arquivo para serializar o acesso entre múltiplas instâncias
   static final Map<String, Lock> _fileLocks = {};
+  final String dataFile;
 
-  /// Obtém ou cria um lock para o arquivo específico
-  Lock _getLock() {
-    return _fileLocks.putIfAbsent(dataFile, () => Lock());
-  }
+  List<Produto> produtos = [];
 
   ProdutoManager({this.dataFile = 'data/produtos.json'}) {
     _carregarDados();
@@ -141,7 +137,65 @@ class ProdutoManager {
   }
 
   /// Public method to save data (for Flutter GUI)
+  @Deprecated('Use salvarDadosSincronizado() para operações seguras')
   void salvarDados() => _salvarDados();
+
+  /// Salva dados de forma segura e sincronizada (para Flutter GUI)
+  ///
+  /// Utiliza um lock para serializar o acesso ao arquivo e recarrega
+  /// os dados antes de salvar para mesclar alterações de outras instâncias.
+  /// Resolve conflitos de ID atribuindo novos IDs para itens novos.
+  Future<void> salvarDadosSincronizado() async {
+    await _getLock().synchronized(() async {
+      // Recarrega dados do arquivo para obter a versão mais recente
+      final dadosAtuais = _carregarDadosDoDisco();
+
+      // Obtém o maior ID existente para evitar conflitos
+      int maiorId = 0;
+      for (final p in dadosAtuais) {
+        if (p.id != null && p.id! > maiorId) {
+          maiorId = p.id!;
+        }
+      }
+
+      // Mescla dados: atualiza itens existentes e adiciona novos com IDs únicos
+      for (final produto in produtos) {
+        final index = dadosAtuais.indexWhere((p) => p.id == produto.id);
+        if (index >= 0) {
+          // Atualiza item existente
+          dadosAtuais[index] = produto;
+        } else {
+          // Verifica se o ID já existe (conflito) e reatribui se necessário
+          final idExistente = dadosAtuais.any((p) => p.id == produto.id);
+          if (idExistente || produto.id == null) {
+            maiorId++;
+            final produtoComNovoId = Produto(
+              id: maiorId,
+              nome: produto.nome,
+              codigo: produto.codigo,
+              preco: produto.preco,
+              estoque: produto.estoque,
+              descricao: produto.descricao,
+              categoria: produto.categoria,
+              dataCadastro: produto.dataCadastro,
+            );
+            dadosAtuais.add(produtoComNovoId);
+          } else {
+            dadosAtuais.add(produto);
+            if (produto.id! > maiorId) {
+              maiorId = produto.id!;
+            }
+          }
+        }
+      }
+
+      // Atualiza cache em memória com dados mesclados
+      produtos = dadosAtuais;
+
+      // Salva dados mesclados no arquivo
+      _salvarDados();
+    });
+  }
 
   /// Carrega dados do arquivo JSON
   void _carregarDados() {
@@ -158,7 +212,30 @@ class ProdutoManager {
     }
   }
 
-  /// Salva dados no arquivo JSON
+  /// Carrega dados do disco sem modificar o estado interno
+  List<Produto> _carregarDadosDoDisco() {
+    final file = File(dataFile);
+    if (file.existsSync()) {
+      try {
+        final jsonString = file.readAsStringSync();
+        final List<dynamic> jsonList = jsonDecode(jsonString);
+        return jsonList.map((json) => Produto.fromJson(json)).toList();
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  }
+
+  /// Obtém ou cria um lock para o arquivo específico
+  Lock _getLock() {
+    return _fileLocks.putIfAbsent(dataFile, () => Lock());
+  }
+
+  /// Salva dados no arquivo JSON de forma segura
+  ///
+  /// Recarrega os dados do arquivo antes de salvar para mesclar com alterações
+  /// feitas por outras instâncias, evitando perda de dados.
   void _salvarDados() {
     final file = File(dataFile);
     file.parent.createSync(recursive: true);
