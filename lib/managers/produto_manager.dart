@@ -56,18 +56,48 @@ class ProdutoManager {
   ///
   /// Utiliza um lock para serializar o acesso ao arquivo e recarrega
   /// os dados antes de salvar para mesclar alterações de outras instâncias.
+  /// Resolve conflitos de ID atribuindo novos IDs para itens novos.
   Future<void> salvarDadosSincronizado() async {
     await _getLock().synchronized(() async {
       // Recarrega dados do arquivo para obter a versão mais recente
       final dadosAtuais = _carregarDadosDoDisco();
 
-      // Mescla dados: mantém itens existentes e adiciona novos da memória
+      // Obtém o maior ID existente para evitar conflitos
+      int maiorId = 0;
+      for (final p in dadosAtuais) {
+        if (p.id != null && p.id! > maiorId) {
+          maiorId = p.id!;
+        }
+      }
+
+      // Mescla dados: atualiza itens existentes e adiciona novos com IDs únicos
       for (final produto in produtos) {
         final index = dadosAtuais.indexWhere((p) => p.id == produto.id);
         if (index >= 0) {
+          // Atualiza item existente
           dadosAtuais[index] = produto;
         } else {
-          dadosAtuais.add(produto);
+          // Verifica se o ID já existe (conflito) e reatribui se necessário
+          final idExistente = dadosAtuais.any((p) => p.id == produto.id);
+          if (idExistente || produto.id == null) {
+            maiorId++;
+            final produtoComNovoId = Produto(
+              id: maiorId,
+              nome: produto.nome,
+              codigo: produto.codigo,
+              preco: produto.preco,
+              estoque: produto.estoque,
+              descricao: produto.descricao,
+              categoria: produto.categoria,
+              dataCadastro: produto.dataCadastro,
+            );
+            dadosAtuais.add(produtoComNovoId);
+          } else {
+            dadosAtuais.add(produto);
+            if (produto.id! > maiorId) {
+              maiorId = produto.id!;
+            }
+          }
         }
       }
 

@@ -56,18 +56,47 @@ class ClienteManager {
   ///
   /// Utiliza um lock para serializar o acesso ao arquivo e recarrega
   /// os dados antes de salvar para mesclar alterações de outras instâncias.
+  /// Resolve conflitos de ID atribuindo novos IDs para itens novos.
   Future<void> salvarDadosSincronizado() async {
     await _getLock().synchronized(() async {
       // Recarrega dados do arquivo para obter a versão mais recente
       final dadosAtuais = _carregarDadosDoDisco();
 
-      // Mescla dados: mantém itens existentes e adiciona novos da memória
+      // Obtém o maior ID existente para evitar conflitos
+      int maiorId = 0;
+      for (final c in dadosAtuais) {
+        if (c.id != null && c.id! > maiorId) {
+          maiorId = c.id!;
+        }
+      }
+
+      // Mescla dados: atualiza itens existentes e adiciona novos com IDs únicos
       for (final cliente in clientes) {
         final index = dadosAtuais.indexWhere((c) => c.id == cliente.id);
         if (index >= 0) {
+          // Atualiza item existente
           dadosAtuais[index] = cliente;
         } else {
-          dadosAtuais.add(cliente);
+          // Verifica se o ID já existe (conflito) e reatribui se necessário
+          final idExistente = dadosAtuais.any((c) => c.id == cliente.id);
+          if (idExistente || cliente.id == null) {
+            maiorId++;
+            final clienteComNovoId = Cliente(
+              id: maiorId,
+              nome: cliente.nome,
+              cpf: cliente.cpf,
+              email: cliente.email,
+              telefone: cliente.telefone,
+              endereco: cliente.endereco,
+              dataCadastro: cliente.dataCadastro,
+            );
+            dadosAtuais.add(clienteComNovoId);
+          } else {
+            dadosAtuais.add(cliente);
+            if (cliente.id! > maiorId) {
+              maiorId = cliente.id!;
+            }
+          }
         }
       }
 

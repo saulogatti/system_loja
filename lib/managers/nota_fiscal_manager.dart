@@ -58,18 +58,48 @@ class NotaFiscalManager {
   ///
   /// Utiliza um lock para serializar o acesso ao arquivo e recarrega
   /// os dados antes de salvar para mesclar alterações de outras instâncias.
+  /// Resolve conflitos de ID atribuindo novos IDs para itens novos.
   Future<void> salvarDadosSincronizado() async {
     await _getLock().synchronized(() async {
       // Recarrega dados do arquivo para obter a versão mais recente
       final dadosAtuais = _carregarDadosDoDisco();
 
-      // Mescla dados: mantém itens existentes e adiciona novos da memória
+      // Obtém o maior ID existente para evitar conflitos
+      int maiorId = 0;
+      for (final nf in dadosAtuais) {
+        if (nf.id != null && nf.id! > maiorId) {
+          maiorId = nf.id!;
+        }
+      }
+
+      // Mescla dados: atualiza itens existentes e adiciona novos com IDs únicos
       for (final notaFiscal in notasFiscais) {
         final index = dadosAtuais.indexWhere((nf) => nf.id == notaFiscal.id);
         if (index >= 0) {
+          // Atualiza item existente
           dadosAtuais[index] = notaFiscal;
         } else {
-          dadosAtuais.add(notaFiscal);
+          // Verifica se o ID já existe (conflito) e reatribui se necessário
+          final idExistente = dadosAtuais.any((nf) => nf.id == notaFiscal.id);
+          if (idExistente || notaFiscal.id == null) {
+            maiorId++;
+            final notaFiscalComNovoId = NotaFiscal(
+              id: maiorId,
+              numeroNota: notaFiscal.numeroNota,
+              clienteId: notaFiscal.clienteId,
+              clienteNome: notaFiscal.clienteNome,
+              clienteCpf: notaFiscal.clienteCpf,
+              itens: notaFiscal.itens,
+              formaPagamento: notaFiscal.formaPagamento,
+              dataEmissao: notaFiscal.dataEmissao,
+            );
+            dadosAtuais.add(notaFiscalComNovoId);
+          } else {
+            dadosAtuais.add(notaFiscal);
+            if (notaFiscal.id! > maiorId) {
+              maiorId = notaFiscal.id!;
+            }
+          }
         }
       }
 
