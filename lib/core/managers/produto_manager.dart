@@ -12,6 +12,10 @@ import 'package:system_loja/core/models/produto.dart';
 /// mecanismo de lock por arquivo para serializar acesso concorrente entre
 /// múltiplas instâncias em execução e realiza carregamento/mesclagem de
 /// dados antes de persistir para reduzir risco de perda por sobrescrita.
+///
+/// Para lidar com concorrência entre processos diferentes, esta classe
+/// utiliza bloqueio de arquivo (file locking) via [RandomAccessFile.lock],
+/// além do lock em memória do pacote `synchronized` para isolates.
 class ProdutoManager with LoggerClassMixin {
   /// Mapa estático de locks por caminho de arquivo, para serializar I/O
   /// entre múltiplas instâncias do gerenciador na mesma aplicação.
@@ -32,7 +36,7 @@ class ProdutoManager with LoggerClassMixin {
   ProdutoManager({this.dataFile = 'data/produtos.json'}) {
     _produtos = _carregarDadosDoDisco();
   }
-  //FIXME: Tratar caso de concorrência entre múltiplas instâncias em processos diferentes.
+
   /// Retorna a lista de produtos em cache, carregando do disco se vazia.
   List<Produto> get _produtosList {
     if (_produtos.isEmpty) {
@@ -83,55 +87,61 @@ class ProdutoManager with LoggerClassMixin {
   /// arquivo, atualizando itens por `id` e atribuindo novos IDs a itens
   /// recém-adicionados quando necessário. Em caso de erro o stack trace é
   /// registrado via `logError`.
+  ///
+  /// O método usa bloqueio de arquivo (file locking) via [RandomAccessFile]
+  /// para garantir exclusividade entre processos diferentes, além do lock
+  /// em memória do pacote `synchronized` para isolates no mesmo processo.
   Future<void> salvarDadosSincronizado() async {
     await _getLock().synchronized(() async {
-      // Recarrega dados do arquivo para obter a versão mais recente
-      final dadosAtuais = _carregarDadosDoDisco();
+      await _executarComFileLock(() async {
+        // Recarrega dados do arquivo para obter a versão mais recente
+        final dadosAtuais = _carregarDadosDoDisco();
 
-      // Obtém o maior ID existente para evitar conflitos
-      int maiorId = 0;
-      for (final p in dadosAtuais) {
-        if (p.id > maiorId) {
-          maiorId = p.id;
+        // Obtém o maior ID existente para evitar conflitos
+        int maiorId = 0;
+        for (final p in dadosAtuais) {
+          if (p.id > maiorId) {
+            maiorId = p.id;
+          }
         }
-      }
 
-      // Mescla dados: atualiza itens existentes e adiciona novos com IDs únicos
-      for (final produto in _produtosList) {
-        final index = dadosAtuais.indexWhere((p) => p.id == produto.id);
-        if (index >= 0) {
-          // Atualiza item existente
-          dadosAtuais[index] = produto;
-        } else {
-          // Verifica se o ID já existe (conflito) e reatribui se necessário
-          final idExistente = dadosAtuais.any((p) => p.id == produto.id);
-          if (idExistente) {
-            maiorId++;
-            final produtoComNovoId = Produto(
-              id: maiorId,
-              nome: produto.nome,
-              codigo: produto.codigo,
-              preco: produto.preco,
-              estoque: produto.estoque,
-              descricao: produto.descricao,
-              categoria: produto.categoria,
-              dataCadastro: produto.dataCadastro,
-            );
-            dadosAtuais.add(produtoComNovoId);
+        // Mescla dados: atualiza itens existentes e adiciona novos
+        for (final produto in _produtosList) {
+          final index = dadosAtuais.indexWhere((p) => p.id == produto.id);
+          if (index >= 0) {
+            // Atualiza item existente
+            dadosAtuais[index] = produto;
           } else {
-            dadosAtuais.add(produto);
-            if (produto.id > maiorId) {
-              maiorId = produto.id;
+            // Verifica se o ID já existe (conflito) e reatribui se necessário
+            final idExistente = dadosAtuais.any((p) => p.id == produto.id);
+            if (idExistente) {
+              maiorId++;
+              final produtoComNovoId = Produto(
+                id: maiorId,
+                nome: produto.nome,
+                codigo: produto.codigo,
+                preco: produto.preco,
+                estoque: produto.estoque,
+                descricao: produto.descricao,
+                categoria: produto.categoria,
+                dataCadastro: produto.dataCadastro,
+              );
+              dadosAtuais.add(produtoComNovoId);
+            } else {
+              dadosAtuais.add(produto);
+              if (produto.id > maiorId) {
+                maiorId = produto.id;
+              }
             }
           }
         }
-      }
 
-      // Atualiza cache em memória com dados mesclados
-      _produtos = dadosAtuais;
+        // Atualiza cache em memória com dados mesclados
+        _produtos = dadosAtuais;
 
-      // Salva dados mesclados no arquivo
-      _salvarDados();
+        // Salva dados mesclados no arquivo
+        _salvarDados();
+      });
     });
   }
 
@@ -171,6 +181,53 @@ class ProdutoManager with LoggerClassMixin {
     return [];
   }
 
+  /// Executa uma operação com bloqueio exclusivo de arquivo.
+  ///
+  /// Utiliza um arquivo de lock (`.lock`) para garantir exclusividade entre
+  /// processos diferentes. O arquivo de lock é criado ao lado do arquivo
+  /// de dados e é bloqueado de forma exclusiva durante a operação.
+  ///
+  /// Em caso de falha ao adquirir o lock, a operação é executada mesmo assim
+  /// para não bloquear a aplicação indefinidamente, registrando um warning.
+  Future<T> _executarComFileLock<T>(Future<T> Function() operacao) async {
+    final lockFile = File('$dataFile.lock');
+    RandomAccessFile? raf;
+    try {
+      // Garante que o diretório pai existe
+      lockFile.parent.createSync(recursive: true);
+
+      // Cria ou abre o arquivo de lock
+      raf = lockFile.openSync(mode: FileMode.write);
+
+      // Tenta adquirir lock exclusivo com timeout
+      await raf.lock(FileLock.blockingExclusive);
+
+      // Executa a operação protegida
+      return await operacao();
+    } on FileSystemException catch (e) {
+      // Se não conseguiu adquirir o lock, loga warning e continua
+      logWarning(
+        'Não foi possível adquirir lock de arquivo: $e. '
+        'Continuando sem garantia de exclusividade entre processos.',
+      );
+      return await operacao();
+    } finally {
+      // Sempre libera o lock e fecha o arquivo
+      if (raf != null) {
+        try {
+          await raf.unlock();
+        } catch (_) {
+          // Ignora erro ao desbloquear (pode já estar desbloqueado)
+        }
+        try {
+          await raf.close();
+        } catch (_) {
+          // Ignora erro ao fechar
+        }
+      }
+    }
+  }
+
   /// Retorna o [Lock] associado ao arquivo de dados, criando se necessário.
   ///
   /// O lock é usado para serializar operações de leitura/escrita no arquivo
@@ -188,7 +245,9 @@ class ProdutoManager with LoggerClassMixin {
     try {
       final file = File(dataFile);
       file.parent.createSync(recursive: true);
-      final jsonString = jsonEncode(_produtosList.map((produto) => produto.toJson()).toList());
+      final jsonString = jsonEncode(
+        _produtosList.map((produto) => produto.toJson()).toList(),
+      );
       file.writeAsStringSync(jsonString);
     } catch (e, stackTrace) {
       logError('Erro ao salvar dados de produtos: $e', stackTrace);

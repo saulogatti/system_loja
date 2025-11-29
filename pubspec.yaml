@@ -10,7 +10,7 @@ dependencies:
   log_custom_printer:
     git:
       url: https://github.com/saulogatti/log_custom_printer.git
-      ref: v1.1.0
+      ref: v_1.1.0
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
