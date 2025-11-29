@@ -46,7 +46,7 @@ class _ClienteScreenState extends State<ClienteScreen> {
       final cliente = Cliente(
         id: _manager.clientes.isEmpty
             ? 1
-            : _manager.clientes.map((c) => c.id!).reduce((a, b) => a > b ? a : b) + 1,
+            : _manager.clientes.map((c) => c.id).reduce((a, b) => a > b ? a : b) + 1,
         nome: _nomeController.text.trim(),
         cpf: cpf,
         email: _emailController.text.trim(),

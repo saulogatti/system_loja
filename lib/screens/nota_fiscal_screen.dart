@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import '../core/managers/nota_fiscal_manager.dart';
+import 'package:system_loja/core/models/item_nota_fiscal.dart';
+
 import '../core/managers/cliente_manager.dart';
+import '../core/managers/nota_fiscal_manager.dart';
 import '../core/managers/produto_manager.dart';
-import '../core/models/nota_fiscal.dart';
 import '../core/models/cliente.dart';
+import '../core/models/nota_fiscal.dart';
 import '../core/models/produto.dart';
 
 class NotaFiscalScreen extends StatefulWidget {
@@ -11,6 +13,308 @@ class NotaFiscalScreen extends StatefulWidget {
 
   @override
   State<NotaFiscalScreen> createState() => _NotaFiscalScreenState();
+}
+
+// Form screen for creating a new nota fiscal
+class _NotaFiscalFormScreen extends StatefulWidget {
+  final ClienteManager clienteManager;
+  final ProdutoManager produtoManager;
+  final NotaFiscalManager notaFiscalManager;
+
+  const _NotaFiscalFormScreen({
+    required this.clienteManager,
+    required this.produtoManager,
+    required this.notaFiscalManager,
+  });
+
+  @override
+  State<_NotaFiscalFormScreen> createState() => _NotaFiscalFormScreenState();
+}
+
+class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _numeroNotaController = TextEditingController();
+  final _formaPagamentoController = TextEditingController();
+  Cliente? _clienteSelecionado;
+  final List<Map<String, dynamic>> _itensSelecionados = [];
+
+  @override
+  Widget build(BuildContext context) {
+    final valorTotal = _itensSelecionados.fold<double>(0, (sum, item) {
+      final produto = item['produto'] as Produto;
+      final quantidade = item['quantidade'] as int;
+      return sum + (produto.preco * quantidade);
+    });
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Nova Nota Fiscal'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: _numeroNotaController,
+                decoration: const InputDecoration(
+                  labelText: 'Número da Nota *',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.numbers),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Número da nota é obrigatório';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<Cliente>(
+                initialValue: _clienteSelecionado,
+                decoration: const InputDecoration(
+                  labelText: 'Cliente *',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.person),
+                ),
+                items: widget.clienteManager.clientes.map((cliente) {
+                  return DropdownMenuItem(value: cliente, child: Text('${cliente.nome} (${cliente.cpf})'));
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _clienteSelecionado = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Selecione um cliente';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _formaPagamentoController,
+                decoration: const InputDecoration(
+                  labelText: 'Forma de Pagamento *',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.payment),
+                  hintText: 'Dinheiro, Cartão, Pix, etc.',
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Forma de pagamento é obrigatória';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Itens', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  ElevatedButton.icon(
+                    onPressed: _adicionarItem,
+                    icon: const Icon(Icons.add),
+                    label: const Text('Adicionar Item'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              if (_itensSelecionados.isEmpty)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(32.0),
+                    child: Text('Nenhum item adicionado', style: TextStyle(color: Colors.grey)),
+                  ),
+                )
+              else
+                ..._itensSelecionados.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final item = entry.value;
+                  final produto = item['produto'] as Produto;
+                  final quantidade = item['quantidade'] as int;
+                  final subtotal = produto.preco * quantidade;
+
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: ListTile(
+                      title: Text(produto.nome),
+                      subtitle: Text(
+                        '${quantidade}x R\$ ${produto.preco.toStringAsFixed(2)} = R\$ ${subtotal.toStringAsFixed(2)}',
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          setState(() {
+                            _itensSelecionados.removeAt(index);
+                          });
+                        },
+                      ),
+                    ),
+                  );
+                }),
+              const SizedBox(height: 24),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(8)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Valor Total:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    Text(
+                      'R\$ ${valorTotal.toStringAsFixed(2)}',
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: _salvarNotaFiscal,
+                style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
+                child: const Text('Salvar Nota Fiscal', style: TextStyle(fontSize: 16)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _numeroNotaController.dispose();
+    _formaPagamentoController.dispose();
+    super.dispose();
+  }
+
+  void _adicionarItem() async {
+    final produto = await showDialog<Produto>(
+      context: context,
+      builder: (context) => _SelecionarProdutoDialog(produtos: widget.produtoManager.getProdutos()),
+    );
+
+    if (produto != null) {
+      final quantidade = await _solicitarQuantidade(produto);
+      if (quantidade != null && quantidade > 0) {
+        if (quantidade > produto.estoque) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Estoque insuficiente! Disponível: ${produto.estoque}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
+        }
+
+        setState(() {
+          _itensSelecionados.add({'produto': produto, 'quantidade': quantidade});
+        });
+      }
+    }
+  }
+
+  void _salvarNotaFiscal() async {
+    if (_formKey.currentState!.validate()) {
+      if (_clienteSelecionado == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Erro: Selecione um cliente!'), backgroundColor: Colors.red),
+        );
+        return;
+      }
+
+      if (_itensSelecionados.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Erro: Adicione pelo menos um item!'), backgroundColor: Colors.red),
+        );
+        return;
+      }
+
+      final numeroNota = _numeroNotaController.text.trim();
+
+      // Check if invoice number already exists
+      if (widget.notaFiscalManager.notasFiscais.any((nf) => nf.numeroNota == numeroNota)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Erro: Número da nota já cadastrado!'), backgroundColor: Colors.red),
+        );
+        return;
+      }
+
+      final itens = _itensSelecionados.map((item) {
+        final produto = item['produto'] as Produto;
+        final quantidade = item['quantidade'] as int;
+        return ItemNotaFiscal(
+          produtoId: produto.id, // Id nao é mais null por construção
+          produtoNome: produto.nome,
+          produtoCodigo: produto.codigo,
+          quantidade: quantidade,
+          precoUnitario: produto.preco,
+        );
+      }).toList();
+
+      final notaFiscal = NotaFiscal(
+        id: widget.notaFiscalManager.notasFiscais.isEmpty
+            ? 1
+            : widget.notaFiscalManager.notasFiscais.map((nf) => nf.id).reduce((a, b) => a > b ? a : b) + 1,
+        numeroNota: numeroNota,
+        clienteId: _clienteSelecionado!.id,
+        clienteNome: _clienteSelecionado!.nome,
+        clienteCpf: _clienteSelecionado!.cpf,
+        itens: itens,
+        formaPagamento: _formaPagamentoController.text.trim(),
+      );
+
+      widget.notaFiscalManager.notasFiscais.add(notaFiscal);
+      await widget.notaFiscalManager.salvarDadosSincronizado();
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Nota Fiscal "$numeroNota" cadastrada com sucesso!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      Navigator.pop(context, true);
+    }
+  }
+
+  Future<int?> _solicitarQuantidade(Produto produto) async {
+    final controller = TextEditingController();
+    final quantidade = await showDialog<int>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Quantidade de ${produto.nome}'),
+        content: TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            labelText: 'Quantidade (Estoque: ${produto.estoque})',
+            border: const OutlineInputBorder(),
+          ),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          ElevatedButton(
+            onPressed: () {
+              final qtd = int.tryParse(controller.text.trim());
+              Navigator.pop(context, qtd);
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+    controller.dispose();
+    return quantidade;
+  }
 }
 
 class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
@@ -33,18 +337,11 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.receipt_long,
-                          size: 80,
-                          color: Colors.grey[400],
-                        ),
+                        Icon(Icons.receipt_long, size: 80, color: Colors.grey[400]),
                         const SizedBox(height: 16),
                         const Text(
                           'Nenhuma nota fiscal cadastrada',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                          ),
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
                         ),
                       ],
                     ),
@@ -98,20 +395,14 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
   void _adicionarNotaFiscal() async {
     if (_clienteManager.clientes.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Erro: Nenhum cliente cadastrado!'),
-          backgroundColor: Colors.red,
-        ),
+        const SnackBar(content: Text('Erro: Nenhum cliente cadastrado!'), backgroundColor: Colors.red),
       );
       return;
     }
 
-    if (_produtoManager.produtos.isEmpty) {
+    if (_produtoManager.getProdutos().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Erro: Nenhum produto cadastrado!'),
-          backgroundColor: Colors.red,
-        ),
+        const SnackBar(content: Text('Erro: Nenhum produto cadastrado!'), backgroundColor: Colors.red),
       );
       return;
     }
@@ -132,6 +423,23 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
     }
   }
 
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
+          ),
+          const SizedBox(height: 4),
+          Text(value, style: const TextStyle(fontSize: 16)),
+        ],
+      ),
+    );
+  }
+
   void _mostrarDetalhesNota(NotaFiscal nf) {
     showDialog(
       context: context,
@@ -148,406 +456,23 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
               _buildDetailRow('CPF', nf.clienteCpf),
               _buildDetailRow('Valor Total', 'R\$ ${nf.valorTotal.toStringAsFixed(2)}'),
               _buildDetailRow('Pagamento', nf.formaPagamento),
-              _buildDetailRow(
-                'Data de Emissão',
-                nf.dataEmissao.toString().split('.')[0],
-              ),
+              _buildDetailRow('Data de Emissão', nf.dataEmissao.toString().split('.')[0]),
               const SizedBox(height: 16),
-              const Text(
-                'Itens:',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
+              const Text('Itens:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               const SizedBox(height: 8),
-              ...nf.itens.map((item) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      '${item.quantidade}x ${item.produtoNome} - R\$ ${item.valorTotal.toStringAsFixed(2)}',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  )),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Fechar'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.grey,
-              fontSize: 12,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 16),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Form screen for creating a new nota fiscal
-class _NotaFiscalFormScreen extends StatefulWidget {
-  final ClienteManager clienteManager;
-  final ProdutoManager produtoManager;
-  final NotaFiscalManager notaFiscalManager;
-
-  const _NotaFiscalFormScreen({
-    required this.clienteManager,
-    required this.produtoManager,
-    required this.notaFiscalManager,
-  });
-
-  @override
-  State<_NotaFiscalFormScreen> createState() => _NotaFiscalFormScreenState();
-}
-
-class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _numeroNotaController = TextEditingController();
-  final _formaPagamentoController = TextEditingController();
-  Cliente? _clienteSelecionado;
-  final List<Map<String, dynamic>> _itensSelecionados = [];
-
-  @override
-  void dispose() {
-    _numeroNotaController.dispose();
-    _formaPagamentoController.dispose();
-    super.dispose();
-  }
-
-  void _adicionarItem() async {
-    final produto = await showDialog<Produto>(
-      context: context,
-      builder: (context) => _SelecionarProdutoDialog(
-        produtos: widget.produtoManager.produtos,
-      ),
-    );
-
-    if (produto != null) {
-      final quantidade = await _solicitarQuantidade(produto);
-      if (quantidade != null && quantidade > 0) {
-        if (quantidade > produto.estoque) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Estoque insuficiente! Disponível: ${produto.estoque}'),
-              backgroundColor: Colors.red,
-            ),
-          );
-          return;
-        }
-
-        setState(() {
-          _itensSelecionados.add({
-            'produto': produto,
-            'quantidade': quantidade,
-          });
-        });
-      }
-    }
-  }
-
-  Future<int?> _solicitarQuantidade(Produto produto) async {
-    final controller = TextEditingController();
-    final quantidade = await showDialog<int>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Quantidade de ${produto.nome}'),
-        content: TextField(
-          controller: controller,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            labelText: 'Quantidade (Estoque: ${produto.estoque})',
-            border: const OutlineInputBorder(),
-          ),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final qtd = int.tryParse(controller.text.trim());
-              Navigator.pop(context, qtd);
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-    controller.dispose();
-    return quantidade;
-  }
-
-  void _salvarNotaFiscal() async {
-    if (_formKey.currentState!.validate()) {
-      if (_clienteSelecionado == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Erro: Selecione um cliente!'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      if (_itensSelecionados.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Erro: Adicione pelo menos um item!'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      final numeroNota = _numeroNotaController.text.trim();
-
-      // Check if invoice number already exists
-      if (widget.notaFiscalManager.notasFiscais.any((nf) => nf.numeroNota == numeroNota)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Erro: Número da nota já cadastrado!'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      final itens = _itensSelecionados.map((item) {
-        final produto = item['produto'] as Produto;
-        final quantidade = item['quantidade'] as int;
-        return ItemNotaFiscal(
-          produtoId: produto.id!,
-          produtoNome: produto.nome,
-          produtoCodigo: produto.codigo,
-          quantidade: quantidade,
-          precoUnitario: produto.preco,
-        );
-      }).toList();
-
-      final notaFiscal = NotaFiscal(
-        id: widget.notaFiscalManager.notasFiscais.isEmpty
-            ? 1
-            : widget.notaFiscalManager.notasFiscais
-                .map((nf) => nf.id!)
-                .reduce((a, b) => a > b ? a : b) + 1,
-        numeroNota: numeroNota,
-        clienteId: _clienteSelecionado!.id!,
-        clienteNome: _clienteSelecionado!.nome,
-        clienteCpf: _clienteSelecionado!.cpf,
-        itens: itens,
-        formaPagamento: _formaPagamentoController.text.trim(),
-      );
-
-      widget.notaFiscalManager.notasFiscais.add(notaFiscal);
-      await widget.notaFiscalManager.salvarDadosSincronizado();
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Nota Fiscal "$numeroNota" cadastrada com sucesso!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-
-      Navigator.pop(context, true);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final valorTotal = _itensSelecionados.fold<double>(
-      0,
-      (sum, item) {
-        final produto = item['produto'] as Produto;
-        final quantidade = item['quantidade'] as int;
-        return sum + (produto.preco * quantidade);
-      },
-    );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nova Nota Fiscal'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _numeroNotaController,
-                decoration: const InputDecoration(
-                  labelText: 'Número da Nota *',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.numbers),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Número da nota é obrigatório';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<Cliente>(
-                initialValue: _clienteSelecionado,
-                decoration: const InputDecoration(
-                  labelText: 'Cliente *',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
-                ),
-                items: widget.clienteManager.clientes.map((cliente) {
-                  return DropdownMenuItem(
-                    value: cliente,
-                    child: Text('${cliente.nome} (${cliente.cpf})'),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _clienteSelecionado = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Selecione um cliente';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _formaPagamentoController,
-                decoration: const InputDecoration(
-                  labelText: 'Forma de Pagamento *',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.payment),
-                  hintText: 'Dinheiro, Cartão, Pix, etc.',
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Forma de pagamento é obrigatória';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Itens',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ...nf.itens.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    '${item.quantidade}x ${item.produtoNome} - R\$ ${item.valorTotal.toStringAsFixed(2)}',
+                    style: const TextStyle(fontSize: 14),
                   ),
-                  ElevatedButton.icon(
-                    onPressed: _adicionarItem,
-                    icon: const Icon(Icons.add),
-                    label: const Text('Adicionar Item'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              if (_itensSelecionados.isEmpty)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(32.0),
-                    child: Text(
-                      'Nenhum item adicionado',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                )
-              else
-                ..._itensSelecionados.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final item = entry.value;
-                  final produto = item['produto'] as Produto;
-                  final quantidade = item['quantidade'] as int;
-                  final subtotal = produto.preco * quantidade;
-
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    child: ListTile(
-                      title: Text(produto.nome),
-                      subtitle: Text(
-                        '${quantidade}x R\$ ${produto.preco.toStringAsFixed(2)} = R\$ ${subtotal.toStringAsFixed(2)}',
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          setState(() {
-                            _itensSelecionados.removeAt(index);
-                          });
-                        },
-                      ),
-                    ),
-                  );
-                }),
-              const SizedBox(height: 24),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Valor Total:',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'R\$ ${valorTotal.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _salvarNotaFiscal,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                ),
-                child: const Text(
-                  'Salvar Nota Fiscal',
-                  style: TextStyle(fontSize: 16),
                 ),
               ),
             ],
           ),
         ),
+        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
       ),
     );
   }
@@ -572,20 +497,13 @@ class _SelecionarProdutoDialog extends StatelessWidget {
             final produto = produtos[index];
             return ListTile(
               title: Text(produto.nome),
-              subtitle: Text(
-                'R\$ ${produto.preco.toStringAsFixed(2)} - Estoque: ${produto.estoque}',
-              ),
+              subtitle: Text('R\$ ${produto.preco.toStringAsFixed(2)} - Estoque: ${produto.estoque}'),
               onTap: () => Navigator.pop(context, produto),
             );
           },
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancelar'),
-        ),
-      ],
+      actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar'))],
     );
   }
 }

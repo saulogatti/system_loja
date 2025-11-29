@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:synchronized/synchronized.dart';
 import 'package:system_loja/core/models/cliente.dart';
+import 'package:system_loja/core/models/item_nota_fiscal.dart';
 import 'package:system_loja/core/models/nota_fiscal.dart';
 import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/utils/input_helper.dart';
@@ -102,7 +103,7 @@ class NotaFiscalManager {
       }
 
       final item = ItemNotaFiscal(
-        produtoId: produtoSelecionado.id!,
+        produtoId: produtoSelecionado.id,
         produtoNome: produtoSelecionado.nome,
         produtoCodigo: produtoSelecionado.codigo,
         quantidade: quantidade,
@@ -125,9 +126,9 @@ class NotaFiscalManager {
         'Não informado';
 
     final notaFiscal = NotaFiscal(
-      id: notasFiscais.isEmpty ? 1 : notasFiscais.map((nf) => nf.id!).reduce((a, b) => a > b ? a : b) + 1,
+      id: notasFiscais.isEmpty ? 1 : notasFiscais.map((nf) => nf.id).reduce((a, b) => a > b ? a : b) + 1,
       numeroNota: numeroNota,
-      clienteId: clienteSelecionado.id!,
+      clienteId: clienteSelecionado.id,
       clienteNome: clienteSelecionado.nome,
       clienteCpf: clienteSelecionado.cpf,
       itens: itens,
@@ -215,8 +216,8 @@ class NotaFiscalManager {
       // Obtém o maior ID existente para evitar conflitos
       int maiorId = 0;
       for (final nf in dadosAtuais) {
-        if (nf.id != null && nf.id! > maiorId) {
-          maiorId = nf.id!;
+        if (nf.id > maiorId) {
+          maiorId = nf.id;
         }
       }
 
@@ -229,7 +230,7 @@ class NotaFiscalManager {
         } else {
           // Verifica se o ID já existe (conflito) e reatribui se necessário
           final idExistente = dadosAtuais.any((nf) => nf.id == notaFiscal.id);
-          if (idExistente || notaFiscal.id == null) {
+          if (idExistente) {
             maiorId++;
             final notaFiscalComNovoId = NotaFiscal(
               id: maiorId,
@@ -244,8 +245,8 @@ class NotaFiscalManager {
             dadosAtuais.add(notaFiscalComNovoId);
           } else {
             dadosAtuais.add(notaFiscal);
-            if (notaFiscal.id! > maiorId) {
-              maiorId = notaFiscal.id!;
+            if (notaFiscal.id > maiorId) {
+              maiorId = notaFiscal.id;
             }
           }
         }
