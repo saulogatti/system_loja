@@ -192,6 +192,7 @@ class ProdutoManager with LoggerClassMixin {
   Future<T> _executarComFileLock<T>(Future<T> Function() operacao) async {
     final lockFile = File('$dataFile.lock');
     RandomAccessFile? raf;
+    var lockAcquired = false;
     try {
       // Garante que o diretório pai existe
       lockFile.parent.createSync(recursive: true);
@@ -199,8 +200,9 @@ class ProdutoManager with LoggerClassMixin {
       // Cria ou abre o arquivo de lock
       raf = lockFile.openSync(mode: FileMode.write);
 
-      // Tenta adquirir lock exclusivo com timeout
+      // Tenta adquirir lock exclusivo
       await raf.lock(FileLock.blockingExclusive);
+      lockAcquired = true;
 
       // Executa a operação protegida
       return await operacao();
@@ -212,12 +214,14 @@ class ProdutoManager with LoggerClassMixin {
       );
       return await operacao();
     } finally {
-      // Sempre libera o lock e fecha o arquivo
+      // Libera o lock apenas se foi adquirido com sucesso
       if (raf != null) {
-        try {
-          await raf.unlock();
-        } catch (_) {
-          // Ignora erro ao desbloquear (pode já estar desbloqueado)
+        if (lockAcquired) {
+          try {
+            await raf.unlock();
+          } catch (_) {
+            // Ignora erro ao desbloquear
+          }
         }
         try {
           await raf.close();
