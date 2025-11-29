@@ -1,15 +1,20 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:system_loja/core/models/default/default_object.dart';
+
+part 'cliente.g.dart';
+
 /// Modelo de dados para Cliente
-class Cliente {
-  int? id;
-  String nome;
-  String cpf;
-  String email;
-  String telefone;
-  String endereco;
-  DateTime dataCadastro;
+@JsonSerializable()
+class Cliente extends DefaultObject {
+  final String nome;
+  final String cpf;
+  final String email;
+  final String telefone;
+  final String endereco;
+  final DateTime dataCadastro;
 
   Cliente({
-    this.id,
+    required super.id,
     required this.nome,
     required this.cpf,
     required this.email,
@@ -18,31 +23,12 @@ class Cliente {
     DateTime? dataCadastro,
   }) : dataCadastro = dataCadastro ?? DateTime.now();
 
-  /// Converte o objeto para JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'nome': nome,
-      'cpf': cpf,
-      'email': email,
-      'telefone': telefone,
-      'endereco': endereco,
-      'data_cadastro': dataCadastro.toIso8601String(),
-    };
-  }
-
   /// Cria um objeto a partir de JSON
-  factory Cliente.fromJson(Map<String, dynamic> json) {
-    return Cliente(
-      id: json['id'] as int?,
-      nome: json['nome'] as String,
-      cpf: json['cpf'] as String,
-      email: json['email'] as String,
-      telefone: json['telefone'] as String,
-      endereco: json['endereco'] as String,
-      dataCadastro: DateTime.parse(json['data_cadastro'] as String),
-    );
-  }
+  factory Cliente.fromJson(Map<String, dynamic> json) => _$ClienteFromJson(json);
+
+  /// Converte o objeto para JSON
+  @override
+  Map<String, dynamic> toJson() => _$ClienteToJson(this);
 
   @override
   String toString() {

@@ -65,8 +65,8 @@ class ClienteManager {
       // Obtém o maior ID existente para evitar conflitos
       int maiorId = 0;
       for (final c in dadosAtuais) {
-        if (c.id != null && c.id! > maiorId) {
-          maiorId = c.id!;
+        if (c.id > maiorId) {
+          maiorId = c.id;
         }
       }
 
@@ -79,7 +79,7 @@ class ClienteManager {
         } else {
           // Verifica se o ID já existe (conflito) e reatribui se necessário
           final idExistente = dadosAtuais.any((c) => c.id == cliente.id);
-          if (idExistente || cliente.id == null) {
+          if (idExistente) {
             maiorId++;
             final clienteComNovoId = Cliente(
               id: maiorId,
@@ -93,8 +93,8 @@ class ClienteManager {
             dadosAtuais.add(clienteComNovoId);
           } else {
             dadosAtuais.add(cliente);
-            if (cliente.id! > maiorId) {
-              maiorId = cliente.id!;
+            if (cliente.id > maiorId) {
+              maiorId = cliente.id;
             }
           }
         }
@@ -148,7 +148,7 @@ class ClienteManager {
     final endereco = InputHelper.lerString('Endereço') ?? '';
 
     final cliente = Cliente(
-      id: clientes.isEmpty ? 1 : clientes.map((c) => c.id!).reduce((a, b) => a > b ? a : b) + 1,
+      id: clientes.isEmpty ? 1 : clientes.map((c) => c.id).reduce((a, b) => a > b ? a : b) + 1,
       nome: nome,
       cpf: cpf,
       email: email,
