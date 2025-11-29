@@ -13,6 +13,8 @@ dependencies:
   path_provider: ^2.1.4
   synchronized: ^3.3.0+3
   path: ^1.9.1
+  sqflite: ^2.3.3
+  sqflite_common_ffi: ^2.3.3
 
 dev_dependencies:
   flutter_test:
