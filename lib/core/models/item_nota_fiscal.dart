@@ -2,15 +2,21 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'item_nota_fiscal.g.dart';
 
+
 @JsonSerializable()
 /// Modelo de dados para Item da Nota Fiscal
 class ItemNotaFiscal {
-  int produtoId;
-  String produtoNome;
-  String produtoCodigo;
-  int quantidade;
-  double precoUnitario;
-  double valorTotal;
+  @JsonKey(name: 'produto_id')
+  final int produtoId;
+  @JsonKey(name: 'produto_nome')
+  final String produtoNome;
+  @JsonKey(name: 'produto_codigo')
+  final String produtoCodigo;
+  final int quantidade;
+  @JsonKey(name: 'preco_unitario')
+  final double precoUnitario;
+  @JsonKey(name: 'valor_total')
+  final double valorTotal;
 
   ItemNotaFiscal({
     required this.produtoId,

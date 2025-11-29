@@ -475,6 +475,7 @@ class CacheManager with LoggerClassMixin {
       );
     } catch (e, stackTrace) {
       logError('Erro ao carregar cache do tipo $type: $e', stackTrace);
+      throw CacheReadException('Erro ao carregar cache do tipo $type', e);
     }
   }
 
@@ -488,7 +489,7 @@ class CacheManager with LoggerClassMixin {
       String filePath = _getCacheFilePath(type);
 
       final isSaveSuccessful = FileSystemManager().saveJsonToFile(filePath, _memoryCache[type]!);
-      if (isSaveSuccessful == false) {
+      if (!isSaveSuccessful) {
         throw CacheWriteException('Falha ao salvar dados no arquivo de cache: $filePath');
       }
     } on FileSystemException catch (e) {

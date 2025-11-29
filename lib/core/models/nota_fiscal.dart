@@ -7,13 +7,20 @@ part 'nota_fiscal.g.dart';
 /// Modelo de dados para Nota Fiscal
 @JsonSerializable()
 class NotaFiscal extends DefaultObject {
+  @JsonKey(name: 'numero_nota')
   final String numeroNota;
+  @JsonKey(name: 'cliente_id')
   final int clienteId;
+  @JsonKey(name: 'cliente_nome')
   final String clienteNome;
+  @JsonKey(name: 'cliente_cpf')
   final String clienteCpf;
   final List<ItemNotaFiscal> itens;
+  @JsonKey(name: 'valor_total')
   final double valorTotal;
+  @JsonKey(name: 'forma_pagamento')
   final String formaPagamento;
+  @JsonKey(name: 'data_emissao')
   final DateTime dataEmissao;
 
   NotaFiscal({

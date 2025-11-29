@@ -11,6 +11,7 @@ class Cliente extends DefaultObject {
   final String email;
   final String telefone;
   final String endereco;
+  @JsonKey(name: 'data_cadastro')
   final DateTime dataCadastro;
 
   Cliente({

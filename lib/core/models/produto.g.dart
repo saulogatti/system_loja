@@ -14,9 +14,9 @@ Produto _$ProdutoFromJson(Map<String, dynamic> json) => Produto(
   estoque: (json['estoque'] as num).toInt(),
   descricao: json['descricao'] as String,
   categoria: json['categoria'] as String,
-  dataCadastro: json['dataCadastro'] == null
+  dataCadastro: json['data_cadastro'] == null
       ? null
-      : DateTime.parse(json['dataCadastro'] as String),
+      : DateTime.parse(json['data_cadastro'] as String),
 );
 
 Map<String, dynamic> _$ProdutoToJson(Produto instance) => <String, dynamic>{
@@ -27,5 +27,5 @@ Map<String, dynamic> _$ProdutoToJson(Produto instance) => <String, dynamic>{
   'estoque': instance.estoque,
   'descricao': instance.descricao,
   'categoria': instance.categoria,
-  'dataCadastro': instance.dataCadastro.toIso8601String(),
+  'data_cadastro': instance.dataCadastro.toIso8601String(),
 };

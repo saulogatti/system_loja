@@ -8,19 +8,18 @@ part of 'item_nota_fiscal.dart';
 
 ItemNotaFiscal _$ItemNotaFiscalFromJson(Map<String, dynamic> json) =>
     ItemNotaFiscal(
-      produtoId: (json['produtoId'] as num).toInt(),
-      produtoNome: json['produtoNome'] as String,
-      produtoCodigo: json['produtoCodigo'] as String,
+      produtoId: (json['produto_id'] as num).toInt(),
+      produtoNome: json['produto_nome'] as String,
+      produtoCodigo: json['produto_codigo'] as String,
       quantidade: (json['quantidade'] as num).toInt(),
-      precoUnitario: (json['precoUnitario'] as num).toDouble(),
-    )..valorTotal = (json['valorTotal'] as num).toDouble();
+      precoUnitario: (json['preco_unitario'] as num).toDouble(),
+    );
 
 Map<String, dynamic> _$ItemNotaFiscalToJson(ItemNotaFiscal instance) =>
     <String, dynamic>{
-      'produtoId': instance.produtoId,
-      'produtoNome': instance.produtoNome,
-      'produtoCodigo': instance.produtoCodigo,
+      'produto_id': instance.produtoId,
+      'produto_nome': instance.produtoNome,
+      'produto_codigo': instance.produtoCodigo,
       'quantidade': instance.quantidade,
-      'precoUnitario': instance.precoUnitario,
-      'valorTotal': instance.valorTotal,
+      'preco_unitario': instance.precoUnitario,
     };

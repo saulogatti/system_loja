@@ -13,9 +13,9 @@ Cliente _$ClienteFromJson(Map<String, dynamic> json) => Cliente(
   email: json['email'] as String,
   telefone: json['telefone'] as String,
   endereco: json['endereco'] as String,
-  dataCadastro: json['dataCadastro'] == null
+  dataCadastro: json['data_cadastro'] == null
       ? null
-      : DateTime.parse(json['dataCadastro'] as String),
+      : DateTime.parse(json['data_cadastro'] as String),
 );
 
 Map<String, dynamic> _$ClienteToJson(Cliente instance) => <String, dynamic>{
@@ -25,5 +25,5 @@ Map<String, dynamic> _$ClienteToJson(Cliente instance) => <String, dynamic>{
   'email': instance.email,
   'telefone': instance.telefone,
   'endereco': instance.endereco,
-  'dataCadastro': instance.dataCadastro.toIso8601String(),
+  'data_cadastro': instance.dataCadastro.toIso8601String(),
 };

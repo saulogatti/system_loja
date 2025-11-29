@@ -12,7 +12,7 @@ class Produto extends DefaultObject {
   final int estoque;
   final String descricao;
   final String categoria;
-
+@JsonKey(name: 'data_cadastro')
   final DateTime dataCadastro;
 
   Produto({
