@@ -303,8 +303,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: ff9d74cef83a95f3f8439925bef2e1fb611b9aac
+      ref: "v_1.1.0"
+      resolved-ref: "4079d719c5397a956de35421ef049d977d250330"
       url: "https://github.com/saulogatti/log_custom_printer.git"
     source: git
     version: "1.1.0"

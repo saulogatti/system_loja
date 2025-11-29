@@ -15,7 +15,7 @@ Produto _$ProdutoFromJson(Map<String, dynamic> json) => Produto(
   descricao: json['descricao'] as String,
   categoria: json['categoria'] as String,
   dataCadastro: json['dataCadastro'] == null
-      ? DateTime.now()
+      ? null
       : DateTime.parse(json['dataCadastro'] as String),
 );
 
