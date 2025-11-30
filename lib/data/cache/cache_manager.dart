@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 import 'package:system_loja/data/cache/models/cacheable.dart';
 import 'package:system_loja/data/files_system/file_system_manager.dart';
@@ -33,15 +32,12 @@ typedef CacheableFactory<T extends Cacheable> = T Function(Map<String, dynamic> 
 /// // Recuperar um objeto
 /// final objeto = await cache.get<MinhaClasse>('chave', MinhaClasse.fromJson);
 /// ```
-class CacheManager with LoggerClassMixin {
+class CacheManager with FileSystemManager, LoggerClassMixin {
   /// Instância única do [CacheManager].
   static final CacheManager instance = CacheManager._privateConstructor();
 
   /// Diretório onde os arquivos de cache são armazenados.
-  String _cacheDirectory = '';
-
-  /// Indica se o cache foi inicializado com sucesso.
-  Future<Directory>? _initialized;
+  final String _cacheDirectory = '';
 
   /// Cache em memória para acesso rápido.
   ///
@@ -50,15 +46,7 @@ class CacheManager with LoggerClassMixin {
 
   /// Construtor privado para implementar o padrão singleton.
   CacheManager._privateConstructor() {
-    ensureInitialized();
-  }
-
-  /// Retorna o diretório de cache atual.
-  ///
-  /// Lança [CacheNotInitializedException] se o cache não estiver inicializado.
-  String get cacheDirectory {
-    _ensureInitialized();
-    return _cacheDirectory;
+    setupFileSystem();
   }
 
   /// Limpa todo o cache da aplicação.
@@ -74,11 +62,9 @@ class CacheManager with LoggerClassMixin {
   /// await cache.clearAll();
   /// ```
   Future<void> clearAll() async {
-    _ensureInitialized();
-
     try {
       _memoryCache.clear();
-
+      //FIXME: Refatorar para usar FileSystemManager --- IGNORE ---
       final cacheDir = Directory(_cacheDirectory);
       if (await cacheDir.exists()) {
         await for (final entity in cacheDir.list()) {
@@ -175,34 +161,6 @@ class CacheManager with LoggerClassMixin {
     }
   }
 
-  /// Inicializa o cache de forma assíncrona.
-  ///
-  /// Este método deve ser chamado antes de qualquer operação de cache.
-  /// É seguro chamar este método múltiplas vezes, pois ele só inicializa
-  /// uma vez.
-  ///
-  /// Lança [CacheException] se ocorrer um erro durante a inicialização.
-  Future<void> ensureInitialized() async {
-    if (_initialized != null) {
-      //FIXME: Trocar para usar um completer
-      await _initialized;
-      return;
-    }
-
-    try {
-      _initialized = getApplicationSupportDirectory();
-      final directory = await _initialized!;
-      _cacheDirectory = p.join(directory.path, 'system_loja_cache');
-      final cacheDir = Directory(_cacheDirectory);
-
-      if (!await cacheDir.exists()) {
-        await cacheDir.create(recursive: true);
-      }
-    } catch (e) {
-      throw CacheException('Falha ao inicializar o diretório de cache', e);
-    }
-  }
-
   /// Recupera um objeto do cache pela sua chave.
   ///
   /// [key] é a chave única do objeto no cache.
@@ -286,7 +244,6 @@ class CacheManager with LoggerClassMixin {
   /// cache.invalidateAllMemoryCache();
   /// ```
   void invalidateAllMemoryCache() {
-    _ensureInitialized();
     _memoryCache.clear();
   }
 
@@ -380,8 +337,6 @@ class CacheManager with LoggerClassMixin {
   /// await cache.set(meuCliente);
   /// ```
   Future<void> set(Cacheable item, {String? typeName}) async {
-    _ensureInitialized();
-
     final type = typeName ?? item.runtimeType.toString();
     final key = item.cacheKey;
     assert(key.isNotEmpty, 'A chave de cache não pode ser vazia');
@@ -409,8 +364,6 @@ class CacheManager with LoggerClassMixin {
   /// Lança [CacheNotInitializedException] se o cache não estiver inicializado.
   /// Lança [CacheWriteException] se ocorrer um erro ao salvar.
   Future<void> setAll(List<Cacheable> items, {String? typeName}) async {
-    _ensureInitialized();
-
     if (items.isEmpty) return;
 
     final type = typeName ?? items.first.runtimeType.toString();
@@ -429,13 +382,9 @@ class CacheManager with LoggerClassMixin {
     }
   }
 
-  /// Verifica se o cache está inicializado.
-  ///
-  /// Lança [CacheNotInitializedException] se não estiver.
-  void _ensureInitialized() {
-    if (_initialized == null) {
-      throw const CacheNotInitializedException();
-    }
+  @override
+  String systemNameDirectory() {
+    return 'system_loja_cache';
   }
 
   /// Encontra o nome do tipo para operações de cache.
@@ -445,8 +394,6 @@ class CacheManager with LoggerClassMixin {
   ///
   /// Retorna o nome do tipo como uma string.
   String _findType<T extends Cacheable>(String? typeName) {
-    _ensureInitialized();
-
     final type = typeName ?? T.toString();
     return type;
   }
@@ -466,7 +413,7 @@ class CacheManager with LoggerClassMixin {
     if (_memoryCache.containsKey(type)) return;
     _memoryCache[type] ??= {};
     try {
-      final Map<String, dynamic> jsonData = FileSystemManager().loadJsonFromFile<Map<String, dynamic>>(
+      final Map<String, dynamic> jsonData = await loadJsonFromFile<Map<String, dynamic>>(
         _getCacheFilePath(type),
       );
 
@@ -488,7 +435,7 @@ class CacheManager with LoggerClassMixin {
     try {
       String filePath = _getCacheFilePath(type);
 
-      final isSaveSuccessful = FileSystemManager().saveJsonToFile(filePath, _memoryCache[type]!);
+      final isSaveSuccessful = await saveJsonToFile(filePath, _memoryCache[type]!);
       if (!isSaveSuccessful) {
         throw CacheWriteException('Falha ao salvar dados no arquivo de cache: $filePath');
       }

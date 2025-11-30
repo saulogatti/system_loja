@@ -240,7 +240,7 @@ class ProdutoManager with LoggerClassMixin {
   /// O lock é usado para serializar operações de leitura/escrita no arquivo
   /// entre múltiplas instâncias do gerenciador dentro do mesmo processo.
   Lock _getLock() {
-    return _fileLocks.putIfAbsent(dataFile, () => Lock());
+    return _fileLocks.putIfAbsent(dataFile, Lock.new);
   }
 
   /// Persiste o cache atual (`_produtosList`) no arquivo JSON.

@@ -56,7 +56,7 @@ class ClienteSqlManager {
       orderBy: 'nome ASC',
     );
 
-    return resultado.map((map) => _mapToCliente(map)).toList();
+    return resultado.map(_mapToCliente).toList();
   }
 
   /// Consulta um cliente pelo CPF
@@ -158,7 +158,7 @@ class ClienteSqlManager {
       orderBy: 'nome ASC',
     );
 
-    return resultado.map((map) => _mapToCliente(map)).toList();
+    return resultado.map(_mapToCliente).toList();
   }
 
   /// Converte um Map do banco de dados para um objeto Cliente

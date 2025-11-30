@@ -123,7 +123,7 @@ class ClienteManager {
 
   /// Obtém ou cria um lock para o arquivo específico
   Lock _getLock() {
-    return _fileLocks.putIfAbsent(dataFile, () => Lock());
+    return _fileLocks.putIfAbsent(dataFile, Lock.new);
   }
 
   /// Salva dados no arquivo JSON de forma segura
