@@ -30,6 +30,8 @@ class FileSystemManager with LoggerClassMixin {
   ///
   /// Lança [ArgumentError] se o caminho for vazio ou não terminar com `.json`.
   /// Lança [FileSystemException] se o arquivo não existir.
+  /// 
+  /// Lança outras exceções em caso de erros de leitura ou decodificação.
   R loadJsonFromFile<R>(String path) {
     if (path.isEmpty || p.extension(path) != ".json") {
       throw ArgumentError('O caminho do arquivo não pode ser vazio. Caminhos JSON devem terminar com .json');
@@ -38,9 +40,14 @@ class FileSystemManager with LoggerClassMixin {
     if (!file.existsSync()) {
       throw FileSystemException('Arquivo não encontrado', path);
     }
-    String content = file.readAsStringSync();
-    final R data = jsonDecode(content) as R;
-    return data;
+    try {
+      String content = file.readAsStringSync();
+      final R data = jsonDecode(content) as R;
+      return data;
+    } catch (e, stackTrace) {
+      logError("Erro ao carregar arquivo JSON em $path: $e", stackTrace);
+      rethrow;
+    }
   }
 
   /// Salva dados no formato JSON em um arquivo.
