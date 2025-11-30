@@ -171,8 +171,8 @@ class ProdutoManager with LoggerClassMixin {
     if (file.existsSync()) {
       try {
         final jsonString = file.readAsStringSync();
-        final List<dynamic> jsonList = jsonDecode(jsonString);
-        return jsonList.map((json) => Produto.fromJson(json)).toList();
+        final List<Map<String, dynamic>> jsonList = jsonDecode(jsonString) as List<Map<String, dynamic>>;
+        return jsonList.map(Produto.fromJson).toList();
       } catch (e, stackTrace) {
         logError('Erro ao carregar dados de produtos do disco: $e', stackTrace);
         return [];

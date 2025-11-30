@@ -82,8 +82,8 @@ class NotaFiscalManager {
     if (file.existsSync()) {
       try {
         final jsonString = file.readAsStringSync();
-        final List<dynamic> jsonList = jsonDecode(jsonString);
-        notasFiscais = jsonList.map((json) => NotaFiscal.fromJson(json)).toList();
+        final List<Map<String, dynamic>> jsonList = jsonDecode(jsonString) as List<Map<String, dynamic>>;
+        notasFiscais = jsonList.map(NotaFiscal.fromJson).toList();
       } catch (e) {
         print('Erro ao carregar dados de notas fiscais: $e');
         notasFiscais = [];
@@ -97,8 +97,8 @@ class NotaFiscalManager {
     if (file.existsSync()) {
       try {
         final jsonString = file.readAsStringSync();
-        final List<dynamic> jsonList = jsonDecode(jsonString);
-        return jsonList.map((json) => NotaFiscal.fromJson(json)).toList();
+        final List<Map<String, dynamic>> jsonList = jsonDecode(jsonString) as List<Map<String, dynamic>>;
+        return jsonList.map(NotaFiscal.fromJson).toList();
       } catch (e) {
         return [];
       }

@@ -97,8 +97,8 @@ class ClienteManager {
     if (file.existsSync()) {
       try {
         final jsonString = file.readAsStringSync();
-        final List<dynamic> jsonList = jsonDecode(jsonString);
-        clientes = jsonList.map((json) => Cliente.fromJson(json)).toList();
+        final List<Map<String, dynamic>> jsonList = jsonDecode(jsonString) as List<Map<String, dynamic>>;
+        clientes = jsonList.map(Cliente.fromJson).toList();
       } catch (e) {
         print('Erro ao carregar dados de clientes: $e');
         clientes = [];
@@ -112,8 +112,8 @@ class ClienteManager {
     if (file.existsSync()) {
       try {
         final jsonString = file.readAsStringSync();
-        final List<dynamic> jsonList = jsonDecode(jsonString);
-        return jsonList.map((json) => Cliente.fromJson(json)).toList();
+        final List<Map<String, dynamic>> jsonList = jsonDecode(jsonString) as List<Map<String, dynamic>>;
+        return jsonList.map(Cliente.fromJson).toList();
       } catch (e) {
         return [];
       }

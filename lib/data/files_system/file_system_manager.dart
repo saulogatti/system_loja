@@ -48,6 +48,7 @@ mixin FileSystemManager {
       assert(false, 'Arquivo não encontrado: $path');
     }
     try {
+
       String content = await file.readAsString();
       final R data = jsonDecode(content) as R;
       return data;
