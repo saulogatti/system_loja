@@ -6,5 +6,3 @@ targets:
           explicit_to_json: true
           any_map: true
           checked: true
-          generate_to_json_function: true
-          generate_from_json_function: true
