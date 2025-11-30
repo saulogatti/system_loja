@@ -217,19 +217,19 @@ class ProdutoManager with LoggerClassMixin {
       rethrow;
     } finally {
       // Libera o lock apenas se foi adquirido com sucesso
-            // Libera o lock e fecha o arquivo, registrando quaisquer erros.
+      // Libera o lock e fecha o arquivo, registrando quaisquer erros.
       if (raf != null) {
         if (lockAcquired) {
           try {
             await raf.unlock();
           } catch (e, stackTrace) {
-            logWarning('Erro ao desbloquear arquivo de lock: $e', stackTrace);
+            logError('Erro ao desbloquear arquivo de lock: $e', stackTrace);
           }
         }
         try {
           await raf.close();
         } catch (e, stackTrace) {
-          logWarning('Erro ao fechar arquivo de lock: $e', stackTrace);
+          logError('Erro ao fechar arquivo de lock: $e', stackTrace);
         }
       }
     }
@@ -252,9 +252,7 @@ class ProdutoManager with LoggerClassMixin {
     try {
       final file = File(dataFile);
       file.parent.createSync(recursive: true);
-      final jsonString = jsonEncode(
-        _produtosList.map((produto) => produto.toJson()).toList(),
-      );
+      final jsonString = jsonEncode(_produtosList.map((produto) => produto.toJson()).toList());
       file.writeAsStringSync(jsonString);
     } catch (e, stackTrace) {
       logError('Erro ao salvar dados de produtos: $e', stackTrace);
