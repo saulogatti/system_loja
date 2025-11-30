@@ -217,18 +217,19 @@ class ProdutoManager with LoggerClassMixin {
       rethrow;
     } finally {
       // Libera o lock apenas se foi adquirido com sucesso
+            // Libera o lock e fecha o arquivo, registrando quaisquer erros.
       if (raf != null) {
         if (lockAcquired) {
           try {
             await raf.unlock();
-          } catch (_) {
-            // Ignora erro ao desbloquear
+          } catch (e, stackTrace) {
+            logWarning('Erro ao desbloquear arquivo de lock: $e', stackTrace);
           }
         }
         try {
           await raf.close();
-        } catch (_) {
-          // Ignora erro ao fechar
+        } catch (e, stackTrace) {
+          logWarning('Erro ao fechar arquivo de lock: $e', stackTrace);
         }
       }
     }
