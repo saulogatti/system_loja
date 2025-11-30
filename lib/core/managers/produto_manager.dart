@@ -187,8 +187,8 @@ class ProdutoManager with LoggerClassMixin {
   /// processos diferentes. O arquivo de lock é criado ao lado do arquivo
   /// de dados e é bloqueado de forma exclusiva durante a operação.
   ///
-  /// Em caso de falha ao adquirir o lock, a operação é executada mesmo assim
-  /// para não bloquear a aplicação indefinidamente, registrando um warning.
+  /// Em caso de falha ao adquirir o lock, a operação é abortada e a exceção
+  /// é relançada para evitar corrupção de dados.
   Future<T> _executarComFileLock<T>(Future<T> Function() operacao) async {
     final lockFile = File('$dataFile.lock');
     RandomAccessFile? raf;
@@ -206,13 +206,15 @@ class ProdutoManager with LoggerClassMixin {
 
       // Executa a operação protegida
       return await operacao();
-    } on FileSystemException catch (e) {
-      // Se não conseguiu adquirir o lock, loga warning e continua
-      logWarning(
-        'Não foi possível adquirir lock de arquivo: $e. '
-        'Continuando sem garantia de exclusividade entre processos.',
+    } on FileSystemException catch (e, stackTrace) {
+      // Se não conseguiu adquirir o lock, a operação deve falhar para evitar
+      // corrupção de dados
+      logError(
+        'Falha crítica ao adquirir lock de arquivo: $e. '
+        'A operação será abortada.',
+        stackTrace,
       );
-      return await operacao();
+      rethrow;
     } finally {
       // Libera o lock apenas se foi adquirido com sucesso
       if (raf != null) {
