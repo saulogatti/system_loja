@@ -1,6 +1,5 @@
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/data/database/database_helper.dart';
 import 'package:system_loja/data/database/produto_sql_manager.dart';
@@ -37,6 +36,7 @@ void main() {
     test('deve inserir um produto com sucesso', () async {
       // Arrange
       final produto = Produto(
+        id: 0,
         nome: 'Notebook Dell',
         codigo: 'NOTE-001',
         preco: 3500.00,
@@ -58,10 +58,10 @@ void main() {
       expect(produtoInserido.preco, equals(3500.00));
     });
 
-    test('deve lançar exceção ao inserir produto com código duplicado',
-        () async {
+    test('deve lançar exceção ao inserir produto com código duplicado', () async {
       // Arrange
       final produto1 = Produto(
+        id: 0,
         nome: 'Notebook Dell',
         codigo: 'NOTE-001',
         preco: 3500.00,
@@ -71,6 +71,7 @@ void main() {
       );
 
       final produto2 = Produto(
+        id: 0,
         nome: 'Notebook HP',
         codigo: 'NOTE-001', // Mesmo código
         preco: 4000.00,
@@ -81,15 +82,13 @@ void main() {
 
       // Act & Assert
       await produtoManager.inserir(produto1);
-      expect(
-        () => produtoManager.inserir(produto2),
-        throwsA(isA<Exception>()),
-      );
+      expect(() => produtoManager.inserir(produto2), throwsA(isA<Exception>()));
     });
 
     test('deve consultar produto por código', () async {
       // Arrange
       final produto = Produto(
+        id: 0,
         nome: 'Mouse Logitech',
         codigo: 'MOUSE-001',
         preco: 150.00,
@@ -101,9 +100,7 @@ void main() {
       await produtoManager.inserir(produto);
 
       // Act
-      final produtoEncontrado = await produtoManager.consultarPorCodigo(
-        'MOUSE-001',
-      );
+      final produtoEncontrado = await produtoManager.consultarPorCodigo('MOUSE-001');
 
       // Assert
       expect(produtoEncontrado, isNotNull);
@@ -121,6 +118,7 @@ void main() {
     test('deve atualizar produto com sucesso', () async {
       // Arrange
       final produto = Produto(
+        id: 0,
         nome: 'Teclado Mecânico',
         codigo: 'TEC-001',
         preco: 300.00,
@@ -156,6 +154,7 @@ void main() {
     test('deve excluir produto com sucesso', () async {
       // Arrange
       final produto = Produto(
+        id: 0,
         nome: 'Monitor 24"',
         codigo: 'MON-001',
         preco: 800.00,
@@ -179,6 +178,7 @@ void main() {
     test('deve listar todos os produtos', () async {
       // Arrange
       final produto1 = Produto(
+        id: 0,
         nome: 'Produto A',
         codigo: 'PROD-A',
         preco: 100.00,
@@ -188,6 +188,7 @@ void main() {
       );
 
       final produto2 = Produto(
+        id: 0,
         nome: 'Produto B',
         codigo: 'PROD-B',
         preco: 200.00,
@@ -212,6 +213,7 @@ void main() {
     test('deve buscar produtos por categoria', () async {
       // Arrange
       final produto1 = Produto(
+        id: 0,
         nome: 'Mouse',
         codigo: 'MOUSE-001',
         preco: 100.00,
@@ -221,6 +223,7 @@ void main() {
       );
 
       final produto2 = Produto(
+        id: 0,
         nome: 'Teclado',
         codigo: 'TEC-001',
         preco: 200.00,
@@ -230,6 +233,7 @@ void main() {
       );
 
       final produto3 = Produto(
+        id: 0,
         nome: 'Notebook',
         codigo: 'NOTE-001',
         preco: 3500.00,
@@ -252,6 +256,7 @@ void main() {
     test('deve listar produtos com estoque baixo', () async {
       // Arrange
       final produto1 = Produto(
+        id: 0,
         nome: 'Produto com estoque alto',
         codigo: 'ALTO-001',
         preco: 100.00,
@@ -261,6 +266,7 @@ void main() {
       );
 
       final produto2 = Produto(
+        id: 0,
         nome: 'Produto com estoque baixo',
         codigo: 'BAIXO-001',
         preco: 200.00,
@@ -283,6 +289,7 @@ void main() {
     test('deve atualizar estoque de produto', () async {
       // Arrange
       final produto = Produto(
+        id: 0,
         nome: 'Produto Teste',
         codigo: 'TESTE-001',
         preco: 100.00,
@@ -304,6 +311,7 @@ void main() {
     test('deve contar o total de produtos', () async {
       // Arrange
       final produto1 = Produto(
+        id: 0,
         nome: 'Produto 1',
         codigo: 'PROD-001',
         preco: 100.00,
@@ -313,6 +321,7 @@ void main() {
       );
 
       final produto2 = Produto(
+        id: 0,
         nome: 'Produto 2',
         codigo: 'PROD-002',
         preco: 200.00,
