@@ -26,9 +26,31 @@ mixin FileSystemManager {
   /// desnecessárias.
   AsyncMemoizer<String> memoizer = AsyncMemoizer<String>();
 
+  @protected
+  /// Exclui todos os arquivos JSON do diretório de cache.
+  /// Esta função é útil para limpar o cache
+  /// de dados persistidos, removendo todos os arquivos JSON
+  /// armazenados no diretório de cache.
+  /// Exclui apenas arquivos com extensão `.json`.
+  /// Se o diretório não existir, não faz nada.
+  /// Se ocorrer um erro ao excluir os arquivos,
+  /// o erro é registrado via `logError`,
+  /// mas a função não lança exceções.
+  @protected
+  Future<void> deleteDirectory() async {
+    final cacheDir = Directory(await setupFileSystem());
+    if (await cacheDir.exists()) {
+      await for (final entity in cacheDir.list()) {
+        if (entity is File && entity.path.endsWith('.json')) {
+          await entity.delete();
+        }
+      }
+    }
+  }
+
   /// Carrega e decodifica dados JSON de um arquivo de forma assíncrona.
   ///
-  /// Lê o conteúdo de um arquivo JSON localizado em [path] relativo ao
+  /// Lê o conteúdo de um arquivo JSON localizado em [fileName] relativo ao
   /// diretório de cache da aplicação e retorna os dados decodificados no
   /// tipo genérico [R]. O caminho deve ser válido e terminar com `.json`.
   ///
@@ -38,22 +60,21 @@ mixin FileSystemManager {
   /// Lança [ArgumentError] se o caminho for vazio ou não terminar com `.json`.
   /// Registra erros e relança exceções em caso de falhas de leitura ou decodificação.
   @protected
-  Future<R> loadJsonFromFile<R>(String path) async {
-    if (path.isEmpty || p.extension(path) != '.json') {
+  Future<R> loadJsonFromFile<R>(String fileName) async {
+    if (fileName.isEmpty || p.extension(fileName) != '.json') {
       throw ArgumentError('O caminho do arquivo não pode ser vazio. Caminhos JSON devem terminar com .json');
     }
 
-    File file = await _mountFileSystem(path);
+    File file = await _mountFileSystem(fileName);
     if (!file.existsSync()) {
-      assert(false, 'Arquivo não encontrado: $path');
+      assert(false, 'Arquivo não encontrado: $fileName');
     }
     try {
-
       String content = await file.readAsString();
       final R data = jsonDecode(content) as R;
       return data;
     } catch (e, stackTrace) {
-      logError('Erro ao carregar arquivo JSON em $path: $e', stackTrace);
+      logError('Erro ao carregar arquivo JSON em $fileName: $e', stackTrace);
       rethrow;
     }
   }
