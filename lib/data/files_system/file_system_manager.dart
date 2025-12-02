@@ -105,8 +105,8 @@ mixin FileSystemManager {
 
     try {
       File file = await _mountFileSystem(path);
-      if (!file.parent.existsSync()) {
-        file.parent.createSync(recursive: true);
+      if (!await file.parent.exists()) {
+        await file.parent.create(recursive: true);
       }
       String jsonString = _jsonEncoder.convert(data);
       await file.writeAsString(jsonString);
