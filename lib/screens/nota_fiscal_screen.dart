@@ -249,7 +249,7 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
         final produto = item['produto'] as Produto;
         final quantidade = item['quantidade'] as int;
         return ItemNotaFiscal(
-          produtoId: produto.id, // Id nao é mais null por construção
+          produtoId: produto.id, // ID não é mais null por construção
           produtoNome: produto.nome,
           produtoCodigo: produto.codigo,
           quantidade: quantidade,
