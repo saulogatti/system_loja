@@ -73,7 +73,7 @@ class ProdutoSqlManager {
       orderBy: 'nome ASC',
     );
 
-    return resultado.map((map) => _mapToProduto(map)).toList();
+    return resultado.map(_mapToProduto).toList();
   }
 
   /// Busca produtos por nome (busca parcial)
@@ -90,7 +90,7 @@ class ProdutoSqlManager {
       orderBy: 'nome ASC',
     );
 
-    return resultado.map((map) => _mapToProduto(map)).toList();
+    return resultado.map(_mapToProduto).toList();
   }
 
   /// Consulta um produto pelo código
@@ -195,7 +195,7 @@ class ProdutoSqlManager {
       orderBy: 'estoque ASC',
     );
 
-    return resultado.map((map) => _mapToProduto(map)).toList();
+    return resultado.map(_mapToProduto).toList();
   }
 
   /// Lista todos os produtos do banco de dados
@@ -210,7 +210,7 @@ class ProdutoSqlManager {
       orderBy: 'nome ASC',
     );
 
-    return resultado.map((map) => _mapToProduto(map)).toList();
+    return resultado.map(_mapToProduto).toList();
   }
 
   /// Converte um Map do banco de dados para um objeto Produto

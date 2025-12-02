@@ -385,7 +385,7 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _adicionarNotaFiscal(),
+        onPressed: _adicionarNotaFiscal,
         icon: const Icon(Icons.add),
         label: const Text('Nova Nota Fiscal'),
       ),

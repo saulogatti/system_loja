@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 import 'package:system_loja/data/cache/models/cacheable.dart';
 import 'package:system_loja/data/files_system/file_system_manager.dart';
@@ -33,15 +32,9 @@ typedef CacheableFactory<T extends Cacheable> = T Function(Map<String, dynamic> 
 /// // Recuperar um objeto
 /// final objeto = await cache.get<MinhaClasse>('chave', MinhaClasse.fromJson);
 /// ```
-class CacheManager with LoggerClassMixin {
+class CacheManager with FileSystemManager, LoggerClassMixin {
   /// Instância única do [CacheManager].
   static final CacheManager instance = CacheManager._privateConstructor();
-
-  /// Diretório onde os arquivos de cache são armazenados.
-  String _cacheDirectory = '';
-
-  /// Indica se o cache foi inicializado com sucesso.
-  Future<Directory>? _initialized;
 
   /// Cache em memória para acesso rápido.
   ///
@@ -49,24 +42,22 @@ class CacheManager with LoggerClassMixin {
   final Map<String, Map<String, Map<String, dynamic>>> _memoryCache = {};
 
   /// Construtor privado para implementar o padrão singleton.
-  CacheManager._privateConstructor() {
-    ensureInitialized();
-  }
-
-  /// Retorna o diretório de cache atual.
   ///
-  /// Lança [CacheNotInitializedException] se o cache não estiver inicializado.
-  String get cacheDirectory {
-    _ensureInitialized();
-    return _cacheDirectory;
+  /// Inicializa o sistema de arquivos através do [FileSystemManager]
+  /// chamando [setupFileSystem] para preparar o ambiente de cache.
+  CacheManager._privateConstructor() {
+    setupFileSystem();
   }
 
   /// Limpa todo o cache da aplicação.
   ///
   /// Remove todos os objetos de todos os tipos, tanto da memória
-  /// quanto dos arquivos de cache.
+  /// quanto dos arquivos de cache. Itera sobre todos os arquivos `.json`
+  /// no diretório de cache e os remove.
   ///
-  /// Lança [CacheNotInitializedException] se o cache não estiver inicializado.
+  /// **Nota**: Implementação atual usa acesso direto ao diretório e
+  /// deve ser refatorada para usar [FileSystemManager].
+  ///
   /// Lança [CacheWriteException] se ocorrer um erro ao limpar.
   ///
   /// Exemplo:
@@ -74,19 +65,9 @@ class CacheManager with LoggerClassMixin {
   /// await cache.clearAll();
   /// ```
   Future<void> clearAll() async {
-    _ensureInitialized();
-
     try {
       _memoryCache.clear();
-
-      final cacheDir = Directory(_cacheDirectory);
-      if (await cacheDir.exists()) {
-        await for (final entity in cacheDir.list()) {
-          if (entity is File && entity.path.endsWith('.json')) {
-            await entity.delete();
-          }
-        }
-      }
+      await deleteDirectory();
     } catch (e) {
       if (e is CacheException) rethrow;
       throw CacheWriteException('Falha ao limpar todo o cache', e);
@@ -95,17 +76,17 @@ class CacheManager with LoggerClassMixin {
 
   /// Limpa todos os objetos de um tipo específico do cache.
   ///
-  /// [typeName] é o nome do tipo a ser limpo.
+  /// Remove da memória e do arquivo todos os objetos do tipo [T].
+  /// O tipo é determinado automaticamente através do genérico.
   ///
-  /// Lança [CacheNotInitializedException] se o cache não estiver inicializado.
-  /// Lança [CacheWriteException] se ocorrer um erro ao limpar.
+  /// Lança [CacheWriteException] se ocorrer um erro ao deletar o arquivo.
   ///
   /// Exemplo:
   /// ```dart
   /// await cache.clearType<Cliente>();
   /// ```
-  Future<void> clearType<T extends Cacheable>({String? typeName}) async {
-    String type = _findType<T>(typeName);
+  Future<void> clearType<T extends Cacheable>() async {
+    String type = _findType<T>();
 
     try {
       _memoryCache.remove(type);
@@ -123,11 +104,12 @@ class CacheManager with LoggerClassMixin {
   /// Verifica se uma chave existe no cache.
   ///
   /// [key] é a chave única do objeto.
-  /// [typeName] é o nome do tipo do objeto.
   ///
-  /// Retorna `true` se a chave existe, `false` caso contrário.
+  /// Carrega automaticamente os dados do arquivo se não estiverem em memória
+  /// (lazy loading). Retorna `true` se a chave existe no cache do tipo [T],
+  /// `false` caso contrário.
   ///
-  /// Lança [CacheNotInitializedException] se o cache não estiver inicializado.
+  /// Lança [CacheReadException] se ocorrer erro ao carregar do arquivo.
   ///
   /// Exemplo:
   /// ```dart
@@ -135,10 +117,10 @@ class CacheManager with LoggerClassMixin {
   ///   // Objeto existe no cache
   /// }
   /// ```
-  Future<bool> containsKey<T extends Cacheable>(String key, {String? typeName}) async {
+  Future<bool> containsKey<T extends Cacheable>(String key) async {
     assert(key.isNotEmpty, 'A chave de cache não pode ser vazia');
 
-    final type = _findType<T>(typeName);
+    final type = _findType<T>();
 
     try {
       // Carrega do arquivo se necessário
@@ -153,7 +135,6 @@ class CacheManager with LoggerClassMixin {
 
   /// Retorna o número de objetos de um tipo específico no cache.
   ///
-  /// [typeName] é o nome do tipo.
   ///
   /// Retorna o número de objetos, ou 0 se o tipo não existir.
   ///
@@ -163,8 +144,8 @@ class CacheManager with LoggerClassMixin {
   /// ```dart
   /// final count = await cache.count<Cliente>();
   /// ```
-  Future<int> count<T extends Cacheable>({String? typeName}) async {
-    final type = _findType<T>(typeName);
+  Future<int> count<T extends Cacheable>() async {
+    final type = _findType<T>();
 
     try {
       await _loadTypeCache(type);
@@ -175,53 +156,28 @@ class CacheManager with LoggerClassMixin {
     }
   }
 
-  /// Inicializa o cache de forma assíncrona.
-  ///
-  /// Este método deve ser chamado antes de qualquer operação de cache.
-  /// É seguro chamar este método múltiplas vezes, pois ele só inicializa
-  /// uma vez.
-  ///
-  /// Lança [CacheException] se ocorrer um erro durante a inicialização.
-  Future<void> ensureInitialized() async {
-    if (_initialized != null) {
-      //FIXME: Trocar para usar um completer
-      await _initialized;
-      return;
-    }
-
-    try {
-      _initialized = getApplicationSupportDirectory();
-      final directory = await _initialized!;
-      _cacheDirectory = p.join(directory.path, 'system_loja_cache');
-      final cacheDir = Directory(_cacheDirectory);
-
-      if (!await cacheDir.exists()) {
-        await cacheDir.create(recursive: true);
-      }
-    } catch (e) {
-      throw CacheException('Falha ao inicializar o diretório de cache', e);
-    }
-  }
-
   /// Recupera um objeto do cache pela sua chave.
   ///
   /// [key] é a chave única do objeto no cache.
-  /// [factory] é a função que converte o JSON de volta para o objeto.
-  /// [typeName] é o nome do tipo (opcional).
+  /// [factory] é a função que converte o JSON de volta para o objeto [T].
   ///
-  /// Retorna o objeto se encontrado, ou `null` se não existir no cache.
+  /// O método primeiro busca em memória. Se não encontrar, carrega do arquivo
+  /// (lazy loading) e busca novamente. Retorna o objeto deserializado se
+  /// encontrado, ou `null` se não existir no cache.
   ///
-  /// Lança [CacheNotInitializedException] se o cache não estiver inicializado.
   /// Lança [CacheSerializationException] se houver erro na deserialização.
   ///
   /// Exemplo:
   /// ```dart
   /// final cliente = await cache.get<Cliente>('cliente_1', Cliente.fromJson);
+  /// if (cliente != null) {
+  ///   // Usar objeto
+  /// }
   /// ```
-  Future<T?> get<T extends Cacheable>(String key, CacheableFactory<T> factory, {String? typeName}) async {
+  Future<T?> get<T extends Cacheable>(String key, CacheableFactory<T> factory) async {
     assert(key.isNotEmpty, 'A chave de cache não pode ser vazia');
 
-    final type = _findType<T>(typeName);
+    final type = _findType<T>();
 
     try {
       // Tenta buscar do cache em memória primeiro
@@ -258,8 +214,8 @@ class CacheManager with LoggerClassMixin {
   /// ```dart
   /// final clientes = await cache.getAll<Cliente>(Cliente.fromJson);
   /// ```
-  Future<List<T>> getAll<T extends Cacheable>(CacheableFactory<T> factory, {String? typeName}) async {
-    final type = _findType<T>(typeName);
+  Future<List<T>> getAll<T extends Cacheable>(CacheableFactory<T> factory) async {
+    final type = _findType<T>();
 
     try {
       // Carrega do arquivo se necessário
@@ -286,7 +242,6 @@ class CacheManager with LoggerClassMixin {
   /// cache.invalidateAllMemoryCache();
   /// ```
   void invalidateAllMemoryCache() {
-    _ensureInitialized();
     _memoryCache.clear();
   }
 
@@ -301,8 +256,8 @@ class CacheManager with LoggerClassMixin {
   /// ```dart
   /// cache.invalidateMemoryCache<Cliente>();
   /// ```
-  void invalidateMemoryCache<T extends Cacheable>({String? typeName}) {
-    final type = _findType<T>(typeName);
+  void invalidateMemoryCache<T extends Cacheable>() {
+    final type = _findType<T>();
     _memoryCache.remove(type);
   }
 
@@ -318,8 +273,8 @@ class CacheManager with LoggerClassMixin {
   /// ```dart
   /// final keys = await cache.keys<Cliente>();
   /// ```
-  Future<Set<String>> keys<T extends Cacheable>({String? typeName}) async {
-    final type = _findType<T>(typeName);
+  Future<Set<String>> keys<T extends Cacheable>() async {
+    final type = _findType<T>();
 
     try {
       await _loadTypeCache(type);
@@ -344,8 +299,8 @@ class CacheManager with LoggerClassMixin {
   /// ```dart
   /// final removido = await cache.remove<Cliente>('cliente_1');
   /// ```
-  Future<bool> remove<T extends Cacheable>(String key, {String? typeName}) async {
-    final type = _findType<T>(typeName);
+  Future<bool> remove<T extends Cacheable>(String key) async {
+    final type = _findType<T>();
 
     try {
       // Carrega do arquivo se necessário
@@ -379,10 +334,8 @@ class CacheManager with LoggerClassMixin {
   /// ```dart
   /// await cache.set(meuCliente);
   /// ```
-  Future<void> set(Cacheable item, {String? typeName}) async {
-    _ensureInitialized();
-
-    final type = typeName ?? item.runtimeType.toString();
+  Future<void> set(Cacheable item) async {
+    final type = item.runtimeType.toString();
     final key = item.cacheKey;
     assert(key.isNotEmpty, 'A chave de cache não pode ser vazia');
     try {
@@ -400,20 +353,25 @@ class CacheManager with LoggerClassMixin {
 
   /// Armazena múltiplos objetos [Cacheable] no cache de uma vez.
   ///
-  /// Este método é mais eficiente que chamar [set] múltiplas vezes,
-  /// pois realiza apenas uma operação de escrita no arquivo.
-  ///
   /// [items] é a lista de objetos a serem armazenados.
-  /// [typeName] é o nome do tipo (opcional).
   ///
-  /// Lança [CacheNotInitializedException] se o cache não estiver inicializado.
+  /// Este método é significativamente mais eficiente que chamar [set]
+  /// múltiplas vezes, pois realiza apenas uma operação de escrita no arquivo
+  /// ao final, em vez de escrever após cada item. Todos os itens devem ser
+  /// do mesmo tipo (determinado pelo primeiro item da lista).
+  ///
+  /// Se a lista estiver vazia, retorna imediatamente sem fazer nada.
+  ///
   /// Lança [CacheWriteException] se ocorrer um erro ao salvar.
-  Future<void> setAll(List<Cacheable> items, {String? typeName}) async {
-    _ensureInitialized();
-
+  ///
+  /// Exemplo:
+  /// ```dart
+  /// await cache.setAll([cliente1, cliente2, cliente3]);
+  /// ```
+  Future<void> setAll(List<Cacheable> items) async {
     if (items.isEmpty) return;
 
-    final type = typeName ?? items.first.runtimeType.toString();
+    final type = items.first.runtimeType.toString();
 
     try {
       _memoryCache[type] ??= {};
@@ -429,47 +387,58 @@ class CacheManager with LoggerClassMixin {
     }
   }
 
-  /// Verifica se o cache está inicializado.
+  /// Retorna o nome do diretório do sistema de cache.
   ///
-  /// Lança [CacheNotInitializedException] se não estiver.
-  void _ensureInitialized() {
-    if (_initialized == null) {
-      throw const CacheNotInitializedException();
-    }
+  /// Este método sobrescreve o comportamento do [FileSystemManager]
+  /// para definir o nome do diretório onde os arquivos de cache serão
+  /// armazenados dentro do diretório de suporte da aplicação.
+  @override
+  String systemNameDirectory() {
+    return 'system_loja_cache';
   }
 
   /// Encontra o nome do tipo para operações de cache.
   ///
-  /// [typeName] é o nome do tipo fornecido opcionalmente.
-  /// Se não for fornecido, usa o nome da classe genérica [T].
+  /// Usa o tipo genérico [T] para obter o nome da classe através de
+  /// [toString]. Este nome é usado como chave para organizar objetos
+  /// no cache em memória e determinar o nome do arquivo de persistência.
   ///
-  /// Retorna o nome do tipo como uma string.
-  String _findType<T extends Cacheable>(String? typeName) {
-    _ensureInitialized();
-
-    final type = typeName ?? T.toString();
+  /// Retorna o nome do tipo como uma string (ex: 'Cliente', 'Produto').
+  String _findType<T extends Cacheable>() {
+    final type = T.toString();
     return type;
   }
 
-  /// Retorna o caminho do arquivo de cache para um tipo específico.
+  /// Retorna o caminho relativo do arquivo de cache para um tipo específico.
   ///
   /// [typeName] é o nome do tipo de objeto (geralmente o nome da classe).
+  /// O caminho é relativo ao diretório de cache gerenciado pelo [FileSystemManager].
+  ///
+  /// Retorna um caminho no formato: `${typeName.toLowerCase()}.json`
   String _getCacheFilePath(String typeName) {
-    return p.join(_cacheDirectory, '${typeName.toLowerCase()}.json');
+    return p.setExtension(typeName.toLowerCase(), '.json');
   }
 
-  /// Carrega os dados do cache de um tipo específico do arquivo.
+  /// Carrega os dados do cache de um tipo específico do arquivo para memória.
   ///
   /// [type] é o nome do tipo a ser carregado.
+  ///
+  /// Se os dados já estão em memória, retorna imediatamente sem carregar do disco.
+  /// Caso contrário, lê o arquivo JSON correspondente usando [loadJsonFromFile] e
+  /// popula o cache em memória.
+  ///
+  /// Lança [CacheReadException] em caso de erro ao ler ou parsear o arquivo.
   Future<void> _loadTypeCache(String type) async {
     // Se já está em memória, não precisa carregar
     if (_memoryCache.containsKey(type)) return;
     _memoryCache[type] ??= {};
     try {
-      final Map<String, dynamic> jsonData = FileSystemManager().loadJsonFromFile<Map<String, dynamic>>(
+      final Map<String, dynamic> jsonData = await loadJsonFromFile<Map<String, dynamic>>(
         _getCacheFilePath(type),
       );
-
+      if (jsonData.isEmpty) {
+        return;
+      }
       _memoryCache[type] = jsonData.map(
         (key, value) => MapEntry(key, Map<String, dynamic>.from(value as Map)),
       );
@@ -479,16 +448,22 @@ class CacheManager with LoggerClassMixin {
     }
   }
 
-  /// Salva os dados do cache de um tipo específico no arquivo.
+  /// Salva os dados do cache de um tipo específico do memória para arquivo.
   ///
   /// [type] é o nome do tipo a ser salvo.
+  ///
+  /// Persiste todos os objetos do tipo especificado que estão em memória
+  /// no arquivo JSON correspondente usando [saveJsonToFile]. Se não houver
+  /// dados em memória para o tipo, retorna sem fazer nada.
+  ///
+  /// Lança [CacheWriteException] em caso de erro ao escrever no arquivo.
   Future<void> _saveTypeCache(String type) async {
     if (!_memoryCache.containsKey(type)) return;
 
     try {
       String filePath = _getCacheFilePath(type);
 
-      final isSaveSuccessful = FileSystemManager().saveJsonToFile(filePath, _memoryCache[type]!);
+      final isSaveSuccessful = await saveJsonToFile(filePath, _memoryCache[type]!);
       if (!isSaveSuccessful) {
         throw CacheWriteException('Falha ao salvar dados no arquivo de cache: $filePath');
       }
