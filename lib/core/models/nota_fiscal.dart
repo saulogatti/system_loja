@@ -1,63 +1,30 @@
-/// Modelo de dados para Item da Nota Fiscal
-class ItemNotaFiscal {
-  int produtoId;
-  String produtoNome;
-  String produtoCodigo;
-  int quantidade;
-  double precoUnitario;
-  double valorTotal;
+import 'package:json_annotation/json_annotation.dart';
+import 'package:system_loja/core/models/default/default_object.dart';
+import 'package:system_loja/core/models/item_nota_fiscal.dart';
 
-  ItemNotaFiscal({
-    required this.produtoId,
-    required this.produtoNome,
-    required this.produtoCodigo,
-    required this.quantidade,
-    required this.precoUnitario,
-  }) : valorTotal = quantidade * precoUnitario;
-
-  /// Converte o objeto para JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'produto_id': produtoId,
-      'produto_nome': produtoNome,
-      'produto_codigo': produtoCodigo,
-      'quantidade': quantidade,
-      'preco_unitario': precoUnitario,
-      'valor_total': valorTotal,
-    };
-  }
-
-  /// Cria um objeto a partir de JSON
-  factory ItemNotaFiscal.fromJson(Map<String, dynamic> json) {
-    return ItemNotaFiscal(
-      produtoId: json['produto_id'] as int,
-      produtoNome: json['produto_nome'] as String,
-      produtoCodigo: json['produto_codigo'] as String,
-      quantidade: json['quantidade'] as int,
-      precoUnitario: (json['preco_unitario'] as num).toDouble(),
-    );
-  }
-
-  @override
-  String toString() {
-    return '  - ${quantidade}x $produtoNome (R\$ ${precoUnitario.toStringAsFixed(2)}) = R\$ ${valorTotal.toStringAsFixed(2)}';
-  }
-}
+part 'nota_fiscal.g.dart';
 
 /// Modelo de dados para Nota Fiscal
-class NotaFiscal {
-  int? id;
-  String numeroNota;
-  int clienteId;
-  String clienteNome;
-  String clienteCpf;
-  List<ItemNotaFiscal> itens;
-  double valorTotal;
-  String formaPagamento;
-  DateTime dataEmissao;
+@JsonSerializable()
+class NotaFiscal extends DefaultObject {
+  @JsonKey(name: 'numero_nota')
+  final String numeroNota;
+  @JsonKey(name: 'cliente_id')
+  final int clienteId;
+  @JsonKey(name: 'cliente_nome')
+  final String clienteNome;
+  @JsonKey(name: 'cliente_cpf')
+  final String clienteCpf;
+  final List<ItemNotaFiscal> itens;
+  @JsonKey(name: 'valor_total')
+  final double valorTotal;
+  @JsonKey(name: 'forma_pagamento')
+  final String formaPagamento;
+  @JsonKey(name: 'data_emissao')
+  final DateTime dataEmissao;
 
   NotaFiscal({
-    this.id,
+    required super.id,
     required this.numeroNota,
     required this.clienteId,
     required this.clienteNome,
@@ -65,39 +32,15 @@ class NotaFiscal {
     required this.itens,
     required this.formaPagamento,
     DateTime? dataEmissao,
-  })  : valorTotal = itens.fold(0.0, (sum, item) => sum + item.valorTotal),
-        dataEmissao = dataEmissao ?? DateTime.now();
-
-  /// Converte o objeto para JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'numero_nota': numeroNota,
-      'cliente_id': clienteId,
-      'cliente_nome': clienteNome,
-      'cliente_cpf': clienteCpf,
-      'itens': itens.map((item) => item.toJson()).toList(),
-      'valor_total': valorTotal,
-      'forma_pagamento': formaPagamento,
-      'data_emissao': dataEmissao.toIso8601String(),
-    };
-  }
+  }) : valorTotal = itens.fold(0.0, (sum, item) => sum + item.valorTotal),
+       dataEmissao = dataEmissao ?? DateTime.now();
 
   /// Cria um objeto a partir de JSON
-  factory NotaFiscal.fromJson(Map<String, dynamic> json) {
-    return NotaFiscal(
-      id: json['id'] as int?,
-      numeroNota: json['numero_nota'] as String,
-      clienteId: json['cliente_id'] as int,
-      clienteNome: json['cliente_nome'] as String,
-      clienteCpf: json['cliente_cpf'] as String,
-      itens: (json['itens'] as List)
-          .map((item) => ItemNotaFiscal.fromJson(item as Map<String, dynamic>))
-          .toList(),
-      formaPagamento: json['forma_pagamento'] as String,
-      dataEmissao: DateTime.parse(json['data_emissao'] as String),
-    );
-  }
+  factory NotaFiscal.fromJson(Map<String, dynamic> json) => _$NotaFiscalFromJson(json);
+
+  /// Converte o objeto para JSON
+  @override
+  Map<String, dynamic> toJson() => _$NotaFiscalToJson(this);
 
   @override
   String toString() {

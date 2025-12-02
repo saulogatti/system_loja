@@ -17,11 +17,108 @@ class ClienteSqlManager {
   /// Construtor que recebe opcionalmente uma instância do DatabaseHelper
   ///
   /// Se não for fornecido, usa a instância singleton padrão.
-  ClienteSqlManager({DatabaseHelper? dbHelper})
-      : _dbHelper = dbHelper ?? DatabaseHelper();
+  ClienteSqlManager({DatabaseHelper? dbHelper}) : _dbHelper = dbHelper ?? DatabaseHelper();
 
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
+
+  /// Atualiza um cliente existente no banco de dados
+  ///
+  /// [cliente] Objeto Cliente com os dados atualizados.
+  /// O cliente deve ter um ID válido.
+  /// Retorna o número de linhas afetadas.
+  Future<int> atualizar(Cliente cliente) async {
+    final db = await _database;
+
+    final Map<String, dynamic> dados = {
+      'nome': cliente.nome,
+      'cpf': cliente.cpf,
+      'email': cliente.email,
+      'telefone': cliente.telefone,
+      'endereco': cliente.endereco,
+      'data_cadastro': cliente.dataCadastro.toIso8601String(),
+    };
+
+    return await db.update(DatabaseConfig.tableClientes, dados, where: 'id = ?', whereArgs: [cliente.id]);
+  }
+
+  /// Busca clientes por nome (busca parcial)
+  ///
+  /// [nome] Texto a ser buscado no nome do cliente.
+  /// Retorna uma lista de clientes cujo nome contém o texto buscado.
+  Future<List<Cliente>> buscarPorNome(String nome) async {
+    final db = await _database;
+
+    final List<Map<String, dynamic>> resultado = await db.query(
+      DatabaseConfig.tableClientes,
+      where: 'nome LIKE ?',
+      whereArgs: ['%$nome%'],
+      orderBy: 'nome ASC',
+    );
+
+    return resultado.map(_mapToCliente).toList();
+  }
+
+  /// Consulta um cliente pelo CPF
+  ///
+  /// [cpf] CPF do cliente a ser consultado.
+  /// Retorna o Cliente encontrado ou null se não existir.
+  Future<Cliente?> consultarPorCpf(String cpf) async {
+    final db = await _database;
+
+    final List<Map<String, dynamic>> resultado = await db.query(
+      DatabaseConfig.tableClientes,
+      where: 'cpf = ?',
+      whereArgs: [cpf],
+    );
+
+    if (resultado.isEmpty) {
+      return null;
+    }
+
+    return _mapToCliente(resultado.first);
+  }
+
+  /// Consulta um cliente pelo ID
+  ///
+  /// [id] ID do cliente a ser consultado.
+  /// Retorna o Cliente encontrado ou null se não existir.
+  Future<Cliente?> consultarPorId(int id) async {
+    final db = await _database;
+
+    final List<Map<String, dynamic>> resultado = await db.query(
+      DatabaseConfig.tableClientes,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (resultado.isEmpty) {
+      return null;
+    }
+
+    return _mapToCliente(resultado.first);
+  }
+
+  /// Conta o número total de clientes cadastrados
+  ///
+  /// Retorna o número total de clientes no banco de dados.
+  Future<int> contarTotal() async {
+    final db = await _database;
+
+    final result = await db.rawQuery('SELECT COUNT(*) as total FROM ${DatabaseConfig.tableClientes}');
+
+    return result.first['total'] as int;
+  }
+
+  /// Remove um cliente do banco de dados
+  ///
+  /// [id] ID do cliente a ser removido.
+  /// Retorna o número de linhas afetadas.
+  Future<int> excluir(int id) async {
+    final db = await _database;
+
+    return await db.delete(DatabaseConfig.tableClientes, where: 'id = ?', whereArgs: [id]);
+  }
 
   /// Insere um novo cliente no banco de dados
   ///
@@ -46,94 +143,7 @@ class ClienteSqlManager {
       'data_cadastro': cliente.dataCadastro.toIso8601String(),
     };
 
-    return await db.insert(
-      DatabaseConfig.tableClientes,
-      dados,
-      conflictAlgorithm: ConflictAlgorithm.abort,
-    );
-  }
-
-  /// Atualiza um cliente existente no banco de dados
-  ///
-  /// [cliente] Objeto Cliente com os dados atualizados.
-  /// O cliente deve ter um ID válido.
-  /// Retorna o número de linhas afetadas.
-  Future<int> atualizar(Cliente cliente) async {
-    if (cliente.id == null) {
-      throw Exception('ID do cliente não pode ser nulo para atualização');
-    }
-
-    final db = await _database;
-
-    final Map<String, dynamic> dados = {
-      'nome': cliente.nome,
-      'cpf': cliente.cpf,
-      'email': cliente.email,
-      'telefone': cliente.telefone,
-      'endereco': cliente.endereco,
-      'data_cadastro': cliente.dataCadastro.toIso8601String(),
-    };
-
-    return await db.update(
-      DatabaseConfig.tableClientes,
-      dados,
-      where: 'id = ?',
-      whereArgs: [cliente.id],
-    );
-  }
-
-  /// Remove um cliente do banco de dados
-  ///
-  /// [id] ID do cliente a ser removido.
-  /// Retorna o número de linhas afetadas.
-  Future<int> excluir(int id) async {
-    final db = await _database;
-
-    return await db.delete(
-      DatabaseConfig.tableClientes,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
-
-  /// Consulta um cliente pelo ID
-  ///
-  /// [id] ID do cliente a ser consultado.
-  /// Retorna o Cliente encontrado ou null se não existir.
-  Future<Cliente?> consultarPorId(int id) async {
-    final db = await _database;
-
-    final List<Map<String, dynamic>> resultado = await db.query(
-      DatabaseConfig.tableClientes,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-
-    if (resultado.isEmpty) {
-      return null;
-    }
-
-    return _mapToCliente(resultado.first);
-  }
-
-  /// Consulta um cliente pelo CPF
-  ///
-  /// [cpf] CPF do cliente a ser consultado.
-  /// Retorna o Cliente encontrado ou null se não existir.
-  Future<Cliente?> consultarPorCpf(String cpf) async {
-    final db = await _database;
-
-    final List<Map<String, dynamic>> resultado = await db.query(
-      DatabaseConfig.tableClientes,
-      where: 'cpf = ?',
-      whereArgs: [cpf],
-    );
-
-    if (resultado.isEmpty) {
-      return null;
-    }
-
-    return _mapToCliente(resultado.first);
+    return await db.insert(DatabaseConfig.tableClientes, dados, conflictAlgorithm: ConflictAlgorithm.abort);
   }
 
   /// Lista todos os clientes do banco de dados
@@ -148,37 +158,7 @@ class ClienteSqlManager {
       orderBy: 'nome ASC',
     );
 
-    return resultado.map((map) => _mapToCliente(map)).toList();
-  }
-
-  /// Busca clientes por nome (busca parcial)
-  ///
-  /// [nome] Texto a ser buscado no nome do cliente.
-  /// Retorna uma lista de clientes cujo nome contém o texto buscado.
-  Future<List<Cliente>> buscarPorNome(String nome) async {
-    final db = await _database;
-
-    final List<Map<String, dynamic>> resultado = await db.query(
-      DatabaseConfig.tableClientes,
-      where: 'nome LIKE ?',
-      whereArgs: ['%$nome%'],
-      orderBy: 'nome ASC',
-    );
-
-    return resultado.map((map) => _mapToCliente(map)).toList();
-  }
-
-  /// Conta o número total de clientes cadastrados
-  ///
-  /// Retorna o número total de clientes no banco de dados.
-  Future<int> contarTotal() async {
-    final db = await _database;
-
-    final result = await db.rawQuery(
-      'SELECT COUNT(*) as total FROM ${DatabaseConfig.tableClientes}',
-    );
-
-    return result.first['total'] as int;
+    return resultado.map(_mapToCliente).toList();
   }
 
   /// Converte um Map do banco de dados para um objeto Cliente
