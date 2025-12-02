@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:system_loja/core/models/nota_fiscal.dart';
 
@@ -8,7 +9,7 @@ import 'package:system_loja/core/models/nota_fiscal.dart';
 ///
 /// Utiliza um mecanismo de sincronização para evitar condições de corrida
 /// e recarrega dados antes de salvar para prevenir perda de dados.
-class NotaFiscalManager {
+class NotaFiscalManager with LoggerClassMixin {
   /// Lock estático por arquivo para serializar o acesso entre múltiplas instâncias
   static final Map<String, Lock> _fileLocks = {};
   final String dataFile;
@@ -84,8 +85,8 @@ class NotaFiscalManager {
         final jsonString = file.readAsStringSync();
         final List<Map<String, dynamic>> jsonList = jsonDecode(jsonString) as List<Map<String, dynamic>>;
         notasFiscais = jsonList.map(NotaFiscal.fromJson).toList();
-      } catch (e) {
-        print('Erro ao carregar dados de notas fiscais: $e');
+      } catch (e, stackTrace) {
+        logError('Erro ao carregar dados de notas fiscais: $e', stackTrace);
         notasFiscais = [];
       }
     }

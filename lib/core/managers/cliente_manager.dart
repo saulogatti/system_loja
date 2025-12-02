@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:synchronized/synchronized.dart';
 
 import '../models/cliente.dart';
@@ -9,7 +10,7 @@ import '../models/cliente.dart';
 ///
 /// Utiliza um mecanismo de sincronização para evitar condições de corrida
 /// e recarrega dados antes de salvar para prevenir perda de dados.
-class ClienteManager {
+class ClienteManager with LoggerClassMixin {
   /// Lock estático por arquivo para serializar o acesso entre múltiplas instâncias
   static final Map<String, Lock> _fileLocks = {};
   final String dataFile;
@@ -99,8 +100,8 @@ class ClienteManager {
         final jsonString = file.readAsStringSync();
         final List<Map<String, dynamic>> jsonList = jsonDecode(jsonString) as List<Map<String, dynamic>>;
         clientes = jsonList.map(Cliente.fromJson).toList();
-      } catch (e) {
-        print('Erro ao carregar dados de clientes: $e');
+      } catch (e, stackTrace) {
+        logError('Erro ao carregar dados de clientes: $e', stackTrace);
         clientes = [];
       }
     }

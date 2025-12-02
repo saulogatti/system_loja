@@ -34,13 +34,14 @@ class ProdutoManager with LoggerClassMixin {
   ///
   /// O parâmetro [dataFile] permite apontar para um arquivo alternativo.
   ProdutoManager({this.dataFile = 'data/produtos.json'}) {
-    _produtos = _carregarDadosDoDisco();
+    _produtos = _carregarDadosDoDisco() ?? [];
   }
 
   /// Retorna a lista de produtos em cache, carregando do disco se vazia.
   List<Produto> get _produtosList {
     if (_produtos.isEmpty) {
-      _produtos = _carregarDadosDoDisco();
+      final dadosAtuais = _carregarDadosDoDisco();
+      _produtos = dadosAtuais ?? [];
     }
     return _produtos;
   }
@@ -93,9 +94,13 @@ class ProdutoManager with LoggerClassMixin {
   /// em memória do pacote `synchronized` para isolates no mesmo processo.
   Future<void> salvarDadosSincronizado() async {
     await _getLock().synchronized(() async {
+      final dadosAtuais = _carregarDadosDoDisco();
+      if (dadosAtuais == null) {
+        logError('Falha ao carregar dados atuais para salvar de forma sincronizada.', StackTrace.current);
+        return;
+      }
       await _executarComFileLock(() async {
         // Recarrega dados do arquivo para obter a versão mais recente
-        final dadosAtuais = _carregarDadosDoDisco();
 
         // Obtém o maior ID existente para evitar conflitos
         int maiorId = 0;
@@ -166,7 +171,7 @@ class ProdutoManager with LoggerClassMixin {
   /// retorna uma lista vazia. Esta função não altera o estado público além
   /// de retornar o conteúdo lido; o cache em memória só é atualizado por
   /// quem chamar explicitamente.
-  List<Produto> _carregarDadosDoDisco() {
+  List<Produto>? _carregarDadosDoDisco() {
     final file = File(dataFile);
     if (file.existsSync()) {
       try {
@@ -175,10 +180,9 @@ class ProdutoManager with LoggerClassMixin {
         return jsonList.map(Produto.fromJson).toList();
       } catch (e, stackTrace) {
         logError('Erro ao carregar dados de produtos do disco: $e', stackTrace);
-        return [];
       }
     }
-    return [];
+    return null;
   }
 
   /// Executa uma operação com bloqueio exclusivo de arquivo.
