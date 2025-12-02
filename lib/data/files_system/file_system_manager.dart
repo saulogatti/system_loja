@@ -66,7 +66,7 @@ mixin FileSystemManager {
     }
 
     File file = await _mountFileSystem(fileName);
-    if (!file.existsSync()) {
+    if (!await file.exists()) {
       assert(false, 'Arquivo não encontrado: $fileName');
     }
     try {
