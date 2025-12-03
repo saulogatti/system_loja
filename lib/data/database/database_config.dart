@@ -16,7 +16,10 @@ class DatabaseConfig {
   ///
   /// Incrementar este valor quando houver alterações no schema
   /// para disparar a migração automática.
-  static const int databaseVersion = 1;
+  ///
+  /// Versão 2: Removidos campos desnormalizados cliente_nome, cliente_cpf,
+  /// produto_nome, produto_codigo para garantir integridade de dados.
+  static const int databaseVersion = 2;
 
   /// Nome da tabela de clientes
   static const String tableClientes = 'clientes';
