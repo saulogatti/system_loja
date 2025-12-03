@@ -1,13 +1,13 @@
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_loja/core/models/cliente.dart';
-import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/core/models/item_nota_fiscal.dart';
 import 'package:system_loja/core/models/nota_fiscal.dart';
-import 'package:system_loja/data/database/database_helper.dart';
+import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/data/database/cliente_sql_manager.dart';
-import 'package:system_loja/data/database/produto_sql_manager.dart';
+import 'package:system_loja/data/database/database_helper.dart';
 import 'package:system_loja/data/database/nota_fiscal_sql_manager.dart';
+import 'package:system_loja/data/database/produto_sql_manager.dart';
 
 /// Testes do NotaFiscalSqlManager
 ///
@@ -44,6 +44,7 @@ void main() {
   /// Cria dados de teste (cliente e produtos)
   Future<Map<String, dynamic>> criarDadosTeste() async {
     final cliente = Cliente(
+      id: 0,
       nome: 'João Silva',
       cpf: '123.456.789-00',
       email: 'joao@email.com',
@@ -54,6 +55,7 @@ void main() {
     final clienteInserido = await clienteManager.consultarPorId(clienteId);
 
     final produto1 = Produto(
+      id: 0,
       nome: 'Notebook',
       codigo: 'NOTE-001',
       preco: 3500.00,
@@ -65,6 +67,7 @@ void main() {
     final produto1Inserido = await produtoManager.consultarPorId(produto1Id);
 
     final produto2 = Produto(
+      id: 0,
       nome: 'Mouse',
       codigo: 'MOUSE-001',
       preco: 150.00,
@@ -92,14 +95,14 @@ void main() {
 
       final itens = [
         ItemNotaFiscal(
-          produtoId: produto1.id!,
+          produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
           quantidade: 2,
           precoUnitario: produto1.preco,
         ),
         ItemNotaFiscal(
-          produtoId: produto2.id!,
+          produtoId: produto2.id,
           produtoNome: produto2.nome,
           produtoCodigo: produto2.codigo,
           quantidade: 3,
@@ -108,8 +111,9 @@ void main() {
       ];
 
       final notaFiscal = NotaFiscal(
+        id: 0,
         numeroNota: 'NF-001',
-        clienteId: cliente.id!,
+        clienteId: cliente.id,
         clienteNome: cliente.nome,
         clienteCpf: cliente.cpf,
         itens: itens,
@@ -117,7 +121,7 @@ void main() {
       );
 
       // Act
-      final id = await notaFiscalManager.inserir(notaFiscal);
+      final id = await notaFiscalManager.atualizar(notaFiscal);
 
       // Assert
       expect(id, greaterThan(0));
@@ -137,7 +141,7 @@ void main() {
 
       final itens = [
         ItemNotaFiscal(
-          produtoId: produto1.id!,
+          produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
           quantidade: 1,
@@ -146,8 +150,9 @@ void main() {
       ];
 
       final nota1 = NotaFiscal(
+        id: 0,
         numeroNota: 'NF-001',
-        clienteId: cliente.id!,
+        clienteId: cliente.id,
         clienteNome: cliente.nome,
         clienteCpf: cliente.cpf,
         itens: itens,
@@ -155,8 +160,9 @@ void main() {
       );
 
       final nota2 = NotaFiscal(
+        id: 0,
         numeroNota: 'NF-001', // Mesmo número
-        clienteId: cliente.id!,
+        clienteId: cliente.id,
         clienteNome: cliente.nome,
         clienteCpf: cliente.cpf,
         itens: itens,
@@ -164,9 +170,9 @@ void main() {
       );
 
       // Act & Assert
-      await notaFiscalManager.inserir(nota1);
+      await notaFiscalManager.atualizar(nota1);
       expect(
-        () => notaFiscalManager.inserir(nota2),
+        () => notaFiscalManager.atualizar(nota2),
         throwsA(isA<Exception>()),
       );
     });
@@ -179,7 +185,7 @@ void main() {
 
       final itens = [
         ItemNotaFiscal(
-          produtoId: produto1.id!,
+          produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
           quantidade: 1,
@@ -188,18 +194,21 @@ void main() {
       ];
 
       final notaFiscal = NotaFiscal(
+        id: 0,
         numeroNota: 'NF-002',
-        clienteId: cliente.id!,
+        clienteId: cliente.id,
         clienteNome: cliente.nome,
         clienteCpf: cliente.cpf,
         itens: itens,
         formaPagamento: 'Cartão',
       );
 
-      await notaFiscalManager.inserir(notaFiscal);
+      await notaFiscalManager.atualizar(notaFiscal);
 
       // Act
-      final notaEncontrada = await notaFiscalManager.consultarPorNumero('NF-002');
+      final notaEncontrada = await notaFiscalManager.consultarPorNumero(
+        'NF-002',
+      );
 
       // Assert
       expect(notaEncontrada, isNotNull);
@@ -222,7 +231,7 @@ void main() {
 
       final itens = [
         ItemNotaFiscal(
-          produtoId: produto1.id!,
+          produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
           quantidade: 1,
@@ -231,15 +240,16 @@ void main() {
       ];
 
       final notaFiscal = NotaFiscal(
+        id: 0,
         numeroNota: 'NF-003',
-        clienteId: cliente.id!,
+        clienteId: cliente.id,
         clienteNome: cliente.nome,
         clienteCpf: cliente.cpf,
         itens: itens,
         formaPagamento: 'Pix',
       );
 
-      final id = await notaFiscalManager.inserir(notaFiscal);
+      final id = await notaFiscalManager.atualizar(notaFiscal);
 
       // Act
       final linhasAfetadas = await notaFiscalManager.excluir(id);
@@ -259,7 +269,7 @@ void main() {
 
       final itens = [
         ItemNotaFiscal(
-          produtoId: produto1.id!,
+          produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
           quantidade: 1,
@@ -268,8 +278,9 @@ void main() {
       ];
 
       final nota1 = NotaFiscal(
+        id: 0,
         numeroNota: 'NF-001',
-        clienteId: cliente.id!,
+        clienteId: cliente.id,
         clienteNome: cliente.nome,
         clienteCpf: cliente.cpf,
         itens: itens,
@@ -277,16 +288,17 @@ void main() {
       );
 
       final nota2 = NotaFiscal(
+        id: 0,
         numeroNota: 'NF-002',
-        clienteId: cliente.id!,
+        clienteId: cliente.id,
         clienteNome: cliente.nome,
         clienteCpf: cliente.cpf,
         itens: itens,
         formaPagamento: 'Cartão',
       );
 
-      await notaFiscalManager.inserir(nota1);
-      await notaFiscalManager.inserir(nota2);
+      await notaFiscalManager.atualizar(nota1);
+      await notaFiscalManager.atualizar(nota2);
 
       // Act
       final notas = await notaFiscalManager.listarTodas();
@@ -303,6 +315,7 @@ void main() {
 
       // Cria outro cliente
       final cliente2 = Cliente(
+        id: 0,
         nome: 'Maria Santos',
         cpf: '987.654.321-00',
         email: 'maria@email.com',
@@ -314,7 +327,7 @@ void main() {
 
       final itens = [
         ItemNotaFiscal(
-          produtoId: produto1.id!,
+          produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
           quantidade: 1,
@@ -323,36 +336,47 @@ void main() {
       ];
 
       // Notas para cliente 1
-      await notaFiscalManager.inserir(NotaFiscal(
-        numeroNota: 'NF-001',
-        clienteId: cliente.id!,
-        clienteNome: cliente.nome,
-        clienteCpf: cliente.cpf,
-        itens: itens,
-        formaPagamento: 'Dinheiro',
-      ));
+      await notaFiscalManager.atualizar(
+        NotaFiscal(
+          id: 0,
+          numeroNota: 'NF-001',
+          clienteId: cliente.id,
+          clienteNome: cliente.nome,
+          clienteCpf: cliente.cpf,
+          itens: itens,
+          formaPagamento: 'Dinheiro',
+        ),
+      );
 
-      await notaFiscalManager.inserir(NotaFiscal(
-        numeroNota: 'NF-002',
-        clienteId: cliente.id!,
-        clienteNome: cliente.nome,
-        clienteCpf: cliente.cpf,
-        itens: itens,
-        formaPagamento: 'Cartão',
-      ));
+      await notaFiscalManager.atualizar(
+        NotaFiscal(
+          id: 0,
+          numeroNota: 'NF-002',
+          clienteId: cliente.id,
+          clienteNome: cliente.nome,
+          clienteCpf: cliente.cpf,
+          itens: itens,
+          formaPagamento: 'Cartão',
+        ),
+      );
 
       // Nota para cliente 2
-      await notaFiscalManager.inserir(NotaFiscal(
-        numeroNota: 'NF-003',
-        clienteId: cliente2Inserido!.id!,
-        clienteNome: cliente2Inserido.nome,
-        clienteCpf: cliente2Inserido.cpf,
-        itens: itens,
-        formaPagamento: 'Pix',
-      ));
+      await notaFiscalManager.atualizar(
+        NotaFiscal(
+          id: 0,
+          numeroNota: 'NF-003',
+          clienteId: cliente2Inserido!.id,
+          clienteNome: cliente2Inserido.nome,
+          clienteCpf: cliente2Inserido.cpf,
+          itens: itens,
+          formaPagamento: 'Pix',
+        ),
+      );
 
       // Act
-      final notasCliente1 = await notaFiscalManager.buscarPorCliente(cliente.id!);
+      final notasCliente1 = await notaFiscalManager.buscarPorCliente(
+        cliente.id,
+      );
 
       // Assert
       expect(notasCliente1.length, equals(2));
@@ -366,7 +390,7 @@ void main() {
 
       final itens = [
         ItemNotaFiscal(
-          produtoId: produto1.id!,
+          produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
           quantidade: 1,
@@ -374,23 +398,29 @@ void main() {
         ),
       ];
 
-      await notaFiscalManager.inserir(NotaFiscal(
-        numeroNota: 'NF-001',
-        clienteId: cliente.id!,
-        clienteNome: cliente.nome,
-        clienteCpf: cliente.cpf,
-        itens: itens,
-        formaPagamento: 'Dinheiro',
-      ));
+      await notaFiscalManager.atualizar(
+        NotaFiscal(
+          id: 0,
+          numeroNota: 'NF-001',
+          clienteId: cliente.id,
+          clienteNome: cliente.nome,
+          clienteCpf: cliente.cpf,
+          itens: itens,
+          formaPagamento: 'Dinheiro',
+        ),
+      );
 
-      await notaFiscalManager.inserir(NotaFiscal(
-        numeroNota: 'NF-002',
-        clienteId: cliente.id!,
-        clienteNome: cliente.nome,
-        clienteCpf: cliente.cpf,
-        itens: itens,
-        formaPagamento: 'Cartão',
-      ));
+      await notaFiscalManager.atualizar(
+        NotaFiscal(
+          id: 0,
+          numeroNota: 'NF-002',
+          clienteId: cliente.id,
+          clienteNome: cliente.nome,
+          clienteCpf: cliente.cpf,
+          itens: itens,
+          formaPagamento: 'Cartão',
+        ),
+      );
 
       // Act
       final total = await notaFiscalManager.contarTotal();
