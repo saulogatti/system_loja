@@ -78,7 +78,11 @@ void main() {
     final produto2Id = await produtoManager.inserir(produto2);
     final produto2Inserido = await produtoManager.consultarPorId(produto2Id);
 
-    return {'cliente': clienteInserido, 'produto1': produto1Inserido, 'produto2': produto2Inserido};
+    return {
+      'cliente': clienteInserido,
+      'produto1': produto1Inserido,
+      'produto2': produto2Inserido,
+    };
   }
 
   group('NotaFiscalSqlManager - Testes de CRUD', () {
@@ -117,7 +121,7 @@ void main() {
       );
 
       // Act
-      final id = await notaFiscalManager.inserir(notaFiscal);
+      final id = await notaFiscalManager.atualizar(notaFiscal);
 
       // Assert
       expect(id, greaterThan(0));
@@ -166,8 +170,11 @@ void main() {
       );
 
       // Act & Assert
-      await notaFiscalManager.inserir(nota1);
-      expect(() => notaFiscalManager.inserir(nota2), throwsA(isA<Exception>()));
+      await notaFiscalManager.atualizar(nota1);
+      expect(
+        () => notaFiscalManager.atualizar(nota2),
+        throwsA(isA<Exception>()),
+      );
     });
 
     test('deve consultar nota fiscal por número', () async {
@@ -196,10 +203,12 @@ void main() {
         formaPagamento: 'Cartão',
       );
 
-      await notaFiscalManager.inserir(notaFiscal);
+      await notaFiscalManager.atualizar(notaFiscal);
 
       // Act
-      final notaEncontrada = await notaFiscalManager.consultarPorNumero('NF-002');
+      final notaEncontrada = await notaFiscalManager.consultarPorNumero(
+        'NF-002',
+      );
 
       // Assert
       expect(notaEncontrada, isNotNull);
@@ -240,7 +249,7 @@ void main() {
         formaPagamento: 'Pix',
       );
 
-      final id = await notaFiscalManager.inserir(notaFiscal);
+      final id = await notaFiscalManager.atualizar(notaFiscal);
 
       // Act
       final linhasAfetadas = await notaFiscalManager.excluir(id);
@@ -288,8 +297,8 @@ void main() {
         formaPagamento: 'Cartão',
       );
 
-      await notaFiscalManager.inserir(nota1);
-      await notaFiscalManager.inserir(nota2);
+      await notaFiscalManager.atualizar(nota1);
+      await notaFiscalManager.atualizar(nota2);
 
       // Act
       final notas = await notaFiscalManager.listarTodas();
@@ -327,7 +336,7 @@ void main() {
       ];
 
       // Notas para cliente 1
-      await notaFiscalManager.inserir(
+      await notaFiscalManager.atualizar(
         NotaFiscal(
           id: 0,
           numeroNota: 'NF-001',
@@ -339,7 +348,7 @@ void main() {
         ),
       );
 
-      await notaFiscalManager.inserir(
+      await notaFiscalManager.atualizar(
         NotaFiscal(
           id: 0,
           numeroNota: 'NF-002',
@@ -352,7 +361,7 @@ void main() {
       );
 
       // Nota para cliente 2
-      await notaFiscalManager.inserir(
+      await notaFiscalManager.atualizar(
         NotaFiscal(
           id: 0,
           numeroNota: 'NF-003',
@@ -365,7 +374,9 @@ void main() {
       );
 
       // Act
-      final notasCliente1 = await notaFiscalManager.buscarPorCliente(cliente.id);
+      final notasCliente1 = await notaFiscalManager.buscarPorCliente(
+        cliente.id,
+      );
 
       // Assert
       expect(notasCliente1.length, equals(2));
@@ -387,7 +398,7 @@ void main() {
         ),
       ];
 
-      await notaFiscalManager.inserir(
+      await notaFiscalManager.atualizar(
         NotaFiscal(
           id: 0,
           numeroNota: 'NF-001',
@@ -399,7 +410,7 @@ void main() {
         ),
       );
 
-      await notaFiscalManager.inserir(
+      await notaFiscalManager.atualizar(
         NotaFiscal(
           id: 0,
           numeroNota: 'NF-002',

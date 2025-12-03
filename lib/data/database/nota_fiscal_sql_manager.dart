@@ -20,7 +20,7 @@ class NotaFiscalSqlManager {
   ///
   /// Se não for fornecido, usa a instância singleton padrão.
   NotaFiscalSqlManager({DatabaseHelper? dbHelper})
-      : _dbHelper = dbHelper ?? DatabaseHelper();
+    : _dbHelper = dbHelper ?? DatabaseHelper();
 
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
@@ -85,20 +85,93 @@ class NotaFiscalSqlManager {
     });
   }
 
-  /// Remove uma nota fiscal do banco de dados
+  /// Busca notas fiscais por cliente
   ///
-  /// [id] ID da nota fiscal a ser removida.
-  /// Retorna o número de linhas afetadas.
-  ///
-  /// Os itens são removidos automaticamente pelo CASCADE definido na FK.
-  Future<int> excluir(int id) async {
+  /// [clienteId] ID do cliente.
+  /// Retorna uma lista de notas fiscais do cliente especificado.
+  Future<List<NotaFiscal>> buscarPorCliente(int clienteId) async {
     final db = await _database;
 
-    return await db.delete(
+    final List<Map<String, dynamic>> resultadoNotas = await db.query(
       DatabaseConfig.tableNotasFiscais,
-      where: 'id = ?',
-      whereArgs: [id],
+      where: 'cliente_id = ?',
+      whereArgs: [clienteId],
+      orderBy: 'data_emissao DESC',
     );
+
+    final List<NotaFiscal> notas = [];
+
+    for (final notaMap in resultadoNotas) {
+      final int notaId = notaMap['id'] as int;
+
+      final List<Map<String, dynamic>> resultadoItens = await db.query(
+        DatabaseConfig.tableItensNotaFiscal,
+        where: 'nota_fiscal_id = ?',
+        whereArgs: [notaId],
+      );
+
+      notas.add(_mapToNotaFiscal(notaMap, resultadoItens));
+    }
+
+    return notas;
+  }
+
+  /// Busca notas fiscais por período
+  ///
+  /// [dataInicio] Data inicial do período.
+  /// [dataFim] Data final do período.
+  /// Retorna uma lista de notas fiscais emitidas no período.
+  Future<List<NotaFiscal>> buscarPorPeriodo(
+    DateTime dataInicio,
+    DateTime dataFim,
+  ) async {
+    final db = await _database;
+
+    final List<Map<String, dynamic>> resultadoNotas = await db.query(
+      DatabaseConfig.tableNotasFiscais,
+      where: 'data_emissao BETWEEN ? AND ?',
+      whereArgs: [dataInicio.toIso8601String(), dataFim.toIso8601String()],
+      orderBy: 'data_emissao DESC',
+    );
+
+    final List<NotaFiscal> notas = [];
+
+    for (final notaMap in resultadoNotas) {
+      final int notaId = notaMap['id'] as int;
+
+      final List<Map<String, dynamic>> resultadoItens = await db.query(
+        DatabaseConfig.tableItensNotaFiscal,
+        where: 'nota_fiscal_id = ?',
+        whereArgs: [notaId],
+      );
+
+      notas.add(_mapToNotaFiscal(notaMap, resultadoItens));
+    }
+
+    return notas;
+  }
+
+  /// Calcula o valor total de vendas em um período
+  ///
+  /// [dataInicio] Data inicial do período.
+  /// [dataFim] Data final do período.
+  /// Retorna o valor total de vendas no período.
+  Future<double> calcularTotalVendasPeriodo(
+    DateTime dataInicio,
+    DateTime dataFim,
+  ) async {
+    final db = await _database;
+
+    final result = await db.rawQuery(
+      '''
+      SELECT COALESCE(SUM(valor_total), 0) as total 
+      FROM ${DatabaseConfig.tableNotasFiscais}
+      WHERE data_emissao BETWEEN ? AND ?
+      ''',
+      [dataInicio.toIso8601String(), dataFim.toIso8601String()],
+    );
+
+    return (result.first['total'] as num).toDouble();
   }
 
   /// Consulta uma nota fiscal pelo ID
@@ -157,6 +230,35 @@ class NotaFiscalSqlManager {
     return _mapToNotaFiscal(resultadoNota.first, resultadoItens);
   }
 
+  /// Conta o número total de notas fiscais cadastradas
+  ///
+  /// Retorna o número total de notas fiscais no banco de dados.
+  Future<int> contarTotal() async {
+    final db = await _database;
+
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as total FROM ${DatabaseConfig.tableNotasFiscais}',
+    );
+
+    return result.first['total'] as int;
+  }
+
+  /// Remove uma nota fiscal do banco de dados
+  ///
+  /// [id] ID da nota fiscal a ser removida.
+  /// Retorna o número de linhas afetadas.
+  ///
+  /// Os itens são removidos automaticamente pelo CASCADE definido na FK.
+  Future<int> excluir(int id) async {
+    final db = await _database;
+
+    return await db.delete(
+      DatabaseConfig.tableNotasFiscais,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
   /// Lista todas as notas fiscais do banco de dados
   ///
   /// Retorna uma lista com todas as notas fiscais cadastradas.
@@ -186,117 +288,15 @@ class NotaFiscalSqlManager {
     return notas;
   }
 
-  /// Busca notas fiscais por cliente
-  ///
-  /// [clienteId] ID do cliente.
-  /// Retorna uma lista de notas fiscais do cliente especificado.
-  Future<List<NotaFiscal>> buscarPorCliente(int clienteId) async {
-    final db = await _database;
-
-    final List<Map<String, dynamic>> resultadoNotas = await db.query(
-      DatabaseConfig.tableNotasFiscais,
-      where: 'cliente_id = ?',
-      whereArgs: [clienteId],
-      orderBy: 'data_emissao DESC',
-    );
-
-    final List<NotaFiscal> notas = [];
-
-    for (final notaMap in resultadoNotas) {
-      final int notaId = notaMap['id'] as int;
-
-      final List<Map<String, dynamic>> resultadoItens = await db.query(
-        DatabaseConfig.tableItensNotaFiscal,
-        where: 'nota_fiscal_id = ?',
-        whereArgs: [notaId],
-      );
-
-      notas.add(_mapToNotaFiscal(notaMap, resultadoItens));
-    }
-
-    return notas;
-  }
-
-  /// Busca notas fiscais por período
-  ///
-  /// [dataInicio] Data inicial do período.
-  /// [dataFim] Data final do período.
-  /// Retorna uma lista de notas fiscais emitidas no período.
-  Future<List<NotaFiscal>> buscarPorPeriodo(
-    DateTime dataInicio,
-    DateTime dataFim,
-  ) async {
-    final db = await _database;
-
-    final List<Map<String, dynamic>> resultadoNotas = await db.query(
-      DatabaseConfig.tableNotasFiscais,
-      where: 'data_emissao BETWEEN ? AND ?',
-      whereArgs: [
-        dataInicio.toIso8601String(),
-        dataFim.toIso8601String(),
-      ],
-      orderBy: 'data_emissao DESC',
-    );
-
-    final List<NotaFiscal> notas = [];
-
-    for (final notaMap in resultadoNotas) {
-      final int notaId = notaMap['id'] as int;
-
-      final List<Map<String, dynamic>> resultadoItens = await db.query(
-        DatabaseConfig.tableItensNotaFiscal,
-        where: 'nota_fiscal_id = ?',
-        whereArgs: [notaId],
-      );
-
-      notas.add(_mapToNotaFiscal(notaMap, resultadoItens));
-    }
-
-    return notas;
-  }
-
-  /// Calcula o valor total de vendas em um período
-  ///
-  /// [dataInicio] Data inicial do período.
-  /// [dataFim] Data final do período.
-  /// Retorna o valor total de vendas no período.
-  Future<double> calcularTotalVendasPeriodo(
-    DateTime dataInicio,
-    DateTime dataFim,
-  ) async {
-    final db = await _database;
-
-    final result = await db.rawQuery(
-      '''
-      SELECT COALESCE(SUM(valor_total), 0) as total 
-      FROM ${DatabaseConfig.tableNotasFiscais}
-      WHERE data_emissao BETWEEN ? AND ?
-      ''',
-      [dataInicio.toIso8601String(), dataFim.toIso8601String()],
-    );
-
-    return (result.first['total'] as num).toDouble();
-  }
-
-  /// Conta o número total de notas fiscais cadastradas
-  ///
-  /// Retorna o número total de notas fiscais no banco de dados.
-  Future<int> contarTotal() async {
-    final db = await _database;
-
-    final result = await db.rawQuery(
-      'SELECT COUNT(*) as total FROM ${DatabaseConfig.tableNotasFiscais}',
-    );
-
-    return result.first['total'] as int;
-  }
-
   /// Converte um Map do banco de dados para um objeto NotaFiscal
   ///
   /// [notaMap] Map com os dados da nota fiscal do banco.
   /// [itensMap] Lista de Maps com os itens da nota fiscal.
   /// Retorna um objeto NotaFiscal com os dados do map.
-  NotaFiscal _mapToNotaFiscal(Map<String, dynamic> notaMap, List<Map<String, dynamic>> itensMap) {
+  NotaFiscal _mapToNotaFiscal(
+    Map<String, dynamic> notaMap,
+    List<Map<String, dynamic>> itensMap,
+  ) {
     final List<ItemNotaFiscal> itens = itensMap.map((itemMap) {
       return ItemNotaFiscal(
         produtoId: itemMap['produto_id'] as int,
