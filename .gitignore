@@ -4,3 +4,4 @@
 
 # Data files
 data/*.json
+.flutter-plugins-dependencies
