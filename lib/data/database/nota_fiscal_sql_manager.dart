@@ -19,7 +19,8 @@ class NotaFiscalSqlManager {
   /// Construtor que recebe opcionalmente uma instância do DatabaseHelper
   ///
   /// Se não for fornecido, usa a instância singleton padrão.
-  NotaFiscalSqlManager({DatabaseHelper? dbHelper}) : _dbHelper = dbHelper ?? DatabaseHelper();
+  NotaFiscalSqlManager({DatabaseHelper? dbHelper})
+    : _dbHelper = dbHelper ?? DatabaseHelper();
 
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
@@ -120,7 +121,10 @@ class NotaFiscalSqlManager {
   /// [dataInicio] Data inicial do período.
   /// [dataFim] Data final do período.
   /// Retorna uma lista de notas fiscais emitidas no período.
-  Future<List<NotaFiscal>> buscarPorPeriodo(DateTime dataInicio, DateTime dataFim) async {
+  Future<List<NotaFiscal>> buscarPorPeriodo(
+    DateTime dataInicio,
+    DateTime dataFim,
+  ) async {
     final db = await _database;
 
     final List<Map<String, dynamic>> resultadoNotas = await db.query(
@@ -152,7 +156,10 @@ class NotaFiscalSqlManager {
   /// [dataInicio] Data inicial do período.
   /// [dataFim] Data final do período.
   /// Retorna o valor total de vendas no período.
-  Future<double> calcularTotalVendasPeriodo(DateTime dataInicio, DateTime dataFim) async {
+  Future<double> calcularTotalVendasPeriodo(
+    DateTime dataInicio,
+    DateTime dataFim,
+  ) async {
     final db = await _database;
 
     final result = await db.rawQuery(
@@ -229,7 +236,9 @@ class NotaFiscalSqlManager {
   Future<int> contarTotal() async {
     final db = await _database;
 
-    final result = await db.rawQuery('SELECT COUNT(*) as total FROM ${DatabaseConfig.tableNotasFiscais}');
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as total FROM ${DatabaseConfig.tableNotasFiscais}',
+    );
 
     return result.first['total'] as int;
   }
@@ -243,65 +252,11 @@ class NotaFiscalSqlManager {
   Future<int> excluir(int id) async {
     final db = await _database;
 
-    return await db.delete(DatabaseConfig.tableNotasFiscais, where: 'id = ?', whereArgs: [id]);
-  }
-
-  /// Insere uma nova nota fiscal no banco de dados
-  ///
-  /// [notaFiscal] Objeto NotaFiscal a ser inserido.
-  /// Retorna o ID da nota fiscal inserida.
-  ///
-  /// A operação é realizada em uma transação para garantir
-  /// que a nota e seus itens sejam inseridos de forma atômica.
-  ///
-  /// Lança uma exceção se o número da nota já existir.
-  Future<int> inserir(NotaFiscal notaFiscal) async {
-    final db = await _database;
-
-    final notaExistente = await consultarPorNumero(notaFiscal.numeroNota);
-    if (notaExistente != null) {
-      throw Exception('Número de nota fiscal já cadastrado: ${notaFiscal.numeroNota}');
-    }
-
-    return await db.transaction((txn) async {
-      // Insere a nota fiscal
-      final Map<String, dynamic> dadosNota = {
-        'numero_nota': notaFiscal.numeroNota,
-        'cliente_id': notaFiscal.clienteId,
-        'cliente_nome': notaFiscal.clienteNome,
-        'cliente_cpf': notaFiscal.clienteCpf,
-        'valor_total': notaFiscal.valorTotal,
-        'forma_pagamento': notaFiscal.formaPagamento,
-        'data_emissao': notaFiscal.dataEmissao.toIso8601String(),
-      };
-
-      final notaFiscalId = await txn.insert(
-        DatabaseConfig.tableNotasFiscais,
-        dadosNota,
-        conflictAlgorithm: ConflictAlgorithm.abort,
-      );
-
-      // Insere os itens da nota fiscal
-      for (final item in notaFiscal.itens) {
-        final Map<String, dynamic> dadosItem = {
-          'nota_fiscal_id': notaFiscalId,
-          'produto_id': item.produtoId,
-          'produto_nome': item.produtoNome,
-          'produto_codigo': item.produtoCodigo,
-          'quantidade': item.quantidade,
-          'preco_unitario': item.precoUnitario,
-          'valor_total': item.valorTotal,
-        };
-
-        await txn.insert(
-          DatabaseConfig.tableItensNotaFiscal,
-          dadosItem,
-          conflictAlgorithm: ConflictAlgorithm.abort,
-        );
-      }
-
-      return notaFiscalId;
-    });
+    return await db.delete(
+      DatabaseConfig.tableNotasFiscais,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
   /// Lista todas as notas fiscais do banco de dados
@@ -338,7 +293,10 @@ class NotaFiscalSqlManager {
   /// [notaMap] Map com os dados da nota fiscal do banco.
   /// [itensMap] Lista de Maps com os itens da nota fiscal.
   /// Retorna um objeto NotaFiscal com os dados do map.
-  NotaFiscal _mapToNotaFiscal(Map<String, dynamic> notaMap, List<Map<String, dynamic>> itensMap) {
+  NotaFiscal _mapToNotaFiscal(
+    Map<String, dynamic> notaMap,
+    List<Map<String, dynamic>> itensMap,
+  ) {
     final List<ItemNotaFiscal> itens = itensMap.map((itemMap) {
       return ItemNotaFiscal(
         produtoId: itemMap['produto_id'] as int,
