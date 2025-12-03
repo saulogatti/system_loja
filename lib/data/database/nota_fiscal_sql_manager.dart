@@ -246,7 +246,7 @@ class NotaFiscalSqlManager {
     return result.first['total'] as int;
   }
 
-  ///
+  /// Remove uma nota fiscal do banco de dados
   /// [id] ID da nota fiscal a ser removida.
   /// Retorna o número de linhas afetadas.
   ///
