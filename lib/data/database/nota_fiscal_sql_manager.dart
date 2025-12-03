@@ -349,7 +349,7 @@ class NotaFiscalSqlManager {
     final Map<int, List<Map<String, dynamic>>> itensPorNota = {};
     for (final item in resultadoItens) {
       final notaId = item['nota_fiscal_id'] as int;
-      (itensPorNota[notaId] ??= []).add(item);
+      itensPorNota.putIfAbsent(notaId, () => []).add(item);
     }
 
     return resultadoNotas.map((notaMap) {
