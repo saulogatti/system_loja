@@ -23,11 +23,6 @@ void main() {
   late ProdutoSqlManager produtoManager;
   late NotaFiscalSqlManager notaFiscalManager;
 
-  setUpAll(() async {
-    // Configura um banco de dados em memória para testes
-    databaseFactory = databaseFactoryFfi;
-  });
-
   setUp(() async {
     // Reset da instância do banco antes de cada teste
     DatabaseHelper.resetInstance();

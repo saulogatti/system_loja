@@ -121,31 +121,9 @@ class NotaFiscalSqlManager {
       return [];
     }
 
-    // Extrai IDs das notas para buscar itens
-    final notasIds = resultadoNotas.map((n) => n['id'] as int).toList();
-    final placeholders = List.filled(notasIds.length, '?').join(',');
-
     // Busca todos os itens de uma vez para evitar N+1 queries
-    final List<Map<String, dynamic>> todosItens = await db.rawQuery(
-      '''
-      SELECT 
-        i.*, 
-        p.nome as produto_nome, 
-        p.codigo as produto_codigo
-      FROM ${DatabaseConfig.tableItensNotaFiscal} i
-      INNER JOIN ${DatabaseConfig.tableProdutos} p ON i.produto_id = p.id
-      WHERE i.nota_fiscal_id IN ($placeholders)
-      ORDER BY i.nota_fiscal_id, i.id
-      ''',
-      notasIds,
-    );
-
-    // Agrupa itens por nota_fiscal_id
-    final Map<int, List<Map<String, dynamic>>> itensPorNota = {};
-    for (final itemMap in todosItens) {
-      final notaId = itemMap['nota_fiscal_id'] as int;
-      itensPorNota.putIfAbsent(notaId, () => []).add(itemMap);
-    }
+    final notasIds = resultadoNotas.map((n) => n['id'] as int).toList();
+    final itensPorNota = await _buscarItensDeNotas(db, notasIds);
 
     // Cria as notas fiscais com seus itens
     final List<NotaFiscal> notas = [];
@@ -190,31 +168,9 @@ class NotaFiscalSqlManager {
       return [];
     }
 
-    // Extrai IDs das notas para buscar itens
-    final notasIds = resultadoNotas.map((n) => n['id'] as int).toList();
-    final placeholders = List.filled(notasIds.length, '?').join(',');
-
     // Busca todos os itens de uma vez para evitar N+1 queries
-    final List<Map<String, dynamic>> todosItens = await db.rawQuery(
-      '''
-      SELECT 
-        i.*, 
-        p.nome as produto_nome, 
-        p.codigo as produto_codigo
-      FROM ${DatabaseConfig.tableItensNotaFiscal} i
-      INNER JOIN ${DatabaseConfig.tableProdutos} p ON i.produto_id = p.id
-      WHERE i.nota_fiscal_id IN ($placeholders)
-      ORDER BY i.nota_fiscal_id, i.id
-      ''',
-      notasIds,
-    );
-
-    // Agrupa itens por nota_fiscal_id
-    final Map<int, List<Map<String, dynamic>>> itensPorNota = {};
-    for (final itemMap in todosItens) {
-      final notaId = itemMap['nota_fiscal_id'] as int;
-      itensPorNota.putIfAbsent(notaId, () => []).add(itemMap);
-    }
+    final notasIds = resultadoNotas.map((n) => n['id'] as int).toList();
+    final itensPorNota = await _buscarItensDeNotas(db, notasIds);
 
     // Cria as notas fiscais com seus itens
     final List<NotaFiscal> notas = [];
@@ -374,6 +330,9 @@ class NotaFiscalSqlManager {
   ///
   /// Utiliza JOIN para buscar dados do cliente associado.
   /// Otimizado para evitar N+1 queries buscando todos os itens de uma vez.
+  ///
+  /// **Nota de Performance**: Este método busca TODAS as notas fiscais e itens.
+  /// Para aplicações com grande volume de dados, considere implementar paginação.
   Future<List<NotaFiscal>> listarTodas() async {
     final db = await _database;
 
@@ -394,6 +353,7 @@ class NotaFiscalSqlManager {
     }
 
     // Busca todos os itens de uma vez para evitar N+1 queries
+    // Este é o método mais eficiente quando precisamos de TODOS os dados
     final List<Map<String, dynamic>> todosItens = await db.rawQuery(
       '''
       SELECT 
@@ -422,6 +382,46 @@ class NotaFiscalSqlManager {
     }
 
     return notas;
+  }
+
+  /// Busca todos os itens das notas fiscais especificadas
+  ///
+  /// [db] Instância do banco de dados.
+  /// [notasIds] Lista de IDs das notas fiscais.
+  /// Retorna um Map agrupando itens por nota_fiscal_id.
+  ///
+  /// Método auxiliar para evitar N+1 queries ao buscar múltiplas notas.
+  Future<Map<int, List<Map<String, dynamic>>>> _buscarItensDeNotas(
+    Database db,
+    List<int> notasIds,
+  ) async {
+    if (notasIds.isEmpty) {
+      return {};
+    }
+
+    final placeholders = List.filled(notasIds.length, '?').join(',');
+    final List<Map<String, dynamic>> todosItens = await db.rawQuery(
+      '''
+      SELECT 
+        i.*, 
+        p.nome as produto_nome, 
+        p.codigo as produto_codigo
+      FROM ${DatabaseConfig.tableItensNotaFiscal} i
+      INNER JOIN ${DatabaseConfig.tableProdutos} p ON i.produto_id = p.id
+      WHERE i.nota_fiscal_id IN ($placeholders)
+      ORDER BY i.nota_fiscal_id, i.id
+      ''',
+      notasIds,
+    );
+
+    // Agrupa itens por nota_fiscal_id
+    final Map<int, List<Map<String, dynamic>>> itensPorNota = {};
+    for (final itemMap in todosItens) {
+      final notaId = itemMap['nota_fiscal_id'] as int;
+      itensPorNota.putIfAbsent(notaId, () => []).add(itemMap);
+    }
+
+    return itensPorNota;
   }
 
   /// Converte um Map do banco de dados para um objeto NotaFiscal
