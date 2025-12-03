@@ -391,6 +391,9 @@ class NotaFiscalSqlManager {
   /// Retorna um Map agrupando itens por nota_fiscal_id.
   ///
   /// Método auxiliar para evitar N+1 queries ao buscar múltiplas notas.
+  ///
+  /// **Nota**: SQLite suporta até 999 parâmetros em uma query por padrão.
+  /// Para conjuntos muito grandes, considere processar em lotes.
   Future<Map<int, List<Map<String, dynamic>>>> _buscarItensDeNotas(
     Database db,
     List<int> notasIds,
