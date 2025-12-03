@@ -4,4 +4,16 @@
 
 # Data files
 data/*.json
+
+# Lock files for cross-process synchronization
+data/*.lock
+
+# Large installation files
+*.deb
+dartsdk-linux-x64-release.zip
+
 .flutter-plugins-dependencies
+
+*.lock
+
+macos/Flutter/GeneratedPluginRegistrant.swift

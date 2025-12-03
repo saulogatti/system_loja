@@ -1,9 +1,8 @@
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_loja/core/models/cliente.dart';
-import 'package:system_loja/data/database/database_helper.dart';
 import 'package:system_loja/data/database/cliente_sql_manager.dart';
+import 'package:system_loja/data/database/database_helper.dart';
 
 /// Testes do ClienteSqlManager
 ///
@@ -37,6 +36,7 @@ void main() {
     test('deve inserir um cliente com sucesso', () async {
       // Arrange
       final cliente = Cliente(
+        id: 0,
         nome: 'João Silva',
         cpf: '123.456.789-00',
         email: 'joao@email.com',
@@ -59,6 +59,7 @@ void main() {
     test('deve lançar exceção ao inserir cliente com CPF duplicado', () async {
       // Arrange
       final cliente1 = Cliente(
+        id: 0,
         nome: 'João Silva',
         cpf: '123.456.789-00',
         email: 'joao@email.com',
@@ -67,6 +68,7 @@ void main() {
       );
 
       final cliente2 = Cliente(
+        id: 0,
         nome: 'Maria Santos',
         cpf: '123.456.789-00', // Mesmo CPF
         email: 'maria@email.com',
@@ -76,15 +78,13 @@ void main() {
 
       // Act & Assert
       await clienteManager.inserir(cliente1);
-      expect(
-        () => clienteManager.inserir(cliente2),
-        throwsA(isA<Exception>()),
-      );
+      expect(() => clienteManager.inserir(cliente2), throwsA(isA<Exception>()));
     });
 
     test('deve consultar cliente por CPF', () async {
       // Arrange
       final cliente = Cliente(
+        id: 0,
         nome: 'João Silva',
         cpf: '123.456.789-00',
         email: 'joao@email.com',
@@ -95,9 +95,7 @@ void main() {
       await clienteManager.inserir(cliente);
 
       // Act
-      final clienteEncontrado = await clienteManager.consultarPorCpf(
-        '123.456.789-00',
-      );
+      final clienteEncontrado = await clienteManager.consultarPorCpf('123.456.789-00');
 
       // Assert
       expect(clienteEncontrado, isNotNull);
@@ -115,6 +113,7 @@ void main() {
     test('deve atualizar cliente com sucesso', () async {
       // Arrange
       final cliente = Cliente(
+        id: 0,
         nome: 'João Silva',
         cpf: '123.456.789-00',
         email: 'joao@email.com',
@@ -147,6 +146,7 @@ void main() {
     test('deve excluir cliente com sucesso', () async {
       // Arrange
       final cliente = Cliente(
+        id: 0,
         nome: 'João Silva',
         cpf: '123.456.789-00',
         email: 'joao@email.com',
@@ -169,6 +169,7 @@ void main() {
     test('deve listar todos os clientes', () async {
       // Arrange
       final cliente1 = Cliente(
+        id: 0,
         nome: 'Ana Costa',
         cpf: '111.111.111-11',
         email: 'ana@email.com',
@@ -177,6 +178,7 @@ void main() {
       );
 
       final cliente2 = Cliente(
+        id: 0,
         nome: 'Bruno Lima',
         cpf: '222.222.222-22',
         email: 'bruno@email.com',
@@ -200,6 +202,7 @@ void main() {
     test('deve buscar clientes por nome', () async {
       // Arrange
       final cliente1 = Cliente(
+        id: 0,
         nome: 'João Silva',
         cpf: '111.111.111-11',
         email: 'joao@email.com',
@@ -208,6 +211,7 @@ void main() {
       );
 
       final cliente2 = Cliente(
+        id: 0,
         nome: 'João Santos',
         cpf: '222.222.222-22',
         email: 'joaos@email.com',
@@ -216,6 +220,7 @@ void main() {
       );
 
       final cliente3 = Cliente(
+        id: 0,
         nome: 'Maria Lima',
         cpf: '333.333.333-33',
         email: 'maria@email.com',
@@ -237,6 +242,7 @@ void main() {
     test('deve contar o total de clientes', () async {
       // Arrange
       final cliente1 = Cliente(
+        id: 0,
         nome: 'Cliente 1',
         cpf: '111.111.111-11',
         email: 'c1@email.com',
@@ -245,6 +251,7 @@ void main() {
       );
 
       final cliente2 = Cliente(
+        id: 0,
         nome: 'Cliente 2',
         cpf: '222.222.222-22',
         email: 'c2@email.com',
