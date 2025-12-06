@@ -206,29 +206,6 @@ class NotaFiscalSqlManager {
     return (result.first['total'] as num).toDouble();
   }
 
-  /// Calcula o valor total de vendas em um período
-  ///
-  /// [dataInicio] Data inicial do período.
-  /// [dataFim] Data final do período.
-  /// Retorna o valor total de vendas no período.
-  Future<double> calcularTotalVendasPeriodo(
-    DateTime dataInicio,
-    DateTime dataFim,
-  ) async {
-    final db = await _database;
-
-    final result = await db.rawQuery(
-      '''
-      SELECT COALESCE(SUM(valor_total), 0) as total 
-      FROM ${DatabaseConfig.tableNotasFiscais}
-      WHERE data_emissao BETWEEN ? AND ?
-      ''',
-      [dataInicio.toIso8601String(), dataFim.toIso8601String()],
-    );
-
-    return (result.first['total'] as num).toDouble();
-  }
-
   /// Consulta uma nota fiscal pelo ID
   ///
   /// [id] ID da nota fiscal a ser consultada.
@@ -359,8 +336,7 @@ class NotaFiscalSqlManager {
   Future<List<NotaFiscal>> listarTodas() async {
     final db = await _database;
 
-    final List<Map<String, dynamic>> resultadoNotas = await db.rawQuery(
-      '''
+    final List<Map<String, dynamic>> resultadoNotas = await db.rawQuery('''
       SELECT 
         nf.*, 
         c.nome as cliente_nome, 
@@ -368,8 +344,7 @@ class NotaFiscalSqlManager {
       FROM ${DatabaseConfig.tableNotasFiscais} nf
       INNER JOIN ${DatabaseConfig.tableClientes} c ON nf.cliente_id = c.id
       ORDER BY nf.data_emissao DESC
-      ''',
-    );
+      ''');
 
     if (resultadoNotas.isEmpty) {
       return [];
@@ -377,8 +352,7 @@ class NotaFiscalSqlManager {
 
     // Busca todos os itens de uma vez para evitar N+1 queries
     // Este é o método mais eficiente quando precisamos de TODOS os dados
-    final List<Map<String, dynamic>> todosItens = await db.rawQuery(
-      '''
+    final List<Map<String, dynamic>> todosItens = await db.rawQuery('''
       SELECT 
         i.*, 
         p.nome as produto_nome, 
@@ -386,8 +360,7 @@ class NotaFiscalSqlManager {
       FROM ${DatabaseConfig.tableItensNotaFiscal} i
       INNER JOIN ${DatabaseConfig.tableProdutos} p ON i.produto_id = p.id
       ORDER BY i.nota_fiscal_id, i.id
-      ''',
-    );
+      ''');
 
     // Agrupa itens por nota_fiscal_id
     final Map<int, List<Map<String, dynamic>>> itensPorNota = {};
@@ -426,8 +399,7 @@ class NotaFiscalSqlManager {
     }
 
     final placeholders = List.filled(notasIds.length, '?').join(',');
-    final List<Map<String, dynamic>> todosItens = await db.rawQuery(
-      '''
+    final List<Map<String, dynamic>> todosItens = await db.rawQuery('''
       SELECT 
         i.*, 
         p.nome as produto_nome, 
@@ -436,9 +408,7 @@ class NotaFiscalSqlManager {
       INNER JOIN ${DatabaseConfig.tableProdutos} p ON i.produto_id = p.id
       WHERE i.nota_fiscal_id IN ($placeholders)
       ORDER BY i.nota_fiscal_id, i.id
-      ''',
-      notasIds,
-    );
+      ''', notasIds);
 
     // Agrupa itens por nota_fiscal_id
     final Map<int, List<Map<String, dynamic>>> itensPorNota = {};
@@ -449,6 +419,7 @@ class NotaFiscalSqlManager {
 
     return itensPorNota;
   }
+
   /// Converte um Map do banco de dados para um objeto NotaFiscal
   ///
   /// [notaMap] Map com os dados da nota fiscal do banco.
