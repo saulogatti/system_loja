@@ -30,13 +30,29 @@ class _ClienteScreenContentState extends State<_ClienteScreenContent> {
   final _emailController = TextEditingController();
   final _telefoneController = TextEditingController();
   final _enderecoController = TextEditingController();
+  int _previousCustomerCount = 0;
+  bool _isAdding = false;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<CustomerBloc, CustomerBlocState>(
       listener: (context, state) {
         state.whenOrNull(
+          customersLoaded: (customers) {
+            // Show success message if we just added a customer
+            if (_isAdding && customers.length > _previousCustomerCount) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Cliente cadastrado com sucesso!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              _isAdding = false;
+            }
+            _previousCustomerCount = customers.length;
+          },
           customerError: (message) {
+            _isAdding = false;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(message),
@@ -257,6 +273,10 @@ class _ClienteScreenContentState extends State<_ClienteScreenContent> {
 
   void _adicionarCliente() {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isAdding = true;
+      });
+      
       context.read<CustomerBloc>().add(
             CustomerBlocEvent.registerCustomer(
               name: _nomeController.text.trim(),
