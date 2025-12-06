@@ -2,18 +2,17 @@
 # Created by `dart pub`
 .dart_tool/
 
-# Data files
-data/*.json
 
-# Lock files for cross-process synchronization
-data/*.lock
 
 # Large installation files
 *.deb
 dartsdk-linux-x64-release.zip
 
 .flutter-plugins-dependencies
+.flutter-plugins
 
-*.lock
 
 macos/Flutter/GeneratedPluginRegistrant.swift
+
+# Build artifacts
+build/

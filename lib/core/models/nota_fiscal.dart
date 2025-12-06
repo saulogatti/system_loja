@@ -5,7 +5,7 @@ import 'package:system_loja/core/models/item_nota_fiscal.dart';
 part 'nota_fiscal.g.dart';
 
 /// Modelo de dados para Nota Fiscal
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class NotaFiscal extends DefaultObject {
   @JsonKey(name: 'numero_nota')
   final String numeroNota;

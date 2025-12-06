@@ -25,97 +25,48 @@ class NotaFiscalSqlManager {
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
 
-  /// Insere ou atualiza uma nota fiscal no banco de dados
-  ///
-  /// [notaFiscal] Objeto NotaFiscal a ser inserido ou atualizado.
-  /// Se o ID for 0, insere uma nova nota fiscal.
-  /// Caso contrário, atualiza a nota fiscal existente.
-  /// Retorna o ID da nota fiscal.
-  ///
-  /// A operação é executada dentro de uma transação.
-  Future<int> atualizar(NotaFiscal notaFiscal) async {
-    final db = await _database;
-
-    return await db.transaction((txn) async {
-      // Dados da nota fiscal (sem campos desnormalizados)
-      final Map<String, dynamic> dadosNota = {
-        'numero_nota': notaFiscal.numeroNota,
-        'cliente_id': notaFiscal.clienteId,
-        'valor_total': notaFiscal.valorTotal,
-        'forma_pagamento': notaFiscal.formaPagamento,
-        'data_emissao': notaFiscal.dataEmissao.toIso8601String(),
-      };
-
-      int notaId;
-      if (notaFiscal.id == 0) {
-        // Insere nova nota fiscal
-        notaId = await txn.insert(
-          DatabaseConfig.tableNotasFiscais,
-          dadosNota,
-          conflictAlgorithm: ConflictAlgorithm.abort,
-        );
-      } else {
-        // Atualiza nota fiscal existente
-        await txn.update(
-          DatabaseConfig.tableNotasFiscais,
-          dadosNota,
-          where: 'id = ?',
-          whereArgs: [notaFiscal.id],
-        );
-        notaId = notaFiscal.id;
-
-        // Remove itens antigos
-        await txn.delete(
-          DatabaseConfig.tableItensNotaFiscal,
-          where: 'nota_fiscal_id = ?',
-          whereArgs: [notaId],
-        );
-      }
-
-      // Insere itens da nota fiscal (sem campos desnormalizados)
-      for (final item in notaFiscal.itens) {
-        final Map<String, dynamic> dadosItem = {
-          'nota_fiscal_id': notaId,
-          'produto_id': item.produtoId,
-          'quantidade': item.quantidade,
-          'preco_unitario': item.precoUnitario,
-          'valor_total': item.valorTotal,
-        };
-
-        await txn.insert(
-          DatabaseConfig.tableItensNotaFiscal,
-          dadosItem,
-          conflictAlgorithm: ConflictAlgorithm.abort,
-        );
-      }
-
-      return notaId;
-    });
-  }
-
-  /// Busca notas fiscais por cliente
+  /// Atualiza uma nota fiscal existente no banco de dados
   ///
   /// [clienteId] ID do cliente.
   /// Retorna uma lista de notas fiscais do cliente especificado.
   ///
-  /// Utiliza JOIN para buscar dados do cliente associado.
-  /// Otimizado para evitar N+1 queries buscando todos os itens de uma vez.
-  Future<List<NotaFiscal>> buscarPorCliente(int clienteId) async {
+  /// A operação exclui os itens antigos e insere os novos
+  /// dentro de uma transação.
+  Future<int> atualizar(NotaFiscal notaFiscal) async {
     final db = await _database;
 
-    final List<Map<String, dynamic>> resultadoNotas = await db.rawQuery(
-      '''
-      SELECT 
-        nf.*, 
-        c.nome as cliente_nome, 
-        c.cpf as cliente_cpf
-      FROM ${DatabaseConfig.tableNotasFiscais} nf
-      INNER JOIN ${DatabaseConfig.tableClientes} c ON nf.cliente_id = c.id
-      WHERE nf.cliente_id = ?
-      ORDER BY nf.data_emissao DESC
-      ''',
-      [clienteId],
-    );
+    return await db.transaction((txn) async {
+      // Atualiza a nota fiscal
+      final Map<String, dynamic> dadosNota = notaFiscal.toJson();
+      // Remove campos que não devem ser atualizados
+      dadosNota.remove('id');
+      dadosNota.remove('itens');
+      // Adiciona o valor_total calculado
+      dadosNota['valor_total'] = notaFiscal.valorTotal;
+
+    return notas;
+  }
+
+  /// Busca notas fiscais por período
+  ///
+  /// [dataInicio] Data inicial do período.
+  /// [dataFim] Data final do período.
+  /// Retorna uma lista de notas fiscais emitidas no período.
+  ///
+  /// Utiliza JOIN para buscar dados do cliente associado.
+  /// Otimizado para evitar N+1 queries buscando todos os itens de uma vez.
+  Future<List<NotaFiscal>> buscarPorPeriodo(
+    DateTime dataInicio,
+    DateTime dataFim,
+  ) async {
+    final db = await _database;
+
+      // Insere novos itens
+      for (final item in notaFiscal.itens) {
+        final Map<String, dynamic> dadosItem = item.toJson();
+        // Adiciona campos necessários para o banco
+        dadosItem['nota_fiscal_id'] = notaFiscal.id;
+        dadosItem['valor_total'] = item.valorTotal;
 
     if (resultadoNotas.isEmpty) {
       return [];
@@ -136,48 +87,67 @@ class NotaFiscalSqlManager {
     return notas;
   }
 
+  /// Busca notas fiscais por cliente
+  ///
+  /// [clienteId] ID do cliente.
+  /// Retorna uma lista de notas fiscais do cliente especificado.
+  Future<List<NotaFiscal>> buscarPorCliente(int clienteId) async {
+    final db = await _database;
+
+    final List<Map<String, dynamic>> resultadoNotas = await db.query(
+      DatabaseConfig.tableNotasFiscais,
+      where: 'cliente_id = ?',
+      whereArgs: [clienteId],
+      orderBy: 'data_emissao DESC',
+    );
+
+    final List<NotaFiscal> notas = [];
+
+    for (final notaMap in resultadoNotas) {
+      final int notaId = notaMap['id'] as int;
+
+      final List<Map<String, dynamic>> resultadoItens = await db.query(
+        DatabaseConfig.tableItensNotaFiscal,
+        where: 'nota_fiscal_id = ?',
+        whereArgs: [notaId],
+      );
+
+      notas.add(_mapToNotaFiscal(notaMap, resultadoItens));
+    }
+
+    return notas;
+  }
+
   /// Busca notas fiscais por período
   ///
   /// [dataInicio] Data inicial do período.
   /// [dataFim] Data final do período.
   /// Retorna uma lista de notas fiscais emitidas no período.
-  ///
-  /// Utiliza JOIN para buscar dados do cliente associado.
-  /// Otimizado para evitar N+1 queries buscando todos os itens de uma vez.
   Future<List<NotaFiscal>> buscarPorPeriodo(
     DateTime dataInicio,
     DateTime dataFim,
   ) async {
     final db = await _database;
 
-    final List<Map<String, dynamic>> resultadoNotas = await db.rawQuery(
-      '''
-      SELECT 
-        nf.*, 
-        c.nome as cliente_nome, 
-        c.cpf as cliente_cpf
-      FROM ${DatabaseConfig.tableNotasFiscais} nf
-      INNER JOIN ${DatabaseConfig.tableClientes} c ON nf.cliente_id = c.id
-      WHERE nf.data_emissao BETWEEN ? AND ?
-      ORDER BY nf.data_emissao DESC
-      ''',
-      [dataInicio.toIso8601String(), dataFim.toIso8601String()],
+    final List<Map<String, dynamic>> resultadoNotas = await db.query(
+      DatabaseConfig.tableNotasFiscais,
+      where: 'data_emissao BETWEEN ? AND ?',
+      whereArgs: [dataInicio.toIso8601String(), dataFim.toIso8601String()],
+      orderBy: 'data_emissao DESC',
     );
 
-    if (resultadoNotas.isEmpty) {
-      return [];
-    }
-
-    // Busca todos os itens de uma vez para evitar N+1 queries
-    final notasIds = resultadoNotas.map((n) => n['id'] as int).toList();
-    final itensPorNota = await _buscarItensDeNotas(db, notasIds);
-
-    // Cria as notas fiscais com seus itens
     final List<NotaFiscal> notas = [];
+
     for (final notaMap in resultadoNotas) {
-      final notaId = notaMap['id'] as int;
-      final itens = itensPorNota[notaId] ?? [];
-      notas.add(_mapToNotaFiscal(notaMap, itens));
+      final int notaId = notaMap['id'] as int;
+
+      final List<Map<String, dynamic>> resultadoItens = await db.query(
+        DatabaseConfig.tableItensNotaFiscal,
+        where: 'nota_fiscal_id = ?',
+        whereArgs: [notaId],
+      );
+
+      notas.add(_mapToNotaFiscal(notaMap, resultadoItens));
     }
 
     return notas;
@@ -327,28 +297,13 @@ class NotaFiscalSqlManager {
   ///
   /// Retorna uma lista com todas as notas fiscais cadastradas.
   /// A lista pode estar vazia se não houver notas fiscais.
-  ///
-  /// Utiliza JOIN para buscar dados do cliente associado.
-  /// Otimizado para evitar N+1 queries buscando todos os itens de uma vez.
-  ///
-  /// **Nota de Performance**: Este método busca TODAS as notas fiscais e itens.
-  /// Para aplicações com grande volume de dados, considere implementar paginação.
   Future<List<NotaFiscal>> listarTodas() async {
     final db = await _database;
 
-    final List<Map<String, dynamic>> resultadoNotas = await db.rawQuery('''
-      SELECT 
-        nf.*, 
-        c.nome as cliente_nome, 
-        c.cpf as cliente_cpf
-      FROM ${DatabaseConfig.tableNotasFiscais} nf
-      INNER JOIN ${DatabaseConfig.tableClientes} c ON nf.cliente_id = c.id
-      ORDER BY nf.data_emissao DESC
-      ''');
-
-    if (resultadoNotas.isEmpty) {
-      return [];
-    }
+    final List<Map<String, dynamic>> resultadoNotas = await db.query(
+      DatabaseConfig.tableNotasFiscais,
+      orderBy: 'data_emissao DESC',
+    );
 
     // Busca todos os itens de uma vez para evitar N+1 queries
     // Este é o método mais eficiente quando precisamos de TODOS os dados
@@ -380,46 +335,6 @@ class NotaFiscalSqlManager {
     return notas;
   }
 
-  /// Busca todos os itens das notas fiscais especificadas
-  ///
-  /// [db] Instância do banco de dados.
-  /// [notasIds] Lista de IDs das notas fiscais.
-  /// Retorna um Map agrupando itens por nota_fiscal_id.
-  ///
-  /// Método auxiliar para evitar N+1 queries ao buscar múltiplas notas.
-  ///
-  /// **Nota**: SQLite suporta até 999 parâmetros em uma query por padrão.
-  /// Para conjuntos muito grandes, considere processar em lotes.
-  Future<Map<int, List<Map<String, dynamic>>>> _buscarItensDeNotas(
-    Database db,
-    List<int> notasIds,
-  ) async {
-    if (notasIds.isEmpty) {
-      return {};
-    }
-
-    final placeholders = List.filled(notasIds.length, '?').join(',');
-    final List<Map<String, dynamic>> todosItens = await db.rawQuery('''
-      SELECT 
-        i.*, 
-        p.nome as produto_nome, 
-        p.codigo as produto_codigo
-      FROM ${DatabaseConfig.tableItensNotaFiscal} i
-      INNER JOIN ${DatabaseConfig.tableProdutos} p ON i.produto_id = p.id
-      WHERE i.nota_fiscal_id IN ($placeholders)
-      ORDER BY i.nota_fiscal_id, i.id
-      ''', notasIds);
-
-    // Agrupa itens por nota_fiscal_id
-    final Map<int, List<Map<String, dynamic>>> itensPorNota = {};
-    for (final itemMap in todosItens) {
-      final notaId = itemMap['nota_fiscal_id'] as int;
-      itensPorNota.putIfAbsent(notaId, () => []).add(itemMap);
-    }
-
-    return itensPorNota;
-  }
-
   /// Converte um Map do banco de dados para um objeto NotaFiscal
   ///
   /// [notaMap] Map com os dados da nota fiscal do banco.
@@ -430,24 +345,15 @@ class NotaFiscalSqlManager {
     List<Map<String, dynamic>> itensMap,
   ) {
     final List<ItemNotaFiscal> itens = itensMap.map((itemMap) {
-      return ItemNotaFiscal(
-        produtoId: itemMap['produto_id'] as int,
-        produtoNome: itemMap['produto_nome'] as String,
-        produtoCodigo: itemMap['produto_codigo'] as String,
-        quantidade: itemMap['quantidade'] as int,
-        precoUnitario: (itemMap['preco_unitario'] as num).toDouble(),
-      );
+      return ItemNotaFiscal.fromJson(itemMap);
     }).toList();
 
-    return NotaFiscal(
-      id: notaMap['id'] as int,
-      numeroNota: notaMap['numero_nota'] as String,
-      clienteId: notaMap['cliente_id'] as int,
-      clienteNome: notaMap['cliente_nome'] as String,
-      clienteCpf: notaMap['cliente_cpf'] as String,
-      itens: itens,
-      formaPagamento: notaMap['forma_pagamento'] as String,
-      dataEmissao: DateTime.parse(notaMap['data_emissao'] as String),
-    );
+    // Prepara o map da nota com os itens para desserialização
+    final notaComItens = {
+      ...notaMap,
+      'itens': itens.map((item) => item.toJson()).toList(),
+    };
+
+    return NotaFiscal.fromJson(notaComItens);
   }
 }

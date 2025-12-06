@@ -5,7 +5,7 @@ import 'package:system_loja/core/models/default/default_object.dart';
 part 'cliente.g.dart';
 
 /// Modelo de dados para Cliente
-@JsonSerializable(constructor: 'withDados')
+@JsonSerializable(constructor: 'withDados', explicitToJson: true)
 class Cliente extends DefaultObject {
   final DadosCliente dadosCliente;
   @JsonKey(name: 'data_cadastro')
