@@ -102,11 +102,76 @@ class DatabaseHelper {
   ///
   /// Implementa a lógica de migração para cada versão do banco.
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // Implementar migrações futuras aqui
-    // Exemplo:
-    // if (oldVersion < 2) {
-    //   await db.execute('ALTER TABLE clientes ADD COLUMN novo_campo TEXT');
-    // }
+    // Migração da versão 1 para 2: Remove campos desnormalizados
+    if (oldVersion < 2) {
+      await _migrateToVersion2(db);
+    }
+  }
+
+  /// Migração para versão 2: Remove campos desnormalizados
+  ///
+  /// Remove os campos cliente_nome e cliente_cpf da tabela notas_fiscais,
+  /// e produto_nome e produto_codigo da tabela itens_nota_fiscal.
+  /// Esses dados serão obtidos via JOIN com as tabelas originais.
+  Future<void> _migrateToVersion2(Database db) async {
+    // SQLite não suporta DROP COLUMN diretamente, então precisamos:
+    // 1. Criar tabelas temporárias com a nova estrutura
+    // 2. Copiar os dados das tabelas antigas
+    // 3. Excluir as tabelas antigas
+    // 4. Renomear as tabelas temporárias
+
+    // Migração da tabela notas_fiscais
+    await db.execute('''
+      CREATE TABLE notas_fiscais_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        numero_nota TEXT NOT NULL UNIQUE,
+        cliente_id INTEGER NOT NULL,
+        valor_total REAL NOT NULL,
+        forma_pagamento TEXT NOT NULL,
+        data_emissao TEXT NOT NULL,
+        FOREIGN KEY (cliente_id) REFERENCES ${DatabaseConfig.tableClientes}(id)
+      )
+    ''');
+
+    await db.execute('''
+      INSERT INTO notas_fiscais_new 
+        (id, numero_nota, cliente_id, valor_total, forma_pagamento, data_emissao)
+      SELECT 
+        id, numero_nota, cliente_id, valor_total, forma_pagamento, data_emissao
+      FROM ${DatabaseConfig.tableNotasFiscais}
+    ''');
+
+    await db.execute('DROP TABLE ${DatabaseConfig.tableNotasFiscais}');
+    await db.execute(
+      'ALTER TABLE notas_fiscais_new RENAME TO ${DatabaseConfig.tableNotasFiscais}',
+    );
+
+    // Migração da tabela itens_nota_fiscal
+    await db.execute('''
+      CREATE TABLE itens_nota_fiscal_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nota_fiscal_id INTEGER NOT NULL,
+        produto_id INTEGER NOT NULL,
+        quantidade INTEGER NOT NULL,
+        preco_unitario REAL NOT NULL,
+        valor_total REAL NOT NULL,
+        FOREIGN KEY (nota_fiscal_id) REFERENCES ${DatabaseConfig.tableNotasFiscais}(id) ON DELETE CASCADE,
+        FOREIGN KEY (produto_id) REFERENCES ${DatabaseConfig.tableProdutos}(id)
+      )
+    ''');
+
+    await db.execute('''
+      INSERT INTO itens_nota_fiscal_new 
+        (id, nota_fiscal_id, produto_id, quantidade, preco_unitario, valor_total)
+      SELECT 
+        id, nota_fiscal_id, produto_id, quantidade, preco_unitario, valor_total
+      FROM ${DatabaseConfig.tableItensNotaFiscal}
+    ''');
+
+    await db.execute('DROP TABLE ${DatabaseConfig.tableItensNotaFiscal}');
+    await db.execute(
+      'ALTER TABLE itens_nota_fiscal_new RENAME TO ${DatabaseConfig.tableItensNotaFiscal}',
+    );
   }
 
   /// Fecha a conexão com o banco de dados
