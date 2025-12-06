@@ -66,8 +66,6 @@ class DatabaseScripts {
   /// - id: Identificador único auto-incrementado
   /// - numero_nota: Número da nota fiscal (único, obrigatório)
   /// - cliente_id: Referência ao cliente
-  /// - cliente_nome: Nome do cliente (desnormalizado para consultas)
-  /// - cliente_cpf: CPF do cliente (desnormalizado para consultas)
   /// - valor_total: Valor total da nota fiscal
   /// - forma_pagamento: Forma de pagamento utilizada
   /// - data_emissao: Data e hora de emissão da nota
@@ -76,8 +74,6 @@ class DatabaseScripts {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       numero_nota TEXT NOT NULL UNIQUE,
       cliente_id INTEGER NOT NULL,
-      cliente_nome TEXT NOT NULL,
-      cliente_cpf TEXT NOT NULL,
       valor_total REAL NOT NULL,
       forma_pagamento TEXT NOT NULL,
       data_emissao TEXT NOT NULL,
@@ -91,8 +87,6 @@ class DatabaseScripts {
   /// - id: Identificador único auto-incrementado
   /// - nota_fiscal_id: Referência à nota fiscal
   /// - produto_id: Referência ao produto
-  /// - produto_nome: Nome do produto (desnormalizado)
-  /// - produto_codigo: Código do produto (desnormalizado)
   /// - quantidade: Quantidade do item
   /// - preco_unitario: Preço unitário do produto
   /// - valor_total: Valor total do item
@@ -101,8 +95,6 @@ class DatabaseScripts {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nota_fiscal_id INTEGER NOT NULL,
       produto_id INTEGER NOT NULL,
-      produto_nome TEXT NOT NULL,
-      produto_codigo TEXT NOT NULL,
       quantidade INTEGER NOT NULL,
       preco_unitario REAL NOT NULL,
       valor_total REAL NOT NULL,
