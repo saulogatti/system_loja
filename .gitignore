@@ -13,7 +13,11 @@ data/*.lock
 dartsdk-linux-x64-release.zip
 
 .flutter-plugins-dependencies
+.flutter-plugins
 
 *.lock
 
 macos/Flutter/GeneratedPluginRegistrant.swift
+
+# Build artifacts
+build/
