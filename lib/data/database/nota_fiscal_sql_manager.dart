@@ -20,7 +20,7 @@ class NotaFiscalSqlManager {
   ///
   /// Se não for fornecido, usa a instância singleton padrão.
   NotaFiscalSqlManager({DatabaseHelper? dbHelper})
-    : _dbHelper = dbHelper ?? DatabaseHelper();
+      : _dbHelper = dbHelper ?? DatabaseHelper();
 
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
@@ -44,47 +44,8 @@ class NotaFiscalSqlManager {
       // Adiciona o valor_total calculado
       dadosNota['valor_total'] = notaFiscal.valorTotal;
 
-    return notas;
-  }
-
-  /// Busca notas fiscais por período
-  ///
-  /// [dataInicio] Data inicial do período.
-  /// [dataFim] Data final do período.
-  /// Retorna uma lista de notas fiscais emitidas no período.
-  ///
-  /// Utiliza JOIN para buscar dados do cliente associado.
-  /// Otimizado para evitar N+1 queries buscando todos os itens de uma vez.
-  Future<List<NotaFiscal>> buscarPorPeriodo(
-    DateTime dataInicio,
-    DateTime dataFim,
-  ) async {
-    final db = await _database;
-
-      // Insere novos itens
-      for (final item in notaFiscal.itens) {
-        final Map<String, dynamic> dadosItem = item.toJson();
-        // Adiciona campos necessários para o banco
-        dadosItem['nota_fiscal_id'] = notaFiscal.id;
-        dadosItem['valor_total'] = item.valorTotal;
-
-    if (resultadoNotas.isEmpty) {
-      return [];
-    }
-
-    // Busca todos os itens de uma vez para evitar N+1 queries
-    final notasIds = resultadoNotas.map((n) => n['id'] as int).toList();
-    final itensPorNota = await _buscarItensDeNotas(db, notasIds);
-
-    // Cria as notas fiscais com seus itens
-    final List<NotaFiscal> notas = [];
-    for (final notaMap in resultadoNotas) {
-      final notaId = notaMap['id'] as int;
-      final itens = itensPorNota[notaId] ?? [];
-      notas.add(_mapToNotaFiscal(notaMap, itens));
-    }
-
-    return notas;
+      return notaFiscal.id;
+    });
   }
 
   /// Busca notas fiscais por cliente
