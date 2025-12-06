@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:system_loja/core/models/cliente.dart';
+import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/models/item_nota_fiscal.dart';
 import 'package:system_loja/core/models/nota_fiscal.dart';
 import 'package:system_loja/core/models/produto.dart';
@@ -43,7 +43,7 @@ void main() {
 
   /// Cria dados de teste (cliente e produtos)
   Future<Map<String, dynamic>> criarDadosTeste() async {
-    final cliente = Cliente(
+    final cliente = Customer(
       id: 0,
       nome: 'João Silva',
       cpf: '123.456.789-00',
@@ -89,7 +89,7 @@ void main() {
     test('deve inserir uma nota fiscal com sucesso', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
       final produto2 = dados['produto2'] as Produto;
 
@@ -136,7 +136,7 @@ void main() {
     test('deve lançar exceção ao inserir nota com número duplicado', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
@@ -180,7 +180,7 @@ void main() {
     test('deve consultar nota fiscal por número', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
@@ -226,7 +226,7 @@ void main() {
     test('deve excluir nota fiscal com sucesso', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
@@ -264,7 +264,7 @@ void main() {
     test('deve listar todas as notas fiscais', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
@@ -310,11 +310,11 @@ void main() {
     test('deve buscar notas fiscais por cliente', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
 
       // Cria outro cliente
-      final cliente2 = Cliente(
+      final cliente2 = Customer(
         id: 0,
         nome: 'Maria Santos',
         cpf: '987.654.321-00',
@@ -385,7 +385,7 @@ void main() {
     test('deve contar o total de notas fiscais', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [

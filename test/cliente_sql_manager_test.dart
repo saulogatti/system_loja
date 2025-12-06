@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:system_loja/core/models/cliente.dart';
+import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/data/database/cliente_sql_manager.dart';
 import 'package:system_loja/data/database/database_helper.dart';
 
@@ -35,7 +35,7 @@ void main() {
   group('ClienteSqlManager - Testes de CRUD', () {
     test('deve inserir um cliente com sucesso', () async {
       // Arrange
-      final cliente = Cliente(
+      final cliente = Customer(
         id: 0,
         nome: 'João Silva',
         cpf: '123.456.789-00',
@@ -58,7 +58,7 @@ void main() {
 
     test('deve lançar exceção ao inserir cliente com CPF duplicado', () async {
       // Arrange
-      final cliente1 = Cliente(
+      final cliente1 = Customer(
         id: 0,
         nome: 'João Silva',
         cpf: '123.456.789-00',
@@ -67,7 +67,7 @@ void main() {
         endereco: 'Rua Teste, 123',
       );
 
-      final cliente2 = Cliente(
+      final cliente2 = Customer(
         id: 0,
         nome: 'Maria Santos',
         cpf: '123.456.789-00', // Mesmo CPF
@@ -83,7 +83,7 @@ void main() {
 
     test('deve consultar cliente por CPF', () async {
       // Arrange
-      final cliente = Cliente(
+      final cliente = Customer(
         id: 0,
         nome: 'João Silva',
         cpf: '123.456.789-00',
@@ -112,7 +112,7 @@ void main() {
 
     test('deve atualizar cliente com sucesso', () async {
       // Arrange
-      final cliente = Cliente(
+      final cliente = Customer(
         id: 0,
         nome: 'João Silva',
         cpf: '123.456.789-00',
@@ -124,7 +124,7 @@ void main() {
       final id = await clienteManager.inserir(cliente);
 
       // Act
-      final clienteAtualizado = Cliente(
+      final clienteAtualizado = Customer(
         id: id,
         nome: 'João Silva Santos',
         cpf: '123.456.789-00',
@@ -145,7 +145,7 @@ void main() {
 
     test('deve excluir cliente com sucesso', () async {
       // Arrange
-      final cliente = Cliente(
+      final cliente = Customer(
         id: 0,
         nome: 'João Silva',
         cpf: '123.456.789-00',
@@ -168,7 +168,7 @@ void main() {
 
     test('deve listar todos os clientes', () async {
       // Arrange
-      final cliente1 = Cliente(
+      final cliente1 = Customer(
         id: 0,
         nome: 'Ana Costa',
         cpf: '111.111.111-11',
@@ -177,7 +177,7 @@ void main() {
         endereco: 'Rua A, 1',
       );
 
-      final cliente2 = Cliente(
+      final cliente2 = Customer(
         id: 0,
         nome: 'Bruno Lima',
         cpf: '222.222.222-22',
@@ -201,7 +201,7 @@ void main() {
 
     test('deve buscar clientes por nome', () async {
       // Arrange
-      final cliente1 = Cliente(
+      final cliente1 = Customer(
         id: 0,
         nome: 'João Silva',
         cpf: '111.111.111-11',
@@ -210,7 +210,7 @@ void main() {
         endereco: 'Rua A, 1',
       );
 
-      final cliente2 = Cliente(
+      final cliente2 = Customer(
         id: 0,
         nome: 'João Santos',
         cpf: '222.222.222-22',
@@ -219,7 +219,7 @@ void main() {
         endereco: 'Rua B, 2',
       );
 
-      final cliente3 = Cliente(
+      final cliente3 = Customer(
         id: 0,
         nome: 'Maria Lima',
         cpf: '333.333.333-33',
@@ -241,7 +241,7 @@ void main() {
 
     test('deve contar o total de clientes', () async {
       // Arrange
-      final cliente1 = Cliente(
+      final cliente1 = Customer(
         id: 0,
         nome: 'Cliente 1',
         cpf: '111.111.111-11',
@@ -250,7 +250,7 @@ void main() {
         endereco: 'Rua 1',
       );
 
-      final cliente2 = Cliente(
+      final cliente2 = Customer(
         id: 0,
         nome: 'Cliente 2',
         cpf: '222.222.222-22',

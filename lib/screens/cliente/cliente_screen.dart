@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../core/managers/cliente_manager.dart';
-import '../core/models/cliente.dart';
+import '../../core/managers/customer_manager.dart';
+import '../../core/models/customer.dart';
 
 class ClienteScreen extends StatefulWidget {
   const ClienteScreen({super.key});
@@ -11,7 +11,9 @@ class ClienteScreen extends StatefulWidget {
 }
 
 class _ClienteScreenState extends State<ClienteScreen> {
-  final ClienteManager _manager = ClienteManager();
+
+  // TODO: Alterar manager para uso do BLoC (CustomerBloc)
+  final CustomerServiceManager _manager = CustomerServiceManager();
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _cpfController = TextEditingController();
@@ -36,7 +38,13 @@ class _ClienteScreenState extends State<ClienteScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Text('Novo Cliente', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Novo Cliente',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _nomeController,
@@ -111,7 +119,10 @@ class _ClienteScreenState extends State<ClienteScreen> {
                     const SizedBox(height: 32),
                     const Text(
                       'Clientes Cadastrados',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     if (_manager.clientes.isEmpty)
@@ -137,14 +148,24 @@ class _ClienteScreenState extends State<ClienteScreen> {
                               leading: CircleAvatar(
                                 backgroundColor: Colors.blue,
                                 child: Text(
-                                  cliente.nome[0].toUpperCase(),
+                                  cliente.name[0].toUpperCase(),
                                   style: const TextStyle(color: Colors.white),
                                 ),
                               ),
-                              title: Text(cliente.nome, style: const TextStyle(fontWeight: FontWeight.bold)),
-                              subtitle: Text('CPF: ${cliente.cpf}\n${cliente.email}'),
+                              title: Text(
+                                cliente.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                'CPF: ${cliente.cpf}\n${cliente.email}',
+                              ),
                               isThreeLine: true,
-                              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                              trailing: const Icon(
+                                Icons.arrow_forward_ios,
+                                size: 16,
+                              ),
                               onTap: () {
                                 _mostrarDetalhesCliente(cliente);
                               },
@@ -179,15 +200,21 @@ class _ClienteScreenState extends State<ClienteScreen> {
       // Check if CPF already exists
       if (_manager.clientes.any((c) => c.cpf == cpf)) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erro: CPF já cadastrado!'), backgroundColor: Colors.red),
+          const SnackBar(
+            content: Text('Erro: CPF já cadastrado!'),
+            backgroundColor: Colors.red,
+          ),
         );
         return;
       }
 
-      final cliente = Cliente(
+      final cliente = Customer(
         id: _manager.clientes.isEmpty
             ? 1
-            : _manager.clientes.map((c) => c.id).reduce((a, b) => a > b ? a : b) + 1,
+            : _manager.clientes
+                      .map((c) => c.id)
+                      .reduce((a, b) => a > b ? a : b) +
+                  1,
         nome: _nomeController.text.trim(),
         cpf: cpf,
         email: _emailController.text.trim(),
@@ -225,7 +252,11 @@ class _ClienteScreenState extends State<ClienteScreen> {
         children: [
           Text(
             label,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+              fontSize: 12,
+            ),
           ),
           const SizedBox(height: 4),
           Text(value, style: const TextStyle(fontSize: 16)),
@@ -234,7 +265,7 @@ class _ClienteScreenState extends State<ClienteScreen> {
     );
   }
 
-  void _mostrarDetalhesCliente(Cliente cliente) {
+  void _mostrarDetalhesCliente(Customer cliente) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -249,11 +280,19 @@ class _ClienteScreenState extends State<ClienteScreen> {
               _buildDetailRow('Email', cliente.email),
               _buildDetailRow('Telefone', cliente.telefone),
               _buildDetailRow('Endereço', cliente.endereco),
-              _buildDetailRow('Data de Cadastro', cliente.dataCadastro.toString().split('.')[0]),
+              _buildDetailRow(
+                'Data de Cadastro',
+                cliente.dataCadastro.toString().split('.')[0],
+              ),
             ],
           ),
         ),
-        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Fechar'),
+          ),
+        ],
       ),
     );
   }

@@ -4,7 +4,7 @@ version: 1.0.0
 publish_to: "none"
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ">=3.10.3"
 
 dependencies:
   log_custom_printer:
@@ -13,7 +13,7 @@ dependencies:
       ref: v_1.1.0
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
+
   path_provider: ^2.1.4
   synchronized: ^3.3.0+3
   path: ^1.9.1
@@ -22,6 +22,10 @@ dependencies:
   sqflite_common_ffi: ^2.3.3
   async: ^2.13.0
   meta: ^1.17.0
+  flutter_bloc: ^9.1.1
+  bloc: ^9.1.0
+  freezed_annotation: ^3.1.0
+  freezed: ^3.2.3
 
 dev_dependencies:
   flutter_test:

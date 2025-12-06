@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/item_nota_fiscal.dart';
 
-import '../core/managers/cliente_manager.dart';
+import '../core/managers/customer_manager.dart';
 import '../core/managers/nota_fiscal_manager.dart';
 import '../core/managers/produto_manager.dart';
-import '../core/models/cliente.dart';
+import '../core/models/customer.dart';
 import '../core/models/nota_fiscal.dart';
 import '../core/models/produto.dart';
 
@@ -17,7 +17,7 @@ class NotaFiscalScreen extends StatefulWidget {
 
 // Form screen for creating a new nota fiscal
 class _NotaFiscalFormScreen extends StatefulWidget {
-  final ClienteManager clienteManager;
+  final CustomerServiceManager clienteManager;
   final ProdutoManager produtoManager;
   final NotaFiscalManager notaFiscalManager;
 
@@ -35,7 +35,7 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _numeroNotaController = TextEditingController();
   final _formaPagamentoController = TextEditingController();
-  Cliente? _clienteSelecionado;
+  Customer? _clienteSelecionado;
   final List<Map<String, dynamic>> _itensSelecionados = [];
 
   @override
@@ -73,7 +73,7 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              DropdownButtonFormField<Cliente>(
+              DropdownButtonFormField<Customer>(
                 initialValue: _clienteSelecionado,
                 decoration: const InputDecoration(
                   labelText: 'Cliente *',
@@ -81,7 +81,10 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
                   prefixIcon: Icon(Icons.person),
                 ),
                 items: widget.clienteManager.clientes.map((cliente) {
-                  return DropdownMenuItem(value: cliente, child: Text('${cliente.nome} (${cliente.cpf})'));
+                  return DropdownMenuItem(
+                    value: cliente,
+                    child: Text('${cliente.name} (${cliente.cpf})'),
+                  );
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
@@ -115,7 +118,10 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Itens', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Itens',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                   ElevatedButton.icon(
                     onPressed: _adicionarItem,
                     icon: const Icon(Icons.add),
@@ -128,7 +134,10 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
                 const Center(
                   child: Padding(
                     padding: EdgeInsets.all(32.0),
-                    child: Text('Nenhum item adicionado', style: TextStyle(color: Colors.grey)),
+                    child: Text(
+                      'Nenhum item adicionado',
+                      style: TextStyle(color: Colors.grey),
+                    ),
                   ),
                 )
               else
@@ -160,14 +169,27 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
               const SizedBox(height: 24),
               Container(
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Valor Total:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Valor Total:',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     Text(
                       'R\$ ${valorTotal.toStringAsFixed(2)}',
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
                     ),
                   ],
                 ),
@@ -175,8 +197,13 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _salvarNotaFiscal,
-                style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
-                child: const Text('Salvar Nota Fiscal', style: TextStyle(fontSize: 16)),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                ),
+                child: const Text(
+                  'Salvar Nota Fiscal',
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ],
           ),
@@ -195,7 +222,9 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
   void _adicionarItem() async {
     final produto = await showDialog<Produto>(
       context: context,
-      builder: (context) => _SelecionarProdutoDialog(produtos: widget.produtoManager.getProdutos()),
+      builder: (context) => _SelecionarProdutoDialog(
+        produtos: widget.produtoManager.getProdutos(),
+      ),
     );
 
     if (produto != null) {
@@ -205,7 +234,9 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Estoque insuficiente! Disponível: ${produto.estoque}'),
+              content: Text(
+                'Estoque insuficiente! Disponível: ${produto.estoque}',
+              ),
               backgroundColor: Colors.red,
             ),
           );
@@ -213,7 +244,10 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
         }
 
         setState(() {
-          _itensSelecionados.add({'produto': produto, 'quantidade': quantidade});
+          _itensSelecionados.add({
+            'produto': produto,
+            'quantidade': quantidade,
+          });
         });
       }
     }
@@ -223,14 +257,20 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
     if (_formKey.currentState!.validate()) {
       if (_clienteSelecionado == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erro: Selecione um cliente!'), backgroundColor: Colors.red),
+          const SnackBar(
+            content: Text('Erro: Selecione um cliente!'),
+            backgroundColor: Colors.red,
+          ),
         );
         return;
       }
 
       if (_itensSelecionados.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erro: Adicione pelo menos um item!'), backgroundColor: Colors.red),
+          const SnackBar(
+            content: Text('Erro: Adicione pelo menos um item!'),
+            backgroundColor: Colors.red,
+          ),
         );
         return;
       }
@@ -238,9 +278,14 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
       final numeroNota = _numeroNotaController.text.trim();
 
       // Check if invoice number already exists
-      if (widget.notaFiscalManager.notasFiscais.any((nf) => nf.numeroNota == numeroNota)) {
+      if (widget.notaFiscalManager.notasFiscais.any(
+        (nf) => nf.numeroNota == numeroNota,
+      )) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erro: Número da nota já cadastrado!'), backgroundColor: Colors.red),
+          const SnackBar(
+            content: Text('Erro: Número da nota já cadastrado!'),
+            backgroundColor: Colors.red,
+          ),
         );
         return;
       }
@@ -260,10 +305,13 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
       final notaFiscal = NotaFiscal(
         id: widget.notaFiscalManager.notasFiscais.isEmpty
             ? 1
-            : widget.notaFiscalManager.notasFiscais.map((nf) => nf.id).reduce((a, b) => a > b ? a : b) + 1,
+            : widget.notaFiscalManager.notasFiscais
+                      .map((nf) => nf.id)
+                      .reduce((a, b) => a > b ? a : b) +
+                  1,
         numeroNota: numeroNota,
         clienteId: _clienteSelecionado!.id,
-        clienteNome: _clienteSelecionado!.nome,
+        clienteNome: _clienteSelecionado!.name,
         clienteCpf: _clienteSelecionado!.cpf,
         itens: itens,
         formaPagamento: _formaPagamentoController.text.trim(),
@@ -301,7 +349,10 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
           autofocus: true,
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
           ElevatedButton(
             onPressed: () {
               final qtd = int.tryParse(controller.text.trim());
@@ -319,7 +370,7 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
 
 class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
   final NotaFiscalManager _manager = NotaFiscalManager();
-  final ClienteManager _clienteManager = ClienteManager();
+  final CustomerServiceManager _clienteManager = CustomerServiceManager();
   final ProdutoManager _produtoManager = ProdutoManager();
 
   @override
@@ -337,7 +388,11 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.receipt_long, size: 80, color: Colors.grey[400]),
+                        Icon(
+                          Icons.receipt_long,
+                          size: 80,
+                          color: Colors.grey[400],
+                        ),
                         const SizedBox(height: 16),
                         const Text(
                           'Nenhuma nota fiscal cadastrada',
@@ -373,7 +428,10 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
                             'Cliente: ${nf.clienteNome}\nR\$ ${nf.valorTotal.toStringAsFixed(2)}',
                           ),
                           isThreeLine: true,
-                          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                          trailing: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                          ),
                           onTap: () {
                             _mostrarDetalhesNota(nf);
                           },
@@ -395,14 +453,20 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
   void _adicionarNotaFiscal() async {
     if (_clienteManager.clientes.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro: Nenhum cliente cadastrado!'), backgroundColor: Colors.red),
+        const SnackBar(
+          content: Text('Erro: Nenhum cliente cadastrado!'),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
 
     if (_produtoManager.getProdutos().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro: Nenhum produto cadastrado!'), backgroundColor: Colors.red),
+        const SnackBar(
+          content: Text('Erro: Nenhum produto cadastrado!'),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
@@ -431,7 +495,11 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
         children: [
           Text(
             label,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+              fontSize: 12,
+            ),
           ),
           const SizedBox(height: 4),
           Text(value, style: const TextStyle(fontSize: 16)),
@@ -454,11 +522,20 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
               _buildDetailRow('Número', nf.numeroNota),
               _buildDetailRow('Cliente', nf.clienteNome),
               _buildDetailRow('CPF', nf.clienteCpf),
-              _buildDetailRow('Valor Total', 'R\$ ${nf.valorTotal.toStringAsFixed(2)}'),
+              _buildDetailRow(
+                'Valor Total',
+                'R\$ ${nf.valorTotal.toStringAsFixed(2)}',
+              ),
               _buildDetailRow('Pagamento', nf.formaPagamento),
-              _buildDetailRow('Data de Emissão', nf.dataEmissao.toString().split('.')[0]),
+              _buildDetailRow(
+                'Data de Emissão',
+                nf.dataEmissao.toString().split('.')[0],
+              ),
               const SizedBox(height: 16),
-              const Text('Itens:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const Text(
+                'Itens:',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
               const SizedBox(height: 8),
               ...nf.itens.map(
                 (item) => Padding(
@@ -472,7 +549,12 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
             ],
           ),
         ),
-        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Fechar'),
+          ),
+        ],
       ),
     );
   }
@@ -497,13 +579,20 @@ class _SelecionarProdutoDialog extends StatelessWidget {
             final produto = produtos[index];
             return ListTile(
               title: Text(produto.nome),
-              subtitle: Text('R\$ ${produto.preco.toStringAsFixed(2)} - Estoque: ${produto.estoque}'),
+              subtitle: Text(
+                'R\$ ${produto.preco.toStringAsFixed(2)} - Estoque: ${produto.estoque}',
+              ),
               onTap: () => Navigator.pop(context, produto),
             );
           },
         ),
       ),
-      actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar'))],
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancelar'),
+        ),
+      ],
     );
   }
 }

@@ -2,129 +2,161 @@
 
 ## Architecture Overview
 
-System Loja is a Flutter multiplatform store management app (Windows, macOS, iOS, Android) using **JSON file persistence** instead of a database. The codebase follows a **Manager Pattern** with clear separation of concerns:
+System Loja is a Flutter multiplatform store management app (Windows, macOS, iOS, Android) with **dual persistence**: JSON files (legacy) and SQLite database (new). The codebase is transitioning to a modern architecture with:
 
-- **Models** (`lib/core/models/`): Data classes with `toJson()`/`fromJson()` serialization
-- **Managers** (`lib/core/managers/`): Business logic classes that handle JSON file I/O and CRUD operations
-- **Screens** (`lib/screens/`): Material 3 UI screens with forms and lists
-- **Data Persistence**: JSON files in `data/` directory (created automatically)
+- **Models** (`lib/core/models/`): Data classes using `@JsonSerializable` for automatic serialization
+- **Managers** (`lib/core/managers/`): Legacy JSON-based managers with file locking for concurrency
+- **SQL Managers** (`lib/data/database/`): New SQLite-based managers using Repository pattern
+- **BLoC** (`lib/screens/*/bloc/`): State management with `flutter_bloc` and `freezed` for events/states
+- **Cache** (`lib/data/cache/`): Generic cache system with `FileSystemManager` mixin
+- **Screens** (`lib/screens/`): Material 3 UI with forms and lists
 
-## Key Patterns
+## Critical Patterns
 
-### Manager Pattern
-Each entity has a dedicated manager class that handles:
+### 1. Resultado Pattern for Error Handling
+Use `Resultado<T, E>` sealed class (not `Result`) for type-safe error handling:
 ```dart
-class ClienteManager {
-  List<Cliente> clientes = [];
-  void _carregarDados() // Load from JSON file
-  void _salvarDados()   // Save to JSON file
-  // CRUD operations
+Resultado<Cliente, ClienteException> resultado = await manager.salvar(cliente);
+switch (resultado) {
+  case Sucesso(valor: final cliente):
+    // Handle success
+  case Erro(erro: final erro):
+    // Handle error with erro.message
 }
 ```
 
-### JSON Persistence
-- Files stored in `data/` directory (`data/clientes.json`, `data/produtos.json`, etc.)
-- Auto-generated IDs using: `clientes.isEmpty ? 1 : clientes.map((c) => c.id!).reduce((a, b) => a > b ? a : b) + 1`
-- Models must have `toJson()` and `fromJson()` methods
-
-### Flutter UI Patterns
-- Material 3 design with `ColorScheme.fromSeed()`
-- Form validation using `GlobalKey<FormState>()`
-- Modal bottom sheets for details with `showModalBottomSheet()`
-- SnackBar feedback for user actions
-- Card-based layouts with `InkWell` for interactions
-
-## Development Workflow
-
-### Adding New Features
-1. **Model**: Create in `lib/core/models/` with JSON serialization
-2. **Manager**: Create in `lib/core/managers/` with file I/O and business logic
-3. **Screen**: Create in `lib/screens/` with form and list UI
-4. **Navigation**: Add to `home_screen.dart` menu
-
-### Testing
+### 2. Code Generation Workflow
+**Always run after model changes:**
 ```bash
-flutter run -d macos     # macOS testing
-flutter run -d windows   # Windows testing
-flutter run              # iOS/Android (with simulator/device)
-flutter test             # Unit tests
+dart run build_runner build --delete-conflicting-outputs
+```
+Required for:
+- `@JsonSerializable` models (generates `.g.dart`)
+- `@freezed` BLoC events/states (generates `.freezed.dart`)
+
+### 3. Manager Concurrency (JSON-based)
+Managers use `synchronized` package + file locking for concurrent writes:
+```dart
+class ProdutoManager {
+  static final Map<String, Lock> _fileLocks = {};
+  
+  Future<void> salvarDadosSincronizado() async {
+    await _getLock().synchronized(() async {
+      // Reload from disk to merge changes
+      final dadosAtuais = _carregarDadosDoDisco();
+      // Merge, then save
+    });
+  }
+}
 ```
 
-### Code Style
-- Follow **Effective Dart** guidelines (configured in `analysis_options.yaml`)
-- Use `lowerCamelCase` for variables/functions, `UpperCamelCase` for classes
-- Prefer `final` over `var` for immutable variables
-- **ALWAYS** document code using `///` comments in **Portuguese**
-- Document all public classes, methods, and properties
-- Use clear, descriptive Portuguese phrases following Dart doc comment patterns
-- Format with `dart format`
-
-## Critical Implementation Details
-
-### Documentation Standards
-All code must be documented in **Portuguese** using Dart doc comments:
+### 4. SQL Managers Pattern
+New SQLite managers (in `lib/data/database/`) use `toJson()`/`fromJson()`:
 ```dart
-/// Gerencia operações CRUD para clientes
+class ClienteSqlManager {
+  Future<int> inserir(Cliente cliente) async {
+    final db = await _database;
+    final map = cliente.toJson();
+    map.remove('id'); // Let DB auto-increment
+    return await db.insert(DatabaseConfig.tabelaClientes, map);
+  }
+}
+```
+
+### 5. BLoC with Freezed
+Events and states use `@freezed` for immutability:
+```dart
+@freezed
+sealed class ClienteBlocEvent with _$ClienteBlocEvent {
+  const factory ClienteBlocEvent.salvarCliente({
+    required String nome,
+    required String cpf,
+  }) = _SalvarCliente;
+}
+
+@freezed
+sealed class ClienteBlocState with _$ClienteBlocState {
+  const factory ClienteBlocState.initial() = _Initial;
+  const factory ClienteBlocState.clienteAdicionado({required Cliente cliente}) = _ClienteAdicionado;
+}
+```
+
+### 6. FileSystemManager Mixin
+For JSON persistence with automatic directory setup:
+```dart
+mixin FileSystemManager {
+  AsyncMemoizer<String> memoizer = AsyncMemoizer<String>();
+  
+  Future<String> setupFileSystem() async { /* creates cache dir */ }
+  Future<T> loadJsonFromFile<T>(String path) async { /* loads JSON */ }
+  Future<bool> saveJsonToFile(String path, Object data) async { /* saves JSON */ }
+}
+```
+
+## Development Workflows
+
+### Adding New Feature with BLoC
+1. **Model**: Create in `lib/core/models/` with `@JsonSerializable`
+2. **Manager**: Create JSON manager in `lib/core/managers/` or SQL manager in `lib/data/database/`
+3. **BLoC**: Create `bloc/` folder with:
+   - `entity_bloc.dart` (main logic)
+   - `entity_bloc_event.dart` (sealed events with `@freezed`)
+   - `entity_bloc_state.dart` (sealed states with `@freezed`)
+4. **Run codegen**: `dart run build_runner build --delete-conflicting-outputs`
+5. **Screen**: Create UI in `lib/screens/entity/` with `BlocProvider` and `BlocBuilder`
+6. **Navigation**: Add to `home_screen.dart`
+
+### Testing Commands
+```bash
+flutter test                      # Run all tests
+flutter test test/cliente_sql_manager_test.dart  # Specific test
+dart run build_runner build --delete-conflicting-outputs  # After model changes
+flutter run -d macos             # macOS
+flutter run -d windows           # Windows
+```
+
+### Debugging Persistence
+- **JSON files**: Check `data/` directory (created automatically)
+- **SQLite**: Use `DatabaseHelper.resetInstance()` in tests
+- **Cache**: Check app support directory via `CacheManager.instance`
+
+## Code Style Requirements
+
+### Documentation (CRITICAL)
+**All code MUST be documented in Portuguese** using `///` comments:
+```dart
+/// Gerencia operações CRUD para clientes no banco SQLite.
 ///
-/// Esta classe é responsável por carregar, salvar e manipular
-/// dados de clientes em arquivos JSON locais.
-class ClienteManager {
-  /// Lista de todos os clientes carregados
-  List<Cliente> clientes = [];
-
-  /// Adiciona um novo cliente ao sistema
+/// Esta classe utiliza o padrão Repository e os métodos `toJson()`/`fromJson()`
+/// gerados automaticamente para serialização.
+class ClienteSqlManager {
+  /// Insere um novo cliente no banco de dados.
   ///
-  /// Valida se o CPF já existe antes de adicionar.
-  /// Retorna true se o cliente foi adicionado com sucesso.
-  bool adicionarCliente(Cliente cliente) { ... }
+  /// Lança [DatabaseException] se o CPF já existir (constraint UNIQUE).
+  /// Retorna o ID gerado automaticamente.
+  Future<int> inserir(Cliente cliente) async { ... }
 }
 ```
 
-### ID Generation
-Always use this pattern for auto-incrementing IDs:
-```dart
-id: manager.items.isEmpty ? 1 : manager.items.map((i) => i.id!).reduce((a, b) => a > b ? a : b) + 1
-```
+### Naming Conventions
+- **Code**: English (variables, methods, classes) - e.g., `saveClient()`, not `salvarCliente()`
+- **Documentation**: Portuguese (comments, strings)
+- **Exception**: Domain models can use Portuguese names (e.g., `Cliente`, `Produto`)
 
-### Manager File Paths
-Default paths use relative `data/` directory:
-```dart
-ClienteManager({this.dataFile = 'data/clientes.json'})
-```
+### Dependencies (Key Packages)
+- `bloc` / `flutter_bloc`: State management
+- `freezed` / `freezed_annotation`: Immutable events/states
+- `json_serializable` / `json_annotation`: Model serialization
+- `sqflite` / `sqflite_common_ffi`: SQLite database
+- `synchronized`: File locking for JSON managers
+- `path_provider`: App directories
+- `log_custom_printer`: Custom logging (via git dependency)
 
-### Form Controllers
-Always dispose controllers in `dispose()` method:
-```dart
-@override
-void dispose() {
-  _nomeController.dispose();
-  _cpfController.dispose();
-  super.dispose();
-}
-```
+## Known Gotchas
 
-### Error Handling
-Use consistent validation patterns:
-- Check for duplicates before saving (CPF, product codes)
-- Show SnackBar with red background for errors
-- Validate required fields with `obrigatorio: true` pattern
-
-### Dependencies
-- `path_provider`: For file system access
-- `path`: For file path operations
-- No external database dependencies (uses JSON files)
-
-## Common Tasks
-
-### Adding New Entity Type
-1. Create model in `lib/core/models/new_entity.dart`
-2. Create manager in `lib/core/managers/new_entity_manager.dart`
-3. Create screen in `lib/screens/new_entity_screen.dart`
-4. Add navigation card to `home_screen.dart`
-
-### Debugging JSON Issues
-- Check `data/` directory for malformed JSON
-- Verify `toJson()`/`fromJson()` methods match exactly
-- Use `dart:convert` `jsonDecode`/`jsonEncode` consistently
-
-This project prioritizes simplicity and local data persistence over complex database setups, making it ideal for desktop and mobile business applications across Windows, macOS, iOS, and Android platforms.
+1. **Dual Persistence**: Some entities use JSON (`lib/core/managers/`), others use SQLite (`lib/data/database/`). Check which system the entity uses before modifying.
+2. **Build Runner**: After adding/modifying `@JsonSerializable` or `@freezed` classes, ALWAYS run `dart run build_runner build --delete-conflicting-outputs` before running the app.
+3. **Resultado vs Result**: Use `Resultado<T, E>` (Portuguese) with `Sucesso` and `Erro`, not Dart's `Result`.
+4. **File Locking**: JSON managers use both in-memory `Lock` (from `synchronized`) and file-system locks (`RandomAccessFile.lock`) for multi-process safety.
+5. **SQL Tests**: Use `sqfliteFfiInit()` and `databaseFactory = databaseFactoryFfi` in test setup for desktop testing.
+6. **CacheManager**: Singleton with `FileSystemManager` mixin, uses `Cacheable` interface for objects. Call `setupFileSystem()` before use.

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'cliente_screen.dart';
+import 'cliente/cliente_screen.dart';
 import 'nota_fiscal_screen.dart';
 import 'produto_screen.dart';
 

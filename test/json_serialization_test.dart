@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:system_loja/core/models/cliente.dart';
-import 'package:system_loja/core/models/produto.dart';
-import 'package:system_loja/core/models/nota_fiscal.dart';
+import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/models/item_nota_fiscal.dart';
+import 'package:system_loja/core/models/nota_fiscal.dart';
+import 'package:system_loja/core/models/produto.dart';
 
 /// Testes de serialização JSON
 ///
@@ -40,7 +40,7 @@ void main() {
   group('Cliente - Serialização JSON', () {
     test('deve serializar e desserializar corretamente', () {
       // Arrange
-      final cliente = Cliente(
+      final cliente = Customer(
         id: 1,
         nome: 'João Silva',
         cpf: '123.456.789-00',
@@ -51,7 +51,7 @@ void main() {
 
       // Act
       final json = cliente.toJson();
-      final clienteReconstruido = Cliente.fromJson(json);
+      final clienteReconstruido = Customer.fromJson(json);
 
       // Assert
       expect(clienteReconstruido.id, equals(cliente.id));
