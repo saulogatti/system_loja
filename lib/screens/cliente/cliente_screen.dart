@@ -222,15 +222,6 @@ class _ClienteScreenContentState extends State<_ClienteScreenContent> {
                                 },
                               );
                             },
-                            customerAdded: (customer) => const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(32.0),
-                                child: Text(
-                                  'Cliente adicionado!',
-                                  style: TextStyle(fontSize: 16, color: Colors.green),
-                                ),
-                              ),
-                            ),
                             customerError: (message) => Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(32.0),

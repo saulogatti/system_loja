@@ -38,6 +38,9 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   }
 
   /// Registra um novo cliente no banco de dados
+  ///
+  /// O ID é definido como 0 pois a tabela usa AUTOINCREMENT.
+  /// O banco de dados SQLite gerará automaticamente o próximo ID disponível.
   Future<void> _onRegisterCustomer(
     _RegisterCustomer event,
     Emitter<CustomerBlocState> emit,
@@ -46,7 +49,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
     
     try {
       final customer = Customer(
-        id: 0, // O banco gera o ID automaticamente
+        id: 0, // SQLite AUTOINCREMENT gera o ID automaticamente
         name: event.name,
         cpf: event.cpf,
         email: event.email,

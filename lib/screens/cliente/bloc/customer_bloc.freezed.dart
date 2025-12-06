@@ -321,14 +321,13 @@ extension CustomerBlocStatePatterns on CustomerBlocState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _CustomersLoaded value)?  customersLoaded,TResult Function( _CustomerAdded value)?  customerAdded,TResult Function( _CustomerError value)?  customerError,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _CustomersLoaded value)?  customersLoaded,TResult Function( _CustomerError value)?  customerError,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _CustomersLoaded() when customersLoaded != null:
-return customersLoaded(_that);case _CustomerAdded() when customerAdded != null:
-return customerAdded(_that);case _CustomerError() when customerError != null:
+return customersLoaded(_that);case _CustomerError() when customerError != null:
 return customerError(_that);case _:
   return orElse();
 
@@ -347,14 +346,13 @@ return customerError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _CustomersLoaded value)  customersLoaded,required TResult Function( _CustomerAdded value)  customerAdded,required TResult Function( _CustomerError value)  customerError,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _CustomersLoaded value)  customersLoaded,required TResult Function( _CustomerError value)  customerError,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case _Loading():
 return loading(_that);case _CustomersLoaded():
-return customersLoaded(_that);case _CustomerAdded():
-return customerAdded(_that);case _CustomerError():
+return customersLoaded(_that);case _CustomerError():
 return customerError(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -372,14 +370,13 @@ return customerError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _CustomersLoaded value)?  customersLoaded,TResult? Function( _CustomerAdded value)?  customerAdded,TResult? Function( _CustomerError value)?  customerError,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _CustomersLoaded value)?  customersLoaded,TResult? Function( _CustomerError value)?  customerError,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _CustomersLoaded() when customersLoaded != null:
-return customersLoaded(_that);case _CustomerAdded() when customerAdded != null:
-return customerAdded(_that);case _CustomerError() when customerError != null:
+return customersLoaded(_that);case _CustomerError() when customerError != null:
 return customerError(_that);case _:
   return null;
 
@@ -397,13 +394,12 @@ return customerError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Customer> customers)?  customersLoaded,TResult Function( Customer customer)?  customerAdded,TResult Function( String message)?  customerError,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Customer> customers)?  customersLoaded,TResult Function( String message)?  customerError,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _CustomersLoaded() when customersLoaded != null:
-return customersLoaded(_that.customers);case _CustomerAdded() when customerAdded != null:
-return customerAdded(_that.customer);case _CustomerError() when customerError != null:
+return customersLoaded(_that.customers);case _CustomerError() when customerError != null:
 return customerError(_that.message);case _:
   return orElse();
 
@@ -422,13 +418,12 @@ return customerError(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Customer> customers)  customersLoaded,required TResult Function( Customer customer)  customerAdded,required TResult Function( String message)  customerError,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Customer> customers)  customersLoaded,required TResult Function( String message)  customerError,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _CustomersLoaded():
-return customersLoaded(_that.customers);case _CustomerAdded():
-return customerAdded(_that.customer);case _CustomerError():
+return customersLoaded(_that.customers);case _CustomerError():
 return customerError(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -446,13 +441,12 @@ return customerError(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Customer> customers)?  customersLoaded,TResult? Function( Customer customer)?  customerAdded,TResult? Function( String message)?  customerError,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Customer> customers)?  customersLoaded,TResult? Function( String message)?  customerError,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _CustomersLoaded() when customersLoaded != null:
-return customersLoaded(_that.customers);case _CustomerAdded() when customerAdded != null:
-return customerAdded(_that.customer);case _CustomerError() when customerError != null:
+return customersLoaded(_that.customers);case _CustomerError() when customerError != null:
 return customerError(_that.message);case _:
   return null;
 
@@ -591,72 +585,6 @@ class __$CustomersLoadedCopyWithImpl<$Res>
   return _then(_CustomersLoaded(
 customers: null == customers ? _self._customers : customers // ignore: cast_nullable_to_non_nullable
 as List<Customer>,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class _CustomerAdded implements CustomerBlocState {
-  const _CustomerAdded({required this.customer});
-  
-
- final  Customer customer;
-
-/// Create a copy of CustomerBlocState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$CustomerAddedCopyWith<_CustomerAdded> get copyWith => __$CustomerAddedCopyWithImpl<_CustomerAdded>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CustomerAdded&&(identical(other.customer, customer) || other.customer == customer));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,customer);
-
-@override
-String toString() {
-  return 'CustomerBlocState.customerAdded(customer: $customer)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$CustomerAddedCopyWith<$Res> implements $CustomerBlocStateCopyWith<$Res> {
-  factory _$CustomerAddedCopyWith(_CustomerAdded value, $Res Function(_CustomerAdded) _then) = __$CustomerAddedCopyWithImpl;
-@useResult
-$Res call({
- Customer customer
-});
-
-
-
-
-}
-/// @nodoc
-class __$CustomerAddedCopyWithImpl<$Res>
-    implements _$CustomerAddedCopyWith<$Res> {
-  __$CustomerAddedCopyWithImpl(this._self, this._then);
-
-  final _CustomerAdded _self;
-  final $Res Function(_CustomerAdded) _then;
-
-/// Create a copy of CustomerBlocState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? customer = null,}) {
-  return _then(_CustomerAdded(
-customer: null == customer ? _self.customer : customer // ignore: cast_nullable_to_non_nullable
-as Customer,
   ));
 }
 
