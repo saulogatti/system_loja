@@ -206,6 +206,29 @@ class NotaFiscalSqlManager {
     return (result.first['total'] as num).toDouble();
   }
 
+  /// Calcula o valor total de vendas em um período
+  ///
+  /// [dataInicio] Data inicial do período.
+  /// [dataFim] Data final do período.
+  /// Retorna o valor total de vendas no período.
+  Future<double> calcularTotalVendasPeriodo(
+    DateTime dataInicio,
+    DateTime dataFim,
+  ) async {
+    final db = await _database;
+
+    final result = await db.rawQuery(
+      '''
+      SELECT COALESCE(SUM(valor_total), 0) as total 
+      FROM ${DatabaseConfig.tableNotasFiscais}
+      WHERE data_emissao BETWEEN ? AND ?
+      ''',
+      [dataInicio.toIso8601String(), dataFim.toIso8601String()],
+    );
+
+    return (result.first['total'] as num).toDouble();
+  }
+
   /// Consulta uma nota fiscal pelo ID
   ///
   /// [id] ID da nota fiscal a ser consultada.
@@ -426,7 +449,6 @@ class NotaFiscalSqlManager {
 
     return itensPorNota;
   }
-
   /// Converte um Map do banco de dados para um objeto NotaFiscal
   ///
   /// [notaMap] Map com os dados da nota fiscal do banco.
