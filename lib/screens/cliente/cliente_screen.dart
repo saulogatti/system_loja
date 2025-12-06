@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/managers/customer_manager.dart';
 import '../../core/models/customer.dart';
+import 'bloc/customer_bloc.dart';
 
-class ClienteScreen extends StatefulWidget {
+class ClienteScreen extends StatelessWidget {
   const ClienteScreen({super.key});
 
   @override
-  State<ClienteScreen> createState() => _ClienteScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => CustomerBloc()..add(const CustomerBlocEvent.loadCustomers()),
+      child: const _ClienteScreenContent(),
+    );
+  }
 }
 
-class _ClienteScreenState extends State<ClienteScreen> {
+class _ClienteScreenContent extends StatefulWidget {
+  const _ClienteScreenContent();
 
-  // TODO: Alterar manager para uso do BLoC (CustomerBloc)
-  final CustomerServiceManager _manager = CustomerServiceManager();
+  @override
+  State<_ClienteScreenContent> createState() => _ClienteScreenContentState();
+}
+
+class _ClienteScreenContentState extends State<_ClienteScreenContent> {
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _cpfController = TextEditingController();
@@ -23,162 +33,205 @@ class _ClienteScreenState extends State<ClienteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cadastro de Cliente'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text(
-                      'Novo Cliente',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _nomeController,
-                      decoration: const InputDecoration(
-                        labelText: 'Nome *',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Nome é obrigatório';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _cpfController,
-                      decoration: const InputDecoration(
-                        labelText: 'CPF *',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.badge),
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'CPF é obrigatório';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.email),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _telefoneController,
-                      decoration: const InputDecoration(
-                        labelText: 'Telefone',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.phone),
-                      ),
-                      keyboardType: TextInputType.phone,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _enderecoController,
-                      decoration: const InputDecoration(
-                        labelText: 'Endereço',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.home),
-                      ),
-                      maxLines: 2,
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: _adicionarCliente,
-                      icon: const Icon(Icons.add),
-                      label: const Text('Adicionar Cliente'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(16),
-                        textStyle: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    const Text(
-                      'Clientes Cadastrados',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    if (_manager.clientes.isEmpty)
-                      const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(32.0),
-                          child: Text(
-                            'Nenhum cliente cadastrado',
-                            style: TextStyle(fontSize: 16, color: Colors.grey),
-                          ),
+    return BlocListener<CustomerBloc, CustomerBlocState>(
+      listener: (context, state) {
+        if (state is _CustomerError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Cadastro de Cliente'),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        'Novo Cliente',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
-                      )
-                    else
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _manager.clientes.length,
-                        itemBuilder: (context, index) {
-                          final cliente = _manager.clientes[index];
-                          return Card(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.blue,
-                                child: Text(
-                                  cliente.name[0].toUpperCase(),
-                                  style: const TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _nomeController,
+                        decoration: const InputDecoration(
+                          labelText: 'Nome *',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.person),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Nome é obrigatório';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _cpfController,
+                        decoration: const InputDecoration(
+                          labelText: 'CPF *',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.badge),
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'CPF é obrigatório';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.email),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _telefoneController,
+                        decoration: const InputDecoration(
+                          labelText: 'Telefone',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.phone),
+                        ),
+                        keyboardType: TextInputType.phone,
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _enderecoController,
+                        decoration: const InputDecoration(
+                          labelText: 'Endereço',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.home),
+                        ),
+                        maxLines: 2,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: _adicionarCliente,
+                        icon: const Icon(Icons.add),
+                        label: const Text('Adicionar Cliente'),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(16),
+                          textStyle: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      const Text(
+                        'Clientes Cadastrados',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      BlocBuilder<CustomerBloc, CustomerBlocState>(
+                        builder: (context, state) {
+                          if (state is _Loading) {
+                            return const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(32.0),
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                          
+                          if (state is _CustomersLoaded) {
+                            if (state.customers.isEmpty) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(32.0),
+                                  child: Text(
+                                    'Nenhum cliente cadastrado',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              title: Text(
-                                cliente.name,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Text(
-                                'CPF: ${cliente.cpf}\n${cliente.email}',
-                              ),
-                              isThreeLine: true,
-                              trailing: const Icon(
-                                Icons.arrow_forward_ios,
-                                size: 16,
-                              ),
-                              onTap: () {
-                                _mostrarDetalhesCliente(cliente);
+                              );
+                            }
+                            
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state.customers.length,
+                              itemBuilder: (context, index) {
+                                final cliente = state.customers[index];
+                                return Card(
+                                  margin: const EdgeInsets.only(bottom: 12),
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundColor: Colors.blue,
+                                      child: Text(
+                                        cliente.name[0].toUpperCase(),
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    title: Text(
+                                      cliente.name,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      'CPF: ${cliente.cpf}\n${cliente.email}',
+                                    ),
+                                    isThreeLine: true,
+                                    trailing: const Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 16,
+                                    ),
+                                    onTap: () {
+                                      _mostrarDetalhesCliente(cliente);
+                                    },
+                                  ),
+                                );
                               },
+                            );
+                          }
+                          
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(32.0),
+                              child: Text(
+                                'Nenhum cliente cadastrado',
+                                style: TextStyle(fontSize: 16, color: Colors.grey),
+                              ),
                             ),
                           );
                         },
                       ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -193,46 +246,17 @@ class _ClienteScreenState extends State<ClienteScreen> {
     super.dispose();
   }
 
-  void _adicionarCliente() async {
+  void _adicionarCliente() {
     if (_formKey.currentState!.validate()) {
-      final cpf = _cpfController.text.trim();
-
-      // Check if CPF already exists
-      if (_manager.clientes.any((c) => c.cpf == cpf)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Erro: CPF já cadastrado!'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      final cliente = Customer(
-        id: _manager.clientes.isEmpty
-            ? 1
-            : _manager.clientes
-                      .map((c) => c.id)
-                      .reduce((a, b) => a > b ? a : b) +
-                  1,
-        nome: _nomeController.text.trim(),
-        cpf: cpf,
-        email: _emailController.text.trim(),
-        telefone: _telefoneController.text.trim(),
-        endereco: _enderecoController.text.trim(),
-      );
-
-      _manager.clientes.add(cliente);
-      await _manager.salvarDadosSincronizado();
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Cliente "${cliente.nome}" cadastrado com sucesso!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      context.read<CustomerBloc>().add(
+            CustomerBlocEvent.registerCustomer(
+              name: _nomeController.text.trim(),
+              cpf: _cpfController.text.trim(),
+              email: _emailController.text.trim(),
+              phone: _telefoneController.text.trim(),
+              address: _enderecoController.text.trim(),
+            ),
+          );
 
       _formKey.currentState!.reset();
       _nomeController.clear();
@@ -240,7 +264,6 @@ class _ClienteScreenState extends State<ClienteScreen> {
       _emailController.clear();
       _telefoneController.clear();
       _enderecoController.clear();
-      setState(() {});
     }
   }
 
@@ -269,7 +292,7 @@ class _ClienteScreenState extends State<ClienteScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(cliente.nome),
+        title: Text(cliente.name),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,11 +301,11 @@ class _ClienteScreenState extends State<ClienteScreen> {
               _buildDetailRow('ID', cliente.id.toString()),
               _buildDetailRow('CPF', cliente.cpf),
               _buildDetailRow('Email', cliente.email),
-              _buildDetailRow('Telefone', cliente.telefone),
-              _buildDetailRow('Endereço', cliente.endereco),
+              _buildDetailRow('Telefone', cliente.phone),
+              _buildDetailRow('Endereço', cliente.address),
               _buildDetailRow(
                 'Data de Cadastro',
-                cliente.dataCadastro.toString().split('.')[0],
+                cliente.registrationDate.toString().split('.')[0],
               ),
             ],
           ),
