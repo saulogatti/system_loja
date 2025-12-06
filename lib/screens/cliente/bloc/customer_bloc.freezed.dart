@@ -14,65 +14,30 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CustomerBlocEvent {
 
- String get name; String get cpf; String get email; String get phone; String get address;
-/// Create a copy of CustomerBlocEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$CustomerBlocEventCopyWith<CustomerBlocEvent> get copyWith => _$CustomerBlocEventCopyWithImpl<CustomerBlocEvent>(this as CustomerBlocEvent, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CustomerBlocEvent&&(identical(other.name, name) || other.name == name)&&(identical(other.cpf, cpf) || other.cpf == cpf)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.address, address) || other.address == address));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CustomerBlocEvent);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,cpf,email,phone,address);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'CustomerBlocEvent(name: $name, cpf: $cpf, email: $email, phone: $phone, address: $address)';
+  return 'CustomerBlocEvent()';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $CustomerBlocEventCopyWith<$Res>  {
-  factory $CustomerBlocEventCopyWith(CustomerBlocEvent value, $Res Function(CustomerBlocEvent) _then) = _$CustomerBlocEventCopyWithImpl;
-@useResult
-$Res call({
- String name, String cpf, String email, String phone, String address
-});
-
-
-
-
-}
-/// @nodoc
-class _$CustomerBlocEventCopyWithImpl<$Res>
-    implements $CustomerBlocEventCopyWith<$Res> {
-  _$CustomerBlocEventCopyWithImpl(this._self, this._then);
-
-  final CustomerBlocEvent _self;
-  final $Res Function(CustomerBlocEvent) _then;
-
-/// Create a copy of CustomerBlocEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? cpf = null,Object? email = null,Object? phone = null,Object? address = null,}) {
-  return _then(_self.copyWith(
-name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,cpf: null == cpf ? _self.cpf : cpf // ignore: cast_nullable_to_non_nullable
-as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
+class $CustomerBlocEventCopyWith<$Res>  {
+$CustomerBlocEventCopyWith(CustomerBlocEvent _, $Res Function(CustomerBlocEvent) __);
 }
 
 
@@ -90,11 +55,12 @@ extension CustomerBlocEventPatterns on CustomerBlocEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _RegisterCustomer value)?  registerCustomer,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _RegisterCustomer value)?  registerCustomer,TResult Function( _LoadCustomers value)?  loadCustomers,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _RegisterCustomer() when registerCustomer != null:
-return registerCustomer(_that);case _:
+return registerCustomer(_that);case _LoadCustomers() when loadCustomers != null:
+return loadCustomers(_that);case _:
   return orElse();
 
 }
@@ -112,11 +78,12 @@ return registerCustomer(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _RegisterCustomer value)  registerCustomer,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _RegisterCustomer value)  registerCustomer,required TResult Function( _LoadCustomers value)  loadCustomers,}){
 final _that = this;
 switch (_that) {
 case _RegisterCustomer():
-return registerCustomer(_that);}
+return registerCustomer(_that);case _LoadCustomers():
+return loadCustomers(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -130,11 +97,12 @@ return registerCustomer(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _RegisterCustomer value)?  registerCustomer,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _RegisterCustomer value)?  registerCustomer,TResult? Function( _LoadCustomers value)?  loadCustomers,}){
 final _that = this;
 switch (_that) {
 case _RegisterCustomer() when registerCustomer != null:
-return registerCustomer(_that);case _:
+return registerCustomer(_that);case _LoadCustomers() when loadCustomers != null:
+return loadCustomers(_that);case _:
   return null;
 
 }
@@ -151,10 +119,11 @@ return registerCustomer(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name,  String cpf,  String email,  String phone,  String address)?  registerCustomer,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name,  String cpf,  String email,  String phone,  String address)?  registerCustomer,TResult Function()?  loadCustomers,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RegisterCustomer() when registerCustomer != null:
-return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);case _:
+return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);case _LoadCustomers() when loadCustomers != null:
+return loadCustomers();case _:
   return orElse();
 
 }
@@ -172,10 +141,11 @@ return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.addre
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name,  String cpf,  String email,  String phone,  String address)  registerCustomer,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name,  String cpf,  String email,  String phone,  String address)  registerCustomer,required TResult Function()  loadCustomers,}) {final _that = this;
 switch (_that) {
 case _RegisterCustomer():
-return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);}
+return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);case _LoadCustomers():
+return loadCustomers();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -189,10 +159,11 @@ return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.addre
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name,  String cpf,  String email,  String phone,  String address)?  registerCustomer,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name,  String cpf,  String email,  String phone,  String address)?  registerCustomer,TResult? Function()?  loadCustomers,}) {final _that = this;
 switch (_that) {
 case _RegisterCustomer() when registerCustomer != null:
-return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);case _:
+return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);case _LoadCustomers() when loadCustomers != null:
+return loadCustomers();case _:
   return null;
 
 }
@@ -207,15 +178,15 @@ class _RegisterCustomer implements CustomerBlocEvent {
   const _RegisterCustomer({required this.name, required this.cpf, required this.email, required this.phone, required this.address});
   
 
-@override final  String name;
-@override final  String cpf;
-@override final  String email;
-@override final  String phone;
-@override final  String address;
+ final  String name;
+ final  String cpf;
+ final  String email;
+ final  String phone;
+ final  String address;
 
 /// Create a copy of CustomerBlocEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
+@JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
 _$RegisterCustomerCopyWith<_RegisterCustomer> get copyWith => __$RegisterCustomerCopyWithImpl<_RegisterCustomer>(this, _$identity);
 
@@ -241,7 +212,7 @@ String toString() {
 /// @nodoc
 abstract mixin class _$RegisterCustomerCopyWith<$Res> implements $CustomerBlocEventCopyWith<$Res> {
   factory _$RegisterCustomerCopyWith(_RegisterCustomer value, $Res Function(_RegisterCustomer) _then) = __$RegisterCustomerCopyWithImpl;
-@override @useResult
+@useResult
 $Res call({
  String name, String cpf, String email, String phone, String address
 });
@@ -260,7 +231,7 @@ class __$RegisterCustomerCopyWithImpl<$Res>
 
 /// Create a copy of CustomerBlocEvent
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? cpf = null,Object? email = null,Object? phone = null,Object? address = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? name = null,Object? cpf = null,Object? email = null,Object? phone = null,Object? address = null,}) {
   return _then(_RegisterCustomer(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,cpf: null == cpf ? _self.cpf : cpf // ignore: cast_nullable_to_non_nullable
@@ -273,6 +244,38 @@ as String,
 
 
 }
+
+/// @nodoc
+
+
+class _LoadCustomers implements CustomerBlocEvent {
+  const _LoadCustomers();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadCustomers);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CustomerBlocEvent.loadCustomers()';
+}
+
+
+}
+
+
+
 
 /// @nodoc
 mixin _$CustomerBlocState {
@@ -318,13 +321,14 @@ extension CustomerBlocStatePatterns on CustomerBlocState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _CustomerAdded value)?  customerAdded,TResult Function( _CustomerError value)?  customerError,TResult Function( _Initial value)?  initial,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _CustomersLoaded value)?  customersLoaded,TResult Function( _CustomerError value)?  customerError,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _CustomerAdded() when customerAdded != null:
-return customerAdded(_that);case _CustomerError() when customerError != null:
-return customerError(_that);case _Initial() when initial != null:
-return initial(_that);case _:
+case _Initial() when initial != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _CustomersLoaded() when customersLoaded != null:
+return customersLoaded(_that);case _CustomerError() when customerError != null:
+return customerError(_that);case _:
   return orElse();
 
 }
@@ -342,13 +346,14 @@ return initial(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _CustomerAdded value)  customerAdded,required TResult Function( _CustomerError value)  customerError,required TResult Function( _Initial value)  initial,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _CustomersLoaded value)  customersLoaded,required TResult Function( _CustomerError value)  customerError,}){
 final _that = this;
 switch (_that) {
-case _CustomerAdded():
-return customerAdded(_that);case _CustomerError():
-return customerError(_that);case _Initial():
-return initial(_that);case _:
+case _Initial():
+return initial(_that);case _Loading():
+return loading(_that);case _CustomersLoaded():
+return customersLoaded(_that);case _CustomerError():
+return customerError(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -365,13 +370,14 @@ return initial(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _CustomerAdded value)?  customerAdded,TResult? Function( _CustomerError value)?  customerError,TResult? Function( _Initial value)?  initial,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _CustomersLoaded value)?  customersLoaded,TResult? Function( _CustomerError value)?  customerError,}){
 final _that = this;
 switch (_that) {
-case _CustomerAdded() when customerAdded != null:
-return customerAdded(_that);case _CustomerError() when customerError != null:
-return customerError(_that);case _Initial() when initial != null:
-return initial(_that);case _:
+case _Initial() when initial != null:
+return initial(_that);case _Loading() when loading != null:
+return loading(_that);case _CustomersLoaded() when customersLoaded != null:
+return customersLoaded(_that);case _CustomerError() when customerError != null:
+return customerError(_that);case _:
   return null;
 
 }
@@ -388,12 +394,13 @@ return initial(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( Customer customer)?  customerAdded,TResult Function( String message)?  customerError,TResult Function()?  initial,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Customer> customers)?  customersLoaded,TResult Function( String message)?  customerError,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _CustomerAdded() when customerAdded != null:
-return customerAdded(_that.customer);case _CustomerError() when customerError != null:
-return customerError(_that.message);case _Initial() when initial != null:
-return initial();case _:
+case _Initial() when initial != null:
+return initial();case _Loading() when loading != null:
+return loading();case _CustomersLoaded() when customersLoaded != null:
+return customersLoaded(_that.customers);case _CustomerError() when customerError != null:
+return customerError(_that.message);case _:
   return orElse();
 
 }
@@ -411,12 +418,13 @@ return initial();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( Customer customer)  customerAdded,required TResult Function( String message)  customerError,required TResult Function()  initial,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Customer> customers)  customersLoaded,required TResult Function( String message)  customerError,}) {final _that = this;
 switch (_that) {
-case _CustomerAdded():
-return customerAdded(_that.customer);case _CustomerError():
-return customerError(_that.message);case _Initial():
-return initial();case _:
+case _Initial():
+return initial();case _Loading():
+return loading();case _CustomersLoaded():
+return customersLoaded(_that.customers);case _CustomerError():
+return customerError(_that.message);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -433,12 +441,13 @@ return initial();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( Customer customer)?  customerAdded,TResult? Function( String message)?  customerError,TResult? Function()?  initial,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Customer> customers)?  customersLoaded,TResult? Function( String message)?  customerError,}) {final _that = this;
 switch (_that) {
-case _CustomerAdded() when customerAdded != null:
-return customerAdded(_that.customer);case _CustomerError() when customerError != null:
-return customerError(_that.message);case _Initial() when initial != null:
-return initial();case _:
+case _Initial() when initial != null:
+return initial();case _Loading() when loading != null:
+return loading();case _CustomersLoaded() when customersLoaded != null:
+return customersLoaded(_that.customers);case _CustomerError() when customerError != null:
+return customerError(_that.message);case _:
   return null;
 
 }
@@ -449,43 +458,113 @@ return initial();case _:
 /// @nodoc
 
 
-class _CustomerAdded implements CustomerBlocState {
-  const _CustomerAdded({required this.customer});
+class _Initial implements CustomerBlocState {
+  const _Initial();
   
 
- final  Customer customer;
 
-/// Create a copy of CustomerBlocState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$CustomerAddedCopyWith<_CustomerAdded> get copyWith => __$CustomerAddedCopyWithImpl<_CustomerAdded>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CustomerAdded&&(identical(other.customer, customer) || other.customer == customer));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,customer);
+int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'CustomerBlocState.customerAdded(customer: $customer)';
+  return 'CustomerBlocState.initial()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _Loading implements CustomerBlocState {
+  const _Loading();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'CustomerBlocState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class _CustomersLoaded implements CustomerBlocState {
+  const _CustomersLoaded({required final  List<Customer> customers}): _customers = customers;
+  
+
+ final  List<Customer> _customers;
+ List<Customer> get customers {
+  if (_customers is EqualUnmodifiableListView) return _customers;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_customers);
+}
+
+
+/// Create a copy of CustomerBlocState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CustomersLoadedCopyWith<_CustomersLoaded> get copyWith => __$CustomersLoadedCopyWithImpl<_CustomersLoaded>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CustomersLoaded&&const DeepCollectionEquality().equals(other._customers, _customers));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_customers));
+
+@override
+String toString() {
+  return 'CustomerBlocState.customersLoaded(customers: $customers)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$CustomerAddedCopyWith<$Res> implements $CustomerBlocStateCopyWith<$Res> {
-  factory _$CustomerAddedCopyWith(_CustomerAdded value, $Res Function(_CustomerAdded) _then) = __$CustomerAddedCopyWithImpl;
+abstract mixin class _$CustomersLoadedCopyWith<$Res> implements $CustomerBlocStateCopyWith<$Res> {
+  factory _$CustomersLoadedCopyWith(_CustomersLoaded value, $Res Function(_CustomersLoaded) _then) = __$CustomersLoadedCopyWithImpl;
 @useResult
 $Res call({
- Customer customer
+ List<Customer> customers
 });
 
 
@@ -493,19 +572,19 @@ $Res call({
 
 }
 /// @nodoc
-class __$CustomerAddedCopyWithImpl<$Res>
-    implements _$CustomerAddedCopyWith<$Res> {
-  __$CustomerAddedCopyWithImpl(this._self, this._then);
+class __$CustomersLoadedCopyWithImpl<$Res>
+    implements _$CustomersLoadedCopyWith<$Res> {
+  __$CustomersLoadedCopyWithImpl(this._self, this._then);
 
-  final _CustomerAdded _self;
-  final $Res Function(_CustomerAdded) _then;
+  final _CustomersLoaded _self;
+  final $Res Function(_CustomersLoaded) _then;
 
 /// Create a copy of CustomerBlocState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? customer = null,}) {
-  return _then(_CustomerAdded(
-customer: null == customer ? _self.customer : customer // ignore: cast_nullable_to_non_nullable
-as Customer,
+@pragma('vm:prefer-inline') $Res call({Object? customers = null,}) {
+  return _then(_CustomersLoaded(
+customers: null == customers ? _self._customers : customers // ignore: cast_nullable_to_non_nullable
+as List<Customer>,
   ));
 }
 
@@ -577,37 +656,5 @@ as String,
 
 
 }
-
-/// @nodoc
-
-
-class _Initial implements CustomerBlocState {
-  const _Initial();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'CustomerBlocState.initial()';
-}
-
-
-}
-
-
-
 
 // dart format on

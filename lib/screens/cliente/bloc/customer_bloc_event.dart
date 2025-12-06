@@ -9,4 +9,6 @@ sealed class CustomerBlocEvent with _$CustomerBlocEvent {
     required String phone,
     required String address,
   }) = _RegisterCustomer;
+  
+  const factory CustomerBlocEvent.loadCustomers() = _LoadCustomers;
 }
