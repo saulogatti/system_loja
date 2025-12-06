@@ -35,14 +35,16 @@ class _ClienteScreenContentState extends State<_ClienteScreenContent> {
   Widget build(BuildContext context) {
     return BlocListener<CustomerBloc, CustomerBlocState>(
       listener: (context, state) {
-        if (state is _CustomerError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
+        state.whenOrNull(
+          customerError: (message) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          },
+        );
       },
       child: Scaffold(
         appBar: AppBar(
@@ -148,78 +150,94 @@ class _ClienteScreenContentState extends State<_ClienteScreenContent> {
                       const SizedBox(height: 16),
                       BlocBuilder<CustomerBloc, CustomerBlocState>(
                         builder: (context, state) {
-                          if (state is _Loading) {
-                            return const Center(
+                          return state.when(
+                            initial: () => const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(32.0),
+                                child: Text(
+                                  'Carregando clientes...',
+                                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                                ),
+                              ),
+                            ),
+                            loading: () => const Center(
                               child: Padding(
                                 padding: EdgeInsets.all(32.0),
                                 child: CircularProgressIndicator(),
                               ),
-                            );
-                          }
-                          
-                          if (state is _CustomersLoaded) {
-                            if (state.customers.isEmpty) {
-                              return const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.all(32.0),
-                                  child: Text(
-                                    'Nenhum cliente cadastrado',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                            
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: state.customers.length,
-                              itemBuilder: (context, index) {
-                                final cliente = state.customers[index];
-                                return Card(
-                                  margin: const EdgeInsets.only(bottom: 12),
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor: Colors.blue,
-                                      child: Text(
-                                        cliente.name[0].toUpperCase(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                        ),
+                            ),
+                            customersLoaded: (customers) {
+                              if (customers.isEmpty) {
+                                return const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(32.0),
+                                    child: Text(
+                                      'Nenhum cliente cadastrado',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
                                       ),
                                     ),
-                                    title: Text(
-                                      cliente.name,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      'CPF: ${cliente.cpf}\n${cliente.email}',
-                                    ),
-                                    isThreeLine: true,
-                                    trailing: const Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 16,
-                                    ),
-                                    onTap: () {
-                                      _mostrarDetalhesCliente(cliente);
-                                    },
                                   ),
                                 );
-                              },
-                            );
-                          }
-                          
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(32.0),
-                              child: Text(
-                                'Nenhum cliente cadastrado',
-                                style: TextStyle(fontSize: 16, color: Colors.grey),
+                              }
+                              
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: customers.length,
+                                itemBuilder: (context, index) {
+                                  final cliente = customers[index];
+                                  return Card(
+                                    margin: const EdgeInsets.only(bottom: 12),
+                                    child: ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor: Colors.blue,
+                                        child: Text(
+                                          cliente.name[0].toUpperCase(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      title: Text(
+                                        cliente.name,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        'CPF: ${cliente.cpf}\n${cliente.email}',
+                                      ),
+                                      isThreeLine: true,
+                                      trailing: const Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 16,
+                                      ),
+                                      onTap: () {
+                                        _mostrarDetalhesCliente(cliente);
+                                      },
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            customerAdded: (customer) => const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(32.0),
+                                child: Text(
+                                  'Cliente adicionado!',
+                                  style: TextStyle(fontSize: 16, color: Colors.green),
+                                ),
+                              ),
+                            ),
+                            customerError: (message) => Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(32.0),
+                                child: Text(
+                                  'Erro: $message',
+                                  style: const TextStyle(fontSize: 16, color: Colors.red),
+                                ),
                               ),
                             ),
                           );
