@@ -4,29 +4,22 @@ version: 1.0.0
 publish_to: "none"
 
 environment:
-  sdk: ^3.10.1
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  log_custom_printer:
-    git:
-      url: https://github.com/saulogatti/log_custom_printer.git
-      ref: v_1.1.0
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
   path_provider: ^2.1.4
   synchronized: ^3.3.0+3
-  path: ^1.9.1
   json_annotation: ^4.9.0
   sqflite: ^2.3.3
   sqflite_common_ffi: ^2.3.3
-  async: ^2.13.0
-  meta: ^1.17.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  flutter_lints: ^5.0.0
   build_runner: ^2.4.6
   json_serializable: ^6.7.2
 
