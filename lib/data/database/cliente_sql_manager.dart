@@ -30,14 +30,7 @@ class ClienteSqlManager {
   Future<int> atualizar(Cliente cliente) async {
     final db = await _database;
 
-    final Map<String, dynamic> dados = {
-      'nome': cliente.nome,
-      'cpf': cliente.cpf,
-      'email': cliente.email,
-      'telefone': cliente.telefone,
-      'endereco': cliente.endereco,
-      'data_cadastro': cliente.dataCadastro.toIso8601String(),
-    };
+    final Map<String, dynamic> dados = _clienteParaDadosDb(cliente);
 
     return await db.update(DatabaseConfig.tableClientes, dados, where: 'id = ?', whereArgs: [cliente.id]);
   }
@@ -134,14 +127,7 @@ class ClienteSqlManager {
       throw Exception('CPF já cadastrado: ${cliente.cpf}');
     }
 
-    final Map<String, dynamic> dados = {
-      'nome': cliente.nome,
-      'cpf': cliente.cpf,
-      'email': cliente.email,
-      'telefone': cliente.telefone,
-      'endereco': cliente.endereco,
-      'data_cadastro': cliente.dataCadastro.toIso8601String(),
-    };
+    final Map<String, dynamic> dados = _clienteParaDadosDb(cliente);
 
     return await db.insert(DatabaseConfig.tableClientes, dados, conflictAlgorithm: ConflictAlgorithm.abort);
   }
@@ -166,14 +152,44 @@ class ClienteSqlManager {
   /// [map] Map com os dados do cliente do banco.
   /// Retorna um objeto Cliente com os dados do map.
   Cliente _mapToCliente(Map<String, dynamic> map) {
-    return Cliente(
-      id: map['id'] as int,
-      nome: map['nome'] as String,
-      cpf: map['cpf'] as String,
-      email: (map['email'] as String?) ?? '',
-      telefone: (map['telefone'] as String?) ?? '',
-      endereco: (map['endereco'] as String?) ?? '',
-      dataCadastro: DateTime.parse(map['data_cadastro'] as String),
-    );
+    // Prepara os dados para o formato esperado pelo fromJson
+    final mapFormatado = _dadosDbParaClienteJson(map);
+    return Cliente.fromJson(mapFormatado);
+  }
+
+  /// Converte um objeto Cliente para um Map compatível com o banco de dados
+  ///
+  /// [cliente] Objeto Cliente a ser convertido.
+  /// Retorna um Map com os dados no formato do banco (estrutura plana).
+  Map<String, dynamic> _clienteParaDadosDb(Cliente cliente) {
+    final json = cliente.toJson();
+    final dadosCliente = json['dadosCliente'] as Map<String, dynamic>;
+
+    return {
+      'nome': dadosCliente['nome'],
+      'cpf': dadosCliente['cpf'],
+      'email': dadosCliente['email'],
+      'telefone': dadosCliente['telefone'],
+      'endereco': dadosCliente['endereco'],
+      'data_cadastro': json['data_cadastro'],
+    };
+  }
+
+  /// Converte dados do banco para o formato JSON esperado pelo Cliente.fromJson
+  ///
+  /// [map] Map com dados do banco (estrutura plana).
+  /// Retorna um Map no formato esperado pelo fromJson (estrutura aninhada).
+  Map<String, dynamic> _dadosDbParaClienteJson(Map<String, dynamic> map) {
+    return {
+      'id': map['id'],
+      'dadosCliente': {
+        'nome': map['nome'],
+        'cpf': map['cpf'],
+        'email': map['email'] ?? '',
+        'telefone': map['telefone'] ?? '',
+        'endereco': map['endereco'] ?? '',
+      },
+      'data_cadastro': map['data_cadastro'],
+    };
   }
 }

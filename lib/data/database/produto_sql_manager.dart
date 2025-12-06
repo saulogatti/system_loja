@@ -30,15 +30,9 @@ class ProdutoSqlManager {
   Future<int> atualizar(Produto produto) async {
     final db = await _database;
 
-    final Map<String, dynamic> dados = {
-      'nome': produto.nome,
-      'codigo': produto.codigo,
-      'preco': produto.preco,
-      'estoque': produto.estoque,
-      'descricao': produto.descricao,
-      'categoria': produto.categoria,
-      'data_cadastro': produto.dataCadastro.toIso8601String(),
-    };
+    final Map<String, dynamic> dados = produto.toJson();
+    // Remove o ID do map de dados pois não deve ser atualizado
+    dados.remove('id');
 
     return await db.update(DatabaseConfig.tableProdutos, dados, where: 'id = ?', whereArgs: [produto.id]);
   }
@@ -168,15 +162,9 @@ class ProdutoSqlManager {
       throw Exception('Código de produto já cadastrado: ${produto.codigo}');
     }
 
-    final Map<String, dynamic> dados = {
-      'nome': produto.nome,
-      'codigo': produto.codigo,
-      'preco': produto.preco,
-      'estoque': produto.estoque,
-      'descricao': produto.descricao,
-      'categoria': produto.categoria,
-      'data_cadastro': produto.dataCadastro.toIso8601String(),
-    };
+    final Map<String, dynamic> dados = produto.toJson();
+    // Remove o ID do map de dados pois será gerado automaticamente
+    dados.remove('id');
 
     return await db.insert(DatabaseConfig.tableProdutos, dados, conflictAlgorithm: ConflictAlgorithm.abort);
   }
@@ -218,15 +206,12 @@ class ProdutoSqlManager {
   /// [map] Map com os dados do produto do banco.
   /// Retorna um objeto Produto com os dados do map.
   Produto _mapToProduto(Map<String, dynamic> map) {
-    return Produto(
-      id: map['id'] as int,
-      nome: map['nome'] as String,
-      codigo: map['codigo'] as String,
-      preco: (map['preco'] as num).toDouble(),
-      estoque: map['estoque'] as int,
-      descricao: (map['descricao'] as String?) ?? '',
-      categoria: (map['categoria'] as String?) ?? '',
-      dataCadastro: DateTime.parse(map['data_cadastro'] as String),
-    );
+    // Garante que campos opcionais tenham valores padrão vazios
+    final mapComDefaults = {
+      ...map,
+      'descricao': map['descricao'] ?? '',
+      'categoria': map['categoria'] ?? '',
+    };
+    return Produto.fromJson(mapComDefaults);
   }
 }

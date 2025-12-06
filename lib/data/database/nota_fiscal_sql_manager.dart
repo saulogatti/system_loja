@@ -38,15 +38,12 @@ class NotaFiscalSqlManager {
 
     return await db.transaction((txn) async {
       // Atualiza a nota fiscal
-      final Map<String, dynamic> dadosNota = {
-        'numero_nota': notaFiscal.numeroNota,
-        'cliente_id': notaFiscal.clienteId,
-        'cliente_nome': notaFiscal.clienteNome,
-        'cliente_cpf': notaFiscal.clienteCpf,
-        'valor_total': notaFiscal.valorTotal,
-        'forma_pagamento': notaFiscal.formaPagamento,
-        'data_emissao': notaFiscal.dataEmissao.toIso8601String(),
-      };
+      final Map<String, dynamic> dadosNota = notaFiscal.toJson();
+      // Remove campos que não devem ser atualizados
+      dadosNota.remove('id');
+      dadosNota.remove('itens');
+      // Adiciona o valor_total calculado
+      dadosNota['valor_total'] = notaFiscal.valorTotal;
 
       final linhasAfetadas = await txn.update(
         DatabaseConfig.tableNotasFiscais,
@@ -64,15 +61,10 @@ class NotaFiscalSqlManager {
 
       // Insere novos itens
       for (final item in notaFiscal.itens) {
-        final Map<String, dynamic> dadosItem = {
-          'nota_fiscal_id': notaFiscal.id,
-          'produto_id': item.produtoId,
-          'produto_nome': item.produtoNome,
-          'produto_codigo': item.produtoCodigo,
-          'quantidade': item.quantidade,
-          'preco_unitario': item.precoUnitario,
-          'valor_total': item.valorTotal,
-        };
+        final Map<String, dynamic> dadosItem = item.toJson();
+        // Adiciona campos necessários para o banco
+        dadosItem['nota_fiscal_id'] = notaFiscal.id;
+        dadosItem['valor_total'] = item.valorTotal;
 
         await txn.insert(
           DatabaseConfig.tableItensNotaFiscal,
@@ -298,24 +290,15 @@ class NotaFiscalSqlManager {
     List<Map<String, dynamic>> itensMap,
   ) {
     final List<ItemNotaFiscal> itens = itensMap.map((itemMap) {
-      return ItemNotaFiscal(
-        produtoId: itemMap['produto_id'] as int,
-        produtoNome: itemMap['produto_nome'] as String,
-        produtoCodigo: itemMap['produto_codigo'] as String,
-        quantidade: itemMap['quantidade'] as int,
-        precoUnitario: (itemMap['preco_unitario'] as num).toDouble(),
-      );
+      return ItemNotaFiscal.fromJson(itemMap);
     }).toList();
 
-    return NotaFiscal(
-      id: notaMap['id'] as int,
-      numeroNota: notaMap['numero_nota'] as String,
-      clienteId: notaMap['cliente_id'] as int,
-      clienteNome: notaMap['cliente_nome'] as String,
-      clienteCpf: notaMap['cliente_cpf'] as String,
-      itens: itens,
-      formaPagamento: notaMap['forma_pagamento'] as String,
-      dataEmissao: DateTime.parse(notaMap['data_emissao'] as String),
-    );
+    // Prepara o map da nota com os itens para desserialização
+    final notaComItens = {
+      ...notaMap,
+      'itens': itens.map((item) => item.toJson()).toList(),
+    };
+
+    return NotaFiscal.fromJson(notaComItens);
   }
 }
