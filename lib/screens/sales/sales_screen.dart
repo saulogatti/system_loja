@@ -1,37 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/item_nota_fiscal.dart';
 
-import '../core/managers/customer_manager.dart';
-import '../core/managers/nota_fiscal_manager.dart';
-import '../core/managers/produto_manager.dart';
-import '../core/models/customer.dart';
-import '../core/models/nota_fiscal.dart';
-import '../core/models/produto.dart';
+import '../../core/managers/customer_manager.dart';
+import '../../core/managers/nota_fiscal_manager.dart';
+import '../../core/managers/produto_manager.dart';
+import '../../core/models/customer.dart';
+import '../../core/models/nota_fiscal.dart';
+import '../../core/models/produto.dart';
 
-class NotaFiscalScreen extends StatefulWidget {
-  const NotaFiscalScreen({super.key});
+class SalesView extends StatefulWidget {
+  const SalesView({super.key});
 
   @override
-  State<NotaFiscalScreen> createState() => _NotaFiscalScreenState();
+  State<SalesView> createState() => _SalesViewState();
 }
 
 // Form screen for creating a new nota fiscal
-class _NotaFiscalFormScreen extends StatefulWidget {
+class _SalesInvoiceScreen extends StatefulWidget {
   final CustomerServiceManager clienteManager;
   final ProdutoManager produtoManager;
   final NotaFiscalManager notaFiscalManager;
 
-  const _NotaFiscalFormScreen({
+  const _SalesInvoiceScreen({
     required this.clienteManager,
     required this.produtoManager,
     required this.notaFiscalManager,
   });
 
   @override
-  State<_NotaFiscalFormScreen> createState() => _NotaFiscalFormScreenState();
+  State<_SalesInvoiceScreen> createState() => _SalesInvoiceScreenState();
 }
 
-class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
+class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
   final _formKey = GlobalKey<FormState>();
   final _numeroNotaController = TextEditingController();
   final _formaPagamentoController = TextEditingController();
@@ -368,7 +368,7 @@ class _NotaFiscalFormScreenState extends State<_NotaFiscalFormScreen> {
   }
 }
 
-class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
+class _SalesViewState extends State<SalesView> {
   final NotaFiscalManager _manager = NotaFiscalManager();
   final CustomerServiceManager _clienteManager = CustomerServiceManager();
   final ProdutoManager _produtoManager = ProdutoManager();
@@ -474,7 +474,7 @@ class _NotaFiscalScreenState extends State<NotaFiscalScreen> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => _NotaFiscalFormScreen(
+        builder: (context) => _SalesInvoiceScreen(
           clienteManager: _clienteManager,
           produtoManager: _produtoManager,
           notaFiscalManager: _manager,

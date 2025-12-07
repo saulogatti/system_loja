@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/screens/products/produto_cubit.dart';
+import 'package:system_loja/screens/products/product_cubit.dart';
 
-import '../core/managers/produto_manager.dart';
-import '../core/models/produto.dart';
+import '../../core/managers/produto_manager.dart';
+import '../../core/models/produto.dart';
 
 /// Tela de cadastro e listagem de produtos.
 ///
 /// Permite adicionar novos produtos, visualizar a lista de produtos
 /// cadastrados e ver detalhes de cada produto.
-class ProdutoScreen extends StatefulWidget {
-  const ProdutoScreen({super.key});
+class ProductViewScreen extends StatefulWidget {
+  const ProductViewScreen({super.key});
 
   @override
-  State<ProdutoScreen> createState() => _ProdutoScreenState();
+  State<ProductViewScreen> createState() => _ProductViewScreenState();
 }
 
-class _ProdutoScreenState extends State<ProdutoScreen> {
+class _ProductViewScreenState extends State<ProductViewScreen> {
   // Constantes
   static const String _tituloAppBar = 'Cadastro de Produto';
   static const String _tituloNovoProduto = 'Novo Produto';
@@ -27,7 +27,9 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
   static const String _mensagemPrecoInvalido = 'Erro: Preço inválido!';
   static const String _mensagemEstoqueInvalido = 'Erro: Estoque inválido!';
 
-  late final ProdutoCubit _produtoCubit = ProdutoCubit(ProdutoManager());
+  late final ProductLogicCubit _produtoCubit = ProductLogicCubit(
+    ProdutoManager(),
+  );
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _codigoController = TextEditingController();
@@ -40,7 +42,7 @@ class _ProdutoScreenState extends State<ProdutoScreen> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: _produtoCubit,
-      child: BlocBuilder<ProdutoCubit, ProdutoState>(
+      child: BlocBuilder<ProductLogicCubit, ProdutoState>(
         builder: (context, state) {
           final produtos = state.produtos;
           return Scaffold(

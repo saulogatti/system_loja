@@ -2,16 +2,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/managers/produto_manager.dart';
 import 'package:system_loja/core/models/produto.dart';
 
-class ProdutoState {
-  const ProdutoState({this.produtos = const []});
-
-  final List<Produto> produtos;
-}
-
-class ProdutoCubit extends Cubit<ProdutoState> {
+class ProductLogicCubit extends Cubit<ProdutoState> {
   final ProdutoManager _manager;
 
-  ProdutoCubit(this._manager)
+  ProductLogicCubit(this._manager)
     : super(ProdutoState(produtos: _manager.getProdutos()));
 
   void adicionarProduto(Produto produto) {
@@ -28,4 +22,10 @@ class ProdutoCubit extends Cubit<ProdutoState> {
   }
 
   int gerarNovoId() => _manager.gerarNovoId();
+}
+
+class ProdutoState {
+  final List<Produto> produtos;
+
+  const ProdutoState({this.produtos = const []});
 }
