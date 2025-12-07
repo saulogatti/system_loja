@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:system_loja/core/models/cliente.dart';
+import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/models/item_nota_fiscal.dart';
 import 'package:system_loja/core/models/nota_fiscal.dart';
 import 'package:system_loja/core/models/produto.dart';
@@ -43,15 +43,15 @@ void main() {
 
   /// Cria dados de teste (cliente e produtos)
   Future<Map<String, dynamic>> criarDadosTeste() async {
-    final cliente = Cliente(
+    final cliente = Customer(
       id: 0,
-      nome: 'João Silva',
+      name: 'João Silva',
       cpf: '123.456.789-00',
       email: 'joao@email.com',
-      telefone: '(11) 99999-9999',
-      endereco: 'Rua Teste, 123',
+      phone: '(11) 99999-9999',
+      address: 'Rua Teste, 123',
     );
-    final clienteId = await clienteManager.inserir(cliente);
+    final clienteId = await clienteManager.atualizar(cliente);
     final clienteInserido = await clienteManager.consultarPorId(clienteId);
 
     final produto1 = Produto(
@@ -63,7 +63,7 @@ void main() {
       descricao: 'Notebook Dell',
       categoria: 'Eletrônicos',
     );
-    final produto1Id = await produtoManager.inserir(produto1);
+    final produto1Id = await produtoManager.atualizar(produto1);
     final produto1Inserido = await produtoManager.consultarPorId(produto1Id);
 
     final produto2 = Produto(
@@ -75,7 +75,7 @@ void main() {
       descricao: 'Mouse sem fio',
       categoria: 'Periféricos',
     );
-    final produto2Id = await produtoManager.inserir(produto2);
+    final produto2Id = await produtoManager.atualizar(produto2);
     final produto2Inserido = await produtoManager.consultarPorId(produto2Id);
 
     return {
@@ -86,10 +86,10 @@ void main() {
   }
 
   group('NotaFiscalSqlManager - Testes de CRUD', () {
-    test('deve inserir uma nota fiscal com sucesso', () async {
+    test('deve atualizar uma nota fiscal com sucesso', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
       final produto2 = dados['produto2'] as Produto;
 
@@ -114,7 +114,7 @@ void main() {
         id: 0,
         numeroNota: 'NF-001',
         clienteId: cliente.id,
-        clienteNome: cliente.nome,
+        clienteNome: cliente.name,
         clienteCpf: cliente.cpf,
         itens: itens,
         formaPagamento: 'Cartão',
@@ -133,54 +133,57 @@ void main() {
       expect(notaInserida.valorTotal, equals(7450.00)); // (2*3500) + (3*150)
     });
 
-    test('deve lançar exceção ao inserir nota com número duplicado', () async {
-      // Arrange
-      final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
-      final produto1 = dados['produto1'] as Produto;
+    test(
+      'deve lançar exceção ao atualizar nota com número duplicado',
+      () async {
+        // Arrange
+        final dados = await criarDadosTeste();
+        final cliente = dados['cliente'] as Customer;
+        final produto1 = dados['produto1'] as Produto;
 
-      final itens = [
-        ItemNotaFiscal(
-          produtoId: produto1.id,
-          produtoNome: produto1.nome,
-          produtoCodigo: produto1.codigo,
-          quantidade: 1,
-          precoUnitario: produto1.preco,
-        ),
-      ];
+        final itens = [
+          ItemNotaFiscal(
+            produtoId: produto1.id,
+            produtoNome: produto1.nome,
+            produtoCodigo: produto1.codigo,
+            quantidade: 1,
+            precoUnitario: produto1.preco,
+          ),
+        ];
 
-      final nota1 = NotaFiscal(
-        id: 0,
-        numeroNota: 'NF-001',
-        clienteId: cliente.id,
-        clienteNome: cliente.nome,
-        clienteCpf: cliente.cpf,
-        itens: itens,
-        formaPagamento: 'Dinheiro',
-      );
+        final nota1 = NotaFiscal(
+          id: 0,
+          numeroNota: 'NF-001',
+          clienteId: cliente.id,
+          clienteNome: cliente.name,
+          clienteCpf: cliente.cpf,
+          itens: itens,
+          formaPagamento: 'Dinheiro',
+        );
 
-      final nota2 = NotaFiscal(
-        id: 0,
-        numeroNota: 'NF-001', // Mesmo número
-        clienteId: cliente.id,
-        clienteNome: cliente.nome,
-        clienteCpf: cliente.cpf,
-        itens: itens,
-        formaPagamento: 'Pix',
-      );
+        final nota2 = NotaFiscal(
+          id: 0,
+          numeroNota: 'NF-001', // Mesmo número
+          clienteId: cliente.id,
+          clienteNome: cliente.name,
+          clienteCpf: cliente.cpf,
+          itens: itens,
+          formaPagamento: 'Pix',
+        );
 
-      // Act & Assert
-      await notaFiscalManager.atualizar(nota1);
-      expect(
-        () => notaFiscalManager.atualizar(nota2),
-        throwsA(isA<Exception>()),
-      );
-    });
+        // Act & Assert
+        await notaFiscalManager.atualizar(nota1);
+        expect(
+          () => notaFiscalManager.atualizar(nota2),
+          throwsA(isA<Exception>()),
+        );
+      },
+    );
 
     test('deve consultar nota fiscal por número', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
@@ -197,7 +200,7 @@ void main() {
         id: 0,
         numeroNota: 'NF-002',
         clienteId: cliente.id,
-        clienteNome: cliente.nome,
+        clienteNome: cliente.name,
         clienteCpf: cliente.cpf,
         itens: itens,
         formaPagamento: 'Cartão',
@@ -226,7 +229,7 @@ void main() {
     test('deve excluir nota fiscal com sucesso', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
@@ -243,7 +246,7 @@ void main() {
         id: 0,
         numeroNota: 'NF-003',
         clienteId: cliente.id,
-        clienteNome: cliente.nome,
+        clienteNome: cliente.name,
         clienteCpf: cliente.cpf,
         itens: itens,
         formaPagamento: 'Pix',
@@ -264,7 +267,7 @@ void main() {
     test('deve listar todas as notas fiscais', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
@@ -281,7 +284,7 @@ void main() {
         id: 0,
         numeroNota: 'NF-001',
         clienteId: cliente.id,
-        clienteNome: cliente.nome,
+        clienteNome: cliente.name,
         clienteCpf: cliente.cpf,
         itens: itens,
         formaPagamento: 'Dinheiro',
@@ -291,7 +294,7 @@ void main() {
         id: 0,
         numeroNota: 'NF-002',
         clienteId: cliente.id,
-        clienteNome: cliente.nome,
+        clienteNome: cliente.name,
         clienteCpf: cliente.cpf,
         itens: itens,
         formaPagamento: 'Cartão',
@@ -310,19 +313,19 @@ void main() {
     test('deve buscar notas fiscais por cliente', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
 
       // Cria outro cliente
-      final cliente2 = Cliente(
+      final cliente2 = Customer(
         id: 0,
-        nome: 'Maria Santos',
+        name: 'Maria Santos',
         cpf: '987.654.321-00',
         email: 'maria@email.com',
-        telefone: '(11) 88888-8888',
-        endereco: 'Rua Outra, 456',
+        phone: '(11) 88888-8888',
+        address: 'Rua Outra, 456',
       );
-      final cliente2Id = await clienteManager.inserir(cliente2);
+      final cliente2Id = await clienteManager.atualizar(cliente2);
       final cliente2Inserido = await clienteManager.consultarPorId(cliente2Id);
 
       final itens = [
@@ -341,7 +344,7 @@ void main() {
           id: 0,
           numeroNota: 'NF-001',
           clienteId: cliente.id,
-          clienteNome: cliente.nome,
+          clienteNome: cliente.name,
           clienteCpf: cliente.cpf,
           itens: itens,
           formaPagamento: 'Dinheiro',
@@ -353,7 +356,7 @@ void main() {
           id: 0,
           numeroNota: 'NF-002',
           clienteId: cliente.id,
-          clienteNome: cliente.nome,
+          clienteNome: cliente.name,
           clienteCpf: cliente.cpf,
           itens: itens,
           formaPagamento: 'Cartão',
@@ -366,7 +369,7 @@ void main() {
           id: 0,
           numeroNota: 'NF-003',
           clienteId: cliente2Inserido!.id,
-          clienteNome: cliente2Inserido.nome,
+          clienteNome: cliente2Inserido.name,
           clienteCpf: cliente2Inserido.cpf,
           itens: itens,
           formaPagamento: 'Pix',
@@ -385,7 +388,7 @@ void main() {
     test('deve contar o total de notas fiscais', () async {
       // Arrange
       final dados = await criarDadosTeste();
-      final cliente = dados['cliente'] as Cliente;
+      final cliente = dados['cliente'] as Customer;
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
@@ -403,7 +406,7 @@ void main() {
           id: 0,
           numeroNota: 'NF-001',
           clienteId: cliente.id,
-          clienteNome: cliente.nome,
+          clienteNome: cliente.name,
           clienteCpf: cliente.cpf,
           itens: itens,
           formaPagamento: 'Dinheiro',
@@ -415,7 +418,7 @@ void main() {
           id: 0,
           numeroNota: 'NF-002',
           clienteId: cliente.id,
-          clienteNome: cliente.nome,
+          clienteNome: cliente.name,
           clienteCpf: cliente.cpf,
           itens: itens,
           formaPagamento: 'Cartão',

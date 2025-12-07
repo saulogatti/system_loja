@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/screens/usuario_screen.dart';
 
-import 'cliente_screen.dart';
-import 'nota_fiscal_screen.dart';
-import 'produto_screen.dart';
-import 'usuario_screen.dart';
+import 'cliente/cliente_screen.dart';
+import 'products/product_screen.dart';
+import 'sales/sales_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -41,7 +41,12 @@ class HomeScreen extends StatelessWidget {
               icon: Icons.person,
               color: Colors.blue,
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const ClienteScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ClienteScreen(),
+                  ),
+                );
               },
             ),
             const SizedBox(height: 16),
@@ -51,7 +56,12 @@ class HomeScreen extends StatelessWidget {
               icon: Icons.inventory,
               color: Colors.green,
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const ProdutoScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProductViewScreen(),
+                  ),
+                );
               },
             ),
             const SizedBox(height: 16),
@@ -61,7 +71,10 @@ class HomeScreen extends StatelessWidget {
               icon: Icons.receipt_long,
               color: Colors.orange,
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const NotaFiscalScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SalesView()),
+                );
               },
             ),
             const SizedBox(height: 16),
@@ -71,7 +84,12 @@ class HomeScreen extends StatelessWidget {
               icon: Icons.people,
               color: Colors.purple,
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarioScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UsuarioScreen(),
+                  ),
+                );
               },
             ),
           ],
@@ -106,7 +124,13 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(width: 20),
               Expanded(
-                child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
               Icon(Icons.arrow_forward_ios, color: Colors.grey[400]),
             ],

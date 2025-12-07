@@ -44,19 +44,12 @@ class NotaFiscalSqlManager {
       // Adiciona o valor_total calculado
       dadosNota['valor_total'] = notaFiscal.valorTotal;
 
-      return 1;
+      return notaFiscal.id;
     });
   }
 
-  /// Busca notas fiscais por período
+  /// Busca notas fiscais por cliente
   ///
-  /// [dataInicio] Data inicial do período.
-  /// [dataFim] Data final do período.
-  /// Retorna uma lista de notas fiscais emitidas no período.
-  ///
-  /// Utiliza JOIN para buscar dados do cliente associado.
-  /// Otimizado para evitar N+1 queries buscando todos os itens de uma vez.
-
   /// [clienteId] ID do cliente.
   /// Retorna uma lista de notas fiscais do cliente especificado.
   Future<List<NotaFiscal>> buscarPorCliente(int clienteId) async {

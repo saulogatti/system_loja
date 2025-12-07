@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:system_loja/core/models/cliente.dart';
+import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/data/database/cliente_sql_manager.dart';
 import 'package:system_loja/data/database/database_helper.dart';
 
@@ -35,13 +35,13 @@ void main() {
   group('ClienteSqlManager - Testes de CRUD', () {
     test('deve inserir um cliente com sucesso', () async {
       // Arrange
-      final cliente = Cliente(
+      final cliente = Customer(
         id: 0,
-        nome: 'João Silva',
+        name: 'João Silva',
         cpf: '123.456.789-00',
         email: 'joao@email.com',
-        telefone: '(11) 99999-9999',
-        endereco: 'Rua Teste, 123',
+        phone: '(11) 99999-9999',
+        address: 'Rua Teste, 123',
       );
 
       // Act
@@ -52,28 +52,28 @@ void main() {
 
       final clienteInserido = await clienteManager.consultarPorId(id);
       expect(clienteInserido, isNotNull);
-      expect(clienteInserido!.nome, equals('João Silva'));
+      expect(clienteInserido!.name, equals('João Silva'));
       expect(clienteInserido.cpf, equals('123.456.789-00'));
     });
 
     test('deve lançar exceção ao inserir cliente com CPF duplicado', () async {
       // Arrange
-      final cliente1 = Cliente(
+      final cliente1 = Customer(
         id: 0,
-        nome: 'João Silva',
+        name: 'João Silva',
         cpf: '123.456.789-00',
         email: 'joao@email.com',
-        telefone: '(11) 99999-9999',
-        endereco: 'Rua Teste, 123',
+        phone: '(11) 99999-9999',
+        address: 'Rua Teste, 123',
       );
 
-      final cliente2 = Cliente(
+      final cliente2 = Customer(
         id: 0,
-        nome: 'Maria Santos',
+        name: 'Maria Santos',
         cpf: '123.456.789-00', // Mesmo CPF
         email: 'maria@email.com',
-        telefone: '(11) 88888-8888',
-        endereco: 'Rua Outra, 456',
+        phone: '(11) 88888-8888',
+        address: 'Rua Outra, 456',
       );
 
       // Act & Assert
@@ -83,23 +83,25 @@ void main() {
 
     test('deve consultar cliente por CPF', () async {
       // Arrange
-      final cliente = Cliente(
+      final cliente = Customer(
         id: 0,
-        nome: 'João Silva',
+        name: 'João Silva',
         cpf: '123.456.789-00',
         email: 'joao@email.com',
-        telefone: '(11) 99999-9999',
-        endereco: 'Rua Teste, 123',
+        phone: '(11) 99999-9999',
+        address: 'Rua Teste, 123',
       );
 
       await clienteManager.inserir(cliente);
 
       // Act
-      final clienteEncontrado = await clienteManager.consultarPorCpf('123.456.789-00');
+      final clienteEncontrado = await clienteManager.consultarPorCpf(
+        '123.456.789-00',
+      );
 
       // Assert
       expect(clienteEncontrado, isNotNull);
-      expect(clienteEncontrado!.nome, equals('João Silva'));
+      expect(clienteEncontrado!.name, equals('João Silva'));
     });
 
     test('deve retornar null ao consultar CPF inexistente', () async {
@@ -112,25 +114,25 @@ void main() {
 
     test('deve atualizar cliente com sucesso', () async {
       // Arrange
-      final cliente = Cliente(
+      final cliente = Customer(
         id: 0,
-        nome: 'João Silva',
+        name: 'João Silva',
         cpf: '123.456.789-00',
         email: 'joao@email.com',
-        telefone: '(11) 99999-9999',
-        endereco: 'Rua Teste, 123',
+        phone: '(11) 99999-9999',
+        address: 'Rua Teste, 123',
       );
 
       final id = await clienteManager.inserir(cliente);
 
       // Act
-      final clienteAtualizado = Cliente(
+      final clienteAtualizado = Customer(
         id: id,
-        nome: 'João Silva Santos',
+        name: 'João Silva Santos',
         cpf: '123.456.789-00',
         email: 'joao.santos@email.com',
-        telefone: '(11) 77777-7777',
-        endereco: 'Rua Nova, 789',
+        phone: '(11) 77777-7777',
+        address: 'Rua Nova, 789',
       );
 
       final linhasAfetadas = await clienteManager.atualizar(clienteAtualizado);
@@ -139,19 +141,19 @@ void main() {
       expect(linhasAfetadas, equals(1));
 
       final clienteConsultado = await clienteManager.consultarPorId(id);
-      expect(clienteConsultado!.nome, equals('João Silva Santos'));
+      expect(clienteConsultado!.name, equals('João Silva Santos'));
       expect(clienteConsultado.email, equals('joao.santos@email.com'));
     });
 
     test('deve excluir cliente com sucesso', () async {
       // Arrange
-      final cliente = Cliente(
+      final cliente = Customer(
         id: 0,
-        nome: 'João Silva',
+        name: 'João Silva',
         cpf: '123.456.789-00',
         email: 'joao@email.com',
-        telefone: '(11) 99999-9999',
-        endereco: 'Rua Teste, 123',
+        phone: '(11) 99999-9999',
+        address: 'Rua Teste, 123',
       );
 
       final id = await clienteManager.inserir(cliente);
@@ -168,22 +170,22 @@ void main() {
 
     test('deve listar todos os clientes', () async {
       // Arrange
-      final cliente1 = Cliente(
+      final cliente1 = Customer(
         id: 0,
-        nome: 'Ana Costa',
+        name: 'Ana Costa',
         cpf: '111.111.111-11',
         email: 'ana@email.com',
-        telefone: '(11) 11111-1111',
-        endereco: 'Rua A, 1',
+        phone: '(11) 11111-1111',
+        address: 'Rua A, 1',
       );
 
-      final cliente2 = Cliente(
+      final cliente2 = Customer(
         id: 0,
-        nome: 'Bruno Lima',
+        name: 'Bruno Lima',
         cpf: '222.222.222-22',
         email: 'bruno@email.com',
-        telefone: '(11) 22222-2222',
-        endereco: 'Rua B, 2',
+        phone: '(11) 22222-2222',
+        address: 'Rua B, 2',
       );
 
       await clienteManager.inserir(cliente1);
@@ -195,37 +197,37 @@ void main() {
       // Assert
       expect(clientes.length, equals(2));
       // Ordenado por nome
-      expect(clientes[0].nome, equals('Ana Costa'));
-      expect(clientes[1].nome, equals('Bruno Lima'));
+      expect(clientes[0].name, equals('Ana Costa'));
+      expect(clientes[1].name, equals('Bruno Lima'));
     });
 
     test('deve buscar clientes por nome', () async {
       // Arrange
-      final cliente1 = Cliente(
+      final cliente1 = Customer(
         id: 0,
-        nome: 'João Silva',
+        name: 'João Silva',
         cpf: '111.111.111-11',
         email: 'joao@email.com',
-        telefone: '(11) 11111-1111',
-        endereco: 'Rua A, 1',
+        phone: '(11) 11111-1111',
+        address: 'Rua A, 1',
       );
 
-      final cliente2 = Cliente(
+      final cliente2 = Customer(
         id: 0,
-        nome: 'João Santos',
+        name: 'João Santos',
         cpf: '222.222.222-22',
         email: 'joaos@email.com',
-        telefone: '(11) 22222-2222',
-        endereco: 'Rua B, 2',
+        phone: '(11) 22222-2222',
+        address: 'Rua B, 2',
       );
 
-      final cliente3 = Cliente(
+      final cliente3 = Customer(
         id: 0,
-        nome: 'Maria Lima',
+        name: 'Maria Lima',
         cpf: '333.333.333-33',
         email: 'maria@email.com',
-        telefone: '(11) 33333-3333',
-        endereco: 'Rua C, 3',
+        phone: '(11) 33333-3333',
+        address: 'Rua C, 3',
       );
 
       await clienteManager.inserir(cliente1);
@@ -241,22 +243,22 @@ void main() {
 
     test('deve contar o total de clientes', () async {
       // Arrange
-      final cliente1 = Cliente(
+      final cliente1 = Customer(
         id: 0,
-        nome: 'Cliente 1',
+        name: 'Cliente 1',
         cpf: '111.111.111-11',
         email: 'c1@email.com',
-        telefone: '(11) 11111-1111',
-        endereco: 'Rua 1',
+        phone: '(11) 11111-1111',
+        address: 'Rua 1',
       );
 
-      final cliente2 = Cliente(
+      final cliente2 = Customer(
         id: 0,
-        nome: 'Cliente 2',
+        name: 'Cliente 2',
         cpf: '222.222.222-22',
         email: 'c2@email.com',
-        telefone: '(11) 22222-2222',
-        endereco: 'Rua 2',
+        phone: '(11) 22222-2222',
+        address: 'Rua 2',
       );
 
       await clienteManager.inserir(cliente1);

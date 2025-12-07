@@ -7,19 +7,19 @@ part of 'nota_fiscal.dart';
 // **************************************************************************
 
 NotaFiscal _$NotaFiscalFromJson(Map<String, dynamic> json) => NotaFiscal(
-      id: (json['id'] as num).toInt(),
-      numeroNota: json['numero_nota'] as String,
-      clienteId: (json['cliente_id'] as num).toInt(),
-      clienteNome: json['cliente_nome'] as String,
-      clienteCpf: json['cliente_cpf'] as String,
-      itens: (json['itens'] as List<dynamic>)
-          .map((e) => ItemNotaFiscal.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      formaPagamento: json['forma_pagamento'] as String,
-      dataEmissao: json['data_emissao'] == null
-          ? null
-          : DateTime.parse(json['data_emissao'] as String),
-    );
+  id: (json['id'] as num).toInt(),
+  numeroNota: json['numero_nota'] as String,
+  clienteId: (json['cliente_id'] as num).toInt(),
+  clienteNome: json['cliente_nome'] as String,
+  clienteCpf: json['cliente_cpf'] as String,
+  itens: (json['itens'] as List<dynamic>)
+      .map((e) => ItemNotaFiscal.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  formaPagamento: json['forma_pagamento'] as String,
+  dataEmissao: json['data_emissao'] == null
+      ? null
+      : DateTime.parse(json['data_emissao'] as String),
+);
 
 Map<String, dynamic> _$NotaFiscalToJson(NotaFiscal instance) =>
     <String, dynamic>{
