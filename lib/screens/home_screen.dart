@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/screens/usuario_screen.dart';
 
-import 'cliente_screen.dart';
-import 'nota_fiscal_screen.dart';
-import 'produto_screen.dart';
-import 'usuario_screen.dart';
+import 'cliente/cliente_screen.dart';
+import 'products/product_screen.dart';
+import 'sales/sales_screen.dart';
 
 /// Tela principal do sistema de gerenciamento de loja.
 ///
