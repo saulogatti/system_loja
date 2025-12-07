@@ -155,7 +155,7 @@ class XManager {
 Sempre use este padrão para IDs auto-incrementais:
 
 ```dart
-id: items.isEmpty ? 1 : items.map((i) => i.id!).reduce((a, b) => a > b ? a : b) + 1
+id: items.map((i) => i.id!).fold(0, (max, current) => max > current ? max : current) + 1
 ```
 
 #### Persistência JSON
