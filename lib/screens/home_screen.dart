@@ -5,7 +5,15 @@ import 'cliente/cliente_screen.dart';
 import 'products/product_screen.dart';
 import 'sales/sales_screen.dart';
 
+/// Tela principal do sistema de gerenciamento de loja.
+///
+/// Exibe um menu com cartões de navegação para as principais funcionalidades:
+/// - Cadastro de Cliente
+/// - Cadastro de Produto
+/// - Cadastro de Nota Fiscal
+/// - Gestão de Usuários
 class HomeScreen extends StatelessWidget {
+  /// Cria uma instância de [HomeScreen].
   const HomeScreen({super.key});
 
   @override
@@ -15,89 +23,82 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Sistema de Gerenciamento de Loja'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Icon(Icons.store, size: 100, color: Colors.blue),
-            const SizedBox(height: 40),
-            const Text(
-              'Bem-vindo!',
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Selecione uma opção para continuar',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40),
-            _buildMenuCard(
-              context,
-              title: 'Cadastro de Cliente',
-              icon: Icons.person,
-              color: Colors.blue,
-              onTap: () {
-                Navigator.push(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Icon(
+                Icons.store,
+                size: 100,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(height: 40),
+              Text(
+                'Bem-vindo!',
+                style: Theme.of(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const ClienteScreen(),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildMenuCard(
-              context,
-              title: 'Cadastro de Produto',
-              icon: Icons.inventory,
-              color: Colors.green,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProductViewScreen(),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildMenuCard(
-              context,
-              title: 'Cadastro de Nota Fiscal',
-              icon: Icons.receipt_long,
-              color: Colors.orange,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SalesView()),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildMenuCard(
-              context,
-              title: 'Gestão de Usuários',
-              icon: Icons.people,
-              color: Colors.purple,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const UsuarioScreen(),
-                  ),
-                );
-              },
-            ),
-          ],
+                ).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Selecione uma opção para continuar',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 40),
+              _buildMenuCard(
+                context,
+                title: 'Cadastro de Cliente',
+                icon: Icons.person,
+                color: Colors.blue,
+                onTap: () => _navigateToScreen(context, const ClienteScreen()),
+              ),
+              const SizedBox(height: 16),
+              _buildMenuCard(
+                context,
+                title: 'Cadastro de Produto',
+                icon: Icons.inventory,
+                color: Colors.green,
+                onTap: () => _navigateToScreen(context, const ProdutoScreen()),
+              ),
+              const SizedBox(height: 16),
+              _buildMenuCard(
+                context,
+                title: 'Cadastro de Nota Fiscal',
+                icon: Icons.receipt_long,
+                color: Colors.orange,
+                onTap: () => _navigateToScreen(context, const NotaFiscalScreen()),
+              ),
+              const SizedBox(height: 16),
+              _buildMenuCard(
+                context,
+                title: 'Gestão de Usuários',
+                icon: Icons.people,
+                color: Colors.purple,
+                onTap: () => _navigateToScreen(context, const UsuarioScreen()),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
+  /// Constrói um cartão de menu com ícone, título e ação de navegação.
+  ///
+  /// Cada cartão é interativo e navega para uma tela específica quando tocado.
+  ///
+  /// Parâmetros:
+  /// - [context]: O contexto de build para acessar o tema e navegação
+  /// - [title]: Título exibido no cartão
+  /// - [icon]: Ícone exibido no lado esquerdo do cartão
+  /// - [color]: Cor do ícone e do fundo do container
+  /// - [onTap]: Callback executado quando o cartão é tocado
   Widget _buildMenuCard(
     BuildContext context, {
     required String title,
@@ -111,7 +112,7 @@ class HomeScreen extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20),
           child: Row(
             children: [
               Container(
@@ -132,11 +133,24 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Icon(Icons.arrow_forward_ios, color: Colors.grey[400]),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  /// Navega para a tela especificada.
+  ///
+  /// Encapsula a lógica de navegação para reduzir duplicação de código.
+  void _navigateToScreen(BuildContext context, Widget screen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(builder: (context) => screen),
     );
   }
 }
