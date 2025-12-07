@@ -15,5 +15,8 @@ sealed class CustomerBlocEvent with _$CustomerBlocEvent {
     required int id,
   }) = _DeleteCustomer;
   const factory CustomerBlocEvent.findCustomerByCpf({required String cpf}) = _FindCustomerByCpf;
+  const factory CustomerBlocEvent.updateCustomer({
+    required Customer customer,
+  }) = _UpdateCustomer;
   
 }

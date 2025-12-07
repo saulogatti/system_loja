@@ -71,4 +71,13 @@ class CustomerRepository extends DefaultManager {
     );
     return result;
   }
+
+  /// Atualiza um cliente existente
+  Future<bool> updateCustomer(Customer customer) async {
+    final data = customer.toJson();
+    final result = await defaultDataStorage.save(
+      PersistentDataStore(id: customer.id, data: data),
+    );
+    return result;
+  }
 }
