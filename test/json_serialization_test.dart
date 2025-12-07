@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/models/item_nota_fiscal.dart';
-import 'package:system_loja/core/models/nota_fiscal.dart';
+import 'package:system_loja/core/models/invoice_item.dart';
+import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/produto.dart';
 
 /// Testes de serialização JSON
@@ -66,7 +66,7 @@ void main() {
   group('ItemNotaFiscal - Serialização JSON', () {
     test('deve serializar e desserializar corretamente', () {
       // Arrange
-      final item = ItemNotaFiscal(
+      final item = InvoiceItem(
         produtoId: 1,
         produtoNome: 'Notebook Dell',
         produtoCodigo: 'NOTE-001',
@@ -76,7 +76,7 @@ void main() {
 
       // Act
       final json = item.toJson();
-      final itemReconstruido = ItemNotaFiscal.fromJson(json);
+      final itemReconstruido = InvoiceItem.fromJson(json);
 
       // Assert
       expect(itemReconstruido.produtoId, equals(item.produtoId));
@@ -91,7 +91,7 @@ void main() {
   group('NotaFiscal - Serialização JSON', () {
     test('deve serializar e desserializar corretamente', () {
       // Arrange
-      final item = ItemNotaFiscal(
+      final item = InvoiceItem(
         produtoId: 1,
         produtoNome: 'Notebook Dell',
         produtoCodigo: 'NOTE-001',

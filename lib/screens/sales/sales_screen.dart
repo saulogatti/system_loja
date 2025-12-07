@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/item_nota_fiscal.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/models/invoice_item.dart';
+import 'package:system_loja/screens/sales/sales_cubit.dart';
+import 'package:system_loja/screens/sales/sales_state.dart';
 
-import '../../core/managers/customer_manager.dart';
-import '../../core/managers/nota_fiscal_manager.dart';
 import '../../core/managers/produto_manager.dart';
 import '../../core/models/customer.dart';
-import '../../core/models/nota_fiscal.dart';
+import '../../core/models/invoice.dart';
 import '../../core/models/produto.dart';
 
 class SalesView extends StatefulWidget {
@@ -17,14 +18,13 @@ class SalesView extends StatefulWidget {
 
 // Form screen for creating a new nota fiscal
 class _SalesInvoiceScreen extends StatefulWidget {
-  final CustomerServiceManager clienteManager;
   final ProdutoManager produtoManager;
-  final NotaFiscalManager notaFiscalManager;
-
+  final Map<int, Customer> customers;
+  final SalesCubit salesCubit;
   const _SalesInvoiceScreen({
-    required this.clienteManager,
     required this.produtoManager,
-    required this.notaFiscalManager,
+    required this.customers,
+    required this.salesCubit,
   });
 
   @override
@@ -80,7 +80,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.person),
                 ),
-                items: widget.clienteManager.clientes.map((cliente) {
+                items: widget.customers.values.map((cliente) {
                   return DropdownMenuItem(
                     value: cliente,
                     child: Text('${cliente.name} (${cliente.cpf})'),
@@ -278,47 +278,40 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
       final numeroNota = _numeroNotaController.text.trim();
 
       // Check if invoice number already exists
-      if (widget.notaFiscalManager.notasFiscais.any(
-        (nf) => nf.numeroNota == numeroNota,
-      )) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Erro: Número da nota já cadastrado!'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
+      // if (widget.notaFiscalManager.notasFiscais.any(
+      //   (nf) => nf.numeroNota == numeroNota,
+      // )) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(
+      //       content: Text('Erro: Número da nota já cadastrado!'),
+      //       backgroundColor: Colors.red,
+      //     ),
+      //   );
+      //   return;
+      // }
 
       final itens = _itensSelecionados.map((item) {
         final produto = item['produto'] as Produto;
         final quantidade = item['quantidade'] as int;
-        return ItemNotaFiscal(
-          produtoId: produto.id, // ID não é mais null por construção
-          produtoNome: produto.nome,
-          produtoCodigo: produto.codigo,
-          quantidade: quantidade,
-          precoUnitario: produto.preco,
+        return InvoiceItem(
+          productId: produto.id, // ID não é mais null por construção
+          productName: produto.nome,
+          productCode: produto.codigo,
+          quantity: quantidade,
+          unitPrice: produto.preco,
         );
       }).toList();
 
-      final notaFiscal = NotaFiscal(
-        id: widget.notaFiscalManager.notasFiscais.isEmpty
-            ? 1
-            : widget.notaFiscalManager.notasFiscais
-                      .map((nf) => nf.id)
-                      .reduce((a, b) => a > b ? a : b) +
-                  1,
-        numeroNota: numeroNota,
-        clienteId: _clienteSelecionado!.id,
-        clienteNome: _clienteSelecionado!.name,
-        clienteCpf: _clienteSelecionado!.cpf,
-        itens: itens,
-        formaPagamento: _formaPagamentoController.text.trim(),
+      final notaFiscal = InvoiceData(
+        invoiceNumber: numeroNota,
+        customerId: _clienteSelecionado!.id,
+        customerName: _clienteSelecionado!.name,
+        customerCpf: _clienteSelecionado!.cpf,
+        items: itens,
+        paymentMethod: _formaPagamentoController.text.trim(),
       );
 
-      widget.notaFiscalManager.notasFiscais.add(notaFiscal);
-      await widget.notaFiscalManager.salvarDadosSincronizado();
+      widget.salesCubit.registerSale(notaFiscal);
 
       if (!mounted) return;
 
@@ -369,10 +362,12 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
 }
 
 class _SalesViewState extends State<SalesView> {
-  final NotaFiscalManager _manager = NotaFiscalManager();
-  final CustomerServiceManager _clienteManager = CustomerServiceManager();
   final ProdutoManager _produtoManager = ProdutoManager();
+  final SalesCubit _salesCubit = SalesCubit();
 
+  Map<int, Invoice> _mapToNotaFiscal = {};
+
+  Map<int, Customer> _mapCustomers = {};
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -380,67 +375,95 @@ class _SalesViewState extends State<SalesView> {
         title: const Text('Cadastro de Nota Fiscal'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _manager.notasFiscais.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.receipt_long,
-                          size: 80,
-                          color: Colors.grey[400],
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Nenhuma nota fiscal cadastrada',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _manager.notasFiscais.length,
-                    itemBuilder: (context, index) {
-                      final nf = _manager.notasFiscais[index];
-                      return Card(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.orange,
-                            child: Text(
-                              'NF',
+      body: BlocListener<SalesCubit, SalesState>(
+        listener: (context, state) {
+          switch (state) {
+            case SalesInitial():
+              break;
+
+            case SalesError():
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Erro ao carregar notas fiscais! ${state.message}',
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              break;
+            case SalesLoaded():
+              _mapToNotaFiscal = state.items;
+            case SalesLoadedCustomers():
+              _mapCustomers = state.customers;
+            case SalesLoading():
+              // TODO: Implementar um dialog ou Overlay de loading (acho melhor um Overlay...)
+              break;
+          }
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: _mapToNotaFiscal.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.receipt_long,
+                            size: 80,
+                            color: Colors.grey[400],
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Nenhuma nota fiscal cadastrada',
+                            style: TextStyle(fontSize: 18, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: _mapToNotaFiscal.length,
+                      itemBuilder: (context, index) {
+                        final nf = _mapToNotaFiscal.values.elementAt(index);
+                        return Card(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.orange,
+                              child: Text(
+                                'NF',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            title: Text(
+                              'Nota: ${nf.data.invoiceNumber}',
                               style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                            subtitle: Text(
+                              'Cliente: ${nf.data.customerName}\nR\$ ${nf.data.totalValue.toStringAsFixed(2)}',
+                            ),
+                            isThreeLine: true,
+                            trailing: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                            ),
+                            onTap: () {
+                              _mostrarDetalhesNota(nf);
+                            },
                           ),
-                          title: Text(
-                            'Nota: ${nf.numeroNota}',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            'Cliente: ${nf.clienteNome}\nR\$ ${nf.valorTotal.toStringAsFixed(2)}',
-                          ),
-                          isThreeLine: true,
-                          trailing: const Icon(
-                            Icons.arrow_forward_ios,
-                            size: 16,
-                          ),
-                          onTap: () {
-                            _mostrarDetalhesNota(nf);
-                          },
-                        ),
-                      );
-                    },
-                  ),
-          ),
-        ],
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _adicionarNotaFiscal,
@@ -451,7 +474,7 @@ class _SalesViewState extends State<SalesView> {
   }
 
   void _adicionarNotaFiscal() async {
-    if (_clienteManager.clientes.isEmpty) {
+    if (_mapCustomers.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Erro: Nenhum cliente cadastrado!'),
@@ -475,9 +498,9 @@ class _SalesViewState extends State<SalesView> {
       context,
       MaterialPageRoute(
         builder: (context) => _SalesInvoiceScreen(
-          clienteManager: _clienteManager,
           produtoManager: _produtoManager,
-          notaFiscalManager: _manager,
+          salesCubit: _salesCubit,
+          customers: _mapCustomers,
         ),
       ),
     );
@@ -508,28 +531,28 @@ class _SalesViewState extends State<SalesView> {
     );
   }
 
-  void _mostrarDetalhesNota(NotaFiscal nf) {
+  void _mostrarDetalhesNota(Invoice nf) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Nota Fiscal ${nf.numeroNota}'),
+        title: Text('Nota Fiscal ${nf.data.invoiceNumber}'),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildDetailRow('ID', nf.id.toString()),
-              _buildDetailRow('Número', nf.numeroNota),
-              _buildDetailRow('Cliente', nf.clienteNome),
-              _buildDetailRow('CPF', nf.clienteCpf),
+              _buildDetailRow('Número', nf.data.invoiceNumber),
+              _buildDetailRow('Cliente', nf.data.customerName),
+              _buildDetailRow('CPF', nf.data.customerCpf),
               _buildDetailRow(
                 'Valor Total',
-                'R\$ ${nf.valorTotal.toStringAsFixed(2)}',
+                'R\$ ${nf.data.totalValue.toStringAsFixed(2)}',
               ),
-              _buildDetailRow('Pagamento', nf.formaPagamento),
+              _buildDetailRow('Pagamento', nf.data.paymentMethod),
               _buildDetailRow(
                 'Data de Emissão',
-                nf.dataEmissao.toString().split('.')[0],
+                nf.data.issueDate.toString().split('.')[0],
               ),
               const SizedBox(height: 16),
               const Text(
@@ -537,11 +560,11 @@ class _SalesViewState extends State<SalesView> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const SizedBox(height: 8),
-              ...nf.itens.map(
+              ...nf.data.items.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text(
-                    '${item.quantidade}x ${item.produtoNome} - R\$ ${item.valorTotal.toStringAsFixed(2)}',
+                    '${item.quantity}x ${item.productName} - R\$ ${item.totalValue.toStringAsFixed(2)}',
                     style: const TextStyle(fontSize: 14),
                   ),
                 ),

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:synchronized/synchronized.dart';
-import 'package:system_loja/core/models/nota_fiscal.dart';
+import 'package:system_loja/core/models/invoice.dart';
 
 /// Gerenciador de Notas Fiscais
 ///

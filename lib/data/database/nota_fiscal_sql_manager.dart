@@ -1,7 +1,7 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:system_loja/core/models/item_nota_fiscal.dart';
+import 'package:system_loja/core/models/invoice_item.dart';
 
-import '../../core/models/nota_fiscal.dart';
+import '../../core/models/invoice.dart';
 import 'database_config.dart';
 import 'database_helper.dart';
 
@@ -20,7 +20,7 @@ class NotaFiscalSqlManager {
   ///
   /// Se não for fornecido, usa a instância singleton padrão.
   NotaFiscalSqlManager({DatabaseHelper? dbHelper})
-      : _dbHelper = dbHelper ?? DatabaseHelper();
+    : _dbHelper = dbHelper ?? DatabaseHelper();
 
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
@@ -305,8 +305,8 @@ class NotaFiscalSqlManager {
     Map<String, dynamic> notaMap,
     List<Map<String, dynamic>> itensMap,
   ) {
-    final List<ItemNotaFiscal> itens = itensMap.map((itemMap) {
-      return ItemNotaFiscal.fromJson(itemMap);
+    final List<InvoiceItem> itens = itensMap.map((itemMap) {
+      return InvoiceItem.fromJson(itemMap);
     }).toList();
 
     // Prepara o map da nota com os itens para desserialização

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/models/item_nota_fiscal.dart';
-import 'package:system_loja/core/models/nota_fiscal.dart';
+import 'package:system_loja/core/models/invoice_item.dart';
+import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/data/database/cliente_sql_manager.dart';
 import 'package:system_loja/data/database/database_helper.dart';
@@ -94,14 +94,14 @@ void main() {
       final produto2 = dados['produto2'] as Produto;
 
       final itens = [
-        ItemNotaFiscal(
+        InvoiceItem(
           produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
           quantidade: 2,
           precoUnitario: produto1.preco,
         ),
-        ItemNotaFiscal(
+        InvoiceItem(
           produtoId: produto2.id,
           produtoNome: produto2.nome,
           produtoCodigo: produto2.codigo,
@@ -142,7 +142,7 @@ void main() {
         final produto1 = dados['produto1'] as Produto;
 
         final itens = [
-          ItemNotaFiscal(
+          InvoiceItem(
             produtoId: produto1.id,
             produtoNome: produto1.nome,
             produtoCodigo: produto1.codigo,
@@ -187,7 +187,7 @@ void main() {
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
-        ItemNotaFiscal(
+        InvoiceItem(
           produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
@@ -233,7 +233,7 @@ void main() {
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
-        ItemNotaFiscal(
+        InvoiceItem(
           produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
@@ -271,7 +271,7 @@ void main() {
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
-        ItemNotaFiscal(
+        InvoiceItem(
           produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
@@ -329,7 +329,7 @@ void main() {
       final cliente2Inserido = await clienteManager.consultarPorId(cliente2Id);
 
       final itens = [
-        ItemNotaFiscal(
+        InvoiceItem(
           produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,
@@ -392,7 +392,7 @@ void main() {
       final produto1 = dados['produto1'] as Produto;
 
       final itens = [
-        ItemNotaFiscal(
+        InvoiceItem(
           produtoId: produto1.id,
           produtoNome: produto1.nome,
           produtoCodigo: produto1.codigo,

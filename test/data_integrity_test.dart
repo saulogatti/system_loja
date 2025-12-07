@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/models/item_nota_fiscal.dart';
-import 'package:system_loja/core/models/nota_fiscal.dart';
+import 'package:system_loja/core/models/invoice_item.dart';
+import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/data/database/cliente_sql_manager.dart';
 import 'package:system_loja/data/database/database_helper.dart';
@@ -69,7 +69,7 @@ void main() {
 
         // Arrange - Cria nota fiscal
         final itens = [
-          ItemNotaFiscal(
+          InvoiceItem(
             produtoId: produtoInserido!.id,
             produtoNome: produtoInserido.nome,
             produtoCodigo: produtoInserido.codigo,
@@ -139,7 +139,7 @@ void main() {
 
         // Arrange - Cria nota fiscal
         final itens = [
-          ItemNotaFiscal(
+          InvoiceItem(
             produtoId: produtoInserido!.id,
             produtoNome: produtoInserido.nome,
             produtoCodigo: produtoInserido.codigo,
@@ -211,7 +211,7 @@ void main() {
 
         // Arrange - Cria nota fiscal
         final itens = [
-          ItemNotaFiscal(
+          InvoiceItem(
             produtoId: produtoInserido!.id,
             produtoNome: produtoInserido.nome,
             produtoCodigo: produtoInserido.codigo,
@@ -286,7 +286,7 @@ void main() {
 
         // Arrange - Cria nota fiscal
         final itens = [
-          ItemNotaFiscal(
+          InvoiceItem(
             produtoId: produtoInserido!.id,
             produtoNome: produtoInserido.nome,
             produtoCodigo: produtoInserido.codigo,
@@ -363,7 +363,7 @@ void main() {
 
         // Arrange - Cria nota fiscal
         final itens = [
-          ItemNotaFiscal(
+          InvoiceItem(
             produtoId: produtoInserido!.id,
             produtoNome: produtoInserido.nome,
             produtoCodigo: produtoInserido.codigo,
