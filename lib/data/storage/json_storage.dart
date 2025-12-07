@@ -15,21 +15,27 @@ class JsonDataStorage extends BaseDataStorage
   static const String _fileNameMask = 'json_storage_';
   static const int _maxFileNameLength = 200;
   static const Duration _timeOutMilliseconds = Duration(milliseconds: 5000);
+
+  JsonDataStorage({required super.storageType});
   @override
   Future<OperationResult<bool, String>> delete(int id) async {
     try {
-      return await getLock().synchronized<OperationResult<bool, String>>(() async {
-        // Sincroniza acesso ao arquivo
+      return await getLock().synchronized<OperationResult<bool, String>>(
+        () async {
+          // Sincroniza acesso ao arquivo
 
-        final fileName = _fileNameId(id);
-        final result = await deleteFile(fileName);
-        if (result) {
-          return OperationResult.success(true);
-        } else {
-          return OperationResult.failure('Falha ao deletar arquivo com ID $id');
-        }
-
-      }, timeout: _timeOutMilliseconds);
+          final fileName = _fileNameId(id);
+          final result = await deleteFile(fileName);
+          if (result) {
+            return OperationResult.success(true);
+          } else {
+            return OperationResult.failure(
+              'Falha ao deletar arquivo com ID $id',
+            );
+          }
+        },
+        timeout: _timeOutMilliseconds,
+      );
     } catch (e, stackTrace) {
       logError('Erro ao deletar arquivo com ID $id: $e', stackTrace);
       return OperationResult.failure('Erro ao deletar arquivo com ID $id: $e');
@@ -65,10 +71,23 @@ class JsonDataStorage extends BaseDataStorage
             PersistentDataStore persistent = _objectFromJson(content);
             allData.add(persistent);
           } catch (e) {
+            final j = jsonDecode(content);
+            if (j is Map && j.containsKey('id')) {
+              final idError = j['id'];
+              if (idError is! int) {
+                int? idErrorInt = int.tryParse(idError.toString());
+                if (idErrorInt != null) {
+                  await delete(idErrorInt);
+                }
+              } else {
+                await delete(idError);
+              }
+            }
             logError(
-              'Erro ao decodificar JSON durante loadAll: $e',
+              'Erro ao decodificar JSON durante loadAll: $e$j',
               StackTrace.current,
             );
+            return OperationResult.failure(e.toString());
           }
         }
         return OperationResult.success(allData);
@@ -79,7 +98,7 @@ class JsonDataStorage extends BaseDataStorage
 
   @override
   String retrieveDirectoryName() {
-    return 'json_data_storage';
+    return 'json_storage_$storageType';
   }
 
   @override
@@ -91,7 +110,7 @@ class JsonDataStorage extends BaseDataStorage
       // Codifica com indentação para legibilidade
       final jsonString = const JsonEncoder.withIndent(
         '  ',
-      ).convert(object.data);
+      ).convert(object.toJson());
       return await saveData(fileName, jsonString);
     } catch (e, stackTrace) {
       logError('Erro ao salvar objeto: $e', stackTrace);

@@ -365,6 +365,7 @@ class _SalesViewState extends State<SalesView> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: BlocListener<SalesCubit, SalesState>(
+        bloc: _salesCubit,
         listener: (context, state) {
           switch (state) {
             case SalesInitial():
@@ -472,6 +473,13 @@ class _SalesViewState extends State<SalesView> {
         label: const Text('Nova Nota Fiscal'),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _salesCubit.loadAllCustomers();
+    _salesCubit.loadSales();
   }
 
   void _adicionarNotaFiscal() async {

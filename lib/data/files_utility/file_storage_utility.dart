@@ -88,7 +88,6 @@ mixin FileStorageUtility {
       return OperationResult.failure('Erro ao listar arquivos: $e');
     }
   }
-
   /// Carrega o conteúdo de um arquivo de forma assíncrona.
   ///
   /// Lê o conteúdo do arquivo localizado em [fileName] relativo ao diretório
@@ -202,6 +201,7 @@ mixin FileStorageUtility {
     if (_asyncAccess.hasRun) return _asyncAccess.future;
     return await _asyncAccess.runOnce(() async {
       try {
+        //DEBUG ///Users/saulogatti-pessoal/Library/Containers/com.example.systemLoja/Data/Library/Application%20Support/com.example.systemLoja/json_data_storage/
         final directory = await getApplicationSupportDirectory();
         String cacheDirectory = p.join(directory.path, retrieveDirectoryName());
         final cacheDir = Directory(cacheDirectory);

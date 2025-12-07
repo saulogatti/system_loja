@@ -8,7 +8,8 @@ part 'storage_data.g.dart';
 abstract class BaseDataStorage {
   @protected
   final Map<String, Lock> fileLocks = {};
-  BaseDataStorage();
+  final String storageType;
+  BaseDataStorage({required this.storageType});
 
   /// Deleta objeto pelo ID
   Future<OperationResult<bool, String>> delete(int id);

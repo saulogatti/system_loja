@@ -9,10 +9,14 @@ abstract class DefaultManager {
   DefaultManager({required this.settingsApp}) {
     switch (settingsApp.typeCache) {
       case EnumTypeCache.json:
-        _defaultDataStorage = JsonDataStorage();
+        _defaultDataStorage = JsonDataStorage(
+          storageType: runtimeType.toString(),
+        );
         break;
       case EnumTypeCache.sql:
-        _defaultDataStorage = SqlDataStorage();
+        _defaultDataStorage = SqlDataStorage(
+          storageType: runtimeType.toString(),
+        );
         break;
     }
   }

@@ -1,4 +1,5 @@
 import 'package:system_loja/core/managers/default/default_manager.dart';
+import 'package:system_loja/core/managers/exceptions/customer_exception.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/storage/storage_data.dart';
@@ -74,6 +75,16 @@ class CustomerRepository extends DefaultManager {
 
   /// Atualiza um cliente existente
   Future<bool> updateCustomer(Customer customer) async {
+    final exists = await findWith(cpf: customer.cpf);
+    if (exists == null) {
+      throw CustomerException(
+        'Cliente com CPF ${customer.cpf} não encontrado para atualização.',
+      );
+    } else if (exists.id != customer.id) {
+      throw CustomerException(
+        'CPF ${customer.cpf} já está associado a outro cliente.',
+      );
+    }
     final data = customer.toJson();
     final result = await defaultDataStorage.save(
       PersistentDataStore(id: customer.id, data: data),

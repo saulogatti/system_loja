@@ -429,7 +429,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
       context,
       MaterialPageRoute<void>(
         builder: (context) => BlocProvider.value(
-          value: context.read<CustomerBloc>(),
+          value: CustomerBloc(),
           child: CustomerDetailScreen(customer: customer),
         ),
       ),
