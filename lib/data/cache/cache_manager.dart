@@ -5,7 +5,7 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 import 'package:system_loja/data/cache/models/cacheable.dart';
-import 'package:system_loja/data/files_system/file_system_manager.dart';
+import 'package:system_loja/data/files_system/file_system_helper.dart';
 
 /// Tipo de função factory para criar instâncias de [Cacheable] a partir de JSON.
 ///

@@ -42,6 +42,31 @@ mixin FileSystemManager {
     }
   }
 
+  /// Exclui um arquivo específico do sistema de cache.
+  ///
+  /// Remove o arquivo localizado em [fileName] relativo ao diretório
+  /// de cache da aplicação. O nome do arquivo deve incluir a extensão
+  /// (ex: 'clientes.json', 'config.txt').
+  ///
+  /// Retorna `true` se o arquivo foi deletado com sucesso, `false`
+  /// se o arquivo não existir ou ocorrer um erro durante a exclusão.
+  /// Erros são registrados via `logError`.
+  ///
+  @protected
+  Future<bool> deleteFile(String fileName) async {
+    try {
+      File file = await _mountFileSystem(fileName);
+      if (await file.exists()) {
+        await file.delete();
+        return true;
+      }
+      return false;
+    } catch (e, stackTrace) {
+      logError('Erro ao deletar arquivo $fileName: $e', stackTrace);
+      return false;
+    }
+  }
+
   /// Carrega o conteúdo de um arquivo de forma assíncrona.
   ///
   /// Lê o conteúdo do arquivo localizado em [fileName] relativo ao diretório
