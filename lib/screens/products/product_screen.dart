@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/screens/products/product_cubit.dart';
+import 'package:system_loja/screens/products/cubit/product_cubit.dart';
+import 'package:system_loja/screens/products/cubit/produto_state.dart';
 
 import '../../core/managers/produto_manager.dart';
 import '../../core/models/produto.dart';
@@ -23,13 +24,10 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
   static const String _tituloProdutosCadastrados = 'Produtos Cadastrados';
   static const String _mensagemNenhumProduto = 'Nenhum produto cadastrado';
   static const String _mensagemSucesso = 'cadastrado com sucesso!';
-  static const String _mensagemCodigoDuplicado = 'Erro: Código já cadastrado!';
   static const String _mensagemPrecoInvalido = 'Erro: Preço inválido!';
   static const String _mensagemEstoqueInvalido = 'Erro: Estoque inválido!';
 
-  late final ProductLogicCubit _produtoCubit = ProductLogicCubit(
-    ProdutoManager(),
-  );
+  late final ProductCubit _produtoCubit = ProductCubit(ProdutoManager());
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _codigoController = TextEditingController();
@@ -42,9 +40,12 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: _produtoCubit,
-      child: BlocBuilder<ProductLogicCubit, ProdutoState>(
+      child: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
-          final produtos = state.produtos;
+          List<Produto> produtos = [];
+          if (state is ProductStateInsertSuccess) {
+            produtos.addAll(state.produtos);
+          }
           return Scaffold(
             appBar: AppBar(
               title: const Text(_tituloAppBar),
@@ -261,12 +262,12 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final codigo = _codigoController.text.trim();
-
-    // Verifica código duplicado
-    if (_produtoCubit.buscarPorCodigo(codigo) != null) {
-      _mostrarErro(_mensagemCodigoDuplicado);
+    int? codigoInt = int.tryParse(codigo);
+    if (codigoInt == null) {
+      _mostrarErro('Erro: Código inválido!');
       return;
     }
+    _produtoCubit.findByCode(codigoInt);
 
     // Valida e converte valores numéricos
     final preco = _validarPreco(_precoController.text.trim());
@@ -283,7 +284,7 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
 
     // Cria e adiciona produto
     final produto = Produto(
-      id: _produtoCubit.gerarNovoId(),
+      id: 0, // ID será gerado automaticamente
       nome: _nomeController.text.trim(),
       codigo: codigo,
       preco: preco,

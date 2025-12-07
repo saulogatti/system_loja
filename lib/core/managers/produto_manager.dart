@@ -262,4 +262,6 @@ class ProdutoManager with LoggerClassMixin {
       logError('Erro ao salvar dados de produtos: $e', stackTrace);
     }
   }
+
+  findByCode(int codigo) {}
 }
