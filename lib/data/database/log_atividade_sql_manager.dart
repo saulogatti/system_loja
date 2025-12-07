@@ -24,18 +24,6 @@ class LogAtividadeSqlManager {
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
 
-  /// Insere um novo log de atividade no banco de dados
-  ///
-  /// [log] Objeto LogAtividade a ser inserido.
-  /// Retorna o ID do log inserido.
-  Future<int> inserir(LogAtividade log) async {
-    final db = await _database;
-
-    final Map<String, dynamic> dados = _logParaDadosDb(log);
-
-    return await db.insert(DatabaseConfig.tableLogsAtividade, dados);
-  }
-
   /// Consulta um log pelo ID
   ///
   /// [id] ID do log a ser consultado.
@@ -56,40 +44,6 @@ class LogAtividadeSqlManager {
     return _mapToLogAtividade(resultado.first);
   }
 
-  /// Lista todos os logs
-  ///
-  /// [orderBy] Campo para ordenação. Padrão: 'data_hora DESC'.
-  /// [limit] Limite de registros retornados.
-  /// Retorna uma lista com todos os logs cadastrados.
-  Future<List<LogAtividade>> listarTodos({String orderBy = 'data_hora DESC', int? limit}) async {
-    final db = await _database;
-
-    final List<Map<String, dynamic>> resultado = await db.query(
-      DatabaseConfig.tableLogsAtividade,
-      orderBy: orderBy,
-      limit: limit,
-    );
-
-    return resultado.map(_mapToLogAtividade).toList();
-  }
-
-  /// Lista logs de um usuário específico
-  ///
-  /// [usuarioId] ID do usuário.
-  /// [limit] Limite de registros retornados.
-  /// Retorna uma lista de logs do usuário especificado.
-  Future<List<LogAtividade>> listarPorUsuario(int usuarioId, {int? limit}) async {
-    final db = await _database;
-
-    final List<Map<String, dynamic>> resultado = await db.query(
-      DatabaseConfig.tableLogsAtividade,
-      where: 'usuario_id = ?',
-      whereArgs: [usuarioId],
-      orderBy: 'data_hora DESC',
-      limit: limit,
-    );
-
-    return resultado.map(_mapToLogAtividade).toList();
   /// Conta logs por usuário
   ///
   /// [usuarioId] ID do usuário.
@@ -143,13 +97,26 @@ class LogAtividadeSqlManager {
     return await db.insert(DatabaseConfig.tableLogsAtividade, dados);
   }
 
+  /// Insere um novo log de atividade no banco de dados
+  ///
+  /// [log] Objeto LogAtividade a ser inserido.
+  /// Retorna o ID do log inserido.
+  // Future<int> inserir(LogAtividade log) async {
+  //   final db = await _database;
+
+  //   final Map<String, dynamic> dados = _logParaDadosDb(log);
+
+  //   return await db.insert(DatabaseConfig.tableLogsAtividade, dados);
+  // }
+
   /// Lista logs de uma entidade específica
   ///
   /// [entidade] Nome da entidade.
   /// [entidadeId] ID da entidade (opcional).
   /// [limit] Limite de registros retornados.
   /// Retorna uma lista de logs da entidade especificada.
-  Future<List<LogAtividade>> listarPorEntidade(String entidade, {int? entidadeId, int? limit}) async {
+  Future<List<LogAtividade>> listarPorEntidade(String entidade,
+      {int? entidadeId, int? limit}) async {
     final db = await _database;
 
     List<Map<String, dynamic>> resultado;
@@ -174,12 +141,6 @@ class LogAtividadeSqlManager {
     return resultado.map(_mapToLogAtividade).toList();
   }
 
-  /// Lista logs por tipo de ação
-  ///
-  /// [tipoAcao] Tipo de ação para filtrar.
-  /// [limit] Limite de registros retornados.
-  /// Retorna uma lista de logs do tipo de ação especificado.
-  Future<List<LogAtividade>> listarPorTipoAcao(TipoAcao tipoAcao, {int? limit}) async {
   /// Lista logs por período
   ///
   /// [dataInicio] Data de início do período.
@@ -193,8 +154,6 @@ class LogAtividadeSqlManager {
 
     final List<Map<String, dynamic>> resultado = await db.query(
       DatabaseConfig.tableLogsAtividade,
-      where: 'tipo_acao = ?',
-      whereArgs: [tipoAcao.toStringValue()],
       where: 'data_hora >= ? AND data_hora <= ?',
       whereArgs: [dataInicio.toIso8601String(), dataFim.toIso8601String()],
       orderBy: 'data_hora DESC',
@@ -204,13 +163,6 @@ class LogAtividadeSqlManager {
     return resultado.map(_mapToLogAtividade).toList();
   }
 
-  /// Lista logs por período
-  ///
-  /// [dataInicio] Data de início do período.
-  /// [dataFim] Data de fim do período.
-  /// [limit] Limite de registros retornados.
-  /// Retorna uma lista de logs do período especificado.
-  Future<List<LogAtividade>> listarPorPeriodo(DateTime dataInicio, DateTime dataFim, {int? limit}) async {
   /// Lista logs por tipo de ação
   ///
   /// [tipoAcao] Tipo de ação para filtrar.
@@ -222,8 +174,6 @@ class LogAtividadeSqlManager {
 
     final List<Map<String, dynamic>> resultado = await db.query(
       DatabaseConfig.tableLogsAtividade,
-      where: 'data_hora >= ? AND data_hora <= ?',
-      whereArgs: [dataInicio.toIso8601String(), dataFim.toIso8601String()],
       where: 'tipo_acao = ?',
       whereArgs: [tipoAcao.toStringValue()],
       orderBy: 'data_hora DESC',
@@ -233,58 +183,6 @@ class LogAtividadeSqlManager {
     return resultado.map(_mapToLogAtividade).toList();
   }
 
-  /// Conta o número total de logs
-  ///
-  /// Retorna o número total de logs no banco de dados.
-  Future<int> contarTotal() async {
-    final db = await _database;
-
-    final resultado = await db.rawQuery('SELECT COUNT(*) as count FROM ${DatabaseConfig.tableLogsAtividade}');
-
-    return Sqflite.firstIntValue(resultado) ?? 0;
-  }
-
-  /// Conta logs por usuário
-  ///
-  /// [usuarioId] ID do usuário.
-  /// Retorna o número de logs do usuário especificado.
-  Future<int> contarPorUsuario(int usuarioId) async {
-    final db = await _database;
-
-    final resultado = await db.rawQuery(
-      'SELECT COUNT(*) as count FROM ${DatabaseConfig.tableLogsAtividade} WHERE usuario_id = ?',
-      [usuarioId],
-    );
-
-    return Sqflite.firstIntValue(resultado) ?? 0;
-  }
-
-  /// Deleta logs antigos
-  ///
-  /// [dataLimite] Data limite - logs anteriores serão deletados.
-  /// Retorna o número de linhas afetadas.
-  Future<int> deletarAntigos(DateTime dataLimite) async {
-    final db = await _database;
-
-    return await db.delete(
-      DatabaseConfig.tableLogsAtividade,
-      where: 'data_hora < ?',
-      whereArgs: [dataLimite.toIso8601String()],
-    );
-  }
-
-  /// Converte um Map do banco de dados para um objeto LogAtividade
-  LogAtividade _mapToLogAtividade(Map<String, dynamic> map) {
-    return LogAtividade(
-      id: map['id'] as int,
-      tipoAcao: TipoAcaoExtension.fromString(map['tipo_acao'] as String),
-      entidade: map['entidade'] as String,
-      entidadeId: map['entidade_id'] as int?,
-      usuarioId: map['usuario_id'] as int,
-      usuarioNome: map['usuario_nome'] as String,
-      dataHora: DateTime.parse(map['data_hora'] as String),
-      detalhes: map['detalhes'] as String? ?? '',
-    );
   /// Lista logs de um usuário específico
   ///
   /// [usuarioId] ID do usuário.
@@ -321,6 +219,20 @@ class LogAtividadeSqlManager {
     );
 
     return resultado.map(_mapToLogAtividade).toList();
+  }
+
+  /// Converte um Map do banco de dados para um objeto LogAtividade
+  LogAtividade mapToLogAtividade(Map<String, dynamic> map) {
+    return LogAtividade(
+      id: map['id'] as int,
+      tipoAcao: TipoAcaoExtension.fromString(map['tipo_acao'] as String),
+      entidade: map['entidade'] as String,
+      entidadeId: map['entidade_id'] as int?,
+      usuarioId: map['usuario_id'] as int,
+      usuarioNome: map['usuario_nome'] as String,
+      dataHora: DateTime.parse(map['data_hora'] as String),
+      detalhes: map['detalhes'] as String? ?? '',
+    );
   }
 
   /// Converte um objeto LogAtividade para um Map do banco de dados
