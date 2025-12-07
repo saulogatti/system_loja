@@ -19,7 +19,9 @@ class DatabaseConfig {
   ///
   /// Versão 2: Removidos campos desnormalizados cliente_nome, cliente_cpf,
   /// produto_nome, produto_codigo para garantir integridade de dados.
-  static const int databaseVersion = 2;
+  /// Versão 3: Adicionadas tabelas usuarios e logs_atividade para
+  /// sistema de gestão de usuários e auditoria.
+  static const int databaseVersion = 3;
 
   /// Nome da tabela de clientes
   static const String tableClientes = 'clientes';
@@ -32,6 +34,12 @@ class DatabaseConfig {
 
   /// Nome da tabela de itens de notas fiscais
   static const String tableItensNotaFiscal = 'itens_nota_fiscal';
+
+  /// Nome da tabela de usuários
+  static const String tableUsuarios = 'usuarios';
+
+  /// Nome da tabela de logs de atividade
+  static const String tableLogsAtividade = 'logs_atividade';
 
   /// Construtor privado para evitar instanciação
   DatabaseConfig._();
