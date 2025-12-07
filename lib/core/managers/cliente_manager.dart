@@ -15,7 +15,7 @@ class ClienteManager with LoggerClassMixin {
   static final Map<String, Lock> _fileLocks = {};
   final String dataFile;
 
-  // FIXME: Alterado de público para privado, assim não expõe a lista diretamente. Todos os tratamentos devem ser feitos via métodos. (checar se tem cliente por id, adicionar, remover, atualizar, etc)
+  // FIXME: Alterar de público para privado, assim não expõe a lista diretamente. Todos os tratamentos devem ser feitos via métodos. (checar se tem cliente por id, adicionar, remover, atualizar, etc)
   List<Cliente> clientes = [];
 
   ClienteManager({this.dataFile = 'data/clientes.json'}) {
@@ -98,7 +98,8 @@ class ClienteManager with LoggerClassMixin {
     if (file.existsSync()) {
       try {
         final jsonString = file.readAsStringSync();
-        final List<Map<String, dynamic>> jsonList = jsonDecode(jsonString) as List<Map<String, dynamic>>;
+        final List<Map<String, dynamic>> jsonList =
+            jsonDecode(jsonString) as List<Map<String, dynamic>>;
         clientes = jsonList.map(Cliente.fromJson).toList();
       } catch (e, stackTrace) {
         logError('Erro ao carregar dados de clientes: $e', stackTrace);
@@ -113,7 +114,8 @@ class ClienteManager with LoggerClassMixin {
     if (file.existsSync()) {
       try {
         final jsonString = file.readAsStringSync();
-        final List<Map<String, dynamic>> jsonList = jsonDecode(jsonString) as List<Map<String, dynamic>>;
+        final List<Map<String, dynamic>> jsonList =
+            jsonDecode(jsonString) as List<Map<String, dynamic>>;
         return jsonList.map(Cliente.fromJson).toList();
       } catch (e) {
         return [];
@@ -134,7 +136,8 @@ class ClienteManager with LoggerClassMixin {
   void _salvarDados() {
     final file = File(dataFile);
     file.parent.createSync(recursive: true);
-    final jsonString = jsonEncode(clientes.map((cliente) => cliente.toJson()).toList());
+    final jsonString =
+        jsonEncode(clientes.map((cliente) => cliente.toJson()).toList());
     file.writeAsStringSync(jsonString);
   }
 }

@@ -1,4 +1,4 @@
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../../core/models/extensions/nivel_permissao_extension.dart';
 import '../../core/models/usuario.dart';
@@ -18,7 +18,8 @@ class UsuarioSqlManager {
   /// Construtor que recebe opcionalmente uma instância do DatabaseHelper
   ///
   /// Se não for fornecido, usa a instância singleton padrão.
-  UsuarioSqlManager({DatabaseHelper? dbHelper}) : _dbHelper = dbHelper ?? DatabaseHelper();
+  UsuarioSqlManager({DatabaseHelper? dbHelper})
+      : _dbHelper = dbHelper ?? DatabaseHelper();
 
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
@@ -69,6 +70,8 @@ class UsuarioSqlManager {
       DatabaseConfig.tableUsuarios,
       where: 'id = ?',
       whereArgs: [id],
+      where: 'LOWER(email) = LOWER(?)',
+      whereArgs: [email],
     );
 
     if (resultado.isEmpty) {
@@ -89,6 +92,8 @@ class UsuarioSqlManager {
       DatabaseConfig.tableUsuarios,
       where: 'LOWER(email) = LOWER(?)',
       whereArgs: [email],
+      where: 'id = ?',
+      whereArgs: [id],
     );
 
     if (resultado.isEmpty) {
@@ -98,43 +103,62 @@ class UsuarioSqlManager {
     return _mapToUsuario(resultado.first);
   }
 
-  /// Busca usuários por nome (busca parcial)
+  /// Conta o número de usuários por nível de permissão
   ///
-  /// [nome] Texto a ser buscado no nome do usuário.
-  /// Retorna uma lista de usuários cujo nome contém o texto buscado.
-  Future<List<Usuario>> buscarPorNome(String nome) async {
+  /// [nivelPermissao] Nível de permissão para filtrar.
+  /// Retorna o número de usuários com o nível de permissão especificado.
+  Future<int> contarPorNivelPermissao(NivelPermissao nivelPermissao) async {
     final db = await _database;
 
-    final List<Map<String, dynamic>> resultado = await db.query(
-      DatabaseConfig.tableUsuarios,
-      where: 'nome LIKE ?',
-      whereArgs: ['%$nome%'],
-      orderBy: 'nome ASC',
+    final resultado = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM ${DatabaseConfig.tableUsuarios} WHERE nivel_permissao = ?',
+      [nivelPermissao.toStringValue()],
     );
 
-    return resultado.map(_mapToUsuario).toList();
+    return Sqflite.firstIntValue(resultado) ?? 0;
   }
 
-  /// Lista todos os usuários
+  /// Conta o número total de usuários cadastrados
   ///
-  /// [orderBy] Campo para ordenação. Padrão: 'nome ASC'.
-  /// Retorna uma lista com todos os usuários cadastrados.
-  Future<List<Usuario>> listarTodos({String orderBy = 'nome ASC'}) async {
+  /// Retorna o número total de usuários no banco de dados.
+  Future<int> contarTotal() async {
     final db = await _database;
 
-    final List<Map<String, dynamic>> resultado = await db.query(
-      DatabaseConfig.tableUsuarios,
-      orderBy: orderBy,
-    );
+    final resultado = await db.rawQuery(
+        'SELECT COUNT(*) as count FROM ${DatabaseConfig.tableUsuarios}');
 
-    return resultado.map(_mapToUsuario).toList();
+    return Sqflite.firstIntValue(resultado) ?? 0;
+  }
+
+  /// Deleta um usuário do banco de dados
+  ///
+  /// [id] ID do usuário a ser deletado.
+  /// Retorna o número de linhas afetadas.
+  Future<int> deletar(int id) async {
+    final db = await _database;
+
+    return await db
+        .delete(DatabaseConfig.tableUsuarios, where: 'id = ?', whereArgs: [id]);
+  }
+
+  /// Insere um novo usuário no banco de dados
+  ///
+  /// [usuario] Objeto Usuario a ser inserido.
+  /// Retorna o ID do usuário inserido.
+  Future<int> inserir(Usuario usuario) async {
+    final db = await _database;
+
+    final Map<String, dynamic> dados = _usuarioParaDadosDb(usuario);
+
+    return await db.insert(DatabaseConfig.tableUsuarios, dados);
   }
 
   /// Lista usuários por nível de permissão
   ///
   /// [nivelPermissao] Nível de permissão para filtrar.
   /// Retorna uma lista de usuários com o nível de permissão especificado.
-  Future<List<Usuario>> listarPorNivelPermissao(NivelPermissao nivelPermissao) async {
+  Future<List<Usuario>> listarPorNivelPermissao(
+      NivelPermissao nivelPermissao) async {
     final db = await _database;
 
     final List<Map<String, dynamic>> resultado = await db.query(

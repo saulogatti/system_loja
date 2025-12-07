@@ -20,7 +20,7 @@ class NotaFiscalSqlManager {
   ///
   /// Se não for fornecido, usa a instância singleton padrão.
   NotaFiscalSqlManager({DatabaseHelper? dbHelper})
-    : _dbHelper = dbHelper ?? DatabaseHelper();
+      : _dbHelper = dbHelper ?? DatabaseHelper();
 
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
@@ -44,7 +44,8 @@ class NotaFiscalSqlManager {
       // Adiciona o valor_total calculado
       dadosNota['valor_total'] = notaFiscal.valorTotal;
 
-    return notas;
+      return 1;
+    });
   }
 
   /// Busca notas fiscais por período
@@ -67,21 +68,30 @@ class NotaFiscalSqlManager {
         // Adiciona campos necessários para o banco
         dadosItem['nota_fiscal_id'] = notaFiscal.id;
         dadosItem['valor_total'] = item.valorTotal;
+  /// [clienteId] ID do cliente.
+  /// Retorna uma lista de notas fiscais do cliente especificado.
+  Future<List<NotaFiscal>> buscarPorCliente(int clienteId) async {
+    final db = await _database;
 
-    if (resultadoNotas.isEmpty) {
-      return [];
-    }
+    final List<Map<String, dynamic>> resultadoNotas = await db.query(
+      DatabaseConfig.tableNotasFiscais,
+      where: 'cliente_id = ?',
+      whereArgs: [clienteId],
+      orderBy: 'data_emissao DESC',
+    );
 
-    // Busca todos os itens de uma vez para evitar N+1 queries
-    final notasIds = resultadoNotas.map((n) => n['id'] as int).toList();
-    final itensPorNota = await _buscarItensDeNotas(db, notasIds);
-
-    // Cria as notas fiscais com seus itens
     final List<NotaFiscal> notas = [];
+
     for (final notaMap in resultadoNotas) {
-      final notaId = notaMap['id'] as int;
-      final itens = itensPorNota[notaId] ?? [];
-      notas.add(_mapToNotaFiscal(notaMap, itens));
+      final int notaId = notaMap['id'] as int;
+
+      final List<Map<String, dynamic>> resultadoItens = await db.query(
+        DatabaseConfig.tableItensNotaFiscal,
+        where: 'nota_fiscal_id = ?',
+        whereArgs: [notaId],
+      );
+
+      notas.add(_mapToNotaFiscal(notaMap, resultadoItens));
     }
 
     return notas;
