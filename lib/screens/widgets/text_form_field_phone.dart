@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+import 'package:system_loja/core/utils/text_formatters.dart';
+
+class TextFormFieldPhone extends StatelessWidget {
+  const TextFormFieldPhone({
+    super.key,
+    required this.telefoneController,
+    required this.isEditing,
+  });
+
+  final TextEditingController telefoneController;
+  final bool isEditing;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: telefoneController,
+      decoration: const InputDecoration(
+        labelText: 'Telefone',
+        border: OutlineInputBorder(),
+        prefixIcon: Icon(Icons.phone),
+      ),
+      enabled: isEditing,
+      keyboardType: TextInputType.phone,
+      inputFormatters: [PhoneTextInputFormatter()],
+    );
+  }
+}
