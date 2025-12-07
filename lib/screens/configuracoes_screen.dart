@@ -609,7 +609,8 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
             'Esta ação irá REMOVER TODOS OS DADOS do sistema '
             '(clientes, produtos, notas fiscais, usuários e logs).\n\n'
             'Esta ação NÃO PODE ser desfeita!\n\n'
-            'Tem certeza que deseja continuar?'),
+            'Tem certeza que deseja continuar?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),

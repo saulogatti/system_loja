@@ -28,7 +28,9 @@ void main() {
     // Remove diretório se estiver vazio
     try {
       Directory('test/data').deleteSync();
-    } catch (_) {}
+    } catch (e) {
+      // Ignora erro se diretório não estiver vazio ou não existir
+    }
   });
 
   group('ConfiguracaoManager - Operações Básicas', () {
@@ -118,17 +120,24 @@ void main() {
       final logsAntigos = [
         {
           'id': 1,
-          'data_hora': DateTime.now().subtract(const Duration(days: 100)).toIso8601String(),
+          'data_hora': DateTime.now()
+              .subtract(const Duration(days: 100))
+              .toIso8601String(),
           'descricao': 'Log antigo'
         },
         {
           'id': 2,
-          'data_hora': DateTime.now().subtract(const Duration(days: 10)).toIso8601String(),
+          'data_hora':
+              DateTime.now().subtract(const Duration(days: 10)).toIso8601String(),
           'descricao': 'Log recente'
         },
       ];
 
-      File('data/logs_atividade.json').writeAsStringSync('[${logsAntigos.map((l) => '{"id":${l['id']},"data_hora":"${l['data_hora']}","descricao":"${l['descricao']}"}').join(',')}]');
+      final jsonContent = logsAntigos
+          .map((l) =>
+              '{"id":${l['id']},"data_hora":"${l['data_hora']}","descricao":"${l['descricao']}"}')
+          .join(',');
+      File('data/logs_atividade.json').writeAsStringSync('[$jsonContent]');
 
       final sucesso = await manager.limparLogsAntigos();
 

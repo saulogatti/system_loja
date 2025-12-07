@@ -98,17 +98,7 @@ class ConfiguracaoManager with LoggerClassMixin {
       final dataLimite = DateTime.now()
           .subtract(Duration(days: _configuracao.diasManterLogs));
 
-      final logsRecentes = logs.where((log) {
-        try {
-          if (log is Map<String, dynamic> && log['data_hora'] is String) {
-            final dataLog = DateTime.parse(log['data_hora'] as String);
-            return dataLog.isAfter(dataLimite);
-          }
-          return true; // Mantém logs com formato inválido
-        } catch (e) {
-          return true; // Mantém logs com data inválida
-        }
-      }).toList();
+      final logsRecentes = logs.where((log) => _isLogRecent(log, dataLimite)).toList();
 
       final logsRemovidos = logs.length - logsRecentes.length;
       
@@ -178,6 +168,22 @@ class ConfiguracaoManager with LoggerClassMixin {
     } else {
       _configuracao = Configuracao.padrao();
       _salvarDados(); // Cria arquivo com configurações padrão
+    }
+  }
+
+  /// Verifica se um log é recente baseado na data limite
+  ///
+  /// Retorna true se o log deve ser mantido, false se deve ser removido.
+  /// Mantém logs com formato inválido por segurança.
+  bool _isLogRecent(dynamic log, DateTime dataLimite) {
+    try {
+      if (log is Map<String, dynamic> && log['data_hora'] is String) {
+        final dataLog = DateTime.parse(log['data_hora'] as String);
+        return dataLog.isAfter(dataLimite);
+      }
+      return true; // Mantém logs com formato inválido
+    } catch (e) {
+      return true; // Mantém logs com data inválida
     }
   }
 
