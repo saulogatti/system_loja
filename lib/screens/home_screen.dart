@@ -37,9 +37,9 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 40),
               Text(
                 'Bem-vindo!',
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
@@ -64,7 +64,8 @@ class HomeScreen extends StatelessWidget {
                 title: 'Cadastro de Produto',
                 icon: Icons.inventory,
                 color: Colors.green,
-                onTap: () => _navigateToScreen(context, const ProdutoScreen()),
+                onTap: () =>
+                    _navigateToScreen(context, const ProductViewScreen()),
               ),
               const SizedBox(height: 16),
               _buildMenuCard(
@@ -72,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                 title: 'Cadastro de Nota Fiscal',
                 icon: Icons.receipt_long,
                 color: Colors.orange,
-                onTap: () => _navigateToScreen(context, const NotaFiscalScreen()),
+                onTap: () => _navigateToScreen(context, const SalesView()),
               ),
               const SizedBox(height: 16),
               _buildMenuCard(
