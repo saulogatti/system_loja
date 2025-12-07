@@ -3,7 +3,7 @@
 .dart_tool/
 
 
-
+*.DS_Store
 # Large installation files
 *.deb
 dartsdk-linux-x64-release.zip
@@ -16,3 +16,5 @@ macos/Flutter/GeneratedPluginRegistrant.swift
 
 # Build artifacts
 build/
+
+.DS_Store
