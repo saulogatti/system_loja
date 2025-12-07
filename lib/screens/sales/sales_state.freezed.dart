@@ -55,7 +55,7 @@ extension SalesStatePatterns on SalesState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SalesError value)?  error,TResult Function( SalesInitial value)?  initial,TResult Function( SalesLoaded value)?  loaded,TResult Function( SalesLoadedCustomers value)?  loadedCustomers,TResult Function( SalesLoading value)?  loading,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SalesError value)?  error,TResult Function( SalesInitial value)?  initial,TResult Function( SalesLoaded value)?  loaded,TResult Function( SalesLoadedCustomers value)?  loadedCustomers,TResult Function( SalesLoading value)?  loading,TResult Function( SalesSaved value)?  saved,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case SalesError() when error != null:
@@ -63,7 +63,8 @@ return error(_that);case SalesInitial() when initial != null:
 return initial(_that);case SalesLoaded() when loaded != null:
 return loaded(_that);case SalesLoadedCustomers() when loadedCustomers != null:
 return loadedCustomers(_that);case SalesLoading() when loading != null:
-return loading(_that);case _:
+return loading(_that);case SalesSaved() when saved != null:
+return saved(_that);case _:
   return orElse();
 
 }
@@ -81,7 +82,7 @@ return loading(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SalesError value)  error,required TResult Function( SalesInitial value)  initial,required TResult Function( SalesLoaded value)  loaded,required TResult Function( SalesLoadedCustomers value)  loadedCustomers,required TResult Function( SalesLoading value)  loading,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SalesError value)  error,required TResult Function( SalesInitial value)  initial,required TResult Function( SalesLoaded value)  loaded,required TResult Function( SalesLoadedCustomers value)  loadedCustomers,required TResult Function( SalesLoading value)  loading,required TResult Function( SalesSaved value)  saved,}){
 final _that = this;
 switch (_that) {
 case SalesError():
@@ -89,7 +90,8 @@ return error(_that);case SalesInitial():
 return initial(_that);case SalesLoaded():
 return loaded(_that);case SalesLoadedCustomers():
 return loadedCustomers(_that);case SalesLoading():
-return loading(_that);}
+return loading(_that);case SalesSaved():
+return saved(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -103,7 +105,7 @@ return loading(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SalesError value)?  error,TResult? Function( SalesInitial value)?  initial,TResult? Function( SalesLoaded value)?  loaded,TResult? Function( SalesLoadedCustomers value)?  loadedCustomers,TResult? Function( SalesLoading value)?  loading,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SalesError value)?  error,TResult? Function( SalesInitial value)?  initial,TResult? Function( SalesLoaded value)?  loaded,TResult? Function( SalesLoadedCustomers value)?  loadedCustomers,TResult? Function( SalesLoading value)?  loading,TResult? Function( SalesSaved value)?  saved,}){
 final _that = this;
 switch (_that) {
 case SalesError() when error != null:
@@ -111,7 +113,8 @@ return error(_that);case SalesInitial() when initial != null:
 return initial(_that);case SalesLoaded() when loaded != null:
 return loaded(_that);case SalesLoadedCustomers() when loadedCustomers != null:
 return loadedCustomers(_that);case SalesLoading() when loading != null:
-return loading(_that);case _:
+return loading(_that);case SalesSaved() when saved != null:
+return saved(_that);case _:
   return null;
 
 }
@@ -128,14 +131,15 @@ return loading(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  error,TResult Function()?  initial,TResult Function( Map<int, Invoice> items)?  loaded,TResult Function( Map<int, Customer> customers)?  loadedCustomers,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  error,TResult Function()?  initial,TResult Function( Map<int, Invoice> items)?  loaded,TResult Function( Map<int, Customer> customers)?  loadedCustomers,TResult Function()?  loading,TResult Function( Map<int, Invoice> items)?  saved,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SalesError() when error != null:
 return error(_that.message);case SalesInitial() when initial != null:
 return initial();case SalesLoaded() when loaded != null:
 return loaded(_that.items);case SalesLoadedCustomers() when loadedCustomers != null:
 return loadedCustomers(_that.customers);case SalesLoading() when loading != null:
-return loading();case _:
+return loading();case SalesSaved() when saved != null:
+return saved(_that.items);case _:
   return orElse();
 
 }
@@ -153,14 +157,15 @@ return loading();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( Map<int, Invoice> items)  loaded,required TResult Function( Map<int, Customer> customers)  loadedCustomers,required TResult Function()  loading,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( Map<int, Invoice> items)  loaded,required TResult Function( Map<int, Customer> customers)  loadedCustomers,required TResult Function()  loading,required TResult Function( Map<int, Invoice> items)  saved,}) {final _that = this;
 switch (_that) {
 case SalesError():
 return error(_that.message);case SalesInitial():
 return initial();case SalesLoaded():
 return loaded(_that.items);case SalesLoadedCustomers():
 return loadedCustomers(_that.customers);case SalesLoading():
-return loading();}
+return loading();case SalesSaved():
+return saved(_that.items);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -174,14 +179,15 @@ return loading();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  error,TResult? Function()?  initial,TResult? Function( Map<int, Invoice> items)?  loaded,TResult? Function( Map<int, Customer> customers)?  loadedCustomers,TResult? Function()?  loading,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  error,TResult? Function()?  initial,TResult? Function( Map<int, Invoice> items)?  loaded,TResult? Function( Map<int, Customer> customers)?  loadedCustomers,TResult? Function()?  loading,TResult? Function( Map<int, Invoice> items)?  saved,}) {final _that = this;
 switch (_that) {
 case SalesError() when error != null:
 return error(_that.message);case SalesInitial() when initial != null:
 return initial();case SalesLoaded() when loaded != null:
 return loaded(_that.items);case SalesLoadedCustomers() when loadedCustomers != null:
 return loadedCustomers(_that.customers);case SalesLoading() when loading != null:
-return loading();case _:
+return loading();case SalesSaved() when saved != null:
+return saved(_that.items);case _:
   return null;
 
 }
@@ -462,5 +468,77 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class SalesSaved implements SalesState {
+   SalesSaved({required final  Map<int, Invoice> items}): _items = items;
+  
+
+ final  Map<int, Invoice> _items;
+ Map<int, Invoice> get items {
+  if (_items is EqualUnmodifiableMapView) return _items;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_items);
+}
+
+
+/// Create a copy of SalesState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SalesSavedCopyWith<SalesSaved> get copyWith => _$SalesSavedCopyWithImpl<SalesSaved>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesSaved&&const DeepCollectionEquality().equals(other._items, _items));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_items));
+
+@override
+String toString() {
+  return 'SalesState.saved(items: $items)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SalesSavedCopyWith<$Res> implements $SalesStateCopyWith<$Res> {
+  factory $SalesSavedCopyWith(SalesSaved value, $Res Function(SalesSaved) _then) = _$SalesSavedCopyWithImpl;
+@useResult
+$Res call({
+ Map<int, Invoice> items
+});
+
+
+
+
+}
+/// @nodoc
+class _$SalesSavedCopyWithImpl<$Res>
+    implements $SalesSavedCopyWith<$Res> {
+  _$SalesSavedCopyWithImpl(this._self, this._then);
+
+  final SalesSaved _self;
+  final $Res Function(SalesSaved) _then;
+
+/// Create a copy of SalesState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? items = null,}) {
+  return _then(SalesSaved(
+items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
+as Map<int, Invoice>,
+  ));
+}
+
+
+}
 
 // dart format on

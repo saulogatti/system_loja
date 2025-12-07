@@ -5,6 +5,15 @@ import 'package:system_loja/data/storage/storage_data.dart';
 
 class SalesRepository extends DefaultManager {
   SalesRepository({required super.settingsApp});
+  Future<int> getNextSaleId() async {
+    final allInvoices = await loadAllSales();
+    if (allInvoices.isEmpty) {
+      return 1;
+    }
+    final maxId = allInvoices.keys.reduce((a, b) => a > b ? a : b);
+    return maxId + 1;
+  }
+
   Future<Map<int, Invoice>> loadAllSales() async {
     final result = await defaultDataStorage.loadAll();
     switch (result) {
@@ -27,10 +36,5 @@ class SalesRepository extends DefaultManager {
     );
     // Implement save sale logic here
     await defaultDataStorage.save(dataStore);
-  }
-  int getNextSaleId() {
-    // TODO: Implement logic to get the next sale ID
-    // This is a placeholder implementation
-    return DateTime.now().millisecondsSinceEpoch;
   }
 }

@@ -14,4 +14,5 @@ sealed class SalesState with _$SalesState {
   factory SalesState.loadedCustomers({required Map<int, Customer> customers}) =
       SalesLoadedCustomers;
   factory SalesState.loading() = SalesLoading;
+  factory SalesState.saved({required Map<int, Invoice> items}) = SalesSaved;
 }

@@ -312,17 +312,6 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
       );
 
       widget.salesCubit.registerSale(notaFiscal);
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Nota Fiscal "$numeroNota" cadastrada com sucesso!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-
-      Navigator.pop(context, true);
     }
   }
 
@@ -397,6 +386,18 @@ class _SalesViewState extends State<SalesView> {
               _mapCustomers = state.customers;
             case SalesLoading():
               // TODO: Implementar um dialog ou Overlay de loading (acho melhor um Overlay...)
+              break;
+            case SalesSaved():
+              _mapToNotaFiscal = state.items;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Nota Fiscal "${state.items.values.last.data.invoiceNumber}" cadastrada com sucesso!',
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              Navigator.pop(context, true);
               break;
           }
         },
