@@ -48,6 +48,12 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                   backgroundColor: Colors.green,
                 ),
               );
+              _formKey.currentState!.reset();
+              _nomeController.clear();
+              _cpfController.clear();
+              _emailController.clear();
+              _telefoneController.clear();
+              _enderecoController.clear();
               _isAdding = false;
             }
             _previousCustomerCount = customers.length;
@@ -98,6 +104,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                         },
                       ),
                       const SizedBox(height: 16),
+                      // Adicionar mascaras e a validacao esta no bloc para CPF
                       TextFormField(
                         controller: _cpfController,
                         decoration: const InputDecoration(
@@ -112,6 +119,36 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                           }
                           return null;
                         },
+                        onChanged: (value) {
+                          // Aqui você pode adicionar lógica para formatar o CPF enquanto o usuário digita
+                          String digitsOnly = value.replaceAll(
+                            RegExp(r'[^0-9]'),
+                            '',
+                          );
+                          String formatted = '';
+                          for (int i = 0; i < digitsOnly.length; i++) {
+                            formatted += digitsOnly[i];
+                            if (i == 2 || i == 5) {
+                              formatted += '.';
+                            } else if (i == 8) {
+                              formatted += '-';
+                            }
+                          }
+                          _cpfController.value = TextEditingValue(
+                            text: formatted,
+                            selection: TextSelection.collapsed(
+                              offset: formatted.length,
+                            ),
+                          );
+                        },
+                        buildCounter:
+                            (
+                              context, {
+                              required currentLength,
+                              required isFocused,
+                              required maxLength,
+                            }) => Text('$currentLength/11'),
+                        maxLength: 14, // Formato XXX.XXX.XXX-XX
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -122,6 +159,17 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                           prefixIcon: Icon(Icons.email),
                         ),
                         keyboardType: TextInputType.emailAddress,
+                        onChanged: (value) {
+                          // Aqui você pode adicionar lógica para formatar o email enquanto o usuário digita
+                          String formatted = value.trim();
+
+                          _emailController.value = TextEditingValue(
+                            text: formatted,
+                            selection: TextSelection.collapsed(
+                              offset: formatted.length,
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -132,6 +180,26 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                           prefixIcon: Icon(Icons.phone),
                         ),
                         keyboardType: TextInputType.phone,
+                        onChanged: (value) {
+                          // Aqui você pode adicionar lógica para formatar o telefone enquanto o usuário digita
+                          String digitsOnly = value.replaceAll(
+                            RegExp(r'[^0-9]'),
+                            '',
+                          );
+                          String formatted = '';
+                          for (int i = 0; i < digitsOnly.length; i++) {
+                            if (i == 0) formatted += '(';
+                            formatted += digitsOnly[i];
+                            if (i == 1) formatted += ') ';
+                            if (i == 6) formatted += '-';
+                          }
+                          _telefoneController.value = TextEditingValue(
+                            text: formatted,
+                            selection: TextSelection.collapsed(
+                              offset: formatted.length,
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -204,10 +272,20 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: customers.length,
                                 itemBuilder: (context, index) {
-                                  final cliente = customers[index];
+                                  final cliente = customers.values.elementAt(index);
                                   return Card(
+                                    elevation: 2,
+                                    color: Colors.white,
                                     margin: const EdgeInsets.only(bottom: 12),
                                     child: ListTile(
+                                      minLeadingWidth: 0,
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
+                                      minVerticalPadding: 0,
+                                      titleAlignment:
+                                          ListTileTitleAlignment.center,
+
                                       leading: CircleAvatar(
                                         backgroundColor: Colors.blue,
                                         child: Text(
@@ -251,6 +329,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                                 ),
                               ),
                             ),
+                            customerFound: _openCustomerDetails,
                           );
                         },
                       ),
@@ -290,13 +369,6 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
           address: _enderecoController.text.trim(),
         ),
       );
-
-      _formKey.currentState!.reset();
-      _nomeController.clear();
-      _cpfController.clear();
-      _emailController.clear();
-      _telefoneController.clear();
-      _enderecoController.clear();
     }
   }
 
@@ -351,5 +423,10 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
         ],
       ),
     );
+  }
+
+  Widget _openCustomerDetails(Customer customer) {
+    // TODO: Implementar a abertura dos detalhes do cliente encontrado
+    return Container();
   }
 }

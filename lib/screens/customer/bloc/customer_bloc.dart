@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/repository/customer_repository.dart';
+import 'package:system_loja/core/settings/settings_app.dart';
+import 'package:system_loja/core/utils/string_extensions.dart';
 
 part 'customer_bloc.freezed.dart';
 part 'customer_bloc_event.dart';
@@ -15,10 +19,14 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   final CustomerRepository _customerRepository;
 
   CustomerBloc()
-    : _customerRepository = CustomerRepository(),
+    : _customerRepository = CustomerRepository(
+        settingsApp: SettingsApp(typeCache: EnumTypeCache.json),
+      ),
       super(const _Initial()) {
     on<_LoadCustomers>(_onLoadCustomers);
     on<_RegisterCustomer>(_onRegisterCustomer);
+    on<_DeleteCustomer>(_onDeleteCustomer);
+    on<_FindCustomerByCpf>(_onFindCustomerByCpf);
   }
 
   /// Carrega todos os clientes do banco de dados
@@ -29,9 +37,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
     emit(const CustomerBlocState.loading());
     try {
       final customers = await _customerRepository.loadAll();
-      emit(
-        CustomerBlocState.customersLoaded(customers: customers.values.toList()),
-      );
+      emit(CustomerBlocState.customersLoaded(customers: customers));
     } catch (e) {
       emit(
         CustomerBlocState.customerError(
@@ -52,8 +58,30 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
     emit(const CustomerBlocState.loading());
 
     try {
+      if (event.cpf.isEmpty || !event.cpf.isValidCPF()) {
+        emit(
+          const CustomerBlocState.customerError(message: 'Erro: CPF inválido!'),
+        );
+        return;
+      } else if (event.email.isNotEmpty && !event.email.isValidEmail()) {
+        emit(
+          const CustomerBlocState.customerError(
+            message: 'Erro: Email inválido!',
+          ),
+        );
+        return;
+      } else if (event.phone.isNotEmpty && !event.phone.isValidPhone()) {
+        emit(
+          const CustomerBlocState.customerError(
+            message: 'Erro: Telefone inválido!',
+          ),
+        );
+        return;
+      }
+
+      int newId = await _customerRepository.getNextId();
       final customer = Customer(
-        id: 0, // SQLite AUTOINCREMENT gera o ID automaticamente
+        id: newId, // SQLite AUTOINCREMENT gera o ID automaticamente
         name: event.name,
         cpf: event.cpf,
         email: event.email,
@@ -65,15 +93,51 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
 
       // Recarrega a lista de clientes após adicionar
       final customers = await _customerRepository.loadAll();
-      emit(
-        CustomerBlocState.customersLoaded(customers: customers.values.toList()),
-      );
+      emit(CustomerBlocState.customersLoaded(customers: customers));
     } catch (e) {
       emit(
         CustomerBlocState.customerError(
           message: e.toString().contains('CPF já cadastrado')
               ? 'Erro: CPF já cadastrado!'
               : 'Erro ao cadastrar cliente: ${e.toString()}',
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _onFindCustomerByCpf(_FindCustomerByCpf event, Emitter<CustomerBlocState> emit) async{
+    emit(const CustomerBlocState.loading());
+    try {
+      final customer = await _customerRepository.findWith(cpf: event.cpf);
+      if (customer != null) {
+        emit(CustomerBlocState.customerFound(customer: customer));
+      } else {
+        emit(
+          const CustomerBlocState.customerError(
+            message: 'Cliente não encontrado para o CPF informado.',
+          ),
+        );
+      }
+    } catch (e) {
+      emit(
+        CustomerBlocState.customerError(
+          message: 'Erro ao buscar cliente: ${e.toString()}',
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _onDeleteCustomer(_DeleteCustomer event, Emitter<CustomerBlocState> emit)async {
+    emit(const CustomerBlocState.loading());
+    try {
+      await _customerRepository.deleteWithId(event.id);
+      // Recarrega a lista de clientes após deletar
+      final customers = await _customerRepository.loadAll();
+      emit(CustomerBlocState.customersLoaded(customers: customers));
+    } catch (e) {
+      emit(
+        CustomerBlocState.customerError(
+          message: 'Erro ao deletar cliente: ${e.toString()}',
         ),
       );
     }

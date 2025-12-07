@@ -1,8 +1,8 @@
 # System Loja
 
-Sistema de gerenciamento de loja desenvolvido em Flutter com persistência de dados em JSON.
+Sistema de gerenciamento de loja desenvolvido em Flutter com arquitetura moderna e persistência de dados dual (JSON + SQLite).
 
-> **🤖 Usando GitHub Copilot?** Leia o [Guia de Contribuição](CONTRIBUTING.md) para obter os melhores resultados!
+> **🤖 Usando GitHub Copilot?** Leia o [Guia de Contribuição](CONTRIBUTING.md) e [.github/copilot-instructions.md](.github/copilot-instructions.md) para obter os melhores resultados!
 
 ## 📚 Índice
 
@@ -16,7 +16,13 @@ Sistema de gerenciamento de loja desenvolvido em Flutter com persistência de da
 
 ## Descrição
 
-Aplicação Flutter com interface gráfica para gerenciamento de loja com as seguintes funcionalidades:
+Aplicação Flutter **multiplataforma** (Windows, macOS, iOS, Android) para gerenciamento de loja com arquitetura moderna:
+
+- **State Management**: BLoC com `flutter_bloc` e `freezed`
+- **Persistência Dual**: JSON (legacy) + SQLite (novo)
+- **Code Generation**: `json_serializable`, `freezed`, `build_runner`
+- **Padrões**: Repository Pattern, Manager Pattern, OperationResult
+- **Material Design 3**: Interface moderna e responsiva
 
 ### Funcionalidades
 
@@ -41,8 +47,9 @@ Aplicação Flutter com interface gráfica para gerenciamento de loja com as seg
 
 ## Requisitos
 
-- Flutter SDK 3.10 ou superior
+- Flutter SDK 3.27 ou superior
 - Dart SDK 3.10.1 ou superior (incluído no Flutter)
+- SQLite (incluído no Flutter desktop)
 
 ## Como Instalar o Flutter
 
@@ -73,7 +80,12 @@ cd system_loja
 flutter pub get
 ```
 
-3. Execute o aplicativo:
+3. Gere o código necessário (models, BLoC):
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+4. Execute o aplicativo:
 ```bash
 # Para executar no Chrome (Web)
 flutter run -d chrome
@@ -90,33 +102,62 @@ flutter run
 
 ## Estrutura de Dados
 
-Todos os dados são salvos em formato JSON no diretório `data/`:
+O projeto utiliza **persistência dual**:
+
+### Sistema Legacy (JSON)
 - `data/clientes.json` - Dados dos clientes
 - `data/produtos.json` - Dados dos produtos
 - `data/notas_fiscais.json` - Dados das notas fiscais
+- Gerenciadores em `lib/core/managers/`
+
+### Sistema Novo (SQLite)
+- Banco: `system_loja.db` (criado automaticamente)
+- Tabelas: `clientes`, `produtos`, `notas_fiscais`, `itens_nota_fiscal`
+- Managers em `lib/data/database/`
+- Suporte a transações e relacionamentos
 
 ## Estrutura do Projeto
 
 ```
 system_loja/
 ├── lib/
-│   ├── main.dart              # Ponto de entrada do aplicativo Flutter
+│   ├── main.dart              # Ponto de entrada com Material 3
+│   ├── core/
+│   │   ├── models/            # Modelos com @JsonSerializable
+│   │   │   ├── customer.dart  # Customer (Cliente)
+│   │   │   ├── produto.dart   # Produto
+│   │   │   └── nota_fiscal.dart
+│   │   ├── managers/          # Managers JSON (legacy)
+│   │   │   ├── cliente_manager.dart
+│   │   │   ├── produto_manager.dart
+│   │   │   └── nota_fiscal_manager.dart
+│   │   └── utils/
+│   │       ├── command_result.dart     # OperationResult pattern
+│   │       └── string_extensions.dart  # File name safety
+│   ├── data/
+│   │   ├── database/          # SQL Managers (novo)
+│   │   │   ├── database_helper.dart
+│   │   │   ├── cliente_sql_manager.dart
+│   │   │   ├── produto_sql_manager.dart
+│   │   │   └── nota_fiscal_sql_manager.dart
+│   │   ├── cache/             # Sistema de cache
+│   │   │   └── cache_manager.dart
+│   │   └── files_system/      # File operations
+│   │       └── file_system_helper.dart
 │   ├── screens/
-│   │   ├── home_screen.dart           # Tela inicial com menu
-│   │   ├── cliente_screen.dart        # Tela de cadastro de clientes
-│   │   ├── produto_screen.dart        # Tela de cadastro de produtos
-│   │   └── nota_fiscal_screen.dart    # Tela de cadastro de notas fiscais
-│   ├── models/
-│   │   ├── cliente.dart       # Modelo de dados Cliente
-│   │   ├── produto.dart       # Modelo de dados Produto
-│   │   └── nota_fiscal.dart   # Modelo de dados Nota Fiscal
-│   ├── managers/
-│   │   ├── cliente_manager.dart      # Gerenciador de clientes
-│   │   ├── produto_manager.dart      # Gerenciador de produtos
-│   │   └── nota_fiscal_manager.dart  # Gerenciador de notas fiscais
+│   │   ├── home_screen.dart
+│   │   ├── customer/
+│   │   │   ├── customer_view.dart
+│   │   │   └── bloc/          # BLoC com freezed
+│   │   │       ├── customer_bloc.dart
+│   │   │       ├── customer_bloc_event.dart
+│   │   │       └── customer_bloc_state.dart
+│   │   ├── produto_screen.dart
+│   │   └── nota_fiscal_screen.dart
 │   └── utils/
-│       └── input_helper.dart  # Helper para entrada de dados (CLI legacy)
-├── data/                      # Diretório para arquivos JSON
+│       └── input_helper.dart  # CLI legacy
+├── test/                      # Testes unitários e integração
+├── data/                      # Arquivos JSON (legacy)
 ├── pubspec.yaml
 └── README.md
 ```
@@ -148,10 +189,73 @@ system_loja/
 
 ## Tecnologias
 
+### Core
 - **Flutter 3.27**: Framework de UI multiplataforma
-- **Dart 3.10.1**: Linguagem de programação
-- **Material Design 3**: Sistema de design
-- **JSON**: Formato de persistência de dados
+- **Dart 3.10.1**: Linguagem com null safety e pattern matching
+- **Material Design 3**: Sistema de design moderno
+
+### State Management
+- **flutter_bloc**: Gerenciamento de estado reativo
+- **freezed**: Classes imutáveis para eventos/states
+
+### Persistência
+- **sqflite**: Banco de dados SQLite
+- **sqflite_common_ffi**: Suporte SQLite para desktop
+- **json_serializable**: Serialização automática JSON
+- **synchronized**: Controle de concorrência para JSON
+
+### Utilities
+- **path_provider**: Acesso a diretórios da aplicação
+- **path**: Manipulação de caminhos de arquivos
+- **async**: AsyncMemoizer para inicialização única
+
+## 🏗️ Arquitetura
+
+### Padrões de Design
+
+1. **BLoC Pattern**: Separação clara entre UI e lógica de negócio
+2. **Repository Pattern**: Abstração da camada de dados (SQL managers)
+3. **Manager Pattern**: Gerenciamento de dados JSON (legacy)
+4. **OperationResult Pattern**: Tratamento type-safe de erros
+5. **Mixin Pattern**: Reutilização de código (FileSystemManager)
+
+### Code Generation
+
+O projeto usa **build_runner** para gerar código automaticamente:
+
+```bash
+# Após modificar models ou BLoC
+dart run build_runner build --delete-conflicting-outputs
+```
+
+Gera:
+- `.g.dart` - Serialização JSON (@JsonSerializable)
+- `.freezed.dart` - Classes imutáveis (@freezed)
+
+### Tratamento de Erros
+
+```dart
+OperationResult<Cliente, String> resultado = await manager.salvar(cliente);
+
+if (resultado.isSuccessful) {
+  final cliente = resultado.asSuccess;
+  print('Salvo: ${cliente.name}');
+} else {
+  final erro = resultado.asError;
+  print('Erro: $erro');
+}
+```
+
+### File Name Safety
+
+Todos os arquivos salvos usam `toSafeFileName()` para garantir compatibilidade cross-platform:
+
+```dart
+import 'package:system_loja/core/utils/string_extensions.dart';
+
+final safeFileName = 'Cliente #123.json'.toSafeFileName();
+// Resultado: 'Cliente_123.json'
+```
 
 ---
 

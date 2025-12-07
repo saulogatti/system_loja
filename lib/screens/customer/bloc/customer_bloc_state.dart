@@ -7,9 +7,13 @@ class CustomerBlocState with _$CustomerBlocState {
   const factory CustomerBlocState.loading() = _Loading;
   
   const factory CustomerBlocState.customersLoaded({
-    required List<Customer> customers,
+    required Map<int, Customer> customers,
   }) = _CustomersLoaded;
 
   const factory CustomerBlocState.customerError({required String message}) =
       _CustomerError;
+      const factory CustomerBlocState.customerFound({
+    required Customer customer,
+  }) = _CustomerFound;
+  
 }

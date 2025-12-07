@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
 
   path_provider: ^2.1.4
-  synchronized: ^3.3.0+3
+  synchronized: ^3.4.0
   path: ^1.9.1
   json_annotation: ^4.9.0
   sqflite: ^2.3.3

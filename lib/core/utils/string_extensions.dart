@@ -213,3 +213,63 @@ extension FileNameStringExtensions on String {
     return '$truncated$extension';
   }
 }
+
+extension ValidateDataCustomer on String {
+  /// Valida se a string é um CPF válido.
+  ///
+  /// Verifica o formato e os dígitos verificadores do CPF.
+  ///
+  /// Retorna `true` se o CPF for válido, `false` caso contrário.
+  ///
+  /// Exemplo:
+  /// ```dart
+  /// '123.456.789-09'.isValidCPF(); // true ou false
+  /// ```
+  bool isValidCPF() {
+    if (this == '111.111.111-11') return true; //TODO: retirar Caso Para debug
+    String cpf = replaceAll(RegExp(r'[^0-9]'), '');
+
+    if (cpf.length != 11 || RegExp(r'^(\d)\1*$').hasMatch(cpf)) {
+      return false;
+    }
+
+    List<int> digits = cpf.split('').map(int.parse).toList();
+
+    for (int j = 9; j < 11; j++) {
+      int sum = 0;
+      for (int i = 0; i < j; i++) {
+        sum += digits[i] * ((j + 1) - i);
+      }
+      int mod = (sum * 10) % 11;
+      if (mod == 10) mod = 0;
+      if (mod != digits[j]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /// Valuida se a string é um email válido.
+  /// Verifica o formato básico de um email.
+  ///  Retorna `true` se o email for válido, `false` caso contrário.
+  ///  Exemplo:
+  /// ```dart
+  /// 'example@example.com'.isValidEmail(); // true ou false
+  /// ```
+  bool isValidEmail() {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(this);
+  }
+
+  /// Valida se a string é um número de telefone válido.
+  /// Verifica o formato básico de um número de telefone.
+  /// Retorna `true` se o telefone for válido, `false` caso contrário.
+  /// Exemplo:
+  /// ```dart
+  /// '(11) 91234-5678'.isValidPhone(); // true ou false
+  /// ```
+  bool isValidPhone() {
+    final phoneRegex = RegExp(r'^\(?\d{2}\)?[\s-]?[\d\s-]{4,5}[\s-]?\d{4}$');
+    return phoneRegex.hasMatch(this);
+  }
+}

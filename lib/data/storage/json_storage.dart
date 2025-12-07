@@ -16,55 +16,54 @@ class JsonDataStorage extends BaseDataStorage
   static const int _maxFileNameLength = 200;
   static const Duration _timeOutMilliseconds = Duration(milliseconds: 5000);
   @override
-  Future<bool> delete(int id) async {
+  Future<OperationResult<bool, String>> delete(int id) async {
     try {
-      return await getLock().synchronized<bool>(() async {
+      return await getLock().synchronized<OperationResult<bool, String>>(() async {
         // Sincroniza acesso ao arquivo
 
         final fileName = _fileNameId(id);
-        return await deleteFile(fileName);
+        final result = await deleteFile(fileName);
+        if (result) {
+          return OperationResult.success(true);
+        } else {
+          return OperationResult.failure('Falha ao deletar arquivo com ID $id');
+        }
+
       }, timeout: _timeOutMilliseconds);
     } catch (e, stackTrace) {
       logError('Erro ao deletar arquivo com ID $id: $e', stackTrace);
-      return false;
+      return OperationResult.failure('Erro ao deletar arquivo com ID $id: $e');
     }
   }
 
   @override
-  Future<OperationResult<Map<String, dynamic>, String>> fetchById(
-    int id,
-  ) async {
+  Future<OperationResult<PersistentDataStore, String>> fetchById(int id) async {
     try {
       final fileName = _fileNameId(id);
       final result = await fetchDataFromFile(fileName);
-
-      if (result.isSuccessful) {
-        final content = result.asSuccess;
-        try {
-          final data = jsonDecode(content) as Map<String, dynamic>;
+      switch (result) {
+        case OperationSuccess(result: final content):
+          final data = _objectFromJson(content);
           return OperationResult.success(data);
-        } catch (e) {
-          return OperationResult.failure('Erro ao decodificar JSON: $e');
-        }
-      } else {
-        return OperationResult.failure(result.asError);
+
+        case OperationError(error: final errorMessage):
+          return OperationResult.failure(errorMessage);
       }
-    } catch (e, stackTrace) {
-      logError('Erro ao buscar objeto com ID $id: $e', stackTrace);
-      return OperationResult.failure('Erro ao buscar objeto: $e');
+    } catch (e) {
+      return OperationResult.failure('Erro ao buscar arquivo com ID $id: $e');
     }
   }
 
   @override
-  Future<OperationResult<List<Map<String, dynamic>>, String>> loadAll() async {
+  Future<OperationResult<List<PersistentDataStore>, String>> loadAll() async {
     OperationResult<List<String>, String> resultado = await fetchAllDataFiles();
     switch (resultado) {
       case OperationSuccess(result: final fileContents):
-        final allData = <Map<String, dynamic>>[];
+        final allData = <PersistentDataStore>[];
         for (var content in fileContents) {
           try {
-            final data = jsonDecode(content) as Map<String, dynamic>;
-            allData.add(data);
+            PersistentDataStore persistent = _objectFromJson(content);
+            allData.add(persistent);
           } catch (e) {
             logError(
               'Erro ao decodificar JSON durante loadAll: $e',
@@ -84,19 +83,15 @@ class JsonDataStorage extends BaseDataStorage
   }
 
   @override
-  Future<bool> save(Map<String, dynamic> object) async {
+  Future<bool> save(PersistentDataStore object) async {
     try {
-      if (!object.containsKey('id')) {
-        logError('Objeto sem ID não pode ser salvo', StackTrace.current);
-        return false;
-      }
-
-      final id = object['id'] as int;
+      final id = object.id;
       final fileName = _fileNameId(id);
 
       // Codifica com indentação para legibilidade
-      final jsonString = const JsonEncoder.withIndent('  ').convert(object);
-
+      final jsonString = const JsonEncoder.withIndent(
+        '  ',
+      ).convert(object.data);
       return await saveData(fileName, jsonString);
     } catch (e, stackTrace) {
       logError('Erro ao salvar objeto: $e', stackTrace);
@@ -113,5 +108,11 @@ class JsonDataStorage extends BaseDataStorage
   String _fileNameId(int id) {
     final baseName = '$_fileNameMask$id.json';
     return baseName.toSafeFileName(maxLength: _maxFileNameLength);
+  }
+
+  PersistentDataStore _objectFromJson(String content) {
+    final data = jsonDecode(content) as Map<String, dynamic>;
+    final persistent = PersistentDataStore.fromJson(data);
+    return persistent;
   }
 }
