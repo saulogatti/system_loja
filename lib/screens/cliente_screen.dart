@@ -12,6 +12,9 @@ class ClienteScreen extends StatefulWidget {
 }
 
 class _ClienteScreenState extends State<ClienteScreen> {
+  /// Regex estático para remover caracteres não numéricos
+  static final _digitsOnlyRegex = RegExp(r'[^\d]');
+  
   final ClienteManager _manager = ClienteManager();
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
@@ -149,7 +152,7 @@ class _ClienteScreenState extends State<ClienteScreen> {
                               : null,
                         ),
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s.-]')),
+                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
                         ],
                         onChanged: (value) {
                           setState(() {
@@ -283,11 +286,11 @@ class _ClienteScreenState extends State<ClienteScreen> {
     }
 
     final termo = _termoBusca.toLowerCase();
-    final termoSemFormatacao = termo.replaceAll(RegExp(r'[^\d]'), '');
+    final termoSemFormatacao = termo.replaceAll(_digitsOnlyRegex, '');
 
     return _manager.clientes.where((cliente) {
       final nomeMatch = cliente.nome.toLowerCase().contains(termo);
-      final cpfSemFormatacao = cliente.cpf.replaceAll(RegExp(r'[^\d]'), '');
+      final cpfSemFormatacao = cliente.cpf.replaceAll(_digitsOnlyRegex, '');
       final cpfMatch = cpfSemFormatacao.contains(termoSemFormatacao);
       
       return nomeMatch || cpfMatch;

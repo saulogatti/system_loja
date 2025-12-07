@@ -21,10 +21,13 @@ void main() {
       await tester.pumpAndSettle();
 
       // Assert - campo de busca não deve aparecer se não há clientes
-      expect(find.byType(TextField).where((widget) {
-        final textField = widget as TextField;
-        return textField.decoration?.labelText == 'Buscar cliente';
-      }), findsNothing);
+      final searchFields = find.byWidgetPredicate((widget) {
+        if (widget is TextField) {
+          return widget.decoration?.labelText == 'Buscar cliente';
+        }
+        return false;
+      });
+      expect(searchFields, findsNothing);
     });
 
     testWidgets('deve exibir mensagem quando nenhum cliente cadastrado', (WidgetTester tester) async {
