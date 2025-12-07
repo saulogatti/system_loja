@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/screens/usuario_screen.dart';
 
-import 'cliente/cliente_screen.dart';
+import 'customer/customer_view.dart';
 import 'products/product_screen.dart';
 import 'sales/sales_screen.dart';
 
@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                 title: 'Cadastro de Cliente',
                 icon: Icons.person,
                 color: Colors.blue,
-                onTap: () => _navigateToScreen(context, const ClienteScreen()),
+                onTap: () => _navigateToScreen(context, const CustomerView()),
               ),
               const SizedBox(height: 16),
               _buildMenuCard(

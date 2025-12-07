@@ -5,7 +5,7 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 import 'package:system_loja/data/cache/models/cacheable.dart';
-import 'package:system_loja/data/files_system/file_system_helper.dart';
+import 'package:system_loja/data/files_utility/file_storage_utility.dart';
 
 /// Tipo de função factory para criar instâncias de [Cacheable] a partir de JSON.
 ///
@@ -33,7 +33,7 @@ typedef CacheableFactory<T extends Cacheable> =
 /// // Recuperar um objeto
 /// final objeto = await cache.get<MinhaClasse>('chave', MinhaClasse.fromJson);
 /// ```
-class CacheManager with FileSystemManager, LoggerClassMixin {
+class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// Instância única do [CacheManager].
   static final CacheManager instance = CacheManager._privateConstructor();
 
@@ -44,7 +44,7 @@ class CacheManager with FileSystemManager, LoggerClassMixin {
 
   /// Construtor privado para implementar o padrão singleton.
   ///
-  /// Inicializa o sistema de arquivos através do [FileSystemManager]
+  /// Inicializa o sistema de arquivos através do [FileStorageUtility]
   /// chamando [_initializeDirectory] para preparar o ambiente de cache.
   CacheManager._privateConstructor();
 
@@ -55,7 +55,7 @@ class CacheManager with FileSystemManager, LoggerClassMixin {
   /// no diretório de cache e os remove.
   ///
   /// **Nota**: Implementação atual usa acesso direto ao diretório e
-  /// deve ser refatorada para usar [FileSystemManager].
+  /// deve ser refatorada para usar [FileStorageUtility].
   ///
   /// Lança [CacheWriteException] se ocorrer um erro ao limpar.
   ///
@@ -334,6 +334,16 @@ class CacheManager with FileSystemManager, LoggerClassMixin {
     }
   }
 
+  /// Retorna o nome do diretório do sistema de cache.
+  ///
+  /// Este método sobrescreve o comportamento do [FileStorageUtility]
+  /// para definir o nome do diretório onde os arquivos de cache serão
+  /// armazenados dentro do diretório de suporte da aplicação.
+  @override
+  String retrieveDirectoryName() {
+    return 'system_loja_cache';
+  }
+
   /// Armazena um objeto [Cacheable] no cache.
   ///
   /// O objeto será persistido tanto em memória quanto em arquivo.
@@ -404,16 +414,6 @@ class CacheManager with FileSystemManager, LoggerClassMixin {
     }
   }
 
-  /// Retorna o nome do diretório do sistema de cache.
-  ///
-  /// Este método sobrescreve o comportamento do [FileSystemManager]
-  /// para definir o nome do diretório onde os arquivos de cache serão
-  /// armazenados dentro do diretório de suporte da aplicação.
-  @override
-  String systemNameDirectory() {
-    return 'system_loja_cache';
-  }
-
   /// Encontra o nome do tipo para operações de cache.
   ///
   /// Usa o tipo genérico [T] para obter o nome da classe através de
@@ -429,7 +429,7 @@ class CacheManager with FileSystemManager, LoggerClassMixin {
   /// Retorna o caminho relativo do arquivo de cache para um tipo específico.
   ///
   /// [typeName] é o nome do tipo de objeto (geralmente o nome da classe).
-  /// O caminho é relativo ao diretório de cache gerenciado pelo [FileSystemManager].
+  /// O caminho é relativo ao diretório de cache gerenciado pelo [FileStorageUtility].
   ///
   /// Retorna um caminho no formato: `${typeName.toLowerCase()}.json`
   String _getCacheFilePath(String typeName) {
@@ -475,7 +475,10 @@ class CacheManager with FileSystemManager, LoggerClassMixin {
     try {
       String filePath = _getCacheFilePath(type);
 
-      final isSaveSuccessful = await saveData(filePath, _memoryCache[type]!.toString());
+      final isSaveSuccessful = await saveData(
+        filePath,
+        _memoryCache[type]!.toString(),
+      );
       if (!isSaveSuccessful) {
         throw CacheWriteException(
           'Falha ao salvar dados no arquivo de cache: $filePath',

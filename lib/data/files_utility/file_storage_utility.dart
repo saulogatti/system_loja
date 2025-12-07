@@ -15,7 +15,7 @@ import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 /// segura do sistema de arquivos.
 ///
 /// Classes que utilizam este mixin devem implementar o método `logError`.
-mixin FileSystemManager {
+mixin FileStorageUtility {
   /// Memoizador para garantir inicialização única do diretório de cache.
   ///
   /// Armazena o resultado da primeira chamada a [_initializeDirectory] e
@@ -67,6 +67,28 @@ mixin FileSystemManager {
     }
   }
 
+  @protected
+  Future<OperationResult<List<String>, String>> fetchAllDataFiles() async {
+    try {
+      final cacheDir = Directory(await _initializeDirectory());
+      if (!await cacheDir.exists()) {
+        return OperationResult.success([]);
+      }
+
+      final availableData = <String>[];
+      await for (var entity in cacheDir.list()) {
+        if (entity is File) {
+          final data = await entity.readAsString();
+          availableData.add(data);
+        }
+      }
+      return OperationResult.success(availableData);
+    } catch (e, stackTrace) {
+      logError('Erro ao listar arquivos no diretório de cache: $e', stackTrace);
+      return OperationResult.failure('Erro ao listar arquivos: $e');
+    }
+  }
+
   /// Carrega o conteúdo de um arquivo de forma assíncrona.
   ///
   /// Lê o conteúdo do arquivo localizado em [fileName] relativo ao diretório
@@ -114,6 +136,20 @@ mixin FileSystemManager {
   /// este mixin, tipicamente usando `LoggerClassMixin` ou similar.
   void logError(String message, StackTrace stackTrace);
 
+  /// Retorna o nome do diretório de cache específico da aplicação.
+  ///
+  /// Este método abstrato deve ser implementado pelas classes que usam
+  /// este mixin para definir o nome do diretório onde os arquivos serão
+  /// armazenados dentro do diretório de suporte da aplicação.
+  ///
+  /// Exemplo de implementação:
+  /// ```dart
+  /// @override
+  /// String systemNameDirectory() => 'system_loja_cache';
+  /// ```
+  @protected
+  String retrieveDirectoryName();
+
   /// Salva dados em um arquivo de forma assíncrona.
   ///
   /// Persiste [data] no arquivo especificado em [path] relativo ao diretório
@@ -154,20 +190,6 @@ mixin FileSystemManager {
     }
   }
 
-  /// Retorna o nome do diretório de cache específico da aplicação.
-  ///
-  /// Este método abstrato deve ser implementado pelas classes que usam
-  /// este mixin para definir o nome do diretório onde os arquivos serão
-  /// armazenados dentro do diretório de suporte da aplicação.
-  ///
-  /// Exemplo de implementação:
-  /// ```dart
-  /// @override
-  /// String systemNameDirectory() => 'system_loja_cache';
-  /// ```
-  @protected
-  String systemNameDirectory();
-
   /// Inicializa o cache de forma assíncrona.
   ///
   /// Este método deve ser chamado antes de qualquer operação de cache.
@@ -181,7 +203,7 @@ mixin FileSystemManager {
     return await _asyncAccess.runOnce(() async {
       try {
         final directory = await getApplicationSupportDirectory();
-        String cacheDirectory = p.join(directory.path, systemNameDirectory());
+        String cacheDirectory = p.join(directory.path, retrieveDirectoryName());
         final cacheDir = Directory(cacheDirectory);
 
         if (!await cacheDir.exists()) {

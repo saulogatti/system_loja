@@ -4,26 +4,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/models/customer.dart';
 import 'bloc/customer_bloc.dart';
 
-class ClienteScreen extends StatelessWidget {
-  const ClienteScreen({super.key});
+class CustomerView extends StatelessWidget {
+  const CustomerView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CustomerBloc()..add(const CustomerBlocEvent.loadCustomers()),
-      child: const _ClienteScreenContent(),
+      create: (context) =>
+          CustomerBloc()..add(const CustomerBlocEvent.loadCustomers()),
+      child: const _CustomerDetailView(),
     );
   }
 }
 
-class _ClienteScreenContent extends StatefulWidget {
-  const _ClienteScreenContent();
+class _CustomerDetailView extends StatefulWidget {
+  const _CustomerDetailView();
 
   @override
-  State<_ClienteScreenContent> createState() => _ClienteScreenContentState();
+  State<_CustomerDetailView> createState() => _CustomerDetailViewState();
 }
 
-class _ClienteScreenContentState extends State<_ClienteScreenContent> {
+class _CustomerDetailViewState extends State<_CustomerDetailView> {
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _cpfController = TextEditingController();
@@ -54,10 +55,7 @@ class _ClienteScreenContentState extends State<_ClienteScreenContent> {
           customerError: (message) {
             _isAdding = false;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: Colors.red,
-              ),
+              SnackBar(content: Text(message), backgroundColor: Colors.red),
             );
           },
         );
@@ -172,7 +170,10 @@ class _ClienteScreenContentState extends State<_ClienteScreenContent> {
                                 padding: EdgeInsets.all(32.0),
                                 child: Text(
                                   'Carregando clientes...',
-                                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
                             ),
@@ -197,7 +198,7 @@ class _ClienteScreenContentState extends State<_ClienteScreenContent> {
                                   ),
                                 );
                               }
-                              
+
                               return ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -243,7 +244,10 @@ class _ClienteScreenContentState extends State<_ClienteScreenContent> {
                                 padding: const EdgeInsets.all(32.0),
                                 child: Text(
                                   'Erro: $message',
-                                  style: const TextStyle(fontSize: 16, color: Colors.red),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.red,
+                                  ),
                                 ),
                               ),
                             ),
@@ -276,16 +280,16 @@ class _ClienteScreenContentState extends State<_ClienteScreenContent> {
       setState(() {
         _isAdding = true;
       });
-      
+
       context.read<CustomerBloc>().add(
-            CustomerBlocEvent.registerCustomer(
-              name: _nomeController.text.trim(),
-              cpf: _cpfController.text.trim(),
-              email: _emailController.text.trim(),
-              phone: _telefoneController.text.trim(),
-              address: _enderecoController.text.trim(),
-            ),
-          );
+        CustomerBlocEvent.registerCustomer(
+          name: _nomeController.text.trim(),
+          cpf: _cpfController.text.trim(),
+          email: _emailController.text.trim(),
+          phone: _telefoneController.text.trim(),
+          address: _enderecoController.text.trim(),
+        ),
+      );
 
       _formKey.currentState!.reset();
       _nomeController.clear();

@@ -13,14 +13,14 @@ System Loja is a Flutter multiplatform store management app (Windows, macOS, iOS
 
 ## Critical Patterns
 
-### 1. Resultado Pattern for Error Handling
-Use `Resultado<T, E>` sealed class (not `Result`) for type-safe error handling:
+### 1. OperationResult Pattern for Error Handling
+Use `OperationResult<T, E>` sealed class (not `Result`) for type-safe error handling:
 ```dart
-Resultado<Cliente, ClienteException> resultado = await manager.salvar(cliente);
+OperationResult<Cliente, ClienteException> resultado = await manager.salvar(cliente);
 switch (resultado) {
-  case Sucesso(valor: final cliente):
+  case OperationSuccess(value: final cliente):
     // Handle success
-  case Erro(erro: final erro):
+  case OperationFailure(error: final erro):
     // Handle error with erro.message
 }
 ```
@@ -81,18 +81,31 @@ sealed class ClienteBlocState with _$ClienteBlocState {
 }
 ```
 
-### 6. FileSystemManager Mixin
-For JSON persistence with automatic directory setup:
+### 6. FileStorageUtility Mixin
+For safe file storage with automatic directory setup:
 ```dart
-mixin FileSystemManager {
-  AsyncMemoizer<String> memoizer = AsyncMemoizer<String>();
+mixin FileStorageUtility {
+  AsyncMemoizer<String> _memoizer = AsyncMemoizer<String>();
   
-  Future<String> setupFileSystem() async { /* creates cache dir */ }
-  Future<T> loadJsonFromFile<T>(String path) async { /* loads JSON */ }
-  Future<bool> saveJsonToFile(String path, Object data) async { /* saves JSON */ }
+  Future<String> _initializeDirectory() async { /* creates cache dir */ }
+  Future<OperationResult<String, String>> fetchDataFromFile(String path) async { /* loads file */ }
+  Future<bool> saveData(String path, Object data) async { /* saves data in file */ }
 }
 ```
 
+### 7. OperationResult use
+
+For file operations, use `OperationResult<T, E>`:
+
+```dart
+final resultado = await fetchDataFromFile('data.json');
+switch (resultado) {
+  case OperationSuccess(value: final data):
+    // Use data
+  case OperationFailure(error: final errorMsg):
+    // Handle error
+}
+```
 ## Development Workflows
 
 ### Adding New Feature with BLoC
@@ -119,6 +132,27 @@ flutter run -d windows           # Windows
 - **JSON files**: Check `data/` directory (created automatically)
 - **SQLite**: Use `DatabaseHelper.resetInstance()` in tests
 - **Cache**: Check app support directory via `CacheManager.instance`
+
+### 7. File Name Safety
+Use `FileNameStringExtensions` for safe file naming:
+```dart
+import 'package:system_loja/core/utils/string_extensions.dart';
+
+// Sanitização completa (recomendado)
+final safeFileName = 'Cliente 123 - Pedido#456.json'.toSafeFileName();
+
+// Validação
+if (fileName.isValidFileName()) {
+  // Safe to use
+}
+
+// Métodos individuais disponíveis:
+fileName.sanitizeFileName()      // Remove caracteres inválidos
+fileName.truncateFileName(200)   // Limita comprimento
+fileName.toAsciiFileName()       // Remove acentos
+fileName.isReservedFileName()    // Verifica nomes reservados do Windows
+fileName.makeUniqueFileName()    // Adiciona timestamp
+```
 
 ## Code Style Requirements
 
@@ -150,6 +184,7 @@ class ClienteSqlManager {
 - `sqflite` / `sqflite_common_ffi`: SQLite database
 - `synchronized`: File locking for JSON managers
 - `path_provider`: App directories
+- `path`: File path manipulation
 - `log_custom_printer`: Custom logging (via git dependency)
 
 ## Known Gotchas
@@ -160,3 +195,4 @@ class ClienteSqlManager {
 4. **File Locking**: JSON managers use both in-memory `Lock` (from `synchronized`) and file-system locks (`RandomAccessFile.lock`) for multi-process safety.
 5. **SQL Tests**: Use `sqfliteFfiInit()` and `databaseFactory = databaseFactoryFfi` in test setup for desktop testing.
 6. **CacheManager**: Singleton with `FileSystemManager` mixin, uses `Cacheable` interface for objects. Call `setupFileSystem()` before use.
+7. **File Names**: Always use `toSafeFileName()` from `FileNameStringExtensions` when saving files to ensure cross-platform compatibility (handles invalid characters, length limits, reserved names, accents).
