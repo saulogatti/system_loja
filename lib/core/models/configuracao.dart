@@ -1,0 +1,150 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:json_annotation/json_annotation.dart';
+
+part 'configuracao.g.dart';
+
+/// Modelo de dados para Configurações do Sistema
+///
+/// Armazena preferências do usuário como notificações, temas,
+/// opções de backup, segurança e tipo de banco de dados.
+@JsonSerializable(explicitToJson: true)
+class Configuracao {
+  // Preferências de Notificação
+  @JsonKey(name: 'notificacoes_ativadas')
+  final bool notificacoesAtivadas;
+  
+  @JsonKey(name: 'notificar_vendas')
+  final bool notificarVendas;
+  
+  @JsonKey(name: 'notificar_estoque_baixo')
+  final bool notificarEstoqueBaixo;
+  
+  @JsonKey(name: 'limite_estoque_baixo')
+  final int limiteEstoqueBaixo;
+
+  // Preferências de Tema
+  @JsonKey(name: 'tema_escuro')
+  final bool temaEscuro;
+  
+  @JsonKey(name: 'cor_primaria')
+  final String corPrimaria;
+
+  // Opções de Backup
+  @JsonKey(name: 'backup_automatico')
+  final bool backupAutomatico;
+  
+  @JsonKey(name: 'frequencia_backup')
+  final String frequenciaBackup; // 'diario', 'semanal', 'mensal'
+  
+  @JsonKey(name: 'local_backup')
+  final String localBackup;
+
+  // Opções de Limpeza de Dados
+  @JsonKey(name: 'limpeza_automatica')
+  final bool limpezaAutomatica;
+  
+  @JsonKey(name: 'dias_manter_logs')
+  final int diasManterLogs;
+
+  // Opções de Segurança
+  @JsonKey(name: 'exigir_senha')
+  final bool exigirSenha;
+  
+  @JsonKey(name: 'tempo_bloqueio_minutos')
+  final int tempoBloqueioMinutos;
+  
+  @JsonKey(name: 'permitir_multiplos_usuarios')
+  final bool permitirMultiplosUsuarios;
+
+  // Tipo de Banco de Dados
+  @JsonKey(name: 'tipo_banco_dados')
+  final String tipoBancoDados; // 'json' ou 'sql'
+
+  Configuracao({
+    this.notificacoesAtivadas = true,
+    this.notificarVendas = true,
+    this.notificarEstoqueBaixo = true,
+    this.limiteEstoqueBaixo = 10,
+    this.temaEscuro = false,
+    this.corPrimaria = '#2196F3', // Blue
+    this.backupAutomatico = false,
+    this.frequenciaBackup = 'semanal',
+    this.localBackup = 'data/backups',
+    this.limpezaAutomatica = false,
+    this.diasManterLogs = 90,
+    this.exigirSenha = false,
+    this.tempoBloqueioMinutos = 15,
+    this.permitirMultiplosUsuarios = false,
+    this.tipoBancoDados = 'json',
+  });
+
+  /// Cria um objeto de configuração padrão
+  factory Configuracao.padrao() => Configuracao();
+
+  /// Cria um objeto a partir de JSON
+  factory Configuracao.fromJson(Map<String, dynamic> json) =>
+      _$ConfiguracaoFromJson(json);
+
+  /// Converte o objeto para JSON
+  Map<String, dynamic> toJson() => _$ConfiguracaoToJson(this);
+
+  /// Cria uma cópia da configuração com alterações opcionais
+  Configuracao copyWith({
+    bool? notificacoesAtivadas,
+    bool? notificarVendas,
+    bool? notificarEstoqueBaixo,
+    int? limiteEstoqueBaixo,
+    bool? temaEscuro,
+    String? corPrimaria,
+    bool? backupAutomatico,
+    String? frequenciaBackup,
+    String? localBackup,
+    bool? limpezaAutomatica,
+    int? diasManterLogs,
+    bool? exigirSenha,
+    int? tempoBloqueioMinutos,
+    bool? permitirMultiplosUsuarios,
+    String? tipoBancoDados,
+  }) {
+    return Configuracao(
+      notificacoesAtivadas: notificacoesAtivadas ?? this.notificacoesAtivadas,
+      notificarVendas: notificarVendas ?? this.notificarVendas,
+      notificarEstoqueBaixo:
+          notificarEstoqueBaixo ?? this.notificarEstoqueBaixo,
+      limiteEstoqueBaixo: limiteEstoqueBaixo ?? this.limiteEstoqueBaixo,
+      temaEscuro: temaEscuro ?? this.temaEscuro,
+      corPrimaria: corPrimaria ?? this.corPrimaria,
+      backupAutomatico: backupAutomatico ?? this.backupAutomatico,
+      frequenciaBackup: frequenciaBackup ?? this.frequenciaBackup,
+      localBackup: localBackup ?? this.localBackup,
+      limpezaAutomatica: limpezaAutomatica ?? this.limpezaAutomatica,
+      diasManterLogs: diasManterLogs ?? this.diasManterLogs,
+      exigirSenha: exigirSenha ?? this.exigirSenha,
+      tempoBloqueioMinutos: tempoBloqueioMinutos ?? this.tempoBloqueioMinutos,
+      permitirMultiplosUsuarios:
+          permitirMultiplosUsuarios ?? this.permitirMultiplosUsuarios,
+      tipoBancoDados: tipoBancoDados ?? this.tipoBancoDados,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Configuracao('
+        'notificacoesAtivadas: $notificacoesAtivadas, '
+        'notificarVendas: $notificarVendas, '
+        'notificarEstoqueBaixo: $notificarEstoqueBaixo, '
+        'limiteEstoqueBaixo: $limiteEstoqueBaixo, '
+        'temaEscuro: $temaEscuro, '
+        'corPrimaria: $corPrimaria, '
+        'backupAutomatico: $backupAutomatico, '
+        'frequenciaBackup: $frequenciaBackup, '
+        'localBackup: $localBackup, '
+        'limpezaAutomatica: $limpezaAutomatica, '
+        'diasManterLogs: $diasManterLogs, '
+        'exigirSenha: $exigirSenha, '
+        'tempoBloqueioMinutos: $tempoBloqueioMinutos, '
+        'permitirMultiplosUsuarios: $permitirMultiplosUsuarios, '
+        'tipoBancoDados: $tipoBancoDados'
+        ')';
+  }
+}

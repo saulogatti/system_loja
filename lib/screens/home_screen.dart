@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'cliente_screen.dart';
+import 'configuracoes_screen.dart';
 import 'nota_fiscal_screen.dart';
 import 'produto_screen.dart';
 import 'usuario_screen.dart';
@@ -72,6 +73,16 @@ class HomeScreen extends StatelessWidget {
               color: Colors.purple,
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarioScreen()));
+              },
+            ),
+            const SizedBox(height: 16),
+            _buildMenuCard(
+              context,
+              title: 'Configurações do Sistema',
+              icon: Icons.settings,
+              color: Colors.teal,
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ConfiguracoesScreen()));
               },
             ),
           ],
