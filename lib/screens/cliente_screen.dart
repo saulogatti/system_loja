@@ -201,26 +201,7 @@ class _ClienteScreenState extends State<ClienteScreen> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: _manager.clientes.length,
                                   itemBuilder: (context, index) {
-                                    final cliente = _manager.clientes[index];
-                                    return Card(
-                                      margin: const EdgeInsets.only(bottom: 12),
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.blue,
-                                          child: Text(
-                                            cliente.nome[0].toUpperCase(),
-                                            style: const TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                        title: Text(cliente.nome, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                        subtitle: Text('CPF: ${cliente.cpf}\n${cliente.email}'),
-                                        isThreeLine: true,
-                                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                                        onTap: () {
-                                          _mostrarDetalhesCliente(cliente);
-                                        },
-                                      ),
-                                    );
+                                    return _buildClientCard(_manager.clientes[index]);
                                   },
                                 ),
                               ],
@@ -232,26 +213,7 @@ class _ClienteScreenState extends State<ClienteScreen> {
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: clientesFiltrados.length,
                             itemBuilder: (context, index) {
-                              final cliente = clientesFiltrados[index];
-                              return Card(
-                                margin: const EdgeInsets.only(bottom: 12),
-                                child: ListTile(
-                                  leading: CircleAvatar(
-                                    backgroundColor: Colors.blue,
-                                    child: Text(
-                                      cliente.nome[0].toUpperCase(),
-                                      style: const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                  title: Text(cliente.nome, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  subtitle: Text('CPF: ${cliente.cpf}\n${cliente.email}'),
-                                  isThreeLine: true,
-                                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                                  onTap: () {
-                                    _mostrarDetalhesCliente(cliente);
-                                  },
-                                ),
-                              );
+                              return _buildClientCard(clientesFiltrados[index]);
                             },
                           );
                         },
@@ -340,6 +302,31 @@ class _ClienteScreenState extends State<ClienteScreen> {
       _enderecoController.clear();
       setState(() {});
     }
+  }
+
+  /// Constrói um card de cliente para exibição na lista
+  ///
+  /// [cliente] Cliente a ser exibido no card
+  Widget _buildClientCard(Cliente cliente) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue,
+          child: Text(
+            cliente.nome[0].toUpperCase(),
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        title: Text(cliente.nome, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text('CPF: ${cliente.cpf}\n${cliente.email}'),
+        isThreeLine: true,
+        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        onTap: () {
+          _mostrarDetalhesCliente(cliente);
+        },
+      ),
+    );
   }
 
   Widget _buildDetailRow(String label, String value) {

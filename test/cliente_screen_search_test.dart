@@ -8,6 +8,9 @@ import 'package:system_loja/screens/cliente_screen.dart';
 /// Valida que a busca funciona corretamente e que a lista completa
 /// permanece visível quando não há resultados.
 void main() {
+  /// Regex estático para remover caracteres não numéricos (matching da implementação)
+  static final digitsOnlyRegex = RegExp(r'[^\d]');
+  
   group('ClienteScreen - Testes de Busca', () {
     testWidgets('deve exibir campo de busca quando há clientes cadastrados', (WidgetTester tester) async {
       // Arrange
@@ -138,7 +141,7 @@ void main() {
       // Act - Simular busca por "123" (início do CPF)
       final termo = '123';
       final resultado = clientes.where((cliente) {
-        final cpfSemFormatacao = cliente.cpf.replaceAll(RegExp(r'[^\d]'), '');
+        final cpfSemFormatacao = cliente.cpf.replaceAll(digitsOnlyRegex, '');
         return cpfSemFormatacao.contains(termo);
       }).toList();
 
@@ -163,9 +166,9 @@ void main() {
 
       // Act - Simular busca com formatação
       final termo = '123.456';
-      final termoSemFormatacao = termo.replaceAll(RegExp(r'[^\d]'), '');
+      final termoSemFormatacao = termo.replaceAll(digitsOnlyRegex, '');
       final resultado = clientes.where((cliente) {
-        final cpfSemFormatacao = cliente.cpf.replaceAll(RegExp(r'[^\d]'), '');
+        final cpfSemFormatacao = cliente.cpf.replaceAll(digitsOnlyRegex, '');
         return cpfSemFormatacao.contains(termoSemFormatacao);
       }).toList();
 
@@ -191,7 +194,7 @@ void main() {
       final termo = 'inexistente';
       final resultado = clientes.where((cliente) {
         final nomeMatch = cliente.nome.toLowerCase().contains(termo.toLowerCase());
-        final cpfSemFormatacao = cliente.cpf.replaceAll(RegExp(r'[^\d]'), '');
+        final cpfSemFormatacao = cliente.cpf.replaceAll(digitsOnlyRegex, '');
         final cpfMatch = cpfSemFormatacao.contains(termo);
         return nomeMatch || cpfMatch;
       }).toList();
@@ -225,8 +228,8 @@ void main() {
       final termo = '';
       final resultado = termo.isEmpty ? clientes : clientes.where((cliente) {
         final nomeMatch = cliente.nome.toLowerCase().contains(termo.toLowerCase());
-        final cpfSemFormatacao = cliente.cpf.replaceAll(RegExp(r'[^\d]'), '');
-        final termoSemFormatacao = termo.replaceAll(RegExp(r'[^\d]'), '');
+        final cpfSemFormatacao = cliente.cpf.replaceAll(digitsOnlyRegex, '');
+        final termoSemFormatacao = termo.replaceAll(digitsOnlyRegex, '');
         final cpfMatch = cpfSemFormatacao.contains(termoSemFormatacao);
         return nomeMatch || cpfMatch;
       }).toList();
