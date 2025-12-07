@@ -23,68 +23,68 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Sistema de Gerenciamento de Loja'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Icon(
-              Icons.store,
-              size: 100,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(height: 40),
-            Text(
-              'Bem-vindo!',
-              style: Theme.of(
-                context,
-              ).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Selecione uma opção para continuar',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Icon(
+                Icons.store,
+                size: 100,
+                color: Theme.of(context).colorScheme.primary,
               ),
-              textAlign: TextAlign.center,
-            ),
-
-            // FIXME: Trocar os _buildMenuCard dentro de ListView para evitar overflow em telas pequenas
-            const SizedBox(height: 40),
-            _buildMenuCard(
-              context,
-              title: 'Cadastro de Cliente',
-              icon: Icons.person,
-              color: Colors.blue,
-              onTap: () => _navigateToScreen(context, const ClienteScreen()),
-            ),
-            const SizedBox(height: 16),
-            _buildMenuCard(
-              context,
-              title: 'Cadastro de Produto',
-              icon: Icons.inventory,
-              color: Colors.green,
-              onTap: () => _navigateToScreen(context, const ProdutoScreen()),
-            ),
-            const SizedBox(height: 16),
-            _buildMenuCard(
-              context,
-              title: 'Cadastro de Nota Fiscal',
-              icon: Icons.receipt_long,
-              color: Colors.orange,
-              onTap: () => _navigateToScreen(context, const NotaFiscalScreen()),
-            ),
-            const SizedBox(height: 16),
-            _buildMenuCard(
-              context,
-              title: 'Gestão de Usuários',
-              icon: Icons.people,
-              color: Colors.purple,
-              onTap: () => _navigateToScreen(context, const UsuarioScreen()),
-            ),
-          ],
+              const SizedBox(height: 40),
+              Text(
+                'Bem-vindo!',
+                style: Theme.of(
+                  context,
+                ).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Selecione uma opção para continuar',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 40),
+              _buildMenuCard(
+                context,
+                title: 'Cadastro de Cliente',
+                icon: Icons.person,
+                color: Colors.blue,
+                onTap: () => _navigateToScreen(context, const ClienteScreen()),
+              ),
+              const SizedBox(height: 16),
+              _buildMenuCard(
+                context,
+                title: 'Cadastro de Produto',
+                icon: Icons.inventory,
+                color: Colors.green,
+                onTap: () => _navigateToScreen(context, const ProdutoScreen()),
+              ),
+              const SizedBox(height: 16),
+              _buildMenuCard(
+                context,
+                title: 'Cadastro de Nota Fiscal',
+                icon: Icons.receipt_long,
+                color: Colors.orange,
+                onTap: () => _navigateToScreen(context, const NotaFiscalScreen()),
+              ),
+              const SizedBox(height: 16),
+              _buildMenuCard(
+                context,
+                title: 'Gestão de Usuários',
+                icon: Icons.people,
+                color: Colors.purple,
+                onTap: () => _navigateToScreen(context, const UsuarioScreen()),
+              ),
+            ],
+          ),
         ),
       ),
     );
