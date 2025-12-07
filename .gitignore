@@ -3,6 +3,7 @@
 .dart_tool/
 
 
+
 *.DS_Store
 # Large installation files
 *.deb

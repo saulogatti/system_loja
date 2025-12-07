@@ -101,20 +101,17 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                             });
                           },
                         ),
-                        helperText:
-                            'Mínimo 8 caracteres, com maiúscula, minúscula e número',
+                        helperText: 'Mínimo 8 caracteres, com maiúscula, minúscula e número',
                         helperMaxLines: 2,
                       ),
                       obscureText: !_senhaVisivel,
                       validator: (value) {
                         // Se está editando e senha está vazia, não valida
-                        if (_usuarioEditando != null &&
-                            (value == null || value.isEmpty)) {
+                        if (_usuarioEditando != null && (value == null || value.isEmpty)) {
                           return null;
                         }
                         // Se está criando novo usuário, senha é obrigatória
-                        if (_usuarioEditando == null &&
-                            (value == null || value.isEmpty)) {
+                        if (_usuarioEditando == null && (value == null || value.isEmpty)) {
                           return 'Senha é obrigatória';
                         }
                         // Valida força da senha

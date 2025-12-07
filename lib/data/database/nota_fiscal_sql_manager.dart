@@ -48,6 +48,55 @@ class NotaFiscalSqlManager {
     });
   }
 
+  /// Busca notas fiscais por período
+  ///
+  /// [dataInicio] Data inicial do período.
+  /// [dataFim] Data final do período.
+  /// Retorna uma lista de notas fiscais emitidas no período.
+  ///
+  /// Utiliza JOIN para buscar dados do cliente associado.
+  /// Otimizado para evitar N+1 queries buscando todos os itens de uma vez.
+  Future<List<NotaFiscal>> buscarPorPeriodo(
+    DateTime dataInicio,
+    DateTime dataFim,
+  ) async {
+    final db = await _database;
+
+      // Insere novos itens
+      for (final item in notaFiscal.itens) {
+        final Map<String, dynamic> dadosItem = item.toJson();
+        // Adiciona campos necessários para o banco
+        dadosItem['nota_fiscal_id'] = notaFiscal.id;
+        dadosItem['valor_total'] = item.valorTotal;
+  /// [clienteId] ID do cliente.
+  /// Retorna uma lista de notas fiscais do cliente especificado.
+  Future<List<NotaFiscal>> buscarPorCliente(int clienteId) async {
+    final db = await _database;
+
+    final List<Map<String, dynamic>> resultadoNotas = await db.query(
+      DatabaseConfig.tableNotasFiscais,
+      where: 'cliente_id = ?',
+      whereArgs: [clienteId],
+      orderBy: 'data_emissao DESC',
+    );
+
+    final List<NotaFiscal> notas = [];
+
+    for (final notaMap in resultadoNotas) {
+      final int notaId = notaMap['id'] as int;
+
+      final List<Map<String, dynamic>> resultadoItens = await db.query(
+        DatabaseConfig.tableItensNotaFiscal,
+        where: 'nota_fiscal_id = ?',
+        whereArgs: [notaId],
+      );
+
+      notas.add(_mapToNotaFiscal(notaMap, resultadoItens));
+    }
+
+    return notas;
+  }
+
   /// Busca notas fiscais por cliente
   ///
   /// [clienteId] ID do cliente.
