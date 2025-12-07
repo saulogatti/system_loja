@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
+import 'package:system_loja/screens/widgets/text_form_field_email.dart';
+import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
 import '../../core/models/customer.dart';
 import '../../core/utils/text_formatters.dart';
@@ -112,54 +115,25 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                       ),
                       const SizedBox(height: 16),
                       // Adicionar mascaras e a validacao esta no bloc para CPF
-                      TextFormField(
-                        controller: _cpfController,
-                        decoration: const InputDecoration(
-                          labelText: 'CPF *',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.badge),
-                        ),
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [CpfTextInputFormatter()],
-                        validator: (value) {
+                      TextFormFieldCpf(
+                        cpfController: _cpfController,
+                        enable: true,
+                        validatorOptions: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return 'CPF é obrigatório';
                           }
                           return null;
                         },
-                        maxLength: 14, // Formato XXX.XXX.XXX-XX
                       ),
                       const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.email),
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        onChanged: (value) {
-                          // Aqui você pode adicionar lógica para formatar o email enquanto o usuário digita
-                          String formatted = value.trim();
-
-                          _emailController.value = TextEditingValue(
-                            text: formatted,
-                            selection: TextSelection.collapsed(
-                              offset: formatted.length,
-                            ),
-                          );
-                        },
+                      TextFormFieldEmail(
+                        emailController: _emailController,
+                        isEditing: true,
                       ),
                       const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _telefoneController,
-                        decoration: const InputDecoration(
-                          labelText: 'Telefone',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.phone),
-                        ),
-                        keyboardType: TextInputType.phone,
-                        inputFormatters: [PhoneTextInputFormatter()],
+                      TextFormFieldPhone(
+                        telefoneController: _telefoneController,
+                        isEditing: true,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -331,7 +305,8 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                                 ),
                               ),
                             ),
-                            customerFound: (customer) => const SizedBox.shrink(),
+                            customerFound: (customer) =>
+                                const SizedBox.shrink(),
                           );
                         },
                       ),
@@ -396,6 +371,23 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     );
   }
 
+  void _buscarClientePorCpf() {
+    final cpf = _searchCpfController.text.trim();
+    if (cpf.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Digite um CPF para buscar'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    context.read<CustomerBloc>().add(
+      CustomerBlocEvent.findCustomerByCpf(cpf: cpf),
+    );
+  }
+
   void _mostrarDetalhesCliente(Customer cliente) {
     showDialog(
       context: context,
@@ -428,27 +420,10 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     );
   }
 
-  void _buscarClientePorCpf() {
-    final cpf = _searchCpfController.text.trim();
-    if (cpf.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Digite um CPF para buscar'),
-          backgroundColor: Colors.orange,
-        ),
-      );
-      return;
-    }
-
-    context.read<CustomerBloc>().add(
-          CustomerBlocEvent.findCustomerByCpf(cpf: cpf),
-        );
-  }
-
   void _openCustomerDetails(Customer customer) {
     // Limpa o campo de busca
     _searchCpfController.clear();
-    
+
     // Navega para a tela de detalhes do cliente
     Navigator.push(
       context,

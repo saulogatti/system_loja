@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/screens/customer/bloc/customer_bloc.dart';
+import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
+import 'package:system_loja/screens/widgets/text_form_field_email.dart';
+import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
 /// Tela de detalhes do cliente com opções de edição e exclusão
 ///
@@ -12,10 +15,7 @@ import 'package:system_loja/screens/customer/bloc/customer_bloc.dart';
 class CustomerDetailScreen extends StatefulWidget {
   final Customer customer;
 
-  const CustomerDetailScreen({
-    super.key,
-    required this.customer,
-  });
+  const CustomerDetailScreen({super.key, required this.customer});
 
   @override
   State<CustomerDetailScreen> createState() => _CustomerDetailScreenState();
@@ -29,26 +29,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   late final TextEditingController _enderecoController;
   final _formKey = GlobalKey<FormState>();
   bool _isEditing = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _nomeController = TextEditingController(text: widget.customer.name);
-    _cpfController = TextEditingController(text: widget.customer.cpf);
-    _emailController = TextEditingController(text: widget.customer.email);
-    _telefoneController = TextEditingController(text: widget.customer.phone);
-    _enderecoController = TextEditingController(text: widget.customer.address);
-  }
-
-  @override
-  void dispose() {
-    _nomeController.dispose();
-    _cpfController.dispose();
-    _emailController.dispose();
-    _telefoneController.dispose();
-    _enderecoController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +60,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           },
           customerError: (message) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: Colors.red,
-              ),
+              SnackBar(content: Text(message), backgroundColor: Colors.red),
             );
           },
         );
@@ -169,36 +146,16 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           },
                         ),
                         const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _cpfController,
-                          decoration: const InputDecoration(
-                            labelText: 'CPF',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.badge),
-                          ),
-                          enabled: false, // CPF não pode ser alterado
+                        TextFormFieldCpf(cpfController: _cpfController),
+                        const SizedBox(height: 16),
+                        TextFormFieldEmail(
+                          emailController: _emailController,
+                          isEditing: _isEditing,
                         ),
                         const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: const InputDecoration(
-                            labelText: 'Email',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.email),
-                          ),
-                          enabled: _isEditing,
-                          keyboardType: TextInputType.emailAddress,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _telefoneController,
-                          decoration: const InputDecoration(
-                            labelText: 'Telefone',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.phone),
-                          ),
-                          enabled: _isEditing,
-                          keyboardType: TextInputType.phone,
+                        TextFormFieldPhone(
+                          telefoneController: _telefoneController,
+                          isEditing: _isEditing,
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
@@ -264,7 +221,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                               _nomeController.text = widget.customer.name;
                               _emailController.text = widget.customer.email;
                               _telefoneController.text = widget.customer.phone;
-                              _enderecoController.text = widget.customer.address;
+                              _enderecoController.text =
+                                  widget.customer.address;
                             });
                           },
                           child: const Text('Cancelar'),
@@ -285,6 +243,26 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _cpfController.dispose();
+    _emailController.dispose();
+    _telefoneController.dispose();
+    _enderecoController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _nomeController = TextEditingController(text: widget.customer.name);
+    _cpfController = TextEditingController(text: widget.customer.cpf);
+    _emailController = TextEditingController(text: widget.customer.email);
+    _telefoneController = TextEditingController(text: widget.customer.phone);
+    _enderecoController = TextEditingController(text: widget.customer.address);
   }
 
   Widget _buildInfoRow(String label, String value, IconData icon) {
@@ -322,6 +300,37 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     );
   }
 
+  void _confirmarExclusao() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar Exclusão'),
+        content: Text(
+          'Tem certeza que deseja excluir o cliente "${widget.customer.name}"?\n\nEsta ação não pode ser desfeita.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context); // Fecha o diálogo
+              context.read<CustomerBloc>().add(
+                CustomerBlocEvent.deleteCustomer(id: widget.customer.id),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            child: const Text('Deletar'),
+          ),
+        ],
+      ),
+    );
+  }
+
   /// Formata uma data no formato DD/MM/YYYY HH:MM
   String _formatDate(DateTime date) {
     final day = date.day.toString().padLeft(2, '0');
@@ -345,39 +354,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       );
 
       context.read<CustomerBloc>().add(
-            CustomerBlocEvent.updateCustomer(customer: updatedCustomer),
-          );
+        CustomerBlocEvent.updateCustomer(customer: updatedCustomer),
+      );
     }
-  }
-
-  void _confirmarExclusao() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirmar Exclusão'),
-        content: Text(
-          'Tem certeza que deseja excluir o cliente "${widget.customer.name}"?\n\nEsta ação não pode ser desfeita.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context); // Fecha o diálogo
-              context.read<CustomerBloc>().add(
-                    CustomerBlocEvent.deleteCustomer(id: widget.customer.id),
-                  );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
-              foregroundColor: Theme.of(context).colorScheme.onError,
-            ),
-            child: const Text('Deletar'),
-          ),
-        ],
-      ),
-    );
   }
 }
