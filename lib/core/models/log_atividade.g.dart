@@ -7,17 +7,17 @@ part of 'log_atividade.dart';
 // **************************************************************************
 
 LogAtividade _$LogAtividadeFromJson(Map<String, dynamic> json) => LogAtividade(
-      id: (json['id'] as num).toInt(),
-      tipoAcao: $enumDecode(_$TipoAcaoEnumMap, json['tipo_acao']),
-      entidade: json['entidade'] as String,
-      entidadeId: (json['entidade_id'] as num?)?.toInt(),
-      usuarioId: (json['usuario_id'] as num).toInt(),
-      usuarioNome: json['usuario_nome'] as String,
-      dataHora: json['data_hora'] == null
-          ? null
-          : DateTime.parse(json['data_hora'] as String),
-      detalhes: json['detalhes'] as String? ?? '',
-    );
+  id: (json['id'] as num).toInt(),
+  tipoAcao: $enumDecode(_$TipoAcaoEnumMap, json['tipo_acao']),
+  entidade: json['entidade'] as String,
+  entidadeId: (json['entidade_id'] as num?)?.toInt(),
+  usuarioId: (json['usuario_id'] as num).toInt(),
+  usuarioNome: json['usuario_nome'] as String,
+  dataHora: json['data_hora'] == null
+      ? null
+      : DateTime.parse(json['data_hora'] as String),
+  detalhes: json['detalhes'] as String? ?? '',
+);
 
 Map<String, dynamic> _$LogAtividadeToJson(LogAtividade instance) =>
     <String, dynamic>{
