@@ -16,3 +16,5 @@ macos/Flutter/GeneratedPluginRegistrant.swift
 
 # Build artifacts
 build/
+
+.DS_Store
