@@ -124,8 +124,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     radius: 50,
                     backgroundColor: Colors.blue,
                     child: Text(
-                      widget.customer.name.isNotEmpty
-                          ? widget.customer.name[0].toUpperCase()
+                      widget.customer.name.trim().isNotEmpty
+                          ? widget.customer.name.trim()[0].toUpperCase()
                           : '?',
                       style: const TextStyle(
                         fontSize: 40,
@@ -241,9 +241,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         const Divider(),
                         _buildInfoRow(
                           'Data de Cadastro',
-                          widget.customer.registrationDate
-                              .toString()
-                              .split('.')[0],
+                          _formatDate(widget.customer.registrationDate),
                           Icons.calendar_today,
                         ),
                       ],
@@ -324,6 +322,16 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     );
   }
 
+  /// Formata uma data no formato DD/MM/YYYY HH:MM
+  String _formatDate(DateTime date) {
+    final day = date.day.toString().padLeft(2, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final year = date.year.toString();
+    final hour = date.hour.toString().padLeft(2, '0');
+    final minute = date.minute.toString().padLeft(2, '0');
+    return '$day/$month/$year $hour:$minute';
+  }
+
   void _salvarAlteracoes() {
     if (_formKey.currentState!.validate()) {
       final updatedCustomer = Customer(
@@ -363,7 +371,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
             ),
             child: const Text('Deletar'),
           ),
