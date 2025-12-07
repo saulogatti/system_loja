@@ -42,8 +42,11 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      _usuarioEditando == null ? 'Novo Usuário' : 'Editar Usuário',
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      _usuarioEditando == null
+                          ? 'Novo Usuário'
+                          : 'Editar Usuário',
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
@@ -83,28 +86,35 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                     TextFormField(
                       controller: _senhaController,
                       decoration: InputDecoration(
-                        labelText: _usuarioEditando == null ? 'Senha *' : 'Nova Senha (deixe vazio para manter)',
+                        labelText: _usuarioEditando == null
+                            ? 'Senha *'
+                            : 'Nova Senha (deixe vazio para manter)',
                         border: const OutlineInputBorder(),
                         prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
-                          icon: Icon(_senhaVisivel ? Icons.visibility_off : Icons.visibility),
+                          icon: Icon(_senhaVisivel
+                              ? Icons.visibility_off
+                              : Icons.visibility),
                           onPressed: () {
                             setState(() {
                               _senhaVisivel = !_senhaVisivel;
                             });
                           },
                         ),
-                        helperText: 'Mínimo 8 caracteres, com maiúscula, minúscula e número',
+                        helperText:
+                            'Mínimo 8 caracteres, com maiúscula, minúscula e número',
                         helperMaxLines: 2,
                       ),
                       obscureText: !_senhaVisivel,
                       validator: (value) {
                         // Se está editando e senha está vazia, não valida
-                        if (_usuarioEditando != null && (value == null || value.isEmpty)) {
+                        if (_usuarioEditando != null &&
+                            (value == null || value.isEmpty)) {
                           return null;
                         }
                         // Se está criando novo usuário, senha é obrigatória
-                        if (_usuarioEditando == null && (value == null || value.isEmpty)) {
+                        if (_usuarioEditando == null &&
+                            (value == null || value.isEmpty)) {
                           return 'Senha é obrigatória';
                         }
                         // Valida força da senha
@@ -119,7 +129,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<NivelPermissao>(
-                      value: _nivelPermissaoSelecionado,
+                      initialValue: _nivelPermissaoSelecionado,
                       decoration: const InputDecoration(
                         labelText: 'Nível de Permissão *',
                         border: OutlineInputBorder(),
@@ -149,8 +159,12 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                         Expanded(
                           child: ElevatedButton.icon(
                             onPressed: _salvarUsuario,
-                            icon: Icon(_usuarioEditando == null ? Icons.add : Icons.save),
-                            label: Text(_usuarioEditando == null ? 'Adicionar Usuário' : 'Salvar Alterações'),
+                            icon: Icon(_usuarioEditando == null
+                                ? Icons.add
+                                : Icons.save),
+                            label: Text(_usuarioEditando == null
+                                ? 'Adicionar Usuário'
+                                : 'Salvar Alterações'),
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.all(16),
                               textStyle: const TextStyle(fontSize: 16),
@@ -174,7 +188,8 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                     const SizedBox(height: 32),
                     const Text(
                       'Usuários Cadastrados',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     if (_manager.usuarios.isEmpty)
@@ -198,17 +213,21 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                             margin: const EdgeInsets.only(bottom: 12),
                             child: ListTile(
                               leading: CircleAvatar(
-                                backgroundColor: usuario.nivelPermissao == NivelPermissao.administrador
+                                backgroundColor: usuario.nivelPermissao ==
+                                        NivelPermissao.administrador
                                     ? Colors.purple
                                     : Colors.blue,
                                 child: Icon(
-                                  usuario.nivelPermissao == NivelPermissao.administrador
+                                  usuario.nivelPermissao ==
+                                          NivelPermissao.administrador
                                       ? Icons.admin_panel_settings
                                       : Icons.person,
                                   color: Colors.white,
                                 ),
                               ),
-                              title: Text(usuario.nome, style: const TextStyle(fontWeight: FontWeight.bold)),
+                              title: Text(usuario.nome,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
                               subtitle: Text(
                                 '${usuario.email}\n${_getNivelPermissaoTexto(usuario.nivelPermissao)}',
                               ),
@@ -217,12 +236,15 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.edit, color: Colors.blue),
+                                    icon: const Icon(Icons.edit,
+                                        color: Colors.blue),
                                     onPressed: () => _editarUsuario(usuario),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete, color: Colors.red),
-                                    onPressed: () => _confirmarExclusao(usuario),
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.red),
+                                    onPressed: () =>
+                                        _confirmarExclusao(usuario),
                                   ),
                                 ],
                               ),
@@ -251,8 +273,149 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     super.dispose();
   }
 
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
+          ),
+          const SizedBox(height: 4),
+          Text(value, style: const TextStyle(fontSize: 16)),
+        ],
+      ),
+    );
+  }
+
+  void _cancelarEdicao() {
+    setState(() {
+      _usuarioEditando = null;
+      _limparFormulario();
+    });
+  }
+
+  void _confirmarExclusao(Usuario usuario) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar Exclusão'),
+        content: Text('Deseja realmente excluir o usuário "${usuario.nome}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await _excluirUsuario(usuario);
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _editarUsuario(Usuario usuario) {
+    setState(() {
+      _usuarioEditando = usuario;
+      _nomeController.text = usuario.nome;
+      _emailController.text = usuario.email;
+      _senhaController.clear();
+      _nivelPermissaoSelecionado = usuario.nivelPermissao;
+    });
+
+    // Scroll para o topo
+    final context = _formKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  Future<void> _excluirUsuario(Usuario usuario) async {
+    final sucesso = await _manager.removerUsuario(usuario.id);
+
+    if (sucesso) {
+      // Registra log de atividade
+      await _logManager.criarERegistrarLog(
+        tipoAcao: TipoAcao.deletar,
+        entidade: 'Usuario',
+        entidadeId: usuario.id,
+        usuarioId: usuario.id,
+        usuarioNome: usuario.nome,
+        detalhes: 'Usuário ${usuario.nome} (${usuario.email}) excluído',
+      );
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Usuário "${usuario.nome}" excluído com sucesso!'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+
+      // Se estava editando o usuário excluído, cancela a edição
+      if (_usuarioEditando?.id == usuario.id) {
+        _cancelarEdicao();
+      }
+
+      setState(() {});
+    }
+  }
+
   String _getNivelPermissaoTexto(NivelPermissao nivel) {
     return nivel.toDisplayName();
+  }
+
+  void _limparFormulario() {
+    _formKey.currentState?.reset();
+    _nomeController.clear();
+    _emailController.clear();
+    _senhaController.clear();
+    _nivelPermissaoSelecionado = NivelPermissao.usuarioComum;
+    _senhaVisivel = false;
+  }
+
+  void _mostrarDetalhesUsuario(Usuario usuario) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(usuario.nome),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildDetailRow('ID', usuario.id.toString()),
+              _buildDetailRow('Email', usuario.email),
+              _buildDetailRow('Nível de Permissão',
+                  _getNivelPermissaoTexto(usuario.nivelPermissao)),
+              _buildDetailRow('Data de Cadastro',
+                  usuario.dataCadastro.toString().split('.')[0]),
+              _buildDetailRow('Última Atualização',
+                  usuario.dataUltimaAtualizacao.toString().split('.')[0]),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Fechar'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _salvarUsuario() async {
@@ -265,7 +428,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         // Verifica se email já existe
         if (_manager.emailJaExiste(email)) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Erro: Email já cadastrado!'), backgroundColor: Colors.red),
+            const SnackBar(
+                content: Text('Erro: Email já cadastrado!'),
+                backgroundColor: Colors.red),
           );
           return;
         }
@@ -290,14 +455,16 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
             entidadeId: usuario.id,
             usuarioId: usuario.id,
             usuarioNome: usuario.nome,
-            detalhes: 'Usuário ${usuario.nome} (${usuario.email}) criado com nível ${_getNivelPermissaoTexto(usuario.nivelPermissao)}',
+            detalhes:
+                'Usuário ${usuario.nome} (${usuario.email}) criado com nível ${_getNivelPermissaoTexto(usuario.nivelPermissao)}',
           );
 
           if (!mounted) return;
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Usuário "${usuario.nome}" cadastrado com sucesso!'),
+              content:
+                  Text('Usuário "${usuario.nome}" cadastrado com sucesso!'),
               backgroundColor: Colors.green,
             ),
           );
@@ -310,7 +477,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         // Verifica se email já existe (excluindo o próprio usuário)
         if (_manager.emailJaExiste(email, ignorarId: _usuarioEditando!.id)) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Erro: Email já cadastrado!'), backgroundColor: Colors.red),
+            const SnackBar(
+                content: Text('Erro: Email já cadastrado!'),
+                backgroundColor: Colors.red),
           );
           return;
         }
@@ -347,7 +516,8 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Usuário "${usuarioAtualizado.nome}" atualizado com sucesso!'),
+              content: Text(
+                  'Usuário "${usuarioAtualizado.nome}" atualizado com sucesso!'),
               backgroundColor: Colors.green,
             ),
           );
@@ -359,142 +529,5 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         }
       }
     }
-  }
-
-  void _editarUsuario(Usuario usuario) {
-    setState(() {
-      _usuarioEditando = usuario;
-      _nomeController.text = usuario.nome;
-      _emailController.text = usuario.email;
-      _senhaController.clear();
-      _nivelPermissaoSelecionado = usuario.nivelPermissao;
-    });
-
-    // Scroll para o topo
-    final context = _formKey.currentContext;
-    if (context != null) {
-      Scrollable.ensureVisible(
-        context,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
-
-  void _cancelarEdicao() {
-    setState(() {
-      _usuarioEditando = null;
-      _limparFormulario();
-    });
-  }
-
-  void _limparFormulario() {
-    _formKey.currentState?.reset();
-    _nomeController.clear();
-    _emailController.clear();
-    _senhaController.clear();
-    _nivelPermissaoSelecionado = NivelPermissao.usuarioComum;
-    _senhaVisivel = false;
-  }
-
-  void _confirmarExclusao(Usuario usuario) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirmar Exclusão'),
-        content: Text('Deseja realmente excluir o usuário "${usuario.nome}"?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await _excluirUsuario(usuario);
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Excluir'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _excluirUsuario(Usuario usuario) async {
-    final sucesso = await _manager.removerUsuario(usuario.id);
-
-    if (sucesso) {
-      // Registra log de atividade
-      await _logManager.criarERegistrarLog(
-        tipoAcao: TipoAcao.deletar,
-        entidade: 'Usuario',
-        entidadeId: usuario.id,
-        usuarioId: usuario.id,
-        usuarioNome: usuario.nome,
-        detalhes: 'Usuário ${usuario.nome} (${usuario.email}) excluído',
-      );
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Usuário "${usuario.nome}" excluído com sucesso!'),
-          backgroundColor: Colors.orange,
-        ),
-      );
-
-      // Se estava editando o usuário excluído, cancela a edição
-      if (_usuarioEditando?.id == usuario.id) {
-        _cancelarEdicao();
-      }
-
-      setState(() {});
-    }
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
-          ),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(fontSize: 16)),
-        ],
-      ),
-    );
-  }
-
-  void _mostrarDetalhesUsuario(Usuario usuario) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(usuario.nome),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildDetailRow('ID', usuario.id.toString()),
-              _buildDetailRow('Email', usuario.email),
-              _buildDetailRow('Nível de Permissão', _getNivelPermissaoTexto(usuario.nivelPermissao)),
-              _buildDetailRow('Data de Cadastro', usuario.dataCadastro.toString().split('.')[0]),
-              _buildDetailRow('Última Atualização', usuario.dataUltimaAtualizacao.toString().split('.')[0]),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Fechar'),
-          ),
-        ],
-      ),
-    );
   }
 }
