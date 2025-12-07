@@ -1,5 +1,6 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+import '../../core/models/extensions/tipo_acao_extension.dart';
 import '../../core/models/log_atividade.dart';
 import 'database_config.dart';
 import 'database_helper.dart';
@@ -129,12 +130,10 @@ class LogAtividadeSqlManager {
   Future<List<LogAtividade>> listarPorTipoAcao(TipoAcao tipoAcao, {int? limit}) async {
     final db = await _database;
 
-    final String tipoAcaoStr = _tipoAcaoToString(tipoAcao);
-
     final List<Map<String, dynamic>> resultado = await db.query(
       DatabaseConfig.tableLogsAtividade,
       where: 'tipo_acao = ?',
-      whereArgs: [tipoAcaoStr],
+      whereArgs: [tipoAcao.toStringValue()],
       orderBy: 'data_hora DESC',
       limit: limit,
     );
@@ -204,12 +203,9 @@ class LogAtividadeSqlManager {
 
   /// Converte um Map do banco de dados para um objeto LogAtividade
   LogAtividade _mapToLogAtividade(Map<String, dynamic> map) {
-    final tipoAcaoStr = map['tipo_acao'] as String;
-    final tipoAcao = _stringToTipoAcao(tipoAcaoStr);
-
     return LogAtividade(
       id: map['id'] as int,
-      tipoAcao: tipoAcao,
+      tipoAcao: TipoAcaoExtension.fromString(map['tipo_acao'] as String),
       entidade: map['entidade'] as String,
       entidadeId: map['entidade_id'] as int?,
       usuarioId: map['usuario_id'] as int,
@@ -223,7 +219,7 @@ class LogAtividadeSqlManager {
   Map<String, dynamic> _logParaDadosDb(LogAtividade log) {
     return {
       'id': log.id,
-      'tipo_acao': _tipoAcaoToString(log.tipoAcao),
+      'tipo_acao': log.tipoAcao.toStringValue(),
       'entidade': log.entidade,
       'entidade_id': log.entidadeId,
       'usuario_id': log.usuarioId,
@@ -231,35 +227,5 @@ class LogAtividadeSqlManager {
       'data_hora': log.dataHora.toIso8601String(),
       'detalhes': log.detalhes,
     };
-  }
-
-  /// Converte TipoAcao para String
-  String _tipoAcaoToString(TipoAcao tipoAcao) {
-    switch (tipoAcao) {
-      case TipoAcao.criar:
-        return 'CRIAR';
-      case TipoAcao.ler:
-        return 'LER';
-      case TipoAcao.atualizar:
-        return 'ATUALIZAR';
-      case TipoAcao.deletar:
-        return 'DELETAR';
-    }
-  }
-
-  /// Converte String para TipoAcao
-  TipoAcao _stringToTipoAcao(String tipoAcaoStr) {
-    switch (tipoAcaoStr) {
-      case 'CRIAR':
-        return TipoAcao.criar;
-      case 'LER':
-        return TipoAcao.ler;
-      case 'ATUALIZAR':
-        return TipoAcao.atualizar;
-      case 'DELETAR':
-        return TipoAcao.deletar;
-      default:
-        return TipoAcao.criar;
-    }
   }
 }

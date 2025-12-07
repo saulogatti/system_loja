@@ -49,15 +49,20 @@ class UsuarioManager with LoggerClassMixin {
     return emailRegex.hasMatch(email);
   }
 
+  /// Tamanho mínimo da senha
+  static const int senhaMinLength = 8;
+
   /// Valida a força da senha
   ///
   /// Retorna uma mensagem de erro se a senha for inválida, ou null se for válida.
+  /// Regras: mínimo [senhaMinLength] caracteres, pelo menos uma letra maiúscula,
+  /// uma letra minúscula e um número.
   String? validarSenha(String senha) {
     if (senha.isEmpty) {
       return 'Senha é obrigatória';
     }
-    if (senha.length < 8) {
-      return 'Senha deve ter no mínimo 8 caracteres';
+    if (senha.length < senhaMinLength) {
+      return 'Senha deve ter no mínimo $senhaMinLength caracteres';
     }
     if (!senha.contains(RegExp(r'[A-Z]'))) {
       return 'Senha deve conter pelo menos uma letra maiúscula';

@@ -71,6 +71,9 @@ class Usuario extends DefaultObject {
       'Usuario(id: $id, dadosUsuario: $dadosUsuario, dataCadastro: $dataCadastro, dataUltimaAtualizacao: $dataUltimaAtualizacao)';
 
   /// Cria uma cópia do usuário com campos atualizados
+  ///
+  /// Atualiza automaticamente a data de última atualização para o momento atual,
+  /// a menos que uma data específica seja fornecida.
   Usuario copyWith({
     int? id,
     String? nome,
@@ -87,7 +90,7 @@ class Usuario extends DefaultObject {
       senhaHash: senhaHash ?? this.senhaHash,
       nivelPermissao: nivelPermissao ?? this.nivelPermissao,
       dataCadastro: dataCadastro ?? this.dataCadastro,
-      dataUltimaAtualizacao: dataUltimaAtualizacao ?? DateTime.now(),
+      dataUltimaAtualizacao: DateTime.now(),
     );
   }
 }

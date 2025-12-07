@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/managers/log_atividade_manager.dart';
 import '../core/managers/usuario_manager.dart';
+import '../core/models/extensions/nivel_permissao_extension.dart';
 import '../core/models/log_atividade.dart';
 import '../core/models/usuario.dart';
 
@@ -251,7 +252,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   }
 
   String _getNivelPermissaoTexto(NivelPermissao nivel) {
-    return nivel == NivelPermissao.administrador ? 'Administrador' : 'Usuário Comum';
+    return nivel.toDisplayName();
   }
 
   void _salvarUsuario() async {
@@ -370,11 +371,14 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     });
 
     // Scroll para o topo
-    Scrollable.ensureVisible(
-      _formKey.currentContext!,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
+    final context = _formKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   void _cancelarEdicao() {

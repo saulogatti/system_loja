@@ -45,9 +45,12 @@ class LogAtividadeManager with LoggerClassMixin {
   }
 
   /// Obtém logs por período
+  ///
+  /// Inclui logs nos limites do período (dataInicio e dataFim são inclusos).
   List<LogAtividade> obterLogsPorPeriodo(DateTime dataInicio, DateTime dataFim) {
     return logs.where((log) {
-      return log.dataHora.isAfter(dataInicio) && log.dataHora.isBefore(dataFim);
+      return (log.dataHora.isAtSameMomentAs(dataInicio) || log.dataHora.isAfter(dataInicio)) && 
+             (log.dataHora.isAtSameMomentAs(dataFim) || log.dataHora.isBefore(dataFim));
     }).toList();
   }
 

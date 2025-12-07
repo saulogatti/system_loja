@@ -1,5 +1,6 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+import '../../core/models/extensions/nivel_permissao_extension.dart';
 import '../../core/models/usuario.dart';
 import 'database_config.dart';
 import 'database_helper.dart';
@@ -136,12 +137,10 @@ class UsuarioSqlManager {
   Future<List<Usuario>> listarPorNivelPermissao(NivelPermissao nivelPermissao) async {
     final db = await _database;
 
-    final String nivelPermissaoStr = nivelPermissao == NivelPermissao.administrador ? 'ADMINISTRADOR' : 'USUARIO_COMUM';
-
     final List<Map<String, dynamic>> resultado = await db.query(
       DatabaseConfig.tableUsuarios,
       where: 'nivel_permissao = ?',
-      whereArgs: [nivelPermissaoStr],
+      whereArgs: [nivelPermissao.toStringValue()],
       orderBy: 'nome ASC',
     );
 
@@ -166,11 +165,9 @@ class UsuarioSqlManager {
   Future<int> contarPorNivelPermissao(NivelPermissao nivelPermissao) async {
     final db = await _database;
 
-    final String nivelPermissaoStr = nivelPermissao == NivelPermissao.administrador ? 'ADMINISTRADOR' : 'USUARIO_COMUM';
-
     final resultado = await db.rawQuery(
       'SELECT COUNT(*) as count FROM ${DatabaseConfig.tableUsuarios} WHERE nivel_permissao = ?',
-      [nivelPermissaoStr],
+      [nivelPermissao.toStringValue()],
     );
 
     return Sqflite.firstIntValue(resultado) ?? 0;
@@ -178,17 +175,12 @@ class UsuarioSqlManager {
 
   /// Converte um Map do banco de dados para um objeto Usuario
   Usuario _mapToUsuario(Map<String, dynamic> map) {
-    final nivelPermissaoStr = map['nivel_permissao'] as String;
-    final nivelPermissao = nivelPermissaoStr == 'ADMINISTRADOR' 
-        ? NivelPermissao.administrador 
-        : NivelPermissao.usuarioComum;
-
     return Usuario(
       id: map['id'] as int,
       nome: map['nome'] as String,
       email: map['email'] as String,
       senhaHash: map['senha_hash'] as String,
-      nivelPermissao: nivelPermissao,
+      nivelPermissao: NivelPermissaoExtension.fromString(map['nivel_permissao'] as String),
       dataCadastro: DateTime.parse(map['data_cadastro'] as String),
       dataUltimaAtualizacao: DateTime.parse(map['data_ultima_atualizacao'] as String),
     );
@@ -196,16 +188,12 @@ class UsuarioSqlManager {
 
   /// Converte um objeto Usuario para um Map do banco de dados
   Map<String, dynamic> _usuarioParaDadosDb(Usuario usuario) {
-    final nivelPermissaoStr = usuario.nivelPermissao == NivelPermissao.administrador 
-        ? 'ADMINISTRADOR' 
-        : 'USUARIO_COMUM';
-
     return {
       'id': usuario.id,
       'nome': usuario.nome,
       'email': usuario.email,
       'senha_hash': usuario.senhaHash,
-      'nivel_permissao': nivelPermissaoStr,
+      'nivel_permissao': usuario.nivelPermissao.toStringValue(),
       'data_cadastro': usuario.dataCadastro.toIso8601String(),
       'data_ultima_atualizacao': usuario.dataUltimaAtualizacao.toIso8601String(),
     };
