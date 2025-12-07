@@ -46,6 +46,17 @@ class ProdutoManager with LoggerClassMixin {
     return _produtos;
   }
 
+  Produto? findByCode(int codigo) {
+    try {
+      return _produtosList.firstWhere(
+        (produto) => produto.codigo == codigo.toString(),
+      );
+    } catch (e) {
+      logInfo('Produto com código $codigo não encontrado.');
+      return null;
+    }
+  }
+
   /// Gera um novo ID incremental com base nos IDs existentes.
   ///
   /// Utiliza a lista em memória para calcular o próximo ID disponível.
@@ -96,7 +107,10 @@ class ProdutoManager with LoggerClassMixin {
     await _getLock().synchronized(() async {
       final dadosAtuais = _carregarDadosDoDisco();
       if (dadosAtuais == null) {
-        logError('Falha ao carregar dados atuais para salvar de forma sincronizada.', StackTrace.current);
+        logError(
+          'Falha ao carregar dados atuais para salvar de forma sincronizada.',
+          StackTrace.current,
+        );
         return;
       }
       await _executarComFileLock(() async {
@@ -176,7 +190,8 @@ class ProdutoManager with LoggerClassMixin {
     if (file.existsSync()) {
       try {
         final jsonString = file.readAsStringSync();
-        final List<Map<String, dynamic>> jsonList = jsonDecode(jsonString) as List<Map<String, dynamic>>;
+        final List<Map<String, dynamic>> jsonList =
+            jsonDecode(jsonString) as List<Map<String, dynamic>>;
         return jsonList.map(Produto.fromJson).toList();
       } catch (e, stackTrace) {
         logError('Erro ao carregar dados de produtos do disco: $e', stackTrace);
@@ -256,12 +271,12 @@ class ProdutoManager with LoggerClassMixin {
     try {
       final file = File(dataFile);
       file.parent.createSync(recursive: true);
-      final jsonString = jsonEncode(_produtosList.map((produto) => produto.toJson()).toList());
+      final jsonString = jsonEncode(
+        _produtosList.map((produto) => produto.toJson()).toList(),
+      );
       file.writeAsStringSync(jsonString);
     } catch (e, stackTrace) {
       logError('Erro ao salvar dados de produtos: $e', stackTrace);
     }
   }
-
-  findByCode(int codigo) {}
 }
