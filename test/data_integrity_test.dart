@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/data/database/cliente_sql_manager.dart';
 import 'package:system_loja/data/database/database_helper.dart';
@@ -21,14 +21,14 @@ void main() {
 
   late ClienteSqlManager clienteManager;
   late ProdutoSqlManager produtoManager;
-  late NotaFiscalSqlManager notaFiscalManager;
+  late InvoiceSqlManager notaFiscalManager;
 
   setUp(() async {
     // Reset da instância do banco antes de cada teste
     DatabaseHelper.resetInstance();
     clienteManager = ClienteSqlManager();
     produtoManager = ProdutoSqlManager();
-    notaFiscalManager = NotaFiscalSqlManager();
+    notaFiscalManager = InvoiceSqlManager();
   });
 
   tearDown(() async {
@@ -70,25 +70,28 @@ void main() {
         // Arrange - Cria nota fiscal
         final itens = [
           InvoiceItem(
-            produtoId: produtoInserido!.id,
-            produtoNome: produtoInserido.nome,
-            produtoCodigo: produtoInserido.codigo,
-            quantidade: 1,
-            precoUnitario: produtoInserido.preco,
+            productId: produtoInserido!.id,
+            productName: produtoInserido.nome,
+            productCode: produtoInserido.codigo,
+            quantity: 1,
+            unitPrice: produtoInserido.preco,
           ),
         ];
 
-        final notaFiscal = NotaFiscal(
+        final invoice = Invoice(
           id: 0,
-          numeroNota: 'NF-001',
-          clienteId: clienteInserido!.id,
-          clienteNome: clienteInserido.name,
-          clienteCpf: clienteInserido.cpf,
-          itens: itens,
-          formaPagamento: 'Cartão',
+          data: InvoiceData(
+            invoiceNumber: 'NF-001',
+            customerId: clienteInserido!.id,
+            customerName: clienteInserido.name,
+            customerCpf: clienteInserido.cpf,
+
+            items: itens,
+            paymentMethod: 'Cartão',
+          ),
         );
 
-        final notaId = await notaFiscalManager.atualizar(notaFiscal);
+        final notaId = await notaFiscalManager.atualizar(invoice);
 
         // Act - Atualiza o nome do cliente
         final clienteAtualizado = Customer(
@@ -104,8 +107,8 @@ void main() {
         // Assert - Busca a nota fiscal e verifica se o nome foi atualizado
         final notaConsultada = await notaFiscalManager.consultarPorId(notaId);
         expect(notaConsultada, isNotNull);
-        expect(notaConsultada!.clienteNome, equals('João Silva Santos'));
-        expect(notaConsultada.clienteCpf, equals('123.456.789-00'));
+        expect(notaConsultada!.data.customerName, equals('João Silva Santos'));
+        expect(notaConsultada.data.customerCpf, equals('123.456.789-00'));
       },
     );
 
@@ -140,25 +143,28 @@ void main() {
         // Arrange - Cria nota fiscal
         final itens = [
           InvoiceItem(
-            produtoId: produtoInserido!.id,
-            produtoNome: produtoInserido.nome,
-            produtoCodigo: produtoInserido.codigo,
-            quantidade: 2,
-            precoUnitario: produtoInserido.preco,
+            productId: produtoInserido!.id,
+            productName: produtoInserido.nome,
+            productCode: produtoInserido.codigo,
+            quantity: 2,
+            unitPrice: produtoInserido.preco,
           ),
         ];
 
-        final notaFiscal = NotaFiscal(
+        final invoice = Invoice(
           id: 0,
-          numeroNota: 'NF-002',
-          clienteId: clienteInserido!.id,
-          clienteNome: clienteInserido.name,
-          clienteCpf: clienteInserido.cpf,
-          itens: itens,
-          formaPagamento: 'Pix',
+          data: InvoiceData(
+            invoiceNumber: 'NF-002',
+            customerId: clienteInserido!.id,
+            customerName: clienteInserido.name,
+            customerCpf: clienteInserido.cpf,
+
+            items: itens,
+            paymentMethod: 'Pix',
+          ),
         );
 
-        final notaId = await notaFiscalManager.atualizar(notaFiscal);
+        final notaId = await notaFiscalManager.atualizar(invoice);
 
         // Act - Atualiza o CPF do cliente
         final clienteAtualizado = Customer(
@@ -174,8 +180,8 @@ void main() {
         // Assert - Busca a nota fiscal e verifica se o CPF foi atualizado
         final notaConsultada = await notaFiscalManager.consultarPorId(notaId);
         expect(notaConsultada, isNotNull);
-        expect(notaConsultada!.clienteNome, equals('Maria Santos'));
-        expect(notaConsultada.clienteCpf, equals('111.222.333-44'));
+        expect(notaConsultada!.data.customerName, equals('Maria Santos'));
+        expect(notaConsultada.data.customerCpf, equals('111.222.333-44'));
       },
     );
   });
@@ -212,22 +218,25 @@ void main() {
         // Arrange - Cria nota fiscal
         final itens = [
           InvoiceItem(
-            produtoId: produtoInserido!.id,
-            produtoNome: produtoInserido.nome,
-            produtoCodigo: produtoInserido.codigo,
-            quantidade: 1,
-            precoUnitario: produtoInserido.preco,
+            productId: produtoInserido!.id,
+            productName: produtoInserido.nome,
+            productCode: produtoInserido.codigo,
+            quantity: 1,
+            unitPrice: produtoInserido.preco,
           ),
         ];
 
-        final notaFiscal = NotaFiscal(
+        final notaFiscal = Invoice(
           id: 0,
-          numeroNota: 'NF-003',
-          clienteId: clienteInserido!.id,
-          clienteNome: clienteInserido.name,
-          clienteCpf: clienteInserido.cpf,
-          itens: itens,
-          formaPagamento: 'Dinheiro',
+          data: InvoiceData(
+            invoiceNumber: 'NF-003',
+            customerId: clienteInserido!.id,
+            customerName: clienteInserido.name,
+            customerCpf: clienteInserido.cpf,
+
+            items: itens,
+            paymentMethod: 'Dinheiro',
+          ),
         );
 
         final notaId = await notaFiscalManager.atualizar(notaFiscal);
@@ -247,12 +256,12 @@ void main() {
         // Assert - Busca a nota fiscal e verifica se o nome do produto foi atualizado
         final notaConsultada = await notaFiscalManager.consultarPorId(notaId);
         expect(notaConsultada, isNotNull);
-        expect(notaConsultada!.itens.length, equals(1));
+        expect(notaConsultada!.data.items.length, equals(1));
         expect(
-          notaConsultada.itens[0].produtoNome,
+          notaConsultada.data.items[0].productName,
           equals('Teclado Mecânico Premium'),
         );
-        expect(notaConsultada.itens[0].produtoCodigo, equals('TECLADO-001'));
+        expect(notaConsultada.data.items[0].productCode, equals('TECLADO-001'));
       },
     );
 
@@ -287,22 +296,25 @@ void main() {
         // Arrange - Cria nota fiscal
         final itens = [
           InvoiceItem(
-            produtoId: produtoInserido!.id,
-            produtoNome: produtoInserido.nome,
-            produtoCodigo: produtoInserido.codigo,
-            quantidade: 1,
-            precoUnitario: produtoInserido.preco,
+            productId: produtoInserido!.id,
+            productName: produtoInserido.nome,
+            productCode: produtoInserido.codigo,
+            quantity: 1,
+            unitPrice: produtoInserido.preco,
           ),
         ];
 
-        final notaFiscal = NotaFiscal(
+        final notaFiscal = Invoice(
           id: 0,
-          numeroNota: 'NF-004',
-          clienteId: clienteInserido!.id,
-          clienteNome: clienteInserido.name,
-          clienteCpf: clienteInserido.cpf,
-          itens: itens,
-          formaPagamento: 'Cartão',
+          data: InvoiceData(
+            invoiceNumber: 'NF-004',
+            customerId: clienteInserido!.id,
+            customerName: clienteInserido.name,
+            customerCpf: clienteInserido.cpf,
+
+            items: itens,
+            paymentMethod: 'Cartão',
+          ),
         );
 
         final notaId = await notaFiscalManager.atualizar(notaFiscal);
@@ -322,10 +334,10 @@ void main() {
         // Assert - Busca a nota fiscal e verifica se o código do produto foi atualizado
         final notaConsultada = await notaFiscalManager.consultarPorId(notaId);
         expect(notaConsultada, isNotNull);
-        expect(notaConsultada!.itens.length, equals(1));
-        expect(notaConsultada.itens[0].produtoNome, equals('Monitor LED'));
+        expect(notaConsultada!.data.items.length, equals(1));
+        expect(notaConsultada.data.items[0].productName, equals('Monitor LED'));
         expect(
-          notaConsultada.itens[0].produtoCodigo,
+          notaConsultada.data.items[0].productCode,
           equals('MONITOR-LED-001'),
         );
       },
@@ -364,22 +376,25 @@ void main() {
         // Arrange - Cria nota fiscal
         final itens = [
           InvoiceItem(
-            produtoId: produtoInserido!.id,
-            produtoNome: produtoInserido.nome,
-            produtoCodigo: produtoInserido.codigo,
-            quantidade: 1,
-            precoUnitario: produtoInserido.preco,
+            productId: produtoInserido!.id,
+            productName: produtoInserido.nome,
+            productCode: produtoInserido.codigo,
+            quantity: 1,
+            unitPrice: produtoInserido.preco,
           ),
         ];
 
-        final notaFiscal = NotaFiscal(
+        final notaFiscal = Invoice(
           id: 0,
-          numeroNota: 'NF-005',
-          clienteId: clienteInserido!.id,
-          clienteNome: clienteInserido.name,
-          clienteCpf: clienteInserido.cpf,
-          itens: itens,
-          formaPagamento: 'Boleto',
+          data: InvoiceData(
+            invoiceNumber: 'NF-005',
+            customerId: clienteInserido!.id,
+            customerName: clienteInserido.name,
+            customerCpf: clienteInserido.cpf,
+
+            items: itens,
+            paymentMethod: 'Boleto',
+          ),
         );
 
         final notaId = await notaFiscalManager.atualizar(notaFiscal);
@@ -408,40 +423,52 @@ void main() {
 
         // Assert - Consulta por ID
         final notaPorId = await notaFiscalManager.consultarPorId(notaId);
-        expect(notaPorId!.clienteNome, equals('Pedro Alves Junior'));
-        expect(notaPorId.clienteCpf, equals('000.111.222-33'));
-        expect(notaPorId.itens[0].produtoNome, equals('Impressora HP'));
-        expect(notaPorId.itens[0].produtoCodigo, equals('HP-IMP-001'));
+        expect(notaPorId!.data.customerName, equals('Pedro Alves Junior'));
+        expect(notaPorId.data.customerCpf, equals('000.111.222-33'));
+        expect(notaPorId.data.items[0].productName, equals('Impressora HP'));
+        expect(notaPorId.data.items[0].productCode, equals('HP-IMP-001'));
 
         // Assert - Consulta por número
         final notaPorNumero = await notaFiscalManager.consultarPorNumero(
           'NF-005',
         );
-        expect(notaPorNumero!.clienteNome, equals('Pedro Alves Junior'));
-        expect(notaPorNumero.clienteCpf, equals('000.111.222-33'));
-        expect(notaPorNumero.itens[0].produtoNome, equals('Impressora HP'));
-        expect(notaPorNumero.itens[0].produtoCodigo, equals('HP-IMP-001'));
+        expect(notaPorNumero!.data.customerName, equals('Pedro Alves Junior'));
+        expect(notaPorNumero.data.customerCpf, equals('000.111.222-33'));
+        expect(
+          notaPorNumero.data.items[0].productName,
+          equals('Impressora HP'),
+        );
+        expect(notaPorNumero.data.items[0].productCode, equals('HP-IMP-001'));
 
         // Assert - Consulta por cliente
         final notasPorCliente = await notaFiscalManager.buscarPorCliente(
           clienteId,
         );
         expect(notasPorCliente.length, equals(1));
-        expect(notasPorCliente[0].clienteNome, equals('Pedro Alves Junior'));
-        expect(notasPorCliente[0].clienteCpf, equals('000.111.222-33'));
         expect(
-          notasPorCliente[0].itens[0].produtoNome,
+          notasPorCliente[0].data.customerName,
+          equals('Pedro Alves Junior'),
+        );
+        expect(notasPorCliente[0].data.customerCpf, equals('000.111.222-33'));
+        expect(
+          notasPorCliente[0].data.items[0].productName,
           equals('Impressora HP'),
         );
-        expect(notasPorCliente[0].itens[0].produtoCodigo, equals('HP-IMP-001'));
+        expect(
+          notasPorCliente[0].data.items[0].productCode,
+          equals('HP-IMP-001'),
+        );
 
         // Assert - Lista todas
         final todasNotas = await notaFiscalManager.listarTodas();
         expect(todasNotas.length, equals(1));
-        expect(todasNotas[0].clienteNome, equals('Pedro Alves Junior'));
-        expect(todasNotas[0].clienteCpf, equals('000.111.222-33'));
-        expect(todasNotas[0].itens[0].produtoNome, equals('Impressora HP'));
-        expect(todasNotas[0].itens[0].produtoCodigo, equals('HP-IMP-001'));
+        expect(todasNotas[0].data.customerName, equals('Pedro Alves Junior'));
+        expect(todasNotas[0].data.customerCpf, equals('000.111.222-33'));
+        expect(
+          todasNotas[0].data.items[0].productName,
+          equals('Impressora HP'),
+        );
+        expect(todasNotas[0].data.items[0].productCode, equals('HP-IMP-001'));
       },
     );
   });

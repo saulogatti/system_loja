@@ -32,8 +32,13 @@ class SalesCubit extends Cubit<SalesState> {
 
     emit(SalesState.loaded(items: sales));
   }
-  void registerSale(InvoiceData invoice) async {
+
+  void registerSale(InvoiceData invoiceData) async {
     emit(SalesState.loading());
+    final invoice = Invoice(
+      id: _salesRepository.getNextSaleId(),
+      data: invoiceData,
+    );
     await _salesRepository.saveSale(invoice);
     loadSales();
   }

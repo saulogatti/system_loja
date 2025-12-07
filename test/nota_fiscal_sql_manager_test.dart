@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/data/database/cliente_sql_manager.dart';
 import 'package:system_loja/data/database/database_helper.dart';
@@ -19,7 +19,7 @@ void main() {
 
   late ClienteSqlManager clienteManager;
   late ProdutoSqlManager produtoManager;
-  late NotaFiscalSqlManager notaFiscalManager;
+  late InvoiceSqlManager notaFiscalManager;
 
   setUpAll(() async {
     // Configura um banco de dados em memória para testes
@@ -31,7 +31,7 @@ void main() {
     DatabaseHelper.resetInstance();
     clienteManager = ClienteSqlManager();
     produtoManager = ProdutoSqlManager();
-    notaFiscalManager = NotaFiscalSqlManager();
+    notaFiscalManager = InvoiceSqlManager();
   });
 
   tearDown(() async {
@@ -95,29 +95,31 @@ void main() {
 
       final itens = [
         InvoiceItem(
-          produtoId: produto1.id,
-          produtoNome: produto1.nome,
-          produtoCodigo: produto1.codigo,
-          quantidade: 2,
-          precoUnitario: produto1.preco,
+          productId: produto1.id,
+          productName: produto1.nome,
+          productCode: produto1.codigo,
+          quantity: 2,
+          unitPrice: produto1.preco,
         ),
         InvoiceItem(
-          produtoId: produto2.id,
-          produtoNome: produto2.nome,
-          produtoCodigo: produto2.codigo,
-          quantidade: 3,
-          precoUnitario: produto2.preco,
+          productId: produto2.id,
+          productName: produto2.nome,
+          productCode: produto2.codigo,
+          quantity: 3,
+          unitPrice: produto2.preco,
         ),
       ];
 
-      final notaFiscal = NotaFiscal(
+      final notaFiscal = Invoice(
         id: 0,
-        numeroNota: 'NF-001',
-        clienteId: cliente.id,
-        clienteNome: cliente.name,
-        clienteCpf: cliente.cpf,
-        itens: itens,
-        formaPagamento: 'Cartão',
+        data: InvoiceData(
+          invoiceNumber: 'NF-001',
+          customerId: cliente.id,
+          customerName: cliente.name,
+          customerCpf: cliente.cpf,
+          items: itens,
+          paymentMethod: 'Cartão',
+        ),
       );
 
       // Act
@@ -128,9 +130,12 @@ void main() {
 
       final notaInserida = await notaFiscalManager.consultarPorId(id);
       expect(notaInserida, isNotNull);
-      expect(notaInserida!.numeroNota, equals('NF-001'));
-      expect(notaInserida.itens.length, equals(2));
-      expect(notaInserida.valorTotal, equals(7450.00)); // (2*3500) + (3*150)
+      expect(notaInserida!.data.invoiceNumber, equals('NF-001'));
+      expect(notaInserida.data.items.length, equals(2));
+      expect(
+        notaInserida.data.totalValue,
+        equals(7450.00),
+      ); // (2*3500) + (3*150)
     });
 
     test(
@@ -143,32 +148,36 @@ void main() {
 
         final itens = [
           InvoiceItem(
-            produtoId: produto1.id,
-            produtoNome: produto1.nome,
-            produtoCodigo: produto1.codigo,
-            quantidade: 1,
-            precoUnitario: produto1.preco,
+            productId: produto1.id,
+            productName: produto1.nome,
+            productCode: produto1.codigo,
+            quantity: 1,
+            unitPrice: produto1.preco,
           ),
         ];
 
-        final nota1 = NotaFiscal(
+        final nota1 = Invoice(
           id: 0,
-          numeroNota: 'NF-001',
-          clienteId: cliente.id,
-          clienteNome: cliente.name,
-          clienteCpf: cliente.cpf,
-          itens: itens,
-          formaPagamento: 'Dinheiro',
+          data: InvoiceData(
+            invoiceNumber: 'NF-001',
+            customerId: cliente.id,
+            customerName: cliente.name,
+            customerCpf: cliente.cpf,
+            items: itens,
+            paymentMethod: 'Dinheiro',
+          ),
         );
 
-        final nota2 = NotaFiscal(
+        final nota2 = Invoice(
           id: 0,
-          numeroNota: 'NF-001', // Mesmo número
-          clienteId: cliente.id,
-          clienteNome: cliente.name,
-          clienteCpf: cliente.cpf,
-          itens: itens,
-          formaPagamento: 'Pix',
+          data: InvoiceData(
+            invoiceNumber: 'NF-001', // Mesmo número
+            customerId: cliente.id,
+            customerName: cliente.name,
+            customerCpf: cliente.cpf,
+            items: itens,
+            paymentMethod: 'Pix',
+          ),
         );
 
         // Act & Assert
@@ -188,22 +197,24 @@ void main() {
 
       final itens = [
         InvoiceItem(
-          produtoId: produto1.id,
-          produtoNome: produto1.nome,
-          produtoCodigo: produto1.codigo,
-          quantidade: 1,
-          precoUnitario: produto1.preco,
+          productId: produto1.id,
+          productName: produto1.nome,
+          productCode: produto1.codigo,
+          quantity: 1,
+          unitPrice: produto1.preco,
         ),
       ];
 
-      final notaFiscal = NotaFiscal(
+      final notaFiscal = Invoice(
         id: 0,
-        numeroNota: 'NF-002',
-        clienteId: cliente.id,
-        clienteNome: cliente.name,
-        clienteCpf: cliente.cpf,
-        itens: itens,
-        formaPagamento: 'Cartão',
+        data: InvoiceData(
+          invoiceNumber: 'NF-002',
+          customerId: cliente.id,
+          customerName: cliente.name,
+          customerCpf: cliente.cpf,
+          items: itens,
+          paymentMethod: 'Cartão',
+        ),
       );
 
       await notaFiscalManager.atualizar(notaFiscal);
@@ -215,7 +226,7 @@ void main() {
 
       // Assert
       expect(notaEncontrada, isNotNull);
-      expect(notaEncontrada!.formaPagamento, equals('Cartão'));
+      expect(notaEncontrada!.data.paymentMethod, equals('Cartão'));
     });
 
     test('deve retornar null ao consultar número inexistente', () async {
@@ -234,22 +245,24 @@ void main() {
 
       final itens = [
         InvoiceItem(
-          produtoId: produto1.id,
-          produtoNome: produto1.nome,
-          produtoCodigo: produto1.codigo,
-          quantidade: 1,
-          precoUnitario: produto1.preco,
+          productId: produto1.id,
+          productName: produto1.nome,
+          productCode: produto1.codigo,
+          quantity: 1,
+          unitPrice: produto1.preco,
         ),
       ];
 
-      final notaFiscal = NotaFiscal(
+      final notaFiscal = Invoice(
         id: 0,
-        numeroNota: 'NF-003',
-        clienteId: cliente.id,
-        clienteNome: cliente.name,
-        clienteCpf: cliente.cpf,
-        itens: itens,
-        formaPagamento: 'Pix',
+        data: InvoiceData(
+          invoiceNumber: 'NF-003',
+          customerId: cliente.id,
+          customerName: cliente.name,
+          customerCpf: cliente.cpf,
+          items: itens,
+          paymentMethod: 'Pix',
+        ),
       );
 
       final id = await notaFiscalManager.atualizar(notaFiscal);
@@ -272,32 +285,36 @@ void main() {
 
       final itens = [
         InvoiceItem(
-          produtoId: produto1.id,
-          produtoNome: produto1.nome,
-          produtoCodigo: produto1.codigo,
-          quantidade: 1,
-          precoUnitario: produto1.preco,
+          productId: produto1.id,
+          productName: produto1.nome,
+          productCode: produto1.codigo,
+          quantity: 1,
+          unitPrice: produto1.preco,
         ),
       ];
 
-      final nota1 = NotaFiscal(
+      final nota1 = Invoice(
         id: 0,
-        numeroNota: 'NF-001',
-        clienteId: cliente.id,
-        clienteNome: cliente.name,
-        clienteCpf: cliente.cpf,
-        itens: itens,
-        formaPagamento: 'Dinheiro',
+        data: InvoiceData(
+          invoiceNumber: 'NF-001',
+          customerId: cliente.id,
+          customerName: cliente.name,
+          customerCpf: cliente.cpf,
+          items: itens,
+          paymentMethod: 'Dinheiro',
+        ),
       );
 
-      final nota2 = NotaFiscal(
+      final nota2 = Invoice(
         id: 0,
-        numeroNota: 'NF-002',
-        clienteId: cliente.id,
-        clienteNome: cliente.name,
-        clienteCpf: cliente.cpf,
-        itens: itens,
-        formaPagamento: 'Cartão',
+        data: InvoiceData(
+          invoiceNumber: 'NF-002',
+          customerId: cliente.id,
+          customerName: cliente.name,
+          customerCpf: cliente.cpf,
+          items: itens,
+          paymentMethod: 'Cartão',
+        ),
       );
 
       await notaFiscalManager.atualizar(nota1);
@@ -330,49 +347,55 @@ void main() {
 
       final itens = [
         InvoiceItem(
-          produtoId: produto1.id,
-          produtoNome: produto1.nome,
-          produtoCodigo: produto1.codigo,
-          quantidade: 1,
-          precoUnitario: produto1.preco,
+          productId: produto1.id,
+          productName: produto1.nome,
+          productCode: produto1.codigo,
+          quantity: 1,
+          unitPrice: produto1.preco,
         ),
       ];
 
       // Notas para cliente 1
       await notaFiscalManager.atualizar(
-        NotaFiscal(
+        Invoice(
           id: 0,
-          numeroNota: 'NF-001',
-          clienteId: cliente.id,
-          clienteNome: cliente.name,
-          clienteCpf: cliente.cpf,
-          itens: itens,
-          formaPagamento: 'Dinheiro',
+          data: InvoiceData(
+            invoiceNumber: 'NF-001',
+            customerId: cliente.id,
+            customerName: cliente.name,
+            customerCpf: cliente.cpf,
+            items: itens,
+            paymentMethod: 'Dinheiro',
+          ),
         ),
       );
 
       await notaFiscalManager.atualizar(
-        NotaFiscal(
+        Invoice(
           id: 0,
-          numeroNota: 'NF-002',
-          clienteId: cliente.id,
-          clienteNome: cliente.name,
-          clienteCpf: cliente.cpf,
-          itens: itens,
-          formaPagamento: 'Cartão',
+          data: InvoiceData(
+            invoiceNumber: 'NF-002',
+            customerId: cliente.id,
+            customerName: cliente.name,
+            customerCpf: cliente.cpf,
+            items: itens,
+            paymentMethod: 'Cartão',
+          ),
         ),
       );
 
       // Nota para cliente 2
       await notaFiscalManager.atualizar(
-        NotaFiscal(
+        Invoice(
           id: 0,
-          numeroNota: 'NF-003',
-          clienteId: cliente2Inserido!.id,
-          clienteNome: cliente2Inserido.name,
-          clienteCpf: cliente2Inserido.cpf,
-          itens: itens,
-          formaPagamento: 'Pix',
+          data: InvoiceData(
+            invoiceNumber: 'NF-003',
+            customerId: cliente2Inserido!.id,
+            customerName: cliente2Inserido.name,
+            customerCpf: cliente2Inserido.cpf,
+            items: itens,
+            paymentMethod: 'Pix',
+          ),
         ),
       );
 
@@ -393,35 +416,39 @@ void main() {
 
       final itens = [
         InvoiceItem(
-          produtoId: produto1.id,
-          produtoNome: produto1.nome,
-          produtoCodigo: produto1.codigo,
-          quantidade: 1,
-          precoUnitario: produto1.preco,
+          productId: produto1.id,
+          productName: produto1.nome,
+          productCode: produto1.codigo,
+          quantity: 1,
+          unitPrice: produto1.preco,
         ),
       ];
 
       await notaFiscalManager.atualizar(
-        NotaFiscal(
+        Invoice(
           id: 0,
-          numeroNota: 'NF-001',
-          clienteId: cliente.id,
-          clienteNome: cliente.name,
-          clienteCpf: cliente.cpf,
-          itens: itens,
-          formaPagamento: 'Dinheiro',
+          data: InvoiceData(
+            invoiceNumber: 'NF-001',
+            customerId: cliente.id,
+            customerName: cliente.name,
+            customerCpf: cliente.cpf,
+            items: itens,
+            paymentMethod: 'Dinheiro',
+          ),
         ),
       );
 
       await notaFiscalManager.atualizar(
-        NotaFiscal(
+        Invoice(
           id: 0,
-          numeroNota: 'NF-002',
-          clienteId: cliente.id,
-          clienteNome: cliente.name,
-          clienteCpf: cliente.cpf,
-          itens: itens,
-          formaPagamento: 'Cartão',
+          data: InvoiceData(
+            invoiceNumber: 'NF-002',
+            customerId: cliente.id,
+            customerName: cliente.name,
+            customerCpf: cliente.cpf,
+            items: itens,
+            paymentMethod: 'Cartão',
+          ),
         ),
       );
 

@@ -272,7 +272,9 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: customers.length,
                                 itemBuilder: (context, index) {
-                                  final cliente = customers.values.elementAt(index);
+                                  final cliente = customers.values.elementAt(
+                                    index,
+                                  );
                                   return Card(
                                     elevation: 2,
                                     color: Colors.white,
@@ -426,7 +428,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
   }
 
   Widget _openCustomerDetails(Customer customer) {
-    // TODO: Implementar a abertura dos detalhes do cliente encontrado
+    // TODO: Implementar a abertura da tela dos detalhes do cliente encontrado (pode alterar, deletar, consultar outro cliente pelo cpf, etc). Caso não exista o cliente, mostrar mensagem de erro.
     return Container();
   }
 }
