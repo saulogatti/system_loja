@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/data/database/cliente_sql_manager.dart';
+import 'package:system_loja/core/repository/customer_repository.dart';
 
 part 'customer_bloc.freezed.dart';
 part 'customer_bloc_event.dart';
@@ -12,11 +12,11 @@ part 'customer_bloc_state.dart';
 /// Utiliza o ClienteSqlManager para operações de banco de dados
 /// e implementa o padrão BLoC para separação de lógica de negócio da UI.
 class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
-  final ClienteSqlManager _sqlManager;
+  final CustomerRepository _customerRepository;
 
-  CustomerBloc({ClienteSqlManager? sqlManager})
-      : _sqlManager = sqlManager ?? ClienteSqlManager(),
-        super(const _Initial()) {
+  CustomerBloc()
+    : _customerRepository = CustomerRepository(),
+      super(const _Initial()) {
     on<_LoadCustomers>(_onLoadCustomers);
     on<_RegisterCustomer>(_onRegisterCustomer);
   }
@@ -28,12 +28,16 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   ) async {
     emit(const CustomerBlocState.loading());
     try {
-      final customers = await _sqlManager.listarTodos();
-      emit(CustomerBlocState.customersLoaded(customers: customers));
+      final customers = await _customerRepository.loadAll();
+      emit(
+        CustomerBlocState.customersLoaded(customers: customers.values.toList()),
+      );
     } catch (e) {
-      emit(CustomerBlocState.customerError(
-        message: 'Erro ao carregar clientes: ${e.toString()}',
-      ));
+      emit(
+        CustomerBlocState.customerError(
+          message: 'Erro ao carregar clientes: ${e.toString()}',
+        ),
+      );
     }
   }
 
@@ -46,7 +50,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
     Emitter<CustomerBlocState> emit,
   ) async {
     emit(const CustomerBlocState.loading());
-    
+
     try {
       final customer = Customer(
         id: 0, // SQLite AUTOINCREMENT gera o ID automaticamente
@@ -57,17 +61,21 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
         address: event.address,
       );
 
-      await _sqlManager.inserir(customer);
-      
+      await _customerRepository.saveNewCustomer(customer);
+
       // Recarrega a lista de clientes após adicionar
-      final customers = await _sqlManager.listarTodos();
-      emit(CustomerBlocState.customersLoaded(customers: customers));
+      final customers = await _customerRepository.loadAll();
+      emit(
+        CustomerBlocState.customersLoaded(customers: customers.values.toList()),
+      );
     } catch (e) {
-      emit(CustomerBlocState.customerError(
-        message: e.toString().contains('CPF já cadastrado') 
-          ? 'Erro: CPF já cadastrado!'
-          : 'Erro ao cadastrar cliente: ${e.toString()}',
-      ));
+      emit(
+        CustomerBlocState.customerError(
+          message: e.toString().contains('CPF já cadastrado')
+              ? 'Erro: CPF já cadastrado!'
+              : 'Erro ao cadastrar cliente: ${e.toString()}',
+        ),
+      );
     }
   }
 }
