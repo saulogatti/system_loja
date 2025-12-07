@@ -2,7 +2,7 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:system_loja/core/cliente_repository/cliente_repository.dart';
 import 'package:system_loja/core/managers/exceptions/cliente_exception.dart';
-import 'package:system_loja/core/utils/resultado.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/utils_extensions.dart';
 
 import '../models/customer.dart';
