@@ -308,13 +308,16 @@ class _ClienteScreenState extends State<ClienteScreen> {
   ///
   /// [cliente] Cliente a ser exibido no card
   Widget _buildClientCard(Cliente cliente) {
+    // Obtém a primeira letra do nome ou '?' se nome estiver vazio
+    final primeiraLetra = cliente.nome.isNotEmpty ? cliente.nome[0].toUpperCase() : '?';
+    
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.blue,
           child: Text(
-            cliente.nome[0].toUpperCase(),
+            primeiraLetra,
             style: const TextStyle(color: Colors.white),
           ),
         ),
