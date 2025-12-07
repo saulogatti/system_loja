@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/models/customer.dart';
+import '../../core/utils/text_formatters.dart';
 import 'bloc/customer_bloc.dart';
 import 'customer_detail_screen.dart';
 
@@ -119,41 +120,13 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                           prefixIcon: Icon(Icons.badge),
                         ),
                         keyboardType: TextInputType.number,
+                        inputFormatters: [CpfTextInputFormatter()],
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return 'CPF é obrigatório';
                           }
                           return null;
                         },
-                        onChanged: (value) {
-                          // Aqui você pode adicionar lógica para formatar o CPF enquanto o usuário digita
-                          String digitsOnly = value.replaceAll(
-                            RegExp(r'[^0-9]'),
-                            '',
-                          );
-                          String formatted = '';
-                          for (int i = 0; i < digitsOnly.length; i++) {
-                            formatted += digitsOnly[i];
-                            if (i == 2 || i == 5) {
-                              formatted += '.';
-                            } else if (i == 8) {
-                              formatted += '-';
-                            }
-                          }
-                          _cpfController.value = TextEditingValue(
-                            text: formatted,
-                            selection: TextSelection.collapsed(
-                              offset: formatted.length,
-                            ),
-                          );
-                        },
-                        buildCounter:
-                            (
-                              context, {
-                              required currentLength,
-                              required isFocused,
-                              required maxLength,
-                            }) => Text('$currentLength/11'),
                         maxLength: 14, // Formato XXX.XXX.XXX-XX
                       ),
                       const SizedBox(height: 16),
@@ -186,26 +159,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                           prefixIcon: Icon(Icons.phone),
                         ),
                         keyboardType: TextInputType.phone,
-                        onChanged: (value) {
-                          // Aqui você pode adicionar lógica para formatar o telefone enquanto o usuário digita
-                          String digitsOnly = value.replaceAll(
-                            RegExp(r'[^0-9]'),
-                            '',
-                          );
-                          String formatted = '';
-                          for (int i = 0; i < digitsOnly.length; i++) {
-                            if (i == 0) formatted += '(';
-                            formatted += digitsOnly[i];
-                            if (i == 1) formatted += ') ';
-                            if (i == 6) formatted += '-';
-                          }
-                          _telefoneController.value = TextEditingValue(
-                            text: formatted,
-                            selection: TextSelection.collapsed(
-                              offset: formatted.length,
-                            ),
-                          );
-                        },
+                        inputFormatters: [PhoneTextInputFormatter()],
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -250,28 +204,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                                 hintText: 'Digite o CPF para buscar',
                               ),
                               keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                // Formatar CPF enquanto digita
-                                String digitsOnly = value.replaceAll(
-                                  RegExp(r'[^0-9]'),
-                                  '',
-                                );
-                                String formatted = '';
-                                for (int i = 0; i < digitsOnly.length; i++) {
-                                  formatted += digitsOnly[i];
-                                  if (i == 2 || i == 5) {
-                                    formatted += '.';
-                                  } else if (i == 8) {
-                                    formatted += '-';
-                                  }
-                                }
-                                _searchCpfController.value = TextEditingValue(
-                                  text: formatted,
-                                  selection: TextSelection.collapsed(
-                                    offset: formatted.length,
-                                  ),
-                                );
-                              },
+                              inputFormatters: [CpfTextInputFormatter()],
                               maxLength: 14, // Formato XXX.XXX.XXX-XX
                             ),
                           ),

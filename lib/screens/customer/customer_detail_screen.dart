@@ -124,7 +124,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     radius: 50,
                     backgroundColor: Colors.blue,
                     child: Text(
-                      widget.customer.name[0].toUpperCase(),
+                      widget.customer.name.isNotEmpty
+                          ? widget.customer.name[0].toUpperCase()
+                          : '?',
                       style: const TextStyle(
                         fontSize: 40,
                         color: Colors.white,
