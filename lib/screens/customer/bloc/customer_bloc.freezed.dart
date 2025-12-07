@@ -55,14 +55,15 @@ extension CustomerBlocEventPatterns on CustomerBlocEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _RegisterCustomer value)?  registerCustomer,TResult Function( _LoadCustomers value)?  loadCustomers,TResult Function( _DeleteCustomer value)?  deleteCustomer,TResult Function( _FindCustomerByCpf value)?  findCustomerByCpf,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _RegisterCustomer value)?  registerCustomer,TResult Function( _LoadCustomers value)?  loadCustomers,TResult Function( _DeleteCustomer value)?  deleteCustomer,TResult Function( _FindCustomerByCpf value)?  findCustomerByCpf,TResult Function( _UpdateCustomer value)?  updateCustomer,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _RegisterCustomer() when registerCustomer != null:
 return registerCustomer(_that);case _LoadCustomers() when loadCustomers != null:
 return loadCustomers(_that);case _DeleteCustomer() when deleteCustomer != null:
 return deleteCustomer(_that);case _FindCustomerByCpf() when findCustomerByCpf != null:
-return findCustomerByCpf(_that);case _:
+return findCustomerByCpf(_that);case _UpdateCustomer() when updateCustomer != null:
+return updateCustomer(_that);case _:
   return orElse();
 
 }
@@ -80,14 +81,15 @@ return findCustomerByCpf(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _RegisterCustomer value)  registerCustomer,required TResult Function( _LoadCustomers value)  loadCustomers,required TResult Function( _DeleteCustomer value)  deleteCustomer,required TResult Function( _FindCustomerByCpf value)  findCustomerByCpf,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _RegisterCustomer value)  registerCustomer,required TResult Function( _LoadCustomers value)  loadCustomers,required TResult Function( _DeleteCustomer value)  deleteCustomer,required TResult Function( _FindCustomerByCpf value)  findCustomerByCpf,required TResult Function( _UpdateCustomer value)  updateCustomer,}){
 final _that = this;
 switch (_that) {
 case _RegisterCustomer():
 return registerCustomer(_that);case _LoadCustomers():
 return loadCustomers(_that);case _DeleteCustomer():
 return deleteCustomer(_that);case _FindCustomerByCpf():
-return findCustomerByCpf(_that);}
+return findCustomerByCpf(_that);case _UpdateCustomer():
+return updateCustomer(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -101,14 +103,15 @@ return findCustomerByCpf(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _RegisterCustomer value)?  registerCustomer,TResult? Function( _LoadCustomers value)?  loadCustomers,TResult? Function( _DeleteCustomer value)?  deleteCustomer,TResult? Function( _FindCustomerByCpf value)?  findCustomerByCpf,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _RegisterCustomer value)?  registerCustomer,TResult? Function( _LoadCustomers value)?  loadCustomers,TResult? Function( _DeleteCustomer value)?  deleteCustomer,TResult? Function( _FindCustomerByCpf value)?  findCustomerByCpf,TResult? Function( _UpdateCustomer value)?  updateCustomer,}){
 final _that = this;
 switch (_that) {
 case _RegisterCustomer() when registerCustomer != null:
 return registerCustomer(_that);case _LoadCustomers() when loadCustomers != null:
 return loadCustomers(_that);case _DeleteCustomer() when deleteCustomer != null:
 return deleteCustomer(_that);case _FindCustomerByCpf() when findCustomerByCpf != null:
-return findCustomerByCpf(_that);case _:
+return findCustomerByCpf(_that);case _UpdateCustomer() when updateCustomer != null:
+return updateCustomer(_that);case _:
   return null;
 
 }
@@ -125,13 +128,14 @@ return findCustomerByCpf(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name,  String cpf,  String email,  String phone,  String address)?  registerCustomer,TResult Function()?  loadCustomers,TResult Function( int id)?  deleteCustomer,TResult Function( String cpf)?  findCustomerByCpf,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name,  String cpf,  String email,  String phone,  String address)?  registerCustomer,TResult Function()?  loadCustomers,TResult Function( int id)?  deleteCustomer,TResult Function( String cpf)?  findCustomerByCpf,TResult Function( Customer customer)?  updateCustomer,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RegisterCustomer() when registerCustomer != null:
 return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);case _LoadCustomers() when loadCustomers != null:
 return loadCustomers();case _DeleteCustomer() when deleteCustomer != null:
 return deleteCustomer(_that.id);case _FindCustomerByCpf() when findCustomerByCpf != null:
-return findCustomerByCpf(_that.cpf);case _:
+return findCustomerByCpf(_that.cpf);case _UpdateCustomer() when updateCustomer != null:
+return updateCustomer(_that.customer);case _:
   return orElse();
 
 }
@@ -149,13 +153,14 @@ return findCustomerByCpf(_that.cpf);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name,  String cpf,  String email,  String phone,  String address)  registerCustomer,required TResult Function()  loadCustomers,required TResult Function( int id)  deleteCustomer,required TResult Function( String cpf)  findCustomerByCpf,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name,  String cpf,  String email,  String phone,  String address)  registerCustomer,required TResult Function()  loadCustomers,required TResult Function( int id)  deleteCustomer,required TResult Function( String cpf)  findCustomerByCpf,required TResult Function( Customer customer)  updateCustomer,}) {final _that = this;
 switch (_that) {
 case _RegisterCustomer():
 return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);case _LoadCustomers():
 return loadCustomers();case _DeleteCustomer():
 return deleteCustomer(_that.id);case _FindCustomerByCpf():
-return findCustomerByCpf(_that.cpf);}
+return findCustomerByCpf(_that.cpf);case _UpdateCustomer():
+return updateCustomer(_that.customer);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -169,13 +174,14 @@ return findCustomerByCpf(_that.cpf);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name,  String cpf,  String email,  String phone,  String address)?  registerCustomer,TResult? Function()?  loadCustomers,TResult? Function( int id)?  deleteCustomer,TResult? Function( String cpf)?  findCustomerByCpf,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name,  String cpf,  String email,  String phone,  String address)?  registerCustomer,TResult? Function()?  loadCustomers,TResult? Function( int id)?  deleteCustomer,TResult? Function( String cpf)?  findCustomerByCpf,TResult? Function( Customer customer)?  updateCustomer,}) {final _that = this;
 switch (_that) {
 case _RegisterCustomer() when registerCustomer != null:
 return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);case _LoadCustomers() when loadCustomers != null:
 return loadCustomers();case _DeleteCustomer() when deleteCustomer != null:
 return deleteCustomer(_that.id);case _FindCustomerByCpf() when findCustomerByCpf != null:
-return findCustomerByCpf(_that.cpf);case _:
+return findCustomerByCpf(_that.cpf);case _UpdateCustomer() when updateCustomer != null:
+return updateCustomer(_that.customer);case _:
   return null;
 
 }
@@ -415,6 +421,72 @@ class __$FindCustomerByCpfCopyWithImpl<$Res>
   return _then(_FindCustomerByCpf(
 cpf: null == cpf ? _self.cpf : cpf // ignore: cast_nullable_to_non_nullable
 as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _UpdateCustomer implements CustomerBlocEvent {
+  const _UpdateCustomer({required this.customer});
+  
+
+ final  Customer customer;
+
+/// Create a copy of CustomerBlocEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$UpdateCustomerCopyWith<_UpdateCustomer> get copyWith => __$UpdateCustomerCopyWithImpl<_UpdateCustomer>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateCustomer&&(identical(other.customer, customer) || other.customer == customer));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,customer);
+
+@override
+String toString() {
+  return 'CustomerBlocEvent.updateCustomer(customer: $customer)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$UpdateCustomerCopyWith<$Res> implements $CustomerBlocEventCopyWith<$Res> {
+  factory _$UpdateCustomerCopyWith(_UpdateCustomer value, $Res Function(_UpdateCustomer) _then) = __$UpdateCustomerCopyWithImpl;
+@useResult
+$Res call({
+ Customer customer
+});
+
+
+
+
+}
+/// @nodoc
+class __$UpdateCustomerCopyWithImpl<$Res>
+    implements _$UpdateCustomerCopyWith<$Res> {
+  __$UpdateCustomerCopyWithImpl(this._self, this._then);
+
+  final _UpdateCustomer _self;
+  final $Res Function(_UpdateCustomer) _then;
+
+/// Create a copy of CustomerBlocEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? customer = null,}) {
+  return _then(_UpdateCustomer(
+customer: null == customer ? _self.customer : customer // ignore: cast_nullable_to_non_nullable
+as Customer,
   ));
 }
 

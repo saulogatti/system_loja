@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/models/customer.dart';
 import 'bloc/customer_bloc.dart';
+import 'customer_detail_screen.dart';
 
 class CustomerView extends StatelessWidget {
   const CustomerView({super.key});
@@ -31,6 +32,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
   final _emailController = TextEditingController();
   final _telefoneController = TextEditingController();
   final _enderecoController = TextEditingController();
+  final _searchCpfController = TextEditingController();
   int _previousCustomerCount = 0;
   bool _isAdding = false;
 
@@ -63,6 +65,10 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(message), backgroundColor: Colors.red),
             );
+          },
+          customerFound: (customer) {
+            // Navega para a tela de detalhes quando um cliente é encontrado
+            _openCustomerDetails(customer);
           },
         );
       },
@@ -222,6 +228,67 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                         ),
                       ),
                       const SizedBox(height: 32),
+                      const Divider(),
+                      const SizedBox(height: 32),
+                      const Text(
+                        'Buscar Cliente por CPF',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _searchCpfController,
+                              decoration: const InputDecoration(
+                                labelText: 'CPF',
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.search),
+                                hintText: 'Digite o CPF para buscar',
+                              ),
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) {
+                                // Formatar CPF enquanto digita
+                                String digitsOnly = value.replaceAll(
+                                  RegExp(r'[^0-9]'),
+                                  '',
+                                );
+                                String formatted = '';
+                                for (int i = 0; i < digitsOnly.length; i++) {
+                                  formatted += digitsOnly[i];
+                                  if (i == 2 || i == 5) {
+                                    formatted += '.';
+                                  } else if (i == 8) {
+                                    formatted += '-';
+                                  }
+                                }
+                                _searchCpfController.value = TextEditingValue(
+                                  text: formatted,
+                                  selection: TextSelection.collapsed(
+                                    offset: formatted.length,
+                                  ),
+                                );
+                              },
+                              maxLength: 14, // Formato XXX.XXX.XXX-XX
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton.icon(
+                            onPressed: _buscarClientePorCpf,
+                            icon: const Icon(Icons.search),
+                            label: const Text('Buscar'),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.all(16),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 32),
+                      const Divider(),
+                      const SizedBox(height: 32),
                       const Text(
                         'Clientes Cadastrados',
                         style: TextStyle(
@@ -331,7 +398,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                                 ),
                               ),
                             ),
-                            customerFound: _openCustomerDetails,
+                            customerFound: (customer) => const SizedBox.shrink(),
                           );
                         },
                       ),
@@ -353,6 +420,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     _emailController.dispose();
     _telefoneController.dispose();
     _enderecoController.dispose();
+    _searchCpfController.dispose();
     super.dispose();
   }
 
@@ -427,8 +495,36 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     );
   }
 
-  Widget _openCustomerDetails(Customer customer) {
-    // TODO: Implementar a abertura da tela dos detalhes do cliente encontrado (pode alterar, deletar, consultar outro cliente pelo cpf, etc). Caso não exista o cliente, mostrar mensagem de erro.
-    return Container();
+  void _buscarClientePorCpf() {
+    final cpf = _searchCpfController.text.trim();
+    if (cpf.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Digite um CPF para buscar'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    context.read<CustomerBloc>().add(
+          CustomerBlocEvent.findCustomerByCpf(cpf: cpf),
+        );
+  }
+
+  void _openCustomerDetails(Customer customer) {
+    // Limpa o campo de busca
+    _searchCpfController.clear();
+    
+    // Navega para a tela de detalhes do cliente
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => BlocProvider.value(
+          value: context.read<CustomerBloc>(),
+          child: CustomerDetailScreen(customer: customer),
+        ),
+      ),
+    );
   }
 }

@@ -27,6 +27,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
     on<_RegisterCustomer>(_onRegisterCustomer);
     on<_DeleteCustomer>(_onDeleteCustomer);
     on<_FindCustomerByCpf>(_onFindCustomerByCpf);
+    on<_UpdateCustomer>(_onUpdateCustomer);
   }
 
   /// Carrega todos os clientes do banco de dados
@@ -138,6 +139,23 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
       emit(
         CustomerBlocState.customerError(
           message: 'Erro ao deletar cliente: ${e.toString()}',
+        ),
+      );
+    }
+  }
+
+  /// Atualiza um cliente existente no banco de dados
+  FutureOr<void> _onUpdateCustomer(_UpdateCustomer event, Emitter<CustomerBlocState> emit) async {
+    emit(const CustomerBlocState.loading());
+    try {
+      await _customerRepository.updateCustomer(event.customer);
+      // Recarrega a lista de clientes após atualizar
+      final customers = await _customerRepository.loadAll();
+      emit(CustomerBlocState.customersLoaded(customers: customers));
+    } catch (e) {
+      emit(
+        CustomerBlocState.customerError(
+          message: 'Erro ao atualizar cliente: ${e.toString()}',
         ),
       );
     }
