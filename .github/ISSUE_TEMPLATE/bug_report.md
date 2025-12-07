@@ -1,38 +1,75 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
+about: Reportar um bug para ajudar a melhorar o projeto
+title: '[BUG] '
+labels: 'bug'
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## 🐛 Descrição do Bug
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+<!-- Uma descrição clara e concisa do que é o bug -->
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## 📋 Passos para Reproduzir
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+<!-- Passos para reproduzir o comportamento -->
+1. Vá para '...'
+2. Clique em '....'
+3. Role até '....'
+4. Veja o erro
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+## ✅ Comportamento Esperado
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+<!-- Uma descrição clara do que você esperava que acontecesse -->
 
-**Additional context**
-Add any other context about the problem here.
+## 📸 Screenshots
+
+<!-- Se aplicável, adicione screenshots para explicar o problema -->
+
+## 🖥️ Ambiente
+
+**Desktop:**
+ - SO: [ex: Windows 11, macOS 13, Ubuntu 22.04]
+ - Navegador: [ex: Chrome, Safari]
+ - Versão: [ex: 22]
+
+**Smartphone:**
+ - Dispositivo: [ex: iPhone 13]
+ - SO: [ex: iOS 16.1]
+ - Navegador: [ex: Safari, Chrome]
+ - Versão: [ex: 22]
+
+**Flutter:**
+ - Versão do Flutter: [execute `flutter --version`]
+ - Versão do Dart: [incluída na saída do comando acima]
+
+## 📂 Arquivos Relacionados
+
+<!-- Liste os arquivos que você acredita estarem relacionados ao bug -->
+- `lib/...`
+- `test/...`
+
+## 🎯 Critérios de Aceitação (para correção)
+
+<!-- Para facilitar o trabalho do Copilot Agent ou desenvolvedores -->
+- [ ] O bug foi identificado e reproduzido
+- [ ] A correção foi implementada
+- [ ] Testes foram adicionados/atualizados
+- [ ] O comportamento esperado foi validado
+- [ ] Documentação foi atualizada (se necessário)
+
+## 📝 Contexto Adicional
+
+<!-- Adicione qualquer outro contexto sobre o problema aqui -->
+
+## 🔍 Logs/Mensagens de Erro
+
+<!-- Cole logs relevantes ou mensagens de erro -->
+```
+cole aqui os logs ou mensagens de erro
+```
+
+---
+
+**💡 Dica para @copilot**: Certifique-se de incluir testes que validem a correção e evitem regressão futura.

@@ -2,6 +2,18 @@
 
 Sistema de gerenciamento de loja desenvolvido em Flutter com persistência de dados em JSON.
 
+> **🤖 Usando GitHub Copilot?** Leia o [Guia de Contribuição](CONTRIBUTING.md) para obter os melhores resultados!
+
+## 📚 Índice
+
+- [Descrição](#descrição)
+- [Funcionalidades](#funcionalidades)
+- [Requisitos](#requisitos)
+- [Como Executar](#como-executar)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Contribuindo](#contribuindo)
+- [Documentação](#documentação)
+
 ## Descrição
 
 Aplicação Flutter com interface gráfica para gerenciamento de loja com as seguintes funcionalidades:
@@ -140,3 +152,57 @@ system_loja/
 - **Dart 3.10.1**: Linguagem de programação
 - **Material Design 3**: Sistema de design
 - **JSON**: Formato de persistência de dados
+
+---
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Por favor, leia o [Guia de Contribuição](CONTRIBUTING.md) antes de começar.
+
+### Para Desenvolvedores
+
+1. Fork o repositório
+2. Crie uma branch: `git checkout -b feature/minha-feature`
+3. Commit suas mudanças: `git commit -m 'feat: adiciona nova feature'`
+4. Push para a branch: `git push origin feature/minha-feature`
+5. Abra um Pull Request
+
+### Para GitHub Copilot Coding Agent
+
+O projeto está configurado para trabalhar efetivamente com o GitHub Copilot Coding Agent. Consulte:
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Guia completo de contribuição
+- [.github/copilot-instructions.md](.github/copilot-instructions.md) - Instruções técnicas
+- [SETUP_MCP.md](SETUP_MCP.md) - Configuração de servidores MCP (futuro)
+
+### Criando Issues
+
+Use os templates disponíveis:
+- **Bug Report**: Para reportar problemas
+- **Feature Request**: Para sugerir melhorias
+
+Inclua sempre **critérios de aceitação** claros para facilitar o trabalho do Copilot Agent.
+
+---
+
+## 📖 Documentação
+
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guia de contribuição detalhado
+- **[.github/copilot-instructions.md](.github/copilot-instructions.md)** - Instruções para Copilot Agent
+- **[.github/instructions/dartcode.instructions.md](.github/instructions/dartcode.instructions.md)** - Padrões de código Dart
+- **[SETUP_MCP.md](SETUP_MCP.md)** - Informações sobre servidores MCP
+- **[docs/](docs/)** - Documentação adicional do projeto
+
+---
+
+## 📄 Licença
+
+Este projeto é de código aberto. Consulte o arquivo LICENSE para mais detalhes.
+
+---
+
+## 🆘 Suporte
+
+Precisa de ajuda? 
+- Abra uma [issue](https://github.com/saulogatti/system_loja/issues) com a label `question`
+- Consulte a [documentação](.github/copilot-instructions.md)
+- Revise o [guia de contribuição](CONTRIBUTING.md)
