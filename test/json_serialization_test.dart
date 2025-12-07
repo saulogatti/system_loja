@@ -42,11 +42,11 @@ void main() {
       // Arrange
       final cliente = Customer(
         id: 1,
-        nome: 'João Silva',
+        name: 'João Silva',
         cpf: '123.456.789-00',
         email: 'joao@email.com',
-        telefone: '(11) 98765-4321',
-        endereco: 'Rua A, 123',
+        phone: '(11) 98765-4321',
+        address: 'Rua A, 123',
       );
 
       // Act
@@ -55,11 +55,11 @@ void main() {
 
       // Assert
       expect(clienteReconstruido.id, equals(cliente.id));
-      expect(clienteReconstruido.nome, equals(cliente.nome));
+      expect(clienteReconstruido.name, equals(cliente.name));
       expect(clienteReconstruido.cpf, equals(cliente.cpf));
       expect(clienteReconstruido.email, equals(cliente.email));
-      expect(clienteReconstruido.telefone, equals(cliente.telefone));
-      expect(clienteReconstruido.endereco, equals(cliente.endereco));
+      expect(clienteReconstruido.phone, equals(cliente.phone));
+      expect(clienteReconstruido.address, equals(cliente.address));
     });
   });
 

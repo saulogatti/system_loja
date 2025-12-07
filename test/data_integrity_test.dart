@@ -45,13 +45,13 @@ void main() {
         // Arrange - Cria cliente
         final cliente = Customer(
           id: 0,
-          nome: 'João Silva',
+          name: 'João Silva',
           cpf: '123.456.789-00',
           email: 'joao@email.com',
-          telefone: '(11) 99999-9999',
-          endereco: 'Rua Teste, 123',
+          phone: '(11) 99999-9999',
+          address: 'Rua Teste, 123',
         );
-        final clienteId = await clienteManager.inserir(cliente);
+        final clienteId = await clienteManager.atualizar(cliente);
         final clienteInserido = await clienteManager.consultarPorId(clienteId);
 
         // Arrange - Cria produto
@@ -64,7 +64,7 @@ void main() {
           descricao: 'Notebook Dell',
           categoria: 'Eletrônicos',
         );
-        final produtoId = await produtoManager.inserir(produto);
+        final produtoId = await produtoManager.atualizar(produto);
         final produtoInserido = await produtoManager.consultarPorId(produtoId);
 
         // Arrange - Cria nota fiscal
@@ -82,7 +82,7 @@ void main() {
           id: 0,
           numeroNota: 'NF-001',
           clienteId: clienteInserido!.id,
-          clienteNome: clienteInserido.nome,
+          clienteNome: clienteInserido.name,
           clienteCpf: clienteInserido.cpf,
           itens: itens,
           formaPagamento: 'Cartão',
@@ -93,11 +93,11 @@ void main() {
         // Act - Atualiza o nome do cliente
         final clienteAtualizado = Customer(
           id: clienteId,
-          nome: 'João Silva Santos', // Nome alterado
+          name: 'João Silva Santos', // Nome alterado
           cpf: '123.456.789-00',
           email: 'joao@email.com',
-          telefone: '(11) 99999-9999',
-          endereco: 'Rua Teste, 123',
+          phone: '(11) 99999-9999',
+          address: 'Rua Teste, 123',
         );
         await clienteManager.atualizar(clienteAtualizado);
 
@@ -115,13 +115,13 @@ void main() {
         // Arrange - Cria cliente
         final cliente = Customer(
           id: 0,
-          nome: 'Maria Santos',
+          name: 'Maria Santos',
           cpf: '987.654.321-00',
           email: 'maria@email.com',
-          telefone: '(11) 88888-8888',
-          endereco: 'Rua Outra, 456',
+          phone: '(11) 88888-8888',
+          address: 'Rua Outra, 456',
         );
-        final clienteId = await clienteManager.inserir(cliente);
+        final clienteId = await clienteManager.atualizar(cliente);
         final clienteInserido = await clienteManager.consultarPorId(clienteId);
 
         // Arrange - Cria produto
@@ -134,7 +134,7 @@ void main() {
           descricao: 'Mouse sem fio',
           categoria: 'Periféricos',
         );
-        final produtoId = await produtoManager.inserir(produto);
+        final produtoId = await produtoManager.atualizar(produto);
         final produtoInserido = await produtoManager.consultarPorId(produtoId);
 
         // Arrange - Cria nota fiscal
@@ -152,7 +152,7 @@ void main() {
           id: 0,
           numeroNota: 'NF-002',
           clienteId: clienteInserido!.id,
-          clienteNome: clienteInserido.nome,
+          clienteNome: clienteInserido.name,
           clienteCpf: clienteInserido.cpf,
           itens: itens,
           formaPagamento: 'Pix',
@@ -163,11 +163,11 @@ void main() {
         // Act - Atualiza o CPF do cliente
         final clienteAtualizado = Customer(
           id: clienteId,
-          nome: 'Maria Santos',
+          name: 'Maria Santos',
           cpf: '111.222.333-44', // CPF alterado
           email: 'maria@email.com',
-          telefone: '(11) 88888-8888',
-          endereco: 'Rua Outra, 456',
+          phone: '(11) 88888-8888',
+          address: 'Rua Outra, 456',
         );
         await clienteManager.atualizar(clienteAtualizado);
 
@@ -187,13 +187,13 @@ void main() {
         // Arrange - Cria cliente
         final cliente = Customer(
           id: 0,
-          nome: 'Carlos Oliveira',
+          name: 'Carlos Oliveira',
           cpf: '111.222.333-44',
           email: 'carlos@email.com',
-          telefone: '(11) 77777-7777',
-          endereco: 'Rua Nova, 789',
+          phone: '(11) 77777-7777',
+          address: 'Rua Nova, 789',
         );
-        final clienteId = await clienteManager.inserir(cliente);
+        final clienteId = await clienteManager.atualizar(cliente);
         final clienteInserido = await clienteManager.consultarPorId(clienteId);
 
         // Arrange - Cria produto
@@ -206,7 +206,7 @@ void main() {
           descricao: 'Teclado mecânico RGB',
           categoria: 'Periféricos',
         );
-        final produtoId = await produtoManager.inserir(produto);
+        final produtoId = await produtoManager.atualizar(produto);
         final produtoInserido = await produtoManager.consultarPorId(produtoId);
 
         // Arrange - Cria nota fiscal
@@ -224,7 +224,7 @@ void main() {
           id: 0,
           numeroNota: 'NF-003',
           clienteId: clienteInserido!.id,
-          clienteNome: clienteInserido.nome,
+          clienteNome: clienteInserido.name,
           clienteCpf: clienteInserido.cpf,
           itens: itens,
           formaPagamento: 'Dinheiro',
@@ -262,13 +262,13 @@ void main() {
         // Arrange - Cria cliente
         final cliente = Customer(
           id: 0,
-          nome: 'Ana Costa',
+          name: 'Ana Costa',
           cpf: '555.666.777-88',
           email: 'ana@email.com',
-          telefone: '(11) 66666-6666',
-          endereco: 'Rua Principal, 100',
+          phone: '(11) 66666-6666',
+          address: 'Rua Principal, 100',
         );
-        final clienteId = await clienteManager.inserir(cliente);
+        final clienteId = await clienteManager.atualizar(cliente);
         final clienteInserido = await clienteManager.consultarPorId(clienteId);
 
         // Arrange - Cria produto
@@ -281,7 +281,7 @@ void main() {
           descricao: 'Monitor LED 24 polegadas',
           categoria: 'Eletrônicos',
         );
-        final produtoId = await produtoManager.inserir(produto);
+        final produtoId = await produtoManager.atualizar(produto);
         final produtoInserido = await produtoManager.consultarPorId(produtoId);
 
         // Arrange - Cria nota fiscal
@@ -299,7 +299,7 @@ void main() {
           id: 0,
           numeroNota: 'NF-004',
           clienteId: clienteInserido!.id,
-          clienteNome: clienteInserido.nome,
+          clienteNome: clienteInserido.name,
           clienteCpf: clienteInserido.cpf,
           itens: itens,
           formaPagamento: 'Cartão',
@@ -339,13 +339,13 @@ void main() {
         // Arrange - Cria cliente
         final cliente = Customer(
           id: 0,
-          nome: 'Pedro Alves',
+          name: 'Pedro Alves',
           cpf: '999.888.777-66',
           email: 'pedro@email.com',
-          telefone: '(11) 55555-5555',
-          endereco: 'Rua Central, 200',
+          phone: '(11) 55555-5555',
+          address: 'Rua Central, 200',
         );
-        final clienteId = await clienteManager.inserir(cliente);
+        final clienteId = await clienteManager.atualizar(cliente);
         final clienteInserido = await clienteManager.consultarPorId(clienteId);
 
         // Arrange - Cria produto
@@ -358,7 +358,7 @@ void main() {
           descricao: 'Impressora multifuncional',
           categoria: 'Eletrônicos',
         );
-        final produtoId = await produtoManager.inserir(produto);
+        final produtoId = await produtoManager.atualizar(produto);
         final produtoInserido = await produtoManager.consultarPorId(produtoId);
 
         // Arrange - Cria nota fiscal
@@ -376,7 +376,7 @@ void main() {
           id: 0,
           numeroNota: 'NF-005',
           clienteId: clienteInserido!.id,
-          clienteNome: clienteInserido.nome,
+          clienteNome: clienteInserido.name,
           clienteCpf: clienteInserido.cpf,
           itens: itens,
           formaPagamento: 'Boleto',
@@ -387,11 +387,11 @@ void main() {
         // Act - Atualiza cliente e produto
         final clienteAtualizado = Customer(
           id: clienteId,
-          nome: 'Pedro Alves Junior',
+          name: 'Pedro Alves Junior',
           cpf: '000.111.222-33',
           email: 'pedro@email.com',
-          telefone: '(11) 55555-5555',
-          endereco: 'Rua Central, 200',
+          phone: '(11) 55555-5555',
+          address: 'Rua Central, 200',
         );
         await clienteManager.atualizar(clienteAtualizado);
 
