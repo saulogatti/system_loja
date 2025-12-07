@@ -22,6 +22,7 @@ dependencies:
   sqflite_common_ffi: ^2.3.3
   async: ^2.13.0
   meta: ^1.17.0
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:

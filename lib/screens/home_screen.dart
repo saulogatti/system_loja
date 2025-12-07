@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'cliente_screen.dart';
 import 'nota_fiscal_screen.dart';
 import 'produto_screen.dart';
+import 'usuario_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -61,6 +62,16 @@ class HomeScreen extends StatelessWidget {
               color: Colors.orange,
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const NotaFiscalScreen()));
+              },
+            ),
+            const SizedBox(height: 16),
+            _buildMenuCard(
+              context,
+              title: 'Gestão de Usuários',
+              icon: Icons.people,
+              color: Colors.purple,
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const UsuarioScreen()));
               },
             ),
           ],

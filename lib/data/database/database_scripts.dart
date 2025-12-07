@@ -103,6 +103,53 @@ class DatabaseScripts {
     )
   ''';
 
+  /// Script de criação da tabela de usuários
+  ///
+  /// Campos:
+  /// - id: Identificador único auto-incrementado
+  /// - nome: Nome completo do usuário (obrigatório)
+  /// - email: Email do usuário (único, obrigatório)
+  /// - senha_hash: Hash SHA-256 da senha (obrigatório)
+  /// - nivel_permissao: Nível de permissão do usuário (obrigatório)
+  /// - data_cadastro: Data e hora do cadastro
+  /// - data_ultima_atualizacao: Data e hora da última atualização
+  static String get createTableUsuarios => '''
+    CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tableUsuarios} (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      senha_hash TEXT NOT NULL,
+      nivel_permissao TEXT NOT NULL,
+      data_cadastro TEXT NOT NULL,
+      data_ultima_atualizacao TEXT NOT NULL
+    )
+  ''';
+
+  /// Script de criação da tabela de logs de atividade
+  ///
+  /// Campos:
+  /// - id: Identificador único auto-incrementado
+  /// - tipo_acao: Tipo de ação realizada (CRIAR, LER, ATUALIZAR, DELETAR)
+  /// - entidade: Nome da entidade afetada
+  /// - entidade_id: ID da entidade afetada (pode ser nulo)
+  /// - usuario_id: ID do usuário que realizou a ação
+  /// - usuario_nome: Nome do usuário que realizou a ação
+  /// - data_hora: Data e hora da ação
+  /// - detalhes: Detalhes adicionais sobre a ação
+  static String get createTableLogsAtividade => '''
+    CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tableLogsAtividade} (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      tipo_acao TEXT NOT NULL,
+      entidade TEXT NOT NULL,
+      entidade_id INTEGER,
+      usuario_id INTEGER NOT NULL,
+      usuario_nome TEXT NOT NULL,
+      data_hora TEXT NOT NULL,
+      detalhes TEXT,
+      FOREIGN KEY (usuario_id) REFERENCES ${DatabaseConfig.tableUsuarios}(id)
+    )
+  ''';
+
   /// Retorna todos os scripts de criação de tabelas na ordem correta
   ///
   /// A ordem é importante para respeitar as dependências entre tabelas.
@@ -111,6 +158,8 @@ class DatabaseScripts {
     createTableProdutos,
     createTableNotasFiscais,
     createTableItensNotaFiscal,
+    createTableUsuarios,
+    createTableLogsAtividade,
   ];
 
   /// Script para criar índice no CPF do cliente
@@ -128,10 +177,28 @@ class DatabaseScripts {
     CREATE INDEX IF NOT EXISTS idx_nota_fiscal_numero ON ${DatabaseConfig.tableNotasFiscais}(numero_nota)
   ''';
 
+  /// Script para criar índice no email do usuário
+  static String get createIndexUsuarioEmail => '''
+    CREATE INDEX IF NOT EXISTS idx_usuario_email ON ${DatabaseConfig.tableUsuarios}(email)
+  ''';
+
+  /// Script para criar índice no usuário_id dos logs
+  static String get createIndexLogUsuario => '''
+    CREATE INDEX IF NOT EXISTS idx_log_usuario ON ${DatabaseConfig.tableLogsAtividade}(usuario_id)
+  ''';
+
+  /// Script para criar índice na entidade dos logs
+  static String get createIndexLogEntidade => '''
+    CREATE INDEX IF NOT EXISTS idx_log_entidade ON ${DatabaseConfig.tableLogsAtividade}(entidade, entidade_id)
+  ''';
+
   /// Retorna todos os scripts de criação de índices
   static List<String> get allCreateIndexScripts => [
     createIndexClienteCpf,
     createIndexProdutoCodigo,
     createIndexNotaFiscalNumero,
+    createIndexUsuarioEmail,
+    createIndexLogUsuario,
+    createIndexLogEntidade,
   ];
 }
