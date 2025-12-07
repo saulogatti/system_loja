@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:async/async.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 
 /// Gerenciador centralizado de operações de sistema de arquivos JSON.
@@ -16,66 +16,70 @@ import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 ///
 /// Classes que utilizam este mixin devem implementar o método `logError`.
 mixin FileSystemManager {
-  /// Encoder JSON reutilizável para formatação consistente.
-  static const JsonEncoder _jsonEncoder = JsonEncoder.withIndent('  ');
-
   /// Memoizador para garantir inicialização única do diretório de cache.
   ///
-  /// Armazena o resultado da primeira chamada a [setupFileSystem] e
+  /// Armazena o resultado da primeira chamada a [_initializeDirectory] e
   /// reutiliza para chamadas subsequentes, evitando operações de I/O
   /// desnecessárias.
-  AsyncMemoizer<String> memoizer = AsyncMemoizer<String>();
+  final AsyncMemoizer<String> _asyncAccess = AsyncMemoizer<String>();
 
-  @protected
   /// Exclui todos os arquivos JSON do diretório de cache.
-  /// Esta função é útil para limpar o cache
-  /// de dados persistidos, removendo todos os arquivos JSON
-  /// armazenados no diretório de cache.
-  /// Exclui apenas arquivos com extensão `.json`.
-  /// Se o diretório não existir, não faz nada.
-  /// Se ocorrer um erro ao excluir os arquivos,
-  /// o erro é registrado via `logError`,
-  /// mas a função não lança exceções.
+  ///
+  /// Itera sobre todos os arquivos `.json` no diretório de cache e os remove.
+  /// Se o diretório não existir, não faz nada. Erros durante a exclusão são
+  /// registrados via `logError`, mas não lançam exceções.
+  ///
+  /// Este método é útil para limpar completamente o cache de dados persistidos.
   @protected
   Future<void> deleteDirectory() async {
-    final cacheDir = Directory(await setupFileSystem());
-    if (await cacheDir.exists()) {
-      await for (final entity in cacheDir.list()) {
-        if (entity is File && entity.path.endsWith('.json')) {
-          await entity.delete();
-        }
+    try {
+      final cacheDir = Directory(await _initializeDirectory());
+      if (await cacheDir.exists()) {
+        await cacheDir.delete(recursive: true);
       }
+    } catch (e, stackTrace) {
+      logError('Erro ao deletar diretório de cache: $e', stackTrace);
     }
   }
 
-  /// Carrega e decodifica dados JSON de um arquivo de forma assíncrona.
+  /// Carrega o conteúdo de um arquivo de forma assíncrona.
   ///
-  /// Lê o conteúdo de um arquivo JSON localizado em [fileName] relativo ao
-  /// diretório de cache da aplicação e retorna os dados decodificados no
-  /// tipo genérico [R]. O caminho deve ser válido e terminar com `.json`.
+  /// Lê o conteúdo do arquivo localizado em [fileName] relativo ao diretório
+  /// de cache da aplicação e retorna como string. O nome do arquivo deve incluir
+  /// a extensão (ex: 'clientes.json', 'config.txt').
   ///
   /// O método garante que o sistema de arquivos esteja inicializado antes
   /// de tentar ler o arquivo.
   ///
-  /// Lança [ArgumentError] se o caminho for vazio ou não terminar com `.json`.
-  /// Registra erros e relança exceções em caso de falhas de leitura ou decodificação.
+  /// Lança [ArgumentError] se [fileName] for vazio ou não contiver extensão.
+  /// Registra erros via `logError` e relança exceções em caso de falhas de leitura.
+  ///
+  /// Exemplo:
+  /// ```dart
+  /// final content = await fetchDataFromFile('clientes.json');
+  /// final data = jsonDecode(content);
+  /// ```
   @protected
-  Future<R> loadJsonFromFile<R>(String fileName) async {
-    if (fileName.isEmpty || p.extension(fileName) != '.json') {
-      throw ArgumentError('O caminho do arquivo não pode ser vazio. Caminhos JSON devem terminar com .json');
+  Future<OperationResult<String, String>> fetchDataFromFile(
+    String fileName,
+  ) async {
+    if (fileName.isEmpty || p.extension(fileName).isEmpty) {
+      throw ArgumentError(
+        'O nome do arquivo não pode ser vazio e deve conter uma extensão (ex: .json, .txt)',
+      );
     }
 
     File file = await _mountFileSystem(fileName);
     if (!await file.exists()) {
-      assert(false, 'Arquivo não encontrado: $fileName');
+      return OperationResult.failure('Arquivo $fileName não encontrado.');
     }
     try {
       String content = await file.readAsString();
-      final R data = jsonDecode(content) as R;
-      return data;
+
+      return OperationResult.success(content);
     } catch (e, stackTrace) {
       logError('Erro ao carregar arquivo JSON em $fileName: $e', stackTrace);
-      rethrow;
+      return OperationResult.failure('Erro ao ler arquivo $fileName: $e');
     }
   }
 
@@ -85,22 +89,30 @@ mixin FileSystemManager {
   /// este mixin, tipicamente usando `LoggerClassMixin` ou similar.
   void logError(String message, StackTrace stackTrace);
 
-  /// Salva dados no formato JSON em um arquivo de forma assíncrona.
+  /// Salva dados em um arquivo de forma assíncrona.
   ///
-  /// Codifica [data] em formato JSON com indentação de 2 espaços e
-  /// persiste no caminho especificado em [path] relativo ao diretório
+  /// Persiste [data] no arquivo especificado em [path] relativo ao diretório
   /// de cache. Cria diretórios pai automaticamente se não existirem.
+  /// O caminho deve incluir a extensão do arquivo (ex: 'clientes.json', 'config.txt').
   ///
   /// O método garante que o sistema de arquivos esteja inicializado antes
   /// de tentar salvar o arquivo.
   ///
   /// Retorna `true` se a operação foi bem-sucedida, `false` caso contrário.
-  /// Lança [ArgumentError] se o caminho for vazio ou não terminar com `.json`.
+  /// Lança [ArgumentError] se [path] for vazio ou não contiver extensão.
   /// Erros de I/O são registrados via `logError` e o método retorna `false`.
+  ///
+  /// Exemplo:
+  /// ```dart
+  /// final jsonString = jsonEncode(clientes);
+  /// final success = await saveData('clientes.json', jsonString);
+  /// ```
   @protected
-  Future<bool> saveJsonToFile(String path, Object data) async {
-    if (path.isEmpty || p.extension(path) != '.json') {
-      throw ArgumentError('O caminho do arquivo não pode ser vazio. Caminhos JSON devem terminar com .json');
+  Future<bool> saveData(String path, String data) async {
+    if (path.isEmpty || p.extension(path).isEmpty) {
+      throw ArgumentError(
+        'O caminho do arquivo não pode ser vazio e deve conter uma extensão (ex: .json, .txt)',
+      );
     }
 
     try {
@@ -108,14 +120,28 @@ mixin FileSystemManager {
       if (!await file.parent.exists()) {
         await file.parent.create(recursive: true);
       }
-      String jsonString = _jsonEncoder.convert(data);
-      await file.writeAsString(jsonString);
+
+      await file.writeAsString(data);
       return true;
     } catch (e, stackTrace) {
       logError('Erro ao salvar arquivo JSON em $path: $e', stackTrace);
       return false;
     }
   }
+
+  /// Retorna o nome do diretório de cache específico da aplicação.
+  ///
+  /// Este método abstrato deve ser implementado pelas classes que usam
+  /// este mixin para definir o nome do diretório onde os arquivos serão
+  /// armazenados dentro do diretório de suporte da aplicação.
+  ///
+  /// Exemplo de implementação:
+  /// ```dart
+  /// @override
+  /// String systemNameDirectory() => 'system_loja_cache';
+  /// ```
+  @protected
+  String systemNameDirectory();
 
   /// Inicializa o cache de forma assíncrona.
   ///
@@ -124,9 +150,10 @@ mixin FileSystemManager {
   /// uma vez.
   ///
   /// Lança [CacheException] se ocorrer um erro durante a inicialização.
-  Future<String> setupFileSystem() async {
-    if (memoizer.hasRun) return memoizer.future;
-    return await memoizer.runOnce(() async {
+  /// Obs: Este método é utilizado internamente pelo mixin. Deixar publico expoe o caminho do diretório. --- IGNORE ---
+  Future<String> _initializeDirectory() async {
+    if (_asyncAccess.hasRun) return _asyncAccess.future;
+    return await _asyncAccess.runOnce(() async {
       try {
         final directory = await getApplicationSupportDirectory();
         String cacheDirectory = p.join(directory.path, systemNameDirectory());
@@ -142,19 +169,18 @@ mixin FileSystemManager {
     });
   }
 
-  @protected
-  String systemNameDirectory();
-
-  /// Monta o sistema de arquivos para o caminho fornecido.
+  /// Monta o caminho completo do arquivo dentro do sistema de cache.
   ///
   /// Retorna um objeto [File] apontando para [path] dentro do diretório
   /// de cache da aplicação. Garante que o diretório de cache esteja
   /// inicializado antes de retornar o arquivo.
   ///
-  /// Este é um método privado utilizado internamente por [loadJsonFromFile]
-  /// e [saveJsonToFile].
+  /// [path] deve ser relativo ao diretório de cache (ex: 'clientes.json').
+  ///
+  /// Este é um método privado utilizado internamente por [fetchDataFromFile]
+  /// e [saveData].
   Future<File> _mountFileSystem(String path) async {
-    String cacheDirectory = await setupFileSystem();
+    String cacheDirectory = await _initializeDirectory();
     return File(p.join(cacheDirectory, path));
   }
 }
