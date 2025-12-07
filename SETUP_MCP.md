@@ -158,10 +158,12 @@ Se o projeto tivesse servidores MCP configurados, você poderia:
 
 Quando estiver pronto para implementar servidores MCP:
 
+> **Nota**: Verifique a disponibilidade e atualidade destes links, pois a documentação do MCP está em evolução.
+
 - **MCP Specification**: https://modelcontextprotocol.io/
-- **GitHub Copilot MCP Docs**: https://docs.github.com/en/copilot/customizing-copilot/using-mcp-servers
-- **MCP Server Examples**: https://github.com/modelcontextprotocol/servers
-- **Community Servers**: https://github.com/topics/mcp-server
+- **GitHub Copilot MCP Docs**: https://docs.github.com/en/copilot (busque por "MCP" ou "Model Context Protocol")
+- **GitHub Copilot Documentation**: https://docs.github.com/en/copilot
+- **Pesquise por**: "Model Context Protocol GitHub" ou "MCP servers GitHub Copilot" para recursos atualizados
 
 ---
 
