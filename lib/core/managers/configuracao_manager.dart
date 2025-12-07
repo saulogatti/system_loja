@@ -100,8 +100,11 @@ class ConfiguracaoManager with LoggerClassMixin {
 
       final logsRecentes = logs.where((log) {
         try {
-          final dataLog = DateTime.parse(log['data_hora']);
-          return dataLog.isAfter(dataLimite);
+          if (log is Map<String, dynamic> && log['data_hora'] is String) {
+            final dataLog = DateTime.parse(log['data_hora'] as String);
+            return dataLog.isAfter(dataLimite);
+          }
+          return true; // Mantém logs com formato inválido
         } catch (e) {
           return true; // Mantém logs com data inválida
         }

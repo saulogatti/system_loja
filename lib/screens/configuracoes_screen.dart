@@ -185,7 +185,7 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
                   border: Border.all(color: Colors.grey),
                 ),
               ),
-              onTap: () => _mostrarSeletorCor(),
+              onTap: _mostrarSeletorCor,
             ),
           ],
         ),
@@ -228,7 +228,7 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
                 title: const Text('Frequência de backup'),
                 subtitle: Text(_config.frequenciaBackup),
                 trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () => _selecionarFrequenciaBackup(),
+                onTap: _selecionarFrequenciaBackup,
               ),
             ListTile(
               title: const Text('Realizar backup agora'),
