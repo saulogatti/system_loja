@@ -109,6 +109,51 @@ void main() {
       expect(resultado[1].nome, equals('José João'));
     });
 
+    test('não deve retornar todos os clientes ao buscar por nome sem dígitos', () {
+      // Arrange
+      final clientes = [
+        Cliente(
+          id: 1,
+          nome: 'João Silva',
+          cpf: '123.456.789-00',
+          email: 'joao@email.com',
+          telefone: '11999999999',
+          endereco: 'Rua A, 123',
+        ),
+        Cliente(
+          id: 2,
+          nome: 'Maria Santos',
+          cpf: '987.654.321-00',
+          email: 'maria@email.com',
+          telefone: '11988888888',
+          endereco: 'Rua B, 456',
+        ),
+        Cliente(
+          id: 3,
+          nome: 'José João',
+          cpf: '111.222.333-44',
+          email: 'jose@email.com',
+          telefone: '11977777777',
+          endereco: 'Rua C, 789',
+        ),
+      ];
+
+      // Act - Simular busca por nome sem números (termoSemFormatacao fica vazio)
+      final termo = 'joao';
+      final termoSemFormatacao = termo.replaceAll(_digitsOnlyRegex, '');
+      final resultado = clientes.where((cliente) {
+        final nomeMatch = cliente.nome.toLowerCase().contains(termo.toLowerCase());
+        final cpfSemFormatacao = cliente.cpf.replaceAll(_digitsOnlyRegex, '');
+        final cpfMatch = termoSemFormatacao.isNotEmpty && cpfSemFormatacao.contains(termoSemFormatacao);
+        return nomeMatch || cpfMatch;
+      }).toList();
+
+      // Assert - apenas clientes cujo nome corresponde devem ser retornados
+      expect(resultado.length, equals(2));
+      expect(resultado[0].nome, equals('João Silva'));
+      expect(resultado[1].nome, equals('José João'));
+    });
+
     test('deve filtrar clientes por CPF parcial', () {
       // Arrange
       final clientes = [

@@ -253,8 +253,8 @@ class _ClienteScreenState extends State<ClienteScreen> {
     return _manager.clientes.where((cliente) {
       final nomeMatch = cliente.nome.toLowerCase().contains(termo);
       final cpfSemFormatacao = cliente.cpf.replaceAll(_digitsOnlyRegex, '');
-      final cpfMatch = cpfSemFormatacao.contains(termoSemFormatacao);
-      
+      final cpfMatch = termoSemFormatacao.isNotEmpty && cpfSemFormatacao.contains(termoSemFormatacao);
+
       return nomeMatch || cpfMatch;
     }).toList();
   }
