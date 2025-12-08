@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../core/managers/cliente_manager.dart';
 import '../core/models/cliente.dart';
@@ -11,6 +12,9 @@ class ClienteScreen extends StatefulWidget {
 }
 
 class _ClienteScreenState extends State<ClienteScreen> {
+  /// Regex estático para remover caracteres não numéricos
+  static final _digitsOnlyRegex = RegExp(r'[^\d]');
+  
   final ClienteManager _manager = ClienteManager();
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
@@ -18,6 +22,8 @@ class _ClienteScreenState extends State<ClienteScreen> {
   final _emailController = TextEditingController();
   final _telefoneController = TextEditingController();
   final _enderecoController = TextEditingController();
+  final _buscaController = TextEditingController();
+  String _termoBusca = '';
 
   @override
   Widget build(BuildContext context) {
@@ -109,11 +115,52 @@ class _ClienteScreenState extends State<ClienteScreen> {
                       ),
                     ),
                     const SizedBox(height: 32),
-                    const Text(
-                      'Clientes Cadastrados',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            'Clientes Cadastrados',
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        if (_manager.clientes.isNotEmpty)
+                          Text(
+                            '${_manager.clientes.length} cliente(s)',
+                            style: const TextStyle(fontSize: 14, color: Colors.grey),
+                          ),
+                      ],
                     ),
                     const SizedBox(height: 16),
+                    if (_manager.clientes.isNotEmpty)
+                      TextField(
+                        controller: _buscaController,
+                        decoration: InputDecoration(
+                          labelText: 'Buscar cliente',
+                          hintText: 'Digite o nome ou CPF',
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: _termoBusca.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    setState(() {
+                                      _buscaController.clear();
+                                      _termoBusca = '';
+                                    });
+                                  },
+                                )
+                              : null,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9\s]')),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            _termoBusca = value;
+                          });
+                        },
+                      ),
+                    if (_manager.clientes.isNotEmpty) const SizedBox(height: 16),
                     if (_manager.clientes.isEmpty)
                       const Center(
                         child: Padding(
@@ -125,30 +172,49 @@ class _ClienteScreenState extends State<ClienteScreen> {
                         ),
                       )
                     else
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _manager.clientes.length,
-                        itemBuilder: (context, index) {
-                          final cliente = _manager.clientes[index];
-                          return Card(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.blue,
-                                child: Text(
-                                  cliente.nome[0].toUpperCase(),
-                                  style: const TextStyle(color: Colors.white),
+                      Builder(
+                        builder: (context) {
+                          final clientesFiltrados = _filtrarClientes();
+                          
+                          if (clientesFiltrados.isEmpty && _termoBusca.isNotEmpty) {
+                            return Column(
+                              children: [
+                                const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(32.0),
+                                    child: Text(
+                                      'Nenhum cliente encontrado com o termo buscado',
+                                      style: TextStyle(fontSize: 16, color: Colors.orange),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              title: Text(cliente.nome, style: const TextStyle(fontWeight: FontWeight.bold)),
-                              subtitle: Text('CPF: ${cliente.cpf}\n${cliente.email}'),
-                              isThreeLine: true,
-                              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                              onTap: () {
-                                _mostrarDetalhesCliente(cliente);
-                              },
-                            ),
+                                const Divider(),
+                                const SizedBox(height: 16),
+                                const Text(
+                                  'Todos os clientes:',
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 8),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: _manager.clientes.length,
+                                  itemBuilder: (context, index) {
+                                    return _buildClientCard(_manager.clientes[index]);
+                                  },
+                                ),
+                              ],
+                            );
+                          }
+                          
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: clientesFiltrados.length,
+                            itemBuilder: (context, index) {
+                              return _buildClientCard(clientesFiltrados[index]);
+                            },
                           );
                         },
                       ),
@@ -169,7 +235,28 @@ class _ClienteScreenState extends State<ClienteScreen> {
     _emailController.dispose();
     _telefoneController.dispose();
     _enderecoController.dispose();
+    _buscaController.dispose();
     super.dispose();
+  }
+
+  /// Filtra a lista de clientes com base no termo de busca
+  /// 
+  /// Busca por nome (parcial) ou CPF (apenas números)
+  List<Cliente> _filtrarClientes() {
+    if (_termoBusca.isEmpty) {
+      return _manager.clientes;
+    }
+
+    final termo = _termoBusca.toLowerCase();
+    final termoSemFormatacao = termo.replaceAll(_digitsOnlyRegex, '');
+
+    return _manager.clientes.where((cliente) {
+      final nomeMatch = cliente.nome.toLowerCase().contains(termo);
+      final cpfSemFormatacao = cliente.cpf.replaceAll(_digitsOnlyRegex, '');
+      final cpfMatch = termoSemFormatacao.isNotEmpty && cpfSemFormatacao.contains(termoSemFormatacao);
+
+      return nomeMatch || cpfMatch;
+    }).toList();
   }
 
   void _adicionarCliente() async {
@@ -215,6 +302,34 @@ class _ClienteScreenState extends State<ClienteScreen> {
       _enderecoController.clear();
       setState(() {});
     }
+  }
+
+  /// Constrói um card de cliente para exibição na lista
+  ///
+  /// [cliente] Cliente a ser exibido no card
+  Widget _buildClientCard(Cliente cliente) {
+    // Obtém a primeira letra do nome ou '?' se nome estiver vazio
+    final primeiraLetra = cliente.nome.isNotEmpty ? cliente.nome[0].toUpperCase() : '?';
+    
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue,
+          child: Text(
+            primeiraLetra,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        title: Text(cliente.nome, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text('CPF: ${cliente.cpf}\n${cliente.email}'),
+        isThreeLine: true,
+        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        onTap: () {
+          _mostrarDetalhesCliente(cliente);
+        },
+      ),
+    );
   }
 
   Widget _buildDetailRow(String label, String value) {
