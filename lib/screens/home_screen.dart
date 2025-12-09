@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/screens/usuario_screen.dart';
 
+import 'configuracoes/configuracoes_screen.dart';
 import 'cliente/cliente_screen.dart';
 import 'products/product_screen.dart';
 import 'sales/sales_screen.dart';
@@ -83,7 +84,17 @@ class HomeScreen extends StatelessWidget {
                 color: Colors.purple,
                 onTap: () => _navigateToScreen(context, const UsuarioScreen()),
               ),
-            ],
+              const SizedBox(height: 16),
+            _buildMenuCard(
+              context,
+              title: 'Configurações do Sistema',
+              icon: Icons.settings,
+              color: Colors.teal,
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ConfiguracoesScreen()));
+              },
+            ),
+          ],
           ),
         ),
       ),

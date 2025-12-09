@@ -1,8 +1,9 @@
 import 'package:system_loja/core/managers/default/repository/system_repository.dart';
-import 'package:system_loja/core/settings/settings_app.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
+
 
 abstract class DefaultManager<S extends SystemRepository> {
-  final SettingsApp settingsApp;
+  final AppSettings settingsApp;
   late S _systemRepository;
   DefaultManager({required this.settingsApp}) {
     switch (settingsApp.typeCache) {
