@@ -6,3 +6,11 @@ extension MapId on Map<int, DefaultObject> {
     return keys.reduce((a, b) => a > b ? a : b) + 1;
   }
 }
+
+/// Extensão para formatação de preços
+extension PriceFormatter on double {
+  /// Formata o preço no padrão brasileiro (R$ XX.XX)
+  String toFormattedPrice() {
+    return 'R\$ ${toStringAsFixed(2)}';
+  }
+}

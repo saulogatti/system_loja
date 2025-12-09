@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/core/utils/utils_extensions.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
 
 /// Widget da lista de produtos cadastrados
 ///
 /// Exibe os produtos em formato de lista com cards ou mensagem quando vazio.
 class ProductList extends StatelessWidget {
+  /// Espaçamento padrão entre título e lista
+  static const double _defaultSpacing = 16.0;
+
   final List<Produto> produtos;
   final Function(Produto) onProductTap;
 
@@ -27,7 +31,7 @@ class ProductList extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: _defaultSpacing),
         if (produtos.isEmpty)
           const Center(
             child: Padding(
@@ -52,7 +56,7 @@ class ProductList extends StatelessWidget {
                 colorAvatar: Colors.green,
                 title: produto.nome,
                 subTitle:
-                    'Código: ${produto.codigo}\nR\$ ${produto.preco.toStringAsFixed(2)} - Estoque: ${produto.estoque}',
+                    'Código: ${produto.codigo}\n${produto.preco.toFormattedPrice()} - Estoque: ${produto.estoque}',
                 onTap: () => onProductTap(produto),
               );
             },

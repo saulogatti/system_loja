@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/core/utils/utils_extensions.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/produto_state.dart';
 

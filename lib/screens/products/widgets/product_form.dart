@@ -80,7 +80,7 @@ class ProductForm extends StatelessWidget {
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.attach_money),
                   ),
-                  keyboardType: const TextInputType.numberWithOptions(
+                  keyboardType: TextInputType.numberWithOptions(
                     decimal: true,
                   ),
                   validator: (value) {
