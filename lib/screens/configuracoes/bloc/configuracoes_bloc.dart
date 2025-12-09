@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/managers/configuracao_manager.dart';
+import 'package:system_loja/screens/settings/settings_service.dart';
 
 import 'configuracoes_event.dart';
 import 'configuracoes_state.dart';
@@ -30,6 +31,8 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
     emit(const ConfiguracoesLoading());
     try {
       await _manager.atualizarConfiguracao(event.configuracao);
+      SettingsService().primaryColorNotifier.value =
+          event.configuracao.corPrimaria;
       emit(
         ConfiguracoesSuccess(
           event.configuracao,

@@ -27,7 +27,7 @@ AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) => AppSettings(
   corPrimaria:
       $enumDecodeNullable(
         _$EnumColorAppThemeSettingsEnumMap,
-        json['corPrimaria'],
+        json['cor_primaria'],
       ) ??
       EnumColorAppThemeSettings.azul,
 );
@@ -39,7 +39,7 @@ Map<String, dynamic> _$AppSettingsToJson(AppSettings instance) =>
       'notificar_vendas': instance.notificarVendas,
       'notificar_estoque_baixo': instance.notificarEstoqueBaixo,
       'limite_estoque_baixo': instance.limiteEstoqueBaixo,
-      'corPrimaria': _$EnumColorAppThemeSettingsEnumMap[instance.corPrimaria]!,
+      'cor_primaria': _$EnumColorAppThemeSettingsEnumMap[instance.corPrimaria]!,
       'tema_escuro': instance.temaEscuro,
       'backup_automatico': instance.backupAutomatico,
       'frequencia_backup': instance.frequenciaBackup,
