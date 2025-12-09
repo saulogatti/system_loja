@@ -144,7 +144,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.qr_code),
                           ),
-                          enabled: false, // Código não deve ser editável
+                          readOnly: true, // Código não editável para manter integridade dos dados
                         ),
                         const SizedBox(height: 16),
                         Row(

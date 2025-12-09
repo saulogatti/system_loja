@@ -64,14 +64,11 @@ class ProductRepository extends RepositoryManager {
   ///
   /// [produto] Produto com os dados atualizados.
   /// Retorna resultado da operação de atualização.
+  /// 
+  /// **Nota**: Este método utiliza internamente [salvarProduto], pois o storage
+  /// não diferencia entre inserção e atualização (upsert pattern).
   Future<OperationResult<bool, String>> updateProduct(Produto produto) async {
-    final result = await defaultDataStorage.save(
-      PersistentDataStore(id: produto.id, data: produto.toJson()),
-    );
-    if (!result) {
-      return OperationError('Falha ao atualizar produto: ${produto.nome}');
-    }
-    return OperationSuccess(result);
+    return salvarProduto(produto);
   }
 
   /// Remove um produto do armazenamento.
@@ -79,10 +76,12 @@ class ProductRepository extends RepositoryManager {
   /// [id] ID do produto a ser removido.
   /// Retorna resultado da operação de exclusão.
   Future<OperationResult<bool, String>> deleteProduct(int id) async {
-    final result = await defaultDataStorage.deleteById(id);
-    if (!result) {
-      return OperationError('Falha ao deletar produto com ID: $id');
+    final result = await defaultDataStorage.delete(id);
+    switch (result) {
+      case OperationSuccess():
+        return OperationSuccess(result.result);
+      case OperationError():
+        return OperationError('Falha ao deletar produto com ID: $id - ${result.error}');
     }
-    return OperationSuccess(result);
   }
 }
