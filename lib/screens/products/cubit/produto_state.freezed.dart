@@ -581,8 +581,6 @@ String toString() {
 
 
 
-// dart format on
-
 /// @nodoc
 
 
@@ -792,3 +790,5 @@ as String,
 
 
 }
+
+// dart format on

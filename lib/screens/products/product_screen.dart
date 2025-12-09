@@ -23,8 +23,6 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
   // Constantes
   static const String _tituloAppBar = 'Cadastro de Produto';
   static const String _mensagemSucesso = 'cadastrado com sucesso!';
-  static const String _mensagemPrecoInvalido = 'Erro: Preço inválido!';
-  static const String _mensagemEstoqueInvalido = 'Erro: Estoque inválido!';
 
   late final ProductCubit _produtoCubit = ProductCubit();
   final _formKey = GlobalKey<FormState>();
@@ -57,41 +55,38 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
               produtos.addAll(state.produtos);
             }
             return Scaffold(
-            appBar: AppBar(
-              title: const Text(_tituloAppBar),
-              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        ProductForm(
-                          formKey: _formKey,
-                          nomeController: _nomeController,
-                          codigoController: _codigoController,
-                          precoController: _precoController,
-                          estoqueController: _estoqueController,
-                          descricaoController: _descricaoController,
-                          categoriaController: _categoriaController,
-                          onSubmit: _adicionarProduto,
-                        ),
-                        const SizedBox(height: 32),
-                        ProductList(
-                          produtos: produtos,
-                          onProductTap: _mostrarDetalhesProduto,
-                        ),
-                      ],
+              appBar: AppBar(
+                title: const Text(_tituloAppBar),
+                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              ),
+              body: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ProductForm(
+                            formKey: _formKey,
+                            nomeController: _nomeController,
+                            codigoController: _codigoController,
+                            precoController: _precoController,
+                            estoqueController: _estoqueController,
+                            descricaoController: _descricaoController,
+                            categoriaController: _categoriaController,
+                            onSubmit: _adicionarProduto,
+                          ),
+                          const SizedBox(height: 32),
+                          ProductList(produtos: produtos, onProductTap: _mostrarDetalhesProduto),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
@@ -117,43 +112,40 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
 
   /// Adiciona um novo produto após validação.
   void _adicionarProduto() {
-    if (!_formKey.currentState!.validate()) return;
-
-    final codigo = _codigoController.text.trim();
-    int? codigoInt = int.tryParse(codigo);
-    if (codigoInt == null) {
-      _mostrarErro('Erro: Código inválido!');
-      return;
-    }
-    _produtoCubit.findByCode(codigoInt);
-
-    // Valida e converte valores numéricos
-    final preco = _validarPreco(_precoController.text.trim());
-    if (preco == null) {
-      _mostrarErro(_mensagemPrecoInvalido);
+    // Valida o formulário usando os validadores
+    // Os validadores já exibem mensagens específicas para cada campo
+    if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    final estoque = _validarEstoque(_estoqueController.text.trim());
-    if (estoque == null) {
-      _mostrarErro(_mensagemEstoqueInvalido);
-      return;
+    try {
+      // Converte valores já validados pelos validators
+      // Os validators garantem que esses valores são parseáveis
+      final preco = double.parse(_precoController.text.trim());
+      final codigo = _codigoController.text.trim();
+      final estoque = int.parse(_estoqueController.text.trim());
+
+      // Cria e adiciona produto
+      final produto = Produto(
+        id: 0, // ID será gerado automaticamente
+        nome: _nomeController.text.trim(),
+        codigo: codigo,
+        preco: preco,
+        estoque: estoque,
+        descricao: _descricaoController.text.trim(),
+        categoria: _categoriaController.text.trim(),
+      );
+
+      _produtoCubit.adicionarProduto(produto);
+      _mostrarSucesso('Produto "${produto.nome}" $_mensagemSucesso');
+      _limparFormulario();
+    } on FormatException catch (e) {
+      // Isto não deve acontecer devido aos validators, mas tratamos por segurança
+      _mostrarErro('Erro de formato ao processar dados numéricos: ${e.message}');
+    } catch (e) {
+      // Captura erros inesperados do repositório/banco de dados
+      _mostrarErro('Erro ao salvar produto: ${e.toString()}');
     }
-
-    // Cria e adiciona produto
-    final produto = Produto(
-      id: 0, // ID será gerado automaticamente
-      nome: _nomeController.text.trim(),
-      codigo: codigo,
-      preco: preco,
-      estoque: estoque,
-      descricao: _descricaoController.text.trim(),
-      categoria: _categoriaController.text.trim(),
-    );
-
-    _produtoCubit.adicionarProduto(produto);
-    _mostrarSucesso('Produto "${produto.nome}" $_mensagemSucesso');
-    _limparFormulario();
   }
 
   /// Limpa todos os campos do formulário.
@@ -182,27 +174,15 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
 
   /// Exibe mensagem de erro em SnackBar.
   void _mostrarErro(String mensagem) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(mensagem), backgroundColor: Colors.red),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.red));
   }
 
   /// Exibe mensagem de sucesso em SnackBar.
   void _mostrarSucesso(String mensagem) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(mensagem), backgroundColor: Colors.green),
-    );
-  }
-
-  /// Valida e converte o estoque.
-  int? _validarEstoque(String texto) {
-    final estoque = int.tryParse(texto);
-    return (estoque != null && estoque >= 0) ? estoque : null;
-  }
-
-  /// Valida e converte o preço.
-  double? _validarPreco(String texto) {
-    final preco = double.tryParse(texto.replaceAll(',', '.'));
-    return (preco != null && preco >= 0) ? preco : null;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.green));
   }
 }

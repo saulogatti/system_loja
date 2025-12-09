@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
 import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
@@ -16,8 +17,7 @@ class CustomerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          CustomerBloc()..add(const CustomerBlocEvent.loadCustomers()),
+      create: (context) => CustomerBloc()..add(const CustomerBlocEvent.loadCustomers()),
       child: const _CustomerDetailView(),
     );
   }
@@ -67,9 +67,9 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
           },
           customerError: (message) {
             _isAdding = false;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(message), backgroundColor: Colors.red),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
           },
           customerFound: (customer) {
             // Navega para a tela de detalhes quando um cliente é encontrado
@@ -92,13 +92,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text(
-                        'Novo Cliente',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const Text('Novo Cliente', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: _nomeController,
@@ -107,12 +101,10 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.person),
                         ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Nome é obrigatório';
-                          }
-                          return null;
-                        },
+                        validator: (value) => combineValidators([
+                          (v) => validateRequired(v, 'Nome'),
+                          (v) => validateMinLength(v, 3, 'Nome'),
+                        ])(value),
                       ),
                       const SizedBox(height: 16),
                       // Adicionar mascaras e a validacao esta no bloc para CPF
@@ -127,15 +119,9 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                         },
                       ),
                       const SizedBox(height: 16),
-                      TextFormFieldEmail(
-                        emailController: _emailController,
-                        isEditing: true,
-                      ),
+                      TextFormFieldEmail(emailController: _emailController, isEditing: true),
                       const SizedBox(height: 16),
-                      TextFormFieldPhone(
-                        telefoneController: _telefoneController,
-                        isEditing: true,
-                      ),
+                      TextFormFieldPhone(telefoneController: _telefoneController, isEditing: true),
                       const SizedBox(height: 16),
                       TextFormField(
                         controller: _enderecoController,
@@ -161,10 +147,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                       const SizedBox(height: 32),
                       const Text(
                         'Buscar Cliente por CPF',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
                       Row(
@@ -188,9 +171,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                             onPressed: _buscarClientePorCpf,
                             icon: const Icon(Icons.search),
                             label: const Text('Buscar'),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.all(16),
-                            ),
+                            style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
                           ),
                         ],
                       ),
@@ -199,10 +180,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                       const SizedBox(height: 32),
                       const Text(
                         'Clientes Cadastrados',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
                       BlocBuilder<CustomerBloc, CustomerBlocState>(
@@ -213,10 +191,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                                 padding: EdgeInsets.all(32.0),
                                 child: Text(
                                   'Carregando clientes...',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey,
-                                  ),
+                                  style: TextStyle(fontSize: 16, color: Colors.grey),
                                 ),
                               ),
                             ),
@@ -233,10 +208,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                                     padding: EdgeInsets.all(32.0),
                                     child: Text(
                                       'Nenhum cliente cadastrado',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey,
-                                      ),
+                                      style: TextStyle(fontSize: 16, color: Colors.grey),
                                     ),
                                   ),
                                 );
@@ -247,14 +219,11 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: customers.length,
                                 itemBuilder: (context, index) {
-                                  final cliente = customers.values.elementAt(
-                                    index,
-                                  );
+                                  final cliente = customers.values.elementAt(index);
                                   return CardListItem(
                                     colorAvatar: Colors.blue,
                                     title: cliente.name,
-                                    subTitle:
-                                        'CPF: ${cliente.cpf}\n${cliente.email}',
+                                    subTitle: 'CPF: ${cliente.cpf}\n${cliente.email}',
                                     onTap: () {
                                       _mostrarDetalhesCliente(cliente);
                                     },
@@ -267,15 +236,11 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                                 padding: const EdgeInsets.all(32.0),
                                 child: Text(
                                   'Erro: $message',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.red,
-                                  ),
+                                  style: const TextStyle(fontSize: 16, color: Colors.red),
                                 ),
                               ),
                             ),
-                            customerFound: (customer) =>
-                                const SizedBox.shrink(),
+                            customerFound: (customer) => const SizedBox.shrink(),
                           );
                         },
                       ),
@@ -327,11 +292,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.grey,
-              fontSize: 12,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
           ),
           const SizedBox(height: 4),
           Text(value, style: const TextStyle(fontSize: 16)),
@@ -344,17 +305,12 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     final cpf = _searchCpfController.text.trim();
     if (cpf.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Digite um CPF para buscar'),
-          backgroundColor: Colors.orange,
-        ),
+        const SnackBar(content: Text('Digite um CPF para buscar'), backgroundColor: Colors.orange),
       );
       return;
     }
 
-    context.read<CustomerBloc>().add(
-      CustomerBlocEvent.findCustomerByCpf(cpf: cpf),
-    );
+    context.read<CustomerBloc>().add(CustomerBlocEvent.findCustomerByCpf(cpf: cpf));
   }
 
   void _mostrarDetalhesCliente(Customer cliente) {
@@ -372,19 +328,11 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
               _buildDetailRow('Email', cliente.email),
               _buildDetailRow('Telefone', cliente.phone),
               _buildDetailRow('Endereço', cliente.address),
-              _buildDetailRow(
-                'Data de Cadastro',
-                cliente.registrationDate.toString().split('.')[0],
-              ),
+              _buildDetailRow('Data de Cadastro', cliente.registrationDate.toString().split('.')[0]),
             ],
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Fechar'),
-          ),
-        ],
+        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
       ),
     );
   }
