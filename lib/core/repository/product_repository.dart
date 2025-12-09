@@ -59,4 +59,30 @@ class ProductRepository extends RepositoryManager {
     }
     return OperationSuccess(result);
   }
+
+  /// Atualiza um produto existente no armazenamento.
+  ///
+  /// [produto] Produto com os dados atualizados.
+  /// Retorna resultado da operação de atualização.
+  Future<OperationResult<bool, String>> updateProduct(Produto produto) async {
+    final result = await defaultDataStorage.save(
+      PersistentDataStore(id: produto.id, data: produto.toJson()),
+    );
+    if (!result) {
+      return OperationError('Falha ao atualizar produto: ${produto.nome}');
+    }
+    return OperationSuccess(result);
+  }
+
+  /// Remove um produto do armazenamento.
+  ///
+  /// [id] ID do produto a ser removido.
+  /// Retorna resultado da operação de exclusão.
+  Future<OperationResult<bool, String>> deleteProduct(int id) async {
+    final result = await defaultDataStorage.deleteById(id);
+    if (!result) {
+      return OperationError('Falha ao deletar produto com ID: $id');
+    }
+    return OperationSuccess(result);
+  }
 }

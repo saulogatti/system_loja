@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/produto_state.dart';
+import 'package:system_loja/screens/products/product_detail_screen.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
 
 import '../../core/models/produto.dart';
@@ -40,13 +41,24 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: _produtoCubit,
-      child: BlocBuilder<ProductCubit, ProductState>(
-        builder: (context, state) {
-          List<Produto> produtos = [];
-          if (state is ProductStateInsertSuccess) {
-            produtos.addAll(state.produtos);
+      child: BlocListener<ProductCubit, ProductState>(
+        listener: (context, state) {
+          if (state is ProductStateUpdateSuccess || state is ProductStateDeleteSuccess) {
+            // Recarregar a lista após atualização ou exclusão
+            _produtoCubit.loadAllProducts();
           }
-          return Scaffold(
+        },
+        child: BlocBuilder<ProductCubit, ProductState>(
+          builder: (context, state) {
+            List<Produto> produtos = [];
+            if (state is ProductStateInsertSuccess) {
+              produtos.addAll(state.produtos);
+            } else if (state is ProductStateUpdateSuccess) {
+              produtos.addAll(state.produtos);
+            } else if (state is ProductStateDeleteSuccess) {
+              produtos.addAll(state.produtos);
+            }
+            return Scaffold(
             appBar: AppBar(
               title: const Text(_tituloAppBar),
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -219,6 +231,7 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
             ),
           );
         },
+        ),
       ),
     );
   }
@@ -282,28 +295,6 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
     _limparFormulario();
   }
 
-  /// Constrói uma linha de detalhe com label e valor.
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.grey,
-              fontSize: 12,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(fontSize: 16)),
-        ],
-      ),
-    );
-  }
-
   /// Limpa todos os campos do formulário.
   void _limparFormulario() {
     _formKey.currentState!.reset();
@@ -315,39 +306,15 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
     _categoriaController.clear();
   }
 
-  /// Exibe um diálogo modal com os detalhes completos do produto.
+  /// Navega para a tela de detalhes do produto.
   void _mostrarDetalhesProduto(Produto produto) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(produto.nome),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildDetailRow('ID', produto.id.toString()),
-              _buildDetailRow('Código', produto.codigo),
-              _buildDetailRow(
-                'Preço',
-                'R\$ ${produto.preco.toStringAsFixed(2)}',
-              ),
-              _buildDetailRow('Estoque', produto.estoque.toString()),
-              _buildDetailRow('Categoria', produto.categoria),
-              _buildDetailRow('Descrição', produto.descricao),
-              _buildDetailRow(
-                'Data de Cadastro',
-                produto.dataCadastro.toString().split('.')[0],
-              ),
-            ],
-          ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider.value(
+          value: _produtoCubit,
+          child: ProductDetailScreen(product: produto),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Fechar'),
-          ),
-        ],
       ),
     );
   }

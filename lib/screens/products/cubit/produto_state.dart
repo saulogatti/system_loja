@@ -18,6 +18,15 @@ sealed class ProductState with _$ProductState {
       ProductStateInsertSuccess;
   factory ProductState.newIdGenerated({required int newId}) =
       ProductStateNewIdGenerated;
-      factory ProductState.loading() =
+  factory ProductState.loading() =
       ProductStateLoading;
+  // Update product success state
+  factory ProductState.updateSuccess({required List<Produto> produtos}) =
+      ProductStateUpdateSuccess;
+  // Delete product success state
+  factory ProductState.deleteSuccess({required List<Produto> produtos}) =
+      ProductStateDeleteSuccess;
+  // Error state for operations
+  factory ProductState.error({required String message}) =
+      ProductStateError;
 }
