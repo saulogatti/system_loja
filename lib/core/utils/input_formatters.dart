@@ -34,9 +34,9 @@ class PriceInputFormatter extends TextInputFormatter {
     
     // Permite apenas um ponto decimal
     final parts = normalizedText.split('.');
-    if (parts.length > 2) {
-      // Se houver mais de um ponto, mantém apenas o primeiro
-      normalizedText = '${parts[0]}.${parts.sublist(1).join('')}';
+    // Permite apenas um ponto decimal
+    if (normalizedText.indexOf('.') != normalizedText.lastIndexOf('.')) {
+      normalizedText = normalizedText.substring(0, normalizedText.lastIndexOf('.'));
     }
     
     // Limita a 2 casas decimais
