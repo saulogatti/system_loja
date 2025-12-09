@@ -8,8 +8,11 @@ part 'storage_data.g.dart';
 abstract class BaseDataStorage {
   @protected
   final Map<String, Lock> fileLocks = {};
-  final String storageType;
-  BaseDataStorage({required this.storageType});
+
+  /// Categoria de armazenamento (usada para diferenciar tipos de dados)
+  /// Exemplo: "UserData", "ProductData", etc.
+  final String storageCategory;
+  BaseDataStorage({required this.storageCategory});
 
   /// Deleta objeto pelo ID
   Future<OperationResult<bool, String>> delete(int id);
@@ -29,7 +32,8 @@ abstract class BaseDataStorage {
   /// Pode salvar novo objeto ou atualizar existente
   Future<bool> save(PersistentDataStore object);
 }
-
+/// Representa um objeto persistente armazenado.
+/// Contém um ID único e um mapa de dados genéricos.
 @JsonSerializable()
 class PersistentDataStore {
   final int id;

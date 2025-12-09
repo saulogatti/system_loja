@@ -16,7 +16,7 @@ class JsonDataStorage extends BaseDataStorage
   static const int _maxFileNameLength = 200;
   static const Duration _timeOutMilliseconds = Duration(milliseconds: 5000);
 
-  JsonDataStorage({required super.storageType});
+  JsonDataStorage({required super.storageCategory});
   @override
   Future<OperationResult<bool, String>> delete(int id) async {
     try {
@@ -98,7 +98,7 @@ class JsonDataStorage extends BaseDataStorage
 
   @override
   String retrieveDirectoryName() {
-    return 'json_storage_$storageType';
+    return 'json_storage_$storageCategory';
   }
 
   @override

@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/screens/sales/sales_cubit.dart';
 import 'package:system_loja/screens/sales/sales_state.dart';
+import 'package:system_loja/screens/widgets/card_list_item.dart';
 
-import '../../core/managers/produto_manager.dart';
 import '../../core/models/customer.dart';
 import '../../core/models/invoice.dart';
 import '../../core/models/produto.dart';
@@ -18,13 +18,14 @@ class SalesView extends StatefulWidget {
 
 // Form screen for creating a new nota fiscal
 class _SalesInvoiceScreen extends StatefulWidget {
-  final ProdutoManager produtoManager;
   final Map<int, Customer> customers;
   final SalesCubit salesCubit;
+  final List<Produto> products;
   const _SalesInvoiceScreen({
-    required this.produtoManager,
+    // required this.produtoManager,
     required this.customers,
     required this.salesCubit,
+    required this.products,
   });
 
   @override
@@ -123,7 +124,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   ElevatedButton.icon(
-                    onPressed: _adicionarItem,
+                    onPressed: _addItem,
                     icon: const Icon(Icons.add),
                     label: const Text('Adicionar Item'),
                   ),
@@ -219,12 +220,14 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
     super.dispose();
   }
 
+  void _addItem() {
+    _adicionarItem();
+  }
+
   void _adicionarItem() async {
     final produto = await showDialog<Produto>(
       context: context,
-      builder: (context) => _SelecionarProdutoDialog(
-        produtos: widget.produtoManager.getProdutos(),
-      ),
+      builder: (context) => _SelecionarProdutoDialog(produtos: widget.products),
     );
 
     if (produto != null) {
@@ -351,7 +354,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
 }
 
 class _SalesViewState extends State<SalesView> {
-  final ProdutoManager _produtoManager = ProdutoManager();
+  List<Produto> _produtoManager = [];
   final SalesCubit _salesCubit = SalesCubit();
 
   Map<int, Invoice> _mapToNotaFiscal = {};
@@ -381,10 +384,24 @@ class _SalesViewState extends State<SalesView> {
                 ),
               );
               break;
+            case SalesLoadProductsFailure():
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Erro ao carregar produtos! ${state.message}'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              break;
             case SalesLoaded():
-              _mapToNotaFiscal = state.items;
+              setState(() {
+                _mapToNotaFiscal = state.items;
+              });
+
+              break;
             case SalesLoadedCustomers():
               _mapCustomers = state.customers;
+            case SalesLoadedProducts():
+              _produtoManager = state.products;
             case SalesLoading():
               // TODO: Implementar um dialog ou Overlay de loading (acho melhor um Overlay...)
               break;
@@ -400,6 +417,8 @@ class _SalesViewState extends State<SalesView> {
               );
               Navigator.pop(context, true);
               break;
+            case SalesLoadingProducts():
+            // TODO: Pensar sobre implementar um dialog ou Overlay de loading (acho melhor um Overlay...)
           }
         },
         child: Column(
@@ -428,38 +447,14 @@ class _SalesViewState extends State<SalesView> {
                       itemCount: _mapToNotaFiscal.length,
                       itemBuilder: (context, index) {
                         final nf = _mapToNotaFiscal.values.elementAt(index);
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.orange,
-                              child: Text(
-                                'NF',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              'Nota: ${nf.data.invoiceNumber}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Text(
+                        return CardListItem(
+                          colorAvatar: Colors.orange,
+                          title: 'Nota: ${nf.data.invoiceNumber}',
+                          subTitle:
                               'Cliente: ${nf.data.customerName}\nR\$ ${nf.data.totalValue.toStringAsFixed(2)}',
-                            ),
-                            isThreeLine: true,
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16,
-                            ),
-                            onTap: () {
-                              _mostrarDetalhesNota(nf);
-                            },
-                          ),
+                          onTap: () {
+                            _mostrarDetalhesNota(nf);
+                          },
                         );
                       },
                     ),
@@ -480,6 +475,7 @@ class _SalesViewState extends State<SalesView> {
     super.initState();
     _salesCubit.loadAllCustomers();
     _salesCubit.loadSales();
+    _salesCubit.loadProducts();
   }
 
   void _adicionarNotaFiscal() async {
@@ -493,7 +489,7 @@ class _SalesViewState extends State<SalesView> {
       return;
     }
 
-    if (_produtoManager.getProdutos().isEmpty) {
+    if (_produtoManager.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Erro: Nenhum produto cadastrado!'),
@@ -507,7 +503,7 @@ class _SalesViewState extends State<SalesView> {
       context,
       MaterialPageRoute(
         builder: (context) => _SalesInvoiceScreen(
-          produtoManager: _produtoManager,
+          products: _produtoManager,
           salesCubit: _salesCubit,
           customers: _mapCustomers,
         ),

@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/repository/customer_repository.dart';
-import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 
 part 'customer_bloc.freezed.dart';
@@ -19,9 +18,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   final CustomerRepository _customerRepository;
 
   CustomerBloc()
-    : _customerRepository = CustomerRepository(
-        settingsApp: AppSettings(typeCache: EnumTypeCache.json),
-      ),
+    : _customerRepository = CustomerRepository(),
       super(const _Initial()) {
     on<_LoadCustomers>(_onLoadCustomers);
     on<_RegisterCustomer>(_onRegisterCustomer);
@@ -124,7 +121,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
         return;
       }
 
-      int newId = await _customerRepository.getNextId();
+      int newId = await _customerRepository.obtainNextId();
       final customer = Customer(
         id: newId, // SQLite AUTOINCREMENT gera o ID automaticamente
         name: event.name,

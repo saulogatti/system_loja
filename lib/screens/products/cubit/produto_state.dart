@@ -18,4 +18,6 @@ sealed class ProductState with _$ProductState {
       ProductStateInsertSuccess;
   factory ProductState.newIdGenerated({required int newId}) =
       ProductStateNewIdGenerated;
+      factory ProductState.loading() =
+      ProductStateLoading;
 }

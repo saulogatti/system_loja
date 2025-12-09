@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:system_loja/core/settings/app_theme_settings.dart';
 
 part 'app_settings.g.dart';
 
@@ -8,7 +9,7 @@ part 'app_settings.g.dart';
 /// opções de backup, segurança e tipo de banco de dados.
 @JsonSerializable(explicitToJson: true)
 class AppSettings {
-  final EnumTypeCache typeCache;
+  EnumTypeCache typeCache;
 
   /// Controla se as notificações estão ativadas globalmente no sistema
   @JsonKey(name: 'notificacoes_ativadas')
@@ -27,14 +28,11 @@ class AppSettings {
   final int limiteEstoqueBaixo;
 
   // Preferências de Tema
+  EnumColorAppThemeSettings corPrimaria;
 
   /// Define se o tema escuro está ativado no aplicativo
   @JsonKey(name: 'tema_escuro')
   final bool temaEscuro;
-
-  /// Cor primária do tema em formato hexadecimal (ex: '#2196F3')
-  @JsonKey(name: 'cor_primaria')
-  final String corPrimaria;
 
   // Opções de Backup
 
@@ -80,7 +78,6 @@ class AppSettings {
     this.notificarEstoqueBaixo = true,
     this.limiteEstoqueBaixo = 10,
     this.temaEscuro = false,
-    this.corPrimaria = '#2196F3', // Blue
     this.backupAutomatico = false,
     this.frequenciaBackup = 'semanal',
     this.localBackup = 'data/backups',
@@ -90,6 +87,7 @@ class AppSettings {
     this.tempoBloqueioMinutos = 15,
     this.permitirMultiplosUsuarios = false,
     this.typeCache = EnumTypeCache.json,
+    this.corPrimaria = EnumColorAppThemeSettings.azul,
   });
 
   /// Cria um objeto de configuração padrão
@@ -106,7 +104,6 @@ class AppSettings {
     bool? notificarEstoqueBaixo,
     int? limiteEstoqueBaixo,
     bool? temaEscuro,
-    String? corPrimaria,
     bool? backupAutomatico,
     String? frequenciaBackup,
     String? localBackup,
@@ -116,6 +113,7 @@ class AppSettings {
     int? tempoBloqueioMinutos,
     bool? permitirMultiplosUsuarios,
     EnumTypeCache? typeCache,
+    EnumColorAppThemeSettings? corPrimaria,
   }) {
     return AppSettings(
       notificacoesAtivadas: notificacoesAtivadas ?? this.notificacoesAtivadas,
@@ -124,7 +122,6 @@ class AppSettings {
           notificarEstoqueBaixo ?? this.notificarEstoqueBaixo,
       limiteEstoqueBaixo: limiteEstoqueBaixo ?? this.limiteEstoqueBaixo,
       temaEscuro: temaEscuro ?? this.temaEscuro,
-      corPrimaria: corPrimaria ?? this.corPrimaria,
       backupAutomatico: backupAutomatico ?? this.backupAutomatico,
       frequenciaBackup: frequenciaBackup ?? this.frequenciaBackup,
       localBackup: localBackup ?? this.localBackup,
@@ -135,6 +132,7 @@ class AppSettings {
       permitirMultiplosUsuarios:
           permitirMultiplosUsuarios ?? this.permitirMultiplosUsuarios,
       typeCache: typeCache ?? this.typeCache,
+      corPrimaria: corPrimaria ?? this.corPrimaria,
     );
   }
 
@@ -149,7 +147,6 @@ class AppSettings {
         'notificarEstoqueBaixo: $notificarEstoqueBaixo, '
         'limiteEstoqueBaixo: $limiteEstoqueBaixo, '
         'temaEscuro: $temaEscuro, '
-        'corPrimaria: $corPrimaria, '
         'backupAutomatico: $backupAutomatico, '
         'frequenciaBackup: $frequenciaBackup, '
         'localBackup: $localBackup, '

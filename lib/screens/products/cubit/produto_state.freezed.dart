@@ -55,7 +55,7 @@ extension ProductStatePatterns on ProductState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult Function( ProductStateInsertSuccess value)?  insertSuccess,TResult Function( ProductStateNewIdGenerated value)?  newIdGenerated,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult Function( ProductStateInsertSuccess value)?  insertSuccess,TResult Function( ProductStateNewIdGenerated value)?  newIdGenerated,TResult Function( ProductStateLoading value)?  loading,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure() when findByCodeFailure != null:
@@ -63,7 +63,8 @@ return findByCodeFailure(_that);case ProductStateFindByCodeSuccess() when findBy
 return findByCodeSuccess(_that);case ProductStateFindByIdSuccess() when findByIdSuccess != null:
 return findByIdSuccess(_that);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that);case ProductStateNewIdGenerated() when newIdGenerated != null:
-return newIdGenerated(_that);case _:
+return newIdGenerated(_that);case ProductStateLoading() when loading != null:
+return loading(_that);case _:
   return orElse();
 
 }
@@ -81,7 +82,7 @@ return newIdGenerated(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ProductStateFindByCodeFailure value)  findByCodeFailure,required TResult Function( ProductStateFindByCodeSuccess value)  findByCodeSuccess,required TResult Function( ProductStateFindByIdSuccess value)  findByIdSuccess,required TResult Function( ProductStateInsertSuccess value)  insertSuccess,required TResult Function( ProductStateNewIdGenerated value)  newIdGenerated,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ProductStateFindByCodeFailure value)  findByCodeFailure,required TResult Function( ProductStateFindByCodeSuccess value)  findByCodeSuccess,required TResult Function( ProductStateFindByIdSuccess value)  findByIdSuccess,required TResult Function( ProductStateInsertSuccess value)  insertSuccess,required TResult Function( ProductStateNewIdGenerated value)  newIdGenerated,required TResult Function( ProductStateLoading value)  loading,}){
 final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure():
@@ -89,7 +90,8 @@ return findByCodeFailure(_that);case ProductStateFindByCodeSuccess():
 return findByCodeSuccess(_that);case ProductStateFindByIdSuccess():
 return findByIdSuccess(_that);case ProductStateInsertSuccess():
 return insertSuccess(_that);case ProductStateNewIdGenerated():
-return newIdGenerated(_that);}
+return newIdGenerated(_that);case ProductStateLoading():
+return loading(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -103,7 +105,7 @@ return newIdGenerated(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult? Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult? Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult? Function( ProductStateInsertSuccess value)?  insertSuccess,TResult? Function( ProductStateNewIdGenerated value)?  newIdGenerated,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult? Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult? Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult? Function( ProductStateInsertSuccess value)?  insertSuccess,TResult? Function( ProductStateNewIdGenerated value)?  newIdGenerated,TResult? Function( ProductStateLoading value)?  loading,}){
 final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure() when findByCodeFailure != null:
@@ -111,7 +113,8 @@ return findByCodeFailure(_that);case ProductStateFindByCodeSuccess() when findBy
 return findByCodeSuccess(_that);case ProductStateFindByIdSuccess() when findByIdSuccess != null:
 return findByIdSuccess(_that);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that);case ProductStateNewIdGenerated() when newIdGenerated != null:
-return newIdGenerated(_that);case _:
+return newIdGenerated(_that);case ProductStateLoading() when loading != null:
+return loading(_that);case _:
   return null;
 
 }
@@ -128,14 +131,15 @@ return newIdGenerated(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  findByCodeFailure,TResult Function( Produto produto)?  findByCodeSuccess,TResult Function( Produto produto)?  findByIdSuccess,TResult Function( List<Produto> produtos)?  insertSuccess,TResult Function( int newId)?  newIdGenerated,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  findByCodeFailure,TResult Function( Produto produto)?  findByCodeSuccess,TResult Function( Produto produto)?  findByIdSuccess,TResult Function( List<Produto> produtos)?  insertSuccess,TResult Function( int newId)?  newIdGenerated,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure() when findByCodeFailure != null:
 return findByCodeFailure(_that.message);case ProductStateFindByCodeSuccess() when findByCodeSuccess != null:
 return findByCodeSuccess(_that.produto);case ProductStateFindByIdSuccess() when findByIdSuccess != null:
 return findByIdSuccess(_that.produto);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that.produtos);case ProductStateNewIdGenerated() when newIdGenerated != null:
-return newIdGenerated(_that.newId);case _:
+return newIdGenerated(_that.newId);case ProductStateLoading() when loading != null:
+return loading();case _:
   return orElse();
 
 }
@@ -153,14 +157,15 @@ return newIdGenerated(_that.newId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  findByCodeFailure,required TResult Function( Produto produto)  findByCodeSuccess,required TResult Function( Produto produto)  findByIdSuccess,required TResult Function( List<Produto> produtos)  insertSuccess,required TResult Function( int newId)  newIdGenerated,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  findByCodeFailure,required TResult Function( Produto produto)  findByCodeSuccess,required TResult Function( Produto produto)  findByIdSuccess,required TResult Function( List<Produto> produtos)  insertSuccess,required TResult Function( int newId)  newIdGenerated,required TResult Function()  loading,}) {final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure():
 return findByCodeFailure(_that.message);case ProductStateFindByCodeSuccess():
 return findByCodeSuccess(_that.produto);case ProductStateFindByIdSuccess():
 return findByIdSuccess(_that.produto);case ProductStateInsertSuccess():
 return insertSuccess(_that.produtos);case ProductStateNewIdGenerated():
-return newIdGenerated(_that.newId);}
+return newIdGenerated(_that.newId);case ProductStateLoading():
+return loading();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -174,14 +179,15 @@ return newIdGenerated(_that.newId);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  findByCodeFailure,TResult? Function( Produto produto)?  findByCodeSuccess,TResult? Function( Produto produto)?  findByIdSuccess,TResult? Function( List<Produto> produtos)?  insertSuccess,TResult? Function( int newId)?  newIdGenerated,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  findByCodeFailure,TResult? Function( Produto produto)?  findByCodeSuccess,TResult? Function( Produto produto)?  findByIdSuccess,TResult? Function( List<Produto> produtos)?  insertSuccess,TResult? Function( int newId)?  newIdGenerated,TResult? Function()?  loading,}) {final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure() when findByCodeFailure != null:
 return findByCodeFailure(_that.message);case ProductStateFindByCodeSuccess() when findByCodeSuccess != null:
 return findByCodeSuccess(_that.produto);case ProductStateFindByIdSuccess() when findByIdSuccess != null:
 return findByIdSuccess(_that.produto);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that.produtos);case ProductStateNewIdGenerated() when newIdGenerated != null:
-return newIdGenerated(_that.newId);case _:
+return newIdGenerated(_that.newId);case ProductStateLoading() when loading != null:
+return loading();case _:
   return null;
 
 }
@@ -524,5 +530,37 @@ as int,
 
 
 }
+
+/// @nodoc
+
+
+class ProductStateLoading implements ProductState {
+   ProductStateLoading();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateLoading);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ProductState.loading()';
+}
+
+
+}
+
+
+
 
 // dart format on

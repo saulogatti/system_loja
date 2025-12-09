@@ -12,7 +12,6 @@ AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) => AppSettings(
   notificarEstoqueBaixo: json['notificar_estoque_baixo'] as bool? ?? true,
   limiteEstoqueBaixo: (json['limite_estoque_baixo'] as num?)?.toInt() ?? 10,
   temaEscuro: json['tema_escuro'] as bool? ?? false,
-  corPrimaria: json['cor_primaria'] as String? ?? '#2196F3',
   backupAutomatico: json['backup_automatico'] as bool? ?? false,
   frequenciaBackup: json['frequencia_backup'] as String? ?? 'semanal',
   localBackup: json['local_backup'] as String? ?? 'data/backups',
@@ -25,6 +24,12 @@ AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) => AppSettings(
   typeCache:
       $enumDecodeNullable(_$EnumTypeCacheEnumMap, json['typeCache']) ??
       EnumTypeCache.json,
+  corPrimaria:
+      $enumDecodeNullable(
+        _$EnumColorAppThemeSettingsEnumMap,
+        json['corPrimaria'],
+      ) ??
+      EnumColorAppThemeSettings.azul,
 );
 
 Map<String, dynamic> _$AppSettingsToJson(AppSettings instance) =>
@@ -34,8 +39,8 @@ Map<String, dynamic> _$AppSettingsToJson(AppSettings instance) =>
       'notificar_vendas': instance.notificarVendas,
       'notificar_estoque_baixo': instance.notificarEstoqueBaixo,
       'limite_estoque_baixo': instance.limiteEstoqueBaixo,
+      'corPrimaria': _$EnumColorAppThemeSettingsEnumMap[instance.corPrimaria]!,
       'tema_escuro': instance.temaEscuro,
-      'cor_primaria': instance.corPrimaria,
       'backup_automatico': instance.backupAutomatico,
       'frequencia_backup': instance.frequenciaBackup,
       'local_backup': instance.localBackup,
@@ -49,4 +54,15 @@ Map<String, dynamic> _$AppSettingsToJson(AppSettings instance) =>
 const _$EnumTypeCacheEnumMap = {
   EnumTypeCache.json: 'json',
   EnumTypeCache.sql: 'sql',
+};
+
+const _$EnumColorAppThemeSettingsEnumMap = {
+  EnumColorAppThemeSettings.azul: 'azul',
+  EnumColorAppThemeSettings.verde: 'verde',
+  EnumColorAppThemeSettings.laranka: 'laranka',
+  EnumColorAppThemeSettings.roxo: 'roxo',
+  EnumColorAppThemeSettings.vermelho: 'vermelho',
+  EnumColorAppThemeSettings.rosa: 'rosa',
+  EnumColorAppThemeSettings.ciano: 'ciano',
+  EnumColorAppThemeSettings.indigo: 'indigo',
 };

@@ -1,11 +1,11 @@
-import 'package:system_loja/core/managers/default/default_manager.dart';
 import 'package:system_loja/core/managers/exceptions/customer_exception.dart';
 import 'package:system_loja/core/models/customer.dart';
+import 'package:system_loja/core/repository/default/repository_manager.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/storage/storage_data.dart';
 
-class CustomerRepository extends DefaultManager {
-  CustomerRepository({required super.settingsApp});
+class CustomerRepository extends RepositoryManager {
+  CustomerRepository();
 
   Future<bool> deleteWithId(int id) {
     final result = defaultDataStorage.delete(id);
@@ -30,20 +30,6 @@ class CustomerRepository extends DefaultManager {
           }
         }
         return null;
-      case OperationError(error: final errorMessage):
-        throw Exception('Erro ao carregar clientes: $errorMessage');
-    }
-  }
-
-  Future<int> getNextId() async {
-    final result = await defaultDataStorage.loadAll();
-    switch (result) {
-      case OperationSuccess(result: final dataList):
-        if (dataList.isEmpty) {
-          return 1;
-        }
-        final ids = dataList.map((data) => data.id).toList();
-        return (ids.reduce((a, b) => a > b ? a : b)) + 1;
       case OperationError(error: final errorMessage):
         throw Exception('Erro ao carregar clientes: $errorMessage');
     }

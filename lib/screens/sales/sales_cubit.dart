@@ -1,21 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/repository/customer_repository.dart';
+import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/repository/sales_repository.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/sales/sales_state.dart';
-import 'package:system_loja/screens/settings/settings_service.dart';
 
 class SalesCubit extends Cubit<SalesState> {
   late SalesRepository _salesRepository;
   late CustomerRepository _customerRepository;
   SalesCubit() : super(SalesInitial()) {
-    _salesRepository = SalesRepository(
-      settingsApp: SettingsService()
-          .currentSettings, // Provide appropriate SettingsApp instance
-    );
-    _customerRepository = CustomerRepository(
-      settingsApp: SettingsService().currentSettings,
-    );
+    _salesRepository = SalesRepository();
+    _customerRepository = CustomerRepository();
   }
   void loadAllCustomers() async {
     // Implement loading customers logic here
@@ -23,6 +19,24 @@ class SalesCubit extends Cubit<SalesState> {
     // Assuming you have a method to load customers in SalesRepository
     final customers = await _customerRepository.loadAll();
     emit(SalesState.loadedCustomers(customers: customers));
+  }
+
+  void loadProducts() async {
+    emit(SalesState.loadingProducts());
+    final productRepository = ProductRepository();
+    final result = await productRepository.getProdutos();
+    switch (result) {
+      case OperationSuccess(result: final products):
+        emit(SalesState.loadedProducts(products: products));
+      case OperationError(error: final errorMessage):
+        emit(
+          SalesState.loadProductsFailure(
+            message: 'Erro ao carregar produtos: $errorMessage',
+          ),
+        );
+    }
+    // final products = await _productRepository.loadAllProducts();
+    // emit(SalesState.loadedProducts(products: products));
   }
 
   void loadSales() async {

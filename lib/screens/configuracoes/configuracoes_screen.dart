@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/core/settings/app_theme_settings.dart';
 
 import 'bloc/configuracoes_bloc.dart';
 import 'bloc/configuracoes_event.dart';
@@ -175,12 +176,6 @@ class _ConfiguracoesView extends StatelessWidget {
     );
   }
 
-  /// Converte cor hexadecimal para Color
-  Color _getColorFromHex(String hexColor) {
-    hexColor = hexColor.replaceAll('#', '');
-    return Color(int.parse('FF$hexColor', radix: 16));
-  }
-
   /// Limpa logs antigos
   Future<void> _limparLogsAntigos(
     BuildContext context,
@@ -247,40 +242,29 @@ class _ConfiguracoesView extends StatelessWidget {
     BuildContext context,
     AppSettings config,
   ) async {
-    final cores = {
-      'Azul': '#2196F3',
-      'Verde': '#4CAF50',
-      'Laranja': '#FF9800',
-      'Roxo': '#9C27B0',
-      'Vermelho': '#F44336',
-      'Rosa': '#E91E63',
-      'Ciano': '#00BCD4',
-      'Índigo': '#3F51B5',
-    };
-
-    final selecionada = await showDialog<String>(
+    final selecionada = await showDialog<EnumColorAppThemeSettings>(
       context: context,
       builder: (dialogContext) => SimpleDialog(
         title: const Text('Escolher Cor'),
-        children: cores.entries.map((entry) {
+        children: EnumColorAppThemeSettings.values.map((entry) {
           return SimpleDialogOption(
-            onPressed: () => Navigator.pop(dialogContext, entry.value),
+            onPressed: () => Navigator.pop(dialogContext, entry),
             child: Row(
               children: [
                 Container(
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
-                    color: _getColorFromHex(entry.value),
+                    color: entry.color,
                     borderRadius: BorderRadius.circular(4),
                     border: Border.all(color: Colors.grey),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Text(
-                  entry.key,
+                  entry.name,
                   style: TextStyle(
-                    fontWeight: config.corPrimaria == entry.value
+                    fontWeight: config.typeCache.name == entry.name
                         ? FontWeight.bold
                         : FontWeight.normal,
                   ),

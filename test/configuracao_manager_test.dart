@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/managers/configuracao_manager.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/core/settings/app_theme_settings.dart';
 
 void main() {
   late ConfiguracaoManager manager;
@@ -229,7 +230,7 @@ void main() {
           notificarEstoqueBaixo: true,
           limiteEstoqueBaixo: 20,
           temaEscuro: true,
-          corPrimaria: '#FF5722',
+          corPrimaria: EnumColorAppThemeSettings.verde,
           backupAutomatico: true,
           frequenciaBackup: 'diario',
           localBackup: 'custom/path',

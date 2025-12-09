@@ -56,7 +56,7 @@ class SecaoTema extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: _getColorFromHex(config.corPrimaria),
+                  color: config.corPrimaria.color,
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: Colors.grey),
                 ),
@@ -67,11 +67,5 @@ class SecaoTema extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  /// Converte cor hexadecimal para Color
-  Color _getColorFromHex(String hexColor) {
-    hexColor = hexColor.replaceAll('#', '');
-    return Color(int.parse('FF$hexColor', radix: 16));
   }
 }

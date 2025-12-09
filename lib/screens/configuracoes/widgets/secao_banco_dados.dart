@@ -41,13 +41,14 @@ class SecaoBancoDados extends StatelessWidget {
               groupValue: config.typeCache,
               onChanged: (EnumTypeCache? value) {
                 if (value != null) {
-                  onConfigChanged(config.copyWith(typeCache: value));
+                  config.typeCache = value;
+                  onConfigChanged(config);
                 }
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('Selected: ${config.typeCache}'),
+                  Text('Selected: ${config.typeCache.name.toUpperCase()}'),
                   const ListTile(
                     title: Text('JSON'),
                     leading: Radio<EnumTypeCache>(value: EnumTypeCache.json),

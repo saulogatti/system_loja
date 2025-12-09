@@ -1,10 +1,10 @@
-import 'package:system_loja/core/managers/default/default_manager.dart';
 import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/repository/default/repository_manager.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/storage/storage_data.dart';
 
-class SalesRepository extends DefaultManager {
-  SalesRepository({required super.settingsApp});
+class SalesRepository extends RepositoryManager {
+  SalesRepository();
   Future<int> getNextSaleId() async {
     final allInvoices = await loadAllSales();
     if (allInvoices.isEmpty) {

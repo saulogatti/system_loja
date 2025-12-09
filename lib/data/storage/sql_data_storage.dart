@@ -2,7 +2,7 @@ import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/storage/storage_data.dart';
 
 class SqlDataStorage extends BaseDataStorage {
-  SqlDataStorage({required super.storageType});
+  SqlDataStorage({required super.storageCategory});
 
   @override
   Future<OperationResult<bool, String>> delete(int id) {

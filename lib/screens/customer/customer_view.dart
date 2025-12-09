@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/screens/widgets/card_list_item.dart';
 import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
@@ -249,46 +250,14 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                                   final cliente = customers.values.elementAt(
                                     index,
                                   );
-                                  return Card(
-                                    elevation: 2,
-                                    color: Colors.white,
-                                    margin: const EdgeInsets.only(bottom: 12),
-                                    child: ListTile(
-                                      minLeadingWidth: 0,
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                      ),
-                                      minVerticalPadding: 0,
-                                      titleAlignment:
-                                          ListTileTitleAlignment.center,
-
-                                      leading: CircleAvatar(
-                                        backgroundColor: Colors.blue,
-                                        child: Text(
-                                          cliente.name[0].toUpperCase(),
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      title: Text(
-                                        cliente.name,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      subtitle: Text(
+                                  return CardListItem(
+                                    colorAvatar: Colors.blue,
+                                    title: cliente.name,
+                                    subTitle:
                                         'CPF: ${cliente.cpf}\n${cliente.email}',
-                                      ),
-                                      isThreeLine: true,
-                                      trailing: const Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 16,
-                                      ),
-                                      onTap: () {
-                                        _mostrarDetalhesCliente(cliente);
-                                      },
-                                    ),
+                                    onTap: () {
+                                      _mostrarDetalhesCliente(cliente);
+                                    },
                                   );
                                 },
                               );

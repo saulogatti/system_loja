@@ -1,34 +1,64 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/managers/produto_manager.dart';
 import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/core/repository/product_repository.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/products/cubit/produto_state.dart';
 
 class ProductCubit extends Cubit<ProductState> {
-  final ProdutoManager _manager;
+  late ProductRepository _manager;
 
-  ProductCubit(this._manager)
-    : super(ProductState.insertSuccess(produtos: _manager.getProdutos()));
-
-  void adicionarProduto(Produto produto) {
-    _manager.salvarProduto(produto);
-    emit(ProductState.insertSuccess(produtos: _manager.getProdutos()));
+  ProductCubit() : super(ProductState.loading()) {
+    _manager = ProductRepository();
+    loadAllProducts();
   }
 
-  void findByCode(int codigo) {
-    try {
-      final produto = _manager.findByCode(codigo);
-      if (produto != null) {
-        emit(ProductState.findByCodeSuccess(produto: produto));
-      } else {
-        emit(ProductState.findByCodeFailure(message: 'Produto não encontrado'));
-      }
-    } catch (e) {
-      emit(ProductState.findByCodeFailure(message: 'Erro ao buscar produto'));
+  void adicionarProduto(Produto produto) async {
+    await _manager.salvarProduto(produto);
+    final result = await _manager.getProdutos();
+    switch (result) {
+      case OperationSuccess(result: final produtos):
+        emit(ProductState.insertSuccess(produtos: produtos.toList()));
+      case OperationError(error: final errorMessage):
+        emit(
+          ProductState.findByCodeFailure(
+            message: 'Erro ao adicionar produto: $errorMessage',
+          ),
+        );
     }
   }
 
-  void newId() {
-    final newId = _manager.gerarNovoId();
+  void findByCode(int codigo) async {
+    final result = await _manager.findByCode(codigo);
+    switch (result) {
+      case OperationSuccess(result: final produto):
+        emit(ProductState.findByCodeSuccess(produto: produto));
+        return;
+      case OperationError(error: final errorMessage):
+        emit(
+          ProductState.findByCodeFailure(
+            message: 'Erro ao buscar produto: $errorMessage',
+          ),
+        );
+        return;
+    }
+  }
+
+  void loadAllProducts() async {
+    final result = await _manager.getProdutos();
+    switch (result) {
+      case OperationSuccess(result: final produtos):
+        emit(ProductState.insertSuccess(produtos: produtos.toList()));
+      case OperationError(error: final errorMessage):
+        emit(
+          ProductState.findByCodeFailure(
+            message: 'Erro ao carregar produtos: $errorMessage',
+          ),
+        );
+    }
+  }
+
+  void newId() async {
+    final newId = await _manager.obtainNextId();
     emit(ProductState.newIdGenerated(newId: newId));
   }
 }

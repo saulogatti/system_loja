@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/produto_state.dart';
+import 'package:system_loja/screens/widgets/card_list_item.dart';
 
-import '../../core/managers/produto_manager.dart';
 import '../../core/models/produto.dart';
 
 /// Tela de cadastro e listagem de produtos.
@@ -27,7 +27,7 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
   static const String _mensagemPrecoInvalido = 'Erro: Preço inválido!';
   static const String _mensagemEstoqueInvalido = 'Erro: Estoque inválido!';
 
-  late final ProductCubit _produtoCubit = ProductCubit(ProdutoManager());
+  late final ProductCubit _produtoCubit = ProductCubit();
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _codigoController = TextEditingController();
@@ -199,36 +199,14 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                               itemCount: produtos.length,
                               itemBuilder: (context, index) {
                                 final produto = produtos[index];
-                                return Card(
-                                  margin: const EdgeInsets.only(bottom: 12),
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor: Colors.green,
-                                      child: Text(
-                                        produto.nome[0].toUpperCase(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    title: Text(
-                                      produto.nome,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    subtitle: Text(
+                                return CardListItem(
+                                  colorAvatar: Colors.green,
+                                  title: produto.nome,
+                                  subTitle:
                                       'Código: ${produto.codigo}\nR\$ ${produto.preco.toStringAsFixed(2)} - Estoque: ${produto.estoque}',
-                                    ),
-                                    isThreeLine: true,
-                                    trailing: const Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 16,
-                                    ),
-                                    onTap: () {
-                                      _mostrarDetalhesProduto(produto);
-                                    },
-                                  ),
+                                  onTap: () {
+                                    _mostrarDetalhesProduto(produto);
+                                  },
                                 );
                               },
                             ),
@@ -255,6 +233,12 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
     _descricaoController.dispose();
     _categoriaController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // _produtoCubit.newId();
   }
 
   /// Adiciona um novo produto após validação.
