@@ -38,7 +38,8 @@ String? validatePrice(String? value) {
   
   // Verifica se tem mais de 2 casas decimais
   final parts = normalizedValue.split('.');
-  if (parts.length > 1 && parts[1].length > 2) {
+  // Verifica se tem mais de 2 casas decimais
+  if (parts.length > 1 && parts[1].isNotEmpty && parts[1].length > 2) {
     return 'Preço deve ter no máximo 2 casas decimais';
   }
   
