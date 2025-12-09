@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/models/configuracao.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/core/settings/app_theme_settings.dart';
 
 import 'bloc/configuracoes_bloc.dart';
 import 'bloc/configuracoes_event.dart';
@@ -80,9 +81,9 @@ class _ConfiguracoesView extends StatelessWidget {
                   Text(state.mensagem),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () => context
-                        .read<ConfiguracoesBloc>()
-                        .add(const CarregarConfiguracoesEvent()),
+                    onPressed: () => context.read<ConfiguracoesBloc>().add(
+                      const CarregarConfiguracoesEvent(),
+                    ),
                     child: const Text('Tentar Novamente'),
                   ),
                 ],
@@ -109,15 +110,17 @@ class _ConfiguracoesView extends StatelessWidget {
                   config: config,
                   onConfigChanged: (newConfig) =>
                       _updateConfig(context, newConfig),
-                  onMostrarSeletorCor: () => _mostrarSeletorCor(context, config),
+                  onMostrarSeletorCor: () =>
+                      _mostrarSeletorCor(context, config),
                 ),
                 const SizedBox(height: 24),
                 SecaoBackup(
                   config: config,
                   onConfigChanged: (newConfig) =>
                       _updateConfig(context, newConfig),
-                  onRealizarBackup: () =>
-                      context.read<ConfiguracoesBloc>().add(const RealizarBackupEvent()),
+                  onRealizarBackup: () => context.read<ConfiguracoesBloc>().add(
+                    const RealizarBackupEvent(),
+                  ),
                   onSelecionarFrequencia: () =>
                       _selecionarFrequenciaBackup(context, config),
                 ),
@@ -126,7 +129,8 @@ class _ConfiguracoesView extends StatelessWidget {
                   config: config,
                   onConfigChanged: (newConfig) =>
                       _updateConfig(context, newConfig),
-                  onLimparLogsAntigos: () => _limparLogsAntigos(context, config),
+                  onLimparLogsAntigos: () =>
+                      _limparLogsAntigos(context, config),
                   onLimparTodosDados: () => _limparTodosDados(context),
                 ),
                 const SizedBox(height: 24),
@@ -152,7 +156,7 @@ class _ConfiguracoesView extends StatelessWidget {
   }
 
   /// Botão de salvar configurações
-  Widget _buildBotaoSalvar(BuildContext context, Configuracao config) {
+  Widget _buildBotaoSalvar(BuildContext context, AppSettings config) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton.icon(
@@ -164,58 +168,26 @@ class _ConfiguracoesView extends StatelessWidget {
           foregroundColor: Colors.white,
         ),
         onPressed: () {
-          context
-              .read<ConfiguracoesBloc>()
-              .add(AtualizarConfiguracoesEvent(config));
+          context.read<ConfiguracoesBloc>().add(
+            AtualizarConfiguracoesEvent(config),
+          );
         },
       ),
     );
   }
 
-  /// Atualiza a configuração no estado local (não salva ainda)
-  void _updateConfig(BuildContext context, Configuracao newConfig) {
-    context
-        .read<ConfiguracoesBloc>()
-        .add(CarregarConfiguracoesEvent()); // Recarrega para manter estado
-    // Aqui mantemos o config local até salvar
-    // Em uma implementação mais complexa, usaríamos outro evento
-  }
-
-  /// Restaura configurações padrão
-  Future<void> _restaurarPadrao(BuildContext context) async {
-    final confirmado = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Restaurar Configurações'),
-        content: const Text(
-            'Deseja restaurar todas as configurações para os valores padrão?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('Restaurar'),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmado == true && context.mounted) {
-      context.read<ConfiguracoesBloc>().add(const RestaurarPadraoEvent());
-    }
-  }
-
   /// Limpa logs antigos
   Future<void> _limparLogsAntigos(
-      BuildContext context, Configuracao config) async {
+    BuildContext context,
+    AppSettings config,
+  ) async {
     final confirmado = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Limpar Logs Antigos'),
         content: Text(
-            'Deseja remover logs com mais de ${config.diasManterLogs} dias?'),
+          'Deseja remover logs com mais de ${config.diasManterLogs} dias?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
@@ -241,10 +213,10 @@ class _ConfiguracoesView extends StatelessWidget {
       builder: (dialogContext) => AlertDialog(
         title: const Text('ATENÇÃO!'),
         content: const Text(
-            'Esta ação irá REMOVER TODOS OS DADOS do sistema '
-            '(clientes, produtos, notas fiscais, usuários e logs).\n\n'
-            'Esta ação NÃO PODE ser desfeita!\n\n'
-            'Tem certeza que deseja continuar?',
+          'Esta ação irá REMOVER TODOS OS DADOS do sistema '
+          '(clientes, produtos, notas fiscais, usuários e logs).\n\n'
+          'Esta ação NÃO PODE ser desfeita!\n\n'
+          'Tem certeza que deseja continuar?',
         ),
         actions: [
           TextButton(
@@ -265,9 +237,85 @@ class _ConfiguracoesView extends StatelessWidget {
     }
   }
 
+  /// Mostra seletor de cor
+  Future<void> _mostrarSeletorCor(
+    BuildContext context,
+    AppSettings config,
+  ) async {
+    final selecionada = await showDialog<EnumColorAppThemeSettings>(
+      context: context,
+      builder: (dialogContext) => SimpleDialog(
+        title: const Text('Escolher Cor'),
+        children: EnumColorAppThemeSettings.values.map((entry) {
+          return SimpleDialogOption(
+            onPressed: () => Navigator.pop(dialogContext, entry),
+            child: Row(
+              children: [
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: entry.color,
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  entry.name,
+                  style: TextStyle(
+                    fontWeight: config.typeCache.name == entry.name
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+
+    if (selecionada != null && context.mounted) {
+      final newConfig = config.copyWith(corPrimaria: selecionada);
+      context.read<ConfiguracoesBloc>().add(
+        AtualizarConfiguracoesEvent(newConfig),
+      );
+    }
+  }
+
+  /// Restaura configurações padrão
+  Future<void> _restaurarPadrao(BuildContext context) async {
+    final confirmado = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Restaurar Configurações'),
+        content: const Text(
+          'Deseja restaurar todas as configurações para os valores padrão?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Restaurar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmado == true && context.mounted) {
+      context.read<ConfiguracoesBloc>().add(const RestaurarPadraoEvent());
+    }
+  }
+
   /// Seleciona a frequência de backup
   Future<void> _selecionarFrequenciaBackup(
-      BuildContext context, Configuracao config) async {
+    BuildContext context,
+    AppSettings config,
+  ) async {
     final opcoes = ['diario', 'semanal', 'mensal'];
     final selecionado = await showDialog<String>(
       context: context,
@@ -291,71 +339,18 @@ class _ConfiguracoesView extends StatelessWidget {
 
     if (selecionado != null && context.mounted) {
       final newConfig = config.copyWith(frequenciaBackup: selecionado);
-      context
-          .read<ConfiguracoesBloc>()
-          .add(AtualizarConfiguracoesEvent(newConfig));
+      context.read<ConfiguracoesBloc>().add(
+        AtualizarConfiguracoesEvent(newConfig),
+      );
     }
   }
 
-  /// Mostra seletor de cor
-  Future<void> _mostrarSeletorCor(
-      BuildContext context, Configuracao config) async {
-    final cores = {
-      'Azul': '#2196F3',
-      'Verde': '#4CAF50',
-      'Laranja': '#FF9800',
-      'Roxo': '#9C27B0',
-      'Vermelho': '#F44336',
-      'Rosa': '#E91E63',
-      'Ciano': '#00BCD4',
-      'Índigo': '#3F51B5',
-    };
-
-    final selecionada = await showDialog<String>(
-      context: context,
-      builder: (dialogContext) => SimpleDialog(
-        title: const Text('Escolher Cor'),
-        children: cores.entries.map((entry) {
-          return SimpleDialogOption(
-            onPressed: () => Navigator.pop(dialogContext, entry.value),
-            child: Row(
-              children: [
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: _getColorFromHex(entry.value),
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: Colors.grey),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Text(
-                  entry.key,
-                  style: TextStyle(
-                    fontWeight: config.corPrimaria == entry.value
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }).toList(),
-      ),
-    );
-
-    if (selecionada != null && context.mounted) {
-      final newConfig = config.copyWith(corPrimaria: selecionada);
-      context
-          .read<ConfiguracoesBloc>()
-          .add(AtualizarConfiguracoesEvent(newConfig));
-    }
-  }
-
-  /// Converte cor hexadecimal para Color
-  Color _getColorFromHex(String hexColor) {
-    hexColor = hexColor.replaceAll('#', '');
-    return Color(int.parse('FF$hexColor', radix: 16));
+  /// Atualiza a configuração no estado local (não salva ainda)
+  void _updateConfig(BuildContext context, AppSettings newConfig) {
+    context.read<ConfiguracoesBloc>().add(
+      CarregarConfiguracoesEvent(),
+    ); // Recarrega para manter estado
+    // Aqui mantemos o config local até salvar
+    // Em uma implementação mais complexa, usaríamos outro evento
   }
 }

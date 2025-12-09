@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/configuracao.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Widget da seção de configurações de backup
 class SecaoBackup extends StatelessWidget {
   /// Configuração atual do sistema
-  final Configuracao config;
-  
+  final AppSettings config;
+
   /// Callback para atualizar a configuração
-  final Function(Configuracao) onConfigChanged;
-  
+  final Function(AppSettings) onConfigChanged;
+
   /// Callback para realizar backup manual
   final VoidCallback onRealizarBackup;
-  
+
   /// Callback para selecionar frequência de backup
   final VoidCallback onSelecionarFrequencia;
 
@@ -33,8 +33,10 @@ class SecaoBackup extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.backup,
-                    color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.backup,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 const Text(
                   'Backup de Dados',

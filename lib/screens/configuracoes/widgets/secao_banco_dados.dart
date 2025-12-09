@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/configuracao.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Widget da seção de configurações de banco de dados
 class SecaoBancoDados extends StatelessWidget {
   /// Configuração atual do sistema
-  final Configuracao config;
-  
+  final AppSettings config;
+
   /// Callback para atualizar a configuração
-  final Function(Configuracao) onConfigChanged;
+  final Function(AppSettings) onConfigChanged;
 
   const SecaoBancoDados({
     super.key,
@@ -25,8 +25,10 @@ class SecaoBancoDados extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.storage,
-                    color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.storage,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 const Text(
                   'Banco de Dados',
@@ -35,29 +37,28 @@ class SecaoBancoDados extends StatelessWidget {
               ],
             ),
             const Divider(),
-            RadioListTile<String>(
-              title: const Text('JSON (Arquivos locais)'),
-              subtitle:
-                  const Text('Leve e simples, recomendado para uso básico'),
-              value: 'json',
-              groupValue: config.tipoBancoDados,
-              onChanged: (value) {
+            RadioGroup<EnumTypeCache>(
+              groupValue: config.typeCache,
+              onChanged: (EnumTypeCache? value) {
                 if (value != null) {
-                  onConfigChanged(config.copyWith(tipoBancoDados: value));
+                  config.typeCache = value;
+                  onConfigChanged(config);
                 }
               },
-            ),
-            RadioListTile<String>(
-              title: const Text('SQL (SQLite)'),
-              subtitle: const Text(
-                  'Mais robusto, recomendado para muitos dados'),
-              value: 'sql',
-              groupValue: config.tipoBancoDados,
-              onChanged: (value) {
-                if (value != null) {
-                  onConfigChanged(config.copyWith(tipoBancoDados: value));
-                }
-              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Selected: ${config.typeCache.name.toUpperCase()}'),
+                  const ListTile(
+                    title: Text('JSON'),
+                    leading: Radio<EnumTypeCache>(value: EnumTypeCache.json),
+                  ),
+                  const ListTile(
+                    title: Text('SQL'),
+                    leading: Radio<EnumTypeCache>(value: EnumTypeCache.sql),
+                  ),
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),

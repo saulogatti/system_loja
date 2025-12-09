@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/configuracao.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Widget da seção de configurações de limpeza de dados
 class SecaoLimpeza extends StatelessWidget {
   /// Configuração atual do sistema
-  final Configuracao config;
-  
+  final AppSettings config;
+
   /// Callback para atualizar a configuração
-  final Function(Configuracao) onConfigChanged;
-  
+  final Function(AppSettings) onConfigChanged;
+
   /// Callback para limpar logs antigos
   final VoidCallback onLimparLogsAntigos;
-  
+
   /// Callback para limpar todos os dados
   final VoidCallback onLimparTodosDados;
 
@@ -33,8 +33,10 @@ class SecaoLimpeza extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.cleaning_services,
-                    color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.cleaning_services,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 const Text(
                   'Limpeza de Dados',
@@ -62,7 +64,8 @@ class SecaoLimpeza extends StatelessWidget {
                   label: '${config.diasManterLogs} dias',
                   onChanged: (value) {
                     onConfigChanged(
-                        config.copyWith(diasManterLogs: value.toInt()));
+                      config.copyWith(diasManterLogs: value.toInt()),
+                    );
                   },
                 ),
                 trailing: Text('${config.diasManterLogs}'),

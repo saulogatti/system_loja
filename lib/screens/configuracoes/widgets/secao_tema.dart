@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/configuracao.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Widget da seção de configurações de aparência/tema
 class SecaoTema extends StatelessWidget {
   /// Configuração atual do sistema
-  final Configuracao config;
-  
+  final AppSettings config;
+
   /// Callback para atualizar a configuração
-  final Function(Configuracao) onConfigChanged;
-  
+  final Function(AppSettings) onConfigChanged;
+
   /// Callback para mostrar seletor de cor
   final VoidCallback onMostrarSeletorCor;
 
@@ -29,8 +29,10 @@ class SecaoTema extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.palette,
-                    color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.palette,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 const Text(
                   'Aparência',
@@ -54,7 +56,7 @@ class SecaoTema extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: _getColorFromHex(config.corPrimaria),
+                  color: config.corPrimaria.color,
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: Colors.grey),
                 ),
@@ -65,11 +67,5 @@ class SecaoTema extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  /// Converte cor hexadecimal para Color
-  Color _getColorFromHex(String hexColor) {
-    hexColor = hexColor.replaceAll('#', '');
-    return Color(int.parse('FF$hexColor', radix: 16));
   }
 }

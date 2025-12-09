@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/configuracao.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Widget da seção de configurações de notificações
 class SecaoNotificacoes extends StatelessWidget {
   /// Configuração atual do sistema
-  final Configuracao config;
-  
+  final AppSettings config;
+
   /// Callback para atualizar a configuração
-  final Function(Configuracao) onConfigChanged;
+  final Function(AppSettings) onConfigChanged;
 
   const SecaoNotificacoes({
     super.key,
@@ -25,8 +25,10 @@ class SecaoNotificacoes extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.notifications,
-                    color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.notifications,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 const Text(
                   'Notificações',
@@ -40,8 +42,7 @@ class SecaoNotificacoes extends StatelessWidget {
               subtitle: const Text('Receber alertas do sistema'),
               value: config.notificacoesAtivadas,
               onChanged: (value) {
-                onConfigChanged(
-                    config.copyWith(notificacoesAtivadas: value));
+                onConfigChanged(config.copyWith(notificacoesAtivadas: value));
               },
             ),
             SwitchListTile(
@@ -50,8 +51,7 @@ class SecaoNotificacoes extends StatelessWidget {
               value: config.notificarVendas,
               onChanged: config.notificacoesAtivadas
                   ? (value) {
-                      onConfigChanged(
-                          config.copyWith(notificarVendas: value));
+                      onConfigChanged(config.copyWith(notificarVendas: value));
                     }
                   : null,
             ),
@@ -62,7 +62,8 @@ class SecaoNotificacoes extends StatelessWidget {
               onChanged: config.notificacoesAtivadas
                   ? (value) {
                       onConfigChanged(
-                          config.copyWith(notificarEstoqueBaixo: value));
+                        config.copyWith(notificarEstoqueBaixo: value),
+                      );
                     }
                   : null,
             ),
@@ -76,8 +77,9 @@ class SecaoNotificacoes extends StatelessWidget {
                   divisions: 49,
                   label: '${config.limiteEstoqueBaixo} unidades',
                   onChanged: (value) {
-                    onConfigChanged(config.copyWith(
-                        limiteEstoqueBaixo: value.toInt()));
+                    onConfigChanged(
+                      config.copyWith(limiteEstoqueBaixo: value.toInt()),
+                    );
                   },
                 ),
                 trailing: Text('${config.limiteEstoqueBaixo}'),

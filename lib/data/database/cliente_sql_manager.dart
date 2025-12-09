@@ -1,6 +1,6 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import '../../core/models/cliente.dart';
+import '../../core/models/customer.dart';
 import 'database_config.dart';
 import 'database_helper.dart';
 
@@ -17,7 +17,8 @@ class ClienteSqlManager {
   /// Construtor que recebe opcionalmente uma instância do DatabaseHelper
   ///
   /// Se não for fornecido, usa a instância singleton padrão.
-  ClienteSqlManager({DatabaseHelper? dbHelper}) : _dbHelper = dbHelper ?? DatabaseHelper();
+  ClienteSqlManager({DatabaseHelper? dbHelper})
+    : _dbHelper = dbHelper ?? DatabaseHelper();
 
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
@@ -27,19 +28,24 @@ class ClienteSqlManager {
   /// [cliente] Objeto Cliente com os dados atualizados.
   /// O cliente deve ter um ID válido.
   /// Retorna o número de linhas afetadas.
-  Future<int> atualizar(Cliente cliente) async {
+  Future<int> atualizar(Customer cliente) async {
     final db = await _database;
 
     final Map<String, dynamic> dados = _clienteParaDadosDb(cliente);
 
-    return await db.update(DatabaseConfig.tableClientes, dados, where: 'id = ?', whereArgs: [cliente.id]);
+    return await db.update(
+      DatabaseConfig.tableClientes,
+      dados,
+      where: 'id = ?',
+      whereArgs: [cliente.id],
+    );
   }
 
   /// Busca clientes por nome (busca parcial)
   ///
   /// [nome] Texto a ser buscado no nome do cliente.
   /// Retorna uma lista de clientes cujo nome contém o texto buscado.
-  Future<List<Cliente>> buscarPorNome(String nome) async {
+  Future<List<Customer>> buscarPorNome(String nome) async {
     final db = await _database;
 
     final List<Map<String, dynamic>> resultado = await db.query(
@@ -56,7 +62,7 @@ class ClienteSqlManager {
   ///
   /// [cpf] CPF do cliente a ser consultado.
   /// Retorna o Cliente encontrado ou null se não existir.
-  Future<Cliente?> consultarPorCpf(String cpf) async {
+  Future<Customer?> consultarPorCpf(String cpf) async {
     final db = await _database;
 
     final List<Map<String, dynamic>> resultado = await db.query(
@@ -76,7 +82,7 @@ class ClienteSqlManager {
   ///
   /// [id] ID do cliente a ser consultado.
   /// Retorna o Cliente encontrado ou null se não existir.
-  Future<Cliente?> consultarPorId(int id) async {
+  Future<Customer?> consultarPorId(int id) async {
     final db = await _database;
 
     final List<Map<String, dynamic>> resultado = await db.query(
@@ -98,7 +104,9 @@ class ClienteSqlManager {
   Future<int> contarTotal() async {
     final db = await _database;
 
-    final result = await db.rawQuery('SELECT COUNT(*) as total FROM ${DatabaseConfig.tableClientes}');
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as total FROM ${DatabaseConfig.tableClientes}',
+    );
 
     return result.first['total'] as int;
   }
@@ -110,7 +118,11 @@ class ClienteSqlManager {
   Future<int> excluir(int id) async {
     final db = await _database;
 
-    return await db.delete(DatabaseConfig.tableClientes, where: 'id = ?', whereArgs: [id]);
+    return await db.delete(
+      DatabaseConfig.tableClientes,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
   /// Insere um novo cliente no banco de dados
@@ -119,7 +131,7 @@ class ClienteSqlManager {
   /// Retorna o ID do cliente inserido.
   ///
   /// Lança uma exceção se o CPF já existir no banco.
-  Future<int> inserir(Cliente cliente) async {
+  Future<int> inserir(Customer cliente) async {
     final db = await _database;
 
     final clienteExistente = await consultarPorCpf(cliente.cpf);
@@ -129,14 +141,18 @@ class ClienteSqlManager {
 
     final Map<String, dynamic> dados = _clienteParaDadosDb(cliente);
 
-    return await db.insert(DatabaseConfig.tableClientes, dados, conflictAlgorithm: ConflictAlgorithm.abort);
+    return await db.insert(
+      DatabaseConfig.tableClientes,
+      dados,
+      conflictAlgorithm: ConflictAlgorithm.abort,
+    );
   }
 
   /// Lista todos os clientes do banco de dados
   ///
   /// Retorna uma lista com todos os clientes cadastrados.
   /// A lista pode estar vazia se não houver clientes.
-  Future<List<Cliente>> listarTodos() async {
+  Future<List<Customer>> listarTodos() async {
     final db = await _database;
 
     final List<Map<String, dynamic>> resultado = await db.query(
@@ -151,17 +167,17 @@ class ClienteSqlManager {
   ///
   /// [map] Map com os dados do cliente do banco.
   /// Retorna um objeto Cliente com os dados do map.
-  Cliente _mapToCliente(Map<String, dynamic> map) {
+  Customer _mapToCliente(Map<String, dynamic> map) {
     // Prepara os dados para o formato esperado pelo fromJson
     final mapFormatado = _dadosDbParaClienteJson(map);
-    return Cliente.fromJson(mapFormatado);
+    return Customer.fromJson(mapFormatado);
   }
 
   /// Converte um objeto Cliente para um Map compatível com o banco de dados
   ///
   /// [cliente] Objeto Cliente a ser convertido.
   /// Retorna um Map com os dados no formato do banco (estrutura plana).
-  Map<String, dynamic> _clienteParaDadosDb(Cliente cliente) {
+  Map<String, dynamic> _clienteParaDadosDb(Customer cliente) {
     final json = cliente.toJson();
     final dadosCliente = json['dadosCliente'] as Map<String, dynamic>;
 

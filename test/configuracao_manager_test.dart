@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/managers/configuracao_manager.dart';
-import 'package:system_loja/core/models/configuracao.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/core/settings/app_theme_settings.dart';
 
 void main() {
   late ConfiguracaoManager manager;
@@ -38,7 +39,7 @@ void main() {
       final config = manager.configuracao;
 
       expect(config.notificacoesAtivadas, isTrue);
-      expect(config.tipoBancoDados, equals('json'));
+      expect(config.typeCache, equals(EnumTypeCache.json));
       expect(config.temaEscuro, isFalse);
       expect(config.limiteEstoqueBaixo, equals(10));
     });
@@ -46,14 +47,14 @@ void main() {
     test('Deve atualizar configurações com sucesso', () async {
       final novaConfig = manager.configuracao.copyWith(
         temaEscuro: true,
-        tipoBancoDados: 'sql',
+        typeCache: EnumTypeCache.sql,
         notificarVendas: false,
       );
 
       await manager.atualizarConfiguracao(novaConfig);
 
       expect(manager.configuracao.temaEscuro, isTrue);
-      expect(manager.configuracao.tipoBancoDados, equals('sql'));
+      expect(manager.configuracao.typeCache, equals(EnumTypeCache.sql));
       expect(manager.configuracao.notificarVendas, isFalse);
     });
 
@@ -123,19 +124,22 @@ void main() {
           'data_hora': DateTime.now()
               .subtract(const Duration(days: 100))
               .toIso8601String(),
-          'descricao': 'Log antigo'
+          'descricao': 'Log antigo',
         },
         {
           'id': 2,
-          'data_hora':
-              DateTime.now().subtract(const Duration(days: 10)).toIso8601String(),
-          'descricao': 'Log recente'
+          'data_hora': DateTime.now()
+              .subtract(const Duration(days: 10))
+              .toIso8601String(),
+          'descricao': 'Log recente',
         },
       ];
 
       final jsonContent = logsAntigos
-          .map((l) =>
-              '{"id":${l['id']},"data_hora":"${l['data_hora']}","descricao":"${l['descricao']}"}')
+          .map(
+            (l) =>
+                '{"id":${l['id']},"data_hora":"${l['data_hora']}","descricao":"${l['descricao']}"}',
+          )
           .join(',');
       File('data/logs_atividade.json').writeAsStringSync('[$jsonContent]');
 
@@ -182,12 +186,12 @@ void main() {
     });
 
     test('Deve aceitar valores válidos de tipo de banco de dados', () async {
-      final tipos = ['json', 'sql'];
+      final tipos = [EnumTypeCache.json, EnumTypeCache.sql];
 
       for (final tipo in tipos) {
-        final config = manager.configuracao.copyWith(tipoBancoDados: tipo);
+        final config = manager.configuracao.copyWith(typeCache: tipo);
         await manager.atualizarConfiguracao(config);
-        expect(manager.configuracao.tipoBancoDados, equals(tipo));
+        expect(manager.configuracao.typeCache, equals(tipo));
       }
     });
 
@@ -195,7 +199,9 @@ void main() {
       final limites = [1, 10, 25, 50];
 
       for (final limite in limites) {
-        final config = manager.configuracao.copyWith(limiteEstoqueBaixo: limite);
+        final config = manager.configuracao.copyWith(
+          limiteEstoqueBaixo: limite,
+        );
         await manager.atualizarConfiguracao(config);
         expect(manager.configuracao.limiteEstoqueBaixo, equals(limite));
       }
@@ -205,7 +211,9 @@ void main() {
       final tempos = [1, 5, 15, 30, 60];
 
       for (final tempo in tempos) {
-        final config = manager.configuracao.copyWith(tempoBloqueioMinutos: tempo);
+        final config = manager.configuracao.copyWith(
+          tempoBloqueioMinutos: tempo,
+        );
         await manager.atualizarConfiguracao(config);
         expect(manager.configuracao.tempoBloqueioMinutos, equals(tempo));
       }
@@ -213,35 +221,53 @@ void main() {
   });
 
   group('ConfiguracaoManager - Serialização JSON', () {
-    test('Deve serializar e desserializar configurações corretamente', () async {
-      final configOriginal = Configuracao(
-        notificacoesAtivadas: false,
-        notificarVendas: false,
-        notificarEstoqueBaixo: true,
-        limiteEstoqueBaixo: 20,
-        temaEscuro: true,
-        corPrimaria: '#FF5722',
-        backupAutomatico: true,
-        frequenciaBackup: 'diario',
-        localBackup: 'custom/path',
-        limpezaAutomatica: true,
-        diasManterLogs: 60,
-        exigirSenha: true,
-        tempoBloqueioMinutos: 30,
-        permitirMultiplosUsuarios: true,
-        tipoBancoDados: 'sql',
-      );
+    test(
+      'Deve serializar e desserializar configurações corretamente',
+      () async {
+        final configOriginal = AppSettings(
+          notificacoesAtivadas: false,
+          notificarVendas: false,
+          notificarEstoqueBaixo: true,
+          limiteEstoqueBaixo: 20,
+          temaEscuro: true,
+          corPrimaria: EnumColorAppThemeSettings.verde,
+          backupAutomatico: true,
+          frequenciaBackup: 'diario',
+          localBackup: 'custom/path',
+          limpezaAutomatica: true,
+          diasManterLogs: 60,
+          exigirSenha: true,
+          tempoBloqueioMinutos: 30,
+          permitirMultiplosUsuarios: true,
+          typeCache: EnumTypeCache.sql,
+        );
 
-      await manager.atualizarConfiguracao(configOriginal);
+        await manager.atualizarConfiguracao(configOriginal);
 
-      // Cria novo manager para verificar serialização
-      final manager2 = ConfiguracaoManager(dataFile: testDataFile);
+        // Cria novo manager para verificar serialização
+        final manager2 = ConfiguracaoManager(dataFile: testDataFile);
 
-      expect(manager2.configuracao.notificacoesAtivadas, equals(configOriginal.notificacoesAtivadas));
-      expect(manager2.configuracao.temaEscuro, equals(configOriginal.temaEscuro));
-      expect(manager2.configuracao.corPrimaria, equals(configOriginal.corPrimaria));
-      expect(manager2.configuracao.backupAutomatico, equals(configOriginal.backupAutomatico));
-      expect(manager2.configuracao.tipoBancoDados, equals(configOriginal.tipoBancoDados));
-    });
+        expect(
+          manager2.configuracao.notificacoesAtivadas,
+          equals(configOriginal.notificacoesAtivadas),
+        );
+        expect(
+          manager2.configuracao.temaEscuro,
+          equals(configOriginal.temaEscuro),
+        );
+        expect(
+          manager2.configuracao.corPrimaria,
+          equals(configOriginal.corPrimaria),
+        );
+        expect(
+          manager2.configuracao.backupAutomatico,
+          equals(configOriginal.backupAutomatico),
+        );
+        expect(
+          manager2.configuracao.typeCache,
+          equals(configOriginal.typeCache),
+        );
+      },
+    );
   });
 }

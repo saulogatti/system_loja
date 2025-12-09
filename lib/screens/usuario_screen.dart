@@ -46,7 +46,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                           ? 'Novo Usuário'
                           : 'Editar Usuário',
                       style: const TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
@@ -92,26 +94,31 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                         border: const OutlineInputBorder(),
                         prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
-                          icon: Icon(_senhaVisivel
-                              ? Icons.visibility_off
-                              : Icons.visibility),
+                          icon: Icon(
+                            _senhaVisivel
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
                           onPressed: () {
                             setState(() {
                               _senhaVisivel = !_senhaVisivel;
                             });
                           },
                         ),
-                        helperText: 'Mínimo 8 caracteres, com maiúscula, minúscula e número',
+                        helperText:
+                            'Mínimo 8 caracteres, com maiúscula, minúscula e número',
                         helperMaxLines: 2,
                       ),
                       obscureText: !_senhaVisivel,
                       validator: (value) {
                         // Se está editando e senha está vazia, não valida
-                        if (_usuarioEditando != null && (value == null || value.isEmpty)) {
+                        if (_usuarioEditando != null &&
+                            (value == null || value.isEmpty)) {
                           return null;
                         }
                         // Se está criando novo usuário, senha é obrigatória
-                        if (_usuarioEditando == null && (value == null || value.isEmpty)) {
+                        if (_usuarioEditando == null &&
+                            (value == null || value.isEmpty)) {
                           return 'Senha é obrigatória';
                         }
                         // Valida força da senha
@@ -156,12 +163,14 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                         Expanded(
                           child: ElevatedButton.icon(
                             onPressed: _salvarUsuario,
-                            icon: Icon(_usuarioEditando == null
-                                ? Icons.add
-                                : Icons.save),
-                            label: Text(_usuarioEditando == null
-                                ? 'Adicionar Usuário'
-                                : 'Salvar Alterações'),
+                            icon: Icon(
+                              _usuarioEditando == null ? Icons.add : Icons.save,
+                            ),
+                            label: Text(
+                              _usuarioEditando == null
+                                  ? 'Adicionar Usuário'
+                                  : 'Salvar Alterações',
+                            ),
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.all(16),
                               textStyle: const TextStyle(fontSize: 16),
@@ -185,8 +194,10 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                     const SizedBox(height: 32),
                     const Text(
                       'Usuários Cadastrados',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     if (_manager.usuarios.isEmpty)
@@ -209,8 +220,16 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                           return Card(
                             margin: const EdgeInsets.only(bottom: 12),
                             child: ListTile(
+                              minLeadingWidth: 0,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              minVerticalPadding: 0,
+                              titleAlignment: ListTileTitleAlignment.center,
+
                               leading: CircleAvatar(
-                                backgroundColor: usuario.nivelPermissao ==
+                                backgroundColor:
+                                    usuario.nivelPermissao ==
                                         NivelPermissao.administrador
                                     ? Colors.purple
                                     : Colors.blue,
@@ -222,9 +241,12 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                                   color: Colors.white,
                                 ),
                               ),
-                              title: Text(usuario.nome,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
+                              title: Text(
+                                usuario.nome,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               subtitle: Text(
                                 '${usuario.email}\n${_getNivelPermissaoTexto(usuario.nivelPermissao)}',
                               ),
@@ -233,13 +255,17 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.edit,
-                                        color: Colors.blue),
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.blue,
+                                    ),
                                     onPressed: () => _editarUsuario(usuario),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
                                     onPressed: () =>
                                         _confirmarExclusao(usuario),
                                   ),
@@ -279,7 +305,10 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
           Text(
             label,
             style: const TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+              fontSize: 12,
+            ),
           ),
           const SizedBox(height: 4),
           Text(value, style: const TextStyle(fontSize: 16)),
@@ -396,12 +425,18 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
             children: [
               _buildDetailRow('ID', usuario.id.toString()),
               _buildDetailRow('Email', usuario.email),
-              _buildDetailRow('Nível de Permissão',
-                  _getNivelPermissaoTexto(usuario.nivelPermissao)),
-              _buildDetailRow('Data de Cadastro',
-                  usuario.dataCadastro.toString().split('.')[0]),
-              _buildDetailRow('Última Atualização',
-                  usuario.dataUltimaAtualizacao.toString().split('.')[0]),
+              _buildDetailRow(
+                'Nível de Permissão',
+                _getNivelPermissaoTexto(usuario.nivelPermissao),
+              ),
+              _buildDetailRow(
+                'Data de Cadastro',
+                usuario.dataCadastro.toString().split('.')[0],
+              ),
+              _buildDetailRow(
+                'Última Atualização',
+                usuario.dataUltimaAtualizacao.toString().split('.')[0],
+              ),
             ],
           ),
         ),
@@ -426,8 +461,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         if (_manager.emailJaExiste(email)) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-                content: Text('Erro: Email já cadastrado!'),
-                backgroundColor: Colors.red),
+              content: Text('Erro: Email já cadastrado!'),
+              backgroundColor: Colors.red,
+            ),
           );
           return;
         }
@@ -460,8 +496,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content:
-                  Text('Usuário "${usuario.nome}" cadastrado com sucesso!'),
+              content: Text(
+                'Usuário "${usuario.nome}" cadastrado com sucesso!',
+              ),
               backgroundColor: Colors.green,
             ),
           );
@@ -475,8 +512,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         if (_manager.emailJaExiste(email, ignorarId: _usuarioEditando!.id)) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-                content: Text('Erro: Email já cadastrado!'),
-                backgroundColor: Colors.red),
+              content: Text('Erro: Email já cadastrado!'),
+              backgroundColor: Colors.red,
+            ),
           );
           return;
         }
@@ -514,7 +552,8 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                  'Usuário "${usuarioAtualizado.nome}" atualizado com sucesso!'),
+                'Usuário "${usuarioAtualizado.nome}" atualizado com sucesso!',
+              ),
               backgroundColor: Colors.green,
             ),
           );

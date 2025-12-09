@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/configuracao.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Widget da seção de configurações de segurança
 class SecaoSeguranca extends StatelessWidget {
   /// Configuração atual do sistema
-  final Configuracao config;
-  
+  final AppSettings config;
+
   /// Callback para atualizar a configuração
-  final Function(Configuracao) onConfigChanged;
+  final Function(AppSettings) onConfigChanged;
 
   const SecaoSeguranca({
     super.key,
@@ -25,8 +25,10 @@ class SecaoSeguranca extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.security,
-                    color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.security,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 const Text(
                   'Segurança',
@@ -53,8 +55,9 @@ class SecaoSeguranca extends StatelessWidget {
                   divisions: 59,
                   label: '${config.tempoBloqueioMinutos} min',
                   onChanged: (value) {
-                    onConfigChanged(config.copyWith(
-                        tempoBloqueioMinutos: value.toInt()));
+                    onConfigChanged(
+                      config.copyWith(tempoBloqueioMinutos: value.toInt()),
+                    );
                   },
                 ),
                 trailing: Text('${config.tempoBloqueioMinutos} min'),
@@ -65,7 +68,8 @@ class SecaoSeguranca extends StatelessWidget {
               value: config.permitirMultiplosUsuarios,
               onChanged: (value) {
                 onConfigChanged(
-                    config.copyWith(permitirMultiplosUsuarios: value));
+                  config.copyWith(permitirMultiplosUsuarios: value),
+                );
               },
             ),
           ],

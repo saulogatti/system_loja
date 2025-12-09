@@ -33,7 +33,7 @@ class DatabaseConfig {
   static const String tableNotasFiscais = 'notas_fiscais';
 
   /// Nome da tabela de itens de notas fiscais
-  static const String tableItensNotaFiscal = 'itens_nota_fiscal';
+  static const String tableInvoiceItems = 'itens_nota_fiscal';
 
   /// Nome da tabela de usuários
   static const String tableUsuarios = 'usuarios';
