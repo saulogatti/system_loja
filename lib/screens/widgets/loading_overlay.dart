@@ -70,15 +70,15 @@ class LoadingOverlay extends StatelessWidget {
                 CircularProgressIndicator(
                   valueColor: colorAnimation,
                 ),
-                if (message case final msg?)
-                  ...[
-                    const SizedBox(height: 16.0),
-                    Text(
-                      msg,
+                if (message != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      message,
                       style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
-                  ],
+                  ),
               ],
             ),
           ),
