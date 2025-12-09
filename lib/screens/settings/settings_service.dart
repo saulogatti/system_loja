@@ -10,6 +10,7 @@ class SettingsService {
     // Return current settings; placeholder implementation
     return AppSettings.createDefaultSettings();
   }
+  
   ValueNotifier<EnumColorAppThemeSettings> get primaryColorNotifier {
     return ValueNotifier<EnumColorAppThemeSettings>(
         currentSettings.corPrimaria);
