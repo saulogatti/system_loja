@@ -19,7 +19,7 @@ class UsuarioSqlManager {
   ///
   /// Se não for fornecido, usa a instância singleton padrão.
   UsuarioSqlManager({DatabaseHelper? dbHelper})
-      : _dbHelper = dbHelper ?? DatabaseHelper();
+    : _dbHelper = dbHelper ?? DatabaseHelper();
 
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
@@ -34,8 +34,12 @@ class UsuarioSqlManager {
 
     final Map<String, dynamic> dados = _usuarioParaDadosDb(usuario);
 
-    return await db.update(DatabaseConfig.tableUsuarios, dados,
-        where: 'id = ?', whereArgs: [usuario.id]);
+    return await db.update(
+      DatabaseConfig.tableUsuarios,
+      dados,
+      where: 'id = ?',
+      whereArgs: [usuario.id],
+    );
   }
 
   /// Consulta um usuário pelo email
@@ -100,7 +104,8 @@ class UsuarioSqlManager {
     final db = await _database;
 
     final resultado = await db.rawQuery(
-        'SELECT COUNT(*) as count FROM ${DatabaseConfig.tableUsuarios}');
+      'SELECT COUNT(*) as count FROM ${DatabaseConfig.tableUsuarios}',
+    );
 
     return Sqflite.firstIntValue(resultado) ?? 0;
   }
@@ -112,8 +117,11 @@ class UsuarioSqlManager {
   Future<int> deletar(int id) async {
     final db = await _database;
 
-    return await db
-        .delete(DatabaseConfig.tableUsuarios, where: 'id = ?', whereArgs: [id]);
+    return await db.delete(
+      DatabaseConfig.tableUsuarios,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
   /// Insere um novo usuário no banco de dados
@@ -133,7 +141,8 @@ class UsuarioSqlManager {
   /// [nivelPermissao] Nível de permissão para filtrar.
   /// Retorna uma lista de usuários com o nível de permissão especificado.
   Future<List<Usuario>> listarPorNivelPermissao(
-      NivelPermissao nivelPermissao) async {
+    NivelPermissao nivelPermissao,
+  ) async {
     final db = await _database;
 
     final List<Map<String, dynamic>> resultado = await db.query(
@@ -153,11 +162,13 @@ class UsuarioSqlManager {
       nome: map['nome'] as String,
       email: map['email'] as String,
       senhaHash: map['senha_hash'] as String,
-      nivelPermissao:
-          NivelPermissaoExtension.fromString(map['nivel_permissao'] as String),
+      nivelPermissao: NivelPermissaoExtension.fromString(
+        map['nivel_permissao'] as String,
+      ),
       dataCadastro: DateTime.parse(map['data_cadastro'] as String),
-      dataUltimaAtualizacao:
-          DateTime.parse(map['data_ultima_atualizacao'] as String),
+      dataUltimaAtualizacao: DateTime.parse(
+        map['data_ultima_atualizacao'] as String,
+      ),
     );
   }
 
@@ -170,8 +181,8 @@ class UsuarioSqlManager {
       'senha_hash': usuario.senhaHash,
       'nivel_permissao': usuario.nivelPermissao.toStringValue(),
       'data_cadastro': usuario.dataCadastro.toIso8601String(),
-      'data_ultima_atualizacao':
-          usuario.dataUltimaAtualizacao.toIso8601String(),
+      'data_ultima_atualizacao': usuario.dataUltimaAtualizacao
+          .toIso8601String(),
     };
   }
 }

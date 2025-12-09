@@ -19,7 +19,7 @@ class LogAtividadeSqlManager {
   ///
   /// Se não for fornecido, usa a instância singleton padrão.
   LogAtividadeSqlManager({DatabaseHelper? dbHelper})
-      : _dbHelper = dbHelper ?? DatabaseHelper();
+    : _dbHelper = dbHelper ?? DatabaseHelper();
 
   /// Obtém a instância do banco de dados
   Future<Database> get _database => _dbHelper.database;
@@ -66,12 +66,12 @@ class LogAtividadeSqlManager {
     final db = await _database;
 
     final resultado = await db.rawQuery(
-        'SELECT COUNT(*) as count FROM ${DatabaseConfig.tableLogsAtividade}');
+      'SELECT COUNT(*) as count FROM ${DatabaseConfig.tableLogsAtividade}',
+    );
 
     return Sqflite.firstIntValue(resultado) ?? 0;
   }
 
-  /// Deleta logs antigos
   ///
   /// [dataLimite] Data limite - logs anteriores serão deletados.
   /// Retorna o número de linhas afetadas.
@@ -115,8 +115,11 @@ class LogAtividadeSqlManager {
   /// [entidadeId] ID da entidade (opcional).
   /// [limit] Limite de registros retornados.
   /// Retorna uma lista de logs da entidade especificada.
-  Future<List<LogAtividade>> listarPorEntidade(String entidade,
-      {int? entidadeId, int? limit}) async {
+  Future<List<LogAtividade>> listarPorEntidade(
+    String entidade, {
+    int? entidadeId,
+    int? limit,
+  }) async {
     final db = await _database;
 
     List<Map<String, dynamic>> resultado;
@@ -141,35 +144,15 @@ class LogAtividadeSqlManager {
     return resultado.map(_mapToLogAtividade).toList();
   }
 
-  /// Lista logs por período
-  ///
-  /// [dataInicio] Data de início do período.
-  /// [dataFim] Data de fim do período.
-  /// [limit] Limite de registros retornados.
-  /// Retorna uma lista de logs do período especificado.
-  Future<List<LogAtividade>> listarPorPeriodo(
-      DateTime dataInicio, DateTime dataFim,
-      {int? limit}) async {
-    final db = await _database;
-
-    final List<Map<String, dynamic>> resultado = await db.query(
-      DatabaseConfig.tableLogsAtividade,
-      where: 'data_hora >= ? AND data_hora <= ?',
-      whereArgs: [dataInicio.toIso8601String(), dataFim.toIso8601String()],
-      orderBy: 'data_hora DESC',
-      limit: limit,
-    );
-
-    return resultado.map(_mapToLogAtividade).toList();
-  }
-
   /// Lista logs por tipo de ação
   ///
   /// [tipoAcao] Tipo de ação para filtrar.
   /// [limit] Limite de registros retornados.
   /// Retorna uma lista de logs do tipo de ação especificado.
-  Future<List<LogAtividade>> listarPorTipoAcao(TipoAcao tipoAcao,
-      {int? limit}) async {
+  Future<List<LogAtividade>> listarPorTipoAcao(
+    TipoAcao tipoAcao, {
+    int? limit,
+  }) async {
     final db = await _database;
 
     final List<Map<String, dynamic>> resultado = await db.query(
@@ -181,6 +164,19 @@ class LogAtividadeSqlManager {
     );
 
     return resultado.map(_mapToLogAtividade).toList();
+
+    /// Lista logs por período
+    ///
+    /// [dataInicio] Data de início do período.
+    /// [dataFim] Data de fim do período.
+    /// [limit] Limite de registros retornados.
+    /// Retorna uma lista de logs do período especificado.
+
+    /// Lista logs por tipo de ação
+    ///
+    /// [tipoAcao] Tipo de ação para filtrar.
+    /// [limit] Limite de registros retornados.
+    /// Retorna uma lista de logs do tipo de ação especificado.
   }
 
   /// Lista logs de um usuário específico
@@ -188,8 +184,10 @@ class LogAtividadeSqlManager {
   /// [usuarioId] ID do usuário.
   /// [limit] Limite de registros retornados.
   /// Retorna uma lista de logs do usuário especificado.
-  Future<List<LogAtividade>> listarPorUsuario(int usuarioId,
-      {int? limit}) async {
+  Future<List<LogAtividade>> listarPorUsuario(
+    int usuarioId, {
+    int? limit,
+  }) async {
     final db = await _database;
 
     final List<Map<String, dynamic>> resultado = await db.query(
@@ -208,8 +206,10 @@ class LogAtividadeSqlManager {
   /// [orderBy] Campo para ordenação. Padrão: 'data_hora DESC'.
   /// [limit] Limite de registros retornados.
   /// Retorna uma lista com todos os logs cadastrados.
-  Future<List<LogAtividade>> listarTodos(
-      {String orderBy = 'data_hora DESC', int? limit}) async {
+  Future<List<LogAtividade>> listarTodos({
+    String orderBy = 'data_hora DESC',
+    int? limit,
+  }) async {
     final db = await _database;
 
     final List<Map<String, dynamic>> resultado = await db.query(
@@ -219,20 +219,6 @@ class LogAtividadeSqlManager {
     );
 
     return resultado.map(_mapToLogAtividade).toList();
-  }
-
-  /// Converte um Map do banco de dados para um objeto LogAtividade
-  LogAtividade mapToLogAtividade(Map<String, dynamic> map) {
-    return LogAtividade(
-      id: map['id'] as int,
-      tipoAcao: TipoAcaoExtension.fromString(map['tipo_acao'] as String),
-      entidade: map['entidade'] as String,
-      entidadeId: map['entidade_id'] as int?,
-      usuarioId: map['usuario_id'] as int,
-      usuarioNome: map['usuario_nome'] as String,
-      dataHora: DateTime.parse(map['data_hora'] as String),
-      detalhes: map['detalhes'] as String? ?? '',
-    );
   }
 
   /// Converte um objeto LogAtividade para um Map do banco de dados
