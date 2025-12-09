@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
 import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
@@ -107,12 +108,10 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.person),
                         ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Nome é obrigatório';
-                          }
-                          return null;
-                        },
+                        validator: (value) => combineValidators([
+                          (v) => validateRequired(v, 'Nome'),
+                          (v) => validateMinLength(v, 3, 'Nome'),
+                        ])(value),
                       ),
                       const SizedBox(height: 16),
                       // Adicionar mascaras e a validacao esta no bloc para CPF

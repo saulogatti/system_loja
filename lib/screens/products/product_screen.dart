@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/core/utils/input_formatters.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/produto_state.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
@@ -90,13 +92,10 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                               labelText: 'Código *',
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.qr_code),
+                              helperText: 'Ex: PROD-001, ABC123',
                             ),
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Código é obrigatório';
-                              }
-                              return null;
-                            },
+                            inputFormatters: [ProductCodeInputFormatter()],
+                            validator: validateProductCode,
                           ),
                           const SizedBox(height: 16),
                           Row(
@@ -108,17 +107,14 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                                     labelText: 'Preço (R\$) *',
                                     border: OutlineInputBorder(),
                                     prefixIcon: Icon(Icons.attach_money),
+                                    helperText: 'Ex: 10.50',
                                   ),
                                   keyboardType:
                                       const TextInputType.numberWithOptions(
                                         decimal: true,
                                       ),
-                                  validator: (value) {
-                                    if (value == null || value.trim().isEmpty) {
-                                      return 'Preço é obrigatório';
-                                    }
-                                    return null;
-                                  },
+                                  inputFormatters: [PriceInputFormatter()],
+                                  validator: validatePrice,
                                 ),
                               ),
                               const SizedBox(width: 16),
@@ -129,14 +125,11 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                                     labelText: 'Estoque *',
                                     border: OutlineInputBorder(),
                                     prefixIcon: Icon(Icons.inventory),
+                                    helperText: 'Ex: 10',
                                   ),
                                   keyboardType: TextInputType.number,
-                                  validator: (value) {
-                                    if (value == null || value.trim().isEmpty) {
-                                      return 'Estoque é obrigatório';
-                                    }
-                                    return null;
-                                  },
+                                  inputFormatters: [QuantityInputFormatter()],
+                                  validator: validateStock,
                                 ),
                               ),
                             ],
@@ -243,43 +236,40 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
 
   /// Adiciona um novo produto após validação.
   void _adicionarProduto() {
-    if (!_formKey.currentState!.validate()) return;
-
-    final codigo = _codigoController.text.trim();
-    int? codigoInt = int.tryParse(codigo);
-    if (codigoInt == null) {
-      _mostrarErro('Erro: Código inválido!');
-      return;
-    }
-    _produtoCubit.findByCode(codigoInt);
-
-    // Valida e converte valores numéricos
-    final preco = _validarPreco(_precoController.text.trim());
-    if (preco == null) {
-      _mostrarErro(_mensagemPrecoInvalido);
+    // Valida o formulário usando os validadores
+    // Os validadores já exibem mensagens específicas para cada campo
+    if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    final estoque = _validarEstoque(_estoqueController.text.trim());
-    if (estoque == null) {
-      _mostrarErro(_mensagemEstoqueInvalido);
-      return;
+    try {
+      // Converte valores já validados pelos validators
+      // Os validators garantem que esses valores são parseáveis
+      final preco = double.parse(_precoController.text.trim());
+      final preco = double.parse(precoTexto);
+      final estoque = int.parse(_estoqueController.text.trim());
+
+      // Cria e adiciona produto
+      final produto = Produto(
+        id: 0, // ID será gerado automaticamente
+        nome: _nomeController.text.trim(),
+        codigo: codigo,
+        preco: preco,
+        estoque: estoque,
+        descricao: _descricaoController.text.trim(),
+        categoria: _categoriaController.text.trim(),
+      );
+
+      _produtoCubit.adicionarProduto(produto);
+      _mostrarSucesso('Produto "${produto.nome}" $_mensagemSucesso');
+      _limparFormulario();
+    } on FormatException catch (e) {
+      // Isto não deve acontecer devido aos validators, mas tratamos por segurança
+      _mostrarErro('Erro de formato ao processar dados numéricos: ${e.message}');
+    } catch (e) {
+      // Captura erros inesperados do repositório/banco de dados
+      _mostrarErro('Erro ao salvar produto: ${e.toString()}');
     }
-
-    // Cria e adiciona produto
-    final produto = Produto(
-      id: 0, // ID será gerado automaticamente
-      nome: _nomeController.text.trim(),
-      codigo: codigo,
-      preco: preco,
-      estoque: estoque,
-      descricao: _descricaoController.text.trim(),
-      categoria: _categoriaController.text.trim(),
-    );
-
-    _produtoCubit.adicionarProduto(produto);
-    _mostrarSucesso('Produto "${produto.nome}" $_mensagemSucesso');
-    _limparFormulario();
   }
 
   /// Constrói uma linha de detalhe com label e valor.
@@ -364,17 +354,5 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(mensagem), backgroundColor: Colors.green),
     );
-  }
-
-  /// Valida e converte o estoque.
-  int? _validarEstoque(String texto) {
-    final estoque = int.tryParse(texto);
-    return (estoque != null && estoque >= 0) ? estoque : null;
-  }
-
-  /// Valida e converte o preço.
-  double? _validarPreco(String texto) {
-    final preco = double.tryParse(texto.replaceAll(',', '.'));
-    return (preco != null && preco >= 0) ? preco : null;
   }
 }
