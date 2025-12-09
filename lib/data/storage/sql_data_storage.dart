@@ -238,7 +238,9 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
           };
 
           // Tenta inserir ou atualizar usando conflictAlgorithm.replace
-          // Isso fará um UPDATE se o id já existir, ou INSERT caso contrário
+          // Com a chave primária composta (id, storage_category), isso fará
+          // um UPDATE se o par (id, categoria) já existir, ou INSERT caso contrário.
+          // Isso garante isolamento entre categorias.
           final result = await db.insert(
             DatabaseConfig.tablePersistentDataStore,
             row,

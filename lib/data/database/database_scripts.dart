@@ -222,18 +222,23 @@ class DatabaseScripts {
   /// Script de criação da tabela de armazenamento persistente genérico
   ///
   /// Campos:
-  /// - id: Identificador único (não auto-incrementado, definido pelo usuário)
+  /// - id: Identificador único dentro da categoria
   /// - storage_category: Categoria de armazenamento (obrigatório)
   /// - data: Dados JSON armazenados (obrigatório)
+  ///
+  /// A tabela usa uma chave primária composta (id, storage_category)
+  /// para permitir que o mesmo ID seja usado em diferentes categorias,
+  /// garantindo isolamento completo entre categorias.
   ///
   /// Esta tabela é utilizada pela classe SqlDataStorage para armazenar
   /// dados genéricos organizados por categoria.
   static String get createTablePersistentDataStore =>
       '''
     CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tablePersistentDataStore} (
-      id INTEGER PRIMARY KEY,
+      id INTEGER NOT NULL,
       storage_category TEXT NOT NULL,
-      data TEXT NOT NULL
+      data TEXT NOT NULL,
+      PRIMARY KEY (id, storage_category)
     )
   ''';
 
