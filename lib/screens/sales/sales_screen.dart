@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
+import 'package:system_loja/core/utils/input_formatters.dart';
+import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/sales/sales_cubit.dart';
 import 'package:system_loja/screens/sales/sales_state.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
@@ -65,13 +67,9 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                   labelText: 'Número da Nota *',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.numbers),
+                  helperText: 'Ex: NF-001, 12345',
                 ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Número da nota é obrigatório';
-                  }
-                  return null;
-                },
+                validator: (value) => validateRequired(value, 'Número da nota'),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<Customer>(
@@ -106,14 +104,9 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                   labelText: 'Forma de Pagamento *',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.payment),
-                  hintText: 'Dinheiro, Cartão, Pix, etc.',
+                  helperText: 'Ex: Dinheiro, Cartão, Pix',
                 ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Forma de pagamento é obrigatória';
-                  }
-                  return null;
-                },
+                validator: (value) => validateRequired(value, 'Forma de pagamento'),
               ),
               const SizedBox(height: 24),
               Row(
@@ -320,18 +313,37 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
 
   Future<int?> _solicitarQuantidade(Produto produto) async {
     final controller = TextEditingController();
+    final formKey = GlobalKey<FormState>();
     final quantidade = await showDialog<int>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Quantidade de ${produto.nome}'),
-        content: TextField(
-          controller: controller,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            labelText: 'Quantidade (Estoque: ${produto.estoque})',
-            border: const OutlineInputBorder(),
+        content: Form(
+          key: formKey,
+          child: TextFormField(
+            controller: controller,
+            keyboardType: TextInputType.number,
+            inputFormatters: [QuantityInputFormatter()],
+            decoration: InputDecoration(
+              labelText: 'Quantidade *',
+              helperText: 'Estoque disponível: ${produto.estoque}',
+              border: const OutlineInputBorder(),
+            ),
+            autofocus: true,
+            validator: (value) {
+              // Usa o validador padrão
+              final error = validateQuantity(value);
+              if (error != null) return error;
+              
+              // Validação adicional para estoque
+              final qtd = int.parse(value!.trim());
+              if (qtd > produto.estoque) {
+                return 'Quantidade maior que o estoque disponível';
+              }
+              
+              return null;
+            },
           ),
-          autofocus: true,
         ),
         actions: [
           TextButton(
@@ -340,8 +352,10 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              final qtd = int.tryParse(controller.text.trim());
-              Navigator.pop(context, qtd);
+              if (formKey.currentState!.validate()) {
+                final qtd = int.parse(controller.text.trim());
+                Navigator.pop(context, qtd);
+              }
             },
             child: const Text('OK'),
           ),
