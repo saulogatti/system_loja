@@ -1,8 +1,7 @@
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:system_loja/data/database/database_helper.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_loja/data/database/database_config.dart';
+import 'package:system_loja/data/database/database_helper.dart';
 
 /// Testes do DatabaseHelper
 ///
@@ -89,7 +88,7 @@ void main() {
 
       // Assert
       final exists = await dbHelper.tableExists(
-        DatabaseConfig.tableItensNotaFiscal,
+        DatabaseConfig.tableInvoiceItems,
       );
       expect(exists, isTrue);
     });

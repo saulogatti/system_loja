@@ -45,14 +45,52 @@ class DatabaseHelper {
     return _database!;
   }
 
-  /// Inicializa o banco de dados FFI para desktop (Windows, Linux, macOS)
-  ///
-  /// Deve ser chamado antes de usar o banco em plataformas desktop.
-  static void initializeFfi() {
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      sqfliteFfiInit();
-      databaseFactory = databaseFactoryFfi;
+  /// Fecha a conexão com o banco de dados
+  Future<void> close() async {
+    if (_database != null && _database!.isOpen) {
+      await _database!.close();
+      _database = null;
     }
+  }
+
+  /// Conta o número de registros em uma tabela
+  ///
+  /// [tableName] Nome da tabela para contagem.
+  /// Retorna o número de registros na tabela.
+  Future<int> countRecords(String tableName) async {
+    final db = await database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM $tableName',
+    );
+    return result.first['count'] as int;
+  }
+
+  /// Exclui o banco de dados
+  ///
+  /// Remove o arquivo do banco de dados do sistema de arquivos.
+  /// Use com cuidado, pois todos os dados serão perdidos.
+  Future<void> deleteDatabase() async {
+    final Directory documentsDirectory =
+        await getApplicationDocumentsDirectory();
+    final String path = join(
+      documentsDirectory.path,
+      DatabaseConfig.databaseName,
+    );
+    await databaseFactory.deleteDatabase(path);
+    resetInstance();
+  }
+
+  /// Verifica se uma tabela existe no banco de dados
+  ///
+  /// [tableName] Nome da tabela a ser verificada.
+  /// Retorna true se a tabela existir, false caso contrário.
+  Future<bool> tableExists(String tableName) async {
+    final db = await database;
+    final result = await db.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+      [tableName],
+    );
+    return result.isNotEmpty;
   }
 
   /// Inicializa o banco de dados
@@ -74,38 +112,6 @@ class DatabaseHelper {
       onUpgrade: _onUpgrade,
       onConfigure: _onConfigure,
     );
-  }
-
-  /// Configura o banco de dados
-  ///
-  /// Habilita as chaves estrangeiras para garantir integridade referencial.
-  Future<void> _onConfigure(Database db) async {
-    await db.execute('PRAGMA foreign_keys = ON');
-  }
-
-  /// Cria as tabelas e índices do banco de dados
-  ///
-  /// Executado automaticamente quando o banco é criado pela primeira vez.
-  Future<void> _onCreate(Database db, int version) async {
-    // Cria todas as tabelas
-    for (final script in DatabaseScripts.allCreateTableScripts) {
-      await db.execute(script);
-    }
-
-    // Cria todos os índices
-    for (final script in DatabaseScripts.allCreateIndexScripts) {
-      await db.execute(script);
-    }
-  }
-
-  /// Atualiza o banco de dados quando a versão muda
-  ///
-  /// Implementa a lógica de migração para cada versão do banco.
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    // Migração da versão 1 para 2: Remove campos desnormalizados
-    if (oldVersion < 2) {
-      await _migrateToVersion2(db);
-    }
   }
 
   /// Migração para versão 2: Remove campos desnormalizados
@@ -165,20 +171,54 @@ class DatabaseHelper {
         (id, nota_fiscal_id, produto_id, quantidade, preco_unitario, valor_total)
       SELECT 
         id, nota_fiscal_id, produto_id, quantidade, preco_unitario, valor_total
-      FROM ${DatabaseConfig.tableItensNotaFiscal}
+      FROM ${DatabaseConfig.tableInvoiceItems}
     ''');
 
-    await db.execute('DROP TABLE ${DatabaseConfig.tableItensNotaFiscal}');
+    await db.execute('DROP TABLE ${DatabaseConfig.tableInvoiceItems}');
     await db.execute(
-      'ALTER TABLE itens_nota_fiscal_new RENAME TO ${DatabaseConfig.tableItensNotaFiscal}',
+      'ALTER TABLE itens_nota_fiscal_new RENAME TO ${DatabaseConfig.tableInvoiceItems}',
     );
   }
 
-  /// Fecha a conexão com o banco de dados
-  Future<void> close() async {
-    if (_database != null && _database!.isOpen) {
-      await _database!.close();
-      _database = null;
+  /// Configura o banco de dados
+  ///
+  /// Habilita as chaves estrangeiras para garantir integridade referencial.
+  Future<void> _onConfigure(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
+  }
+
+  /// Cria as tabelas e índices do banco de dados
+  ///
+  /// Executado automaticamente quando o banco é criado pela primeira vez.
+  Future<void> _onCreate(Database db, int version) async {
+    // Cria todas as tabelas
+    for (final script in DatabaseScripts.allCreateTableScripts) {
+      await db.execute(script);
+    }
+
+    // Cria todos os índices
+    for (final script in DatabaseScripts.allCreateIndexScripts) {
+      await db.execute(script);
+    }
+  }
+
+  /// Atualiza o banco de dados quando a versão muda
+  ///
+  /// Implementa a lógica de migração para cada versão do banco.
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    // Migração da versão 1 para 2: Remove campos desnormalizados
+    if (oldVersion < 2) {
+      await _migrateToVersion2(db);
+    }
+  }
+
+  /// Inicializa o banco de dados FFI para desktop (Windows, Linux, macOS)
+  ///
+  /// Deve ser chamado antes de usar o banco em plataformas desktop.
+  static void initializeFfi() {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
     }
   }
 
@@ -189,43 +229,5 @@ class DatabaseHelper {
   static void resetInstance() {
     _database = null;
     _instance = null;
-  }
-
-  /// Exclui o banco de dados
-  ///
-  /// Remove o arquivo do banco de dados do sistema de arquivos.
-  /// Use com cuidado, pois todos os dados serão perdidos.
-  Future<void> deleteDatabase() async {
-    final Directory documentsDirectory =
-        await getApplicationDocumentsDirectory();
-    final String path = join(
-      documentsDirectory.path,
-      DatabaseConfig.databaseName,
-    );
-    await databaseFactory.deleteDatabase(path);
-    resetInstance();
-  }
-
-  /// Verifica se uma tabela existe no banco de dados
-  ///
-  /// [tableName] Nome da tabela a ser verificada.
-  /// Retorna true se a tabela existir, false caso contrário.
-  Future<bool> tableExists(String tableName) async {
-    final db = await database;
-    final result = await db.rawQuery(
-      "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
-      [tableName],
-    );
-    return result.isNotEmpty;
-  }
-
-  /// Conta o número de registros em uma tabela
-  ///
-  /// [tableName] Nome da tabela para contagem.
-  /// Retorna o número de registros na tabela.
-  Future<int> countRecords(String tableName) async {
-    final db = await database;
-    final result = await db.rawQuery('SELECT COUNT(*) as count FROM $tableName');
-    return result.first['count'] as int;
   }
 }

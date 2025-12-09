@@ -11,4 +11,12 @@ sealed class CustomerBlocEvent with _$CustomerBlocEvent {
   }) = _RegisterCustomer;
   
   const factory CustomerBlocEvent.loadCustomers() = _LoadCustomers;
+  const factory CustomerBlocEvent.deleteCustomer({
+    required int id,
+  }) = _DeleteCustomer;
+  const factory CustomerBlocEvent.findCustomerByCpf({required String cpf}) = _FindCustomerByCpf;
+  const factory CustomerBlocEvent.updateCustomer({
+    required Customer customer,
+  }) = _UpdateCustomer;
+  
 }

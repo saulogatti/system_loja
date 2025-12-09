@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/models/item_nota_fiscal.dart';
-import 'package:system_loja/core/models/nota_fiscal.dart';
+import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/produto.dart';
 
 /// Testes de serialização JSON
@@ -66,63 +66,65 @@ void main() {
   group('ItemNotaFiscal - Serialização JSON', () {
     test('deve serializar e desserializar corretamente', () {
       // Arrange
-      final item = ItemNotaFiscal(
-        produtoId: 1,
-        produtoNome: 'Notebook Dell',
-        produtoCodigo: 'NOTE-001',
-        quantidade: 2,
-        precoUnitario: 3500.00,
+      final item = InvoiceItem(
+        productId: 1,
+        productName: 'Notebook Dell',
+        productCode: 'NOTE-001',
+        quantity: 2,
+        unitPrice: 3500.00,
       );
 
       // Act
       final json = item.toJson();
-      final itemReconstruido = ItemNotaFiscal.fromJson(json);
+      final itemReconstruido = InvoiceItem.fromJson(json);
 
       // Assert
-      expect(itemReconstruido.produtoId, equals(item.produtoId));
-      expect(itemReconstruido.produtoNome, equals(item.produtoNome));
-      expect(itemReconstruido.produtoCodigo, equals(item.produtoCodigo));
-      expect(itemReconstruido.quantidade, equals(item.quantidade));
-      expect(itemReconstruido.precoUnitario, equals(item.precoUnitario));
-      expect(itemReconstruido.valorTotal, equals(item.valorTotal));
+      expect(itemReconstruido.productId, equals(item.productId));
+      expect(itemReconstruido.productName, equals(item.productName));
+      expect(itemReconstruido.productCode, equals(item.productCode));
+      expect(itemReconstruido.quantity, equals(item.quantity));
+      expect(itemReconstruido.unitPrice, equals(item.unitPrice));
+      expect(itemReconstruido.totalValue, equals(item.totalValue));
     });
   });
 
-  group('NotaFiscal - Serialização JSON', () {
+  group('Invoice - Serialização JSON', () {
     test('deve serializar e desserializar corretamente', () {
       // Arrange
-      final item = ItemNotaFiscal(
-        produtoId: 1,
-        produtoNome: 'Notebook Dell',
-        produtoCodigo: 'NOTE-001',
-        quantidade: 2,
-        precoUnitario: 3500.00,
+      final item = InvoiceItem(
+        productId: 1,
+        productName: 'Notebook Dell',
+        productCode: 'NOTE-001',
+        quantity: 2,
+        unitPrice: 3500.00,
       );
 
-      final nota = NotaFiscal(
+      final invoice = Invoice(
         id: 1,
-        numeroNota: 'NF-001',
-        clienteId: 1,
-        clienteNome: 'João Silva',
-        clienteCpf: '123.456.789-00',
-        itens: [item],
-        formaPagamento: 'Cartão de Crédito',
+        data: InvoiceData(
+          invoiceNumber: 'NF-001',
+          customerId: 1,
+          customerName: 'João Silva',
+          customerCpf: '123.456.789-00',
+          items: [item],
+          paymentMethod: 'Cartão de Crédito',
+        ),
       );
 
       // Act
-      final json = nota.toJson();
-      final notaReconstruida = NotaFiscal.fromJson(json);
+      final json = invoice.toJson();
+      final invoiceReconstruido = Invoice.fromJson(json);
 
       // Assert
-      expect(notaReconstruida.id, equals(nota.id));
-      expect(notaReconstruida.numeroNota, equals(nota.numeroNota));
-      expect(notaReconstruida.clienteId, equals(nota.clienteId));
-      expect(notaReconstruida.clienteNome, equals(nota.clienteNome));
-      expect(notaReconstruida.clienteCpf, equals(nota.clienteCpf));
-      expect(notaReconstruida.formaPagamento, equals(nota.formaPagamento));
-      expect(notaReconstruida.valorTotal, equals(nota.valorTotal));
-      expect(notaReconstruida.itens.length, equals(1));
-      expect(notaReconstruida.itens[0].produtoNome, equals('Notebook Dell'));
+      expect(invoiceReconstruido.id, equals(invoice.id));
+      expect(invoiceReconstruido.data.invoiceNumber, equals(invoice.data.invoiceNumber));
+      expect(invoiceReconstruido.data.customerId, equals(invoice.data.customerId));
+      expect(invoiceReconstruido.data.customerName, equals(invoice.data.customerName));
+      expect(invoiceReconstruido.data.customerCpf, equals(invoice.data.customerCpf));
+      expect(invoiceReconstruido.data.paymentMethod, equals(invoice.data.paymentMethod));
+      expect(invoiceReconstruido.data.totalValue, equals(invoice.data.totalValue));
+      expect(invoiceReconstruido.data.items.length, equals(1));
+      expect(invoiceReconstruido.data.items[0].productName, equals('Notebook Dell'));
     });
   });
 }
