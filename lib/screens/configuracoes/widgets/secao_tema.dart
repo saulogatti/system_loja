@@ -1,0 +1,75 @@
+import 'package:flutter/material.dart';
+import 'package:system_loja/core/models/configuracao.dart';
+
+/// Widget da seção de configurações de aparência/tema
+class SecaoTema extends StatelessWidget {
+  /// Configuração atual do sistema
+  final Configuracao config;
+  
+  /// Callback para atualizar a configuração
+  final Function(Configuracao) onConfigChanged;
+  
+  /// Callback para mostrar seletor de cor
+  final VoidCallback onMostrarSeletorCor;
+
+  const SecaoTema({
+    super.key,
+    required this.config,
+    required this.onConfigChanged,
+    required this.onMostrarSeletorCor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.palette,
+                    color: Theme.of(context).colorScheme.primary),
+                const SizedBox(width: 8),
+                const Text(
+                  'Aparência',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const Divider(),
+            SwitchListTile(
+              title: const Text('Tema escuro'),
+              subtitle: const Text('Ativar modo escuro'),
+              value: config.temaEscuro,
+              onChanged: (value) {
+                onConfigChanged(config.copyWith(temaEscuro: value));
+              },
+            ),
+            ListTile(
+              title: const Text('Cor primária'),
+              subtitle: const Text('Cor principal do aplicativo'),
+              trailing: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: _getColorFromHex(config.corPrimaria),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey),
+                ),
+              ),
+              onTap: onMostrarSeletorCor,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Converte cor hexadecimal para Color
+  Color _getColorFromHex(String hexColor) {
+    hexColor = hexColor.replaceAll('#', '');
+    return Color(int.parse('FF$hexColor', radix: 16));
+  }
+}
