@@ -467,13 +467,13 @@ class _SalesViewState extends State<SalesView> {
                 ],
               ),
               // Exibe o overlay de loading quando necessário
-              if (state is SalesLoading)
-                const LoadingOverlay(
-                  message: 'Carregando vendas...',
-                ),
-              if (state is SalesLoadingProducts)
-                const LoadingOverlay(
-                  message: 'Carregando produtos...',
+              if (state is SalesLoading || state is SalesLoadingProducts)
+                LoadingOverlay(
+                  message: switch (state) {
+                    SalesLoading() => 'Carregando vendas...',
+                    SalesLoadingProducts() => 'Carregando produtos...',
+                    _ => 'Carregando...',
+                  },
                 ),
             ],
           );
