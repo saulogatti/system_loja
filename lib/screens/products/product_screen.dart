@@ -245,8 +245,7 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
     try {
       // Converte valores já validados pelos validators
       // Os validators garantem que esses valores são parseáveis
-      final codigo = _codigoController.text.trim();
-      final precoTexto = _precoController.text.trim().replaceAll(',', '.');
+      final preco = double.parse(_precoController.text.trim());
       final preco = double.parse(precoTexto);
       final estoque = int.parse(_estoqueController.text.trim());
 
