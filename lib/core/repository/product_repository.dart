@@ -59,4 +59,29 @@ class ProductRepository extends RepositoryManager {
     }
     return OperationSuccess(result);
   }
+
+  /// Atualiza um produto existente no armazenamento.
+  ///
+  /// [produto] Produto com os dados atualizados.
+  /// Retorna resultado da operação de atualização.
+  /// 
+  /// **Nota**: Este método utiliza internamente [salvarProduto], pois o storage
+  /// não diferencia entre inserção e atualização (upsert pattern).
+  Future<OperationResult<bool, String>> updateProduct(Produto produto) async {
+    return salvarProduto(produto);
+  }
+
+  /// Remove um produto do armazenamento.
+  ///
+  /// [id] ID do produto a ser removido.
+  /// Retorna resultado da operação de exclusão.
+  Future<OperationResult<bool, String>> deleteProduct(int id) async {
+    final result = await defaultDataStorage.delete(id);
+    switch (result) {
+      case OperationSuccess():
+        return OperationSuccess(result.result);
+      case OperationError():
+        return OperationError('Falha ao deletar produto com ID: $id - ${result.error}');
+    }
+  }
 }

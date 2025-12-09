@@ -68,8 +68,8 @@ import 'package:system_loja/data/storage/storage_data.dart';
 ///     print('Erro: $erro');
 /// }
 /// ```
-class SqlDataStorage extends BaseDataStorage {
-  SqlDataStorage({required super.storageCategory});
+class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
+  static const Duration _timeOutMilliseconds = Duration(seconds: 5);
 
   /// Deleta um objeto pelo ID do banco de dados.
   ///
@@ -93,28 +93,26 @@ class SqlDataStorage extends BaseDataStorage {
   ///     print('Erro ao deletar: $erro');
   /// }
   /// ```
+  final _dbHelper = DatabaseHelper();
+  SqlDataStorage({required super.storageCategory});
+  Future<Database> get _database => _dbHelper.database;
   @override
   Future<OperationResult<bool, String>> delete(int id) async {
     try {
-      return await getLock().synchronized<OperationResult<bool, String>>(
-        () async {
-          final db = await _database;
-          final rowsAffected = await db.delete(
-            DatabaseConfig.tablePersistentDataStore,
-            where: 'id = ? AND storage_category = ?',
-            whereArgs: [id, storageCategory],
-          );
+      return await getLock().synchronized<OperationResult<bool, String>>(() async {
+        final db = await _database;
+        final rowsAffected = await db.delete(
+          DatabaseConfig.tablePersistentDataStore,
+          where: 'id = ? AND storage_category = ?',
+          whereArgs: [id, storageCategory],
+        );
 
-          if (rowsAffected > 0) {
-            return OperationResult.success(true);
-          } else {
-            return OperationResult.failure(
-              'Nenhum objeto encontrado com ID $id na categoria $storageCategory',
-            );
-          }
-        },
-        timeout: _timeOutMilliseconds,
-      );
+        if (rowsAffected > 0) {
+          return OperationResult.success(true);
+        } else {
+          return OperationResult.failure('Nenhum objeto encontrado com ID $id na categoria $storageCategory');
+        }
+      }, timeout: _timeOutMilliseconds);
     } catch (e, stackTrace) {
       logError('Erro ao deletar objeto com ID $id: $e', stackTrace);
       return OperationResult.failure('Erro ao deletar objeto com ID $id: $e');
@@ -155,17 +153,12 @@ class SqlDataStorage extends BaseDataStorage {
       );
 
       if (results.isEmpty) {
-        return OperationResult.failure(
-          'Objeto com ID $id não encontrado na categoria $storageCategory',
-        );
+        return OperationResult.failure('Objeto com ID $id não encontrado na categoria $storageCategory');
       }
 
       final row = results.first;
       final dataJson = jsonDecode(row['data'] as String) as Map<String, dynamic>;
-      final persistentData = PersistentDataStore(
-        id: row['id'] as int,
-        data: dataJson,
-      );
+      final persistentData = PersistentDataStore(id: row['id'] as int, data: dataJson);
 
       return OperationResult.success(persistentData);
     } catch (e, stackTrace) {
@@ -212,17 +205,11 @@ class SqlDataStorage extends BaseDataStorage {
       for (var row in results) {
         try {
           final dataJson = jsonDecode(row['data'] as String) as Map<String, dynamic>;
-          final persistentData = PersistentDataStore(
-            id: row['id'] as int,
-            data: dataJson,
-          );
+          final persistentData = PersistentDataStore(id: row['id'] as int, data: dataJson);
           allData.add(persistentData);
         } catch (e, stackTrace) {
           // Registra erro mas continua processando outros registros
-          logError(
-            'Erro ao decodificar registro com ID ${row['id']}: $e',
-            stackTrace,
-          );
+          logError('Erro ao decodificar registro com ID ${row['id']}: $e', stackTrace);
           // Opcionalmente, pode deletar o registro corrompido
           // await delete(row['id'] as int);
         }
@@ -263,31 +250,28 @@ class SqlDataStorage extends BaseDataStorage {
   @override
   Future<bool> save(PersistentDataStore object) async {
     try {
-      return await getLock().synchronized<bool>(
-        () async {
-          final db = await _database;
-          final dataJson = jsonEncode(object.data);
+      return await getLock().synchronized<bool>(() async {
+        final db = await _database;
+        final dataJson = jsonEncode(object.data);
 
-          final Map<String, dynamic> row = {
-            'id': object.id,
-            'storage_category': storageCategory,
-            'data': dataJson,
-          };
+        final Map<String, dynamic> row = {
+          'id': object.id,
+          'storage_category': storageCategory,
+          'data': dataJson,
+        };
 
-          // Tenta inserir ou atualizar usando conflictAlgorithm.replace
-          // Com a chave primária composta (id, storage_category), isso fará
-          // um UPDATE se o par (id, categoria) já existir, ou INSERT caso contrário.
-          // Isso garante isolamento entre categorias.
-          final result = await db.insert(
-            DatabaseConfig.tablePersistentDataStore,
-            row,
-            conflictAlgorithm: ConflictAlgorithm.replace,
-          );
+        // Tenta inserir ou atualizar usando conflictAlgorithm.replace
+        // Com a chave primária composta (id, storage_category), isso fará
+        // um UPDATE se o par (id, categoria) já existir, ou INSERT caso contrário.
+        // Isso garante isolamento entre categorias.
+        final result = await db.insert(
+          DatabaseConfig.tablePersistentDataStore,
+          row,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
 
-          return result > 0;
-        },
-        timeout: _timeOutMilliseconds,
-      );
+        return result > 0;
+      }, timeout: _timeOutMilliseconds);
     } catch (e, stackTrace) {
       logError('Erro ao salvar objeto com ID ${object.id}: $e', stackTrace);
       return false;

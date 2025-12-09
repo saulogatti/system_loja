@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/utils/validators.dart';
 
 import '../core/managers/log_atividade_manager.dart';
 import '../core/managers/usuario_manager.dart';
@@ -58,12 +59,10 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.person),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Nome é obrigatório';
-                        }
-                        return null;
-                      },
+                      validator: (value) => combineValidators([
+                        (v) => validateRequired(v, 'Nome'),
+                        (v) => validateMinLength(v, 3, 'Nome'),
+                      ])(value),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(

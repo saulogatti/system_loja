@@ -1,6 +1,7 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/database_helper.dart';
 import 'package:system_loja/data/storage/sql_data_storage.dart';
 import 'package:system_loja/data/storage/storage_data.dart';
@@ -38,10 +39,7 @@ void main() {
   group('SqlDataStorage - Testes de save', () {
     test('deve salvar um novo objeto com sucesso', () async {
       // Arrange
-      final objeto = PersistentDataStore(
-        id: 1,
-        data: {'nome': 'Teste', 'valor': 123},
-      );
+      final objeto = PersistentDataStore(id: 1, data: {'nome': 'Teste', 'valor': 123});
 
       // Act
       final success = await storage.save(objeto);
@@ -59,16 +57,10 @@ void main() {
 
     test('deve atualizar um objeto existente', () async {
       // Arrange
-      final objeto1 = PersistentDataStore(
-        id: 1,
-        data: {'nome': 'Teste', 'valor': 123},
-      );
+      final objeto1 = PersistentDataStore(id: 1, data: {'nome': 'Teste', 'valor': 123});
       await storage.save(objeto1);
 
-      final objeto2 = PersistentDataStore(
-        id: 1,
-        data: {'nome': 'Teste Atualizado', 'valor': 456},
-      );
+      final objeto2 = PersistentDataStore(id: 1, data: {'nome': 'Teste Atualizado', 'valor': 456});
 
       // Act
       final success = await storage.save(objeto2);
@@ -85,18 +77,9 @@ void main() {
 
     test('deve salvar múltiplos objetos com IDs diferentes', () async {
       // Arrange
-      final objeto1 = PersistentDataStore(
-        id: 1,
-        data: {'nome': 'Objeto 1'},
-      );
-      final objeto2 = PersistentDataStore(
-        id: 2,
-        data: {'nome': 'Objeto 2'},
-      );
-      final objeto3 = PersistentDataStore(
-        id: 3,
-        data: {'nome': 'Objeto 3'},
-      );
+      final objeto1 = PersistentDataStore(id: 1, data: {'nome': 'Objeto 1'});
+      final objeto2 = PersistentDataStore(id: 2, data: {'nome': 'Objeto 2'});
+      final objeto3 = PersistentDataStore(id: 3, data: {'nome': 'Objeto 3'});
 
       // Act
       final success1 = await storage.save(objeto1);
@@ -118,15 +101,8 @@ void main() {
       final objeto = PersistentDataStore(
         id: 1,
         data: {
-          'usuario': {
-            'nome': 'João Silva',
-            'email': 'joao@email.com',
-            'idade': 30,
-          },
-          'configuracoes': {
-            'tema': 'escuro',
-            'notificacoes': true,
-          },
+          'usuario': {'nome': 'João Silva', 'email': 'joao@email.com', 'idade': 30},
+          'configuracoes': {'tema': 'escuro', 'notificacoes': true},
           'tags': ['admin', 'developer'],
         },
       );
@@ -140,6 +116,7 @@ void main() {
       final result = await storage.fetchById(1);
       expect(result.isSuccessful, isTrue);
       final dados = result.asSuccess.data;
+      expect(dados, isA<Map<String, dynamic>>());
       expect(dados['usuario']['nome'], equals('João Silva'));
       expect(dados['configuracoes']['tema'], equals('escuro'));
       expect(dados['tags'], equals(['admin', 'developer']));
@@ -149,10 +126,7 @@ void main() {
   group('SqlDataStorage - Testes de fetchById', () {
     test('deve buscar um objeto existente por ID', () async {
       // Arrange
-      final objeto = PersistentDataStore(
-        id: 42,
-        data: {'descricao': 'Teste de busca'},
-      );
+      final objeto = PersistentDataStore(id: 42, data: {'descricao': 'Teste de busca'});
       await storage.save(objeto);
 
       // Act
@@ -178,10 +152,7 @@ void main() {
       final storage1 = SqlDataStorage(storageCategory: 'Categoria1');
       final storage2 = SqlDataStorage(storageCategory: 'Categoria2');
 
-      final objeto1 = PersistentDataStore(
-        id: 1,
-        data: {'categoria': 'primeira'},
-      );
+      final objeto1 = PersistentDataStore(id: 1, data: {'categoria': 'primeira'});
       final objeto2 = PersistentDataStore(
         id: 1, // Mesmo ID, mas categoria diferente
         data: {'categoria': 'segunda'},
@@ -232,7 +203,7 @@ void main() {
       // Assert
       expect(result.isSuccessful, isTrue);
       expect(result.asSuccess.length, equals(5));
-      
+
       // Verifica se os IDs estão em ordem crescente
       final ids = result.asSuccess.map((e) => e.id).toList();
       expect(ids, equals([1, 2, 3, 4, 5]));
@@ -281,10 +252,7 @@ void main() {
   group('SqlDataStorage - Testes de delete', () {
     test('deve deletar um objeto existente', () async {
       // Arrange
-      final objeto = PersistentDataStore(
-        id: 1,
-        data: {'teste': 'deletar'},
-      );
+      final objeto = PersistentDataStore(id: 1, data: {'teste': 'deletar'});
       await storage.save(objeto);
 
       // Verifica que o objeto existe
@@ -356,10 +324,7 @@ void main() {
   group('SqlDataStorage - Testes de integração', () {
     test('deve executar ciclo completo CRUD', () async {
       // Create
-      final objeto = PersistentDataStore(
-        id: 100,
-        data: {'status': 'criado'},
-      );
+      final objeto = PersistentDataStore(id: 100, data: {'status': 'criado'});
       var success = await storage.save(objeto);
       expect(success, isTrue);
 
@@ -369,10 +334,7 @@ void main() {
       expect(result.asSuccess.data['status'], equals('criado'));
 
       // Update
-      final objetoAtualizado = PersistentDataStore(
-        id: 100,
-        data: {'status': 'atualizado'},
-      );
+      final objetoAtualizado = PersistentDataStore(id: 100, data: {'status': 'atualizado'});
       success = await storage.save(objetoAtualizado);
       expect(success, isTrue);
 
@@ -397,11 +359,11 @@ void main() {
       // Act
       await usuarios.save(PersistentDataStore(id: 1, data: {'nome': 'João'}));
       await usuarios.save(PersistentDataStore(id: 2, data: {'nome': 'Maria'}));
-      
+
       await produtos.save(PersistentDataStore(id: 1, data: {'nome': 'Cadeira'}));
       await produtos.save(PersistentDataStore(id: 2, data: {'nome': 'Mesa'}));
       await produtos.save(PersistentDataStore(id: 3, data: {'nome': 'Sofá'}));
-      
+
       await configs.save(PersistentDataStore(id: 1, data: {'tema': 'escuro'}));
 
       // Assert
@@ -416,10 +378,7 @@ void main() {
 
     test('deve preservar dados após reabrir o banco', () async {
       // Arrange - Salva dados
-      await storage.save(PersistentDataStore(
-        id: 1,
-        data: {'persistente': true},
-      ));
+      await storage.save(PersistentDataStore(id: 1, data: {'persistente': true}));
 
       // Fecha e reabre o banco
       final dbHelper = DatabaseHelper();
@@ -441,10 +400,7 @@ void main() {
   group('SqlDataStorage - Testes de casos extremos', () {
     test('deve lidar com dados vazios', () async {
       // Arrange
-      final objeto = PersistentDataStore(
-        id: 1,
-        data: {},
-      );
+      final objeto = PersistentDataStore(id: 1, data: {});
 
       // Act
       final success = await storage.save(objeto);
@@ -460,10 +416,7 @@ void main() {
     test('deve lidar com strings longas', () async {
       // Arrange
       final textoLongo = 'A' * 10000; // 10k caracteres
-      final objeto = PersistentDataStore(
-        id: 1,
-        data: {'texto': textoLongo},
-      );
+      final objeto = PersistentDataStore(id: 1, data: {'texto': textoLongo});
 
       // Act
       final success = await storage.save(objeto);
