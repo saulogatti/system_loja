@@ -272,6 +272,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
         _isAdding = true;
       });
 
+
       context.read<CustomerBloc>().add(
         CustomerBlocEvent.registerCustomer(
           name: _nomeController.text.trim(),
