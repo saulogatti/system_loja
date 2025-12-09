@@ -10,55 +10,76 @@ part 'configuracao.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Configuracao {
   // Preferências de Notificação
+  
+  /// Controla se as notificações estão ativadas globalmente no sistema
   @JsonKey(name: 'notificacoes_ativadas')
   final bool notificacoesAtivadas;
   
+  /// Define se o sistema deve notificar sobre novas vendas realizadas
   @JsonKey(name: 'notificar_vendas')
   final bool notificarVendas;
   
+  /// Define se o sistema deve alertar quando o estoque de produtos estiver baixo
   @JsonKey(name: 'notificar_estoque_baixo')
   final bool notificarEstoqueBaixo;
   
+  /// Quantidade mínima de unidades em estoque para disparar alerta (1-50)
   @JsonKey(name: 'limite_estoque_baixo')
   final int limiteEstoqueBaixo;
 
   // Preferências de Tema
+  
+  /// Define se o tema escuro está ativado no aplicativo
   @JsonKey(name: 'tema_escuro')
   final bool temaEscuro;
   
+  /// Cor primária do tema em formato hexadecimal (ex: '#2196F3')
   @JsonKey(name: 'cor_primaria')
   final String corPrimaria;
 
   // Opções de Backup
+  
+  /// Define se o backup automático dos dados está habilitado
   @JsonKey(name: 'backup_automatico')
   final bool backupAutomatico;
   
+  /// Frequência do backup automático: 'diario', 'semanal' ou 'mensal'
   @JsonKey(name: 'frequencia_backup')
-  final String frequenciaBackup; // 'diario', 'semanal', 'mensal'
+  final String frequenciaBackup;
   
+  /// Caminho do diretório onde os backups serão armazenados
   @JsonKey(name: 'local_backup')
   final String localBackup;
 
   // Opções de Limpeza de Dados
+  
+  /// Define se a limpeza automática de logs antigos está habilitada
   @JsonKey(name: 'limpeza_automatica')
   final bool limpezaAutomatica;
   
+  /// Número de dias para manter logs no sistema antes da limpeza (7-365)
   @JsonKey(name: 'dias_manter_logs')
   final int diasManterLogs;
 
   // Opções de Segurança
+  
+  /// Define se o sistema deve exigir senha ao ser aberto
   @JsonKey(name: 'exigir_senha')
   final bool exigirSenha;
   
+  /// Tempo em minutos de inatividade antes de solicitar senha novamente (1-60)
   @JsonKey(name: 'tempo_bloqueio_minutos')
   final int tempoBloqueioMinutos;
   
+  /// Define se o sistema permite gestão de múltiplos usuários
   @JsonKey(name: 'permitir_multiplos_usuarios')
   final bool permitirMultiplosUsuarios;
 
   // Tipo de Banco de Dados
+  
+  /// Tipo de persistência de dados: 'json' (padrão) ou 'sql' (SQLite)
   @JsonKey(name: 'tipo_banco_dados')
-  final String tipoBancoDados; // 'json' ou 'sql'
+  final String tipoBancoDados;
 
   Configuracao({
     this.notificacoesAtivadas = true,

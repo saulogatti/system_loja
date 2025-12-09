@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'cliente_screen.dart';
-import 'configuracoes_screen.dart';
+import 'configuracoes/configuracoes_screen.dart';
 import 'nota_fiscal_screen.dart';
 import 'produto_screen.dart';
 import 'usuario_screen.dart';
