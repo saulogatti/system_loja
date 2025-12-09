@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/screens/configuracoes/configuracoes_screen.dart';
-import 'package:system_loja/screens/customer/customer_view.dart';
-import 'package:system_loja/screens/products/product_screen.dart';
-import 'package:system_loja/screens/sales/sales_screen.dart';
 import 'package:system_loja/screens/usuario_screen.dart';
 
- 
+import '../customer/customer_view.dart';
+import '../products/product_screen.dart';
+import '../sales/sales_screen.dart';
 
 /// Tela principal do sistema de gerenciamento de loja.
 ///
 /// Exibe um menu com cartões de navegação para as principais funcionalidades:
 /// - Cadastro de Cliente
 /// - Cadastro de Produto
-/// - Cadastro de Nota Fiscal 
+/// - Cadastro de Nota Fiscal
 /// - Gestão de Usuários
 class HomeScreen extends StatelessWidget {
   /// Cria uma instância de [HomeScreen].

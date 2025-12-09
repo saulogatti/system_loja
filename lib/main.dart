@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:system_loja/screens/settings/settings_service.dart';
 
-import 'screens/home_screen.dart';
+import 'screens/home/home_screen.dart';
 
 void main() {
   runApp(const SystemLojaApp());
@@ -12,14 +13,19 @@ class SystemLojaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Sistema de Gerenciamento de Loja',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: const HomeScreen(),
-      debugShowCheckedModeBanner: kDebugMode,
+    return ValueListenableBuilder(
+      valueListenable: SettingsService().primaryColorNotifier,
+      builder: (context, value, child) {
+        return MaterialApp(
+          title: 'Sistema de Gerenciamento de Loja',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: value.color),
+            useMaterial3: true,
+          ),
+          home: const HomeScreen(),
+          debugShowCheckedModeBanner: kDebugMode,
+        );
+      },
     );
   }
 }

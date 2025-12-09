@@ -28,6 +28,9 @@ class AppSettings {
   final int limiteEstoqueBaixo;
 
   // Preferências de Tema
+
+  /// Cor primária do tema do aplicativo
+  @JsonKey(name: 'cor_primaria')
   EnumColorAppThemeSettings corPrimaria;
 
   /// Define se o tema escuro está ativado no aplicativo
