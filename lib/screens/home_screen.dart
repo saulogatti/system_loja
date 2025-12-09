@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/screens/configuracoes/configuracoes_screen.dart';
 import 'package:system_loja/screens/usuario_screen.dart';
 
 import 'customer/customer_view.dart';

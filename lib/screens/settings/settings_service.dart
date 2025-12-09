@@ -1,12 +1,11 @@
-
-import 'package:system_loja/core/settings/settings_app.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
 
 class SettingsService {
   static final SettingsService _instance = SettingsService._internal();
   factory SettingsService() => _instance;
   SettingsService._internal();
-  SettingsApp get currentSettings {
+  AppSettings get currentSettings {
     // Return current settings; placeholder implementation
-    return SettingsApp(typeCache: EnumTypeCache.json);
+    return AppSettings.createDefaultSettings();
   }
 }

@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/repository/customer_repository.dart';
-import 'package:system_loja/core/settings/settings_app.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 
 part 'customer_bloc.freezed.dart';
@@ -20,7 +20,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
 
   CustomerBloc()
     : _customerRepository = CustomerRepository(
-        settingsApp: SettingsApp(typeCache: EnumTypeCache.json),
+        settingsApp: AppSettings(typeCache: EnumTypeCache.json),
       ),
       super(const _Initial()) {
     on<_LoadCustomers>(_onLoadCustomers);
@@ -28,6 +28,50 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
     on<_DeleteCustomer>(_onDeleteCustomer);
     on<_FindCustomerByCpf>(_onFindCustomerByCpf);
     on<_UpdateCustomer>(_onUpdateCustomer);
+  }
+
+  FutureOr<void> _onDeleteCustomer(
+    _DeleteCustomer event,
+    Emitter<CustomerBlocState> emit,
+  ) async {
+    emit(const CustomerBlocState.loading());
+    try {
+      await _customerRepository.deleteWithId(event.id);
+      // Recarrega a lista de clientes após deletar
+      final customers = await _customerRepository.loadAll();
+      emit(CustomerBlocState.customersLoaded(customers: customers));
+    } catch (e) {
+      emit(
+        CustomerBlocState.customerError(
+          message: 'Erro ao deletar cliente: ${e.toString()}',
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _onFindCustomerByCpf(
+    _FindCustomerByCpf event,
+    Emitter<CustomerBlocState> emit,
+  ) async {
+    emit(const CustomerBlocState.loading());
+    try {
+      final customer = await _customerRepository.findWith(cpf: event.cpf);
+      if (customer != null) {
+        emit(CustomerBlocState.customerFound(customer: customer));
+      } else {
+        emit(
+          const CustomerBlocState.customerError(
+            message: 'Cliente não encontrado para o CPF informado.',
+          ),
+        );
+      }
+    } catch (e) {
+      emit(
+        CustomerBlocState.customerError(
+          message: 'Erro ao buscar cliente: ${e.toString()}',
+        ),
+      );
+    }
   }
 
   /// Carrega todos os clientes do banco de dados
@@ -106,46 +150,11 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
     }
   }
 
-  FutureOr<void> _onFindCustomerByCpf(_FindCustomerByCpf event, Emitter<CustomerBlocState> emit) async{
-    emit(const CustomerBlocState.loading());
-    try {
-      final customer = await _customerRepository.findWith(cpf: event.cpf);
-      if (customer != null) {
-        emit(CustomerBlocState.customerFound(customer: customer));
-      } else {
-        emit(
-          const CustomerBlocState.customerError(
-            message: 'Cliente não encontrado para o CPF informado.',
-          ),
-        );
-      }
-    } catch (e) {
-      emit(
-        CustomerBlocState.customerError(
-          message: 'Erro ao buscar cliente: ${e.toString()}',
-        ),
-      );
-    }
-  }
-
-  FutureOr<void> _onDeleteCustomer(_DeleteCustomer event, Emitter<CustomerBlocState> emit)async {
-    emit(const CustomerBlocState.loading());
-    try {
-      await _customerRepository.deleteWithId(event.id);
-      // Recarrega a lista de clientes após deletar
-      final customers = await _customerRepository.loadAll();
-      emit(CustomerBlocState.customersLoaded(customers: customers));
-    } catch (e) {
-      emit(
-        CustomerBlocState.customerError(
-          message: 'Erro ao deletar cliente: ${e.toString()}',
-        ),
-      );
-    }
-  }
-
   /// Atualiza um cliente existente no banco de dados
-  FutureOr<void> _onUpdateCustomer(_UpdateCustomer event, Emitter<CustomerBlocState> emit) async {
+  FutureOr<void> _onUpdateCustomer(
+    _UpdateCustomer event,
+    Emitter<CustomerBlocState> emit,
+  ) async {
     emit(const CustomerBlocState.loading());
     try {
       await _customerRepository.updateCustomer(event.customer);
