@@ -19,6 +19,7 @@ class DatabaseScripts {
     createIndexUsuarioEmail,
     createIndexLogUsuario,
     createIndexLogEntidade,
+    createIndexPersistentDataStoreCategory,
   ];
 
   /// Retorna todos os scripts de criação de tabelas na ordem correta
@@ -31,6 +32,7 @@ class DatabaseScripts {
     createTableItensNotaFiscal,
     createTableUsuarios,
     createTableLogsAtividade,
+    createTablePersistentDataStore,
   ];
 
   /// Script para criar índice no CPF do cliente
@@ -67,6 +69,12 @@ class DatabaseScripts {
   static String get createIndexUsuarioEmail =>
       '''
     CREATE INDEX IF NOT EXISTS idx_usuario_email ON ${DatabaseConfig.tableUsuarios}(email)
+  ''';
+
+  /// Script para criar índice na categoria do armazenamento persistente
+  static String get createIndexPersistentDataStoreCategory =>
+      '''
+    CREATE INDEX IF NOT EXISTS idx_persistent_data_store_category ON ${DatabaseConfig.tablePersistentDataStore}(storage_category)
   ''';
 
   /// Script de criação da tabela de clientes
@@ -208,6 +216,24 @@ class DatabaseScripts {
       nivel_permissao TEXT NOT NULL,
       data_cadastro TEXT NOT NULL,
       data_ultima_atualizacao TEXT NOT NULL
+    )
+  ''';
+
+  /// Script de criação da tabela de armazenamento persistente genérico
+  ///
+  /// Campos:
+  /// - id: Identificador único (não auto-incrementado, definido pelo usuário)
+  /// - storage_category: Categoria de armazenamento (obrigatório)
+  /// - data: Dados JSON armazenados (obrigatório)
+  ///
+  /// Esta tabela é utilizada pela classe SqlDataStorage para armazenar
+  /// dados genéricos organizados por categoria.
+  static String get createTablePersistentDataStore =>
+      '''
+    CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tablePersistentDataStore} (
+      id INTEGER PRIMARY KEY,
+      storage_category TEXT NOT NULL,
+      data TEXT NOT NULL
     )
   ''';
 

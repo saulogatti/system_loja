@@ -21,7 +21,9 @@ class DatabaseConfig {
   /// produto_nome, produto_codigo para garantir integridade de dados.
   /// Versão 3: Adicionadas tabelas usuarios e logs_atividade para
   /// sistema de gestão de usuários e auditoria.
-  static const int databaseVersion = 3;
+  /// Versão 4: Adicionada tabela persistent_data_store para armazenamento
+  /// genérico de dados categorizados.
+  static const int databaseVersion = 4;
 
   /// Nome da tabela de clientes
   static const String tableClientes = 'clientes';
@@ -40,6 +42,9 @@ class DatabaseConfig {
 
   /// Nome da tabela de logs de atividade
   static const String tableLogsAtividade = 'logs_atividade';
+
+  /// Nome da tabela de armazenamento persistente genérico
+  static const String tablePersistentDataStore = 'persistent_data_store';
 
   /// Construtor privado para evitar instanciação
   DatabaseConfig._();

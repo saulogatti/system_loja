@@ -210,6 +210,20 @@ class DatabaseHelper {
     if (oldVersion < 2) {
       await _migrateToVersion2(db);
     }
+    
+    // Migração da versão 3 para 4: Adiciona tabela persistent_data_store
+    if (oldVersion < 4) {
+      await _migrateToVersion4(db);
+    }
+  }
+
+  /// Migração para versão 4: Adiciona tabela persistent_data_store
+  ///
+  /// Cria a tabela persistent_data_store e o índice correspondente
+  /// para armazenamento genérico de dados categorizados.
+  Future<void> _migrateToVersion4(Database db) async {
+    await db.execute(DatabaseScripts.createTablePersistentDataStore);
+    await db.execute(DatabaseScripts.createIndexPersistentDataStoreCategory);
   }
 
   /// Inicializa o banco de dados FFI para desktop (Windows, Linux, macOS)
