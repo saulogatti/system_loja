@@ -237,15 +237,17 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
   /// Adiciona um novo produto após validação.
   void _adicionarProduto() {
     // Valida o formulário usando os validadores
+    // Os validadores já exibem mensagens específicas para cada campo
     if (!_formKey.currentState!.validate()) {
-      _mostrarErro('Por favor, corrija os erros no formulário');
       return;
     }
 
     try {
-      // Converte valores já validados
+      // Converte valores já validados pelos validators
+      // Os validators garantem que esses valores são parseáveis
       final codigo = _codigoController.text.trim();
-      final preco = double.parse(_precoController.text.trim().replaceAll(',', '.'));
+      final precoTexto = _precoController.text.trim().replaceAll(',', '.');
+      final preco = double.parse(precoTexto);
       final estoque = int.parse(_estoqueController.text.trim());
 
       // Cria e adiciona produto
@@ -262,9 +264,12 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
       _produtoCubit.adicionarProduto(produto);
       _mostrarSucesso('Produto "${produto.nome}" $_mensagemSucesso');
       _limparFormulario();
+    } on FormatException catch (e) {
+      // Isto não deve acontecer devido aos validators, mas tratamos por segurança
+      _mostrarErro('Erro de formato ao processar dados numéricos: ${e.message}');
     } catch (e) {
-      // Captura erros inesperados durante a conversão
-      _mostrarErro('Erro ao processar dados: ${e.toString()}');
+      // Captura erros inesperados do repositório/banco de dados
+      _mostrarErro('Erro ao salvar produto: ${e.toString()}');
     }
   }
 
