@@ -368,106 +368,103 @@ class _SalesViewState extends State<SalesView> {
         title: const Text('Cadastro de Nota Fiscal'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: BlocBuilder<SalesCubit, SalesState>(
+      body: BlocConsumer<SalesCubit, SalesState>(
         bloc: _salesCubit,
+        listener: (context, state) {
+          switch (state) {
+            case SalesInitial():
+              break;
+
+            case SalesError():
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Erro ao carregar notas fiscais! ${state.message}',
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              break;
+            case SalesLoadProductsFailure():
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Erro ao carregar produtos! ${state.message}'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              break;
+            case SalesLoaded():
+              setState(() {
+                _mapToNotaFiscal = state.items;
+              });
+
+              break;
+            case SalesLoadedCustomers():
+              _mapCustomers = state.customers;
+            case SalesLoadedProducts():
+              _produtoManager = state.products;
+            case SalesLoading():
+              // Loading overlay é exibido através do builder
+              break;
+            case SalesSaved():
+              _mapToNotaFiscal = state.items;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Nota Fiscal "${state.items.values.last.data.invoiceNumber}" cadastrada com sucesso!',
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              Navigator.pop(context, true);
+              break;
+            case SalesLoadingProducts():
+              // Loading overlay é exibido através do builder
+              break;
+          }
+        },
         builder: (context, state) {
           return Stack(
             children: [
-              BlocListener<SalesCubit, SalesState>(
-                bloc: _salesCubit,
-                listener: (context, state) {
-                  switch (state) {
-                    case SalesInitial():
-                      break;
-
-                    case SalesError():
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Erro ao carregar notas fiscais! ${state.message}',
-                          ),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                      break;
-                    case SalesLoadProductsFailure():
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Erro ao carregar produtos! ${state.message}'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                      break;
-                    case SalesLoaded():
-                      setState(() {
-                        _mapToNotaFiscal = state.items;
-                      });
-
-                      break;
-                    case SalesLoadedCustomers():
-                      _mapCustomers = state.customers;
-                    case SalesLoadedProducts():
-                      _produtoManager = state.products;
-                    case SalesLoading():
-                      // Loading overlay é exibido através do BlocBuilder
-                      break;
-                    case SalesSaved():
-                      _mapToNotaFiscal = state.items;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Nota Fiscal "${state.items.values.last.data.invoiceNumber}" cadastrada com sucesso!',
-                          ),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                      Navigator.pop(context, true);
-                      break;
-                    case SalesLoadingProducts():
-                      // Loading overlay é exibido através do BlocBuilder
-                      break;
-                  }
-                },
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: _mapToNotaFiscal.isEmpty
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.receipt_long,
-                                    size: 80,
-                                    color: Colors.grey[400],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text(
-                                    'Nenhuma nota fiscal cadastrada',
-                                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : ListView.builder(
-                              padding: const EdgeInsets.all(16),
-                              itemCount: _mapToNotaFiscal.length,
-                              itemBuilder: (context, index) {
-                                final nf = _mapToNotaFiscal.values.elementAt(index);
-                                return CardListItem(
-                                  colorAvatar: Colors.orange,
-                                  title: 'Nota: ${nf.data.invoiceNumber}',
-                                  subTitle:
-                                      'Cliente: ${nf.data.customerName}\nR\$ ${nf.data.totalValue.toStringAsFixed(2)}',
-                                  onTap: () {
-                                    _mostrarDetalhesNota(nf);
-                                  },
-                                );
-                              },
+              Column(
+                children: [
+                  Expanded(
+                    child: _mapToNotaFiscal.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.receipt_long,
+                                  size: 80,
+                                  color: Colors.grey[400],
+                                ),
+                                const SizedBox(height: 16),
+                                const Text(
+                                  'Nenhuma nota fiscal cadastrada',
+                                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                                ),
+                              ],
                             ),
-                    ),
-                  ],
-                ),
+                          )
+                        : ListView.builder(
+                            padding: const EdgeInsets.all(16),
+                            itemCount: _mapToNotaFiscal.length,
+                            itemBuilder: (context, index) {
+                              final nf = _mapToNotaFiscal.values.elementAt(index);
+                              return CardListItem(
+                                colorAvatar: Colors.orange,
+                                title: 'Nota: ${nf.data.invoiceNumber}',
+                                subTitle:
+                                    'Cliente: ${nf.data.customerName}\nR\$ ${nf.data.totalValue.toStringAsFixed(2)}',
+                                onTap: () {
+                                  _mostrarDetalhesNota(nf);
+                                },
+                              );
+                            },
+                          ),
+                  ),
+                ],
               ),
               // Exibe o overlay de loading quando necessário
               if (state is SalesLoading)

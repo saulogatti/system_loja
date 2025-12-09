@@ -69,14 +69,15 @@ class LoadingOverlay extends StatelessWidget {
                         Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                if (message != null) ...[
-                  const SizedBox(height: 16.0),
-                  Text(
-                    message!,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                if (message case final msg?)
+                  ...[
+                    const SizedBox(height: 16.0),
+                    Text(
+                      msg,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
               ],
             ),
           ),
