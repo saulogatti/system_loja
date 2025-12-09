@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/produto_state.dart';
 import 'package:system_loja/screens/products/product_detail_screen.dart';
-import 'package:system_loja/screens/widgets/card_list_item.dart';
+import 'package:system_loja/screens/products/widgets/product_form.dart';
+import 'package:system_loja/screens/products/widgets/product_list.dart';
 
 import '../../core/models/produto.dart';
 
@@ -21,9 +22,6 @@ class ProductViewScreen extends StatefulWidget {
 class _ProductViewScreenState extends State<ProductViewScreen> {
   // Constantes
   static const String _tituloAppBar = 'Cadastro de Produto';
-  static const String _tituloNovoProduto = 'Novo Produto';
-  static const String _tituloProdutosCadastrados = 'Produtos Cadastrados';
-  static const String _mensagemNenhumProduto = 'Nenhum produto cadastrado';
   static const String _mensagemSucesso = 'cadastrado com sucesso!';
   static const String _mensagemPrecoInvalido = 'Erro: Preço inválido!';
   static const String _mensagemEstoqueInvalido = 'Erro: Estoque inválido!';
@@ -68,162 +66,25 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(16.0),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const Text(
-                            _tituloNovoProduto,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          TextFormField(
-                            controller: _nomeController,
-                            decoration: const InputDecoration(
-                              labelText: 'Nome do Produto *',
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.inventory_2),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Nome é obrigatório';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            controller: _codigoController,
-                            decoration: const InputDecoration(
-                              labelText: 'Código *',
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.qr_code),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return 'Código é obrigatório';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  controller: _precoController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Preço (R\$) *',
-                                    border: OutlineInputBorder(),
-                                    prefixIcon: Icon(Icons.attach_money),
-                                  ),
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                        decimal: true,
-                                      ),
-                                  validator: (value) {
-                                    if (value == null || value.trim().isEmpty) {
-                                      return 'Preço é obrigatório';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: TextFormField(
-                                  controller: _estoqueController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Estoque *',
-                                    border: OutlineInputBorder(),
-                                    prefixIcon: Icon(Icons.inventory),
-                                  ),
-                                  keyboardType: TextInputType.number,
-                                  validator: (value) {
-                                    if (value == null || value.trim().isEmpty) {
-                                      return 'Estoque é obrigatório';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            controller: _categoriaController,
-                            decoration: const InputDecoration(
-                              labelText: 'Categoria',
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.category),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            controller: _descricaoController,
-                            decoration: const InputDecoration(
-                              labelText: 'Descrição',
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.description),
-                            ),
-                            maxLines: 3,
-                          ),
-                          const SizedBox(height: 24),
-                          ElevatedButton.icon(
-                            onPressed: _adicionarProduto,
-                            icon: const Icon(Icons.add),
-                            label: const Text('Adicionar Produto'),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.all(16),
-                              textStyle: const TextStyle(fontSize: 16),
-                            ),
-                          ),
-                          const SizedBox(height: 32),
-                          const Text(
-                            _tituloProdutosCadastrados,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          if (produtos.isEmpty)
-                            const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(32.0),
-                                child: Text(
-                                  _mensagemNenhumProduto,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            )
-                          else
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: produtos.length,
-                              itemBuilder: (context, index) {
-                                final produto = produtos[index];
-                                return CardListItem(
-                                  colorAvatar: Colors.green,
-                                  title: produto.nome,
-                                  subTitle:
-                                      'Código: ${produto.codigo}\nR\$ ${produto.preco.toStringAsFixed(2)} - Estoque: ${produto.estoque}',
-                                  onTap: () {
-                                    _mostrarDetalhesProduto(produto);
-                                  },
-                                );
-                              },
-                            ),
-                        ],
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ProductForm(
+                          formKey: _formKey,
+                          nomeController: _nomeController,
+                          codigoController: _codigoController,
+                          precoController: _precoController,
+                          estoqueController: _estoqueController,
+                          descricaoController: _descricaoController,
+                          categoriaController: _categoriaController,
+                          onSubmit: _adicionarProduto,
+                        ),
+                        const SizedBox(height: 32),
+                        ProductList(
+                          produtos: produtos,
+                          onProductTap: _mostrarDetalhesProduto,
+                        ),
+                      ],
                     ),
                   ),
                 ),
