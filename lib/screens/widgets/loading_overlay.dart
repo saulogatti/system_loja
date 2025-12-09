@@ -38,6 +38,10 @@ class LoadingOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final indicatorColor =
+        progressIndicatorColor ?? Theme.of(context).colorScheme.primary;
+    final colorAnimation = AlwaysStoppedAnimation<Color>(indicatorColor);
+
     return Stack(
       children: [
         // Modal barrier para bloquear interações
@@ -64,10 +68,7 @@ class LoadingOverlay extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    progressIndicatorColor ??
-                        Theme.of(context).colorScheme.primary,
-                  ),
+                  valueColor: colorAnimation,
                 ),
                 if (message case final msg?)
                   ...[
