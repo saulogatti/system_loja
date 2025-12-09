@@ -61,4 +61,56 @@ class ProductCubit extends Cubit<ProductState> {
     final newId = await _manager.obtainNextId();
     emit(ProductState.newIdGenerated(newId: newId));
   }
+
+  /// Atualiza um produto existente
+  void updateProduct(Produto produto) async {
+    emit(ProductState.loading());
+    final updateResult = await _manager.updateProduct(produto);
+    switch (updateResult) {
+      case OperationSuccess():
+        final result = await _manager.getProdutos();
+        switch (result) {
+          case OperationSuccess(result: final produtos):
+            emit(ProductState.updateSuccess(produtos: produtos.toList()));
+          case OperationError(error: final errorMessage):
+            emit(
+              ProductState.error(
+                message: 'Erro ao carregar produtos após atualização: $errorMessage',
+              ),
+            );
+        }
+      case OperationError(error: final errorMessage):
+        emit(
+          ProductState.error(
+            message: 'Erro ao atualizar produto: $errorMessage',
+          ),
+        );
+    }
+  }
+
+  /// Remove um produto
+  void deleteProduct(int id) async {
+    emit(ProductState.loading());
+    final deleteResult = await _manager.deleteProduct(id);
+    switch (deleteResult) {
+      case OperationSuccess():
+        final result = await _manager.getProdutos();
+        switch (result) {
+          case OperationSuccess(result: final produtos):
+            emit(ProductState.deleteSuccess(produtos: produtos.toList()));
+          case OperationError(error: final errorMessage):
+            emit(
+              ProductState.error(
+                message: 'Erro ao carregar produtos após exclusão: $errorMessage',
+              ),
+            );
+        }
+      case OperationError(error: final errorMessage):
+        emit(
+          ProductState.error(
+            message: 'Erro ao deletar produto: $errorMessage',
+          ),
+        );
+    }
+  }
 }

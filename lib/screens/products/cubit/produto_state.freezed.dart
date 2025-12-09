@@ -55,7 +55,7 @@ extension ProductStatePatterns on ProductState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult Function( ProductStateInsertSuccess value)?  insertSuccess,TResult Function( ProductStateNewIdGenerated value)?  newIdGenerated,TResult Function( ProductStateLoading value)?  loading,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult Function( ProductStateInsertSuccess value)?  insertSuccess,TResult Function( ProductStateNewIdGenerated value)?  newIdGenerated,TResult Function( ProductStateLoading value)?  loading,TResult Function( ProductStateUpdateSuccess value)?  updateSuccess,TResult Function( ProductStateDeleteSuccess value)?  deleteSuccess,TResult Function( ProductStateError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure() when findByCodeFailure != null:
@@ -64,7 +64,10 @@ return findByCodeSuccess(_that);case ProductStateFindByIdSuccess() when findById
 return findByIdSuccess(_that);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that);case ProductStateNewIdGenerated() when newIdGenerated != null:
 return newIdGenerated(_that);case ProductStateLoading() when loading != null:
-return loading(_that);case _:
+return loading(_that);case ProductStateUpdateSuccess() when updateSuccess != null:
+return updateSuccess(_that);case ProductStateDeleteSuccess() when deleteSuccess != null:
+return deleteSuccess(_that);case ProductStateError() when error != null:
+return error(_that);case _:
   return orElse();
 
 }
@@ -82,7 +85,7 @@ return loading(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ProductStateFindByCodeFailure value)  findByCodeFailure,required TResult Function( ProductStateFindByCodeSuccess value)  findByCodeSuccess,required TResult Function( ProductStateFindByIdSuccess value)  findByIdSuccess,required TResult Function( ProductStateInsertSuccess value)  insertSuccess,required TResult Function( ProductStateNewIdGenerated value)  newIdGenerated,required TResult Function( ProductStateLoading value)  loading,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ProductStateFindByCodeFailure value)  findByCodeFailure,required TResult Function( ProductStateFindByCodeSuccess value)  findByCodeSuccess,required TResult Function( ProductStateFindByIdSuccess value)  findByIdSuccess,required TResult Function( ProductStateInsertSuccess value)  insertSuccess,required TResult Function( ProductStateNewIdGenerated value)  newIdGenerated,required TResult Function( ProductStateLoading value)  loading,required TResult Function( ProductStateUpdateSuccess value)  updateSuccess,required TResult Function( ProductStateDeleteSuccess value)  deleteSuccess,required TResult Function( ProductStateError value)  error,}){
 final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure():
@@ -91,7 +94,10 @@ return findByCodeSuccess(_that);case ProductStateFindByIdSuccess():
 return findByIdSuccess(_that);case ProductStateInsertSuccess():
 return insertSuccess(_that);case ProductStateNewIdGenerated():
 return newIdGenerated(_that);case ProductStateLoading():
-return loading(_that);}
+return loading(_that);case ProductStateUpdateSuccess():
+return updateSuccess(_that);case ProductStateDeleteSuccess():
+return deleteSuccess(_that);case ProductStateError():
+return error(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -105,7 +111,7 @@ return loading(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult? Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult? Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult? Function( ProductStateInsertSuccess value)?  insertSuccess,TResult? Function( ProductStateNewIdGenerated value)?  newIdGenerated,TResult? Function( ProductStateLoading value)?  loading,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult? Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult? Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult? Function( ProductStateInsertSuccess value)?  insertSuccess,TResult? Function( ProductStateNewIdGenerated value)?  newIdGenerated,TResult? Function( ProductStateLoading value)?  loading,TResult? Function( ProductStateUpdateSuccess value)?  updateSuccess,TResult? Function( ProductStateDeleteSuccess value)?  deleteSuccess,TResult? Function( ProductStateError value)?  error,}){
 final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure() when findByCodeFailure != null:
@@ -114,7 +120,10 @@ return findByCodeSuccess(_that);case ProductStateFindByIdSuccess() when findById
 return findByIdSuccess(_that);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that);case ProductStateNewIdGenerated() when newIdGenerated != null:
 return newIdGenerated(_that);case ProductStateLoading() when loading != null:
-return loading(_that);case _:
+return loading(_that);case ProductStateUpdateSuccess() when updateSuccess != null:
+return updateSuccess(_that);case ProductStateDeleteSuccess() when deleteSuccess != null:
+return deleteSuccess(_that);case ProductStateError() when error != null:
+return error(_that);case _:
   return null;
 
 }
@@ -131,7 +140,7 @@ return loading(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  findByCodeFailure,TResult Function( Produto produto)?  findByCodeSuccess,TResult Function( Produto produto)?  findByIdSuccess,TResult Function( List<Produto> produtos)?  insertSuccess,TResult Function( int newId)?  newIdGenerated,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  findByCodeFailure,TResult Function( Produto produto)?  findByCodeSuccess,TResult Function( Produto produto)?  findByIdSuccess,TResult Function( List<Produto> produtos)?  insertSuccess,TResult Function( int newId)?  newIdGenerated,TResult Function()?  loading,TResult Function( List<Produto> produtos)?  updateSuccess,TResult Function( List<Produto> produtos)?  deleteSuccess,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure() when findByCodeFailure != null:
 return findByCodeFailure(_that.message);case ProductStateFindByCodeSuccess() when findByCodeSuccess != null:
@@ -139,7 +148,10 @@ return findByCodeSuccess(_that.produto);case ProductStateFindByIdSuccess() when 
 return findByIdSuccess(_that.produto);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that.produtos);case ProductStateNewIdGenerated() when newIdGenerated != null:
 return newIdGenerated(_that.newId);case ProductStateLoading() when loading != null:
-return loading();case _:
+return loading();case ProductStateUpdateSuccess() when updateSuccess != null:
+return updateSuccess(_that.produtos);case ProductStateDeleteSuccess() when deleteSuccess != null:
+return deleteSuccess(_that.produtos);case ProductStateError() when error != null:
+return error(_that.message);case _:
   return orElse();
 
 }
@@ -157,7 +169,7 @@ return loading();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  findByCodeFailure,required TResult Function( Produto produto)  findByCodeSuccess,required TResult Function( Produto produto)  findByIdSuccess,required TResult Function( List<Produto> produtos)  insertSuccess,required TResult Function( int newId)  newIdGenerated,required TResult Function()  loading,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  findByCodeFailure,required TResult Function( Produto produto)  findByCodeSuccess,required TResult Function( Produto produto)  findByIdSuccess,required TResult Function( List<Produto> produtos)  insertSuccess,required TResult Function( int newId)  newIdGenerated,required TResult Function()  loading,required TResult Function( List<Produto> produtos)  updateSuccess,required TResult Function( List<Produto> produtos)  deleteSuccess,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure():
 return findByCodeFailure(_that.message);case ProductStateFindByCodeSuccess():
@@ -165,7 +177,10 @@ return findByCodeSuccess(_that.produto);case ProductStateFindByIdSuccess():
 return findByIdSuccess(_that.produto);case ProductStateInsertSuccess():
 return insertSuccess(_that.produtos);case ProductStateNewIdGenerated():
 return newIdGenerated(_that.newId);case ProductStateLoading():
-return loading();}
+return loading();case ProductStateUpdateSuccess():
+return updateSuccess(_that.produtos);case ProductStateDeleteSuccess():
+return deleteSuccess(_that.produtos);case ProductStateError():
+return error(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -179,7 +194,7 @@ return loading();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  findByCodeFailure,TResult? Function( Produto produto)?  findByCodeSuccess,TResult? Function( Produto produto)?  findByIdSuccess,TResult? Function( List<Produto> produtos)?  insertSuccess,TResult? Function( int newId)?  newIdGenerated,TResult? Function()?  loading,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  findByCodeFailure,TResult? Function( Produto produto)?  findByCodeSuccess,TResult? Function( Produto produto)?  findByIdSuccess,TResult? Function( List<Produto> produtos)?  insertSuccess,TResult? Function( int newId)?  newIdGenerated,TResult? Function()?  loading,TResult? Function( List<Produto> produtos)?  updateSuccess,TResult? Function( List<Produto> produtos)?  deleteSuccess,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case ProductStateFindByCodeFailure() when findByCodeFailure != null:
 return findByCodeFailure(_that.message);case ProductStateFindByCodeSuccess() when findByCodeSuccess != null:
@@ -187,7 +202,10 @@ return findByCodeSuccess(_that.produto);case ProductStateFindByIdSuccess() when 
 return findByIdSuccess(_that.produto);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that.produtos);case ProductStateNewIdGenerated() when newIdGenerated != null:
 return newIdGenerated(_that.newId);case ProductStateLoading() when loading != null:
-return loading();case _:
+return loading();case ProductStateUpdateSuccess() when updateSuccess != null:
+return updateSuccess(_that.produtos);case ProductStateDeleteSuccess() when deleteSuccess != null:
+return deleteSuccess(_that.produtos);case ProductStateError() when error != null:
+return error(_that.message);case _:
   return null;
 
 }
@@ -562,5 +580,215 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class ProductStateUpdateSuccess implements ProductState {
+   ProductStateUpdateSuccess({required final  List<Produto> produtos}): _produtos = produtos;
+  
+
+ final  List<Produto> _produtos;
+ List<Produto> get produtos {
+  if (_produtos is EqualUnmodifiableListView) return _produtos;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_produtos);
+}
+
+
+/// Create a copy of ProductState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ProductStateUpdateSuccessCopyWith<ProductStateUpdateSuccess> get copyWith => _$ProductStateUpdateSuccessCopyWithImpl<ProductStateUpdateSuccess>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateUpdateSuccess&&const DeepCollectionEquality().equals(other._produtos, _produtos));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_produtos));
+
+@override
+String toString() {
+  return 'ProductState.updateSuccess(produtos: $produtos)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ProductStateUpdateSuccessCopyWith<$Res> implements $ProductStateCopyWith<$Res> {
+  factory $ProductStateUpdateSuccessCopyWith(ProductStateUpdateSuccess value, $Res Function(ProductStateUpdateSuccess) _then) = _$ProductStateUpdateSuccessCopyWithImpl;
+@useResult
+$Res call({
+ List<Produto> produtos
+});
+
+
+
+
+}
+/// @nodoc
+class _$ProductStateUpdateSuccessCopyWithImpl<$Res>
+    implements $ProductStateUpdateSuccessCopyWith<$Res> {
+  _$ProductStateUpdateSuccessCopyWithImpl(this._self, this._then);
+
+  final ProductStateUpdateSuccess _self;
+  final $Res Function(ProductStateUpdateSuccess) _then;
+
+/// Create a copy of ProductState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? produtos = null,}) {
+  return _then(ProductStateUpdateSuccess(
+produtos: null == produtos ? _self._produtos : produtos // ignore: cast_nullable_to_non_nullable
+as List<Produto>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class ProductStateDeleteSuccess implements ProductState {
+   ProductStateDeleteSuccess({required final  List<Produto> produtos}): _produtos = produtos;
+  
+
+ final  List<Produto> _produtos;
+ List<Produto> get produtos {
+  if (_produtos is EqualUnmodifiableListView) return _produtos;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_produtos);
+}
+
+
+/// Create a copy of ProductState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ProductStateDeleteSuccessCopyWith<ProductStateDeleteSuccess> get copyWith => _$ProductStateDeleteSuccessCopyWithImpl<ProductStateDeleteSuccess>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateDeleteSuccess&&const DeepCollectionEquality().equals(other._produtos, _produtos));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_produtos));
+
+@override
+String toString() {
+  return 'ProductState.deleteSuccess(produtos: $produtos)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ProductStateDeleteSuccessCopyWith<$Res> implements $ProductStateCopyWith<$Res> {
+  factory $ProductStateDeleteSuccessCopyWith(ProductStateDeleteSuccess value, $Res Function(ProductStateDeleteSuccess) _then) = _$ProductStateDeleteSuccessCopyWithImpl;
+@useResult
+$Res call({
+ List<Produto> produtos
+});
+
+
+
+
+}
+/// @nodoc
+class _$ProductStateDeleteSuccessCopyWithImpl<$Res>
+    implements $ProductStateDeleteSuccessCopyWith<$Res> {
+  _$ProductStateDeleteSuccessCopyWithImpl(this._self, this._then);
+
+  final ProductStateDeleteSuccess _self;
+  final $Res Function(ProductStateDeleteSuccess) _then;
+
+/// Create a copy of ProductState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? produtos = null,}) {
+  return _then(ProductStateDeleteSuccess(
+produtos: null == produtos ? _self._produtos : produtos // ignore: cast_nullable_to_non_nullable
+as List<Produto>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class ProductStateError implements ProductState {
+   ProductStateError({required this.message});
+  
+
+ final  String message;
+
+/// Create a copy of ProductState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ProductStateErrorCopyWith<ProductStateError> get copyWith => _$ProductStateErrorCopyWithImpl<ProductStateError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateError&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'ProductState.error(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ProductStateErrorCopyWith<$Res> implements $ProductStateCopyWith<$Res> {
+  factory $ProductStateErrorCopyWith(ProductStateError value, $Res Function(ProductStateError) _then) = _$ProductStateErrorCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class _$ProductStateErrorCopyWithImpl<$Res>
+    implements $ProductStateErrorCopyWith<$Res> {
+  _$ProductStateErrorCopyWithImpl(this._self, this._then);
+
+  final ProductStateError _self;
+  final $Res Function(ProductStateError) _then;
+
+/// Create a copy of ProductState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(ProductStateError(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 // dart format on
