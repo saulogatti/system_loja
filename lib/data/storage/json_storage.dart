@@ -104,14 +104,19 @@ class JsonDataStorage extends BaseDataStorage
   @override
   Future<bool> save(PersistentDataStore object) async {
     try {
-      final id = object.id;
-      final fileName = _fileNameId(id);
+      return await getLock().synchronized<bool>(
+        () async {
+          final id = object.id;
+          final fileName = _fileNameId(id);
 
-      // Codifica com indentação para legibilidade
-      final jsonString = const JsonEncoder.withIndent(
-        '  ',
-      ).convert(object.toJson());
-      return await saveData(fileName, jsonString);
+          // Codifica com indentação para legibilidade
+          final jsonString = const JsonEncoder.withIndent(
+            '  ',
+          ).convert(object.toJson());
+          return await saveData(fileName, jsonString);
+        },
+        timeout: _timeOutMilliseconds,
+      );
     } catch (e, stackTrace) {
       logError('Erro ao salvar objeto: $e', stackTrace);
       return false;
