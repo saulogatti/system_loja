@@ -6,6 +6,11 @@ import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
+// FIXME: #47 1 - Classe muito grande, quebrar em vários widgets menores, pode ser qie tenha até um widget para o formulário de edição
+/// 2 - Ao editar um cliente, não valida qualqeur campo, apenas o nome, Exemp;lo: Campo de email consegue salvar um email inválido
+/// 3 - Adicionar loading indicator ao salvar ou deletar cliente
+/// 4 - Melhorar feedback visual para o usuário ao salvar ou deletar cliente
+
 /// Tela de detalhes do cliente com opções de edição e exclusão
 ///
 /// Permite visualizar informações completas do cliente e realizar operações como:
