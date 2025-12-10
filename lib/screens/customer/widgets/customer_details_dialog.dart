@@ -4,6 +4,9 @@ import 'package:system_loja/core/models/customer.dart';
 /// Exibe um dialog com os detalhes completos do cliente
 ///
 /// Mostra todas as informações do cliente formatadas em um dialog modal.
+///
+///
+//TODO: Detalhes do cliente e buscar cliente podem ser a mesma tela, refatorar depois
 void showCustomerDetailsDialog(BuildContext context, Customer customer) {
   showDialog(
     context: context,
@@ -54,10 +57,7 @@ Widget _buildDetailRow(String label, String value) {
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(fontSize: 16),
-        ),
+        Text(value, style: const TextStyle(fontSize: 16)),
       ],
     ),
   );
