@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/utils/validators.dart';
-import 'package:system_loja/screens/widgets/card_list_item.dart';
-import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
-import 'package:system_loja/screens/widgets/text_form_field_email.dart';
-import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
 import '../../core/models/customer.dart';
-import '../../core/utils/text_formatters.dart';
 import 'bloc/customer_bloc.dart';
 import 'customer_detail_screen.dart';
+import 'widgets/customer_details_dialog.dart';
+import 'widgets/customer_form.dart';
+import 'widgets/customer_list.dart';
+import 'widgets/customer_search_section.dart';
 
 class CustomerView extends StatelessWidget {
   const CustomerView({super.key});
@@ -41,6 +39,17 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
   final _searchCpfController = TextEditingController();
   int _previousCustomerCount = 0;
   bool _isAdding = false;
+
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _cpfController.dispose();
+    _emailController.dispose();
+    _telefoneController.dispose();
+    _enderecoController.dispose();
+    _searchCpfController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,198 +97,35 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Text(
-                        'Novo Cliente',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _nomeController,
-                        decoration: const InputDecoration(
-                          labelText: 'Nome *',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.person),
-                        ),
-                        validator: (value) => combineValidators([
-                          (v) => validateRequired(v, 'Nome'),
-                          (v) => validateMinLength(v, 3, 'Nome'),
-                        ])(value),
-                      ),
-                      const SizedBox(height: 16),
-                      // Adicionar mascaras e a validacao esta no bloc para CPF
-                      TextFormFieldCpf(
-                        cpfController: _cpfController,
-                        enable: true,
-                        validatorOptions: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'CPF é obrigatório';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormFieldEmail(
-                        emailController: _emailController,
-                        isEditing: true,
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormFieldPhone(
-                        telefoneController: _telefoneController,
-                        isEditing: true,
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _enderecoController,
-                        decoration: const InputDecoration(
-                          labelText: 'Endereço',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.home),
-                        ),
-                        maxLines: 2,
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton.icon(
-                        onPressed: _adicionarCliente,
-                        icon: const Icon(Icons.add),
-                        label: const Text('Adicionar Cliente'),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(16),
-                          textStyle: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      const Divider(),
-                      const SizedBox(height: 32),
-                      const Text(
-                        'Buscar Cliente por CPF',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _searchCpfController,
-                              decoration: const InputDecoration(
-                                labelText: 'CPF',
-                                border: OutlineInputBorder(),
-                                prefixIcon: Icon(Icons.search),
-                                hintText: 'Digite o CPF para buscar',
-                              ),
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [CpfTextInputFormatter()],
-                              maxLength: 14, // Formato XXX.XXX.XXX-XX
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          ElevatedButton.icon(
-                            onPressed: _buscarClientePorCpf,
-                            icon: const Icon(Icons.search),
-                            label: const Text('Buscar'),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.all(16),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 32),
-                      const Divider(),
-                      const SizedBox(height: 32),
-                      const Text(
-                        'Clientes Cadastrados',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      BlocBuilder<CustomerBloc, CustomerBlocState>(
-                        builder: (context, state) {
-                          return state.when(
-                            initial: () => const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(32.0),
-                                child: Text(
-                                  'Carregando clientes...',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            loading: () => const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(32.0),
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                            customersLoaded: (customers) {
-                              if (customers.isEmpty) {
-                                return const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(32.0),
-                                    child: Text(
-                                      'Nenhum cliente cadastrado',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
-
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: customers.length,
-                                itemBuilder: (context, index) {
-                                  final cliente = customers.values.elementAt(
-                                    index,
-                                  );
-                                  return CardListItem(
-                                    colorAvatar: Colors.blue,
-                                    title: cliente.name,
-                                    subTitle:
-                                        'CPF: ${cliente.cpf}\n${cliente.email}',
-                                    onTap: () {
-                                      _mostrarDetalhesCliente(cliente);
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                            customerError: (message) => Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(32.0),
-                                child: Text(
-                                  'Erro: $message',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            customerFound: (customer) =>
-                                const SizedBox.shrink(),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Formulário de cadastro
+                    CustomerForm(
+                      formKey: _formKey,
+                      nomeController: _nomeController,
+                      cpfController: _cpfController,
+                      emailController: _emailController,
+                      telefoneController: _telefoneController,
+                      enderecoController: _enderecoController,
+                      onSubmit: _adicionarCliente,
+                    ),
+                    const SizedBox(height: 32),
+                    const Divider(),
+                    const SizedBox(height: 32),
+                    // Seção de busca por CPF
+                    CustomerSearchSection(
+                      searchCpfController: _searchCpfController,
+                      onSearch: _buscarClientePorCpf,
+                    ),
+                    const SizedBox(height: 32),
+                    const Divider(),
+                    const SizedBox(height: 32),
+                    // Lista de clientes
+                    CustomerList(
+                      onCustomerTap: _mostrarDetalhesCliente,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -287,17 +133,6 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _nomeController.dispose();
-    _cpfController.dispose();
-    _emailController.dispose();
-    _telefoneController.dispose();
-    _enderecoController.dispose();
-    _searchCpfController.dispose();
-    super.dispose();
   }
 
   void _adicionarCliente() {
@@ -316,27 +151,6 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
         ),
       );
     }
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.grey,
-              fontSize: 12,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(fontSize: 16)),
-        ],
-      ),
-    );
   }
 
   void _buscarClientePorCpf() {
@@ -358,35 +172,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
 
   ///TODO: #48 refatorar para abrir a tela de detalhes, navegando para outra tela
   void _mostrarDetalhesCliente(Customer cliente) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(cliente.name),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildDetailRow('ID', cliente.id.toString()),
-              _buildDetailRow('CPF', cliente.cpf),
-              _buildDetailRow('Email', cliente.email),
-              _buildDetailRow('Telefone', cliente.phone),
-              _buildDetailRow('Endereço', cliente.address),
-              _buildDetailRow(
-                'Data de Cadastro',
-                cliente.registrationDate.toString().split('.')[0],
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Fechar'),
-          ),
-        ],
-      ),
-    );
+    showCustomerDetailsDialog(context, cliente);
   }
 
   void _openCustomerDetails(Customer customer) {
