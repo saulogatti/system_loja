@@ -15,7 +15,8 @@ class CustomerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CustomerBloc()..add(const CustomerBlocEvent.loadCustomers()),
+      create: (context) =>
+          CustomerBloc()..add(const CustomerBlocEvent.loadCustomers()),
       child: const _CustomerDetailView(),
     );
   }
@@ -27,7 +28,7 @@ class _CustomerDetailView extends StatefulWidget {
   @override
   State<_CustomerDetailView> createState() => _CustomerDetailViewState();
 }
-
+/// FIXME: #49 Tela esta muito grande, refatorar em componentes menores, pode ser que tem widgets que podem ser extraidos
 class _CustomerDetailViewState extends State<_CustomerDetailView> {
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
@@ -76,9 +77,9 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
           },
           customerError: (message) {
             _isAdding = false;
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(message), backgroundColor: Colors.red),
+            );
           },
           customerFound: (customer) {
             // Navega para a tela de detalhes quando um cliente é encontrado
@@ -156,14 +157,20 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     final cpf = _searchCpfController.text.trim();
     if (cpf.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Digite um CPF para buscar'), backgroundColor: Colors.orange),
+        const SnackBar(
+          content: Text('Digite um CPF para buscar'),
+          backgroundColor: Colors.orange,
+        ),
       );
       return;
     }
 
-    context.read<CustomerBloc>().add(CustomerBlocEvent.findCustomerByCpf(cpf: cpf));
+    context.read<CustomerBloc>().add(
+      CustomerBlocEvent.findCustomerByCpf(cpf: cpf),
+    );
   }
 
+  ///TODO: #48 refatorar para abrir a tela de detalhes, navegando para outra tela
   void _mostrarDetalhesCliente(Customer cliente) {
     showCustomerDetailsDialog(context, cliente);
   }
@@ -171,13 +178,13 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
   void _openCustomerDetails(Customer customer) {
     // Limpa o campo de busca
     _searchCpfController.clear();
-
+    final bloc = context.read<CustomerBloc>();
     // Navega para a tela de detalhes do cliente
     Navigator.push(
       context,
       MaterialPageRoute<void>(
         builder: (context) => BlocProvider.value(
-          value: CustomerBloc(),
+          value: bloc,
           child: CustomerDetailScreen(customer: customer),
         ),
       ),

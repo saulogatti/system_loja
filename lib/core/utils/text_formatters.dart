@@ -10,8 +10,13 @@ class CpfTextInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
+    // se oldValue é maior que newValue, significa que o usuário está apagando
+    if (oldValue.text.length > newValue.text.length) {
+      return newValue;
+    }
     // Remove todos os caracteres não-numéricos
-    final digitsOnly = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    var regExp = RegExp(r'[^0-9]');
+    final digitsOnly = newValue.text.replaceAll(regExp, '');
 
     // Limita a 11 dígitos
     final limitedDigits = digitsOnly.length > 11
@@ -56,7 +61,11 @@ class PhoneTextInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    // Remove todos os caracteres não-numéricos
+    // se oldValue é maior que newValue, significa que o usuário está apagando
+    if (oldValue.text.length > newValue.text.length) {
+      return newValue;
+    }
+        // Remove todos os caracteres não-numéricos
     final digitsOnly = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
 
     // Limita a 11 dígitos
