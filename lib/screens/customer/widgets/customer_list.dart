@@ -14,10 +14,7 @@ class CustomerList extends StatelessWidget {
 
   final Function(Customer) onCustomerTap;
 
-  const CustomerList({
-    super.key,
-    required this.onCustomerTap,
-  });
+  const CustomerList({super.key, required this.onCustomerTap});
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +23,7 @@ class CustomerList extends StatelessWidget {
       children: [
         const Text(
           'Clientes Cadastrados',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: _defaultSpacing),
         BlocBuilder<CustomerBloc, CustomerBlocState>(
@@ -40,10 +34,7 @@ class CustomerList extends StatelessWidget {
                   padding: EdgeInsets.all(32.0),
                   child: Text(
                     'Carregando clientes...',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
               ),
@@ -53,17 +44,14 @@ class CustomerList extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 ),
               ),
-              customersLoaded: (customers) {
+              customersLoaded: (customers, stateType) {
                 if (customers.isEmpty) {
                   return const Center(
                     child: Padding(
                       padding: EdgeInsets.all(32.0),
                       child: Text(
                         'Nenhum cliente cadastrado',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     ),
                   );
@@ -89,10 +77,7 @@ class CustomerList extends StatelessWidget {
                   padding: const EdgeInsets.all(32.0),
                   child: Text(
                     'Erro: $message',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.red,
-                    ),
+                    style: const TextStyle(fontSize: 16, color: Colors.red),
                   ),
                 ),
               ),

@@ -37,7 +37,12 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
       await _customerRepository.deleteWithId(event.id);
       // Recarrega a lista de clientes após deletar
       final customers = await _customerRepository.loadAll();
-      emit(CustomerBlocState.customersLoaded(customers: customers));
+      emit(
+        CustomerBlocState.customersLoaded(
+          customers: customers,
+          stateType: EnumStateCustomerLoaded.deleteCustomer,
+        ),
+      );
     } on CustomerException catch (e) {
       emit(
         CustomerBlocState.customerError(
@@ -80,7 +85,12 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
     emit(const CustomerBlocState.loading());
     try {
       final customers = await _customerRepository.loadAll();
-      emit(CustomerBlocState.customersLoaded(customers: customers));
+      emit(
+        CustomerBlocState.customersLoaded(
+          customers: customers,
+          stateType: EnumStateCustomerLoaded.customersLoaded,
+        ),
+      );
     } on CustomerException catch (e) {
       emit(
         CustomerBlocState.customerError(
@@ -136,7 +146,12 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
 
       // Recarrega a lista de clientes após adicionar
       final customers = await _customerRepository.loadAll();
-      emit(CustomerBlocState.customersLoaded(customers: customers));
+      emit(
+        CustomerBlocState.customersLoaded(
+          customers: customers,
+          stateType: EnumStateCustomerLoaded.registerCustomer,
+        ),
+      );
     } on CustomerException catch (e) {
       emit(
         CustomerBlocState.customerError(
@@ -156,7 +171,12 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
       await _customerRepository.updateCustomer(event.customer);
       // Recarrega a lista de clientes após atualizar
       final customers = await _customerRepository.loadAll();
-      emit(CustomerBlocState.customersLoaded(customers: customers));
+      emit(
+        CustomerBlocState.customersLoaded(
+          customers: customers,
+          stateType: EnumStateCustomerLoaded.updateCustomer,
+        ),
+      );
     } on CustomerException catch (e) {
       emit(
         CustomerBlocState.customerError(

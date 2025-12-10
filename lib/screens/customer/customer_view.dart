@@ -27,7 +27,7 @@ class _CustomerDetailView extends StatefulWidget {
   @override
   State<_CustomerDetailView> createState() => _CustomerDetailViewState();
 }
-/// FIXME: #49 Tela esta muito grande, refatorar em componentes menores, pode ser que tem widgets que podem ser extraidos
+
 class _CustomerDetailViewState extends State<_CustomerDetailView> {
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
@@ -36,49 +36,37 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
   final _telefoneController = TextEditingController();
   final _enderecoController = TextEditingController();
   final _searchCpfController = TextEditingController();
-  int _previousCustomerCount = 0;
-  bool _isAdding = false;
-
-  @override
-  void dispose() {
-    _nomeController.dispose();
-    _cpfController.dispose();
-    _emailController.dispose();
-    _telefoneController.dispose();
-    _enderecoController.dispose();
-    _searchCpfController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<CustomerBloc, CustomerBlocState>(
       listener: (context, state) {
         state.whenOrNull(
-          customersLoaded: (customers) {
-            // Show success message if we just added a customer
-            if (_isAdding && customers.length > _previousCustomerCount) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Cliente cadastrado com sucesso!'),
-                  backgroundColor: Colors.green,
-                ),
-              );
-              _formKey.currentState!.reset();
-              _nomeController.clear();
-              _cpfController.clear();
-              _emailController.clear();
-              _telefoneController.clear();
-              _enderecoController.clear();
-              _isAdding = false;
+          customersLoaded: (customers, stateType) {
+            switch (stateType) {
+              case EnumStateCustomerLoaded.registerCustomer:
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Cliente cadastrado com sucesso!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+                _formKey.currentState!.reset();
+                _nomeController.clear();
+                _cpfController.clear();
+                _emailController.clear();
+                _telefoneController.clear();
+                _enderecoController.clear();
+              case EnumStateCustomerLoaded.deleteCustomer:
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Cliente deletado com sucesso!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              case EnumStateCustomerLoaded.customersLoaded:
+              case EnumStateCustomerLoaded.updateCustomer:
             }
-            _previousCustomerCount = customers.length;
-          },
-          customerError: (message) {
-            _isAdding = false;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(message), backgroundColor: Colors.red),
-            );
           },
           customerFound: (customer) {
             // Navega para a tela de detalhes quando um cliente é encontrado
@@ -121,9 +109,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
                     const Divider(),
                     const SizedBox(height: 32),
                     // Lista de clientes
-                    CustomerList(
-                      onCustomerTap: _mostrarDetalhesCliente,
-                    ),
+                    CustomerList(onCustomerTap: _mostrarDetalhesCliente),
                   ],
                 ),
               ),
@@ -134,12 +120,19 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     );
   }
 
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _cpfController.dispose();
+    _emailController.dispose();
+    _telefoneController.dispose();
+    _enderecoController.dispose();
+    _searchCpfController.dispose();
+    super.dispose();
+  }
+
   void _adicionarCliente() {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isAdding = true;
-      });
-
       context.read<CustomerBloc>().add(
         CustomerBlocEvent.registerCustomer(
           name: _nomeController.text.trim(),
@@ -156,9 +149,9 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     final cpf = _searchCpfController.text.trim();
     if (cpf.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Digite um CPF para buscar'),
-          backgroundColor: Colors.orange,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
