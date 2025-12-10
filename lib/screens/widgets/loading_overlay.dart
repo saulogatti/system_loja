@@ -39,7 +39,10 @@ class LoadingOverlay extends StatelessWidget {
     return Stack(
       children: [
         // Modal barrier para bloquear interações
-        ModalBarrier(dismissible: false, color: backgroundColor ?? Colors.black.withValues(alpha: 0.5)),
+        ModalBarrier(
+          dismissible: false,
+          color: backgroundColor ?? Colors.black.withValues(alpha: 0.5),
+        ),
         // Indicador de progresso centralizado
         Center(
           child: Container(

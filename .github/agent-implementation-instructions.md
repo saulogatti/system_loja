@@ -391,6 +391,270 @@ Antes de submeter qualquer implementação, verificar:
 - [ ] Sem erros de lint: `flutter analyze`
 - [ ] Segue padrões de Material 3
 - [ ] Importações ordenadas: `dart:` → `package:` → relativos
+- [ ] **CRÍTICO: Verificou duplicação de código?** (Veja seção 6.1)
+
+### 6.1 Evitar Duplicação de Código (OBRIGATÓRIO)
+
+**Regra Principal**: NUNCA duplicar código na mesma classe ou arquivo. Se houver necessidade temporária de duplicação, marcar com `//FIXME:`.
+
+#### 6.1.1 Padrões para Evitar Duplicação
+
+**Cenário 1: Validação Repetida**
+```dart
+// ❌ ERRADO - Validação duplicada
+void saveNewUser(Usuario usuario) {
+  if (usuario.email.isEmpty) return false;
+  if (!_isValidEmail(usuario.email)) return false;
+  // Salvar...
+}
+
+void updateUser(Usuario usuario) {
+  if (usuario.email.isEmpty) return false;
+  if (!_isValidEmail(usuario.email)) return false;
+  // Atualizar...
+}
+
+// ✅ CORRETO - Extrair método
+bool _validateUserData(Usuario usuario) {
+  if (usuario.email.isEmpty) return false;
+  if (!_isValidEmail(usuario.email)) return false;
+  return true;
+}
+
+void saveNewUser(Usuario usuario) {
+  if (!_validateUserData(usuario)) return false;
+  // Salvar...
+}
+
+void updateUser(Usuario usuario) {
+  if (!_validateUserData(usuario)) return false;
+  // Atualizar...
+}
+```
+
+**Cenário 2: Lógica de UI Repetida**
+```dart
+// ❌ ERRADO - Widgets duplicados
+Widget build(BuildContext context) {
+  return Column(
+    children: [
+      // Duplicado 1
+      TextFormField(
+        controller: _nomeController,
+        decoration: InputDecoration(
+          labelText: 'Nome',
+          border: OutlineInputBorder(),
+        ),
+      ),
+      const SizedBox(height: 16),
+      // Duplicado 2
+      TextFormField(
+        controller: _emailController,
+        decoration: InputDecoration(
+          labelText: 'Email',
+          border: OutlineInputBorder(),
+        ),
+      ),
+    ],
+  );
+}
+
+// ✅ CORRETO - Extrair método
+Widget _buildFormField({
+  required TextEditingController controller,
+  required String label,
+}) {
+  return TextFormField(
+    controller: controller,
+    decoration: InputDecoration(
+      labelText: label,
+      border: OutlineInputBorder(),
+    ),
+  );
+}
+
+Widget build(BuildContext context) {
+  return Column(
+    children: [
+      _buildFormField(controller: _nomeController, label: 'Nome'),
+      const SizedBox(height: 16),
+      _buildFormField(controller: _emailController, label: 'Email'),
+    ],
+  );
+}
+```
+
+**Cenário 3: Tratamento de Erro Repetido**
+```dart
+// ❌ ERRADO - Try/catch duplicado
+Future<void> operacao1() async {
+  try {
+    await database.executar();
+  } catch (e) {
+    print('Erro ao executar operação 1: $e');
+    rethrow;
+  }
+}
+
+Future<void> operacao2() async {
+  try {
+    await database.executar();
+  } catch (e) {
+    print('Erro ao executar operação 2: $e');
+    rethrow;
+  }
+}
+
+// ✅ CORRETO - Extrair método
+Future<void> _executeComTratamento(Future Function() operacao) async {
+  try {
+    await operacao();
+  } catch (e) {
+    print('Erro ao executar operação: $e');
+    rethrow;
+  }
+}
+
+Future<void> operacao1() => _executeComTratamento(() => database.executar());
+Future<void> operacao2() => _executeComTratamento(() => database.executar());
+```
+
+#### 6.1.2 Quando NÃO Há Alternativa: Usar //FIXME:
+
+Se após análise profunda não encontrar forma melhor de evitar duplicação (raro):
+
+```dart
+class UsuarioScreen extends StatefulWidget {
+  // ... código da tela ...
+  
+  void _salvarUsuario() async {
+    if (_formKey.currentState!.validate()) {
+      // ... validações ...
+      
+      // Criar novo usuário
+      if (_usuarioEditando == null) {
+        final senhaHash = _manager.hashSenha(senha);
+        // ... resto da lógica ...
+      } else {
+        // FIXME: Codigo duplicado - hashSenha() calculado em ambos os branches
+        // TODO: Refatorar para extrair logica comum de hash
+        final senhaHash = _manager.hashSenha(senha);
+        // ... resto da lógica ...
+      }
+    }
+  }
+}
+```
+
+#### 6.1.3 Estratégias de Refatoração
+
+| Problema | Solução |
+|----------|---------|
+| Mesmo código em 2+ métodos | Extrair método privado |
+| Mesmo Widget usado várias vezes | Criar método que retorna Widget |
+| Mesmo bloco try/catch | Extrair em método genérico |
+| Mesmo condicional | Extrair em getter/método booleano |
+| Mesma string/constante | Declarar como `static const` |
+| Mesma lista de parâmetros | Usar objeto com parâmetros ou extensão |
+
+#### 6.1.4 Exemplo Real: UsuarioScreen
+
+Analisando o `usuario_screen.dart`, vemos duplicação:
+
+```dart
+// ANTES - Duplicado em _salvarUsuario()
+if (_usuarioEditando == null) {
+  // ... verificações de email ...
+  final senhaHash = _manager.hashSenha(senha);
+  final usuario = Usuario(...);
+  final sucesso = await _manager.adicionarUsuario(usuario);
+  if (sucesso) {
+    await _logManager.criarERegistrarLog(...);
+    _limparFormulario();
+    setState(() {});
+  }
+} else {
+  // ... verificações de email ...
+  final senhaHash = _manager.hashSenha(senha);
+  final usuarioAtualizado = Usuario(...);
+  final sucesso = await _manager.atualizarUsuario(usuarioAtualizado);
+  if (sucesso) {
+    await _logManager.criarERegistrarLog(...);
+    _limparFormulario();
+    setState(() { _usuarioEditando = null; });
+  }
+}
+
+// DEPOIS - Refatorado
+Future<void> _salvarUsuario() async {
+  if (_formKey.currentState!.validate()) {
+    final email = _emailController.text.trim();
+    final senha = _senhaController.text;
+
+    if (!_validarEmail(email)) return;
+
+    final usuario = _criarUsuarioDoFormulario(email, senha);
+    final sucesso = await _salvarOuAtualizarUsuario(usuario);
+    
+    if (sucesso) {
+      await _registrarLogOperacao(usuario);
+      _finalizarOperacao();
+    }
+  }
+}
+
+Usuario _criarUsuarioDoFormulario(String email, String senha) {
+  final senhaHash = _manager.hashSenha(senha);
+  if (_usuarioEditando == null) {
+    return Usuario(
+      id: _manager.gerarProximoId(),
+      nome: _nomeController.text.trim(),
+      email: email,
+      senhaHash: senhaHash,
+      nivelPermissao: _nivelPermissaoSelecionado,
+    );
+  } else {
+    return Usuario(
+      id: _usuarioEditando!.id,
+      nome: _nomeController.text.trim(),
+      email: email,
+      senhaHash: senha.isEmpty ? _usuarioEditando!.senhaHash : senhaHash,
+      nivelPermissao: _nivelPermissaoSelecionado,
+      dataCadastro: _usuarioEditando!.dataCadastro,
+    );
+  }
+}
+
+Future<bool> _salvarOuAtualizarUsuario(Usuario usuario) async {
+  if (_usuarioEditando == null) {
+    return await _manager.adicionarUsuario(usuario);
+  } else {
+    return await _manager.atualizarUsuario(usuario);
+  }
+}
+
+Future<void> _registrarLogOperacao(Usuario usuario) async {
+  final tipoAcao = _usuarioEditando == null ? TipoAcao.criar : TipoAcao.atualizar;
+  await _logManager.criarERegistrarLog(
+    tipoAcao: tipoAcao,
+    entidade: 'Usuario',
+    entidadeId: usuario.id,
+    usuarioId: usuario.id,
+    usuarioNome: usuario.nome,
+    detalhes: 'Usuário ${usuario.nome} ${tipoAcao == TipoAcao.criar ? 'criado' : 'atualizado'}',
+  );
+}
+
+void _finalizarOperacao() {
+  _mostrarMensagemSucesso();
+  _limparFormulario();
+  if (_usuarioEditando != null) {
+    setState(() => _usuarioEditando = null);
+  } else {
+    setState(() {});
+  }
+}
+```
 
 ## 7. Exemplo Completo: Implementar "Cadastro de Usuário Avançado"
 
