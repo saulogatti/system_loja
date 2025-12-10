@@ -51,50 +51,79 @@ class HomeScreen extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 40),
-              _buildMenuCard(
-                context,
-                title: 'Cadastro de Cliente',
-                icon: Icons.person,
-                color: Colors.blue,
-                onTap: () => _navigateToScreen(context, const CustomerView()),
+              const SizedBox(height: 24),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final width = constraints.maxWidth;
+                  final crossAxisCount = width > 800
+                      ? 3
+                      : (width > 480 ? 2 : 1);
+                  final childAspectRatio = crossAxisCount == 1 ? 5.0 : 3.0;
+
+                  final items = [
+                    _buildMenuCard(
+                      context,
+                      title: 'Cadastro de Cliente',
+                      icon: Icons.person,
+                      color: Colors.blue,
+                      onTap: () =>
+                          _navigateToScreen(context, const CustomerView()),
+                    ),
+                    _buildMenuCard(
+                      context,
+                      title: 'Cadastro de Produto',
+                      icon: Icons.inventory,
+                      color: Colors.green,
+                      onTap: () =>
+                          _navigateToScreen(context, const ProductViewScreen()),
+                    ),
+                    _buildMenuCard(
+                      context,
+                      title: 'Cadastro de Nota Fiscal',
+                      icon: Icons.receipt_long,
+                      color: Colors.orange,
+                      onTap: () =>
+                          _navigateToScreen(context, const SalesView()),
+                    ),
+                    _buildMenuCard(
+                      context,
+                      title: 'Gestão de Usuários',
+                      icon: Icons.people,
+                      color: Colors.purple,
+                      onTap: () =>
+                          _navigateToScreen(context, const UsuarioScreen()),
+                    ),
+                    _buildMenuCard(
+                      context,
+                      title: 'Configurações do Sistema',
+                      icon: Icons.settings,
+                      color: Colors.teal,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ConfiguracoesScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ];
+
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: childAspectRatio,
+                    ),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) => items[index],
+                  );
+                },
               ),
-              const SizedBox(height: 16),
-              _buildMenuCard(
-                context,
-                title: 'Cadastro de Produto',
-                icon: Icons.inventory,
-                color: Colors.green,
-                onTap: () =>
-                    _navigateToScreen(context, const ProductViewScreen()),
-              ),
-              const SizedBox(height: 16),
-              _buildMenuCard(
-                context,
-                title: 'Cadastro de Nota Fiscal',
-                icon: Icons.receipt_long,
-                color: Colors.orange,
-                onTap: () => _navigateToScreen(context, const SalesView()),
-              ),
-              const SizedBox(height: 16),
-              _buildMenuCard(
-                context,
-                title: 'Gestão de Usuários',
-                icon: Icons.people,
-                color: Colors.purple,
-                onTap: () => _navigateToScreen(context, const UsuarioScreen()),
-              ),
-              const SizedBox(height: 16),
-            _buildMenuCard(
-              context,
-              title: 'Configurações do Sistema',
-              icon: Icons.settings,
-              color: Colors.teal,
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const ConfiguracoesScreen()));
-              },
-            ),
-          ],
+            ],
           ),
         ),
       ),
