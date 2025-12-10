@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/models/customer.dart';
 import 'bloc/customer_bloc.dart';
 import 'customer_detail_screen.dart';
-import 'widgets/customer_details_dialog.dart';
 import 'widgets/customer_form.dart';
 import 'widgets/customer_list.dart';
 import 'widgets/customer_search_section.dart';
@@ -170,9 +169,11 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     );
   }
 
-  ///TODO: #48 refatorar para abrir a tela de detalhes, navegando para outra tela
+  /// Navega para a tela de detalhes do cliente
+  ///
+  /// Utilizado tanto para busca por CPF quanto para seleção da lista.
   void _mostrarDetalhesCliente(Customer cliente) {
-    showCustomerDetailsDialog(context, cliente);
+    _openCustomerDetails(cliente);
   }
 
   void _openCustomerDetails(Customer customer) {
