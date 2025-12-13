@@ -62,25 +62,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         }
       },
       child: Scaffold(
-            appBar: AppBar(
-              title: const Text('Detalhes do Produto'),
-              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-              actions: [
-                if (!_isEditing)
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {
-                      setState(() {
-                        _isEditing = true;
-                      });
-                    },
-                    tooltip: 'Editar',
-                  ),
-                if (!_isEditing)
-                  IconButton(icon: const Icon(Icons.delete), onPressed: _confirmarExclusao, tooltip: 'Deletar'),
-              ],
-            ),
-            body: SingleChildScrollView(
+        appBar: AppBar(
+          title: const Text('Detalhes do Produto'),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          actions: [
+            if (!_isEditing)
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  setState(() {
+                    _isEditing = true;
+                  });
+                },
+                tooltip: 'Editar',
+              ),
+            if (!_isEditing)
+              IconButton(icon: const Icon(Icons.delete), onPressed: _confirmarExclusao, tooltip: 'Deletar'),
+          ],
+        ),
+        body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
