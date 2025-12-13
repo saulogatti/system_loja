@@ -39,7 +39,6 @@ void main() {
       final config = manager.configuracao;
 
       expect(config.notificacoesAtivadas, isTrue);
-      expect(config.typeCache, equals(EnumTypeCache.json));
       expect(config.temaEscuro, isFalse);
       expect(config.limiteEstoqueBaixo, equals(10));
     });
@@ -47,14 +46,14 @@ void main() {
     test('Deve atualizar configurações com sucesso', () async {
       final novaConfig = manager.configuracao.copyWith(
         temaEscuro: true,
-        typeCache: EnumTypeCache.sql,
+
         notificarVendas: false,
       );
 
       await manager.atualizarConfiguracao(novaConfig);
 
       expect(manager.configuracao.temaEscuro, isTrue);
-      expect(manager.configuracao.typeCache, equals(EnumTypeCache.sql));
+
       expect(manager.configuracao.notificarVendas, isFalse);
     });
 
@@ -185,16 +184,6 @@ void main() {
       }
     });
 
-    test('Deve aceitar valores válidos de tipo de banco de dados', () async {
-      final tipos = [EnumTypeCache.json, EnumTypeCache.sql];
-
-      for (final tipo in tipos) {
-        final config = manager.configuracao.copyWith(typeCache: tipo);
-        await manager.atualizarConfiguracao(config);
-        expect(manager.configuracao.typeCache, equals(tipo));
-      }
-    });
-
     test('Deve aceitar limites de estoque baixo válidos', () async {
       final limites = [1, 10, 25, 50];
 
@@ -239,7 +228,6 @@ void main() {
           exigirSenha: true,
           tempoBloqueioMinutos: 30,
           permitirMultiplosUsuarios: true,
-          typeCache: EnumTypeCache.sql,
         );
 
         await manager.atualizarConfiguracao(configOriginal);
@@ -262,10 +250,6 @@ void main() {
         expect(
           manager2.configuracao.backupAutomatico,
           equals(configOriginal.backupAutomatico),
-        );
-        expect(
-          manager2.configuracao.typeCache,
-          equals(configOriginal.typeCache),
         );
       },
     );

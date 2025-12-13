@@ -5,7 +5,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/database_config.dart';
 import 'package:system_loja/data/database/database_helper.dart';
-import 'package:system_loja/data/storage/storage_data.dart';
+import 'package:system_loja/data/storage/base_data_storage.dart';
 
 /// Implementação de armazenamento de dados utilizando SQL.
 ///

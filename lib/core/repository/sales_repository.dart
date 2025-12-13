@@ -1,9 +1,9 @@
 import 'package:system_loja/core/models/invoice.dart';
-import 'package:system_loja/core/repository/default/repository_manager.dart';
+import 'package:system_loja/core/repository/default/base_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/data/storage/storage_data.dart';
+import 'package:system_loja/data/storage/base_data_storage.dart';
 
-class SalesRepository extends RepositoryManager {
+class SalesRepository extends BaseRepository {
   SalesRepository();
   Future<int> getNextSaleId() async {
     final allInvoices = await loadAllSales();

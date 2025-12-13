@@ -10,7 +10,7 @@ import '../settings/app_settings.dart';
 ///
 /// Responsável por carregar, salvar e gerenciar as configurações
 /// do sistema usando persistência em arquivo JSON.
-class ConfiguracaoManager with LoggerClassMixin {
+class ConfiguracaoManager  with LoggerClassMixin {
   /// Lock estático para serializar o acesso entre múltiplas instâncias
   static final Map<String, Lock> _fileLocks = {};
   final String dataFile;

@@ -21,9 +21,6 @@ AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) => AppSettings(
   tempoBloqueioMinutos: (json['tempo_bloqueio_minutos'] as num?)?.toInt() ?? 15,
   permitirMultiplosUsuarios:
       json['permitir_multiplos_usuarios'] as bool? ?? false,
-  typeCache:
-      $enumDecodeNullable(_$EnumTypeCacheEnumMap, json['typeCache']) ??
-      EnumTypeCache.sql,
   corPrimaria:
       $enumDecodeNullable(
         _$EnumColorAppThemeSettingsEnumMap,
@@ -34,7 +31,6 @@ AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) => AppSettings(
 
 Map<String, dynamic> _$AppSettingsToJson(AppSettings instance) =>
     <String, dynamic>{
-      'typeCache': _$EnumTypeCacheEnumMap[instance.typeCache]!,
       'notificacoes_ativadas': instance.notificacoesAtivadas,
       'notificar_vendas': instance.notificarVendas,
       'notificar_estoque_baixo': instance.notificarEstoqueBaixo,
@@ -50,11 +46,6 @@ Map<String, dynamic> _$AppSettingsToJson(AppSettings instance) =>
       'tempo_bloqueio_minutos': instance.tempoBloqueioMinutos,
       'permitir_multiplos_usuarios': instance.permitirMultiplosUsuarios,
     };
-
-const _$EnumTypeCacheEnumMap = {
-  EnumTypeCache.json: 'json',
-  EnumTypeCache.sql: 'sql',
-};
 
 const _$EnumColorAppThemeSettingsEnumMap = {
   EnumColorAppThemeSettings.azul: 'azul',

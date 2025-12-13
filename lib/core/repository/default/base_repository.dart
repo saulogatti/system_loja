@@ -1,27 +1,13 @@
-import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/data/storage/json_storage.dart';
+import 'package:system_loja/data/storage/base_data_storage.dart';
 import 'package:system_loja/data/storage/sql_data_storage.dart';
-import 'package:system_loja/data/storage/storage_data.dart';
-import 'package:system_loja/screens/settings/settings_service.dart';
 
-abstract class RepositoryManager {
-  
+abstract class BaseRepository {
   late BaseDataStorage _defaultDataStorage;
-  RepositoryManager() {
-    final settingsApp = SettingsService().currentSettings;
-    switch (settingsApp.typeCache) {
-      case EnumTypeCache.json:
-        _defaultDataStorage = JsonDataStorage(
-          storageCategory: runtimeType.toString(),
-        );
-        break;
-      case EnumTypeCache.sql:
-        _defaultDataStorage = SqlDataStorage(
-          storageCategory: runtimeType.toString(),
-        );
-        break;
-    }
+  BaseRepository() {
+    _defaultDataStorage = SqlDataStorage(
+      storageCategory: runtimeType.toString(),
+    );
   }
 
   BaseDataStorage get defaultDataStorage => _defaultDataStorage;

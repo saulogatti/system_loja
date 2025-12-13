@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 
-part 'storage_data.g.dart';
+part 'base_data_storage.g.dart';
 
 abstract class BaseDataStorage {
   @protected

@@ -8,5 +8,3 @@ export 'cliente_sql_manager.dart';
 export 'database_config.dart';
 export 'database_helper.dart';
 export 'database_scripts.dart';
-export 'nota_fiscal_sql_manager.dart';
-export 'produto_sql_manager.dart';

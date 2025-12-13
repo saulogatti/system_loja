@@ -1,8 +1,8 @@
 import 'package:system_loja/core/managers/exceptions/customer_exception.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/repository/default/repository_manager.dart';
+import 'package:system_loja/core/repository/default/base_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/data/storage/storage_data.dart';
+import 'package:system_loja/data/storage/base_data_storage.dart';
 
 /// Repositório para gerenciar operações com clientes.
 ///
@@ -35,10 +35,10 @@ import 'package:system_loja/data/storage/storage_data.dart';
 /// // Buscar por CPF
 /// final cliente = await repository.findWith(cpf: '123.456.789-00');
 /// ```
-class CustomerRepository extends RepositoryManager {
+class CustomerRepository extends BaseRepository {
   /// Cria uma instância de [CustomerRepository].
   ///
-  /// Herda [defaultDataStorage] da classe mãe [RepositoryManager].
+  /// Herda [defaultDataStorage] da classe mãe [BaseRepository].
   CustomerRepository();
 
   /// Deleta um cliente pelo seu ID.

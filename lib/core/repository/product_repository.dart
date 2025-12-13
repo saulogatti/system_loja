@@ -1,12 +1,28 @@
 import 'package:system_loja/core/models/produto.dart';
-import 'package:system_loja/core/repository/default/repository_manager.dart';
+import 'package:system_loja/core/repository/default/base_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/data/storage/storage_data.dart';
+import 'package:system_loja/data/storage/base_data_storage.dart';
 
-class ProductRepository extends RepositoryManager {
+class ProductRepository extends BaseRepository {
   /// Mapa estático de locks por caminho de arquivo, para serializar I/O
 
   ProductRepository();
+
+  /// Remove um produto do armazenamento.
+  ///
+  /// [id] ID do produto a ser removido.
+  /// Retorna resultado da operação de exclusão.
+  Future<OperationResult<bool, String>> deleteProduct(int id) async {
+    final result = await defaultDataStorage.delete(id);
+    switch (result) {
+      case OperationSuccess():
+        return OperationSuccess(result.result);
+      case OperationError():
+        return OperationError(
+          'Falha ao deletar produto com ID: $id - ${result.error}',
+        );
+    }
+  }
 
   /// Retorna a lista de produtos em cache, carregando do disco se vazia.
 
@@ -64,24 +80,10 @@ class ProductRepository extends RepositoryManager {
   ///
   /// [produto] Produto com os dados atualizados.
   /// Retorna resultado da operação de atualização.
-  /// 
+  ///
   /// **Nota**: Este método utiliza internamente [salvarProduto], pois o storage
   /// não diferencia entre inserção e atualização (upsert pattern).
   Future<OperationResult<bool, String>> updateProduct(Produto produto) async {
     return salvarProduto(produto);
-  }
-
-  /// Remove um produto do armazenamento.
-  ///
-  /// [id] ID do produto a ser removido.
-  /// Retorna resultado da operação de exclusão.
-  Future<OperationResult<bool, String>> deleteProduct(int id) async {
-    final result = await defaultDataStorage.delete(id);
-    switch (result) {
-      case OperationSuccess():
-        return OperationSuccess(result.result);
-      case OperationError():
-        return OperationError('Falha ao deletar produto com ID: $id - ${result.error}');
-    }
   }
 }
