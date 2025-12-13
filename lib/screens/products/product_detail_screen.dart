@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/produto_state.dart';
+import 'package:system_loja/screens/products/widgets/product_category.dart';
 
 /// Tela de detalhes do produto com opções de edição e exclusão
 ///
@@ -12,8 +13,13 @@ import 'package:system_loja/screens/products/cubit/produto_state.dart';
 /// - Deletar produto
 class ProductDetailScreen extends StatefulWidget {
   final Produto product;
+  final List<Produto> produtos;
 
-  const ProductDetailScreen({super.key, required this.product});
+  const ProductDetailScreen({
+    super.key,
+    required this.product,
+    this.produtos = const [],
+  });
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -181,13 +187,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        TextFormField(
+                        ProductCategory(
                           controller: _categoriaController,
-                          decoration: const InputDecoration(
-                            labelText: 'Categoria',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.category),
-                          ),
+                          produtos: widget.produtos,
                           enabled: _isEditing,
                         ),
                         const SizedBox(height: 16),

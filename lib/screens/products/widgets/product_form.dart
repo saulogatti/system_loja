@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/core/utils/input_formatters.dart';
 import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/products/widgets/product_category.dart';
 
 /// Widget do formulário de cadastro de produto
 ///
@@ -14,6 +16,7 @@ class ProductForm extends StatelessWidget {
   final TextEditingController descricaoController;
   final TextEditingController categoriaController;
   final VoidCallback onSubmit;
+  final List<Produto> produtos;
 
   const ProductForm({
     super.key,
@@ -25,6 +28,7 @@ class ProductForm extends StatelessWidget {
     required this.descricaoController,
     required this.categoriaController,
     required this.onSubmit,
+    required this.produtos,
   });
 
   @override
@@ -105,13 +109,9 @@ class ProductForm extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          TextFormField(
+          ProductCategory(
             controller: categoriaController,
-            decoration: const InputDecoration(
-              labelText: 'Categoria',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.category),
-            ),
+            produtos: produtos,
           ),
           const SizedBox(height: 16),
           TextFormField(
