@@ -77,15 +77,11 @@ class _ProductCategoryState extends State<ProductCategory> {
   void _inicializarValor() {
     final valorAtual = widget.controller.text.trim();
     if (valorAtual.isNotEmpty && _categorias.contains(valorAtual)) {
-      setState(() {
-        _categoriaSelecionada = valorAtual;
-        _modoEntradaManual = false;
-      });
+      _categoriaSelecionada = valorAtual;
+      _modoEntradaManual = false;
     } else if (valorAtual.isNotEmpty) {
-      setState(() {
-        _categoriaSelecionada = null;
-        _modoEntradaManual = true;
-      });
+      _categoriaSelecionada = null;
+      _modoEntradaManual = true;
     }
   }
 
