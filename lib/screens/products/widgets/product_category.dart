@@ -159,7 +159,7 @@ class _ProductCategoryState extends State<ProductCategory> {
       children: [
         Expanded(
           child: DropdownButtonFormField<String>(
-            value: _categoriaSelecionada,
+            initialValue: _categoriaSelecionada,
             decoration: InputDecoration(
               labelText: widget.required ? 'Categoria *' : 'Categoria',
               border: const OutlineInputBorder(),

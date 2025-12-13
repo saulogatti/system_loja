@@ -23,7 +23,7 @@ AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) => AppSettings(
       json['permitir_multiplos_usuarios'] as bool? ?? false,
   typeCache:
       $enumDecodeNullable(_$EnumTypeCacheEnumMap, json['typeCache']) ??
-      EnumTypeCache.json,
+      EnumTypeCache.sql,
   corPrimaria:
       $enumDecodeNullable(
         _$EnumColorAppThemeSettingsEnumMap,
