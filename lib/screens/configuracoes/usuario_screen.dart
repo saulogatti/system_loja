@@ -11,6 +11,7 @@ import '../../core/models/extensions/nivel_permissao_extension.dart';
 import '../../core/models/log_atividade.dart';
 import '../../core/models/usuario.dart';
 
+//todo: Tela de gestão de usuários com listagem, adição, edição e exclusão. Esta muito grande, pensar em dividir em vários arquivos menores (widgets). Reaproveitar componentes como formulário de usuário, lista de usuários, etc. Alterar apenas este arquivo para composição dos widgets menores. Outros arquivos que ja existem Não é para ser alterados. Caso precise criar novos arquivos, criar na pasta widgets. Caso tenha dúvidas, me chamar.
 class UsuarioScreen extends StatefulWidget {
   const UsuarioScreen({super.key});
 
@@ -200,8 +201,10 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                             return 'Senha é obrigatória';
                           }
                           // Valida força da senha
-                          if (value != null && value.isNotEmpty) {
-                            _bloc.validarSenha(value);
+                          if (value != null &&
+                              value.isNotEmpty &&
+                              value.validarSenha() != null) {
+                            return value.validarSenha();
                           }
                           return null;
                         },
