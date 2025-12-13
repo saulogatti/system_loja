@@ -99,7 +99,6 @@ class _ProductCategoryState extends State<ProductCategory> {
         widget.controller.clear();
       }
     });
-    widget.onChanged?.call(null);
   }
 
   @override
