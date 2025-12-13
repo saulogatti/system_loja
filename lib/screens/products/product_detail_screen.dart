@@ -13,8 +13,13 @@ import 'package:system_loja/screens/products/widgets/product_category.dart';
 /// - Deletar produto
 class ProductDetailScreen extends StatefulWidget {
   final Produto product;
+  final List<Produto> produtos;
 
-  const ProductDetailScreen({super.key, required this.product});
+  const ProductDetailScreen({
+    super.key,
+    required this.product,
+    this.produtos = const [],
+  });
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -56,19 +61,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
         }
       },
-      child: BlocBuilder<ProductCubit, ProductState>(
-        builder: (context, state) {
-          // Extrai lista de produtos do estado atual
-          List<Produto> produtos = [];
-          if (state is ProductStateInsertSuccess) {
-            produtos = state.produtos;
-          } else if (state is ProductStateUpdateSuccess) {
-            produtos = state.produtos;
-          } else if (state is ProductStateDeleteSuccess) {
-            produtos = state.produtos;
-          }
-
-          return Scaffold(
+      child: Scaffold(
             appBar: AppBar(
               title: const Text('Detalhes do Produto'),
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -196,7 +189,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         const SizedBox(height: 16),
                         ProductCategory(
                           controller: _categoriaController,
-                          produtos: produtos,
+                          produtos: widget.produtos,
                           enabled: _isEditing,
                         ),
                         const SizedBox(height: 16),
@@ -275,8 +268,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ],
             ),
           ),
-        );
-        },
+        ),
       ),
     );
   }

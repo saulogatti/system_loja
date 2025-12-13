@@ -82,7 +82,8 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                           const SizedBox(height: 32),
                           ProductList(
                             produtos: produtos,
-                            onProductTap: _mostrarDetalhesProduto,
+                            onProductTap: (produto) =>
+                                _mostrarDetalhesProduto(produto, produtos),
                           ),
                         ],
                       ),
@@ -164,13 +165,16 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
   }
 
   /// Navega para a tela de detalhes do produto.
-  void _mostrarDetalhesProduto(Produto produto) {
+  void _mostrarDetalhesProduto(Produto produto, List<Produto> produtos) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => BlocProvider.value(
           value: _produtoCubit,
-          child: ProductDetailScreen(product: produto),
+          child: ProductDetailScreen(
+            product: produto,
+            produtos: produtos,
+          ),
         ),
       ),
     );
