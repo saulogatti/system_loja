@@ -204,6 +204,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         phone: _telefoneController.text.trim(),
         address: _enderecoController.text.trim(),
         registrationDate: widget.customer.registrationDate,
+        lastUpdatedDate: widget.customer.lastUpdatedDate,
       );
 
       context.read<CustomerBloc>().add(

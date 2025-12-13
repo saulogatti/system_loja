@@ -14,18 +14,22 @@ Produto _$ProdutoFromJson(Map<String, dynamic> json) => Produto(
   estoque: (json['estoque'] as num).toInt(),
   descricao: json['descricao'] as String,
   categoria: json['categoria'] as String,
-  dataCadastro: json['data_cadastro'] == null
+  lastUpdatedDate: json['last_updated_date'] == null
       ? null
-      : DateTime.parse(json['data_cadastro'] as String),
+      : DateTime.parse(json['last_updated_date'] as String),
+  registrationDate: json['registration_date'] == null
+      ? null
+      : DateTime.parse(json['registration_date'] as String),
 );
 
 Map<String, dynamic> _$ProdutoToJson(Produto instance) => <String, dynamic>{
   'id': instance.id,
+  'registration_date': instance.registrationDate.toIso8601String(),
+  'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
   'nome': instance.nome,
   'codigo': instance.codigo,
   'preco': instance.preco,
   'estoque': instance.estoque,
   'descricao': instance.descricao,
   'categoria': instance.categoria,
-  'data_cadastro': instance.dataCadastro.toIso8601String(),
 };

@@ -17,11 +17,12 @@ LogAtividade _$LogAtividadeFromJson(Map<String, dynamic> json) => LogAtividade(
       ? null
       : DateTime.parse(json['data_hora'] as String),
   detalhes: json['detalhes'] as String? ?? '',
-);
+)..lastUpdatedDate = DateTime.parse(json['last_updated_date'] as String);
 
 Map<String, dynamic> _$LogAtividadeToJson(LogAtividade instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
       'tipo_acao': _$TipoAcaoEnumMap[instance.tipoAcao]!,
       'entidade': instance.entidade,
       'entidade_id': instance.entidadeId,

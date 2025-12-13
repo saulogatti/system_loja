@@ -226,7 +226,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         const Divider(),
                         _buildInfoRow(
                           'Data de Cadastro',
-                          _formatDate(widget.product.dataCadastro),
+                          _formatDate(widget.product.registrationDate),
                           Icons.calendar_today,
                         ),
                       ],
@@ -369,7 +369,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         estoque: estoque,
         descricao: _descricaoController.text.trim(),
         categoria: _categoriaController.text.trim(),
-        dataCadastro: widget.product.dataCadastro,
+        registrationDate: widget.product.registrationDate,
+        lastUpdatedDate: DateTime.now(),
       );
 
       context.read<ProductCubit>().updateProduct(updatedProduct);

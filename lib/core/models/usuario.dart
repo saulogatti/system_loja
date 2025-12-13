@@ -4,6 +4,35 @@ import 'package:system_loja/core/models/default/default_object.dart';
 
 part 'usuario.g.dart';
 
+/// Dados do usuário
+@JsonSerializable()
+class DadosUsuario {
+  final String nome;
+  final String email;
+
+  @JsonKey(name: 'senha_hash')
+  final String senhaHash;
+
+  @JsonKey(name: 'nivel_permissao')
+  final NivelPermissao nivelPermissao;
+
+  DadosUsuario({
+    required this.nome,
+    required this.email,
+    required this.senhaHash,
+    required this.nivelPermissao,
+  });
+
+  factory DadosUsuario.fromJson(Map<String, dynamic> json) =>
+      _$DadosUsuarioFromJson(json);
+  Map<String, dynamic> toJson() => _$DadosUsuarioToJson(this);
+
+  @override
+  String toString() {
+    return 'DadosUsuario(nome: $nome, email: $email, nivelPermissao: $nivelPermissao)';
+  }
+}
+
 /// Níveis de permissão disponíveis no sistema
 enum NivelPermissao {
   /// Administrador com acesso total ao sistema
@@ -22,12 +51,6 @@ enum NivelPermissao {
 @JsonSerializable(constructor: 'withDados', explicitToJson: true)
 class Usuario extends DefaultObject {
   final DadosUsuario dadosUsuario;
-  
-  @JsonKey(name: 'data_cadastro')
-  final DateTime dataCadastro;
-  
-  @JsonKey(name: 'data_ultima_atualizacao')
-  final DateTime dataUltimaAtualizacao;
 
   Usuario({
     required super.id,
@@ -35,40 +58,30 @@ class Usuario extends DefaultObject {
     required String email,
     required String senhaHash,
     required NivelPermissao nivelPermissao,
-    DateTime? dataCadastro,
-    DateTime? dataUltimaAtualizacao,
-  })  : dadosUsuario = DadosUsuario(
-          nome: nome,
-          email: email,
-          senhaHash: senhaHash,
-          nivelPermissao: nivelPermissao,
-        ),
-        dataCadastro = dataCadastro ?? DateTime.now(),
-        dataUltimaAtualizacao = dataUltimaAtualizacao ?? DateTime.now();
+    super.registrationDate,
+    super.lastUpdatedDate,
+  }) : dadosUsuario = DadosUsuario(
+         nome: nome,
+         email: email,
+         senhaHash: senhaHash,
+         nivelPermissao: nivelPermissao,
+       );
 
   /// Cria um objeto a partir de JSON
-  factory Usuario.fromJson(Map<String, dynamic> json) => _$UsuarioFromJson(json);
+  factory Usuario.fromJson(Map<String, dynamic> json) =>
+      _$UsuarioFromJson(json);
 
   Usuario.withDados({
     required super.id,
     required this.dadosUsuario,
-    DateTime? dataCadastro,
-    DateTime? dataUltimaAtualizacao,
-  })  : dataCadastro = dataCadastro ?? DateTime.now(),
-        dataUltimaAtualizacao = dataUltimaAtualizacao ?? DateTime.now();
+    super.lastUpdatedDate,
+    super.registrationDate,
+  });
 
-  String get nome => dadosUsuario.nome;
   String get email => dadosUsuario.email;
-  String get senhaHash => dadosUsuario.senhaHash;
   NivelPermissao get nivelPermissao => dadosUsuario.nivelPermissao;
-
-  /// Converte o objeto para JSON
-  @override
-  Map<String, dynamic> toJson() => _$UsuarioToJson(this);
-
-  @override
-  String toString() =>
-      'Usuario(id: $id, dadosUsuario: $dadosUsuario, dataCadastro: $dataCadastro, dataUltimaAtualizacao: $dataUltimaAtualizacao)';
+  String get nome => dadosUsuario.nome;
+  String get senhaHash => dadosUsuario.senhaHash;
 
   /// Cria uma cópia do usuário com campos atualizados
   ///
@@ -89,36 +102,15 @@ class Usuario extends DefaultObject {
       email: email ?? this.email,
       senhaHash: senhaHash ?? this.senhaHash,
       nivelPermissao: nivelPermissao ?? this.nivelPermissao,
-      dataCadastro: dataCadastro ?? this.dataCadastro,
-      dataUltimaAtualizacao: DateTime.now(),
+      lastUpdatedDate: dataUltimaAtualizacao ?? lastUpdatedDate,
+      registrationDate: dataCadastro ?? registrationDate,
     );
   }
-}
 
-/// Dados do usuário
-@JsonSerializable()
-class DadosUsuario {
-  final String nome;
-  final String email;
-  
-  @JsonKey(name: 'senha_hash')
-  final String senhaHash;
-  
-  @JsonKey(name: 'nivel_permissao')
-  final NivelPermissao nivelPermissao;
-
-  DadosUsuario({
-    required this.nome,
-    required this.email,
-    required this.senhaHash,
-    required this.nivelPermissao,
-  });
-
-  factory DadosUsuario.fromJson(Map<String, dynamic> json) => _$DadosUsuarioFromJson(json);
-  Map<String, dynamic> toJson() => _$DadosUsuarioToJson(this);
+  /// Converte o objeto para JSON
+  @override
+  Map<String, dynamic> toJson() => _$UsuarioToJson(this);
 
   @override
-  String toString() {
-    return 'DadosUsuario(nome: $nome, email: $email, nivelPermissao: $nivelPermissao)';
-  }
+  String toString() => 'Usuario(dadosUsuario: $dadosUsuario)';
 }

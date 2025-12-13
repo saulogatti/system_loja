@@ -362,9 +362,7 @@ void main() {
 
         // Assert - deve estar no modo dropdown com valor selecionado
         expect(find.byType(DropdownButtonFormField<String>), findsOneWidget);
-        final dropdown = tester.widget<DropdownButtonFormField<String>>(
-          find.byType(DropdownButtonFormField<String>),
-        );
+
         expect(controller.text, 'Livros');
       },
     );
@@ -519,9 +517,6 @@ void main() {
 
         // Assert - valor deve ser preservado e selecionado no dropdown
         expect(controller.text, 'Livros');
-        final dropdown = tester.widget<DropdownButtonFormField<String>>(
-          find.byType(DropdownButtonFormField<String>),
-        );
       },
     );
 
@@ -554,10 +549,6 @@ void main() {
 
         // Assert - valor deve ser limpo pois não existe nas categorias
         expect(controller.text, '');
-        final dropdown = tester.widget<DropdownButtonFormField<String>>(
-          find.byType(DropdownButtonFormField<String>),
-        );
-        // expect(dropdown.value, isNull);
       },
     );
   });

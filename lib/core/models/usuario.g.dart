@@ -6,26 +6,6 @@ part of 'usuario.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Usuario _$UsuarioFromJson(Map<String, dynamic> json) => Usuario.withDados(
-  id: (json['id'] as num).toInt(),
-  dadosUsuario: DadosUsuario.fromJson(
-    json['dadosUsuario'] as Map<String, dynamic>,
-  ),
-  dataCadastro: json['data_cadastro'] == null
-      ? null
-      : DateTime.parse(json['data_cadastro'] as String),
-  dataUltimaAtualizacao: json['data_ultima_atualizacao'] == null
-      ? null
-      : DateTime.parse(json['data_ultima_atualizacao'] as String),
-);
-
-Map<String, dynamic> _$UsuarioToJson(Usuario instance) => <String, dynamic>{
-  'id': instance.id,
-  'dadosUsuario': instance.dadosUsuario.toJson(),
-  'data_cadastro': instance.dataCadastro.toIso8601String(),
-  'data_ultima_atualizacao': instance.dataUltimaAtualizacao.toIso8601String(),
-};
-
 DadosUsuario _$DadosUsuarioFromJson(Map<String, dynamic> json) => DadosUsuario(
   nome: json['nome'] as String,
   email: json['email'] as String,
@@ -44,4 +24,24 @@ Map<String, dynamic> _$DadosUsuarioToJson(DadosUsuario instance) =>
 const _$NivelPermissaoEnumMap = {
   NivelPermissao.administrador: 'ADMINISTRADOR',
   NivelPermissao.usuarioComum: 'USUARIO_COMUM',
+};
+
+Usuario _$UsuarioFromJson(Map<String, dynamic> json) => Usuario.withDados(
+  id: (json['id'] as num).toInt(),
+  dadosUsuario: DadosUsuario.fromJson(
+    json['dadosUsuario'] as Map<String, dynamic>,
+  ),
+  lastUpdatedDate: json['last_updated_date'] == null
+      ? null
+      : DateTime.parse(json['last_updated_date'] as String),
+  registrationDate: json['registration_date'] == null
+      ? null
+      : DateTime.parse(json['registration_date'] as String),
+);
+
+Map<String, dynamic> _$UsuarioToJson(Usuario instance) => <String, dynamic>{
+  'id': instance.id,
+  'registration_date': instance.registrationDate.toIso8601String(),
+  'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
+  'dadosUsuario': instance.dadosUsuario.toJson(),
 };

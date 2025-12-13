@@ -6,10 +6,10 @@ import 'package:system_loja/screens/configuracoes/bloc/usuario_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 import 'package:system_loja/screens/widgets/overlay_app_widget.dart';
 
-import '../core/managers/log_atividade_manager.dart';
-import '../core/models/extensions/nivel_permissao_extension.dart';
-import '../core/models/log_atividade.dart';
-import '../core/models/usuario.dart';
+import '../../core/managers/log_atividade_manager.dart';
+import '../../core/models/extensions/nivel_permissao_extension.dart';
+import '../../core/models/log_atividade.dart';
+import '../../core/models/usuario.dart';
 
 class UsuarioScreen extends StatefulWidget {
   const UsuarioScreen({super.key});
@@ -499,11 +499,11 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
               ),
               _buildDetailRow(
                 'Data de Cadastro',
-                usuario.dataCadastro.toString().split('.')[0],
+                usuario.registrationDate.toString().split('.')[0],
               ),
               _buildDetailRow(
                 'Última Atualização',
-                usuario.dataUltimaAtualizacao.toString().split('.')[0],
+                usuario.lastUpdatedDate.toString().split('.')[0],
               ),
             ],
           ),

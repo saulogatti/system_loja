@@ -88,6 +88,7 @@ mixin FileStorageUtility {
       return OperationResult.failure('Erro ao listar arquivos: $e');
     }
   }
+
   /// Carrega o conteúdo de um arquivo de forma assíncrona.
   ///
   /// Lê o conteúdo do arquivo localizado em [fileName] relativo ao diretório
@@ -148,6 +149,34 @@ mixin FileStorageUtility {
   /// ```
   @protected
   String retrieveDirectoryName();
+  Future<int> backup() async {
+    try {
+      final backupFiles = await _initializeDirectory();
+      final bacupFiles = Directory(backupFiles);
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final appDocDir = await getApplicationSupportDirectory();
+      final backupDir = Directory(p.join(appDocDir.path, 'backup_$timestamp'));
+      if (!await backupDir.exists()) {
+        await backupDir.create(recursive: true);
+      }
+
+      var arquivosCopiados = 0;
+      for (final file in bacupFiles.listSync()) {
+        if (file.existsSync()) {
+          final nomeArquivo = p.basename(file.path);
+          await file.rename('${backupDir.path}/$nomeArquivo');
+          arquivosCopiados++;
+        }
+      }
+      logDebug('Backup realizado com sucesso: $backupFiles arquivos copiados');
+      return arquivosCopiados;
+    } catch (e, stackTrace) {
+      logError('Erro ao realizar backup: $e', stackTrace);
+      return 0;
+    }
+  }
+
+  void logDebug(String message);
 
   /// Salva dados em um arquivo de forma assíncrona.
   ///

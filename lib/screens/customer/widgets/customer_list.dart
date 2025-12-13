@@ -8,7 +8,7 @@ import 'package:system_loja/screens/widgets/card_list_item.dart';
 ///
 /// Exibe os clientes em formato de lista com cards ou mensagem quando vazio.
 /// Gerencia os estados do BLoC internamente.
-class CustomerList extends StatelessWidget {
+class CustomerList extends StatefulWidget {
   /// Espaçamento padrão entre título e lista
   static const double _defaultSpacing = 16.0;
 
@@ -16,6 +16,12 @@ class CustomerList extends StatelessWidget {
 
   const CustomerList({super.key, required this.onCustomerTap});
 
+  @override
+  State<CustomerList> createState() => _CustomerListState();
+}
+
+class _CustomerListState extends State<CustomerList> {
+  final Map<int, Customer> _customers = {};
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,10 +31,10 @@ class CustomerList extends StatelessWidget {
           'Clientes Cadastrados',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: _defaultSpacing),
-        BlocBuilder<CustomerBloc, CustomerBlocState>(
-          builder: (context, state) {
-            return state.when(
+        const SizedBox(height: CustomerList._defaultSpacing),
+        BlocListener<CustomerBloc, CustomerBlocState>(
+          listener: (context, state) {
+            state.when(
               initial: () => const Center(
                 child: Padding(
                   padding: EdgeInsets.all(32.0),
@@ -45,45 +51,56 @@ class CustomerList extends StatelessWidget {
                 ),
               ),
               customersLoaded: (customers, stateType) {
-                if (customers.isEmpty) {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(32.0),
-                      child: Text(
-                        'Nenhum cliente cadastrado',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                    ),
-                  );
-                }
+                _customers.clear();
+                _customers.addAll(customers);
+                setState(() {});
+              },
 
-                return ListView.builder(
+              customerError: (message) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(message),
+                    backgroundColor: Colors.red,
+
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+
+              customerFound: (customer) => const SizedBox.shrink(),
+            );
+          },
+          child: Column(
+            children: [
+              if (_customers.isEmpty)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(32.0),
+                    child: Text(
+                      'Nenhum cliente cadastrado',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  ),
+                ),
+              if (_customers.isNotEmpty)
+                ListView.builder(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: customers.length,
+                  physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics(),
+                  ),
+                  itemCount: _customers.length,
                   itemBuilder: (context, index) {
-                    final cliente = customers.values.elementAt(index);
+                    final cliente = _customers.values.elementAt(index);
                     return CardListItem(
                       colorAvatar: Colors.blue,
                       title: cliente.name,
                       subTitle: 'CPF: ${cliente.cpf}\n${cliente.email}',
-                      onTap: () => onCustomerTap(cliente),
+                      onTap: () => widget.onCustomerTap(cliente),
                     );
                   },
-                );
-              },
-              customerError: (message) => Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Text(
-                    'Erro: $message',
-                    style: const TextStyle(fontSize: 16, color: Colors.red),
-                  ),
                 ),
-              ),
-              customerFound: (customer) => const SizedBox.shrink(),
-            );
-          },
+            ],
+          ),
         ),
       ],
     );

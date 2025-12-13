@@ -1,19 +1,19 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:system_loja/core/managers/configuracao_manager.dart';
+import 'package:system_loja/core/managers/configuration_repository.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/app_theme_settings.dart';
 
 void main() {
-  late ConfiguracaoManager manager;
+  late ConfigurationRepository manager;
   late String testDataFile;
 
   setUp(() {
     // Cria arquivo temporário para os testes
     testDataFile =
         'test/data/test_configuracao_${DateTime.now().millisecondsSinceEpoch}.json';
-    manager = ConfiguracaoManager(dataFile: testDataFile);
+    manager = ConfigurationRepository();
   });
 
   tearDown(() {
@@ -66,7 +66,7 @@ void main() {
       await manager.atualizarConfiguracao(novaConfig);
 
       // Cria novo manager para verificar persistência
-      final manager2 = ConfiguracaoManager(dataFile: testDataFile);
+      final manager2 = ConfigurationRepository();
 
       expect(manager2.configuracao.limiteEstoqueBaixo, equals(25));
       expect(manager2.configuracao.frequenciaBackup, equals('mensal'));
@@ -233,7 +233,7 @@ void main() {
         await manager.atualizarConfiguracao(configOriginal);
 
         // Cria novo manager para verificar serialização
-        final manager2 = ConfiguracaoManager(dataFile: testDataFile);
+        final manager2 = ConfigurationRepository();
 
         expect(
           manager2.configuracao.notificacoesAtivadas,

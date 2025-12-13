@@ -14,12 +14,16 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) => Customer.withData(
   registrationDate: json['registration_date'] == null
       ? null
       : DateTime.parse(json['registration_date'] as String),
+  lastUpdatedDate: json['last_updated_date'] == null
+      ? null
+      : DateTime.parse(json['last_updated_date'] as String),
 );
 
 Map<String, dynamic> _$CustomerToJson(Customer instance) => <String, dynamic>{
   'id': instance.id,
-  'customerInfo': instance.customerInfo.toJson(),
   'registration_date': instance.registrationDate.toIso8601String(),
+  'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
+  'customerInfo': instance.customerInfo.toJson(),
 };
 
 CustomerInfo _$CustomerInfoFromJson(Map<String, dynamic> json) => CustomerInfo(

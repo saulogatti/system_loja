@@ -13,8 +13,6 @@ class Produto extends DefaultObject {
   final int estoque;
   final String descricao;
   final String categoria;
-  @JsonKey(name: 'data_cadastro')
-  final DateTime dataCadastro;
 
   Produto({
     required super.id,
@@ -24,8 +22,9 @@ class Produto extends DefaultObject {
     required this.estoque,
     required this.descricao,
     required this.categoria,
-    DateTime? dataCadastro,
-  }) : dataCadastro = dataCadastro ?? DateTime.now();
+    super.lastUpdatedDate,
+    super.registrationDate,
+  });
 
   /// Cria um objeto a partir de JSON
   factory Produto.fromJson(Map<String, dynamic> json) =>
@@ -45,6 +44,7 @@ Preço: R\$ ${preco.toStringAsFixed(2)}
 Estoque: $estoque
 Descrição: $descricao
 Categoria: $categoria
-Data de Cadastro: ${dataCadastro.toString().split('.')[0]}''';
+Data de Atualização: ${lastUpdatedDate.toString().split('.')[0]}
+Data de Cadastro: ${registrationDate.toString().split('.')[0]}''';
   }
 }

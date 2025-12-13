@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/repository/user_repository.dart';
 import 'package:system_loja/core/models/usuario.dart';
+import 'package:system_loja/core/repository/user_repository.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 
@@ -23,9 +23,8 @@ class UsuarioCubit extends Cubit<UsuarioState> {
         nome: nome,
         email: email,
         senhaHash: senha.hashSenha(),
-        dataCadastro: DateTime.now(),
+
         nivelPermissao: nivelPermissao,
-        dataUltimaAtualizacao: DateTime.now(),
       );
 
       bool sucesso = await _manager.adicionarUsuario(usuario);

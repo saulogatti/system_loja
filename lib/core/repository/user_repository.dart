@@ -41,7 +41,7 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
           email: usuario.email,
           senhaHash: usuario.senhaHash,
           nivelPermissao: usuario.dadosUsuario.nivelPermissao,
-          dataCadastro: userExisting.dataCadastro,
+          dataCadastro: userExisting.registrationDate,
           dataUltimaAtualizacao: DateTime.now(),
         );
         PersistentDataStore persistentDataStore = PersistentDataStore(

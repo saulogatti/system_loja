@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/managers/configuracao_manager.dart';
+import 'package:system_loja/core/managers/configuration_repository.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
 import 'configuracoes_event.dart';
@@ -10,10 +10,10 @@ import 'configuracoes_state.dart';
 /// Utiliza o ConfiguracaoManager para persistência de dados
 /// e gerencia os estados da tela de configurações.
 class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
-  final ConfiguracaoManager _manager;
+  final ConfigurationRepository _manager;
 
-  ConfiguracoesBloc({ConfiguracaoManager? manager})
-    : _manager = manager ?? ConfiguracaoManager(),
+  ConfiguracoesBloc({ConfigurationRepository? manager})
+    : _manager = manager ?? ConfigurationRepository(),
       super(const ConfiguracoesInitial()) {
     on<CarregarConfiguracoesEvent>(_onCarregarConfiguracoes);
     on<AtualizarConfiguracoesEvent>(_onAtualizarConfiguracoes);
