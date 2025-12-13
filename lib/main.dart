@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/repository/user_repository.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_cubit.dart';
 import 'package:system_loja/screens/customer/bloc/customer_bloc.dart';
 import 'package:system_loja/screens/sales/sales_cubit.dart';
@@ -22,7 +23,7 @@ class SystemLojaApp extends StatelessWidget {
       providers: [
         BlocProvider<CustomerBloc>(create: (context) => CustomerBloc()),
         BlocProvider<SalesCubit>(create: (context) => SalesCubit()),
-        BlocProvider(create: (context) => UsuarioCubit()),
+        BlocProvider(create: (context) => UsuarioCubit(UserRepository())),
       ],
       child: ValueListenableBuilder(
         valueListenable: SettingsService().primaryColorNotifier,

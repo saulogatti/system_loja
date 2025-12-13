@@ -5,9 +5,9 @@ import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 
 class UsuarioCubit extends Cubit<UsuarioState> {
-  final UserRepository _manager = UserRepository();
+  final UserRepository _userRepository;
 
-  UsuarioCubit() : super(UsuarioState.initial());
+  UsuarioCubit(this._userRepository) : super(UsuarioState.initial());
 
   Future<void> adicionarUsuario({
     required String nome,
@@ -17,7 +17,7 @@ class UsuarioCubit extends Cubit<UsuarioState> {
   }) async {
     try {
       // Lógica para adicionar usuário
-      int usuarioId = await _manager.gerarProximoId(); // Exemplo de ID
+      int usuarioId = await _userRepository.gerarProximoId(); // Exemplo de ID
       final usuario = Usuario(
         id: usuarioId,
         nome: nome,
@@ -27,7 +27,7 @@ class UsuarioCubit extends Cubit<UsuarioState> {
         nivelPermissao: nivelPermissao,
       );
 
-      bool sucesso = await _manager.adicionarUsuario(usuario);
+      bool sucesso = await _userRepository.adicionarUsuario(usuario);
       if (sucesso) {
         emit(UsuarioState.usuarioAdicionado(usuario, true));
       } else {
@@ -44,7 +44,7 @@ class UsuarioCubit extends Cubit<UsuarioState> {
 
   Future<void> atualizarUsuario({required Usuario usuarioAtualizado}) async {
     try {
-      bool sucesso = await _manager.atualizarUsuario(usuarioAtualizado);
+      bool sucesso = await _userRepository.atualizarUsuario(usuarioAtualizado);
       if (sucesso) {
         emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
       } else {
@@ -59,9 +59,20 @@ class UsuarioCubit extends Cubit<UsuarioState> {
     }
   }
 
+  void loadUsuarios() async {
+    try {
+      final usuarios = await _userRepository.obterTodosUsuarios();
+      emit(UsuarioState.loadSuccess(usuarios: usuarios));
+    } catch (e) {
+      emit(
+        UsuarioState.loadFailure(errorMessage: 'Erro ao carregar usuários: $e'),
+      );
+    }
+  }
+
   Future<void> removerUsuario(int id) async {
     try {
-      bool sucesso = await _manager.removerUsuario(id);
+      bool sucesso = await _userRepository.removerUsuario(id);
       if (sucesso) {
         emit(UsuarioState.usuarioRemovido(id));
       } else {
@@ -75,6 +86,4 @@ class UsuarioCubit extends Cubit<UsuarioState> {
       );
     }
   }
-
-  void validarSenha(String value) {}
 }

@@ -20,7 +20,7 @@ class UsuarioScreen extends StatefulWidget {
 }
 
 class _UsuarioScreenState extends State<UsuarioScreen> {
-  final UsuarioCubit _bloc = UsuarioCubit();
+  late UsuarioCubit _bloc;
   final LogAtividadeManager _logManager = LogAtividadeManager();
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
@@ -30,7 +30,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   Usuario? _usuarioEditando;
   bool _senhaVisivel = false;
   final OverlayApp _overlayLoader = OverlayApp();
-  List<Usuario> _usuarios = [];
+  List<Usuario> _usuarios = List.empty(growable: true);
 
   @override
   Widget build(BuildContext context) {
@@ -378,6 +378,13 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     _emailController.dispose();
     _senhaController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = context.read<UsuarioCubit>();
+    _bloc.loadUsuarios();
   }
 
   Widget _buildDetailRow(String label, String value) {
