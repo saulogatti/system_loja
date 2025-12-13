@@ -17,7 +17,7 @@ O `ProductCategory` é um widget reutilizável que facilita a seleção e criaç
 ### Alternância de Modos
 - Inicia no modo dropdown se houver categorias cadastradas
 - Botão **+** (adicionar) alterna para modo de entrada manual
-- Botão **☰** (lista) retorna ao modo dropdown
+- Botão `Icons.list` (lista) retorna ao modo dropdown
 - Preserva o valor do controller durante alternância
 
 ### Validação
