@@ -77,6 +77,7 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                             descricaoController: _descricaoController,
                             categoriaController: _categoriaController,
                             onSubmit: _adicionarProduto,
+                            produtos: produtos,
                           ),
                           const SizedBox(height: 32),
                           ProductList(

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/produto.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/produto_state.dart';
+import 'package:system_loja/screens/products/widgets/product_category.dart';
 
 /// Tela de detalhes do produto com opções de edição e exclusão
 ///
@@ -55,26 +56,38 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Detalhes do Produto'),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          actions: [
-            if (!_isEditing)
-              IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: () {
-                  setState(() {
-                    _isEditing = true;
-                  });
-                },
-                tooltip: 'Editar',
-              ),
-            if (!_isEditing)
-              IconButton(icon: const Icon(Icons.delete), onPressed: _confirmarExclusao, tooltip: 'Deletar'),
-          ],
-        ),
-        body: SingleChildScrollView(
+      child: BlocBuilder<ProductCubit, ProductState>(
+        builder: (context, state) {
+          // Extrai lista de produtos do estado atual
+          List<Produto> produtos = [];
+          if (state is ProductStateInsertSuccess) {
+            produtos = state.produtos;
+          } else if (state is ProductStateUpdateSuccess) {
+            produtos = state.produtos;
+          } else if (state is ProductStateDeleteSuccess) {
+            produtos = state.produtos;
+          }
+
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Detalhes do Produto'),
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              actions: [
+                if (!_isEditing)
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      setState(() {
+                        _isEditing = true;
+                      });
+                    },
+                    tooltip: 'Editar',
+                  ),
+                if (!_isEditing)
+                  IconButton(icon: const Icon(Icons.delete), onPressed: _confirmarExclusao, tooltip: 'Deletar'),
+              ],
+            ),
+            body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
@@ -181,13 +194,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        TextFormField(
+                        ProductCategory(
                           controller: _categoriaController,
-                          decoration: const InputDecoration(
-                            labelText: 'Categoria',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.category),
-                          ),
+                          produtos: produtos,
                           enabled: _isEditing,
                         ),
                         const SizedBox(height: 16),
@@ -266,7 +275,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ],
             ),
           ),
-        ),
+        );
+        },
       ),
     );
   }
