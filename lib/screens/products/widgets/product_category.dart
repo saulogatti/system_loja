@@ -48,6 +48,7 @@ class _ProductCategoryState extends State<ProductCategory> {
   @override
   void initState() {
     super.initState();
+    // Atualiza categorias antes de inicializar valor, pois depende da lista
     _atualizarCategorias();
     _inicializarValor();
   }
@@ -62,14 +63,13 @@ class _ProductCategoryState extends State<ProductCategory> {
 
   /// Extrai categorias únicas dos produtos
   void _atualizarCategorias() {
-    final categoriasSet = <String>{};
-    for (final produto in widget.produtos) {
-      if (produto.categoria.isNotEmpty) {
-        categoriasSet.add(produto.categoria);
-      }
-    }
     setState(() {
-      _categorias = categoriasSet.toList()..sort();
+      _categorias = widget.produtos
+          .where((produto) => produto.categoria.isNotEmpty)
+          .map((produto) => produto.categoria)
+          .toSet()
+          .toList()
+        ..sort();
     });
   }
 

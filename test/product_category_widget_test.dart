@@ -467,8 +467,8 @@ void main() {
       expect(find.text('Eletrônicos'), findsOneWidget);
       expect(find.text('Livros'), findsOneWidget);
 
-      // Fecha o dropdown
-      await tester.tapAt(const Offset(10, 10));
+      // Fecha o dropdown pressionando ESC ou clicando fora
+      await tester.tapAt(tester.getCenter(find.byType(Scaffold)));
       await tester.pumpAndSettle();
 
       // Act - atualiza com nova lista de produtos
