@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/utils/string_extensions.dart';
-import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
+import 'package:system_loja/screens/configuracoes/widgets/usuario_delete_confirm_dialog.dart';
+import 'package:system_loja/screens/configuracoes/widgets/usuario_details_dialog.dart';
+import 'package:system_loja/screens/configuracoes/widgets/usuario_form.dart';
+import 'package:system_loja/screens/configuracoes/widgets/usuario_list.dart';
 import 'package:system_loja/screens/widgets/overlay_app_widget.dart';
 
 import '../../core/managers/log_atividade_manager.dart';
-import '../../core/models/extensions/nivel_permissao_extension.dart';
 import '../../core/models/log_atividade.dart';
 import '../../core/models/usuario.dart';
+import '../../core/utils/string_extensions.dart';
 
-//todo: Tela de gestão de usuários com listagem, adição, edição e exclusão. Esta muito grande, pensar em dividir em vários arquivos menores (widgets). Reaproveitar componentes como formulário de usuário, lista de usuários, etc. Alterar apenas este arquivo para composição dos widgets menores. Outros arquivos que ja existem Não é para ser alterados. Caso precise criar novos arquivos, criar na pasta widgets. Caso tenha dúvidas, me chamar.
+/// Tela de gestão de usuários com listagem, adição, edição e exclusão.
+///
+/// Esta tela foi refatorada em widgets menores para melhor manutenibilidade:
+/// - UsuarioForm: formulário de criação/edição
+/// - UsuarioList: lista de usuários cadastrados
+/// - UsuarioListItem: item individual da lista
+/// - UsuarioDetailsDialog: dialog com detalhes do usuário
+/// - UsuarioDeleteConfirmDialog: dialog de confirmação de exclusão
 class UsuarioScreen extends StatefulWidget {
   const UsuarioScreen({super.key});
 
@@ -28,7 +37,6 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   final _senhaController = TextEditingController();
   NivelPermissao _nivelPermissaoSelecionado = NivelPermissao.usuarioComum;
   Usuario? _usuarioEditando;
-  bool _senhaVisivel = false;
   final OverlayApp _overlayLoader = OverlayApp();
   List<Usuario> _usuarios = [];
 
@@ -52,7 +60,6 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
               );
             },
             loading: () {
-              // Pode mostrar um indicador de carregamento se desejar
               _overlayLoader.createHighlightOverlay(
                 label: 'Carregando...',
                 color: Colors.black,
@@ -87,7 +94,6 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
               );
               _usuarios.removeWhere((usuario) => usuario.id == id);
               if (_usuarioEditando?.id == id) {
-                // Já chama o setState dentro do método
                 _cancelarEdicao();
               } else {
                 setState(() {});
@@ -117,252 +123,32 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        _usuarioEditando == null
-                            ? 'Novo Usuário'
-                            : 'Editar Usuário',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _nomeController,
-                        decoration: const InputDecoration(
-                          labelText: 'Nome *',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.person),
-                        ),
-                        validator: (value) => combineValidators([
-                          (v) => validateRequired(v, 'Nome'),
-                          (v) => validateMinLength(v, 3, 'Nome'),
-                        ])(value),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: const InputDecoration(
-                          labelText: 'Email *',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.email),
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Email é obrigatório';
-                          }
-                          if (value.trim().isValidEmail() == false) {
-                            return 'Email inválido';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _senhaController,
-                        decoration: InputDecoration(
-                          labelText: _usuarioEditando == null
-                              ? 'Senha *'
-                              : 'Nova Senha (deixe vazio para manter)',
-                          border: const OutlineInputBorder(),
-                          prefixIcon: const Icon(Icons.lock),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _senhaVisivel
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _senhaVisivel = !_senhaVisivel;
-                              });
-                            },
-                          ),
-                          helperText:
-                              'Mínimo 8 caracteres, com maiúscula, minúscula e número',
-                          helperMaxLines: 2,
-                        ),
-                        obscureText: !_senhaVisivel,
-                        validator: (value) {
-                          // Se está editando e senha está vazia, não valida
-                          if (_usuarioEditando != null &&
-                              (value == null || value.isEmpty)) {
-                            return null;
-                          }
-                          // Se está criando novo usuário, senha é obrigatória
-                          if (_usuarioEditando == null &&
-                              (value == null || value.isEmpty)) {
-                            return 'Senha é obrigatória';
-                          }
-                          // Valida força da senha
-                          if (value != null &&
-                              value.isNotEmpty &&
-                              value.validarSenha() != null) {
-                            return value.validarSenha();
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      DropdownButtonFormField<NivelPermissao>(
-                        initialValue: _nivelPermissaoSelecionado,
-                        decoration: const InputDecoration(
-                          labelText: 'Nível de Permissão *',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.security),
-                        ),
-                        items: const [
-                          DropdownMenuItem(
-                            value: NivelPermissao.usuarioComum,
-                            child: Text('Usuário Comum'),
-                          ),
-                          DropdownMenuItem(
-                            value: NivelPermissao.administrador,
-                            child: Text('Administrador'),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          if (value != null) {
-                            setState(() {
-                              _nivelPermissaoSelecionado = value;
-                            });
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 24),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: _salvarUsuario,
-                              icon: Icon(
-                                _usuarioEditando == null
-                                    ? Icons.add
-                                    : Icons.save,
-                              ),
-                              label: Text(
-                                _usuarioEditando == null
-                                    ? 'Adicionar Usuário'
-                                    : 'Salvar Alterações',
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(16),
-                                textStyle: const TextStyle(fontSize: 16),
-                              ),
-                            ),
-                          ),
-                          if (_usuarioEditando != null) ...[
-                            const SizedBox(width: 8),
-                            ElevatedButton.icon(
-                              onPressed: _cancelarEdicao,
-                              icon: const Icon(Icons.cancel),
-                              label: const Text('Cancelar'),
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(16),
-                                backgroundColor: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                      const SizedBox(height: 32),
-                      const Text(
-                        'Usuários Cadastrados',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      if (_usuarios.isEmpty)
-                        const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(32.0),
-                            child: Text(
-                              'Nenhum usuário cadastrado',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                        )
-                      else
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _usuarios.length,
-                          itemBuilder: (context, index) {
-                            final usuario = _usuarios[index];
-                            return Card(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              child: ListTile(
-                                minLeadingWidth: 0,
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                minVerticalPadding: 0,
-                                titleAlignment: ListTileTitleAlignment.center,
-
-                                leading: CircleAvatar(
-                                  backgroundColor:
-                                      usuario.nivelPermissao ==
-                                          NivelPermissao.administrador
-                                      ? Colors.purple
-                                      : Colors.blue,
-                                  child: Icon(
-                                    usuario.nivelPermissao ==
-                                            NivelPermissao.administrador
-                                        ? Icons.admin_panel_settings
-                                        : Icons.person,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                title: Text(
-                                  usuario.nome,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  '${usuario.email}\n${_getNivelPermissaoTexto(usuario.nivelPermissao)}',
-                                ),
-                                isThreeLine: true,
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.edit,
-                                        color: Colors.blue,
-                                      ),
-                                      onPressed: () => _editarUsuario(usuario),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
-                                      ),
-                                      onPressed: () =>
-                                          _confirmarExclusao(usuario),
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  _mostrarDetalhesUsuario(usuario);
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    UsuarioForm(
+                      formKey: _formKey,
+                      nomeController: _nomeController,
+                      emailController: _emailController,
+                      senhaController: _senhaController,
+                      nivelPermissaoSelecionado: _nivelPermissaoSelecionado,
+                      usuarioEditando: _usuarioEditando,
+                      onSubmit: _salvarUsuario,
+                      onCancel: _cancelarEdicao,
+                      onPermissaoChanged: (value) {
+                        setState(() {
+                          _nivelPermissaoSelecionado = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 32),
+                    UsuarioList(
+                      usuarios: _usuarios,
+                      onEdit: _editarUsuario,
+                      onDelete: _confirmarExclusao,
+                      onTap: _mostrarDetalhesUsuario,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -380,27 +166,6 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     super.dispose();
   }
 
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.grey,
-              fontSize: 12,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(fontSize: 16)),
-        ],
-      ),
-    );
-  }
-
   void _cancelarEdicao() {
     setState(() {
       _usuarioEditando = null;
@@ -409,26 +174,10 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   }
 
   void _confirmarExclusao(Usuario usuario) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirmar Exclusão'),
-        content: Text('Deseja realmente excluir o usuário "${usuario.nome}"?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await _excluirUsuario(usuario);
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Excluir'),
-          ),
-        ],
-      ),
+    UsuarioDeleteConfirmDialog.show(
+      context,
+      usuario,
+      () => _excluirUsuario(usuario),
     );
   }
 
@@ -471,54 +220,16 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     }
   }
 
-  String _getNivelPermissaoTexto(NivelPermissao nivel) {
-    return nivel.toDisplayName();
-  }
-
   void _limparFormulario() {
     _formKey.currentState?.reset();
     _nomeController.clear();
     _emailController.clear();
     _senhaController.clear();
     _nivelPermissaoSelecionado = NivelPermissao.usuarioComum;
-    _senhaVisivel = false;
   }
 
   void _mostrarDetalhesUsuario(Usuario usuario) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(usuario.nome),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildDetailRow('ID', usuario.id.toString()),
-              _buildDetailRow('Email', usuario.email),
-              _buildDetailRow(
-                'Nível de Permissão',
-                _getNivelPermissaoTexto(usuario.nivelPermissao),
-              ),
-              _buildDetailRow(
-                'Data de Cadastro',
-                usuario.registrationDate.toString().split('.')[0],
-              ),
-              _buildDetailRow(
-                'Última Atualização',
-                usuario.lastUpdatedDate.toString().split('.')[0],
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Fechar'),
-          ),
-        ],
-      ),
-    );
+    UsuarioDetailsDialog.show(context, usuario);
   }
 
   void _salvarUsuario() async {
