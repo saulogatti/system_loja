@@ -504,5 +504,75 @@ void main() {
       expect(find.text('Eletrônicos'), findsNothing);
       expect(find.text('Livros'), findsNothing);
     });
+
+    testWidgets(
+        'deve preservar valor existente ao alternar de manual para dropdown',
+        (WidgetTester tester) async {
+      // Arrange
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ProductCategory(
+              controller: controller,
+              produtos: produtos,
+            ),
+          ),
+        ),
+      );
+
+      // Act - alterna para modo manual
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+
+      // Digita uma categoria que já existe
+      await tester.enterText(find.byType(TextFormField), 'Livros');
+      await tester.pump();
+
+      // Alterna de volta para dropdown
+      await tester.tap(find.byIcon(Icons.list));
+      await tester.pumpAndSettle();
+
+      // Assert - valor deve ser preservado e selecionado no dropdown
+      expect(controller.text, 'Livros');
+      final dropdown = tester.widget<DropdownButtonFormField<String>>(
+        find.byType(DropdownButtonFormField<String>),
+      );
+      expect(dropdown.value, 'Livros');
+    });
+
+    testWidgets(
+        'deve limpar valor não existente ao alternar de manual para dropdown',
+        (WidgetTester tester) async {
+      // Arrange
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ProductCategory(
+              controller: controller,
+              produtos: produtos,
+            ),
+          ),
+        ),
+      );
+
+      // Act - alterna para modo manual
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+
+      // Digita uma categoria que não existe
+      await tester.enterText(find.byType(TextFormField), 'CategoriaInexistente');
+      await tester.pump();
+
+      // Alterna de volta para dropdown
+      await tester.tap(find.byIcon(Icons.list));
+      await tester.pumpAndSettle();
+
+      // Assert - valor deve ser limpo pois não existe nas categorias
+      expect(controller.text, '');
+      final dropdown = tester.widget<DropdownButtonFormField<String>>(
+        find.byType(DropdownButtonFormField<String>),
+      );
+      expect(dropdown.value, isNull);
+    });
   });
 }

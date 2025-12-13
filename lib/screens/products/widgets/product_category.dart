@@ -92,7 +92,15 @@ class _ProductCategoryState extends State<ProductCategory> {
       if (_modoEntradaManual) {
         _categoriaSelecionada = null;
       } else {
-        widget.controller.clear();
+        // Preserva o valor do controller ao alternar para dropdown
+        // Se o valor existir nas categorias, seleciona-o no dropdown
+        final valorAtual = widget.controller.text.trim();
+        if (valorAtual.isNotEmpty && _categorias.contains(valorAtual)) {
+          _categoriaSelecionada = valorAtual;
+        } else {
+          // Valor não existe nas categorias, limpa o controller
+          widget.controller.clear();
+        }
       }
     });
   }
