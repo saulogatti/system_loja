@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/screens/customer/bloc/customer_bloc.dart';
-import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
-import 'package:system_loja/screens/widgets/text_form_field_email.dart';
-import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
+import 'package:system_loja/screens/customer/widgets/customer_action_buttons.dart';
+import 'package:system_loja/screens/customer/widgets/customer_avatar.dart';
+import 'package:system_loja/screens/customer/widgets/customer_info_form.dart';
+import 'package:system_loja/screens/customer/widgets/customer_system_info_card.dart';
 
 /// Tela de detalhes do cliente com opções de edição e exclusão
 ///
@@ -35,9 +36,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     return BlocListener<CustomerBloc, CustomerBlocState>(
       listener: (context, state) {
         state.whenOrNull(
-          customersLoaded: (customers) {
-            // Cliente foi atualizado ou deletado com sucesso
-            if (_isEditing) {
+          customersLoaded: (customers, stateType) {
+            if (stateType == EnumStateCustomerLoaded.updateCustomer) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Cliente atualizado com sucesso!'),
@@ -47,8 +47,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               setState(() {
                 _isEditing = false;
               });
-            } else {
-              // Cliente foi deletado
+            } else if (stateType == EnumStateCustomerLoaded.deleteCustomer) {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -95,147 +94,26 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Avatar e nome
-                Center(
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.blue,
-                    child: Text(
-                      widget.customer.name.trim().isNotEmpty
-                          ? widget.customer.name.trim()[0].toUpperCase()
-                          : '?',
-                      style: const TextStyle(
-                        fontSize: 40,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+                CustomerAvatar(name: widget.customer.name),
                 const SizedBox(height: 24),
-
-                // Informações do cliente
-                Card(
-                  elevation: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Informações Pessoais',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _nomeController,
-                          decoration: const InputDecoration(
-                            labelText: 'Nome *',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.person),
-                          ),
-                          enabled: _isEditing,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Nome é obrigatório';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormFieldCpf(cpfController: _cpfController),
-                        const SizedBox(height: 16),
-                        TextFormFieldEmail(
-                          emailController: _emailController,
-                          isEditing: _isEditing,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormFieldPhone(
-                          telefoneController: _telefoneController,
-                          isEditing: _isEditing,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _enderecoController,
-                          decoration: const InputDecoration(
-                            labelText: 'Endereço',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.home),
-                          ),
-                          enabled: _isEditing,
-                          maxLines: 2,
-                        ),
-                      ],
-                    ),
-                  ),
+                CustomerInfoForm(
+                  isEditing: _isEditing,
+                  nomeController: _nomeController,
+                  cpfController: _cpfController,
+                  emailController: _emailController,
+                  telefoneController: _telefoneController,
+                  enderecoController: _enderecoController,
                 ),
                 const SizedBox(height: 16),
-
-                // Card com informações adicionais
-                Card(
-                  elevation: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Informações do Sistema',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        _buildInfoRow(
-                          'ID',
-                          widget.customer.id.toString(),
-                          Icons.numbers,
-                        ),
-                        const Divider(),
-                        _buildInfoRow(
-                          'Data de Cadastro',
-                          _formatDate(widget.customer.registrationDate),
-                          Icons.calendar_today,
-                        ),
-                      ],
-                    ),
-                  ),
+                CustomerSystemInfoCard(
+                  customer: widget.customer,
+                  formatDate: _formatDate,
                 ),
-
                 const SizedBox(height: 24),
-
-                // Botões de ação quando em modo de edição
                 if (_isEditing)
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            setState(() {
-                              _isEditing = false;
-                              // Restaurar valores originais
-                              _nomeController.text = widget.customer.name;
-                              _emailController.text = widget.customer.email;
-                              _telefoneController.text = widget.customer.phone;
-                              _enderecoController.text =
-                                  widget.customer.address;
-                            });
-                          },
-                          child: const Text('Cancelar'),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: _salvarAlteracoes,
-                          child: const Text('Salvar Alterações'),
-                        ),
-                      ),
-                    ],
+                  CustomerActionButtons(
+                    onCancel: _cancelEditing,
+                    onSave: _salvarAlteracoes,
                   ),
               ],
             ),
@@ -265,39 +143,14 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     _enderecoController = TextEditingController(text: widget.customer.address);
   }
 
-  Widget _buildInfoRow(String label, String value, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: Colors.grey[600]),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+  void _cancelEditing() {
+    setState(() {
+      _isEditing = false;
+      _nomeController.text = widget.customer.name;
+      _emailController.text = widget.customer.email;
+      _telefoneController.text = widget.customer.phone;
+      _enderecoController.text = widget.customer.address;
+    });
   }
 
   void _confirmarExclusao() {
@@ -315,7 +168,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context); // Fecha o diálogo
+              Navigator.pop(context);
               context.read<CustomerBloc>().add(
                 CustomerBlocEvent.deleteCustomer(id: widget.customer.id),
               );

@@ -28,7 +28,7 @@ class SalesRepository extends RepositoryManager {
         throw Exception('Erro ao carregar vendas: $errorMessage');
     }
   }
-
+// TODO: Analisar como salvar itens relacionados à venda e decrementar estoque dos produtos vendidos.
   Future<void> saveSale(Invoice invoice) async {
     final PersistentDataStore dataStore = PersistentDataStore(
       id: invoice.id,

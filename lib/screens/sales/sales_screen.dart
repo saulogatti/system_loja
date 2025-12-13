@@ -6,6 +6,7 @@ import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/sales/sales_cubit.dart';
 import 'package:system_loja/screens/sales/sales_state.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
+import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
 import '../../core/models/invoice.dart';
@@ -340,7 +341,7 @@ class _SalesViewState extends State<SalesView> {
         title: const Text('Cadastro de Nota Fiscal'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: BlocListener<SalesCubit, SalesState>(
+      body: BlocConsumer<SalesCubit, SalesState>(
         bloc: _salesCubit,
         listener: (context, state) {
           switch (state) {
@@ -374,7 +375,7 @@ class _SalesViewState extends State<SalesView> {
             case SalesLoadedProducts():
               _produtoManager = state.products;
             case SalesLoading():
-              // TODO: Implementar um dialog ou Overlay de loading (acho melhor um Overlay...)
+              // Loading overlay é exibido através do builder
               break;
             case SalesSaved():
               _mapToNotaFiscal = state.items;
@@ -389,45 +390,65 @@ class _SalesViewState extends State<SalesView> {
               Navigator.pop(context, true);
               break;
             case SalesLoadingProducts():
-            // TODO: Pensar sobre implementar um dialog ou Overlay de loading (acho melhor um Overlay...)
+              // Loading overlay é exibido através do builder
+              break;
           }
         },
-        child: Column(
-          children: [
-            Expanded(
-              child: _mapToNotaFiscal.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.receipt_long, size: 80, color: Colors.grey[400]),
-                          const SizedBox(height: 16),
-                          const Text(
-                            'Nenhuma nota fiscal cadastrada',
-                            style: TextStyle(fontSize: 18, color: Colors.grey),
+        builder: (context, state) {
+          return Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                    child: _mapToNotaFiscal.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.receipt_long,
+                                  size: 80,
+                                  color: Colors.grey[400],
+                                ),
+                                const SizedBox(height: 16),
+                                const Text(
+                                  'Nenhuma nota fiscal cadastrada',
+                                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          )
+                        : ListView.builder(
+                            padding: const EdgeInsets.all(16),
+                            itemCount: _mapToNotaFiscal.length,
+                            itemBuilder: (context, index) {
+                              final nf = _mapToNotaFiscal.values.elementAt(index);
+                              return CardListItem(
+                                colorAvatar: Colors.orange,
+                                title: 'Nota: ${nf.data.invoiceNumber}',
+                                subTitle:
+                                    'Cliente: ${nf.data.customerName}\nR\$ ${nf.data.totalValue.toStringAsFixed(2)}',
+                                onTap: () {
+                                  _mostrarDetalhesNota(nf);
+                                },
+                              );
+                            },
                           ),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: _mapToNotaFiscal.length,
-                      itemBuilder: (context, index) {
-                        final nf = _mapToNotaFiscal.values.elementAt(index);
-                        return CardListItem(
-                          colorAvatar: Colors.orange,
-                          title: 'Nota: ${nf.data.invoiceNumber}',
-                          subTitle:
-                              'Cliente: ${nf.data.customerName}\nR\$ ${nf.data.totalValue.toStringAsFixed(2)}',
-                          onTap: () {
-                            _mostrarDetalhesNota(nf);
-                          },
-                        );
-                      },
-                    ),
-            ),
-          ],
-        ),
+                  ),
+                ],
+              ),
+              // Exibe o overlay de loading quando necessário
+              if (state is SalesLoading || state is SalesLoadingProducts)
+                LoadingOverlay(
+                  message: switch (state) {
+                    SalesLoading() => 'Carregando vendas...',
+                    SalesLoadingProducts() => 'Carregando produtos...',
+                    _ => 'Carregando...',
+                  },
+                ),
+            ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _adicionarNotaFiscal,

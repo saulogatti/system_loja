@@ -571,10 +571,7 @@ return initial(_that);case _Loading():
 return loading(_that);case _CustomersLoaded():
 return customersLoaded(_that);case _CustomerError():
 return customerError(_that);case _CustomerFound():
-return customerFound(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return customerFound(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -613,12 +610,12 @@ return customerFound(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( Map<int, Customer> customers)?  customersLoaded,TResult Function( String message)?  customerError,TResult Function( Customer customer)?  customerFound,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( Map<int, Customer> customers,  EnumStateCustomerLoaded stateType)?  customersLoaded,TResult Function( String message)?  customerError,TResult Function( Customer customer)?  customerFound,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _CustomersLoaded() when customersLoaded != null:
-return customersLoaded(_that.customers);case _CustomerError() when customerError != null:
+return customersLoaded(_that.customers,_that.stateType);case _CustomerError() when customerError != null:
 return customerError(_that.message);case _CustomerFound() when customerFound != null:
 return customerFound(_that.customer);case _:
   return orElse();
@@ -638,17 +635,14 @@ return customerFound(_that.customer);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( Map<int, Customer> customers)  customersLoaded,required TResult Function( String message)  customerError,required TResult Function( Customer customer)  customerFound,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( Map<int, Customer> customers,  EnumStateCustomerLoaded stateType)  customersLoaded,required TResult Function( String message)  customerError,required TResult Function( Customer customer)  customerFound,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _CustomersLoaded():
-return customersLoaded(_that.customers);case _CustomerError():
+return customersLoaded(_that.customers,_that.stateType);case _CustomerError():
 return customerError(_that.message);case _CustomerFound():
-return customerFound(_that.customer);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return customerFound(_that.customer);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -662,12 +656,12 @@ return customerFound(_that.customer);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( Map<int, Customer> customers)?  customersLoaded,TResult? Function( String message)?  customerError,TResult? Function( Customer customer)?  customerFound,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( Map<int, Customer> customers,  EnumStateCustomerLoaded stateType)?  customersLoaded,TResult? Function( String message)?  customerError,TResult? Function( Customer customer)?  customerFound,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _CustomersLoaded() when customersLoaded != null:
-return customersLoaded(_that.customers);case _CustomerError() when customerError != null:
+return customersLoaded(_that.customers,_that.stateType);case _CustomerError() when customerError != null:
 return customerError(_that.message);case _CustomerFound() when customerFound != null:
 return customerFound(_that.customer);case _:
   return null;
@@ -745,7 +739,7 @@ String toString() {
 
 
 class _CustomersLoaded implements CustomerBlocState {
-  const _CustomersLoaded({required final  Map<int, Customer> customers}): _customers = customers;
+  const _CustomersLoaded({required final  Map<int, Customer> customers, required this.stateType}): _customers = customers;
   
 
  final  Map<int, Customer> _customers;
@@ -755,6 +749,7 @@ class _CustomersLoaded implements CustomerBlocState {
   return EqualUnmodifiableMapView(_customers);
 }
 
+ final  EnumStateCustomerLoaded stateType;
 
 /// Create a copy of CustomerBlocState
 /// with the given fields replaced by the non-null parameter values.
@@ -766,16 +761,16 @@ _$CustomersLoadedCopyWith<_CustomersLoaded> get copyWith => __$CustomersLoadedCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CustomersLoaded&&const DeepCollectionEquality().equals(other._customers, _customers));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CustomersLoaded&&const DeepCollectionEquality().equals(other._customers, _customers)&&(identical(other.stateType, stateType) || other.stateType == stateType));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_customers));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_customers),stateType);
 
 @override
 String toString() {
-  return 'CustomerBlocState.customersLoaded(customers: $customers)';
+  return 'CustomerBlocState.customersLoaded(customers: $customers, stateType: $stateType)';
 }
 
 
@@ -786,7 +781,7 @@ abstract mixin class _$CustomersLoadedCopyWith<$Res> implements $CustomerBlocSta
   factory _$CustomersLoadedCopyWith(_CustomersLoaded value, $Res Function(_CustomersLoaded) _then) = __$CustomersLoadedCopyWithImpl;
 @useResult
 $Res call({
- Map<int, Customer> customers
+ Map<int, Customer> customers, EnumStateCustomerLoaded stateType
 });
 
 
@@ -803,10 +798,11 @@ class __$CustomersLoadedCopyWithImpl<$Res>
 
 /// Create a copy of CustomerBlocState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? customers = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? customers = null,Object? stateType = null,}) {
   return _then(_CustomersLoaded(
 customers: null == customers ? _self._customers : customers // ignore: cast_nullable_to_non_nullable
-as Map<int, Customer>,
+as Map<int, Customer>,stateType: null == stateType ? _self.stateType : stateType // ignore: cast_nullable_to_non_nullable
+as EnumStateCustomerLoaded,
   ));
 }
 

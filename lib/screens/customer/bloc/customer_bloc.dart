@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:system_loja/core/managers/exceptions/customer_exception.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/repository/customer_repository.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
@@ -36,11 +37,16 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
       await _customerRepository.deleteWithId(event.id);
       // Recarrega a lista de clientes após deletar
       final customers = await _customerRepository.loadAll();
-      emit(CustomerBlocState.customersLoaded(customers: customers));
-    } catch (e) {
+      emit(
+        CustomerBlocState.customersLoaded(
+          customers: customers,
+          stateType: EnumStateCustomerLoaded.deleteCustomer,
+        ),
+      );
+    } on CustomerException catch (e) {
       emit(
         CustomerBlocState.customerError(
-          message: 'Erro ao deletar cliente: ${e.toString()}',
+          message: 'Erro ao deletar cliente: ${e.message}',
         ),
       );
     }
@@ -62,10 +68,10 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
           ),
         );
       }
-    } catch (e) {
+    } on CustomerException catch (e) {
       emit(
         CustomerBlocState.customerError(
-          message: 'Erro ao buscar cliente: ${e.toString()}',
+          message: 'Erro ao buscar cliente: ${e.message}',
         ),
       );
     }
@@ -79,11 +85,16 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
     emit(const CustomerBlocState.loading());
     try {
       final customers = await _customerRepository.loadAll();
-      emit(CustomerBlocState.customersLoaded(customers: customers));
-    } catch (e) {
+      emit(
+        CustomerBlocState.customersLoaded(
+          customers: customers,
+          stateType: EnumStateCustomerLoaded.customersLoaded,
+        ),
+      );
+    } on CustomerException catch (e) {
       emit(
         CustomerBlocState.customerError(
-          message: 'Erro ao carregar clientes: ${e.toString()}',
+          message: 'Erro ao carregar clientes: ${e.message}',
         ),
       );
     }
@@ -135,13 +146,16 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
 
       // Recarrega a lista de clientes após adicionar
       final customers = await _customerRepository.loadAll();
-      emit(CustomerBlocState.customersLoaded(customers: customers));
-    } catch (e) {
+      emit(
+        CustomerBlocState.customersLoaded(
+          customers: customers,
+          stateType: EnumStateCustomerLoaded.registerCustomer,
+        ),
+      );
+    } on CustomerException catch (e) {
       emit(
         CustomerBlocState.customerError(
-          message: e.toString().contains('CPF já cadastrado')
-              ? 'Erro: CPF já cadastrado!'
-              : 'Erro ao cadastrar cliente: ${e.toString()}',
+          message: 'Erro ao cadastrar cliente: ${e.message}',
         ),
       );
     }
@@ -157,11 +171,16 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
       await _customerRepository.updateCustomer(event.customer);
       // Recarrega a lista de clientes após atualizar
       final customers = await _customerRepository.loadAll();
-      emit(CustomerBlocState.customersLoaded(customers: customers));
-    } catch (e) {
+      emit(
+        CustomerBlocState.customersLoaded(
+          customers: customers,
+          stateType: EnumStateCustomerLoaded.updateCustomer,
+        ),
+      );
+    } on CustomerException catch (e) {
       emit(
         CustomerBlocState.customerError(
-          message: 'Erro ao atualizar cliente: ${e.toString()}',
+          message: 'Erro ao atualizar cliente: ${e.message}',
         ),
       );
     }
