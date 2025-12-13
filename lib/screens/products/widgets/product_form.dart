@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/utils/input_formatters.dart';
+import 'package:system_loja/core/utils/validators.dart';
 
 /// Widget do formulário de cadastro de produto
 ///
@@ -34,10 +36,7 @@ class ProductForm extends StatelessWidget {
         children: [
           const Text(
             'Novo Produto',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
           TextFormField(
@@ -79,16 +78,13 @@ class ProductForm extends StatelessWidget {
                     labelText: 'Preço (R\$) *',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.attach_money),
+                    helperText: 'Ex: 10.50',
                   ),
-                  keyboardType: TextInputType.numberWithOptions(
+                  keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Preço é obrigatório';
-                    }
-                    return null;
-                  },
+                  inputFormatters: [PriceInputFormatter()],
+                  validator: validatePrice,
                 ),
               ),
               const SizedBox(width: 16),
@@ -99,14 +95,11 @@ class ProductForm extends StatelessWidget {
                     labelText: 'Estoque *',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.inventory),
+                    helperText: 'Ex: 10',
                   ),
                   keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Estoque é obrigatório';
-                    }
-                    return null;
-                  },
+                  inputFormatters: [QuantityInputFormatter()],
+                  validator: validateStock,
                 ),
               ),
             ],

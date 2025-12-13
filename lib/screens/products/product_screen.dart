@@ -39,7 +39,8 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
       value: _produtoCubit,
       child: BlocListener<ProductCubit, ProductState>(
         listener: (context, state) {
-          if (state is ProductStateUpdateSuccess || state is ProductStateDeleteSuccess) {
+          if (state is ProductStateUpdateSuccess ||
+              state is ProductStateDeleteSuccess) {
             // Recarregar a lista após atualização ou exclusão
             _produtoCubit.loadAllProducts();
           }
@@ -78,7 +79,10 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                             onSubmit: _adicionarProduto,
                           ),
                           const SizedBox(height: 32),
-                          ProductList(produtos: produtos, onProductTap: _mostrarDetalhesProduto),
+                          ProductList(
+                            produtos: produtos,
+                            onProductTap: _mostrarDetalhesProduto,
+                          ),
                         ],
                       ),
                     ),
@@ -124,21 +128,23 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
       final preco = double.parse(_precoController.text.trim());
       final codigo = _codigoController.text.trim();
       final estoque = int.parse(_estoqueController.text.trim());
-final nome = _nomeController.text.trim();
-    
+      final nome = _nomeController.text.trim();
 
-      _produtoCubit.adicionarProduto( 
+      _produtoCubit.adicionarProduto(
         nome: nome,
         codigo: codigo,
         preco: preco,
         estoque: estoque,
         descricao: _descricaoController.text.trim(),
-        categoria: _categoriaController.text.trim(),);
+        categoria: _categoriaController.text.trim(),
+      );
       _mostrarSucesso('Produto "$nome" $_mensagemSucesso');
       _limparFormulario();
     } on FormatException catch (e) {
       // Isto não deve acontecer devido aos validators, mas tratamos por segurança
-      _mostrarErro('Erro de formato ao processar dados numéricos: ${e.message}');
+      _mostrarErro(
+        'Erro de formato ao processar dados numéricos: ${e.message}',
+      );
     } catch (e) {
       // Captura erros inesperados do repositório/banco de dados
       _mostrarErro('Erro ao salvar produto: ${e.toString()}');
@@ -171,15 +177,15 @@ final nome = _nomeController.text.trim();
 
   /// Exibe mensagem de erro em SnackBar.
   void _mostrarErro(String mensagem) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.red));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(mensagem), backgroundColor: Colors.red),
+    );
   }
 
   /// Exibe mensagem de sucesso em SnackBar.
   void _mostrarSucesso(String mensagem) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.green));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(mensagem), backgroundColor: Colors.green),
+    );
   }
 }
