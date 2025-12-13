@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/default/default_object.dart';
 
@@ -12,7 +13,7 @@ class Produto extends DefaultObject {
   final int estoque;
   final String descricao;
   final String categoria;
-@JsonKey(name: 'data_cadastro')
+  @JsonKey(name: 'data_cadastro')
   final DateTime dataCadastro;
 
   Produto({
@@ -27,7 +28,8 @@ class Produto extends DefaultObject {
   }) : dataCadastro = dataCadastro ?? DateTime.now();
 
   /// Cria um objeto a partir de JSON
-  factory Produto.fromJson(Map<String, dynamic> json) => _$ProdutoFromJson(json);
+  factory Produto.fromJson(Map<String, dynamic> json) =>
+      _$ProdutoFromJson(json);
 
   /// Converte o objeto para JSON
   @override

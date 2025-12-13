@@ -1,23 +1,12 @@
 // ignore_for_file: avoid_dynamic_calls
 
 import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:system_loja/data/storage/json_storage.dart';
 import 'package:system_loja/data/storage/storage_data.dart';
-
-/// Implementação fake do PathProvider para testes
-class FakePathProviderPlatform extends Fake
-    with MockPlatformInterfaceMixin
-    implements PathProviderPlatform {
-  @override
-  Future<String?> getApplicationSupportPath() async {
-    // Retorna um diretório temporário para testes
-    final tempDir = Directory.systemTemp.createTempSync('json_storage_test_');
-    return tempDir.path;
-  }
-}
 
 /// Testes do JsonDataStorage
 ///
@@ -55,7 +44,10 @@ void main() {
   group('JsonDataStorage - Testes de save', () {
     test('deve salvar um novo objeto com sucesso', () async {
       // Arrange
-      final objeto = PersistentDataStore(id: 1, data: {'nome': 'Teste', 'valor': 123});
+      final objeto = PersistentDataStore(
+        id: 1,
+        data: {'nome': 'Teste', 'valor': 123},
+      );
 
       // Act
       final success = await storage.save(objeto);
@@ -73,10 +65,16 @@ void main() {
 
     test('deve atualizar um objeto existente', () async {
       // Arrange
-      final objeto1 = PersistentDataStore(id: 1, data: {'nome': 'Teste', 'valor': 123});
+      final objeto1 = PersistentDataStore(
+        id: 1,
+        data: {'nome': 'Teste', 'valor': 123},
+      );
       await storage.save(objeto1);
 
-      final objeto2 = PersistentDataStore(id: 1, data: {'nome': 'Teste Atualizado', 'valor': 456});
+      final objeto2 = PersistentDataStore(
+        id: 1,
+        data: {'nome': 'Teste Atualizado', 'valor': 456},
+      );
 
       // Act
       final success = await storage.save(objeto2);
@@ -116,7 +114,10 @@ void main() {
       // Arrange
       final objetos = List.generate(
         10,
-        (i) => PersistentDataStore(id: i + 1, data: {'index': i, 'nome': 'Objeto $i'}),
+        (i) => PersistentDataStore(
+          id: i + 1,
+          data: {'index': i, 'nome': 'Objeto $i'},
+        ),
       );
 
       // Act - Salva todos os objetos concorrentemente
@@ -167,7 +168,11 @@ void main() {
       final objeto = PersistentDataStore(
         id: 1,
         data: {
-          'usuario': {'nome': 'João Silva', 'email': 'joao@email.com', 'idade': 30},
+          'usuario': {
+            'nome': 'João Silva',
+            'email': 'joao@email.com',
+            'idade': 30,
+          },
           'configuracoes': {'tema': 'escuro', 'notificacoes': true},
           'tags': ['admin', 'developer'],
         },
@@ -192,7 +197,10 @@ void main() {
   group('JsonDataStorage - Testes de fetchById', () {
     test('deve buscar um objeto existente por ID', () async {
       // Arrange
-      final objeto = PersistentDataStore(id: 42, data: {'descricao': 'Teste de busca'});
+      final objeto = PersistentDataStore(
+        id: 42,
+        data: {'descricao': 'Teste de busca'},
+      );
       await storage.save(objeto);
 
       // Act
@@ -315,7 +323,10 @@ void main() {
       expect(result.asSuccess.data['status'], equals('criado'));
 
       // Update
-      final objetoAtualizado = PersistentDataStore(id: 100, data: {'status': 'atualizado'});
+      final objetoAtualizado = PersistentDataStore(
+        id: 100,
+        data: {'status': 'atualizado'},
+      );
       success = await storage.save(objetoAtualizado);
       expect(success, isTrue);
 
@@ -342,12 +353,16 @@ void main() {
 
       // Salvamentos
       for (var i = 6; i <= 10; i++) {
-        futures.add(storage.save(PersistentDataStore(id: i, data: {'index': i})));
+        futures.add(
+          storage.save(PersistentDataStore(id: i, data: {'index': i})),
+        );
       }
 
       // Atualizações
       for (var i = 1; i <= 3; i++) {
-        futures.add(storage.save(PersistentDataStore(id: i, data: {'updated': true})));
+        futures.add(
+          storage.save(PersistentDataStore(id: i, data: {'updated': true})),
+        );
       }
 
       // Deleções
@@ -465,7 +480,8 @@ void main() {
       // Act - Tenta fazer 100 atualizações concorrentes
       final futures = List.generate(
         100,
-        (i) => storage.save(PersistentDataStore(id: 1, data: {'versao': i + 1})),
+        (i) =>
+            storage.save(PersistentDataStore(id: 1, data: {'versao': i + 1})),
       );
 
       final results = await Future.wait(futures);
@@ -486,7 +502,9 @@ void main() {
       // Act - Alterna entre save e delete rapidamente
       final futures = <Future>[];
       for (var i = 0; i < 50; i++) {
-        futures.add(storage.save(PersistentDataStore(id: 1, data: {'iteration': i})));
+        futures.add(
+          storage.save(PersistentDataStore(id: 1, data: {'iteration': i})),
+        );
         if (i % 5 == 0) {
           futures.add(storage.delete(1));
         }
@@ -501,4 +519,16 @@ void main() {
       expect(result.isSuccessful || result.hasError, isTrue);
     });
   });
+}
+
+/// Implementação fake do PathProvider para testes
+class FakePathProviderPlatform extends Fake
+    with MockPlatformInterfaceMixin
+    implements PathProviderPlatform {
+  @override
+  Future<String?> getApplicationSupportPath() async {
+    // Retorna um diretório temporário para testes
+    final tempDir = Directory.systemTemp.createTempSync('json_storage_test_');
+    return tempDir.path;
+  }
 }

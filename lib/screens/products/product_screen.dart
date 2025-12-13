@@ -124,20 +124,17 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
       final preco = double.parse(_precoController.text.trim());
       final codigo = _codigoController.text.trim();
       final estoque = int.parse(_estoqueController.text.trim());
+final nome = _nomeController.text.trim();
+    
 
-      // Cria e adiciona produto
-      final produto = Produto(
-        id: 0, // ID será gerado automaticamente
-        nome: _nomeController.text.trim(),
+      _produtoCubit.adicionarProduto( 
+        nome: nome,
         codigo: codigo,
         preco: preco,
         estoque: estoque,
         descricao: _descricaoController.text.trim(),
-        categoria: _categoriaController.text.trim(),
-      );
-
-      _produtoCubit.adicionarProduto(produto);
-      _mostrarSucesso('Produto "${produto.nome}" $_mensagemSucesso');
+        categoria: _categoriaController.text.trim(),);
+      _mostrarSucesso('Produto "$nome" $_mensagemSucesso');
       _limparFormulario();
     } on FormatException catch (e) {
       // Isto não deve acontecer devido aos validators, mas tratamos por segurança

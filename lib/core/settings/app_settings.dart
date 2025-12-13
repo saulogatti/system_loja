@@ -89,7 +89,7 @@ class AppSettings {
     this.exigirSenha = false,
     this.tempoBloqueioMinutos = 15,
     this.permitirMultiplosUsuarios = false,
-    this.typeCache = EnumTypeCache.json,
+    this.typeCache = EnumTypeCache.sql,
     this.corPrimaria = EnumColorAppThemeSettings.azul,
   });
 

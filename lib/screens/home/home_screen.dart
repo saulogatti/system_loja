@@ -19,6 +19,50 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final items = [
+      _buildMenuCard(
+        context,
+        title: 'Cadastro de Cliente',
+        icon: Icons.person,
+        color: Colors.blue,
+        onTap: () => _navigateToScreen(context, const CustomerView()),
+      ),
+      _buildMenuCard(
+        context,
+        title: 'Cadastro de Produto',
+        icon: Icons.inventory,
+        color: Colors.green,
+        onTap: () => _navigateToScreen(context, const ProductViewScreen()),
+      ),
+      _buildMenuCard(
+        context,
+        title: 'Cadastro de Nota Fiscal',
+        icon: Icons.receipt_long,
+        color: Colors.orange,
+        onTap: () => _navigateToScreen(context, const SalesView()),
+      ),
+      _buildMenuCard(
+        context,
+        title: 'Gestão de Usuários',
+        icon: Icons.people,
+        color: Colors.purple,
+        onTap: () => _navigateToScreen(context, const UsuarioScreen()),
+      ),
+      _buildMenuCard(
+        context,
+        title: 'Configurações do Sistema',
+        icon: Icons.settings,
+        color: Colors.teal,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ConfiguracoesScreen(),
+            ),
+          );
+        },
+      ),
+    ];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sistema de Gerenciamento de Loja'),
@@ -52,76 +96,18 @@ class HomeScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final width = constraints.maxWidth;
-                  final crossAxisCount = width > 800
-                      ? 3
-                      : (width > 480 ? 2 : 1);
-                  final childAspectRatio = crossAxisCount == 1 ? 5.0 : 3.0;
 
-                  final items = [
-                    _buildMenuCard(
-                      context,
-                      title: 'Cadastro de Cliente',
-                      icon: Icons.person,
-                      color: Colors.blue,
-                      onTap: () =>
-                          _navigateToScreen(context, const CustomerView()),
-                    ),
-                    _buildMenuCard(
-                      context,
-                      title: 'Cadastro de Produto',
-                      icon: Icons.inventory,
-                      color: Colors.green,
-                      onTap: () =>
-                          _navigateToScreen(context, const ProductViewScreen()),
-                    ),
-                    _buildMenuCard(
-                      context,
-                      title: 'Cadastro de Nota Fiscal',
-                      icon: Icons.receipt_long,
-                      color: Colors.orange,
-                      onTap: () =>
-                          _navigateToScreen(context, const SalesView()),
-                    ),
-                    _buildMenuCard(
-                      context,
-                      title: 'Gestão de Usuários',
-                      icon: Icons.people,
-                      color: Colors.purple,
-                      onTap: () =>
-                          _navigateToScreen(context, const UsuarioScreen()),
-                    ),
-                    _buildMenuCard(
-                      context,
-                      title: 'Configurações do Sistema',
-                      icon: Icons.settings,
-                      color: Colors.teal,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ConfiguracoesScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ];
-
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: childAspectRatio,
-                    ),
-                    itemCount: items.length,
-                    itemBuilder: (context, index) => items[index],
-                  );
-                },
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 320, // cada card no máximo 320px
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 1.5,
+                ),
+                itemCount: items.length,
+                itemBuilder: (context, index) => items[index],
               ),
             ],
           ),
@@ -151,7 +137,7 @@ class HomeScreen extends StatelessWidget {
       elevation: 4,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        // borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Row(
@@ -164,19 +150,24 @@ class HomeScreen extends StatelessWidget {
                 ),
                 child: Icon(icon, size: 32, color: color),
               ),
-              const SizedBox(width: 20),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    overflow: TextOverflow.ellipsis,
                   ),
+                  maxLines: 2,
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              Align(
+                alignment: Alignment.centerRight,
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),
