@@ -38,13 +38,12 @@ class UsuarioDetailsDialog extends StatelessWidget {
             ),
             _buildDetailRow(
               'Data de Cadastro',
-              usuario.registrationDate.toString().split('.')[0],
+              DateFormat('dd/MM/yyyy HH:mm:ss').format(usuario.registrationDate),
             ),
             _buildDetailRow(
               'Última Atualização',
-              usuario.lastUpdatedDate.toString().split('.')[0],
+              DateFormat('dd/MM/yyyy HH:mm:ss').format(usuario.lastUpdatedDate),
             ),
-          ],
         ),
       ),
       actions: [
