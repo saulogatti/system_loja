@@ -59,6 +59,8 @@ class LogAtividade extends DefaultObject {
     required this.usuarioNome,
     DateTime? dataHora,
     this.detalhes = '',
+    super.lastUpdatedDate,
+    super.registrationDate,
   }) : dataHora = dataHora ?? DateTime.now();
 
   /// Cria um objeto a partir de JSON

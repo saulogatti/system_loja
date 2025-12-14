@@ -252,6 +252,15 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
     try {
       return await getLock().synchronized<bool>(() async {
         final db = await _database;
+        // final dataExkists = await fetchById(object.id);
+        // switch (dataExkists) {
+        //   case OperationSuccess():
+        //     // Já existe, será atualizado
+        //     break;
+        //   case OperationError():
+        //     // Não existe, será inserido
+        //     break;
+        // }
         final dataJson = jsonEncode(object.data);
 
         final Map<String, dynamic> row = {
