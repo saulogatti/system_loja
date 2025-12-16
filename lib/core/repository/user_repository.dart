@@ -1,4 +1,6 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:system_loja/core/managers/log_atividade_manager.dart';
+import 'package:system_loja/core/models/log_atividade.dart';
 import 'package:system_loja/core/repository/default/base_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
@@ -12,6 +14,8 @@ import '../models/usuario.dart';
 /// e recarrega dados antes de salvar para prevenir perda de dados.
 /// Implementa funcionalidades de hash de senha para segurança.
 class UserRepository extends BaseRepository with LoggerClassMixin {
+  final LogAtividadeManager _logManager = LogAtividadeManager();
+
   /// Tamanho mínimo da senha
 
   UserRepository();
@@ -20,21 +24,34 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
   ///
   /// A senha será automaticamente convertida em hash antes de salvar.
   /// Retorna true se o usuário foi adicionado com sucesso.
-  Future<bool> adicionarUsuario(Usuario usuario) async {
+  Future<ExecutionResult<bool, String>> adicionarUsuario(
+    Usuario usuario,
+  ) async {
     PersistentDataStore persistentDataStore = PersistentDataStore(
       id: usuario.id,
       data: usuario.toJson(),
     );
-    return await defaultDataStorage.save(persistentDataStore);
+    final result = await defaultDataStorage.save(persistentDataStore);
+    await _logManager.criarERegistrarLog(
+      tipoAcao: TipoAcao.criar,
+      entidade: runtimeType.toString(),
+      entidadeId: usuario.id,
+      detalhes: 'Usuário ${usuario.nome} (ID: ${usuario.id}) criado.',
+      usuarioId: usuario.id,
+      usuarioNome: usuario.nome,
+    );
+    return ExecutionResult.success(result);
   }
 
   /// Atualiza um usuário existente
   ///
   /// Retorna true se o usuário foi atualizado com sucesso.
-  Future<bool> atualizarUsuario(Usuario usuario) async {
+  Future<ExecutionResult<bool, String>> atualizarUsuario(
+    Usuario usuario,
+  ) async {
     final exists = await defaultDataStorage.fetchById(usuario.id);
     switch (exists) {
-      case ResultSuccess(result: final data):
+      case ExecutionSucess(result: final data):
         Usuario userExisting = Usuario.fromJson(data.data);
         userExisting = usuario.copyWith(
           nome: usuario.nome,
@@ -48,32 +65,31 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
           id: userExisting.id,
           data: userExisting.toJson(),
         );
-        return await defaultDataStorage.save(persistentDataStore);
-
-      case ResultFailure(failure: final errorMessage):
-        logError(
-          'Erro ao buscar usuário para atualização: $errorMessage',
-          StackTrace.current,
+        await _logManager.criarERegistrarLog(
+          tipoAcao: TipoAcao.atualizar,
+          entidade: runtimeType.toString(),
+          usuarioId: usuario.id,
+          usuarioNome: usuario.nome,
         );
-        return false;
-    }
-  }
+        return ExecutionResult.success(
+          await defaultDataStorage.save(persistentDataStore),
+        );
 
-  /// Gera o próximo ID disponível
-  Future<int> gerarProximoId() async {
-    return obtainNextId();
+      case ExecutionError(failure: final errorMessage):
+        return ExecutionResult.error(errorMessage);
+    }
   }
 
   /// Obtém todos os usuários
   Future<List<Usuario>> obterTodosUsuarios() async {
     final dados = await defaultDataStorage.loadAll();
     switch (dados) {
-      case ResultSuccess(result: final dataList):
+      case ExecutionSucess(result: final dataList):
         final usuariosCarregados = dataList
             .map((data) => Usuario.fromJson(data.data))
             .toList();
         return usuariosCarregados;
-      case ResultFailure(failure: final errorMessage):
+      case ExecutionError(failure: final errorMessage):
         logError(
           'Erro ao carregar usuários: $errorMessage',
           StackTrace.current,
@@ -86,14 +102,14 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
   Future<Usuario?> obterUsuarioPorEmail(String email) async {
     final dados = await defaultDataStorage.loadAll();
     switch (dados) {
-      case ResultSuccess(result: final dataList):
+      case ExecutionSucess(result: final dataList):
         final usuariosCarregados = dataList
             .map((data) => Usuario.fromJson(data.data))
             .toList();
         return usuariosCarregados
             .where((u) => u.email.toLowerCase() == email.toLowerCase())
             .firstOrNull;
-      case ResultFailure(failure: final errorMessage):
+      case ExecutionError(failure: final errorMessage):
         logError(
           'Erro ao carregar usuários: $errorMessage',
           StackTrace.current,
@@ -106,9 +122,17 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
   Future<Usuario?> obterUsuarioPorId(int id) async {
     final dados = await defaultDataStorage.fetchById(id);
     switch (dados) {
-      case ResultSuccess(result: final data):
-        return Usuario.fromJson(data.data);
-      case ResultFailure(failure: final errorMessage):
+      case ExecutionSucess(result: final data):
+        final user = Usuario.fromJson(data.data);
+        await _logManager.criarERegistrarLog(
+          tipoAcao: TipoAcao.ler,
+          entidade: runtimeType.toString(),
+          usuarioId: id,
+          usuarioNome: user.nome,
+          detalhes: 'Usuário ${user.nome} (ID: ${user.id}) carregado.',
+        );
+        return user;
+      case ExecutionError(failure: final errorMessage):
         logError(
           'Erro ao carregar usuário por ID $id: $errorMessage',
           StackTrace.current,
@@ -123,10 +147,17 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
   Future<bool> removerUsuario(int id) async {
     final resultado = await defaultDataStorage.delete(id);
     switch (resultado) {
-      case ResultSuccess(result: final success):
+      case ExecutionSucess(result: final success):
         logInfo('Usuário removido com sucesso: ID $id');
+        await _logManager.criarERegistrarLog(
+          tipoAcao: TipoAcao.deletar,
+          entidade: runtimeType.toString(),
+          usuarioId: id,
+          usuarioNome: '',
+          detalhes: 'Usuário com ID $id removido.',
+        );
         return success;
-      case ResultFailure(failure: final errorMessage):
+      case ExecutionError(failure: final errorMessage):
         logError(
           'Erro ao remover usuário por ID $id: $errorMessage',
           StackTrace.current,

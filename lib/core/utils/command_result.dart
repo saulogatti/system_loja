@@ -1,5 +1,22 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+/// Representa o resultado de uma operação com falha.
+///
+/// Contém o erro ocorrido durante a execução da operação.
+/// Esta classe é uma subclasse de [ExecutionResult] e indica que
+/// a operação não foi concluída com sucesso.
+///
+/// Tipo genérico:
+/// - [R]: Tipo do resultado em caso de sucesso
+/// - [E]: Tipo do erro em caso de falha
+class ExecutionError<R, E> extends ExecutionResult<R, E> {
+  /// O erro que ocorreu durante a operação.
+  final E failure;
+
+  /// Cria uma instância de erro com o erro especificado.
+  ExecutionError(this.failure);
+}
+
 /// Representa o resultado de uma operação que pode ter sucesso ou falha.
 ///
 /// Esta sealed class implementa o padrão Result para tratamento de erros
@@ -36,16 +53,16 @@ sealed class ExecutionResult<R, E> {
 
   /// Cria um resultado de falha com o erro especificado.
   ///
-  /// Factory constructor que retorna uma instância de [ResultFailure].
-  factory ExecutionResult.failure(E error) {
-    return ResultFailure<R, E>(error);
+  /// Factory constructor que retorna uma instância de [ExecutionError].
+  factory ExecutionResult.error(E error) {
+    return ExecutionError<R, E>(error);
   }
 
   /// Cria um resultado de sucesso com o valor especificado.
   ///
-  /// Factory constructor que retorna uma instância de [ResultSuccess].
+  /// Factory constructor que retorna uma instância de [ExecutionSucess].
   factory ExecutionResult.success(R result) {
-    return ResultSuccess<R, E>(result);
+    return ExecutionSucess<R, E>(result);
   }
 
   /// Retorna o erro se o resultado for uma falha.
@@ -53,8 +70,8 @@ sealed class ExecutionResult<R, E> {
   /// Lança [StateError] se o resultado for um sucesso.
   /// Use [hasError] para verificar antes de acessar este getter.
   E get asError {
-    if (this is ResultFailure<R, E>) {
-      return (this as ResultFailure<R, E>).failure;
+    if (this is ExecutionError<R, E>) {
+      return (this as ExecutionError<R, E>).failure;
     }
     throw StateError('OperationResult is not an error');
   }
@@ -64,8 +81,8 @@ sealed class ExecutionResult<R, E> {
   /// Lança [StateError] se o resultado for uma falha.
   /// Use [isSuccessful] para verificar antes de acessar este getter.
   R get asSuccess {
-    if (this is ResultSuccess<R, E>) {
-      return (this as ResultSuccess<R, E>).result;
+    if (this is ExecutionSucess<R, E>) {
+      return (this as ExecutionSucess<R, E>).result;
     }
     throw StateError('OperationResult is not a success');
   }
@@ -73,17 +90,17 @@ sealed class ExecutionResult<R, E> {
   /// Verifica se o resultado representa um erro.
   ///
   /// Retorna `true` se a operação falhou, `false` caso contrário.
-  bool get hasError => this is ResultFailure<R, E>;
+  bool get hasError => this is ExecutionError<R, E>;
 
   /// Verifica se o resultado representa um sucesso.
   ///
   /// Retorna `true` se a operação foi bem-sucedida, `false` caso contrário.
-  bool get isSuccessful => this is ResultSuccess<R, E>;
+  bool get isSuccessful => this is ExecutionSucess<R, E>;
 
   /// Executa uma função baseada no tipo de resultado.
   ///
   /// Este método implementa pattern matching, executando [onSuccess]
-  /// se o resultado for um sucesso, ou [onFailure] se for um erro.
+  /// se o resultado for um sucesso, ou [onError] se for um erro.
   ///
   /// Exemplo:
   /// ```dart
@@ -94,31 +111,14 @@ sealed class ExecutionResult<R, E> {
   /// ```
   void when({
     required void Function(R valor) onSuccess,
-    required void Function(E error) onFailure,
+    required void Function(E error) onError,
   }) {
-    if (this is ResultSuccess<R, E>) {
-      onSuccess((this as ResultSuccess<R, E>).result);
-    } else if (this is ResultFailure<R, E>) {
-      onFailure((this as ResultFailure<R, E>).failure);
+    if (this is ExecutionSucess<R, E>) {
+      onSuccess((this as ExecutionSucess<R, E>).result);
+    } else if (this is ExecutionError<R, E>) {
+      onError((this as ExecutionError<R, E>).failure);
     }
   }
-}
-
-/// Representa o resultado de uma operação com falha.
-///
-/// Contém o erro ocorrido durante a execução da operação.
-/// Esta classe é uma subclasse de [ExecutionResult] e indica que
-/// a operação não foi concluída com sucesso.
-///
-/// Tipo genérico:
-/// - [R]: Tipo do resultado em caso de sucesso
-/// - [E]: Tipo do erro em caso de falha
-class ResultFailure<R, E> extends ExecutionResult<R, E> {
-  /// O erro que ocorreu durante a operação.
-  final E failure;
-
-  /// Cria uma instância de erro com o erro especificado.
-  ResultFailure(this.failure);
 }
 
 /// Representa o resultado de uma operação bem-sucedida.
@@ -130,10 +130,10 @@ class ResultFailure<R, E> extends ExecutionResult<R, E> {
 /// Tipo genérico:
 /// - [R]: Tipo do resultado em caso de sucesso
 /// - [E]: Tipo do erro em caso de falha
-class ResultSuccess<R, E> extends ExecutionResult<R, E> {
+class ExecutionSucess<R, E> extends ExecutionResult<R, E> {
   /// O valor resultante da operação bem-sucedida.
   final R result;
 
   /// Cria uma instância de sucesso com o resultado especificado.
-  ResultSuccess(this.result);
+  ExecutionSucess(this.result);
 }

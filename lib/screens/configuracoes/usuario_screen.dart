@@ -9,8 +9,6 @@ import 'package:system_loja/screens/configuracoes/widgets/usuario_form.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_list.dart';
 import 'package:system_loja/screens/widgets/overlay_app_widget.dart';
 
-import '../../core/managers/log_atividade_manager.dart';
-import '../../core/models/log_atividade.dart';
 import '../../core/models/usuario.dart';
 
 /// Tela de gestão de usuários com listagem, adição, edição e exclusão.
@@ -30,7 +28,7 @@ class UsuarioScreen extends StatefulWidget {
 
 class _UsuarioScreenState extends State<UsuarioScreen> {
   late final UsuarioCubit _bloc = UsuarioCubit(UserRepository());
-  final LogAtividadeManager _logManager = LogAtividadeManager();
+
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
@@ -70,7 +68,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
             },
             loadSuccess: (usuarios) {
               _overlayLoader.removeHighlightOverlay();
-              _usuarios = usuarios;
+              _usuarios = List.from(usuarios, growable: true);
               setState(() {});
             },
             initial: () {
@@ -111,11 +109,20 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                   backgroundColor: Colors.green,
                 ),
               );
-              _usuarios.add(usuario);
-              _limparFormulario();
-              setState(() {
-                _usuarioEditando = null;
-              });
+              if (!novoUsuario) {
+                final index = _usuarios.indexWhere((u) => u.id == usuario.id);
+                if (index != -1) {
+                  setState(() {
+                    _usuarios[index] = usuario;
+                  });
+                }
+              } else {
+                _usuarios.add(usuario);
+                _limparFormulario();
+                setState(() {
+                  _usuarioEditando = null;
+                });
+              }
             },
           );
         },
@@ -213,16 +220,6 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
 
   Future<void> _excluirUsuario(Usuario usuario) async {
     _bloc.removerUsuario(usuario.id);
-
-    // Registra log de atividade
-    await _logManager.criarERegistrarLog(
-      tipoAcao: TipoAcao.deletar,
-      entidade: 'Usuario',
-      entidadeId: usuario.id,
-      usuarioId: usuario.id,
-      usuarioNome: usuario.nome,
-      detalhes: 'Usuário ${usuario.nome} (${usuario.email}) excluído',
-    );
 
     // Se estava editando o usuário excluído, cancela a edição
     if (_usuarioEditando?.id == usuario.id) {

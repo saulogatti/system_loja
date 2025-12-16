@@ -28,24 +28,24 @@ import 'package:system_loja/data/storage/base_data_storage.dart';
 ///
 /// ### Método [delete]
 /// - Remove um registro pelo [id] do banco de dados
-/// - Retorna [ResultSuccess] com `true` se deletado com sucesso
-/// - Retorna [ResultFailure] com mensagem descritiva se falhar (ID não existe, erro SQL, etc.)
+/// - Retorna [ExecutionSucess] com `true` se deletado com sucesso
+/// - Retorna [ExecutionError] com mensagem descritiva se falhar (ID não existe, erro SQL, etc.)
 ///
 /// ### Método [fetchById]
 /// - Recupera um registro específico pelo [id]
-/// - Retorna [ResultSuccess] contendo o objeto [PersistentDataStore] se encontrado
-/// - Retorna [ResultFailure] se ID não existe, erro de banco ou falha de desserialização
+/// - Retorna [ExecutionSucess] contendo o objeto [PersistentDataStore] se encontrado
+/// - Retorna [ExecutionError] se ID não existe, erro de banco ou falha de desserialização
 /// - Usa [fromJson] do objeto para converter dados SQL em objeto Dart
 ///
 /// ### Método [loadAll]
 /// - Carrega todos os registros da categoria de armazenamento
-/// - Retorna [ResultSuccess] com lista (vazia se nenhum registro)
-/// - Retorna [ResultFailure] em caso de erro de acesso ao banco
+/// - Retorna [ExecutionSucess] com lista (vazia se nenhum registro)
+/// - Retorna [ExecutionError] em caso de erro de acesso ao banco
 /// - Cada item da lista deve ser validado e convertido via [fromJson]
 ///
 /// ## Padrões de Erro
-/// - Use [ResultSuccess] para operações bem-sucedidas
-/// - Use [ResultFailure] com mensagem clara do erro (ex: "Cliente com ID 123 não encontrado")
+/// - Use [ExecutionSucess] para operações bem-sucedidas
+/// - Use [ExecutionError] com mensagem clara do erro (ex: "Cliente com ID 123 não encontrado")
 /// - Não lance exceções; encapsule erros em [ExecutionResult]
 ///
 /// ## Dependências Externas
@@ -112,14 +112,14 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
         if (rowsAffected > 0) {
           return ExecutionResult.success(true);
         } else {
-          return ExecutionResult.failure(
+          return ExecutionResult.error(
             'Nenhum objeto encontrado com ID $id na categoria $storageCategory',
           );
         }
       }, timeout: _timeOutMilliseconds);
     } catch (e, stackTrace) {
       logError('Erro ao deletar objeto com ID $id: $e', stackTrace);
-      return ExecutionResult.failure('Erro ao deletar objeto com ID $id: $e');
+      return ExecutionResult.error('Erro ao deletar objeto com ID $id: $e');
     }
   }
 
@@ -157,7 +157,7 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
       );
 
       if (results.isEmpty) {
-        return ExecutionResult.failure(
+        return ExecutionResult.error(
           'Objeto com ID $id não encontrado na categoria $storageCategory',
         );
       }
@@ -173,7 +173,7 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
       return ExecutionResult.success(persistentData);
     } catch (e, stackTrace) {
       logError('Erro ao buscar objeto com ID $id: $e', stackTrace);
-      return ExecutionResult.failure('Erro ao buscar objeto com ID $id: $e');
+      return ExecutionResult.error('Erro ao buscar objeto com ID $id: $e');
     }
   }
 
@@ -235,7 +235,7 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
       return ExecutionResult.success(allData);
     } catch (e, stackTrace) {
       logError('Erro ao carregar todos os objetos: $e', stackTrace);
-      return ExecutionResult.failure('Erro ao carregar todos os objetos: $e');
+      return ExecutionResult.error('Erro ao carregar todos os objetos: $e');
     }
   }
 

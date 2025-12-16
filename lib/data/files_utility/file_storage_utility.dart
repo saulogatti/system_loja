@@ -112,7 +112,7 @@ mixin FileStorageUtility {
       return ExecutionResult.success(availableData);
     } catch (e, stackTrace) {
       logError('Erro ao listar arquivos no diretório de cache: $e', stackTrace);
-      return ExecutionResult.failure('Erro ao listar arquivos: $e');
+      return ExecutionResult.error('Erro ao listar arquivos: $e');
     }
   }
 
@@ -145,7 +145,7 @@ mixin FileStorageUtility {
 
     File file = await _mountFileSystem(fileName);
     if (!await file.exists()) {
-      return ExecutionResult.failure('Arquivo $fileName não encontrado.');
+      return ExecutionResult.error('Arquivo $fileName não encontrado.');
     }
     try {
       String content = await file.readAsString();
@@ -153,11 +153,12 @@ mixin FileStorageUtility {
       return ExecutionResult.success(content);
     } catch (e, stackTrace) {
       logError('Erro ao carregar arquivo JSON em $fileName: $e', stackTrace);
-      return ExecutionResult.failure('Erro ao ler arquivo $fileName: $e');
+      return ExecutionResult.error('Erro ao ler arquivo $fileName: $e');
     }
   }
 
   void logDebug(String message);
+
   /// Registra mensagens de erro com stack trace.
   ///
   /// Este método abstrato deve ser implementado pelas classes que usam

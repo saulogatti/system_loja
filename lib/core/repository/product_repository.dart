@@ -15,10 +15,10 @@ class ProductRepository extends BaseRepository {
   Future<ExecutionResult<bool, String>> deleteProduct(int id) async {
     final result = await defaultDataStorage.delete(id);
     switch (result) {
-      case ResultSuccess():
-        return ResultSuccess(result.result);
-      case ResultFailure():
-        return ResultFailure(
+      case ExecutionSucess():
+        return ExecutionSucess(result.result);
+      case ExecutionError():
+        return ExecutionError(
           'Falha ao deletar produto com ID: $id - ${result.failure}',
         );
     }
@@ -29,15 +29,15 @@ class ProductRepository extends BaseRepository {
   Future<ExecutionResult<Produto, String>> findByCode(int codigo) async {
     final result = await defaultDataStorage.fetchById(codigo);
     switch (result) {
-      case ResultFailure<PersistentDataStore, String>():
-        return ResultFailure(
+      case ExecutionError<PersistentDataStore, String>():
+        return ExecutionError(
           'Erro ao buscar produto com código $codigo'
           'no armazenamento: ${result.failure}',
         );
-      case ResultSuccess<PersistentDataStore, String>():
+      case ExecutionSucess<PersistentDataStore, String>():
         final data = result.result;
         final produto = Produto.fromJson(data.data);
-        return ResultSuccess(produto);
+        return ExecutionSucess(produto);
     }
   }
 
@@ -48,16 +48,16 @@ class ProductRepository extends BaseRepository {
   Future<ExecutionResult<List<Produto>, String>> getProdutos() async {
     final result = await defaultDataStorage.loadAll();
     switch (result) {
-      case ResultFailure<List<PersistentDataStore>, String>():
-        return ResultFailure(
+      case ExecutionError<List<PersistentDataStore>, String>():
+        return ExecutionError(
           'Erro ao carregar produtos do armazenamento: ${result.failure}',
         );
-      case ResultSuccess<List<PersistentDataStore>, String>():
+      case ExecutionSucess<List<PersistentDataStore>, String>():
         final dataList = result.result;
         final produtos = dataList
             .map((data) => Produto.fromJson(data.data))
             .toList(growable: false);
-        return ResultSuccess(produtos);
+        return ExecutionSucess(produtos);
     }
   }
 
@@ -71,9 +71,9 @@ class ProductRepository extends BaseRepository {
       PersistentDataStore(id: produto.id, data: produto.toJson()),
     );
     if (!result) {
-      return ResultFailure('Falha ao salvar produto: ${produto.nome}');
+      return ExecutionError('Falha ao salvar produto: ${produto.nome}');
     }
-    return ResultSuccess(result);
+    return ExecutionSucess(result);
   }
 
   /// Atualiza um produto existente no armazenamento.

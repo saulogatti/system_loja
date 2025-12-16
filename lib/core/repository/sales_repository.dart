@@ -17,14 +17,14 @@ class SalesRepository extends BaseRepository {
   Future<Map<int, Invoice>> loadAllSales() async {
     final result = await defaultDataStorage.loadAll();
     switch (result) {
-      case ResultSuccess(result: final dataList):
+      case ExecutionSucess(result: final dataList):
         Map<int, Invoice> sales = {};
         for (var data in dataList) {
           final sale = Invoice.fromJson(data.data);
           sales[sale.id] = sale;
         }
         return sales;
-      case ResultFailure(failure: final errorMessage):
+      case ExecutionError(failure: final errorMessage):
         throw Exception('Erro ao carregar vendas: $errorMessage');
     }
   }

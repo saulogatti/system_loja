@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/usuario.dart';
 import 'package:system_loja/core/repository/user_repository.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 
@@ -15,9 +16,9 @@ class UsuarioCubit extends Cubit<UsuarioState> {
     required String senha,
     required NivelPermissao nivelPermissao,
   }) async {
+    // Lógica para adicionar usuário
     try {
-      // Lógica para adicionar usuário
-      int usuarioId = await _userRepository.gerarProximoId(); // Exemplo de ID
+      int usuarioId = await _userRepository.obtainNextId(); // Exemplo de ID
       final usuario = Usuario(
         id: usuarioId,
         nome: nome,
@@ -27,14 +28,16 @@ class UsuarioCubit extends Cubit<UsuarioState> {
         nivelPermissao: nivelPermissao,
       );
 
-      bool sucesso = await _userRepository.adicionarUsuario(usuario);
-      if (sucesso) {
-        emit(UsuarioState.usuarioAdicionado(usuario, true));
-      } else {
-        emit(
-          UsuarioState.loadFailure(errorMessage: 'Falha ao adicionar usuário.'),
-        );
-      }
+      ExecutionResult<bool, String> executionResult = await _userRepository
+          .adicionarUsuario(usuario);
+      executionResult.when(
+        onSuccess: (sucess) {
+          emit(UsuarioState.usuarioAdicionado(usuario, true));
+        },
+        onError: (error) {
+          emit(UsuarioState.loadFailure(errorMessage: error));
+        },
+      );
     } catch (e) {
       emit(
         UsuarioState.loadFailure(errorMessage: 'Erro ao adicionar usuário: $e'),
@@ -44,13 +47,19 @@ class UsuarioCubit extends Cubit<UsuarioState> {
 
   Future<void> atualizarUsuario({required Usuario usuarioAtualizado}) async {
     try {
-      bool sucesso = await _userRepository.atualizarUsuario(usuarioAtualizado);
-      if (sucesso) {
-        emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
-      } else {
-        emit(
-          UsuarioState.loadFailure(errorMessage: 'Falha ao atualizar usuário.'),
-        );
+      ExecutionResult<bool, String> resultAdd = await _userRepository
+          .atualizarUsuario(usuarioAtualizado);
+      switch (resultAdd) {
+        case ExecutionSucess(result: final sucesso):
+          if (sucesso) {
+            emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
+          }
+        case ExecutionError(failure: final errorMessage):
+          emit(
+            UsuarioState.loadFailure(
+              errorMessage: 'Falha ao atualizar usuário: $errorMessage',
+            ),
+          );
       }
     } catch (e) {
       emit(
