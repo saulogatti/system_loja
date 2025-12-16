@@ -12,32 +12,32 @@ class ProductRepository extends BaseRepository {
   ///
   /// [id] ID do produto a ser removido.
   /// Retorna resultado da operação de exclusão.
-  Future<OperationResult<bool, String>> deleteProduct(int id) async {
+  Future<ExecutionResult<bool, String>> deleteProduct(int id) async {
     final result = await defaultDataStorage.delete(id);
     switch (result) {
-      case OperationSuccess():
-        return OperationSuccess(result.result);
-      case OperationError():
-        return OperationError(
-          'Falha ao deletar produto com ID: $id - ${result.error}',
+      case ResultSuccess():
+        return ResultSuccess(result.result);
+      case ResultFailure():
+        return ResultFailure(
+          'Falha ao deletar produto com ID: $id - ${result.failure}',
         );
     }
   }
 
   /// Retorna a lista de produtos em cache, carregando do disco se vazia.
 
-  Future<OperationResult<Produto, String>> findByCode(int codigo) async {
+  Future<ExecutionResult<Produto, String>> findByCode(int codigo) async {
     final result = await defaultDataStorage.fetchById(codigo);
     switch (result) {
-      case OperationError<PersistentDataStore, String>():
-        return OperationError(
+      case ResultFailure<PersistentDataStore, String>():
+        return ResultFailure(
           'Erro ao buscar produto com código $codigo'
-          'no armazenamento: ${result.error}',
+          'no armazenamento: ${result.failure}',
         );
-      case OperationSuccess<PersistentDataStore, String>():
+      case ResultSuccess<PersistentDataStore, String>():
         final data = result.result;
         final produto = Produto.fromJson(data.data);
-        return OperationSuccess(produto);
+        return ResultSuccess(produto);
     }
   }
 
@@ -45,19 +45,19 @@ class ProductRepository extends BaseRepository {
   ///
   /// A cópia protege o cache interno contra modificações acidentais
   /// feitas pelo chamador.
-  Future<OperationResult<List<Produto>, String>> getProdutos() async {
+  Future<ExecutionResult<List<Produto>, String>> getProdutos() async {
     final result = await defaultDataStorage.loadAll();
     switch (result) {
-      case OperationError<List<PersistentDataStore>, String>():
-        return OperationError(
-          'Erro ao carregar produtos do armazenamento: ${result.error}',
+      case ResultFailure<List<PersistentDataStore>, String>():
+        return ResultFailure(
+          'Erro ao carregar produtos do armazenamento: ${result.failure}',
         );
-      case OperationSuccess<List<PersistentDataStore>, String>():
+      case ResultSuccess<List<PersistentDataStore>, String>():
         final dataList = result.result;
         final produtos = dataList
             .map((data) => Produto.fromJson(data.data))
             .toList(growable: false);
-        return OperationSuccess(produtos);
+        return ResultSuccess(produtos);
     }
   }
 
@@ -66,14 +66,14 @@ class ProductRepository extends BaseRepository {
   /// Este método atualiza o cache interno e chama [salvarDadosSincronizado]
   /// para persistir as alterações de forma segura. Não aguarda o término da
   /// operação (fire-and-forget) — adaptar conforme necessidade do chamador.
-  Future<OperationResult<bool, String>> salvarProduto(Produto produto) async {
+  Future<ExecutionResult<bool, String>> salvarProduto(Produto produto) async {
     final result = await defaultDataStorage.save(
       PersistentDataStore(id: produto.id, data: produto.toJson()),
     );
     if (!result) {
-      return OperationError('Falha ao salvar produto: ${produto.nome}');
+      return ResultFailure('Falha ao salvar produto: ${produto.nome}');
     }
-    return OperationSuccess(result);
+    return ResultSuccess(result);
   }
 
   /// Atualiza um produto existente no armazenamento.
@@ -83,7 +83,7 @@ class ProductRepository extends BaseRepository {
   ///
   /// **Nota**: Este método utiliza internamente [salvarProduto], pois o storage
   /// não diferencia entre inserção e atualização (upsert pattern).
-  Future<OperationResult<bool, String>> updateProduct(Produto produto) async {
+  Future<ExecutionResult<bool, String>> updateProduct(Produto produto) async {
     return salvarProduto(produto);
   }
 }

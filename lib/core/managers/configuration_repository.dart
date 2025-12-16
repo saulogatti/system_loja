@@ -14,7 +14,9 @@ class ConfigurationRepository with LoggerClassMixin {
   /// Configuração atual do sistema
   AppSettings _configuracao = AppSettings.createDefaultSettings();
 
-  ConfigurationRepository();
+  ConfigurationRepository() {
+    _carregarDados();
+  }
 
   /// Obtém a configuração atual
   AppSettings get configuracao => _configuracao;
@@ -29,6 +31,8 @@ class ConfigurationRepository with LoggerClassMixin {
     _salvarDados();
     logInfo('Configuração atualizada com sucesso');
   }
+
+  Future<dynamic> limparLogsAntigos() async {}
 
   /// Limpa todos os dados do sistema
   ///
@@ -110,6 +114,4 @@ class ConfigurationRepository with LoggerClassMixin {
     final file = ConfigurationRepositoryCache(configuracao: _configuracao);
     _cache.set(file);
   }
-
-  Future<dynamic> limparLogsAntigos() async {}
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:system_loja/core/models/extensions/nivel_permissao_extension.dart';
 import 'package:system_loja/core/models/usuario.dart';
 
@@ -8,18 +9,7 @@ import 'package:system_loja/core/models/usuario.dart';
 class UsuarioDetailsDialog extends StatelessWidget {
   final Usuario usuario;
 
-  const UsuarioDetailsDialog({
-    super.key,
-    required this.usuario,
-  });
-
-  /// Mostra o dialog de detalhes do usuário
-  static void show(BuildContext context, Usuario usuario) {
-    showDialog(
-      context: context,
-      builder: (context) => UsuarioDetailsDialog(usuario: usuario),
-    );
-  }
+  const UsuarioDetailsDialog({super.key, required this.usuario});
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +28,15 @@ class UsuarioDetailsDialog extends StatelessWidget {
             ),
             _buildDetailRow(
               'Data de Cadastro',
-              DateFormat('dd/MM/yyyy HH:mm:ss').format(usuario.registrationDate),
+              DateFormat(
+                'dd/MM/yyyy HH:mm:ss',
+              ).format(usuario.registrationDate),
             ),
             _buildDetailRow(
               'Última Atualização',
               DateFormat('dd/MM/yyyy HH:mm:ss').format(usuario.lastUpdatedDate),
             ),
+          ],
         ),
       ),
       actions: [
@@ -73,6 +66,14 @@ class UsuarioDetailsDialog extends StatelessWidget {
           Text(value, style: const TextStyle(fontSize: 16)),
         ],
       ),
+    );
+  }
+
+  /// Mostra o dialog de detalhes do usuário
+  static void show(BuildContext context, Usuario usuario) {
+    showDialog(
+      context: context,
+      builder: (context) => UsuarioDetailsDialog(usuario: usuario),
     );
   }
 }

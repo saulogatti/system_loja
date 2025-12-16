@@ -15,23 +15,24 @@ abstract class BaseDataStorage {
   BaseDataStorage({required this.storageCategory});
 
   /// Deleta objeto pelo ID
-  Future<OperationResult<bool, String>> delete(int id);
+  Future<ExecutionResult<bool, String>> delete(int id);
 
   /// Busca objeto pelo ID
   /// Sucesso: Retorna o objeto encontrado
   /// Falha: Retorna mensagem de erro
-  Future<OperationResult<PersistentDataStore, String>> fetchById(int id);
+  Future<ExecutionResult<PersistentDataStore, String>> fetchById(int id);
 
   @protected
   Lock getLock() {
     return fileLocks.putIfAbsent(runtimeType.toString(), Lock.new);
   }
 
-  Future<OperationResult<List<PersistentDataStore>, String>> loadAll();
+  Future<ExecutionResult<List<PersistentDataStore>, String>> loadAll();
 
   /// Pode salvar novo objeto ou atualizar existente
   Future<bool> save(PersistentDataStore object);
 }
+
 /// Representa um objeto persistente armazenado.
 /// Contém um ID único e um mapa de dados genéricos.
 @JsonSerializable()

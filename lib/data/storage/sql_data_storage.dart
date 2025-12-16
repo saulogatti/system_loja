@@ -24,29 +24,29 @@ import 'package:system_loja/data/storage/base_data_storage.dart';
 /// - Se o objeto tem `id == null` ou `id == 0`: insere novo registro retornando `true`
 /// - Se o objeto tem `id > 0`: atualiza registro existente retornando `true`
 /// - Em caso de erro (constraint violation, I/O error): retorna `false`
-/// - Não deve retornar [OperationResult], apenas bool (como definido na assinatura)
+/// - Não deve retornar [ExecutionResult], apenas bool (como definido na assinatura)
 ///
 /// ### Método [delete]
 /// - Remove um registro pelo [id] do banco de dados
-/// - Retorna [OperationSuccess] com `true` se deletado com sucesso
-/// - Retorna [OperationError] com mensagem descritiva se falhar (ID não existe, erro SQL, etc.)
+/// - Retorna [ResultSuccess] com `true` se deletado com sucesso
+/// - Retorna [ResultFailure] com mensagem descritiva se falhar (ID não existe, erro SQL, etc.)
 ///
 /// ### Método [fetchById]
 /// - Recupera um registro específico pelo [id]
-/// - Retorna [OperationSuccess] contendo o objeto [PersistentDataStore] se encontrado
-/// - Retorna [OperationError] se ID não existe, erro de banco ou falha de desserialização
+/// - Retorna [ResultSuccess] contendo o objeto [PersistentDataStore] se encontrado
+/// - Retorna [ResultFailure] se ID não existe, erro de banco ou falha de desserialização
 /// - Usa [fromJson] do objeto para converter dados SQL em objeto Dart
 ///
 /// ### Método [loadAll]
 /// - Carrega todos os registros da categoria de armazenamento
-/// - Retorna [OperationSuccess] com lista (vazia se nenhum registro)
-/// - Retorna [OperationError] em caso de erro de acesso ao banco
+/// - Retorna [ResultSuccess] com lista (vazia se nenhum registro)
+/// - Retorna [ResultFailure] em caso de erro de acesso ao banco
 /// - Cada item da lista deve ser validado e convertido via [fromJson]
 ///
 /// ## Padrões de Erro
-/// - Use [OperationSuccess] para operações bem-sucedidas
-/// - Use [OperationError] com mensagem clara do erro (ex: "Cliente com ID 123 não encontrado")
-/// - Não lance exceções; encapsule erros em [OperationResult]
+/// - Use [ResultSuccess] para operações bem-sucedidas
+/// - Use [ResultFailure] com mensagem clara do erro (ex: "Cliente com ID 123 não encontrado")
+/// - Não lance exceções; encapsule erros em [ExecutionResult]
 ///
 /// ## Dependências Externas
 /// - Acesse o banco via `DatabaseHelper.instance` ou similar
@@ -78,7 +78,7 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
   ///
   /// [id] Identificador único do objeto a ser deletado.
   ///
-  /// Retorna [OperationResult] com:
+  /// Retorna [ExecutionResult] com:
   /// - Sucesso: `true` se o objeto foi deletado
   /// - Falha: Mensagem de erro se não foi possível deletar
   ///
@@ -97,9 +97,11 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
   SqlDataStorage({required super.storageCategory});
   Future<Database> get _database => _dbHelper.database;
   @override
-  Future<OperationResult<bool, String>> delete(int id) async {
+  Future<ExecutionResult<bool, String>> delete(int id) async {
     try {
-      return await getLock().synchronized<OperationResult<bool, String>>(() async {
+      return await getLock().synchronized<
+        ExecutionResult<bool, String>
+      >(() async {
         final db = await _database;
         final rowsAffected = await db.delete(
           DatabaseConfig.tablePersistentDataStore,
@@ -108,14 +110,16 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
         );
 
         if (rowsAffected > 0) {
-          return OperationResult.success(true);
+          return ExecutionResult.success(true);
         } else {
-          return OperationResult.failure('Nenhum objeto encontrado com ID $id na categoria $storageCategory');
+          return ExecutionResult.failure(
+            'Nenhum objeto encontrado com ID $id na categoria $storageCategory',
+          );
         }
       }, timeout: _timeOutMilliseconds);
     } catch (e, stackTrace) {
       logError('Erro ao deletar objeto com ID $id: $e', stackTrace);
-      return OperationResult.failure('Erro ao deletar objeto com ID $id: $e');
+      return ExecutionResult.failure('Erro ao deletar objeto com ID $id: $e');
     }
   }
 
@@ -127,7 +131,7 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
   ///
   /// [id] Identificador único do objeto a ser buscado.
   ///
-  /// Retorna [OperationResult] com:
+  /// Retorna [ExecutionResult] com:
   /// - Sucesso: Objeto [PersistentDataStore] encontrado
   /// - Falha: Mensagem de erro se não encontrado ou erro na busca
   ///
@@ -143,7 +147,7 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
   /// }
   /// ```
   @override
-  Future<OperationResult<PersistentDataStore, String>> fetchById(int id) async {
+  Future<ExecutionResult<PersistentDataStore, String>> fetchById(int id) async {
     try {
       final db = await _database;
       final List<Map<String, dynamic>> results = await db.query(
@@ -153,17 +157,23 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
       );
 
       if (results.isEmpty) {
-        return OperationResult.failure('Objeto com ID $id não encontrado na categoria $storageCategory');
+        return ExecutionResult.failure(
+          'Objeto com ID $id não encontrado na categoria $storageCategory',
+        );
       }
 
       final row = results.first;
-      final dataJson = jsonDecode(row['data'] as String) as Map<String, dynamic>;
-      final persistentData = PersistentDataStore(id: row['id'] as int, data: dataJson);
+      final dataJson =
+          jsonDecode(row['data'] as String) as Map<String, dynamic>;
+      final persistentData = PersistentDataStore(
+        id: row['id'] as int,
+        data: dataJson,
+      );
 
-      return OperationResult.success(persistentData);
+      return ExecutionResult.success(persistentData);
     } catch (e, stackTrace) {
       logError('Erro ao buscar objeto com ID $id: $e', stackTrace);
-      return OperationResult.failure('Erro ao buscar objeto com ID $id: $e');
+      return ExecutionResult.failure('Erro ao buscar objeto com ID $id: $e');
     }
   }
 
@@ -172,7 +182,7 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
   /// Busca todos os registros da tabela `persistent_data_store` que
   /// pertencem à categoria de armazenamento desta instância.
   ///
-  /// Retorna [OperationResult] com:
+  /// Retorna [ExecutionResult] com:
   /// - Sucesso: Lista de objetos [PersistentDataStore] (pode estar vazia)
   /// - Falha: Mensagem de erro se houver problema na consulta
   ///
@@ -191,7 +201,7 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
   /// }
   /// ```
   @override
-  Future<OperationResult<List<PersistentDataStore>, String>> loadAll() async {
+  Future<ExecutionResult<List<PersistentDataStore>, String>> loadAll() async {
     try {
       final db = await _database;
       final List<Map<String, dynamic>> results = await db.query(
@@ -204,21 +214,28 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
       final allData = <PersistentDataStore>[];
       for (var row in results) {
         try {
-          final dataJson = jsonDecode(row['data'] as String) as Map<String, dynamic>;
-          final persistentData = PersistentDataStore(id: row['id'] as int, data: dataJson);
+          final dataJson =
+              jsonDecode(row['data'] as String) as Map<String, dynamic>;
+          final persistentData = PersistentDataStore(
+            id: row['id'] as int,
+            data: dataJson,
+          );
           allData.add(persistentData);
         } catch (e, stackTrace) {
           // Registra erro mas continua processando outros registros
-          logError('Erro ao decodificar registro com ID ${row['id']}: $e', stackTrace);
+          logError(
+            'Erro ao decodificar registro com ID ${row['id']}: $e',
+            stackTrace,
+          );
           // Opcionalmente, pode deletar o registro corrompido
           // await delete(row['id'] as int);
         }
       }
 
-      return OperationResult.success(allData);
+      return ExecutionResult.success(allData);
     } catch (e, stackTrace) {
       logError('Erro ao carregar todos os objetos: $e', stackTrace);
-      return OperationResult.failure('Erro ao carregar todos os objetos: $e');
+      return ExecutionResult.failure('Erro ao carregar todos os objetos: $e');
     }
   }
 

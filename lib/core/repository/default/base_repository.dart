@@ -14,13 +14,13 @@ abstract class BaseRepository {
   Future<int> obtainNextId() async {
     final result = await defaultDataStorage.loadAll();
     switch (result) {
-      case OperationSuccess(result: final dataList):
+      case ResultSuccess(result: final dataList):
         if (dataList.isEmpty) {
           return 1;
         }
         final ids = dataList.map((data) => data.id).toList();
         return (ids.reduce((a, b) => a > b ? a : b)) + 1;
-      case OperationError(error: final errorMessage):
+      case ResultFailure(failure: final errorMessage):
         throw Exception('Erro ao carregar clientes: $errorMessage');
     }
   }

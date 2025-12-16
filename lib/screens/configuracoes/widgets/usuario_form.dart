@@ -129,7 +129,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<NivelPermissao>(
-            value: widget.nivelPermissaoSelecionado,
+            initialValue: widget.nivelPermissaoSelecionado,
             decoration: const InputDecoration(
               labelText: 'Nível de Permissão *',
               border: OutlineInputBorder(),

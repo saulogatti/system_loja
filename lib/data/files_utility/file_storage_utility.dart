@@ -23,6 +23,33 @@ mixin FileStorageUtility {
   /// desnecessárias.
   final AsyncMemoizer<String> _asyncAccess = AsyncMemoizer<String>();
 
+  Future<int> backup() async {
+    try {
+      final backupFiles = await _initializeDirectory();
+      final bacupFiles = Directory(backupFiles);
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final appDocDir = await getApplicationSupportDirectory();
+      final backupDir = Directory(p.join(appDocDir.path, 'backup_$timestamp'));
+      if (!await backupDir.exists()) {
+        await backupDir.create(recursive: true);
+      }
+
+      var arquivosCopiados = 0;
+      for (final file in bacupFiles.listSync()) {
+        if (file.existsSync()) {
+          final nomeArquivo = p.basename(file.path);
+          await file.rename('${backupDir.path}/$nomeArquivo');
+          arquivosCopiados++;
+        }
+      }
+      logDebug('Backup realizado com sucesso: $backupFiles arquivos copiados');
+      return arquivosCopiados;
+    } catch (e, stackTrace) {
+      logError('Erro ao realizar backup: $e', stackTrace);
+      return 0;
+    }
+  }
+
   /// Exclui todos os arquivos JSON do diretório de cache.
   ///
   /// Itera sobre todos os arquivos `.json` no diretório de cache e os remove.
@@ -68,11 +95,11 @@ mixin FileStorageUtility {
   }
 
   @protected
-  Future<OperationResult<List<String>, String>> fetchAllDataFiles() async {
+  Future<ExecutionResult<List<String>, String>> fetchAllDataFiles() async {
     try {
       final cacheDir = Directory(await _initializeDirectory());
       if (!await cacheDir.exists()) {
-        return OperationResult.success([]);
+        return ExecutionResult.success([]);
       }
 
       final availableData = <String>[];
@@ -82,10 +109,10 @@ mixin FileStorageUtility {
           availableData.add(data);
         }
       }
-      return OperationResult.success(availableData);
+      return ExecutionResult.success(availableData);
     } catch (e, stackTrace) {
       logError('Erro ao listar arquivos no diretório de cache: $e', stackTrace);
-      return OperationResult.failure('Erro ao listar arquivos: $e');
+      return ExecutionResult.failure('Erro ao listar arquivos: $e');
     }
   }
 
@@ -107,7 +134,7 @@ mixin FileStorageUtility {
   /// final data = jsonDecode(content);
   /// ```
   @protected
-  Future<OperationResult<String, String>> fetchDataFromFile(
+  Future<ExecutionResult<String, String>> fetchDataFromFile(
     String fileName,
   ) async {
     if (fileName.isEmpty || p.extension(fileName).isEmpty) {
@@ -118,18 +145,19 @@ mixin FileStorageUtility {
 
     File file = await _mountFileSystem(fileName);
     if (!await file.exists()) {
-      return OperationResult.failure('Arquivo $fileName não encontrado.');
+      return ExecutionResult.failure('Arquivo $fileName não encontrado.');
     }
     try {
       String content = await file.readAsString();
 
-      return OperationResult.success(content);
+      return ExecutionResult.success(content);
     } catch (e, stackTrace) {
       logError('Erro ao carregar arquivo JSON em $fileName: $e', stackTrace);
-      return OperationResult.failure('Erro ao ler arquivo $fileName: $e');
+      return ExecutionResult.failure('Erro ao ler arquivo $fileName: $e');
     }
   }
 
+  void logDebug(String message);
   /// Registra mensagens de erro com stack trace.
   ///
   /// Este método abstrato deve ser implementado pelas classes que usam
@@ -149,34 +177,6 @@ mixin FileStorageUtility {
   /// ```
   @protected
   String retrieveDirectoryName();
-  Future<int> backup() async {
-    try {
-      final backupFiles = await _initializeDirectory();
-      final bacupFiles = Directory(backupFiles);
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final appDocDir = await getApplicationSupportDirectory();
-      final backupDir = Directory(p.join(appDocDir.path, 'backup_$timestamp'));
-      if (!await backupDir.exists()) {
-        await backupDir.create(recursive: true);
-      }
-
-      var arquivosCopiados = 0;
-      for (final file in bacupFiles.listSync()) {
-        if (file.existsSync()) {
-          final nomeArquivo = p.basename(file.path);
-          await file.rename('${backupDir.path}/$nomeArquivo');
-          arquivosCopiados++;
-        }
-      }
-      logDebug('Backup realizado com sucesso: $backupFiles arquivos copiados');
-      return arquivosCopiados;
-    } catch (e, stackTrace) {
-      logError('Erro ao realizar backup: $e', stackTrace);
-      return 0;
-    }
-  }
-
-  void logDebug(String message);
 
   /// Salva dados em um arquivo de forma assíncrona.
   ///

@@ -17,18 +17,19 @@ class SalesRepository extends BaseRepository {
   Future<Map<int, Invoice>> loadAllSales() async {
     final result = await defaultDataStorage.loadAll();
     switch (result) {
-      case OperationSuccess(result: final dataList):
+      case ResultSuccess(result: final dataList):
         Map<int, Invoice> sales = {};
         for (var data in dataList) {
           final sale = Invoice.fromJson(data.data);
           sales[sale.id] = sale;
         }
         return sales;
-      case OperationError(error: final errorMessage):
+      case ResultFailure(failure: final errorMessage):
         throw Exception('Erro ao carregar vendas: $errorMessage');
     }
   }
-// TODO: Analisar como salvar itens relacionados à venda e decrementar estoque dos produtos vendidos.
+
+  // TODO: Analisar como salvar itens relacionados à venda e decrementar estoque dos produtos vendidos.
   Future<void> saveSale(Invoice invoice) async {
     final PersistentDataStore dataStore = PersistentDataStore(
       id: invoice.id,

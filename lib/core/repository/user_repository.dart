@@ -34,7 +34,7 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
   Future<bool> atualizarUsuario(Usuario usuario) async {
     final exists = await defaultDataStorage.fetchById(usuario.id);
     switch (exists) {
-      case OperationSuccess(result: final data):
+      case ResultSuccess(result: final data):
         Usuario userExisting = Usuario.fromJson(data.data);
         userExisting = usuario.copyWith(
           nome: usuario.nome,
@@ -50,7 +50,7 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
         );
         return await defaultDataStorage.save(persistentDataStore);
 
-      case OperationError(error: final errorMessage):
+      case ResultFailure(failure: final errorMessage):
         logError(
           'Erro ao buscar usuário para atualização: $errorMessage',
           StackTrace.current,
@@ -68,12 +68,12 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
   Future<List<Usuario>> obterTodosUsuarios() async {
     final dados = await defaultDataStorage.loadAll();
     switch (dados) {
-      case OperationSuccess(result: final dataList):
+      case ResultSuccess(result: final dataList):
         final usuariosCarregados = dataList
             .map((data) => Usuario.fromJson(data.data))
             .toList();
         return usuariosCarregados;
-      case OperationError(error: final errorMessage):
+      case ResultFailure(failure: final errorMessage):
         logError(
           'Erro ao carregar usuários: $errorMessage',
           StackTrace.current,
@@ -86,14 +86,14 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
   Future<Usuario?> obterUsuarioPorEmail(String email) async {
     final dados = await defaultDataStorage.loadAll();
     switch (dados) {
-      case OperationSuccess(result: final dataList):
+      case ResultSuccess(result: final dataList):
         final usuariosCarregados = dataList
             .map((data) => Usuario.fromJson(data.data))
             .toList();
         return usuariosCarregados
             .where((u) => u.email.toLowerCase() == email.toLowerCase())
             .firstOrNull;
-      case OperationError(error: final errorMessage):
+      case ResultFailure(failure: final errorMessage):
         logError(
           'Erro ao carregar usuários: $errorMessage',
           StackTrace.current,
@@ -106,9 +106,9 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
   Future<Usuario?> obterUsuarioPorId(int id) async {
     final dados = await defaultDataStorage.fetchById(id);
     switch (dados) {
-      case OperationSuccess(result: final data):
+      case ResultSuccess(result: final data):
         return Usuario.fromJson(data.data);
-      case OperationError(error: final errorMessage):
+      case ResultFailure(failure: final errorMessage):
         logError(
           'Erro ao carregar usuário por ID $id: $errorMessage',
           StackTrace.current,
@@ -123,10 +123,10 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
   Future<bool> removerUsuario(int id) async {
     final resultado = await defaultDataStorage.delete(id);
     switch (resultado) {
-      case OperationSuccess(result: final success):
+      case ResultSuccess(result: final success):
         logInfo('Usuário removido com sucesso: ID $id');
         return success;
-      case OperationError(error: final errorMessage):
+      case ResultFailure(failure: final errorMessage):
         logError(
           'Erro ao remover usuário por ID $id: $errorMessage',
           StackTrace.current,

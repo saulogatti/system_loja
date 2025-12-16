@@ -1,22 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-/// Representa o resultado de uma operação com falha.
-///
-/// Contém o erro ocorrido durante a execução da operação.
-/// Esta classe é uma subclasse de [OperationResult] e indica que
-/// a operação não foi concluída com sucesso.
-///
-/// Tipo genérico:
-/// - [R]: Tipo do resultado em caso de sucesso
-/// - [E]: Tipo do erro em caso de falha
-class OperationError<R, E> extends OperationResult<R, E> {
-  /// O erro que ocorreu durante a operação.
-  final E error;
-
-  /// Cria uma instância de erro com o erro especificado.
-  OperationError(this.error);
-}
-
 /// Representa o resultado de uma operação que pode ter sucesso ou falha.
 ///
 /// Esta sealed class implementa o padrão Result para tratamento de erros
@@ -46,23 +29,23 @@ class OperationError<R, E> extends OperationResult<R, E> {
 ///   print('Erro: $erro');
 /// }
 /// ```
-sealed class OperationResult<R, E> {
+sealed class ExecutionResult<R, E> {
   /// Construtor protegido para uso interno das subclasses.
   @protected
-  OperationResult();
+  ExecutionResult();
 
   /// Cria um resultado de falha com o erro especificado.
   ///
-  /// Factory constructor que retorna uma instância de [OperationError].
-  factory OperationResult.failure(E error) {
-    return OperationError<R, E>(error);
+  /// Factory constructor que retorna uma instância de [ResultFailure].
+  factory ExecutionResult.failure(E error) {
+    return ResultFailure<R, E>(error);
   }
 
   /// Cria um resultado de sucesso com o valor especificado.
   ///
-  /// Factory constructor que retorna uma instância de [OperationSuccess].
-  factory OperationResult.success(R result) {
-    return OperationSuccess<R, E>(result);
+  /// Factory constructor que retorna uma instância de [ResultSuccess].
+  factory ExecutionResult.success(R result) {
+    return ResultSuccess<R, E>(result);
   }
 
   /// Retorna o erro se o resultado for uma falha.
@@ -70,8 +53,8 @@ sealed class OperationResult<R, E> {
   /// Lança [StateError] se o resultado for um sucesso.
   /// Use [hasError] para verificar antes de acessar este getter.
   E get asError {
-    if (this is OperationError<R, E>) {
-      return (this as OperationError<R, E>).error;
+    if (this is ResultFailure<R, E>) {
+      return (this as ResultFailure<R, E>).failure;
     }
     throw StateError('OperationResult is not an error');
   }
@@ -81,8 +64,8 @@ sealed class OperationResult<R, E> {
   /// Lança [StateError] se o resultado for uma falha.
   /// Use [isSuccessful] para verificar antes de acessar este getter.
   R get asSuccess {
-    if (this is OperationSuccess<R, E>) {
-      return (this as OperationSuccess<R, E>).result;
+    if (this is ResultSuccess<R, E>) {
+      return (this as ResultSuccess<R, E>).result;
     }
     throw StateError('OperationResult is not a success');
   }
@@ -90,12 +73,12 @@ sealed class OperationResult<R, E> {
   /// Verifica se o resultado representa um erro.
   ///
   /// Retorna `true` se a operação falhou, `false` caso contrário.
-  bool get hasError => this is OperationError<R, E>;
+  bool get hasError => this is ResultFailure<R, E>;
 
   /// Verifica se o resultado representa um sucesso.
   ///
   /// Retorna `true` se a operação foi bem-sucedida, `false` caso contrário.
-  bool get isSuccessful => this is OperationSuccess<R, E>;
+  bool get isSuccessful => this is ResultSuccess<R, E>;
 
   /// Executa uma função baseada no tipo de resultado.
   ///
@@ -113,27 +96,44 @@ sealed class OperationResult<R, E> {
     required void Function(R valor) onSuccess,
     required void Function(E error) onFailure,
   }) {
-    if (this is OperationSuccess<R, E>) {
-      onSuccess((this as OperationSuccess<R, E>).result);
-    } else if (this is OperationError<R, E>) {
-      onFailure((this as OperationError<R, E>).error);
+    if (this is ResultSuccess<R, E>) {
+      onSuccess((this as ResultSuccess<R, E>).result);
+    } else if (this is ResultFailure<R, E>) {
+      onFailure((this as ResultFailure<R, E>).failure);
     }
   }
+}
+
+/// Representa o resultado de uma operação com falha.
+///
+/// Contém o erro ocorrido durante a execução da operação.
+/// Esta classe é uma subclasse de [ExecutionResult] e indica que
+/// a operação não foi concluída com sucesso.
+///
+/// Tipo genérico:
+/// - [R]: Tipo do resultado em caso de sucesso
+/// - [E]: Tipo do erro em caso de falha
+class ResultFailure<R, E> extends ExecutionResult<R, E> {
+  /// O erro que ocorreu durante a operação.
+  final E failure;
+
+  /// Cria uma instância de erro com o erro especificado.
+  ResultFailure(this.failure);
 }
 
 /// Representa o resultado de uma operação bem-sucedida.
 ///
 /// Contém o valor resultante da execução da operação.
-/// Esta classe é uma subclasse de [OperationResult] e indica que
+/// Esta classe é uma subclasse de [ExecutionResult] e indica que
 /// a operação foi concluída com sucesso.
 ///
 /// Tipo genérico:
 /// - [R]: Tipo do resultado em caso de sucesso
 /// - [E]: Tipo do erro em caso de falha
-class OperationSuccess<R, E> extends OperationResult<R, E> {
+class ResultSuccess<R, E> extends ExecutionResult<R, E> {
   /// O valor resultante da operação bem-sucedida.
   final R result;
 
   /// Cria uma instância de sucesso com o resultado especificado.
-  OperationSuccess(this.result);
+  ResultSuccess(this.result);
 }

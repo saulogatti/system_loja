@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/repository/user_repository.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_delete_confirm_dialog.dart';
@@ -11,7 +12,6 @@ import 'package:system_loja/screens/widgets/overlay_app_widget.dart';
 import '../../core/managers/log_atividade_manager.dart';
 import '../../core/models/log_atividade.dart';
 import '../../core/models/usuario.dart';
-import '../../core/utils/string_extensions.dart';
 
 /// Tela de gestão de usuários com listagem, adição, edição e exclusão.
 ///
@@ -29,7 +29,7 @@ class UsuarioScreen extends StatefulWidget {
 }
 
 class _UsuarioScreenState extends State<UsuarioScreen> {
-  late UsuarioCubit _bloc;
+  late final UsuarioCubit _bloc = UsuarioCubit(UserRepository());
   final LogAtividadeManager _logManager = LogAtividadeManager();
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
@@ -48,6 +48,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: BlocListener<UsuarioCubit, UsuarioState>(
+        bloc: _bloc,
         listener: (context, state) {
           state.when(
             loadFailure: (errorMessage) {
@@ -122,6 +123,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -164,6 +168,12 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     _emailController.dispose();
     _senhaController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc.loadUsuarios();
   }
 
   void _cancelarEdicao() {

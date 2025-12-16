@@ -69,9 +69,9 @@ class CustomerRepository extends BaseRepository {
     final result = defaultDataStorage.delete(id);
     return result.then((operationResult) {
       switch (operationResult) {
-        case OperationSuccess(result: final success):
+        case ResultSuccess(result: final success):
           return success;
-        case OperationError(error: final errorMessage):
+        case ResultFailure(failure: final errorMessage):
           throw CustomerException(
             'Erro ao deletar cliente com ID $id: $errorMessage',
           );
@@ -105,7 +105,7 @@ class CustomerRepository extends BaseRepository {
   Future<Customer?> findWith({required String cpf}) async {
     final result = await defaultDataStorage.loadAll();
     switch (result) {
-      case OperationSuccess(result: final dataList):
+      case ResultSuccess(result: final dataList):
         for (var data in dataList) {
           final customer = Customer.fromJson(data.data);
           if (customer.cpf == cpf) {
@@ -113,7 +113,7 @@ class CustomerRepository extends BaseRepository {
           }
         }
         return null;
-      case OperationError(error: final errorMessage):
+      case ResultFailure(failure: final errorMessage):
         throw CustomerException('Erro ao carregar clientes: $errorMessage');
     }
   }
@@ -151,14 +151,14 @@ class CustomerRepository extends BaseRepository {
   Future<Map<int, Customer>> loadAll() async {
     final result = await defaultDataStorage.loadAll();
     switch (result) {
-      case OperationSuccess(result: final dataList):
+      case ResultSuccess(result: final dataList):
         Map<int, Customer> customers = {};
         for (var data in dataList) {
           final customer = Customer.fromJson(data.data);
           customers[customer.id] = customer;
         }
         return customers;
-      case OperationError(error: final errorMessage):
+      case ResultFailure(failure: final errorMessage):
         throw CustomerException('Erro ao carregar clientes: $errorMessage');
     }
   }
