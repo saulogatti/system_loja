@@ -1,4 +1,4 @@
-include: 
+include:
   - package:flutter_lints/flutter.yaml
   - package:bloc_lint/recommended.yaml
 
@@ -32,6 +32,9 @@ linter:
     use_key_in_widget_constructors: true
     avoid_dynamic_calls: true
     avoid_annotating_with_dynamic: true
+    exhaustive_cases: true
+    only_throw_errors: true
+    prefer_final_locals: true
 
 analyzer:
   exclude:

@@ -239,13 +239,13 @@ extension ValidateDataCustomer on String {
   /// ```
   bool isValidCPF() {
     if (this == '111.111.111-11') return true; //TODO: retirar Caso Para debug
-    String cpf = replaceAll(RegExp(r'[^0-9]'), '');
+    final String cpf = replaceAll(RegExp(r'[^0-9]'), '');
 
     if (cpf.length != 11 || RegExp(r'^(\d)\1*$').hasMatch(cpf)) {
       return false;
     }
 
-    List<int> digits = cpf.split('').map(int.parse).toList();
+    final List<int> digits = cpf.split('').map(int.parse).toList();
 
     for (int j = 9; j < 11; j++) {
       int sum = 0;
@@ -291,7 +291,7 @@ extension ValidateDataCustomer on String {
   /// Regras: mínimo [senhaMinLength] caracteres, pelo menos uma letra maiúscula,
   /// uma letra minúscula e um número.
   String? validarSenha() {
-    String senha = this;
+    final String senha = this;
     if (senha.isEmpty) {
       return 'Senha é obrigatória';
     }

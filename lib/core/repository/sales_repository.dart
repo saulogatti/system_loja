@@ -18,7 +18,7 @@ class SalesRepository extends BaseRepository {
     final result = await defaultDataStorage.loadAll();
     switch (result) {
       case ExecutionSucess(result: final dataList):
-        Map<int, Invoice> sales = {};
+        final Map<int, Invoice> sales = {};
         for (var data in dataList) {
           final sale = Invoice.fromJson(data.data);
           sales[sale.id] = sale;

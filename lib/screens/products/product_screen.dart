@@ -47,7 +47,7 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
         },
         child: BlocBuilder<ProductCubit, ProductState>(
           builder: (context, state) {
-            List<Produto> produtos = [];
+            final List<Produto> produtos = [];
             if (state is ProductStateInsertSuccess) {
               produtos.addAll(state.produtos);
             } else if (state is ProductStateUpdateSuccess) {

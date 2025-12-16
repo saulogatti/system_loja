@@ -27,7 +27,7 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
   Future<ExecutionResult<bool, String>> adicionarUsuario(
     Usuario usuario,
   ) async {
-    PersistentDataStore persistentDataStore = PersistentDataStore(
+    final PersistentDataStore persistentDataStore = PersistentDataStore(
       id: usuario.id,
       data: usuario.toJson(),
     );
@@ -61,7 +61,7 @@ class UserRepository extends BaseRepository with LoggerClassMixin {
           dataCadastro: userExisting.registrationDate,
           dataUltimaAtualizacao: DateTime.now(),
         );
-        PersistentDataStore persistentDataStore = PersistentDataStore(
+        final PersistentDataStore persistentDataStore = PersistentDataStore(
           id: userExisting.id,
           data: userExisting.toJson(),
         );

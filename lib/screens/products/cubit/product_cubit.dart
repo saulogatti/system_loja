@@ -43,7 +43,7 @@ class ProductCubit extends Cubit<ProductState> {
     required String descricao,
     required String categoria,
   }) async {
-    int produtoId = await _manager.obtainNextId();
+    final int produtoId = await _manager.obtainNextId();
     final produto = Produto(
       id: produtoId, // ID será gerado automaticamente
       nome: nome,

@@ -49,6 +49,12 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
           message: 'Erro ao deletar cliente: ${e.message}',
         ),
       );
+    } catch (e) {
+      emit(
+        CustomerBlocState.customerError(
+          message: 'Erro inesperado ao deletar cliente: $e',
+        ),
+      );
     }
   }
 
@@ -132,9 +138,9 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
         return;
       }
 
-      int newId = await _customerRepository.obtainNextId();
+      final int newId = await _customerRepository.obtainNextId();
       final customer = Customer(
-        id: newId, // SQLite AUTOINCREMENT gera o ID automaticamente
+        id: newId,
         name: event.name,
         cpf: event.cpf,
         email: event.email,
@@ -156,6 +162,12 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
       emit(
         CustomerBlocState.customerError(
           message: 'Erro ao cadastrar cliente: ${e.message}',
+        ),
+      );
+    } catch (e) {
+      emit(
+        CustomerBlocState.customerError(
+          message: 'Erro inesperado ao cadastrar cliente: $e',
         ),
       );
     }

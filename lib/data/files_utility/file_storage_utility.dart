@@ -82,7 +82,7 @@ mixin FileStorageUtility {
   @protected
   Future<bool> deleteFile(String fileName) async {
     try {
-      File file = await _mountFileSystem(fileName);
+      final File file = await _mountFileSystem(fileName);
       if (await file.exists()) {
         await file.delete();
         return true;
@@ -143,12 +143,12 @@ mixin FileStorageUtility {
       );
     }
 
-    File file = await _mountFileSystem(fileName);
+    final File file = await _mountFileSystem(fileName);
     if (!await file.exists()) {
       return ExecutionResult.error('Arquivo $fileName não encontrado.');
     }
     try {
-      String content = await file.readAsString();
+      final String content = await file.readAsString();
 
       return ExecutionResult.success(content);
     } catch (e, stackTrace) {
@@ -206,7 +206,7 @@ mixin FileStorageUtility {
     }
 
     try {
-      File file = await _mountFileSystem(path);
+      final File file = await _mountFileSystem(path);
       if (!await file.parent.exists()) {
         await file.parent.create(recursive: true);
       }
@@ -233,7 +233,7 @@ mixin FileStorageUtility {
       try {
         //DEBUG ///Users/saulogatti-pessoal/Library/Containers/com.example.systemLoja/Data/Library/Application%20Support/com.example.systemLoja/json_data_storage/
         final directory = await getApplicationSupportDirectory();
-        String cacheDirectory = p.join(directory.path, retrieveDirectoryName());
+        final String cacheDirectory = p.join(directory.path, retrieveDirectoryName());
         final cacheDir = Directory(cacheDirectory);
 
         if (!await cacheDir.exists()) {
@@ -257,7 +257,7 @@ mixin FileStorageUtility {
   /// Este é um método privado utilizado internamente por [fetchDataFromFile]
   /// e [saveData].
   Future<File> _mountFileSystem(String path) async {
-    String cacheDirectory = await _initializeDirectory();
+    final String cacheDirectory = await _initializeDirectory();
     return File(p.join(cacheDirectory, path));
   }
 }

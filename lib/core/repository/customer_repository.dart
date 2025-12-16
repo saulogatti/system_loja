@@ -152,7 +152,7 @@ class CustomerRepository extends BaseRepository {
     final result = await defaultDataStorage.loadAll();
     switch (result) {
       case ExecutionSucess(result: final dataList):
-        Map<int, Customer> customers = {};
+        final Map<int, Customer> customers = {};
         for (var data in dataList) {
           final customer = Customer.fromJson(data.data);
           customers[customer.id] = customer;

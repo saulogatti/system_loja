@@ -18,7 +18,7 @@ class UsuarioCubit extends Cubit<UsuarioState> {
   }) async {
     // Lógica para adicionar usuário
     try {
-      int usuarioId = await _userRepository.obtainNextId(); // Exemplo de ID
+      final int usuarioId = await _userRepository.obtainNextId(); // Exemplo de ID
       final usuario = Usuario(
         id: usuarioId,
         nome: nome,
@@ -28,7 +28,7 @@ class UsuarioCubit extends Cubit<UsuarioState> {
         nivelPermissao: nivelPermissao,
       );
 
-      ExecutionResult<bool, String> executionResult = await _userRepository
+      final ExecutionResult<bool, String> executionResult = await _userRepository
           .adicionarUsuario(usuario);
       executionResult.when(
         onSuccess: (sucess) {
@@ -47,7 +47,7 @@ class UsuarioCubit extends Cubit<UsuarioState> {
 
   Future<void> atualizarUsuario({required Usuario usuarioAtualizado}) async {
     try {
-      ExecutionResult<bool, String> resultAdd = await _userRepository
+      final ExecutionResult<bool, String> resultAdd = await _userRepository
           .atualizarUsuario(usuarioAtualizado);
       switch (resultAdd) {
         case ExecutionSucess(result: final sucesso):
@@ -81,7 +81,7 @@ class UsuarioCubit extends Cubit<UsuarioState> {
 
   Future<void> removerUsuario(int id) async {
     try {
-      bool sucesso = await _userRepository.removerUsuario(id);
+      final bool sucesso = await _userRepository.removerUsuario(id);
       if (sucesso) {
         emit(UsuarioState.usuarioRemovido(id));
       } else {
