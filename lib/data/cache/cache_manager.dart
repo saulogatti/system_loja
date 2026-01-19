@@ -268,7 +268,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// armazenados dentro do diretório de suporte da aplicação.
   @override
   String retrieveDirectoryName() {
-    // TODO: Validar se este nome é adequado a plataformas diferentes (web, mobile, desktop etc)
+   
     return 'system_loja_cache';
   }
 

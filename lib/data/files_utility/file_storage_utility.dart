@@ -25,6 +25,7 @@ mixin FileStorageUtility {
 
   Future<int> backup() async {
     try {
+      // FIXME QUando vai fazer o backup, precisa recuperar a pasta principal do app e não do cache atual. Atualmente tem system_loja_cache e system_loja_database.
       final backupFiles = await _initializeDirectory();
       final bacupFiles = Directory(backupFiles);
       final timestamp = DateTime.now().millisecondsSinceEpoch;
@@ -157,6 +158,13 @@ mixin FileStorageUtility {
     }
   }
 
+  @protected
+  @nonVirtual
+  Future<String> getPathWithFileName(String fileName) async {
+    final directoryPath = await _initializeDirectory();
+    return p.join(directoryPath, fileName);
+  }
+
   void logDebug(String message);
 
   /// Registra mensagens de erro com stack trace.
@@ -233,7 +241,10 @@ mixin FileStorageUtility {
       try {
         //DEBUG ///Users/saulogatti-pessoal/Library/Containers/com.example.systemLoja/Data/Library/Application%20Support/com.example.systemLoja/json_data_storage/
         final directory = await getApplicationSupportDirectory();
-        final String cacheDirectory = p.join(directory.path, retrieveDirectoryName());
+        final String cacheDirectory = p.join(
+          directory.path,
+          retrieveDirectoryName(),
+        );
         final cacheDir = Directory(cacheDirectory);
 
         if (!await cacheDir.exists()) {

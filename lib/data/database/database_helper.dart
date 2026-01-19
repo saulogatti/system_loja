@@ -1,8 +1,7 @@
 import 'dart:io';
 
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:system_loja/data/files_utility/file_storage_utility.dart';
 
 import 'database_config.dart';
 import 'database_scripts.dart';
@@ -17,7 +16,7 @@ import 'database_scripts.dart';
 /// - Criar as tabelas e índices
 /// - Gerenciar migrações de versão
 /// - Fornecer acesso à instância do banco
-class DatabaseHelper {
+class DatabaseHelper with FileStorageUtility {
   /// Instância singleton do DatabaseHelper
   static DatabaseHelper? _instance;
 
@@ -70,14 +69,20 @@ class DatabaseHelper {
   /// Remove o arquivo do banco de dados do sistema de arquivos.
   /// Use com cuidado, pois todos os dados serão perdidos.
   Future<void> deleteDatabase() async {
-    final Directory documentsDirectory =
-        await getApplicationDocumentsDirectory();
-    final String path = join(
-      documentsDirectory.path,
-      DatabaseConfig.databaseName,
-    );
+    final path = await _getPath();
     await databaseFactory.deleteDatabase(path);
     resetInstance();
+  }
+
+  @override
+  void logDebug(String message) {}
+
+  @override
+  void logError(String message, StackTrace stackTrace) {}
+
+  @override
+  String retrieveDirectoryName() {
+    return 'system_loja_database';
   }
 
   /// Verifica se uma tabela existe no banco de dados
@@ -93,17 +98,19 @@ class DatabaseHelper {
     return result.isNotEmpty;
   }
 
+  Future<String> _getPath() async {
+    final directoryPath = await getPathWithFileName(
+      DatabaseConfig.databaseName,
+    );
+    return directoryPath;
+  }
+
   /// Inicializa o banco de dados
   ///
   /// Cria o arquivo do banco de dados no diretório de documentos
   /// da aplicação e executa os scripts de criação de tabelas.
   Future<Database> _initDatabase() async {
-    final Directory documentsDirectory =
-        await getApplicationDocumentsDirectory();
-    final String path = join(
-      documentsDirectory.path,
-      DatabaseConfig.databaseName,
-    );
+    final path = await _getPath();
     initializeFfi();
     return await openDatabase(
       path,
