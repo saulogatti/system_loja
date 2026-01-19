@@ -97,6 +97,7 @@ class ConfigurationRepository with LoggerClassMixin {
   ///
   /// Retorna true se o log deve ser mantido, false se deve ser removido.
   /// Mantém logs com formato inválido por segurança.
+  // ignore: unused_element
   bool _isLogRecent(Object log, DateTime dataLimite) {
     try {
       if (log is Map<String, dynamic> && log['data_hora'] is String) {

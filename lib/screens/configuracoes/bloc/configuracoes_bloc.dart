@@ -31,8 +31,7 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
     emit(const ConfiguracoesLoading());
     try {
       await _manager.atualizarConfiguracao(event.configuracao);
-      SettingsService().primaryColorNotifier.value =
-          event.configuracao.corPrimaria;
+      SettingsService().updateSettings(event.configuracao);
       emit(
         ConfiguracoesSuccess(
           event.configuracao,
@@ -55,6 +54,7 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
     emit(const ConfiguracoesLoading());
     try {
       final configuracao = _manager.configuracao;
+      SettingsService().updateSettings(configuracao);
       emit(ConfiguracoesLoaded(configuracao));
     } catch (e) {
       emit(ConfiguracoesError('Erro ao carregar configurações: $e'));

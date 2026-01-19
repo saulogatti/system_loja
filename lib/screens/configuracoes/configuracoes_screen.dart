@@ -343,7 +343,7 @@ class _ConfiguracoesView extends StatelessWidget {
   /// Atualiza a configuração no estado local (não salva ainda)
   void _updateConfig(BuildContext context, AppSettings newConfig) {
     context.read<ConfiguracoesBloc>().add(
-      CarregarConfiguracoesEvent(),
+      AtualizarConfiguracoesEvent(newConfig),
     ); // Recarrega para manter estado
     // Aqui mantemos o config local até salvar
     // Em uma implementação mais complexa, usaríamos outro evento
