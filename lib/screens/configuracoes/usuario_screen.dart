@@ -239,7 +239,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     UsuarioDetailsDialog.show(context, usuario);
   }
 
-  void _salvarUsuario() async {
+  Future<void> _salvarUsuario() async {
     if (_formKey.currentState!.validate()) {
       final email = _emailController.text.trim();
       final senha = _senhaController.text;

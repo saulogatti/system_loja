@@ -35,6 +35,9 @@ linter:
     exhaustive_cases: true
     only_throw_errors: true
     prefer_final_locals: true
+    unnecessary_async: true
+    await_only_futures: true
+    avoid_void_async: true
 
 analyzer:
   exclude:
@@ -42,4 +45,5 @@ analyzer:
   errors:
     missing_override_of_must_be_overridden: error
     inference_failure_on_function_invocation: ignore
-
+    await_only_futures: warning
+    avoid_void_async: warning

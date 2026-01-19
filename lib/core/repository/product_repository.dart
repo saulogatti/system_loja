@@ -83,7 +83,7 @@ class ProductRepository extends BaseRepository {
   ///
   /// **Nota**: Este método utiliza internamente [salvarProduto], pois o storage
   /// não diferencia entre inserção e atualização (upsert pattern).
-  Future<ExecutionResult<bool, String>> updateProduct(Produto produto) async {
+  Future<ExecutionResult<bool, String>> updateProduct(Produto produto) {
     return salvarProduto(produto);
   }
 }

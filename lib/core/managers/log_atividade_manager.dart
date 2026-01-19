@@ -114,7 +114,7 @@ class LogAtividadeManager with LoggerClassMixin {
   Future<void> salvarDadosSincronizado() async {
     await _getLock().synchronized(() async {
       // Recarrega dados do arquivo para obter a versão mais recente
-      final dadosAtuais = _carregarDadosDoDisco();
+      final dadosAtuais = await _carregarDadosDoDisco();
 
       // Obtém o maior ID existente para evitar conflitos
       int maiorId = 0;
@@ -159,11 +159,11 @@ class LogAtividadeManager with LoggerClassMixin {
   }
 
   /// Carrega dados do disco sem modificar o estado interno
-  List<LogAtividade> _carregarDadosDoDisco() {
+  Future<List<LogAtividade>> _carregarDadosDoDisco() async {
     final file = File(dataFile);
     if (file.existsSync()) {
       try {
-        final jsonString = file.readAsStringSync();
+        final jsonString = await file.readAsString();
         final List<dynamic> jsonList = jsonDecode(jsonString) as List<dynamic>;
         return jsonList.map((json) => LogAtividade.fromJson(json as Map<String, dynamic>)).toList();
       } catch (e) {

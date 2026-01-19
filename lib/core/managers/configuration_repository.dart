@@ -111,8 +111,8 @@ class ConfigurationRepository with LoggerClassMixin {
   }
 
   /// Salva dados no arquivo JSON
-  void _salvarDados() {
+  Future<void> _salvarDados() async {
     final file = ConfigurationRepositoryCache(configuracao: _configuracao);
-    _cache.set(file);
+    await _cache.set(file);
   }
 }

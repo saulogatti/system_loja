@@ -13,7 +13,7 @@ class SalesCubit extends Cubit<SalesState> {
     _salesRepository = SalesRepository();
     _customerRepository = CustomerRepository();
   }
-  void loadAllCustomers() async {
+  Future<void> loadAllCustomers() async {
     // Implement loading customers logic here
     emit(SalesState.loading());
     // Assuming you have a method to load customers in SalesRepository
@@ -21,7 +21,7 @@ class SalesCubit extends Cubit<SalesState> {
     emit(SalesState.loadedCustomers(customers: customers));
   }
 
-  void loadProducts() async {
+  Future<void> loadProducts() async {
     emit(SalesState.loadingProducts());
     final productRepository = ProductRepository();
     final result = await productRepository.getProdutos();
@@ -39,7 +39,7 @@ class SalesCubit extends Cubit<SalesState> {
     // emit(SalesState.loadedProducts(products: products));
   }
 
-  void loadSales() async {
+  Future<void> loadSales() async {
     // Implement loading sales logic here
     emit(SalesState.loading());
     final sales = await _salesRepository.loadAllSales();
@@ -47,7 +47,7 @@ class SalesCubit extends Cubit<SalesState> {
     emit(SalesState.loaded(items: sales));
   }
 
-  void registerSale(InvoiceData invoiceData) async {
+  Future<void> registerSale(InvoiceData invoiceData) async {
     emit(SalesState.loading());
     final invoice = Invoice(
       id: await _salesRepository.getNextSaleId(),

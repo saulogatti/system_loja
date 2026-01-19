@@ -35,7 +35,7 @@ class ProductCubit extends Cubit<ProductState> {
   ///   - [estoque]: Quantidade disponível em estoque.
   ///   - [descricao]: Descrição detalhada do produto.
   ///   - [categoria]: Categoria à qual o produto pertence.
-  void adicionarProduto({
+  Future<void> adicionarProduto({
     required String nome,
     required String codigo,
     required double preco,
@@ -75,7 +75,7 @@ class ProductCubit extends Cubit<ProductState> {
   ///
   /// Parâmetros:
   ///   - [id]: Identificador único do produto a ser removido.
-  void deleteProduct(int id) async {
+  Future<void> deleteProduct(int id) async {
     final deleteResult = await _manager.deleteProduct(id);
     switch (deleteResult) {
       case ExecutionSucess():
@@ -105,7 +105,7 @@ class ProductCubit extends Cubit<ProductState> {
   ///
   /// Parâmetros:
   ///   - [codigo]: Código do produto a ser localizado.
-  void findByCode(int codigo) async {
+  Future<void> findByCode(int codigo) async {
     final result = await _manager.findByCode(codigo);
     switch (result) {
       case ExecutionSucess(result: final produto):
@@ -120,7 +120,7 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  void loadAllProducts() async {
+  Future<void> loadAllProducts() async {
     final result = await _manager.getProdutos();
     switch (result) {
       case ExecutionSucess(result: final produtos):
@@ -141,7 +141,7 @@ class ProductCubit extends Cubit<ProductState> {
   ///
   /// Parâmetros:
   ///   - [produto]: Objeto [Produto] contendo os dados atualizados.
-  void updateProduct(Produto produto) async {
+  Future<void> updateProduct(Produto produto) async {
     emit(ProductState.loading());
     final updateResult = await _manager.updateProduct(produto);
     switch (updateResult) {

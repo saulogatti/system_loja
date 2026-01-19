@@ -14,12 +14,12 @@ void main() {
 
   late ClienteSqlManager clienteManager;
 
-  setUpAll(() async {
+  setUpAll(()  {
     // Configura um banco de dados em memória para testes
     databaseFactory = databaseFactoryFfi;
   });
 
-  setUp(() async {
+  setUp(()  {
     // Reset da instância do banco antes de cada teste
     DatabaseHelper.resetInstance();
     clienteManager = ClienteSqlManager();

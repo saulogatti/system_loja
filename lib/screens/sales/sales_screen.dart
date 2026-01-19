@@ -219,7 +219,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
     _adicionarItem();
   }
 
-  void _adicionarItem() async {
+  Future<void> _adicionarItem() async {
     final produto = await showDialog<Produto>(
       context: context,
       builder: (context) => _SelecionarProdutoDialog(produtos: widget.products),
@@ -251,7 +251,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
     }
   }
 
-  void _salvarNotaFiscal() async {
+  Future<void> _salvarNotaFiscal() async {
     if (_formKey.currentState!.validate()) {
       if (_clienteSelecionado == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -515,7 +515,7 @@ class _SalesViewState extends State<SalesView> {
     _salesCubit.loadProducts();
   }
 
-  void _adicionarNotaFiscal() async {
+  Future<void> _adicionarNotaFiscal() async {
     if (_mapCustomers.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

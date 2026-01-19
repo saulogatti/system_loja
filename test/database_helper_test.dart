@@ -11,15 +11,12 @@ void main() {
   sqfliteFfiInit();
   databaseFactory = databaseFactoryFfi;
 
-  setUpAll(() async {
+  setUpAll(() {
     // Configura um banco de dados em memória para testes
     databaseFactory = databaseFactoryFfi;
   });
 
-  setUp(() async {
-    // Reset da instância do banco antes de cada teste
-    DatabaseHelper.resetInstance();
-  });
+  setUp(DatabaseHelper.resetInstance);
 
   tearDown(() async {
     // Limpa o banco após cada teste

@@ -35,7 +35,7 @@ class CustomerForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
+          Text(
             'Novo Cliente',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),

@@ -37,6 +37,9 @@ class SystemLojaApp extends StatelessWidget {
           return MaterialApp(
             title: 'Sistema de Gerenciamento de Loja',
             theme: value,
+            themeMode: SettingsService().currentSettings.temaEscuro
+                ? ThemeMode.dark
+                : ThemeMode.light,
             home: const HomeScreen(),
             debugShowCheckedModeBanner: kDebugMode,
           );

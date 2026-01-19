@@ -18,12 +18,12 @@ void main() {
   late SqlDataStorage storage;
   const String testCategory = 'TestCategory';
 
-  setUpAll(() async {
+  setUpAll(() {
     // Configura um banco de dados em memória para testes
     databaseFactory = databaseFactoryFfi;
   });
 
-  setUp(() async {
+  setUp(() {
     // Reset da instância do banco antes de cada teste
     DatabaseHelper.resetInstance();
     storage = SqlDataStorage(storageCategory: testCategory);

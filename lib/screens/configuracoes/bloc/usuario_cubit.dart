@@ -68,7 +68,7 @@ class UsuarioCubit extends Cubit<UsuarioState> {
     }
   }
 
-  void loadUsuarios() async {
+  Future<void> loadUsuarios() async {
     try {
       final usuarios = await _userRepository.obterTodosUsuarios();
       emit(UsuarioState.loadSuccess(usuarios: usuarios));
