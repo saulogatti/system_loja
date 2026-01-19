@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:async/async.dart';
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -35,8 +36,7 @@ mixin FileStorageUtility {
     try {
       // Obtém o diretório principal do app (não o subdirectório específico)
       final appDocDir = await getApplicationSupportDirectory();
-      final now = DateTime.now();
-      final timestamp = '${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}_${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}${now.second.toString().padLeft(2, '0')}';
+      final timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
       final backupDir = Directory(p.join(appDocDir.path, 'backup_$timestamp'));
       
       if (!await backupDir.exists()) {
