@@ -166,13 +166,13 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
+                  color: Theme.of(context).colorScheme.primary.withAlpha(25),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Valor Total:',
                       style: TextStyle(
                         fontSize: 20,
@@ -181,10 +181,10 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                     ),
                     Text(
                       'R\$ ${valorTotal.toStringAsFixed(2)}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ],
@@ -196,7 +196,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),
-                child: const Text(
+                child: Text(
                   'Salvar Nota Fiscal',
                   style: TextStyle(fontSize: 16),
                 ),

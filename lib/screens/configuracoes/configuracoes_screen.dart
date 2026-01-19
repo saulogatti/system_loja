@@ -161,11 +161,7 @@ class _ConfiguracoesView extends StatelessWidget {
       child: ElevatedButton.icon(
         icon: const Icon(Icons.save),
         label: const Text('Salvar Configurações'),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.all(16),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Colors.white,
-        ),
+        style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
         onPressed: () {
           context.read<ConfiguracoesBloc>().add(
             AtualizarConfiguracoesEvent(config),

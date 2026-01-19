@@ -103,10 +103,6 @@ class LogAtividadeManager with LoggerClassMixin {
     logInfo('Logs antigos removidos: $logsAntigos registros');
   }
 
-  /// Public method to save data (for Flutter GUI)
-  @Deprecated('Use salvarDadosSincronizado() para operações seguras')
-  void salvarDados() => _salvarDados();
-
   /// Salva dados de forma segura e sincronizada
   ///
   /// Utiliza um lock para serializar o acesso ao arquivo e recarrega

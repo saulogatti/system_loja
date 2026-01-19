@@ -46,11 +46,14 @@ class _ProductCategoryState extends State<ProductCategory> {
   bool _modoEntradaManual = false;
 
   @override
-  void initState() {
-    super.initState();
-    // Atualiza categorias antes de inicializar valor, pois depende da lista
-    _atualizarCategorias();
-    _inicializarValor();
+  Widget build(BuildContext context) {
+    // Se não há categorias cadastradas ou modo manual ativo, mostra apenas o campo de texto
+    if (_categorias.isEmpty || _modoEntradaManual) {
+      return _buildCampoTexto();
+    }
+
+    // Se há categorias, mostra dropdown + opção de adicionar nova
+    return _buildCampoComDropdown();
   }
 
   @override
@@ -61,28 +64,12 @@ class _ProductCategoryState extends State<ProductCategory> {
     }
   }
 
-  /// Extrai categorias únicas dos produtos
-  void _atualizarCategorias() {
-    setState(() {
-      _categorias = widget.produtos
-          .where((produto) => produto.categoria.isNotEmpty)
-          .map((produto) => produto.categoria)
-          .toSet()
-          .toList()
-        ..sort();
-    });
-  }
-
-  /// Inicializa o valor do dropdown com base no controller
-  void _inicializarValor() {
-    final valorAtual = widget.controller.text.trim();
-    if (valorAtual.isNotEmpty && _categorias.contains(valorAtual)) {
-      _categoriaSelecionada = valorAtual;
-      _modoEntradaManual = false;
-    } else if (valorAtual.isNotEmpty) {
-      _categoriaSelecionada = null;
-      _modoEntradaManual = true;
-    }
+  @override
+  void initState() {
+    super.initState();
+    // Atualiza categorias antes de inicializar valor, pois depende da lista
+    _atualizarCategorias();
+    _inicializarValor();
   }
 
   /// Alterna entre modo dropdown e modo entrada manual
@@ -105,52 +92,17 @@ class _ProductCategoryState extends State<ProductCategory> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // Se não há categorias cadastradas ou modo manual ativo, mostra apenas o campo de texto
-    if (_categorias.isEmpty || _modoEntradaManual) {
-      return _buildCampoTexto();
-    }
-
-    // Se há categorias, mostra dropdown + opção de adicionar nova
-    return _buildCampoComDropdown();
-  }
-
-  /// Constrói o campo de texto para entrada manual
-  Widget _buildCampoTexto() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            controller: widget.controller,
-            enabled: widget.enabled,
-            decoration: InputDecoration(
-              labelText: widget.required ? 'Categoria *' : 'Categoria',
-              border: const OutlineInputBorder(),
-              prefixIcon: const Icon(Icons.category),
-              helperText: 'Digite uma nova categoria',
-            ),
-            validator: widget.required
-                ? (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Categoria é obrigatória';
-                    }
-                    return null;
-                  }
-                : null,
-            onChanged: (value) => widget.onChanged?.call(value),
-          ),
-        ),
-        if (_categorias.isNotEmpty) ...[
-          const SizedBox(width: 8),
-          IconButton(
-            onPressed: widget.enabled ? _alternarModo : null,
-            icon: const Icon(Icons.list),
-            tooltip: 'Selecionar categoria existente',
-          ),
-        ],
-      ],
-    );
+  /// Extrai categorias únicas dos produtos
+  void _atualizarCategorias() {
+    setState(() {
+      _categorias =
+          widget.produtos
+              .where((produto) => produto.categoria.isNotEmpty)
+              .map((produto) => produto.categoria)
+              .toSet()
+              .toList()
+            ..sort();
+    });
   }
 
   /// Constrói o campo com dropdown de categorias existentes
@@ -159,12 +111,13 @@ class _ProductCategoryState extends State<ProductCategory> {
       children: [
         Expanded(
           child: DropdownButtonFormField<String>(
+            padding: EdgeInsets.zero,
             initialValue: _categoriaSelecionada,
+            hint: const Text('Selecione ou crie uma nova'),
             decoration: InputDecoration(
               labelText: widget.required ? 'Categoria *' : 'Categoria',
               border: const OutlineInputBorder(),
               prefixIcon: const Icon(Icons.category),
-              helperText: 'Selecione ou crie uma nova',
             ),
             items: [
               ..._categorias.map((categoria) {
@@ -203,5 +156,54 @@ class _ProductCategoryState extends State<ProductCategory> {
         ),
       ],
     );
+  }
+
+  /// Constrói o campo de texto para entrada manual
+  Widget _buildCampoTexto() {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFormField(
+            controller: widget.controller,
+            enabled: widget.enabled,
+            decoration: InputDecoration(
+              labelText: widget.required ? 'Categoria *' : 'Categoria',
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.category),
+              hintText: 'Digite uma nova categoria',
+            ),
+            validator: widget.required
+                ? (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Categoria é obrigatória';
+                    }
+                    return null;
+                  }
+                : null,
+            onChanged: (value) => widget.onChanged?.call(value),
+          ),
+        ),
+        if (_categorias.isNotEmpty) ...[
+          const SizedBox(width: 8),
+          IconButton(
+            onPressed: widget.enabled ? _alternarModo : null,
+            icon: const Icon(Icons.list),
+            tooltip: 'Selecionar categoria existente',
+          ),
+        ],
+      ],
+    );
+  }
+
+  /// Inicializa o valor do dropdown com base no controller
+  void _inicializarValor() {
+    final valorAtual = widget.controller.text.trim();
+    if (valorAtual.isNotEmpty && _categorias.contains(valorAtual)) {
+      _categoriaSelecionada = valorAtual;
+      _modoEntradaManual = false;
+    } else if (valorAtual.isNotEmpty) {
+      _categoriaSelecionada = null;
+      _modoEntradaManual = true;
+    }
   }
 }

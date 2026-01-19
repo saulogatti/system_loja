@@ -190,7 +190,7 @@ system_loja/
 ## Tecnologias
 
 ### Core
-- **Flutter 3.27**: Framework de UI multiplataforma
+- **Flutter 3.38**: Framework de UI multiplataforma
 - **Dart 3.10.1**: Linguagem com null safety e pattern matching
 - **Material Design 3**: Sistema de design moderno
 

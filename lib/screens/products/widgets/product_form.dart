@@ -36,6 +36,7 @@ class ProductForm extends StatelessWidget {
     return Form(
       key: formKey,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Text(
@@ -109,10 +110,7 @@ class ProductForm extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          ProductCategory(
-            controller: categoriaController,
-            produtos: produtos,
-          ),
+          ProductCategory(controller: categoriaController, produtos: produtos),
           const SizedBox(height: 16),
           TextFormField(
             controller: descricaoController,
