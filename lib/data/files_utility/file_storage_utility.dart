@@ -35,7 +35,7 @@ mixin FileStorageUtility {
     try {
       // Obtém o diretório principal do app (não o subdirectório específico)
       final appDocDir = await getApplicationSupportDirectory();
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final timestamp = DateTime.now().microsecondsSinceEpoch;
       final backupDir = Directory(p.join(appDocDir.path, 'backup_$timestamp'));
       
       if (!await backupDir.exists()) {
