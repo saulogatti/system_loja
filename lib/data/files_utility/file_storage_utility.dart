@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:async/async.dart';
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -23,27 +24,49 @@ mixin FileStorageUtility {
   /// desnecessárias.
   final AsyncMemoizer<String> _asyncAccess = AsyncMemoizer<String>();
 
+  /// Realiza backup de todos os dados do sistema.
+  ///
+  /// Copia todos os arquivos e diretórios do diretório de suporte da aplicação
+  /// (incluindo `system_loja_cache` e `system_loja_database`) para um novo
+  /// diretório de backup com timestamp.
+  ///
+  /// Retorna o número de arquivos copiados com sucesso.
+  /// Em caso de erro, registra via `logError` e retorna 0.
   Future<int> backup() async {
     try {
-      // FIXME QUando vai fazer o backup, precisa recuperar a pasta principal do app e não do cache atual. Atualmente tem system_loja_cache e system_loja_database.
-      final backupFiles = await _initializeDirectory();
-      final bacupFiles = Directory(backupFiles);
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      // Obtém o diretório principal do app (não o subdiretório específico)
       final appDocDir = await getApplicationSupportDirectory();
+      final timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
       final backupDir = Directory(p.join(appDocDir.path, 'backup_$timestamp'));
+      
       if (!await backupDir.exists()) {
         await backupDir.create(recursive: true);
       }
 
       var arquivosCopiados = 0;
-      for (final file in bacupFiles.listSync()) {
-        if (file.existsSync()) {
-          final nomeArquivo = p.basename(file.path);
-          await file.rename('${backupDir.path}/$nomeArquivo');
+      
+      // Lista todos os itens no diretório principal do app
+      await for (final entity in appDocDir.list()) {
+        // Ignora diretórios de backup existentes para evitar recursão
+        if (entity is Directory && p.basename(entity.path).startsWith('backup_')) {
+          continue;
+        }
+        
+        if (entity is File) {
+          // Copia arquivos diretamente no diretório principal
+          final nomeArquivo = p.basename(entity.path);
+          final destino = File(p.join(backupDir.path, nomeArquivo));
+          await entity.copy(destino.path);
           arquivosCopiados++;
+        } else if (entity is Directory) {
+          // Copia diretórios recursivamente (ex: system_loja_cache, system_loja_database)
+          final nomeDiretorio = p.basename(entity.path);
+          final destinoDir = Directory(p.join(backupDir.path, nomeDiretorio));
+          arquivosCopiados += await _copyDirectoryRecursively(entity, destinoDir);
         }
       }
-      logDebug('Backup realizado com sucesso: $backupFiles arquivos copiados');
+      
+      logDebug('Backup realizado com sucesso: $arquivosCopiados arquivos copiados');
       return arquivosCopiados;
     } catch (e, stackTrace) {
       logError('Erro ao realizar backup: $e', stackTrace);
@@ -255,6 +278,38 @@ mixin FileStorageUtility {
         throw CacheException('Falha ao inicializar o diretório de cache', e);
       }
     });
+  }
+
+  /// Copia um diretório recursivamente para o destino.
+  ///
+  /// [source] é o diretório de origem a ser copiado.
+  /// [destination] é o diretório de destino onde os arquivos serão copiados.
+  ///
+  /// Retorna o número de arquivos copiados.
+  Future<int> _copyDirectoryRecursively(
+    Directory source,
+    Directory destination,
+  ) async {
+    var filesCopied = 0;
+    
+    if (!await destination.exists()) {
+      await destination.create(recursive: true);
+    }
+
+    await for (final entity in source.list()) {
+      if (entity is File) {
+        final nomeArquivo = p.basename(entity.path);
+        final destino = File(p.join(destination.path, nomeArquivo));
+        await entity.copy(destino.path);
+        filesCopied++;
+      } else if (entity is Directory) {
+        final nomeDiretorio = p.basename(entity.path);
+        final destinoDir = Directory(p.join(destination.path, nomeDiretorio));
+        filesCopied += await _copyDirectoryRecursively(entity, destinoDir);
+      }
+    }
+    
+    return filesCopied;
   }
 
   /// Monta o caminho completo do arquivo dentro do sistema de cache.
