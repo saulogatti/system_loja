@@ -6,24 +6,50 @@ part of 'log_atividade.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-LogAtividade _$LogAtividadeFromJson(Map<String, dynamic> json) => LogAtividade(
-  id: (json['id'] as num).toInt(),
-  tipoAcao: $enumDecode(_$TipoAcaoEnumMap, json['tipo_acao']),
-  entidade: json['entidade'] as String,
-  entidadeId: (json['entidade_id'] as num?)?.toInt(),
-  usuarioId: (json['usuario_id'] as num).toInt(),
-  usuarioNome: json['usuario_nome'] as String,
-  dataHora: json['data_hora'] == null
-      ? null
-      : DateTime.parse(json['data_hora'] as String),
-  detalhes: json['detalhes'] as String? ?? '',
-  lastUpdatedDate: json['last_updated_date'] == null
-      ? null
-      : DateTime.parse(json['last_updated_date'] as String),
-  registrationDate: json['registration_date'] == null
-      ? null
-      : DateTime.parse(json['registration_date'] as String),
-);
+LogAtividade _$LogAtividadeFromJson(Map<String, dynamic> json) =>
+    $checkedCreate(
+      'LogAtividade',
+      json,
+      ($checkedConvert) {
+        final val = LogAtividade(
+          id: $checkedConvert('id', (v) => (v as num).toInt()),
+          tipoAcao: $checkedConvert(
+            'tipo_acao',
+            (v) => $enumDecode(_$TipoAcaoEnumMap, v),
+          ),
+          entidade: $checkedConvert('entidade', (v) => v as String),
+          entidadeId: $checkedConvert(
+            'entidade_id',
+            (v) => (v as num?)?.toInt(),
+          ),
+          usuarioId: $checkedConvert('usuario_id', (v) => (v as num).toInt()),
+          usuarioNome: $checkedConvert('usuario_nome', (v) => v as String),
+          dataHora: $checkedConvert(
+            'data_hora',
+            (v) => v == null ? null : DateTime.parse(v as String),
+          ),
+          detalhes: $checkedConvert('detalhes', (v) => v as String? ?? ''),
+          lastUpdatedDate: $checkedConvert(
+            'last_updated_date',
+            (v) => v == null ? null : DateTime.parse(v as String),
+          ),
+          registrationDate: $checkedConvert(
+            'registration_date',
+            (v) => v == null ? null : DateTime.parse(v as String),
+          ),
+        );
+        return val;
+      },
+      fieldKeyMap: const {
+        'tipoAcao': 'tipo_acao',
+        'entidadeId': 'entidade_id',
+        'usuarioId': 'usuario_id',
+        'usuarioNome': 'usuario_nome',
+        'dataHora': 'data_hora',
+        'lastUpdatedDate': 'last_updated_date',
+        'registrationDate': 'registration_date',
+      },
+    );
 
 Map<String, dynamic> _$LogAtividadeToJson(LogAtividade instance) =>
     <String, dynamic>{

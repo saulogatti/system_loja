@@ -13,7 +13,7 @@ void main() {
     // Cria arquivo temporário para os testes
     testDataFile =
         'test/data/test_configuracao_${DateTime.now().millisecondsSinceEpoch}.json';
-    manager = ConfigurationRepository();
+    manager = ConfigurationRepository.injection();
   });
 
   tearDown(() {
@@ -35,8 +35,8 @@ void main() {
   });
 
   group('ConfiguracaoManager - Operações Básicas', () {
-    test('Deve carregar configurações padrão na primeira execução', () {
-      final config = manager.configuracao;
+    test('Deve carregar configurações padrão na primeira execução', () async {
+      final config = await manager.carregarConfiguracao();
 
       expect(config.notificacoesAtivadas, isTrue);
       expect(config.temaEscuro, isFalse);
@@ -44,7 +44,8 @@ void main() {
     });
 
     test('Deve atualizar configurações com sucesso', () async {
-      final novaConfig = manager.configuracao.copyWith(
+      final currentConfig = await manager.carregarConfiguracao();
+      final novaConfig = currentConfig.copyWith(
         temaEscuro: true,
 
         notificarVendas: false,
@@ -52,13 +53,16 @@ void main() {
 
       await manager.atualizarConfiguracao(novaConfig);
 
-      expect(manager.configuracao.temaEscuro, isTrue);
+      final updatedConfig = await manager.carregarConfiguracao();
 
-      expect(manager.configuracao.notificarVendas, isFalse);
+      expect(updatedConfig.temaEscuro, isTrue);
+
+      expect(updatedConfig.notificarVendas, isFalse);
     });
 
     test('Deve persistir configurações após salvar', () async {
-      final novaConfig = manager.configuracao.copyWith(
+      final currentConfig = await manager.carregarConfiguracao();
+      final novaConfig = currentConfig.copyWith(
         limiteEstoqueBaixo: 25,
         frequenciaBackup: 'mensal',
       );
@@ -66,15 +70,18 @@ void main() {
       await manager.atualizarConfiguracao(novaConfig);
 
       // Cria novo manager para verificar persistência
-      final manager2 = ConfigurationRepository();
+      final manager2 = ConfigurationRepository.injection();
 
-      expect(manager2.configuracao.limiteEstoqueBaixo, equals(25));
-      expect(manager2.configuracao.frequenciaBackup, equals('mensal'));
+      final updatedConfig2 = await manager2.carregarConfiguracao();
+
+      expect(updatedConfig2.limiteEstoqueBaixo, equals(25));
+      expect(updatedConfig2.frequenciaBackup, equals('mensal'));
     });
 
     test('Deve restaurar configurações padrão', () async {
       // Primeiro altera as configurações
-      final novaConfig = manager.configuracao.copyWith(
+      final currentConfig = await manager.carregarConfiguracao();
+      final novaConfig = currentConfig.copyWith(
         temaEscuro: true,
         limiteEstoqueBaixo: 50,
       );
@@ -83,8 +90,10 @@ void main() {
       // Depois restaura padrão
       await manager.restaurarPadrao();
 
-      expect(manager.configuracao.temaEscuro, isFalse);
-      expect(manager.configuracao.limiteEstoqueBaixo, equals(10));
+      final restoredConfig = await manager.carregarConfiguracao();
+
+      expect(restoredConfig.temaEscuro, isFalse);
+      expect(restoredConfig.limiteEstoqueBaixo, equals(10));
     });
   });
 
@@ -178,21 +187,22 @@ void main() {
       final frequencias = ['diario', 'semanal', 'mensal'];
 
       for (final freq in frequencias) {
-        final config = manager.configuracao.copyWith(frequenciaBackup: freq);
+        final currentConfig = await manager.carregarConfiguracao();
+        final config = currentConfig.copyWith(frequenciaBackup: freq);
         await manager.atualizarConfiguracao(config);
-        expect(manager.configuracao.frequenciaBackup, equals(freq));
+        final updatedConfig = await manager.carregarConfiguracao();
+        expect(updatedConfig.frequenciaBackup, equals(freq));
       }
     });
 
     test('Deve aceitar limites de estoque baixo válidos', () async {
       final limites = [1, 10, 25, 50];
-
+      final currentConfig = await manager.carregarConfiguracao();
       for (final limite in limites) {
-        final config = manager.configuracao.copyWith(
-          limiteEstoqueBaixo: limite,
-        );
+        final config = currentConfig.copyWith(limiteEstoqueBaixo: limite);
         await manager.atualizarConfiguracao(config);
-        expect(manager.configuracao.limiteEstoqueBaixo, equals(limite));
+        final updatedConfig = await manager.carregarConfiguracao();
+        expect(updatedConfig.limiteEstoqueBaixo, equals(limite));
       }
     });
 
@@ -200,11 +210,11 @@ void main() {
       final tempos = [1, 5, 15, 30, 60];
 
       for (final tempo in tempos) {
-        final config = manager.configuracao.copyWith(
-          tempoBloqueioMinutos: tempo,
-        );
+        final currentConfig = await manager.carregarConfiguracao();
+        final config = currentConfig.copyWith(tempoBloqueioMinutos: tempo);
         await manager.atualizarConfiguracao(config);
-        expect(manager.configuracao.tempoBloqueioMinutos, equals(tempo));
+        final updatedConfig = await manager.carregarConfiguracao();
+        expect(updatedConfig.tempoBloqueioMinutos, equals(tempo));
       }
     });
   });
@@ -233,22 +243,16 @@ void main() {
         await manager.atualizarConfiguracao(configOriginal);
 
         // Cria novo manager para verificar serialização
-        final manager2 = ConfigurationRepository();
-
+        final manager2 = ConfigurationRepository.injection();
+        final configuracao = await manager2.carregarConfiguracao();
         expect(
-          manager2.configuracao.notificacoesAtivadas,
+          configuracao.notificacoesAtivadas,
           equals(configOriginal.notificacoesAtivadas),
         );
+        expect(configuracao.temaEscuro, equals(configOriginal.temaEscuro));
+        expect(configuracao.corPrimaria, equals(configOriginal.corPrimaria));
         expect(
-          manager2.configuracao.temaEscuro,
-          equals(configOriginal.temaEscuro),
-        );
-        expect(
-          manager2.configuracao.corPrimaria,
-          equals(configOriginal.corPrimaria),
-        );
-        expect(
-          manager2.configuracao.backupAutomatico,
+          configuracao.backupAutomatico,
           equals(configOriginal.backupAutomatico),
         );
       },

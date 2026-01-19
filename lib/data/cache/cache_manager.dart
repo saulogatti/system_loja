@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:log_custom_printer/log_custom_printer.dart';
@@ -130,18 +131,6 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     final type = _findType<T>();
 
     try {
-      final cachedBeforeLoad = await _memoryLock.synchronized(() {
-        final entries = _memoryCache[type];
-        if (entries != null && entries.containsKey(key)) {
-          return Map<String, dynamic>.from(entries[key]!);
-        }
-        return null;
-      });
-
-      if (cachedBeforeLoad != null) {
-        return factory(cachedBeforeLoad);
-      }
-
       await _loadTypeCache(type);
 
       final cachedAfterLoad = await _memoryLock.synchronized(() {
@@ -223,6 +212,10 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// ```
   void invalidateAllMemoryCache() {
     unawaited(_memoryLock.synchronized(_memoryCache.clear));
+  }
+
+  Map<String, dynamic> parseData(String dataString) {
+    return Map<String, dynamic>.from(jsonDecode(dataString));
   }
 
   /// Remove um objeto do cache pela sua chave.
@@ -390,20 +383,31 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   ///
   /// Lança [CacheReadException] em caso de erro ao ler ou parsear o arquivo.
   Future<void> _loadTypeCache(String type) async {
-    var shouldLoad = false;
-
     await _memoryLock.synchronized(() {
       if (_memoryCache.containsKey(type)) {
         return;
       }
       _memoryCache[type] = {};
-      shouldLoad = true;
     });
 
-    if (!shouldLoad) return;
+    final filePath = _getCacheFilePath(type);
+    final lock = _getLock(filePath);
+
+    String? dataString;
+
+    await lock.synchronized(() async {
+      final result = await fetchDataFromFile(filePath);
+      if (result.isSuccessful) {
+        dataString = result.asSuccess;
+      }
+    });
+
+    if (dataString == null) {
+      return;
+    }
 
     try {
-      final Map<String, dynamic> jsonData = {};
+      final Map<String, dynamic> jsonData = parseData(dataString!);
       final loadedData = jsonData.map(
         (key, value) => MapEntry(
           key,
@@ -429,16 +433,14 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   ///
   /// Lança [CacheWriteException] em caso de erro ao escrever no arquivo.
   Future<void> _saveTypeCache(String type) async {
-    Map<String, Map<String, dynamic>>? snapshot;
+    String? snapshot;
 
     await _memoryLock.synchronized(() {
       final entries = _memoryCache[type];
       if (entries == null || entries.isEmpty) {
         return;
       }
-      snapshot = entries.map(
-        (key, value) => MapEntry(key, Map<String, dynamic>.from(value)),
-      );
+      snapshot = jsonEncode(entries);
     });
 
     if (snapshot == null) {
@@ -450,7 +452,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
 
     await lock.synchronized(() async {
       try {
-        final isSaveSuccessful = await saveData(filePath, snapshot!.toString());
+        final isSaveSuccessful = await saveData(filePath, snapshot!);
         if (!isSaveSuccessful) {
           throw CacheWriteException(
             'Falha ao salvar dados no arquivo de cache: $filePath',

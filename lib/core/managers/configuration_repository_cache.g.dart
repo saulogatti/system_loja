@@ -8,12 +8,16 @@ part of 'configuration_repository_cache.dart';
 
 ConfigurationRepositoryCache _$ConfigurationRepositoryCacheFromJson(
   Map<String, dynamic> json,
-) => ConfigurationRepositoryCache(
-  configuracao: AppSettings.fromJson(
-    json['configuracao'] as Map<String, dynamic>,
-  ),
-);
+) => $checkedCreate('ConfigurationRepositoryCache', json, ($checkedConvert) {
+  final val = ConfigurationRepositoryCache(
+    configuracao: $checkedConvert(
+      'configuracao',
+      (v) => AppSettings.fromJson(v as Map<String, dynamic>),
+    ),
+  );
+  return val;
+});
 
 Map<String, dynamic> _$ConfigurationRepositoryCacheToJson(
   ConfigurationRepositoryCache instance,
-) => <String, dynamic>{'configuracao': instance.configuracao};
+) => <String, dynamic>{'configuracao': instance.configuracao.toJson()};

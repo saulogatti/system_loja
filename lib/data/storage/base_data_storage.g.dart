@@ -7,10 +7,13 @@ part of 'base_data_storage.dart';
 // **************************************************************************
 
 PersistentDataStore _$PersistentDataStoreFromJson(Map<String, dynamic> json) =>
-    PersistentDataStore(
-      id: (json['id'] as num).toInt(),
-      data: json['data'] as Map<String, dynamic>,
-    );
+    $checkedCreate('PersistentDataStore', json, ($checkedConvert) {
+      final val = PersistentDataStore(
+        id: $checkedConvert('id', (v) => (v as num).toInt()),
+        data: $checkedConvert('data', (v) => v as Map<String, dynamic>),
+      );
+      return val;
+    });
 
 Map<String, dynamic> _$PersistentDataStoreToJson(
   PersistentDataStore instance,

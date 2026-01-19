@@ -10,7 +10,7 @@ dependencies:
   log_custom_printer:
     git:
       url: https://github.com/saulogatti/log_custom_printer.git
-      ref: v_1.1.0
+      ref: uopdateLib
   flutter:
     sdk: flutter
 

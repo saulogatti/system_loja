@@ -1,6 +1,7 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/managers/configuration_repository_cache.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
+import 'package:system_loja/screens/injection/app_injection.dart';
 
 import '../settings/app_settings.dart';
 
@@ -10,16 +11,13 @@ const String keyConfigurationRepositoryCache = 'configuration_repository_cache';
 ///
 /// Responsável por carregar, salvar e gerenciar as configurações
 /// do sistema usando persistência em arquivo JSON.
-class ConfigurationRepository with LoggerClassMixin {
+class ConfigurationRepository
+    with LoggerClassMixin
+    implements AppInjectionInterface {
   /// Configuração atual do sistema
   AppSettings _configuracao = AppSettings.createDefaultSettings();
 
-  ConfigurationRepository() {
-    _carregarDados();
-  }
-
-  /// Obtém a configuração atual
-  AppSettings get configuracao => _configuracao;
+  ConfigurationRepository.injection();
 
   CacheManager get _cache => CacheManager.instance;
 
@@ -28,8 +26,23 @@ class ConfigurationRepository with LoggerClassMixin {
   /// Salva automaticamente após atualizar.
   Future<void> atualizarConfiguracao(AppSettings novaConfiguracao) async {
     _configuracao = novaConfiguracao;
-    _salvarDados();
+    await _salvarDados();
+    AppInjection.instance.settingsService.updateSettings(
+      novaConfiguracao.corPrimaria,
+      novaConfiguracao.temaEscuro,
+    );
     logInfo('Configuração atualizada com sucesso');
+  }
+
+  /// Carrega a configuração atual do sistema
+  Future<AppSettings> carregarConfiguracao() async {
+    await _carregarDados();
+    return _configuracao;
+  }
+
+  @override
+  Future<void> initializeDependencies() async {
+    await _carregarDados();
   }
 
   Future<dynamic> limparLogsAntigos() async {}
@@ -75,21 +88,24 @@ class ConfigurationRepository with LoggerClassMixin {
 
   /// Carrega dados do arquivo JSON
   Future<void> _carregarDados() async {
-    final file = await _cache.get<ConfigurationRepositoryCache>(
-      keyConfigurationRepositoryCache,
-      ConfigurationRepositoryCache.fromJson,
-    );
-    if (file != null) {
-      try {
+    try {
+      final file = await _cache.get<ConfigurationRepositoryCache>(
+        keyConfigurationRepositoryCache,
+        ConfigurationRepositoryCache.fromJson,
+      );
+      if (file != null) {
         _configuracao = file.configuracao;
         logInfo('Configurações carregadas com sucesso');
-      } catch (e, stackTrace) {
-        logError('Erro ao carregar configurações: $e', stackTrace);
+      } else {
         _configuracao = AppSettings.createDefaultSettings();
       }
-    } else {
+      AppInjection.instance.settingsService.updateSettings(
+        _configuracao.corPrimaria,
+        _configuracao.temaEscuro,
+      );
+    } catch (e, stackTrace) {
+      logError('Erro ao carregar configurações: $e', stackTrace);
       _configuracao = AppSettings.createDefaultSettings();
-      _salvarDados(); // Cria arquivo com configurações padrão
     }
   }
 

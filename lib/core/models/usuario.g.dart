@@ -6,12 +6,27 @@ part of 'usuario.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-DadosUsuario _$DadosUsuarioFromJson(Map<String, dynamic> json) => DadosUsuario(
-  nome: json['nome'] as String,
-  email: json['email'] as String,
-  senhaHash: json['senha_hash'] as String,
-  nivelPermissao: $enumDecode(_$NivelPermissaoEnumMap, json['nivel_permissao']),
-);
+DadosUsuario _$DadosUsuarioFromJson(Map<String, dynamic> json) =>
+    $checkedCreate(
+      'DadosUsuario',
+      json,
+      ($checkedConvert) {
+        final val = DadosUsuario(
+          nome: $checkedConvert('nome', (v) => v as String),
+          email: $checkedConvert('email', (v) => v as String),
+          senhaHash: $checkedConvert('senha_hash', (v) => v as String),
+          nivelPermissao: $checkedConvert(
+            'nivel_permissao',
+            (v) => $enumDecode(_$NivelPermissaoEnumMap, v),
+          ),
+        );
+        return val;
+      },
+      fieldKeyMap: const {
+        'senhaHash': 'senha_hash',
+        'nivelPermissao': 'nivel_permissao',
+      },
+    );
 
 Map<String, dynamic> _$DadosUsuarioToJson(DadosUsuario instance) =>
     <String, dynamic>{
@@ -26,17 +41,31 @@ const _$NivelPermissaoEnumMap = {
   NivelPermissao.usuarioComum: 'USUARIO_COMUM',
 };
 
-Usuario _$UsuarioFromJson(Map<String, dynamic> json) => Usuario.withDados(
-  id: (json['id'] as num).toInt(),
-  dadosUsuario: DadosUsuario.fromJson(
-    json['dadosUsuario'] as Map<String, dynamic>,
-  ),
-  lastUpdatedDate: json['last_updated_date'] == null
-      ? null
-      : DateTime.parse(json['last_updated_date'] as String),
-  registrationDate: json['registration_date'] == null
-      ? null
-      : DateTime.parse(json['registration_date'] as String),
+Usuario _$UsuarioFromJson(Map<String, dynamic> json) => $checkedCreate(
+  'Usuario',
+  json,
+  ($checkedConvert) {
+    final val = Usuario.withDados(
+      id: $checkedConvert('id', (v) => (v as num).toInt()),
+      dadosUsuario: $checkedConvert(
+        'dadosUsuario',
+        (v) => DadosUsuario.fromJson(v as Map<String, dynamic>),
+      ),
+      lastUpdatedDate: $checkedConvert(
+        'last_updated_date',
+        (v) => v == null ? null : DateTime.parse(v as String),
+      ),
+      registrationDate: $checkedConvert(
+        'registration_date',
+        (v) => v == null ? null : DateTime.parse(v as String),
+      ),
+    );
+    return val;
+  },
+  fieldKeyMap: const {
+    'lastUpdatedDate': 'last_updated_date',
+    'registrationDate': 'registration_date',
+  },
 );
 
 Map<String, dynamic> _$UsuarioToJson(Usuario instance) => <String, dynamic>{
