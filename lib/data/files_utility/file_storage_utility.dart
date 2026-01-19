@@ -34,7 +34,7 @@ mixin FileStorageUtility {
   /// Em caso de erro, registra via `logError` e retorna 0.
   Future<int> backup() async {
     try {
-      // Obtém o diretório principal do app (não o subdirectório específico)
+      // Obtém o diretório principal do app (não o subdiretório específico)
       final appDocDir = await getApplicationSupportDirectory();
       final timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
       final backupDir = Directory(p.join(appDocDir.path, 'backup_$timestamp'));
