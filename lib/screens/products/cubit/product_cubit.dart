@@ -1,8 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/screens/products/cubit/produto_state.dart';
+import 'package:system_loja/screens/injection/app_injection.dart';
+import 'package:system_loja/screens/products/cubit/product_state.dart';
 
 /// Gerencia o estado da tela de produtos e operações com a base de dados.
 ///
@@ -12,14 +13,14 @@ import 'package:system_loja/screens/products/cubit/produto_state.dart';
 /// operação para a UI.
 class ProductCubit extends Cubit<ProductState> {
   /// Repositório utilizado para acessar dados de produtos.
-  late ProductRepository _manager;
+  late final ProductRepository _manager =
+      AppInjection.instance.productRepository;
 
   /// Inicializa o Cubit com estado de carregamento.
   ///
   /// Cria uma nova instância do repositório e carrega todos os produtos
   /// disponíveis na base de dados.
   ProductCubit() : super(ProductState.loading()) {
-    _manager = ProductRepository();
     loadAllProducts();
   }
 
@@ -43,15 +44,14 @@ class ProductCubit extends Cubit<ProductState> {
     required String descricao,
     required String categoria,
   }) async {
-    final int produtoId = await _manager.obtainNextId();
-    final produto = Produto(
-      id: produtoId, // ID será gerado automaticamente
-      nome: nome,
-      codigo: codigo,
-      preco: preco,
-      estoque: estoque,
-      descricao: descricao,
-      categoria: categoria,
+    final produto = Product(
+      id: 0,
+      name: nome,
+      code: codigo,
+      price: preco,
+      stockQuantity: estoque,
+      description: descricao,
+      category: categoria,
     );
 
     await _manager.salvarProduto(produto);
@@ -75,7 +75,8 @@ class ProductCubit extends Cubit<ProductState> {
   ///
   /// Parâmetros:
   ///   - [id]: Identificador único do produto a ser removido.
-  Future<void> deleteProduct(int id) async {
+  Future<void> deleteProduct(String code) async {
+    final id = int.tryParse(code) ?? 0;
     final deleteResult = await _manager.deleteProduct(id);
     switch (deleteResult) {
       case ExecutionSucess():
@@ -141,7 +142,7 @@ class ProductCubit extends Cubit<ProductState> {
   ///
   /// Parâmetros:
   ///   - [produto]: Objeto [Produto] contendo os dados atualizados.
-  Future<void> updateProduct(Produto produto) async {
+  Future<void> updateProduct(Product produto) async {
     emit(ProductState.loading());
     final updateResult = await _manager.updateProduct(produto);
     switch (updateResult) {

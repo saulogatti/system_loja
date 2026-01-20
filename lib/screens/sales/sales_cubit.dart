@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/repository/cliente_repository.dart';
-import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/repository/sales_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/injection/app_injection.dart';
@@ -24,7 +23,7 @@ class SalesCubit extends Cubit<SalesState> {
 
   Future<void> loadProducts() async {
     emit(SalesState.loadingProducts());
-    final productRepository = ProductRepository();
+    final productRepository = AppInjection.instance.productRepository;
     final result = await productRepository.getProdutos();
     switch (result) {
       case ExecutionSucess(result: final products):

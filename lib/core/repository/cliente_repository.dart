@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/data/database/cliente_dao.dart';
+import 'package:system_loja/data/database/extension/cliente_to_companion.dart';
 
 class ClienteRepository {
   final ClienteDao dao;

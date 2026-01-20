@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
+import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/input_formatters.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/sales/sales_cubit.dart';
@@ -10,7 +11,6 @@ import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
 import '../../core/models/invoice.dart';
-import '../../core/models/produto.dart';
 
 class SalesView extends StatefulWidget {
   const SalesView({super.key});
@@ -23,7 +23,7 @@ class SalesView extends StatefulWidget {
 class _SalesInvoiceScreen extends StatefulWidget {
   final Map<int, Customer> customers;
   final SalesCubit salesCubit;
-  final List<Produto> products;
+  final List<Product> products;
   const _SalesInvoiceScreen({
     // required this.produtoManager,
     required this.customers,
@@ -45,9 +45,9 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
   @override
   Widget build(BuildContext context) {
     final valorTotal = _itensSelecionados.fold<double>(0, (sum, item) {
-      final produto = item['produto'] as Produto;
+      final productItem = item['produto'] as Product;
       final quantidade = item['quantidade'] as int;
-      return sum + (produto.preco * quantidade);
+      return sum + (productItem.price * quantidade);
     });
 
     return Scaffold(
@@ -140,16 +140,16 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                 ..._itensSelecionados.asMap().entries.map((entry) {
                   final index = entry.key;
                   final item = entry.value;
-                  final produto = item['produto'] as Produto;
+                  final productItem = item['product'] as Product;
                   final quantidade = item['quantidade'] as int;
-                  final subtotal = produto.preco * quantidade;
+                  final subtotal = productItem.price * quantidade;
 
                   return Card(
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
-                      title: Text(produto.nome),
+                      title: Text(productItem.name),
                       subtitle: Text(
-                        '${quantidade}x R\$ ${produto.preco.toStringAsFixed(2)} = R\$ ${subtotal.toStringAsFixed(2)}',
+                        '${quantidade}x R\$ ${productItem.price.toStringAsFixed(2)} = R\$ ${subtotal.toStringAsFixed(2)}',
                       ),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
@@ -220,20 +220,20 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
   }
 
   Future<void> _adicionarItem() async {
-    final produto = await showDialog<Produto>(
+    final product = await showDialog<Product>(
       context: context,
-      builder: (context) => _SelecionarProdutoDialog(produtos: widget.products),
+      builder: (context) => _SelecionarProdutoDialog(products: widget.products),
     );
 
-    if (produto != null) {
-      final quantidade = await _solicitarQuantidade(produto);
+    if (product != null) {
+      final quantidade = await _solicitarQuantidade(product);
       if (quantidade != null && quantidade > 0) {
-        if (quantidade > produto.estoque) {
+        if (quantidade > product.stockQuantity) {
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Estoque insuficiente! Disponível: ${produto.estoque}',
+                'Estoque insuficiente! Disponível: ${product.stockQuantity}',
               ),
               backgroundColor: Colors.red,
             ),
@@ -242,10 +242,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
         }
 
         setState(() {
-          _itensSelecionados.add({
-            'produto': produto,
-            'quantidade': quantidade,
-          });
+          _itensSelecionados.add({'product': product, 'quantity': quantidade});
         });
       }
     }
@@ -289,14 +286,14 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
       // }
 
       final itens = _itensSelecionados.map((item) {
-        final produto = item['produto'] as Produto;
-        final quantidade = item['quantidade'] as int;
+        final product = item['product'] as Product;
+        final quantity = item['quantity'] as int;
         return InvoiceItem(
-          productId: produto.id, // ID não é mais null por construção
-          productName: produto.nome,
-          productCode: produto.codigo,
-          quantity: quantidade,
-          unitPrice: produto.preco,
+          productId: product.id, // ID não é mais null por construção
+          productName: product.name,
+          productCode: product.code,
+          quantity: quantity,
+          unitPrice: product.price,
         );
       }).toList();
 
@@ -313,13 +310,13 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
     }
   }
 
-  Future<int?> _solicitarQuantidade(Produto produto) async {
+  Future<int?> _solicitarQuantidade(Product product) async {
     final controller = TextEditingController();
     final formKey = GlobalKey<FormState>();
     final quantidade = await showDialog<int>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Quantidade de ${produto.nome}'),
+        title: Text('Quantidade de ${product.name}'),
         content: Form(
           key: formKey,
           child: TextFormField(
@@ -328,7 +325,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
             inputFormatters: [QuantityInputFormatter()],
             decoration: InputDecoration(
               labelText: 'Quantidade *',
-              helperText: 'Estoque disponível: ${produto.estoque}',
+              helperText: 'Estoque disponível: ${product.stockQuantity}',
               border: const OutlineInputBorder(),
             ),
             autofocus: true,
@@ -339,7 +336,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
 
               // Validação adicional para estoque
               final qtd = int.parse(value!.trim());
-              if (qtd > produto.estoque) {
+              if (qtd > product.stockQuantity) {
                 return 'Quantidade maior que o estoque disponível';
               }
 
@@ -370,7 +367,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
 }
 
 class _SalesViewState extends State<SalesView> {
-  List<Produto> _produtoManager = [];
+  List<Product> _productManager = [];
   final SalesCubit _salesCubit = SalesCubit();
 
   Map<int, Invoice> _mapToNotaFiscal = {};
@@ -417,7 +414,7 @@ class _SalesViewState extends State<SalesView> {
             case SalesLoadedCustomers():
               _mapCustomers = state.customers;
             case SalesLoadedProducts():
-              _produtoManager = state.products;
+              _productManager = state.products;
             case SalesLoading():
               // Loading overlay é exibido através do builder
               break;
@@ -526,7 +523,7 @@ class _SalesViewState extends State<SalesView> {
       return;
     }
 
-    if (_produtoManager.isEmpty) {
+    if (_productManager.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Erro: Nenhum produto cadastrado!'),
@@ -540,7 +537,7 @@ class _SalesViewState extends State<SalesView> {
       context,
       MaterialPageRoute(
         builder: (context) => _SalesInvoiceScreen(
-          products: _produtoManager,
+          products: _productManager,
           salesCubit: _salesCubit,
           customers: _mapCustomers,
         ),
@@ -627,9 +624,9 @@ class _SalesViewState extends State<SalesView> {
 
 // Dialog to select a product
 class _SelecionarProdutoDialog extends StatelessWidget {
-  final List<Produto> produtos;
+  final List<Product> products;
 
-  const _SelecionarProdutoDialog({required this.produtos});
+  const _SelecionarProdutoDialog({required this.products});
 
   @override
   Widget build(BuildContext context) {
@@ -639,15 +636,15 @@ class _SelecionarProdutoDialog extends StatelessWidget {
         width: double.maxFinite,
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: produtos.length,
+          itemCount: products.length,
           itemBuilder: (context, index) {
-            final produto = produtos[index];
+            final product = products[index];
             return ListTile(
-              title: Text(produto.nome),
+              title: Text(product.name),
               subtitle: Text(
-                'R\$ ${produto.preco.toStringAsFixed(2)} - Estoque: ${produto.estoque}',
+                'R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}',
               ),
-              onTap: () => Navigator.pop(context, produto),
+              onTap: () => Navigator.pop(context, product),
             );
           },
         ),
