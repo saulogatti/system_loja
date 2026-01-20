@@ -12,17 +12,16 @@ class AppInjection {
     return _instance!;
   }
 
-  late final AppDatabase appDatabase = AppDatabase();
+    final AppDatabase appDatabase = AppDatabase();
   late final ClienteRepository clienteRepository = ClienteRepository(
     ClienteDao(appDatabase),
   );
   late final SettingsService settingsService = SettingsService.injection();
   late final ConfigurationRepository configurationRepository =
       ConfigurationRepository.injection();
-  AppInjection._internal();
+  late final ProductRepository productRepository = ProductRepository();
 
-  ProductRepository get productRepository =>
-      ProductRepository(appDatabase.productDao);
+  AppInjection._internal();
   Future<void> initializeDependencies() async {
     await configurationRepository.initializeDependencies();
   }

@@ -19,12 +19,13 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
     )..where((t) => t.id.equals(id))).getSingleOrNull();
   }
 
-  Future<int> insertProduct(Product data) {
-    return into(productsRecords).insert(data.toInsertable());
+  Future<int> insertProduct(Product data) async {
+    return await into(productsRecords).insert(data.toInsertable());
   }
 
   Future<bool> remove(int id) async {
-   return await (delete(productsRecords)..where((t) => t.id.equals(id))).go() > 0;
+    return await (delete(productsRecords)..where((t) => t.id.equals(id))).go() >
+        0;
   }
 
   Future<int> updateProduct(Product data) async {
