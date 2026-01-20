@@ -59,6 +59,12 @@ class DatabaseScripts {
     CREATE INDEX IF NOT EXISTS idx_nota_fiscal_numero ON ${DatabaseConfig.tableNotasFiscais}(numero_nota)
   ''';
 
+  /// Script para criar índice na categoria do armazenamento persistente
+  static String get createIndexPersistentDataStoreCategory =>
+      '''
+    CREATE INDEX IF NOT EXISTS idx_persistent_data_store_category ON ${DatabaseConfig.tablePersistentDataStore}(storage_category)
+  ''';
+
   /// Script para criar índice no código do produto
   static String get createIndexProdutoCodigo =>
       '''
@@ -71,16 +77,10 @@ class DatabaseScripts {
     CREATE INDEX IF NOT EXISTS idx_usuario_email ON ${DatabaseConfig.tableUsuarios}(email)
   ''';
 
-  /// Script para criar índice na categoria do armazenamento persistente
-  static String get createIndexPersistentDataStoreCategory =>
-      '''
-    CREATE INDEX IF NOT EXISTS idx_persistent_data_store_category ON ${DatabaseConfig.tablePersistentDataStore}(storage_category)
-  ''';
-
   /// Script de criação da tabela de clientes
   ///
   /// Campos:
-  /// - id: Identificador único auto-incrementado
+  /// - id: Identificador único gerenciado pela aplicação
   /// - nome: Nome completo do cliente (obrigatório)
   /// - cpf: CPF do cliente (único, obrigatório)
   /// - email: Endereço de email
@@ -90,7 +90,7 @@ class DatabaseScripts {
   static String get createTableClientes =>
       '''
     CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tableClientes} (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id INTEGER NOT NULL PRIMARY KEY,
       nome TEXT NOT NULL,
       cpf TEXT NOT NULL UNIQUE,
       email TEXT,
@@ -103,7 +103,7 @@ class DatabaseScripts {
   /// Script de criação da tabela de itens de nota fiscal
   ///
   /// Campos:
-  /// - id: Identificador único auto-incrementado
+  /// - id: Identificador único gerenciado pela aplicação
   /// - nota_fiscal_id: Referência à nota fiscal
   /// - produto_id: Referência ao produto
   /// - quantidade: Quantidade do item
@@ -112,7 +112,7 @@ class DatabaseScripts {
   static String get createTableItensNotaFiscal =>
       '''
     CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tableInvoiceItems} (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id INTEGER NOT NULL PRIMARY KEY,
       nota_fiscal_id INTEGER NOT NULL,
       produto_id INTEGER NOT NULL,
       quantidade INTEGER NOT NULL,
@@ -126,7 +126,7 @@ class DatabaseScripts {
   /// Script de criação da tabela de logs de atividade
   ///
   /// Campos:
-  /// - id: Identificador único auto-incrementado
+  /// - id: Identificador único gerenciado pela aplicação
   /// - tipo_acao: Tipo de ação realizada (CRIAR, LER, ATUALIZAR, DELETAR)
   /// - entidade: Nome da entidade afetada
   /// - entidade_id: ID da entidade afetada (pode ser nulo)
@@ -137,7 +137,7 @@ class DatabaseScripts {
   static String get createTableLogsAtividade =>
       '''
     CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tableLogsAtividade} (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id INTEGER NOT NULL PRIMARY KEY,
       tipo_acao TEXT NOT NULL,
       entidade TEXT NOT NULL,
       entidade_id INTEGER,
@@ -152,7 +152,7 @@ class DatabaseScripts {
   /// Script de criação da tabela de notas fiscais
   ///
   /// Campos:
-  /// - id: Identificador único auto-incrementado
+  /// - id: Identificador único gerenciado pela aplicação
   /// - numero_nota: Número da nota fiscal (único, obrigatório)
   /// - cliente_id: Referência ao cliente
   /// - valor_total: Valor total da nota fiscal
@@ -161,61 +161,13 @@ class DatabaseScripts {
   static String get createTableNotasFiscais =>
       '''
     CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tableNotasFiscais} (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id INTEGER NOT NULL PRIMARY KEY,
       numero_nota TEXT NOT NULL UNIQUE,
       cliente_id INTEGER NOT NULL,
       valor_total REAL NOT NULL,
       forma_pagamento TEXT NOT NULL,
       data_emissao TEXT NOT NULL,
       FOREIGN KEY (cliente_id) REFERENCES ${DatabaseConfig.tableClientes}(id)
-    )
-  ''';
-
-  /// Script de criação da tabela de produtos
-  ///
-  /// Campos:
-  /// - id: Identificador único auto-incrementado
-  /// - nome: Nome do produto (obrigatório)
-  /// - codigo: Código do produto (único, obrigatório)
-  /// - preco: Preço unitário do produto
-  /// - estoque: Quantidade em estoque
-  /// - descricao: Descrição detalhada do produto
-  /// - categoria: Categoria do produto
-  /// - data_cadastro: Data e hora do cadastro
-  static String get createTableProdutos =>
-      '''
-    CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tableProdutos} (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nome TEXT NOT NULL,
-      codigo TEXT NOT NULL UNIQUE,
-      preco REAL NOT NULL,
-      estoque INTEGER NOT NULL,
-      descricao TEXT,
-      categoria TEXT,
-      data_cadastro TEXT NOT NULL
-    )
-  ''';
-
-  /// Script de criação da tabela de usuários
-  ///
-  /// Campos:
-  /// - id: Identificador único auto-incrementado
-  /// - nome: Nome completo do usuário (obrigatório)
-  /// - email: Email do usuário (único, obrigatório)
-  /// - senha_hash: Hash SHA-256 da senha (obrigatório)
-  /// - nivel_permissao: Nível de permissão do usuário (obrigatório)
-  /// - data_cadastro: Data e hora do cadastro
-  /// - data_ultima_atualizacao: Data e hora da última atualização
-  static String get createTableUsuarios =>
-      '''
-    CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tableUsuarios} (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nome TEXT NOT NULL,
-      email TEXT NOT NULL UNIQUE,
-      senha_hash TEXT NOT NULL,
-      nivel_permissao TEXT NOT NULL,
-      data_cadastro TEXT NOT NULL,
-      data_ultima_atualizacao TEXT NOT NULL
     )
   ''';
 
@@ -239,6 +191,54 @@ class DatabaseScripts {
       storage_category TEXT NOT NULL,
       data TEXT NOT NULL,
       PRIMARY KEY (id, storage_category)
+    )
+  ''';
+
+  /// Script de criação da tabela de produtos
+  ///
+  /// Campos:
+  /// - id: Identificador único gerenciado pela aplicação
+  /// - nome: Nome do produto (obrigatório)
+  /// - codigo: Código do produto (único, obrigatório)
+  /// - preco: Preço unitário do produto
+  /// - estoque: Quantidade em estoque
+  /// - descricao: Descrição detalhada do produto
+  /// - categoria: Categoria do produto
+  /// - data_cadastro: Data e hora do cadastro
+  static String get createTableProdutos =>
+      '''
+    CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tableProdutos} (
+      id INTEGER NOT NULL PRIMARY KEY,
+      nome TEXT NOT NULL,
+      codigo TEXT NOT NULL UNIQUE,
+      preco REAL NOT NULL,
+      estoque INTEGER NOT NULL,
+      descricao TEXT,
+      categoria TEXT,
+      data_cadastro TEXT NOT NULL
+    )
+  ''';
+
+  /// Script de criação da tabela de usuários
+  ///
+  /// Campos:
+  /// - id: Identificador único gerenciado pela aplicação
+  /// - nome: Nome completo do usuário (obrigatório)
+  /// - email: Email do usuário (único, obrigatório)
+  /// - senha_hash: Hash SHA-256 da senha (obrigatório)
+  /// - nivel_permissao: Nível de permissão do usuário (obrigatório)
+  /// - data_cadastro: Data e hora do cadastro
+  /// - data_ultima_atualizacao: Data e hora da última atualização
+  static String get createTableUsuarios =>
+      '''
+    CREATE TABLE IF NOT EXISTS ${DatabaseConfig.tableUsuarios} (
+      id INTEGER NOT NULL PRIMARY KEY,
+      nome TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      senha_hash TEXT NOT NULL,
+      nivel_permissao TEXT NOT NULL,
+      data_cadastro TEXT NOT NULL,
+      data_ultima_atualizacao TEXT NOT NULL
     )
   ''';
 

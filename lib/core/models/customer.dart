@@ -8,8 +8,6 @@ part 'customer.g.dart';
 @JsonSerializable(constructor: 'withData', explicitToJson: true)
 class Customer extends DefaultObject {
   final CustomerInfo customerInfo;
-  @JsonKey(name: 'registration_date')
-  final DateTime registrationDate;
 
   Customer({
     required super.id,
@@ -17,16 +15,14 @@ class Customer extends DefaultObject {
     required String cpf,
     required String email,
     required String phone,
-    required String address,
-    DateTime? registrationDate,
+    required String address, super.registrationDate, super.lastUpdatedDate,
   }) : customerInfo = CustomerInfo(
          name: name,
          cpf: cpf,
          email: email,
          phone: phone,
          address: address,
-       ),
-       registrationDate = registrationDate ?? DateTime.now();
+       );
 
   /// Cria um objeto a partir de JSON
   factory Customer.fromJson(Map<String, dynamic> json) =>
@@ -34,8 +30,9 @@ class Customer extends DefaultObject {
   Customer.withData({
     required super.id,
     required this.customerInfo,
-    DateTime? registrationDate,
-  }) : registrationDate = registrationDate ?? DateTime.now();
+    super.registrationDate,
+    super.lastUpdatedDate,
+  });
   String get address => customerInfo.address;
   String get cpf => customerInfo.cpf;
   String get email => customerInfo.email;

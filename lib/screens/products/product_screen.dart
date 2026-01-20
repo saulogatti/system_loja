@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
-import 'package:system_loja/screens/products/cubit/produto_state.dart';
+import 'package:system_loja/screens/products/cubit/product_state.dart';
 import 'package:system_loja/screens/products/product_detail_screen.dart';
 import 'package:system_loja/screens/products/widgets/product_form.dart';
 import 'package:system_loja/screens/products/widgets/product_list.dart';
-
-import '../../core/models/produto.dart';
 
 /// Tela de cadastro e listagem de produtos.
 ///
@@ -39,14 +38,15 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
       value: _produtoCubit,
       child: BlocListener<ProductCubit, ProductState>(
         listener: (context, state) {
-          if (state is ProductStateUpdateSuccess || state is ProductStateDeleteSuccess) {
+          if (state is ProductStateUpdateSuccess ||
+              state is ProductStateDeleteSuccess) {
             // Recarregar a lista após atualização ou exclusão
             _produtoCubit.loadAllProducts();
           }
         },
         child: BlocBuilder<ProductCubit, ProductState>(
           builder: (context, state) {
-            List<Produto> produtos = [];
+            final List<Product> produtos = [];
             if (state is ProductStateInsertSuccess) {
               produtos.addAll(state.produtos);
             } else if (state is ProductStateUpdateSuccess) {
@@ -76,9 +76,14 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
                             descricaoController: _descricaoController,
                             categoriaController: _categoriaController,
                             onSubmit: _adicionarProduto,
+                            products: produtos,
                           ),
                           const SizedBox(height: 32),
-                          ProductList(produtos: produtos, onProductTap: _mostrarDetalhesProduto),
+                          ProductList(
+                            products: produtos,
+                            onProductTap: (produto) =>
+                                _mostrarDetalhesProduto(produto, produtos),
+                          ),
                         ],
                       ),
                     ),
@@ -124,24 +129,23 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
       final preco = double.parse(_precoController.text.trim());
       final codigo = _codigoController.text.trim();
       final estoque = int.parse(_estoqueController.text.trim());
+      final nome = _nomeController.text.trim();
 
-      // Cria e adiciona produto
-      final produto = Produto(
-        id: 0, // ID será gerado automaticamente
-        nome: _nomeController.text.trim(),
+      _produtoCubit.adicionarProduto(
+        nome: nome,
         codigo: codigo,
         preco: preco,
         estoque: estoque,
         descricao: _descricaoController.text.trim(),
         categoria: _categoriaController.text.trim(),
       );
-
-      _produtoCubit.adicionarProduto(produto);
-      _mostrarSucesso('Produto "${produto.nome}" $_mensagemSucesso');
+      _mostrarSucesso('Produto "$nome" $_mensagemSucesso');
       _limparFormulario();
     } on FormatException catch (e) {
       // Isto não deve acontecer devido aos validators, mas tratamos por segurança
-      _mostrarErro('Erro de formato ao processar dados numéricos: ${e.message}');
+      _mostrarErro(
+        'Erro de formato ao processar dados numéricos: ${e.message}',
+      );
     } catch (e) {
       // Captura erros inesperados do repositório/banco de dados
       _mostrarErro('Erro ao salvar produto: ${e.toString()}');
@@ -160,13 +164,13 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
   }
 
   /// Navega para a tela de detalhes do produto.
-  void _mostrarDetalhesProduto(Produto produto) {
+  void _mostrarDetalhesProduto(Product produto, List<Product> produtos) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => BlocProvider.value(
           value: _produtoCubit,
-          child: ProductDetailScreen(product: produto),
+          child: ProductDetailScreen(product: produto, productList: produtos),
         ),
       ),
     );
@@ -174,15 +178,15 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
 
   /// Exibe mensagem de erro em SnackBar.
   void _mostrarErro(String mensagem) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.red));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(mensagem), backgroundColor: Colors.red),
+    );
   }
 
   /// Exibe mensagem de sucesso em SnackBar.
   void _mostrarSucesso(String mensagem) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.green));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(mensagem), backgroundColor: Colors.green),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
@@ -34,12 +35,9 @@ class CustomerForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
+          Text(
             'Novo Cliente',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
           TextFormField(
@@ -61,15 +59,14 @@ class CustomerForm extends StatelessWidget {
             validatorOptions: (value) {
               if (value == null || value.trim().isEmpty) {
                 return 'CPF é obrigatório';
+              } else if (!value.isValidCPF()) {
+                return 'CPF inválido';
               }
               return null;
             },
           ),
           const SizedBox(height: 16),
-          TextFormFieldEmail(
-            emailController: emailController,
-            isEditing: true,
-          ),
+          TextFormFieldEmail(emailController: emailController, isEditing: true),
           const SizedBox(height: 16),
           TextFormFieldPhone(
             telefoneController: telefoneController,

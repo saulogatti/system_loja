@@ -22,7 +22,7 @@ class TextFormFieldEmail extends StatelessWidget {
       enabled: isEditing,
       keyboardType: TextInputType.emailAddress,
       onChanged: (value) {
-        String formatted = value.trim();
+        final String formatted = value.trim();
 
         emailController.value = TextEditingValue(
           text: formatted,

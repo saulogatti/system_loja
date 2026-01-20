@@ -15,7 +15,7 @@ class CpfTextInputFormatter extends TextInputFormatter {
       return newValue;
     }
     // Remove todos os caracteres não-numéricos
-    var regExp = RegExp(r'[^0-9]');
+    final regExp = RegExp(r'[^0-9]');
     final digitsOnly = newValue.text.replaceAll(regExp, '');
 
     // Limita a 11 dígitos

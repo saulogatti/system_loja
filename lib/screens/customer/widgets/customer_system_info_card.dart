@@ -38,6 +38,12 @@ class CustomerSystemInfoCard extends StatelessWidget {
               icon: Icons.calendar_today,
               value: formatDate(customer.registrationDate),
             ),
+            const Divider(),
+            CustomerInfoRow(
+              label: 'Data de Atualização',
+              icon: Icons.calendar_month_outlined,
+              value: formatDate(customer.lastUpdatedDate),
+            ),
           ],
         ),
       ),

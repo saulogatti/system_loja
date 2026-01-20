@@ -1,9 +1,8 @@
-import 'package:sqflite/sqflite.dart';
+import 'package:system_loja/data/storage/sql_data_storage.dart';
 
 import '../../core/models/extensions/tipo_acao_extension.dart';
 import '../../core/models/log_atividade.dart';
 import 'database_config.dart';
-import 'database_helper.dart';
 
 /// Gerenciador de operações SQL para Logs de Atividade
 ///
@@ -11,18 +10,15 @@ import 'database_helper.dart';
 /// (Create, Read, Update, Delete) de logs de atividade no banco de dados SQLite.
 ///
 /// Utiliza o padrão Repository para abstrair o acesso aos dados.
-class LogAtividadeSqlManager {
-  /// Instância do helper do banco de dados
-  final DatabaseHelper _dbHelper;
+class LogAtividadeSqlManager extends SqlDataStorage {
+  LogAtividadeSqlManager({required super.storageCategory});
 
-  /// Construtor que recebe opcionalmente uma instância do DatabaseHelper
-  ///
-  /// Se não for fornecido, usa a instância singleton padrão.
-  LogAtividadeSqlManager({DatabaseHelper? dbHelper})
-    : _dbHelper = dbHelper ?? DatabaseHelper();
+  /// Instância do helper do banco de dados
 
   /// Obtém a instância do banco de dados
-  Future<Database> get _database => _dbHelper.database;
+  Future<Database> get _database async {
+    return await Future.value(Database());
+  }
 
   /// Consulta um log pelo ID
   ///
@@ -34,7 +30,7 @@ class LogAtividadeSqlManager {
     final List<Map<String, dynamic>> resultado = await db.query(
       DatabaseConfig.tableLogsAtividade,
       where: 'id = ?',
-      whereArgs: [id],
+      whereArgs: [id.toString()],
     );
 
     if (resultado.isEmpty) {
@@ -56,7 +52,7 @@ class LogAtividadeSqlManager {
       [usuarioId],
     );
 
-    return Sqflite.firstIntValue(resultado) ?? 0;
+    return resultado ?? 0;
   }
 
   /// Conta o número total de logs
@@ -67,9 +63,10 @@ class LogAtividadeSqlManager {
 
     final resultado = await db.rawQuery(
       'SELECT COUNT(*) as count FROM ${DatabaseConfig.tableLogsAtividade}',
+      [],
     );
 
-    return Sqflite.firstIntValue(resultado) ?? 0;
+    return (resultado) ?? 0;
   }
 
   ///
@@ -94,7 +91,11 @@ class LogAtividadeSqlManager {
 
     final Map<String, dynamic> dados = _logParaDadosDb(log);
 
-    return await db.insert(DatabaseConfig.tableLogsAtividade, dados);
+    return await db.insert(
+      DatabaseConfig.tableLogsAtividade,
+      dados,
+      conflictAlgorithm: null,
+    );
   }
 
   /// Insere um novo log de atividade no banco de dados
@@ -127,9 +128,8 @@ class LogAtividadeSqlManager {
       resultado = await db.query(
         DatabaseConfig.tableLogsAtividade,
         where: 'entidade = ? AND entidade_id = ?',
-        whereArgs: [entidade, entidadeId],
+        whereArgs: [entidade, entidadeId.toString()],
         orderBy: 'data_hora DESC',
-        limit: limit,
       );
     } else {
       resultado = await db.query(
@@ -137,7 +137,6 @@ class LogAtividadeSqlManager {
         where: 'entidade = ?',
         whereArgs: [entidade],
         orderBy: 'data_hora DESC',
-        limit: limit,
       );
     }
 
@@ -160,7 +159,6 @@ class LogAtividadeSqlManager {
       where: 'tipo_acao = ?',
       whereArgs: [tipoAcao.toStringValue()],
       orderBy: 'data_hora DESC',
-      limit: limit,
     );
 
     return resultado.map(_mapToLogAtividade).toList();
@@ -193,9 +191,8 @@ class LogAtividadeSqlManager {
     final List<Map<String, dynamic>> resultado = await db.query(
       DatabaseConfig.tableLogsAtividade,
       where: 'usuario_id = ?',
-      whereArgs: [usuarioId],
+      whereArgs: [usuarioId.toString()],
       orderBy: 'data_hora DESC',
-      limit: limit,
     );
 
     return resultado.map(_mapToLogAtividade).toList();
@@ -215,7 +212,6 @@ class LogAtividadeSqlManager {
     final List<Map<String, dynamic>> resultado = await db.query(
       DatabaseConfig.tableLogsAtividade,
       orderBy: orderBy,
-      limit: limit,
     );
 
     return resultado.map(_mapToLogAtividade).toList();

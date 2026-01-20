@@ -4,8 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/managers/exceptions/customer_exception.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/repository/customer_repository.dart';
+import 'package:system_loja/core/repository/cliente_repository.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
+import 'package:system_loja/screens/injection/app_injection.dart';
 
 part 'customer_bloc.freezed.dart';
 part 'customer_bloc_event.dart';
@@ -16,11 +17,10 @@ part 'customer_bloc_state.dart';
 /// Utiliza o ClienteSqlManager para operações de banco de dados
 /// e implementa o padrão BLoC para separação de lógica de negócio da UI.
 class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
-  final CustomerRepository _customerRepository;
+  final ClienteRepository _customerRepository =
+      AppInjection.instance.clienteRepository;
 
-  CustomerBloc()
-    : _customerRepository = CustomerRepository(),
-      super(const _Initial()) {
+  CustomerBloc() : super(const _Initial()) {
     on<_LoadCustomers>(_onLoadCustomers);
     on<_RegisterCustomer>(_onRegisterCustomer);
     on<_DeleteCustomer>(_onDeleteCustomer);
@@ -34,9 +34,9 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   ) async {
     emit(const CustomerBlocState.loading());
     try {
-      await _customerRepository.deleteWithId(event.id);
+      await _customerRepository.excluir(event.id);
       // Recarrega a lista de clientes após deletar
-      final customers = await _customerRepository.loadAll();
+      final customers = await _customerRepository.listarMapeado();
       emit(
         CustomerBlocState.customersLoaded(
           customers: customers,
@@ -47,6 +47,12 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
       emit(
         CustomerBlocState.customerError(
           message: 'Erro ao deletar cliente: ${e.message}',
+        ),
+      );
+    } catch (e) {
+      emit(
+        CustomerBlocState.customerError(
+          message: 'Erro inesperado ao deletar cliente: $e',
         ),
       );
     }
@@ -84,7 +90,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   ) async {
     emit(const CustomerBlocState.loading());
     try {
-      final customers = await _customerRepository.loadAll();
+      final customers = await _customerRepository.listarMapeado();
       emit(
         CustomerBlocState.customersLoaded(
           customers: customers,
@@ -132,9 +138,8 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
         return;
       }
 
-      int newId = await _customerRepository.obtainNextId();
       final customer = Customer(
-        id: newId, // SQLite AUTOINCREMENT gera o ID automaticamente
+        id: 0,
         name: event.name,
         cpf: event.cpf,
         email: event.email,
@@ -142,10 +147,10 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
         address: event.address,
       );
 
-      await _customerRepository.saveNewCustomer(customer);
+      await _customerRepository.salvar(customer);
 
       // Recarrega a lista de clientes após adicionar
-      final customers = await _customerRepository.loadAll();
+      final customers = await _customerRepository.listarMapeado();
       emit(
         CustomerBlocState.customersLoaded(
           customers: customers,
@@ -158,6 +163,12 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
           message: 'Erro ao cadastrar cliente: ${e.message}',
         ),
       );
+    } catch (e) {
+      emit(
+        CustomerBlocState.customerError(
+          message: 'Erro inesperado ao cadastrar cliente: $e',
+        ),
+      );
     }
   }
 
@@ -168,9 +179,9 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   ) async {
     emit(const CustomerBlocState.loading());
     try {
-      await _customerRepository.updateCustomer(event.customer);
+      await _customerRepository.update(event.customer);
       // Recarrega a lista de clientes após atualizar
-      final customers = await _customerRepository.loadAll();
+      final customers = await _customerRepository.listarMapeado();
       emit(
         CustomerBlocState.customersLoaded(
           customers: customers,

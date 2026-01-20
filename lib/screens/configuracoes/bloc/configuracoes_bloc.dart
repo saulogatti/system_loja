@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/managers/configuracao_manager.dart';
-import 'package:system_loja/screens/settings/settings_service.dart';
+import 'package:system_loja/screens/injection/app_injection.dart';
 
 import 'configuracoes_event.dart';
 import 'configuracoes_state.dart';
@@ -10,11 +9,7 @@ import 'configuracoes_state.dart';
 /// Utiliza o ConfiguracaoManager para persistência de dados
 /// e gerencia os estados da tela de configurações.
 class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
-  final ConfiguracaoManager _manager;
-
-  ConfiguracoesBloc({ConfiguracaoManager? manager})
-    : _manager = manager ?? ConfiguracaoManager(),
-      super(const ConfiguracoesInitial()) {
+  ConfiguracoesBloc() : super(const ConfiguracoesInitial()) {
     on<CarregarConfiguracoesEvent>(_onCarregarConfiguracoes);
     on<AtualizarConfiguracoesEvent>(_onAtualizarConfiguracoes);
     on<RestaurarPadraoEvent>(_onRestaurarPadrao);
@@ -30,9 +25,9 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
   ) async {
     emit(const ConfiguracoesLoading());
     try {
-      await _manager.atualizarConfiguracao(event.configuracao);
-      SettingsService().primaryColorNotifier.value =
-          event.configuracao.corPrimaria;
+      await AppInjection.instance.configurationRepository.atualizarConfiguracao(
+        event.configuracao,
+      );
       emit(
         ConfiguracoesSuccess(
           event.configuracao,
@@ -54,7 +49,8 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
   ) async {
     emit(const ConfiguracoesLoading());
     try {
-      final configuracao = _manager.configuracao;
+      final configuracao =
+          await AppInjection.instance.configurationRepository.carregarConfiguracao();
       emit(ConfiguracoesLoaded(configuracao));
     } catch (e) {
       emit(ConfiguracoesError('Erro ao carregar configurações: $e'));
@@ -71,7 +67,8 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
 
     emit(const ConfiguracoesLoading());
     try {
-      final sucesso = await _manager.limparLogsAntigos();
+      final sucesso = await AppInjection.instance.configurationRepository
+          .limparLogsAntigos();
       if (sucesso) {
         emit(
           ConfiguracoesSuccess(
@@ -101,7 +98,8 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
 
     emit(const ConfiguracoesLoading());
     try {
-      final sucesso = await _manager.limparTodosDados();
+      final sucesso = await AppInjection.instance.configurationRepository
+          .limparTodosDados();
       if (sucesso) {
         emit(
           ConfiguracoesSuccess(
@@ -131,7 +129,8 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
 
     emit(const ConfiguracoesLoading());
     try {
-      final sucesso = await _manager.realizarBackup();
+      final sucesso = await AppInjection.instance.configurationRepository
+          .realizarBackup();
       if (sucesso) {
         emit(
           ConfiguracoesSuccess(
@@ -158,8 +157,9 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
   ) async {
     emit(const ConfiguracoesLoading());
     try {
-      await _manager.restaurarPadrao();
-      final configuracao = _manager.configuracao;
+      await AppInjection.instance.configurationRepository.restaurarPadrao();
+      final configuracao =
+          await AppInjection.instance.configurationRepository.carregarConfiguracao();
       emit(
         ConfiguracoesSuccess(
           configuracao,

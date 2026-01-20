@@ -7,7 +7,6 @@ import 'bloc/configuracoes_bloc.dart';
 import 'bloc/configuracoes_event.dart';
 import 'bloc/configuracoes_state.dart';
 import 'widgets/secao_backup.dart';
-import 'widgets/secao_banco_dados.dart';
 import 'widgets/secao_limpeza.dart';
 import 'widgets/secao_notificacoes.dart';
 import 'widgets/secao_seguranca.dart';
@@ -140,11 +139,11 @@ class _ConfiguracoesView extends StatelessWidget {
                       _updateConfig(context, newConfig),
                 ),
                 const SizedBox(height: 24),
-                SecaoBancoDados(
-                  config: config,
-                  onConfigChanged: (newConfig) =>
-                      _updateConfig(context, newConfig),
-                ),
+                // SecaoBancoDados(
+                //   config: config,
+                //   onConfigChanged: (newConfig) =>
+                //       _updateConfig(context, newConfig),
+                // ),
                 const SizedBox(height: 32),
                 _buildBotaoSalvar(context, config),
               ],
@@ -162,11 +161,7 @@ class _ConfiguracoesView extends StatelessWidget {
       child: ElevatedButton.icon(
         icon: const Icon(Icons.save),
         label: const Text('Salvar Configurações'),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.all(16),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Colors.white,
-        ),
+        style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
         onPressed: () {
           context.read<ConfiguracoesBloc>().add(
             AtualizarConfiguracoesEvent(config),
@@ -263,11 +258,7 @@ class _ConfiguracoesView extends StatelessWidget {
                 const SizedBox(width: 16),
                 Text(
                   entry.name,
-                  style: TextStyle(
-                    fontWeight: config.typeCache.name == entry.name
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.normal),
                 ),
               ],
             ),
@@ -348,7 +339,7 @@ class _ConfiguracoesView extends StatelessWidget {
   /// Atualiza a configuração no estado local (não salva ainda)
   void _updateConfig(BuildContext context, AppSettings newConfig) {
     context.read<ConfiguracoesBloc>().add(
-      CarregarConfiguracoesEvent(),
+      AtualizarConfiguracoesEvent(newConfig),
     ); // Recarrega para manter estado
     // Aqui mantemos o config local até salvar
     // Em uma implementação mais complexa, usaríamos outro evento

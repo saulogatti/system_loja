@@ -9,7 +9,12 @@ part 'invoice.g.dart';
 class Invoice extends DefaultObject {
   final InvoiceData data;
 
-  Invoice({required super.id, required this.data});
+  Invoice({
+    required super.id,
+    required this.data,
+    super.registrationDate,
+    super.lastUpdatedDate,
+  });
 
   /// Cria um objeto a partir de JSON
   factory Invoice.fromJson(Map<String, dynamic> json) =>
@@ -32,6 +37,13 @@ class Invoice extends DefaultObject {
     for (var item in data.items) {
       buffer.writeln(item.toString());
     }
+    buffer.writeln(
+      'Data de Cadastro: ${registrationDate.toString().split('.')[0]}',
+    );
+
+    buffer.writeln(
+      'Data de Atualização: ${lastUpdatedDate.toString().split('.')[0]}',
+    );
     return buffer.toString();
   }
 }

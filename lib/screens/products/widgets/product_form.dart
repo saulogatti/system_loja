@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/models/product.dart';
+import 'package:system_loja/core/utils/input_formatters.dart';
+import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/products/widgets/product_category.dart';
 
 /// Widget do formulário de cadastro de produto
 ///
@@ -12,6 +16,7 @@ class ProductForm extends StatelessWidget {
   final TextEditingController descricaoController;
   final TextEditingController categoriaController;
   final VoidCallback onSubmit;
+  final List<Product> products;
 
   const ProductForm({
     super.key,
@@ -23,6 +28,7 @@ class ProductForm extends StatelessWidget {
     required this.descricaoController,
     required this.categoriaController,
     required this.onSubmit,
+    required this.products,
   });
 
   @override
@@ -30,14 +36,12 @@ class ProductForm extends StatelessWidget {
     return Form(
       key: formKey,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Text(
             'Novo Produto',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
           TextFormField(
@@ -79,16 +83,13 @@ class ProductForm extends StatelessWidget {
                     labelText: 'Preço (R\$) *',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.attach_money),
+                    helperText: 'Ex: 10.50',
                   ),
-                  keyboardType: TextInputType.numberWithOptions(
+                  keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Preço é obrigatório';
-                    }
-                    return null;
-                  },
+                  inputFormatters: [PriceInputFormatter()],
+                  validator: validatePrice,
                 ),
               ),
               const SizedBox(width: 16),
@@ -99,27 +100,17 @@ class ProductForm extends StatelessWidget {
                     labelText: 'Estoque *',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.inventory),
+                    helperText: 'Ex: 10',
                   ),
                   keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Estoque é obrigatório';
-                    }
-                    return null;
-                  },
+                  inputFormatters: [QuantityInputFormatter()],
+                  validator: validateStock,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          TextFormField(
-            controller: categoriaController,
-            decoration: const InputDecoration(
-              labelText: 'Categoria',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.category),
-            ),
-          ),
+          ProductCategory(controller: categoriaController, products: products),
           const SizedBox(height: 16),
           TextFormField(
             controller: descricaoController,
