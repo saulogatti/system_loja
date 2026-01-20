@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
-import 'package:system_loja/screens/products/cubit/produto_state.dart';
+import 'package:system_loja/screens/products/cubit/product_state.dart';
 import 'package:system_loja/screens/products/widgets/product_category.dart';
 
 /// Tela de detalhes do produto com opções de edição e exclusão
@@ -12,13 +12,13 @@ import 'package:system_loja/screens/products/widgets/product_category.dart';
 /// - Editar dados do produto
 /// - Deletar produto
 class ProductDetailScreen extends StatefulWidget {
-  final Produto product;
-  final List<Produto> produtos;
+  final Product product;
+  final List<Product> productList;
 
   const ProductDetailScreen({
     super.key,
     required this.product,
-    this.produtos = const [],
+    this.productList = const [],
   });
 
   @override
@@ -43,7 +43,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           // Produto foi atualizado com sucesso
           if (_isEditing) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Produto atualizado com sucesso!'), backgroundColor: Colors.green),
+              const SnackBar(
+                content: Text('Produto atualizado com sucesso!'),
+                backgroundColor: Colors.green,
+              ),
             );
             setState(() {
               _isEditing = false;
@@ -53,12 +56,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           // Produto foi deletado
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Produto deletado com sucesso!'), backgroundColor: Colors.green),
+            const SnackBar(
+              content: Text('Produto deletado com sucesso!'),
+              backgroundColor: Colors.green,
+            ),
           );
         } else if (state is ProductStateError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
         }
       },
       child: Scaffold(
@@ -77,7 +83,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 tooltip: 'Editar',
               ),
             if (!_isEditing)
-              IconButton(icon: const Icon(Icons.delete), onPressed: _confirmarExclusao, tooltip: 'Deletar'),
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: _confirmarExclusao,
+                tooltip: 'Deletar',
+              ),
           ],
         ),
         body: SingleChildScrollView(
@@ -92,7 +102,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.green,
-                    child: Icon(Icons.inventory_2, size: 50, color: Colors.white),
+                    child: Icon(
+                      Icons.inventory_2,
+                      size: 50,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -107,7 +121,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: [
                         const Text(
                           'Informações do Produto',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
@@ -133,7 +150,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.qr_code),
                           ),
-                          readOnly: true, // Código não editável para manter integridade dos dados
+                          readOnly:
+                              true, // Código não editável para manter integridade dos dados
                         ),
                         const SizedBox(height: 16),
                         Row(
@@ -146,13 +164,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   border: OutlineInputBorder(),
                                   prefixIcon: Icon(Icons.attach_money),
                                 ),
-                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                      decimal: true,
+                                    ),
                                 enabled: _isEditing,
                                 validator: (value) {
                                   if (value == null || value.trim().isEmpty) {
                                     return 'Preço é obrigatório';
                                   }
-                                  final preco = double.tryParse(value.trim().replaceAll(',', '.'));
+                                  final preco = double.tryParse(
+                                    value.trim().replaceAll(',', '.'),
+                                  );
                                   if (preco == null || preco < 0) {
                                     return 'Preço inválido';
                                   }
@@ -170,7 +193,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   prefixIcon: Icon(Icons.inventory),
                                 ),
                                 keyboardType: TextInputType.number,
-                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
                                 enabled: _isEditing,
                                 validator: (value) {
                                   if (value == null || value.trim().isEmpty) {
@@ -189,7 +214,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         const SizedBox(height: 16),
                         ProductCategory(
                           controller: _categoriaController,
-                          produtos: widget.produtos,
+                          products: widget.productList,
                           enabled: _isEditing,
                         ),
                         const SizedBox(height: 16),
@@ -219,14 +244,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: [
                         const Text(
                           'Informações do Sistema',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 16),
-                        _buildInfoRow('ID', widget.product.id.toString(), Icons.numbers),
+                        _buildInfoRow(
+                          'ID',
+                          widget.product.code.toString(),
+                          Icons.numbers,
+                        ),
                         const Divider(),
                         _buildInfoRow(
                           'Data de Cadastro',
-                          _formatDate(widget.product.dataCadastro),
+                          _formatDate(widget.product.registrationDate),
                           Icons.calendar_today,
                         ),
                       ],
@@ -246,11 +278,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             setState(() {
                               _isEditing = false;
                               // Restaurar valores originais
-                              _nomeController.text = widget.product.nome;
-                              _precoController.text = widget.product.preco.toStringAsFixed(2);
-                              _estoqueController.text = widget.product.estoque.toString();
-                              _categoriaController.text = widget.product.categoria;
-                              _descricaoController.text = widget.product.descricao;
+                              _nomeController.text = widget.product.name;
+                              _precoController.text = widget.product.price
+                                  .toStringAsFixed(2);
+                              _estoqueController.text = widget
+                                  .product
+                                  .stockQuantity
+                                  .toString();
+                              _categoriaController.text =
+                                  widget.product.category;
+                              _descricaoController.text =
+                                  widget.product.description;
                             });
                           },
                           child: const Text('Cancelar'),
@@ -287,12 +325,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _nomeController = TextEditingController(text: widget.product.nome);
-    _codigoController = TextEditingController(text: widget.product.codigo);
-    _precoController = TextEditingController(text: widget.product.preco.toStringAsFixed(2));
-    _estoqueController = TextEditingController(text: widget.product.estoque.toString());
-    _descricaoController = TextEditingController(text: widget.product.descricao);
-    _categoriaController = TextEditingController(text: widget.product.categoria);
+    _nomeController = TextEditingController(text: widget.product.name);
+    _codigoController = TextEditingController(text: widget.product.code);
+    _precoController = TextEditingController(
+      text: widget.product.price.toStringAsFixed(2),
+    );
+    _estoqueController = TextEditingController(
+      text: widget.product.stockQuantity.toString(),
+    );
+    _descricaoController = TextEditingController(
+      text: widget.product.description,
+    );
+    _categoriaController = TextEditingController(text: widget.product.category);
   }
 
   Widget _buildInfoRow(String label, String value, IconData icon) {
@@ -308,10 +352,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               children: [
                 Text(
                   label,
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600], fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 const SizedBox(height: 4),
-                Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ],
             ),
           ),
@@ -323,13 +377,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void _confirmarExclusao() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (_) => AlertDialog(
         title: const Text('Confirmar Exclusão'),
         content: Text(
-          'Tem certeza que deseja excluir o produto "${widget.product.nome}"?\n\nEsta ação não pode ser desfeita.',
+          'Tem certeza que deseja excluir o produto "${widget.product.name}"?\n\nEsta ação não pode ser desfeita.',
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context); // Fecha o diálogo
@@ -358,18 +415,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   void _salvarAlteracoes() {
     if (_formKey.currentState!.validate()) {
-      final preco = double.parse(_precoController.text.trim().replaceAll(',', '.'));
+      final preco = double.parse(
+        _precoController.text.trim().replaceAll(',', '.'),
+      );
       final estoque = int.parse(_estoqueController.text.trim());
 
-      final updatedProduct = Produto(
+      final updatedProduct = Product(
+        name: _nomeController.text.trim(),
+        code: widget.product.code,
+        price: preco,
+        stockQuantity: estoque,
+        description: _descricaoController.text.trim(),
+        category: _categoriaController.text.trim(),
         id: widget.product.id,
-        nome: _nomeController.text.trim(),
-        codigo: widget.product.codigo, // Código não muda
-        preco: preco,
-        estoque: estoque,
-        descricao: _descricaoController.text.trim(),
-        categoria: _categoriaController.text.trim(),
-        dataCadastro: widget.product.dataCadastro,
       );
 
       context.read<ProductCubit>().updateProduct(updatedProduct);

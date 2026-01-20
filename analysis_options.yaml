@@ -1,4 +1,4 @@
-include: 
+include:
   - package:flutter_lints/flutter.yaml
   - package:bloc_lint/recommended.yaml
 
@@ -32,6 +32,12 @@ linter:
     use_key_in_widget_constructors: true
     avoid_dynamic_calls: true
     avoid_annotating_with_dynamic: true
+    exhaustive_cases: true
+    only_throw_errors: true
+    prefer_final_locals: true
+    unnecessary_async: true
+    await_only_futures: true
+    avoid_void_async: true
 
 analyzer:
   exclude:
@@ -39,8 +45,6 @@ analyzer:
   errors:
     missing_override_of_must_be_overridden: error
     inference_failure_on_function_invocation: ignore
-# For more information about the core and recommended set of lints, see
-# https://dart.dev/go/core-lints
-
-# For additional information about configuring this file, see
-# https://dart.dev/guides/language/analysis-options
+    await_only_futures: warning
+    avoid_void_async: warning
+    avoid_dynamic_calls: error

@@ -4,9 +4,7 @@
 /// do banco de dados SQLite no sistema.
 library;
 
-export 'cliente_sql_manager.dart';
+export 'dao/cliente_dao.dart';
 export 'database_config.dart';
 export 'database_helper.dart';
 export 'database_scripts.dart';
-export 'nota_fiscal_sql_manager.dart';
-export 'produto_sql_manager.dart';

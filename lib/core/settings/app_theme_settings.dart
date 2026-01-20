@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppThemeSettings {
-  AppThemeSettings() {
-    Colors.black;
-  }
-}
-
+ 
 enum EnumColorAppThemeSettings {
   azul,
   verde,

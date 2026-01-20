@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/products/widgets/product_category.dart';
 
 /// Testes do widget ProductCategory
@@ -10,37 +10,37 @@ import 'package:system_loja/screens/products/widgets/product_category.dart';
 void main() {
   group('ProductCategory Widget Tests', () {
     late TextEditingController controller;
-    late List<Produto> produtos;
+    late List<Product> products = [];
 
     setUp(() {
       controller = TextEditingController();
-      produtos = [
-        Produto(
+      products = [
+        Product(
           id: 1,
-          nome: 'Produto 1',
-          codigo: 'P001',
-          preco: 10.0,
-          estoque: 5,
-          descricao: 'Descrição 1',
-          categoria: 'Eletrônicos',
+          name: 'Product 1',
+          code: 'P001',
+          price: 10.0,
+          stockQuantity: 5,
+          description: 'Description 1',
+          category: 'Electronics',
         ),
-        Produto(
+        Product(
           id: 2,
-          nome: 'Produto 2',
-          codigo: 'P002',
-          preco: 20.0,
-          estoque: 10,
-          descricao: 'Descrição 2',
-          categoria: 'Livros',
+          name: 'Product 2',
+          code: 'P002',
+          price: 20.0,
+          stockQuantity: 10,
+          description: 'Description 2',
+          category: 'Books',
         ),
-        Produto(
+        Product(
           id: 3,
-          nome: 'Produto 3',
-          codigo: 'P003',
-          preco: 30.0,
-          estoque: 15,
-          descricao: 'Descrição 3',
-          categoria: 'Eletrônicos',
+          name: 'Product 3',
+          code: 'P003',
+          price: 30.0,
+          stockQuantity: 15,
+          description: 'Description 3',
+          category: 'Electronics',
         ),
       ];
     });
@@ -56,7 +56,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ProductCategory(controller: controller, produtos: []),
+            body: ProductCategory(controller: controller, products: []),
           ),
         ),
       );
@@ -73,7 +73,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ProductCategory(controller: controller, produtos: produtos),
+            body: ProductCategory(controller: controller, products: products),
           ),
         ),
       );
@@ -90,7 +90,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ProductCategory(controller: controller, produtos: produtos),
+            body: ProductCategory(controller: controller, products: products),
           ),
         ),
       );
@@ -99,9 +99,9 @@ void main() {
       await tester.tap(find.byType(DropdownButtonFormField<String>));
       await tester.pumpAndSettle();
 
-      // Assert - deve haver 2 categorias únicas (Eletrônicos e Livros)
-      expect(find.text('Eletrônicos'), findsOneWidget);
-      expect(find.text('Livros'), findsOneWidget);
+      // Assert - deve haver 2 categorias únicas (Electronics e Books)
+      expect(find.text('Electronics'), findsOneWidget);
+      expect(find.text('Books'), findsOneWidget);
     });
 
     testWidgets('deve permitir selecionar categoria do dropdown', (
@@ -111,7 +111,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ProductCategory(controller: controller, produtos: produtos),
+            body: ProductCategory(controller: controller, products: products),
           ),
         ),
       );
@@ -119,11 +119,11 @@ void main() {
       // Act - abre dropdown e seleciona uma categoria
       await tester.tap(find.byType(DropdownButtonFormField<String>));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Livros').last);
+      await tester.tap(find.text('Books').last);
       await tester.pumpAndSettle();
 
       // Assert
-      expect(controller.text, 'Livros');
+      expect(controller.text, 'Books');
     });
 
     testWidgets(
@@ -133,7 +133,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: ProductCategory(controller: controller, produtos: produtos),
+              body: ProductCategory(controller: controller, products: products),
             ),
           ),
         );
@@ -159,7 +159,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: ProductCategory(controller: controller, produtos: produtos),
+              body: ProductCategory(controller: controller, products: products),
             ),
           ),
         );
@@ -188,7 +188,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ProductCategory(controller: controller, produtos: produtos),
+            body: ProductCategory(controller: controller, products: products),
           ),
         ),
       );
@@ -217,7 +217,7 @@ void main() {
               key: formKey,
               child: ProductCategory(
                 controller: controller,
-                produtos: produtos,
+                products: products,
                 required: true,
               ),
             ),
@@ -246,7 +246,7 @@ void main() {
               key: formKey,
               child: ProductCategory(
                 controller: controller,
-                produtos: produtos,
+                products: products,
                 required: true,
               ),
             ),
@@ -276,7 +276,7 @@ void main() {
           home: Scaffold(
             body: ProductCategory(
               controller: controller,
-              produtos: produtos,
+              products: products,
               enabled: false,
             ),
           ),
@@ -302,7 +302,7 @@ void main() {
           home: Scaffold(
             body: ProductCategory(
               controller: controller,
-              produtos: [],
+              products: [],
               enabled: false,
             ),
           ),
@@ -326,7 +326,7 @@ void main() {
           home: Scaffold(
             body: ProductCategory(
               controller: controller,
-              produtos: produtos,
+              products: products,
               onChanged: (value) {
                 categoriaAlterada = value;
               },
@@ -355,16 +355,14 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: ProductCategory(controller: controller, produtos: produtos),
+              body: ProductCategory(controller: controller, products: products),
             ),
           ),
         );
 
         // Assert - deve estar no modo dropdown com valor selecionado
         expect(find.byType(DropdownButtonFormField<String>), findsOneWidget);
-        final dropdown = tester.widget<DropdownButtonFormField<String>>(
-          find.byType(DropdownButtonFormField<String>),
-        );
+
         expect(controller.text, 'Livros');
       },
     );
@@ -379,7 +377,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: ProductCategory(controller: controller, produtos: produtos),
+              body: ProductCategory(controller: controller, products: products),
             ),
           ),
         );
@@ -396,15 +394,15 @@ void main() {
     ) async {
       // Arrange - adiciona produto sem categoria
       final produtosComVazio = [
-        ...produtos,
-        Produto(
+        ...products,
+        Product(
           id: 4,
-          nome: 'Produto sem categoria',
-          codigo: 'P004',
-          preco: 40.0,
-          estoque: 20,
-          descricao: 'Sem categoria',
-          categoria: '',
+          name: 'Produto sem categoria',
+          code: 'P004',
+          price: 40.0,
+          stockQuantity: 20,
+          description: 'Sem categoria',
+          category: '',
         ),
       ];
 
@@ -414,7 +412,7 @@ void main() {
           home: Scaffold(
             body: ProductCategory(
               controller: controller,
-              produtos: produtosComVazio,
+              products: produtosComVazio,
             ),
           ),
         ),
@@ -444,7 +442,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ProductCategory(controller: controller, produtos: produtos),
+            body: ProductCategory(controller: controller, products: products),
           ),
         ),
       );
@@ -461,14 +459,14 @@ void main() {
 
       // Act - atualiza com nova lista de produtos
       final novosProdutos = [
-        Produto(
+        Product(
           id: 5,
-          nome: 'Produto 5',
-          codigo: 'P005',
-          preco: 50.0,
-          estoque: 25,
-          descricao: 'Nova categoria',
-          categoria: 'Alimentos',
+          name: 'Produto 5',
+          code: 'P005',
+          price: 50.0,
+          stockQuantity: 25,
+          description: 'Nova categoria',
+          category: 'Alimentos',
         ),
       ];
 
@@ -477,7 +475,7 @@ void main() {
           home: Scaffold(
             body: ProductCategory(
               controller: controller,
-              produtos: novosProdutos,
+              products: novosProdutos,
             ),
           ),
         ),
@@ -500,7 +498,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: ProductCategory(controller: controller, produtos: produtos),
+              body: ProductCategory(controller: controller, products: products),
             ),
           ),
         );
@@ -519,9 +517,6 @@ void main() {
 
         // Assert - valor deve ser preservado e selecionado no dropdown
         expect(controller.text, 'Livros');
-        final dropdown = tester.widget<DropdownButtonFormField<String>>(
-          find.byType(DropdownButtonFormField<String>),
-        );
       },
     );
 
@@ -532,7 +527,7 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
-              body: ProductCategory(controller: controller, produtos: produtos),
+              body: ProductCategory(controller: controller, products: products),
             ),
           ),
         );
@@ -554,10 +549,6 @@ void main() {
 
         // Assert - valor deve ser limpo pois não existe nas categorias
         expect(controller.text, '');
-        final dropdown = tester.widget<DropdownButtonFormField<String>>(
-          find.byType(DropdownButtonFormField<String>),
-        );
-        // expect(dropdown.value, isNull);
       },
     );
   });

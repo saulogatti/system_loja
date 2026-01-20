@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/core/models/product.dart';
 
 /// Widget de seleção e criação de categorias de produto
 ///
@@ -11,7 +11,7 @@ class ProductCategory extends StatefulWidget {
   final TextEditingController controller;
 
   /// Lista de produtos para extrair categorias existentes
-  final List<Produto> produtos;
+  final List<Product> products;
 
   /// Indica se o campo é obrigatório
   final bool required;
@@ -25,7 +25,7 @@ class ProductCategory extends StatefulWidget {
   const ProductCategory({
     super.key,
     required this.controller,
-    required this.produtos,
+    required this.products,
     this.required = false,
     this.enabled = true,
     this.onChanged,
@@ -37,13 +37,32 @@ class ProductCategory extends StatefulWidget {
 
 class _ProductCategoryState extends State<ProductCategory> {
   /// Lista de categorias únicas extraídas dos produtos
-  List<String> _categorias = [];
+  List<String> _categories = [];
 
   /// Categoria atualmente selecionada no dropdown
-  String? _categoriaSelecionada;
+  String? _selectedCategory;
 
   /// Indica se o modo de entrada manual está ativo
-  bool _modoEntradaManual = false;
+  bool _manualEntryMode = false;
+
+  @override
+  Widget build(BuildContext context) {
+    // Se não há categorias cadastradas ou modo manual ativo, mostra apenas o campo de texto
+    if (_categories.isEmpty || _manualEntryMode) {
+      return _buildCampoTexto();
+    }
+
+    // Se há categorias, mostra dropdown + opção de adicionar nova
+    return _buildCampoComDropdown();
+  }
+
+  @override
+  void didUpdateWidget(ProductCategory oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.products != widget.products) {
+      _atualizarCategorias();
+    }
+  }
 
   @override
   void initState() {
@@ -53,50 +72,18 @@ class _ProductCategoryState extends State<ProductCategory> {
     _inicializarValor();
   }
 
-  @override
-  void didUpdateWidget(ProductCategory oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.produtos != widget.produtos) {
-      _atualizarCategorias();
-    }
-  }
-
-  /// Extrai categorias únicas dos produtos
-  void _atualizarCategorias() {
-    setState(() {
-      _categorias = widget.produtos
-          .where((produto) => produto.categoria.isNotEmpty)
-          .map((produto) => produto.categoria)
-          .toSet()
-          .toList()
-        ..sort();
-    });
-  }
-
-  /// Inicializa o valor do dropdown com base no controller
-  void _inicializarValor() {
-    final valorAtual = widget.controller.text.trim();
-    if (valorAtual.isNotEmpty && _categorias.contains(valorAtual)) {
-      _categoriaSelecionada = valorAtual;
-      _modoEntradaManual = false;
-    } else if (valorAtual.isNotEmpty) {
-      _categoriaSelecionada = null;
-      _modoEntradaManual = true;
-    }
-  }
-
   /// Alterna entre modo dropdown e modo entrada manual
   void _alternarModo() {
     setState(() {
-      _modoEntradaManual = !_modoEntradaManual;
-      if (_modoEntradaManual) {
-        _categoriaSelecionada = null;
+      _manualEntryMode = !_manualEntryMode;
+      if (_manualEntryMode) {
+        _selectedCategory = null;
       } else {
         // Preserva o valor do controller ao alternar para dropdown
         // Se o valor existir nas categorias, seleciona-o no dropdown
-        final valorAtual = widget.controller.text.trim();
-        if (valorAtual.isNotEmpty && _categorias.contains(valorAtual)) {
-          _categoriaSelecionada = valorAtual;
+        final currentValue = widget.controller.text.trim();
+        if (currentValue.isNotEmpty && _categories.contains(currentValue)) {
+          _selectedCategory = currentValue;
         } else {
           // Valor não existe nas categorias, limpa o controller
           widget.controller.clear();
@@ -105,52 +92,17 @@ class _ProductCategoryState extends State<ProductCategory> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // Se não há categorias cadastradas ou modo manual ativo, mostra apenas o campo de texto
-    if (_categorias.isEmpty || _modoEntradaManual) {
-      return _buildCampoTexto();
-    }
-
-    // Se há categorias, mostra dropdown + opção de adicionar nova
-    return _buildCampoComDropdown();
-  }
-
-  /// Constrói o campo de texto para entrada manual
-  Widget _buildCampoTexto() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            controller: widget.controller,
-            enabled: widget.enabled,
-            decoration: InputDecoration(
-              labelText: widget.required ? 'Categoria *' : 'Categoria',
-              border: const OutlineInputBorder(),
-              prefixIcon: const Icon(Icons.category),
-              helperText: 'Digite uma nova categoria',
-            ),
-            validator: widget.required
-                ? (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Categoria é obrigatória';
-                    }
-                    return null;
-                  }
-                : null,
-            onChanged: (value) => widget.onChanged?.call(value),
-          ),
-        ),
-        if (_categorias.isNotEmpty) ...[
-          const SizedBox(width: 8),
-          IconButton(
-            onPressed: widget.enabled ? _alternarModo : null,
-            icon: const Icon(Icons.list),
-            tooltip: 'Selecionar categoria existente',
-          ),
-        ],
-      ],
-    );
+  /// Extrai categorias únicas dos produtos
+  void _atualizarCategorias() {
+    setState(() {
+      _categories =
+          widget.products
+              .where((product) => product.category.isNotEmpty)
+              .map((product) => product.category)
+              .toSet()
+              .toList()
+            ..sort();
+    });
   }
 
   /// Constrói o campo com dropdown de categorias existentes
@@ -159,25 +111,23 @@ class _ProductCategoryState extends State<ProductCategory> {
       children: [
         Expanded(
           child: DropdownButtonFormField<String>(
-            initialValue: _categoriaSelecionada,
+            padding: EdgeInsets.zero,
+            initialValue: _selectedCategory,
+            hint: const Text('Selecione ou crie uma nova'),
             decoration: InputDecoration(
               labelText: widget.required ? 'Categoria *' : 'Categoria',
               border: const OutlineInputBorder(),
               prefixIcon: const Icon(Icons.category),
-              helperText: 'Selecione ou crie uma nova',
             ),
             items: [
-              ..._categorias.map((categoria) {
-                return DropdownMenuItem(
-                  value: categoria,
-                  child: Text(categoria),
-                );
+              ..._categories.map((category) {
+                return DropdownMenuItem(value: category, child: Text(category));
               }),
             ],
             onChanged: widget.enabled
                 ? (value) {
                     setState(() {
-                      _categoriaSelecionada = value;
+                      _selectedCategory = value;
                       if (value != null) {
                         widget.controller.text = value;
                       }
@@ -203,5 +153,54 @@ class _ProductCategoryState extends State<ProductCategory> {
         ),
       ],
     );
+  }
+
+  /// Constrói o campo de texto para entrada manual
+  Widget _buildCampoTexto() {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFormField(
+            controller: widget.controller,
+            enabled: widget.enabled,
+            decoration: InputDecoration(
+              labelText: widget.required ? 'Categoria *' : 'Categoria',
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.category),
+              hintText: 'Digite uma nova categoria',
+            ),
+            validator: widget.required
+                ? (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Categoria é obrigatória';
+                    }
+                    return null;
+                  }
+                : null,
+            onChanged: (value) => widget.onChanged?.call(value),
+          ),
+        ),
+        if (_categories.isNotEmpty) ...[
+          const SizedBox(width: 8),
+          IconButton(
+            onPressed: widget.enabled ? _alternarModo : null,
+            icon: const Icon(Icons.list),
+            tooltip: 'Selecionar categoria existente',
+          ),
+        ],
+      ],
+    );
+  }
+
+  /// Inicializa o valor do dropdown com base no controller
+  void _inicializarValor() {
+    final currentValue = widget.controller.text.trim();
+    if (currentValue.isNotEmpty && _categories.contains(currentValue)) {
+      _selectedCategory = currentValue;
+      _manualEntryMode = false;
+    } else if (currentValue.isNotEmpty) {
+      _selectedCategory = null;
+      _manualEntryMode = true;
+    }
   }
 }

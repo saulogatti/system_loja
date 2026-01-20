@@ -21,7 +21,6 @@ class CardListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      color: Colors.white,
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         minLeadingWidth: 0,

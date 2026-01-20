@@ -7,7 +7,7 @@ class SecaoTema extends StatelessWidget {
   final AppSettings config;
 
   /// Callback para atualizar a configuração
-  final Function(AppSettings) onConfigChanged;
+  final void Function(AppSettings) onConfigChanged;
 
   /// Callback para mostrar seletor de cor
   final VoidCallback onMostrarSeletorCor;

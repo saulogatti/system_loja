@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 
 /// Extensões para manipulação segura de strings em nomes de arquivos.
@@ -215,6 +218,15 @@ extension FileNameStringExtensions on String {
 }
 
 extension ValidateDataCustomer on String {
+  static const int senhaMinLength = 8;
+
+  /// Gera hash SHA-256 da senha
+  String hashSenha() {
+    final bytes = utf8.encode(this);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
   /// Valida se a string é um CPF válido.
   ///
   /// Verifica o formato e os dígitos verificadores do CPF.
@@ -227,13 +239,13 @@ extension ValidateDataCustomer on String {
   /// ```
   bool isValidCPF() {
     if (this == '111.111.111-11') return true; //TODO: retirar Caso Para debug
-    String cpf = replaceAll(RegExp(r'[^0-9]'), '');
+    final String cpf = replaceAll(RegExp(r'[^0-9]'), '');
 
     if (cpf.length != 11 || RegExp(r'^(\d)\1*$').hasMatch(cpf)) {
       return false;
     }
 
-    List<int> digits = cpf.split('').map(int.parse).toList();
+    final List<int> digits = cpf.split('').map(int.parse).toList();
 
     for (int j = 9; j < 11; j++) {
       int sum = 0;
@@ -271,5 +283,30 @@ extension ValidateDataCustomer on String {
   bool isValidPhone() {
     final phoneRegex = RegExp(r'^\(?\d{2}\)?[\s-]?[\d\s-]{4,5}[\s-]?\d{4}$');
     return phoneRegex.hasMatch(this);
+  }
+
+  /// Valida a força da senha
+  ///
+  /// Retorna uma mensagem de erro se a senha for inválida, ou null se for válida.
+  /// Regras: mínimo [senhaMinLength] caracteres, pelo menos uma letra maiúscula,
+  /// uma letra minúscula e um número.
+  String? validarSenha() {
+    final String senha = this;
+    if (senha.isEmpty) {
+      return 'Senha é obrigatória';
+    }
+    if (senha.length < senhaMinLength) {
+      return 'Senha deve ter no mínimo $senhaMinLength caracteres';
+    }
+    if (!senha.contains(RegExp(r'[A-Z]'))) {
+      return 'Senha deve conter pelo menos uma letra maiúscula';
+    }
+    if (!senha.contains(RegExp(r'[a-z]'))) {
+      return 'Senha deve conter pelo menos uma letra minúscula';
+    }
+    if (!senha.contains(RegExp(r'[0-9]'))) {
+      return 'Senha deve conter pelo menos um número';
+    }
+    return null;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,27 +9,15 @@ import 'widgets/customer_form.dart';
 import 'widgets/customer_list.dart';
 import 'widgets/customer_search_section.dart';
 
-class CustomerView extends StatelessWidget {
-  const CustomerView({super.key});
+@RoutePage()
+class CustomerDetailView extends StatefulWidget {
+  const CustomerDetailView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          CustomerBloc()..add(const CustomerBlocEvent.loadCustomers()),
-      child: const _CustomerDetailView(),
-    );
-  }
+  State<CustomerDetailView> createState() => _CustomerDetailViewState();
 }
 
-class _CustomerDetailView extends StatefulWidget {
-  const _CustomerDetailView();
-
-  @override
-  State<_CustomerDetailView> createState() => _CustomerDetailViewState();
-}
-
-class _CustomerDetailViewState extends State<_CustomerDetailView> {
+class _CustomerDetailViewState extends State<CustomerDetailView> {
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _cpfController = TextEditingController();
@@ -131,6 +120,12 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    context.read<CustomerBloc>().add(const CustomerBlocEvent.loadCustomers());
+  }
+
   void _adicionarCliente() {
     if (_formKey.currentState!.validate()) {
       context.read<CustomerBloc>().add(
@@ -172,15 +167,12 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
   void _openCustomerDetails(Customer customer) {
     // Limpa o campo de busca
     _searchCpfController.clear();
-    final bloc = context.read<CustomerBloc>();
+
     // Navega para a tela de detalhes do cliente
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => BlocProvider.value(
-          value: bloc,
-          child: CustomerDetailScreen(customer: customer),
-        ),
+        builder: (context) => CustomerDetailScreen(customer: customer),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
+import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/input_formatters.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/sales/sales_cubit.dart';
@@ -10,8 +11,17 @@ import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
 import '../../core/models/invoice.dart';
-import '../../core/models/produto.dart';
+class _AddSaleTemp {
+  final List<_ProductSelection> product;
+ 
+  _AddSaleTemp({required this.product,  });
+}
+class _ProductSelection {
+  final Product product;
+  final int quantity;
 
+  _ProductSelection({required this.product, required this.quantity});
+}
 class SalesView extends StatefulWidget {
   const SalesView({super.key});
 
@@ -23,7 +33,7 @@ class SalesView extends StatefulWidget {
 class _SalesInvoiceScreen extends StatefulWidget {
   final Map<int, Customer> customers;
   final SalesCubit salesCubit;
-  final List<Produto> products;
+  final List<Product> products;
   const _SalesInvoiceScreen({
     // required this.produtoManager,
     required this.customers,
@@ -40,15 +50,18 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
   final _numeroNotaController = TextEditingController();
   final _formaPagamentoController = TextEditingController();
   Customer? _clienteSelecionado;
-  final List<Map<String, dynamic>> _itensSelecionados = [];
+  final  _AddSaleTemp _itensSelecionados = _AddSaleTemp(product: []);
 
   @override
   Widget build(BuildContext context) {
-    final valorTotal = _itensSelecionados.fold<double>(0, (sum, item) {
-      final produto = item['produto'] as Produto;
-      final quantidade = item['quantidade'] as int;
-      return sum + (produto.preco * quantidade);
-    });
+    final valorTotal = _itensSelecionados.product.fold<double>(
+      0.0,
+      (previousValue, item) {
+        final productItem = item.product;
+        final quantidade = item.quantity;
+        return previousValue + (productItem.price * quantidade);
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -81,7 +94,10 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                   prefixIcon: Icon(Icons.person),
                 ),
                 items: widget.customers.values.map((cliente) {
-                  return DropdownMenuItem(value: cliente, child: Text('${cliente.name} (${cliente.cpf})'));
+                  return DropdownMenuItem(
+                    value: cliente,
+                    child: Text('${cliente.name} (${cliente.cpf})'),
+                  );
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
@@ -104,13 +120,17 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                   prefixIcon: Icon(Icons.payment),
                   helperText: 'Ex: Dinheiro, Cartão, Pix',
                 ),
-                validator: (value) => validateRequired(value, 'Forma de pagamento'),
+                validator: (value) =>
+                    validateRequired(value, 'Forma de pagamento'),
               ),
               const SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Itens', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Itens',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                   ElevatedButton.icon(
                     onPressed: _addItem,
                     icon: const Icon(Icons.add),
@@ -119,33 +139,36 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              if (_itensSelecionados.isEmpty)
+              if (_itensSelecionados.product.isEmpty)
                 const Center(
                   child: Padding(
                     padding: EdgeInsets.all(32.0),
-                    child: Text('Nenhum item adicionado', style: TextStyle(color: Colors.grey)),
+                    child: Text(
+                      'Nenhum item adicionado',
+                      style: TextStyle(color: Colors.grey),
+                    ),
                   ),
                 )
               else
-                ..._itensSelecionados.asMap().entries.map((entry) {
+                ..._itensSelecionados.product.asMap().entries.map((entry) {
                   final index = entry.key;
                   final item = entry.value;
-                  final produto = item['produto'] as Produto;
-                  final quantidade = item['quantidade'] as int;
-                  final subtotal = produto.preco * quantidade;
+                  final productItem = item.product;
+                  final quantidade = item.quantity;
+                  final subtotal = productItem.price * quantidade;
 
                   return Card(
                     margin: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
-                      title: Text(produto.nome),
+                      title: Text(productItem.name),
                       subtitle: Text(
-                        '${quantidade}x R\$ ${produto.preco.toStringAsFixed(2)} = R\$ ${subtotal.toStringAsFixed(2)}',
+                        '${quantidade}x R\$ ${productItem.price.toStringAsFixed(2)} = R\$ ${subtotal.toStringAsFixed(2)}',
                       ),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           setState(() {
-                            _itensSelecionados.removeAt(index);
+                            _itensSelecionados.product.removeAt(index);
                           });
                         },
                       ),
@@ -155,14 +178,27 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
               const SizedBox(height: 24),
               Container(
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withAlpha(25),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Valor Total:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    Text(
+                      'Valor Total:',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     Text(
                       'R\$ ${valorTotal.toStringAsFixed(2)}',
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue),
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ],
                 ),
@@ -170,8 +206,13 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _salvarNotaFiscal,
-                style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
-                child: const Text('Salvar Nota Fiscal', style: TextStyle(fontSize: 16)),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                ),
+                child: Text(
+                  'Salvar Nota Fiscal',
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ],
           ),
@@ -191,20 +232,22 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
     _adicionarItem();
   }
 
-  void _adicionarItem() async {
-    final produto = await showDialog<Produto>(
+  Future<void> _adicionarItem() async {
+    final product = await showDialog<Product>(
       context: context,
-      builder: (context) => _SelecionarProdutoDialog(produtos: widget.products),
+      builder: (context) => _SelecionarProdutoDialog(products: widget.products),
     );
 
-    if (produto != null) {
-      final quantidade = await _solicitarQuantidade(produto);
+    if (product != null) {
+      final quantidade = await _solicitarQuantidade(product);
       if (quantidade != null && quantidade > 0) {
-        if (quantidade > produto.estoque) {
+        if (quantidade > product.stockQuantity) {
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Estoque insuficiente! Disponível: ${produto.estoque}'),
+              content: Text(
+                'Estoque insuficiente! Disponível: ${product.stockQuantity}',
+              ),
               backgroundColor: Colors.red,
             ),
           );
@@ -212,24 +255,30 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
         }
 
         setState(() {
-          _itensSelecionados.add({'produto': produto, 'quantidade': quantidade});
+          _itensSelecionados.product.add(_ProductSelection(product: product, quantity: quantidade));
         });
       }
     }
   }
 
-  void _salvarNotaFiscal() async {
+  Future<void> _salvarNotaFiscal() async {
     if (_formKey.currentState!.validate()) {
       if (_clienteSelecionado == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erro: Selecione um cliente!'), backgroundColor: Colors.red),
+          const SnackBar(
+            content: Text('Erro: Selecione um cliente!'),
+            backgroundColor: Colors.red,
+          ),
         );
         return;
       }
 
-      if (_itensSelecionados.isEmpty) {
+      if (_itensSelecionados.product.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erro: Adicione pelo menos um item!'), backgroundColor: Colors.red),
+          const SnackBar(
+            content: Text('Erro: Adicione pelo menos um item!'),
+            backgroundColor: Colors.red,
+          ),
         );
         return;
       }
@@ -249,15 +298,15 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
       //   return;
       // }
 
-      final itens = _itensSelecionados.map((item) {
-        final produto = item['produto'] as Produto;
-        final quantidade = item['quantidade'] as int;
+      final itens = _itensSelecionados.product.map((item) {
+        final product = item.product;
+        final quantity = item.quantity;
         return InvoiceItem(
-          productId: produto.id, // ID não é mais null por construção
-          productName: produto.nome,
-          productCode: produto.codigo,
-          quantity: quantidade,
-          unitPrice: produto.preco,
+          productId: product.id, // ID não é mais null por construção
+          productName: product.name,
+          productCode: product.code,
+          quantity: quantity,
+          unitPrice: product.price,
         );
       }).toList();
 
@@ -274,13 +323,13 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
     }
   }
 
-  Future<int?> _solicitarQuantidade(Produto produto) async {
+  Future<int?> _solicitarQuantidade(Product product) async {
     final controller = TextEditingController();
     final formKey = GlobalKey<FormState>();
     final quantidade = await showDialog<int>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Quantidade de ${produto.nome}'),
+        title: Text('Quantidade de ${product.name}'),
         content: Form(
           key: formKey,
           child: TextFormField(
@@ -289,7 +338,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
             inputFormatters: [QuantityInputFormatter()],
             decoration: InputDecoration(
               labelText: 'Quantidade *',
-              helperText: 'Estoque disponível: ${produto.estoque}',
+              helperText: 'Estoque disponível: ${product.stockQuantity}',
               border: const OutlineInputBorder(),
             ),
             autofocus: true,
@@ -300,7 +349,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
 
               // Validação adicional para estoque
               final qtd = int.parse(value!.trim());
-              if (qtd > produto.estoque) {
+              if (qtd > product.stockQuantity) {
                 return 'Quantidade maior que o estoque disponível';
               }
 
@@ -309,7 +358,10 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
           ElevatedButton(
             onPressed: () {
               if (formKey.currentState!.validate()) {
@@ -322,13 +374,13 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
         ],
       ),
     );
-    controller.dispose();
+
     return quantidade;
   }
 }
 
 class _SalesViewState extends State<SalesView> {
-  List<Produto> _produtoManager = [];
+  List<Product> _productManager = [];
   final SalesCubit _salesCubit = SalesCubit();
 
   Map<int, Invoice> _mapToNotaFiscal = {};
@@ -351,7 +403,9 @@ class _SalesViewState extends State<SalesView> {
             case SalesError():
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Erro ao carregar notas fiscais! ${state.message}'),
+                  content: Text(
+                    'Erro ao carregar notas fiscais! ${state.message}',
+                  ),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -373,7 +427,7 @@ class _SalesViewState extends State<SalesView> {
             case SalesLoadedCustomers():
               _mapCustomers = state.customers;
             case SalesLoadedProducts():
-              _produtoManager = state.products;
+              _productManager = state.products;
             case SalesLoading():
               // Loading overlay é exibido através do builder
               break;
@@ -413,7 +467,10 @@ class _SalesViewState extends State<SalesView> {
                                 const SizedBox(height: 16),
                                 const Text(
                                   'Nenhuma nota fiscal cadastrada',
-                                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ],
                             ),
@@ -422,7 +479,9 @@ class _SalesViewState extends State<SalesView> {
                             padding: const EdgeInsets.all(16),
                             itemCount: _mapToNotaFiscal.length,
                             itemBuilder: (context, index) {
-                              final nf = _mapToNotaFiscal.values.elementAt(index);
+                              final nf = _mapToNotaFiscal.values.elementAt(
+                                index,
+                              );
                               return CardListItem(
                                 colorAvatar: Colors.orange,
                                 title: 'Nota: ${nf.data.invoiceNumber}',
@@ -466,17 +525,23 @@ class _SalesViewState extends State<SalesView> {
     _salesCubit.loadProducts();
   }
 
-  void _adicionarNotaFiscal() async {
+  Future<void> _adicionarNotaFiscal() async {
     if (_mapCustomers.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro: Nenhum cliente cadastrado!'), backgroundColor: Colors.red),
+        const SnackBar(
+          content: Text('Erro: Nenhum cliente cadastrado!'),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
 
-    if (_produtoManager.isEmpty) {
+    if (_productManager.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro: Nenhum produto cadastrado!'), backgroundColor: Colors.red),
+        const SnackBar(
+          content: Text('Erro: Nenhum produto cadastrado!'),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
@@ -484,8 +549,11 @@ class _SalesViewState extends State<SalesView> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            _SalesInvoiceScreen(products: _produtoManager, salesCubit: _salesCubit, customers: _mapCustomers),
+        builder: (context) => _SalesInvoiceScreen(
+          products: _productManager,
+          salesCubit: _salesCubit,
+          customers: _mapCustomers,
+        ),
       ),
     );
 
@@ -502,7 +570,11 @@ class _SalesViewState extends State<SalesView> {
         children: [
           Text(
             label,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+              fontSize: 12,
+            ),
           ),
           const SizedBox(height: 4),
           Text(value, style: const TextStyle(fontSize: 16)),
@@ -525,11 +597,20 @@ class _SalesViewState extends State<SalesView> {
               _buildDetailRow('Número', nf.data.invoiceNumber),
               _buildDetailRow('Cliente', nf.data.customerName),
               _buildDetailRow('CPF', nf.data.customerCpf),
-              _buildDetailRow('Valor Total', 'R\$ ${nf.data.totalValue.toStringAsFixed(2)}'),
+              _buildDetailRow(
+                'Valor Total',
+                'R\$ ${nf.data.totalValue.toStringAsFixed(2)}',
+              ),
               _buildDetailRow('Pagamento', nf.data.paymentMethod),
-              _buildDetailRow('Data de Emissão', nf.data.issueDate.toString().split('.')[0]),
+              _buildDetailRow(
+                'Data de Emissão',
+                nf.data.issueDate.toString().split('.')[0],
+              ),
               const SizedBox(height: 16),
-              const Text('Itens:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const Text(
+                'Itens:',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
               const SizedBox(height: 8),
               ...nf.data.items.map(
                 (item) => Padding(
@@ -543,7 +624,12 @@ class _SalesViewState extends State<SalesView> {
             ],
           ),
         ),
-        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Fechar'),
+          ),
+        ],
       ),
     );
   }
@@ -551,9 +637,9 @@ class _SalesViewState extends State<SalesView> {
 
 // Dialog to select a product
 class _SelecionarProdutoDialog extends StatelessWidget {
-  final List<Produto> produtos;
+  final List<Product> products;
 
-  const _SelecionarProdutoDialog({required this.produtos});
+  const _SelecionarProdutoDialog({required this.products});
 
   @override
   Widget build(BuildContext context) {
@@ -563,18 +649,25 @@ class _SelecionarProdutoDialog extends StatelessWidget {
         width: double.maxFinite,
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: produtos.length,
+          itemCount: products.length,
           itemBuilder: (context, index) {
-            final produto = produtos[index];
+            final product = products[index];
             return ListTile(
-              title: Text(produto.nome),
-              subtitle: Text('R\$ ${produto.preco.toStringAsFixed(2)} - Estoque: ${produto.estoque}'),
-              onTap: () => Navigator.pop(context, produto),
+              title: Text(product.name),
+              subtitle: Text(
+                'R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}',
+              ),
+              onTap: () => Navigator.pop(context, product),
             );
           },
         ),
       ),
-      actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar'))],
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancelar'),
+        ),
+      ],
     );
   }
 }

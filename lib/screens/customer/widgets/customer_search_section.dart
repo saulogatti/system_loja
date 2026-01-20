@@ -21,13 +21,11 @@ class CustomerSearchSection extends StatelessWidget {
       children: [
         const Text(
           'Buscar Cliente por CPF',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               child: TextFormField(

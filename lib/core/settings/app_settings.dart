@@ -9,7 +9,6 @@ part 'app_settings.g.dart';
 /// opções de backup, segurança e tipo de banco de dados.
 @JsonSerializable(explicitToJson: true)
 class AppSettings {
-  EnumTypeCache typeCache;
 
   /// Controla se as notificações estão ativadas globalmente no sistema
   @JsonKey(name: 'notificacoes_ativadas')
@@ -89,7 +88,6 @@ class AppSettings {
     this.exigirSenha = false,
     this.tempoBloqueioMinutos = 15,
     this.permitirMultiplosUsuarios = false,
-    this.typeCache = EnumTypeCache.sql,
     this.corPrimaria = EnumColorAppThemeSettings.azul,
   });
 
@@ -115,7 +113,6 @@ class AppSettings {
     bool? exigirSenha,
     int? tempoBloqueioMinutos,
     bool? permitirMultiplosUsuarios,
-    EnumTypeCache? typeCache,
     EnumColorAppThemeSettings? corPrimaria,
   }) {
     return AppSettings(
@@ -134,7 +131,6 @@ class AppSettings {
       tempoBloqueioMinutos: tempoBloqueioMinutos ?? this.tempoBloqueioMinutos,
       permitirMultiplosUsuarios:
           permitirMultiplosUsuarios ?? this.permitirMultiplosUsuarios,
-      typeCache: typeCache ?? this.typeCache,
       corPrimaria: corPrimaria ?? this.corPrimaria,
     );
   }
@@ -158,9 +154,7 @@ class AppSettings {
         'exigirSenha: $exigirSenha, '
         'tempoBloqueioMinutos: $tempoBloqueioMinutos, '
         'permitirMultiplosUsuarios: $permitirMultiplosUsuarios, '
-        'typeCache: $typeCache'
         ')';
   }
 }
 
-enum EnumTypeCache { json, sql }
