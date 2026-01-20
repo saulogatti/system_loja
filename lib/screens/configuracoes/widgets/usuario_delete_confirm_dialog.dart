@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/usuario.dart';
+import 'package:system_loja/core/models/user.dart';
 
 /// Widget do dialog de confirmação de exclusão de usuário
 ///
 /// Exibe um dialog de confirmação antes de excluir um usuário.
 class UsuarioDeleteConfirmDialog extends StatelessWidget {
-  final Usuario usuario;
+  final User usuario;
   final VoidCallback onConfirm;
 
   const UsuarioDeleteConfirmDialog({
@@ -15,17 +15,11 @@ class UsuarioDeleteConfirmDialog extends StatelessWidget {
   });
 
   /// Mostra o dialog de confirmação de exclusão
-  static void show(
-    BuildContext context,
-    Usuario usuario,
-    VoidCallback onConfirm,
-  ) {
+  static void show(BuildContext context, User usuario, VoidCallback onConfirm) {
     showDialog(
       context: context,
-      builder: (context) => UsuarioDeleteConfirmDialog(
-        usuario: usuario,
-        onConfirm: onConfirm,
-      ),
+      builder: (context) =>
+          UsuarioDeleteConfirmDialog(usuario: usuario, onConfirm: onConfirm),
     );
   }
 

@@ -11,7 +11,17 @@ import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
 import '../../core/models/invoice.dart';
+class _AddSaleTemp {
+  final List<_ProductSelection> product;
+ 
+  _AddSaleTemp({required this.product,  });
+}
+class _ProductSelection {
+  final Product product;
+  final int quantity;
 
+  _ProductSelection({required this.product, required this.quantity});
+}
 class SalesView extends StatefulWidget {
   const SalesView({super.key});
 
@@ -40,15 +50,18 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
   final _numeroNotaController = TextEditingController();
   final _formaPagamentoController = TextEditingController();
   Customer? _clienteSelecionado;
-  final List<Map<String, dynamic>> _itensSelecionados = [];
+  final  _AddSaleTemp _itensSelecionados = _AddSaleTemp(product: []);
 
   @override
   Widget build(BuildContext context) {
-    final valorTotal = _itensSelecionados.fold<double>(0, (sum, item) {
-      final productItem = item['produto'] as Product;
-      final quantidade = item['quantidade'] as int;
-      return sum + (productItem.price * quantidade);
-    });
+    final valorTotal = _itensSelecionados.product.fold<double>(
+      0.0,
+      (previousValue, item) {
+        final productItem = item.product;
+        final quantidade = item.quantity;
+        return previousValue + (productItem.price * quantidade);
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -126,7 +139,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              if (_itensSelecionados.isEmpty)
+              if (_itensSelecionados.product.isEmpty)
                 const Center(
                   child: Padding(
                     padding: EdgeInsets.all(32.0),
@@ -137,11 +150,11 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                   ),
                 )
               else
-                ..._itensSelecionados.asMap().entries.map((entry) {
+                ..._itensSelecionados.product.asMap().entries.map((entry) {
                   final index = entry.key;
                   final item = entry.value;
-                  final productItem = item['product'] as Product;
-                  final quantidade = item['quantidade'] as int;
+                  final productItem = item.product;
+                  final quantidade = item.quantity;
                   final subtotal = productItem.price * quantidade;
 
                   return Card(
@@ -155,7 +168,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           setState(() {
-                            _itensSelecionados.removeAt(index);
+                            _itensSelecionados.product.removeAt(index);
                           });
                         },
                       ),
@@ -242,7 +255,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
         }
 
         setState(() {
-          _itensSelecionados.add({'product': product, 'quantity': quantidade});
+          _itensSelecionados.product.add(_ProductSelection(product: product, quantity: quantidade));
         });
       }
     }
@@ -260,7 +273,7 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
         return;
       }
 
-      if (_itensSelecionados.isEmpty) {
+      if (_itensSelecionados.product.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Erro: Adicione pelo menos um item!'),
@@ -285,9 +298,9 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
       //   return;
       // }
 
-      final itens = _itensSelecionados.map((item) {
-        final product = item['product'] as Product;
-        final quantity = item['quantity'] as int;
+      final itens = _itensSelecionados.product.map((item) {
+        final product = item.product;
+        final quantity = item.quantity;
         return InvoiceItem(
           productId: product.id, // ID não é mais null por construção
           productName: product.name,

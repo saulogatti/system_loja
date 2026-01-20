@@ -75,7 +75,9 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   /// Os itens da nota devem ser inseridos separadamente usando InvoiceItemDao.
   /// Retorna o ID gerado automaticamente.
   Future<int> insertInvoice(Invoice invoice) {
-    return into(invoicesRecords).insert(invoice.toCompanion());
+    return into(
+      invoicesRecords,
+    ).insert(invoice.toCompanion(), mode: InsertMode.insertOrReplace);
   }
 
   /// Insere uma nova nota fiscal com seus itens em uma transação.

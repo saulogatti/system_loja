@@ -24,9 +24,9 @@ class Database {
 
   Future<List<Map<String, dynamic>>> query(
     String tablePersistentDataStore, {
-      String? where,
-      List<String>? whereArgs,
-      String? orderBy,
+    String? where,
+    List<String>? whereArgs,
+    String? orderBy,
   }) async {
     return [];
   }
@@ -122,8 +122,8 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
   /// ```
   // final _dbHelper = DatabaseHelper();
   SqlDataStorage({required super.storageCategory});
-  Future<Database> get _database => Future.value(Database());
   Database get database => Database();
+  Future<Database> get _database => Future.value(Database());
   @override
   Future<ExecutionResult<bool, String>> delete(int id) async {
     try {
@@ -137,7 +137,7 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
           whereArgs: [id, storageCategory],
         );
 
-        if (rowsAffected > 0) {
+        if (rowsAffected as int > 0) {
           return ExecutionResult.success(true);
         } else {
           return ExecutionResult.error(
@@ -325,7 +325,7 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
 
-        return result > 0;
+        return result as int > 0;
       }, timeout: _timeOutMilliseconds);
     } catch (e, stackTrace) {
       logError('Erro ao salvar objeto com ID ${object.id}: $e', stackTrace);

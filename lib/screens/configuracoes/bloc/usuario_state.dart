@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:system_loja/core/models/usuario.dart';
+import 'package:system_loja/core/models/user.dart';
 
 part 'usuario_state.freezed.dart';
 
@@ -12,9 +12,12 @@ sealed class UsuarioState with _$UsuarioState {
 
   const factory UsuarioState.loading() = UsuarioStateLoading;
 
-  const factory UsuarioState.loadSuccess({required List<Usuario> usuarios}) =
+  const factory UsuarioState.loadSuccess({required List<User> usuarios}) =
       UsuarioStateLoadSuccess;
-  const factory UsuarioState.senhaInvalida(String mensagem) = UsuarioStateSenhaInvalida;
-  const factory UsuarioState.usuarioRemovido(int id) = UsuarioStateUsuarioRemovido;
-  const factory UsuarioState.usuarioAdicionado(Usuario usuario, bool novoUsuario) = UsuarioStateUsuarioAdicionado;
+  const factory UsuarioState.senhaInvalida(String mensagem) =
+      UsuarioStateSenhaInvalida;
+  const factory UsuarioState.usuarioRemovido(int id) =
+      UsuarioStateUsuarioRemovido;
+  const factory UsuarioState.usuarioAdicionado(User usuario, bool novoUsuario) =
+      UsuarioStateUsuarioAdicionado;
 }

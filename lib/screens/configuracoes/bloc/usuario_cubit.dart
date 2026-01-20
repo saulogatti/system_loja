@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/models/usuario.dart';
+import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/core/repository/user_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
@@ -14,22 +14,23 @@ class UsuarioCubit extends Cubit<UsuarioState> {
     required String nome,
     required String email,
     required String senha,
-    required NivelPermissao nivelPermissao,
+    required AuthorizationLevel nivelPermissao,
   }) async {
     // Lógica para adicionar usuário
     try {
-      final int usuarioId = await _userRepository.obtainNextId(); // Exemplo de ID
-      final usuario = Usuario(
+      final int usuarioId = await _userRepository
+          .obtainNextId(); // Exemplo de ID
+      final usuario = User(
         id: usuarioId,
-        nome: nome,
+        userName: nome,
         email: email,
-        senhaHash: senha.hashSenha(),
+        passwordHash: senha.hashSenha(),
 
-        nivelPermissao: nivelPermissao,
+        permissionLevel: nivelPermissao,
       );
 
-      final ExecutionResult<bool, String> executionResult = await _userRepository
-          .adicionarUsuario(usuario);
+      final ExecutionResult<bool, String> executionResult =
+          await _userRepository.adicionarUsuario(usuario);
       executionResult.when(
         onSuccess: (sucess) {
           emit(UsuarioState.usuarioAdicionado(usuario, true));
@@ -45,7 +46,7 @@ class UsuarioCubit extends Cubit<UsuarioState> {
     }
   }
 
-  Future<void> atualizarUsuario({required Usuario usuarioAtualizado}) async {
+  Future<void> atualizarUsuario({required User usuarioAtualizado}) async {
     try {
       final ExecutionResult<bool, String> resultAdd = await _userRepository
           .atualizarUsuario(usuarioAtualizado);

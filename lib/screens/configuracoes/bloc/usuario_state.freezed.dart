@@ -134,7 +134,7 @@ return usuarioAdicionado(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( String errorMessage)?  loadFailure,TResult Function()?  loading,TResult Function( List<Usuario> usuarios)?  loadSuccess,TResult Function( String mensagem)?  senhaInvalida,TResult Function( int id)?  usuarioRemovido,TResult Function( Usuario usuario,  bool novoUsuario)?  usuarioAdicionado,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( String errorMessage)?  loadFailure,TResult Function()?  loading,TResult Function( List<User> usuarios)?  loadSuccess,TResult Function( String mensagem)?  senhaInvalida,TResult Function( int id)?  usuarioRemovido,TResult Function( User usuario,  bool novoUsuario)?  usuarioAdicionado,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case UsuarioStateInitial() when initial != null:
 return initial();case UsuarioStateLoadFailure() when loadFailure != null:
@@ -161,7 +161,7 @@ return usuarioAdicionado(_that.usuario,_that.novoUsuario);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( String errorMessage)  loadFailure,required TResult Function()  loading,required TResult Function( List<Usuario> usuarios)  loadSuccess,required TResult Function( String mensagem)  senhaInvalida,required TResult Function( int id)  usuarioRemovido,required TResult Function( Usuario usuario,  bool novoUsuario)  usuarioAdicionado,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( String errorMessage)  loadFailure,required TResult Function()  loading,required TResult Function( List<User> usuarios)  loadSuccess,required TResult Function( String mensagem)  senhaInvalida,required TResult Function( int id)  usuarioRemovido,required TResult Function( User usuario,  bool novoUsuario)  usuarioAdicionado,}) {final _that = this;
 switch (_that) {
 case UsuarioStateInitial():
 return initial();case UsuarioStateLoadFailure():
@@ -184,7 +184,7 @@ return usuarioAdicionado(_that.usuario,_that.novoUsuario);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( String errorMessage)?  loadFailure,TResult? Function()?  loading,TResult? Function( List<Usuario> usuarios)?  loadSuccess,TResult? Function( String mensagem)?  senhaInvalida,TResult? Function( int id)?  usuarioRemovido,TResult? Function( Usuario usuario,  bool novoUsuario)?  usuarioAdicionado,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( String errorMessage)?  loadFailure,TResult? Function()?  loading,TResult? Function( List<User> usuarios)?  loadSuccess,TResult? Function( String mensagem)?  senhaInvalida,TResult? Function( int id)?  usuarioRemovido,TResult? Function( User usuario,  bool novoUsuario)?  usuarioAdicionado,}) {final _that = this;
 switch (_that) {
 case UsuarioStateInitial() when initial != null:
 return initial();case UsuarioStateLoadFailure() when loadFailure != null:
@@ -335,11 +335,11 @@ String toString() {
 
 
 class UsuarioStateLoadSuccess implements UsuarioState {
-  const UsuarioStateLoadSuccess({required final  List<Usuario> usuarios}): _usuarios = usuarios;
+  const UsuarioStateLoadSuccess({required final  List<User> usuarios}): _usuarios = usuarios;
   
 
- final  List<Usuario> _usuarios;
- List<Usuario> get usuarios {
+ final  List<User> _usuarios;
+ List<User> get usuarios {
   if (_usuarios is EqualUnmodifiableListView) return _usuarios;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_usuarios);
@@ -376,7 +376,7 @@ abstract mixin class $UsuarioStateLoadSuccessCopyWith<$Res> implements $UsuarioS
   factory $UsuarioStateLoadSuccessCopyWith(UsuarioStateLoadSuccess value, $Res Function(UsuarioStateLoadSuccess) _then) = _$UsuarioStateLoadSuccessCopyWithImpl;
 @useResult
 $Res call({
- List<Usuario> usuarios
+ List<User> usuarios
 });
 
 
@@ -396,7 +396,7 @@ class _$UsuarioStateLoadSuccessCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? usuarios = null,}) {
   return _then(UsuarioStateLoadSuccess(
 usuarios: null == usuarios ? _self._usuarios : usuarios // ignore: cast_nullable_to_non_nullable
-as List<Usuario>,
+as List<User>,
   ));
 }
 
@@ -542,7 +542,7 @@ class UsuarioStateUsuarioAdicionado implements UsuarioState {
   const UsuarioStateUsuarioAdicionado(this.usuario, this.novoUsuario);
   
 
- final  Usuario usuario;
+ final  User usuario;
  final  bool novoUsuario;
 
 /// Create a copy of UsuarioState
@@ -575,7 +575,7 @@ abstract mixin class $UsuarioStateUsuarioAdicionadoCopyWith<$Res> implements $Us
   factory $UsuarioStateUsuarioAdicionadoCopyWith(UsuarioStateUsuarioAdicionado value, $Res Function(UsuarioStateUsuarioAdicionado) _then) = _$UsuarioStateUsuarioAdicionadoCopyWithImpl;
 @useResult
 $Res call({
- Usuario usuario, bool novoUsuario
+ User usuario, bool novoUsuario
 });
 
 
@@ -595,7 +595,7 @@ class _$UsuarioStateUsuarioAdicionadoCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? usuario = null,Object? novoUsuario = null,}) {
   return _then(UsuarioStateUsuarioAdicionado(
 null == usuario ? _self.usuario : usuario // ignore: cast_nullable_to_non_nullable
-as Usuario,null == novoUsuario ? _self.novoUsuario : novoUsuario // ignore: cast_nullable_to_non_nullable
+as User,null == novoUsuario ? _self.novoUsuario : novoUsuario // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

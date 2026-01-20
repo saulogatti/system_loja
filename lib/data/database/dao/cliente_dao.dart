@@ -42,7 +42,9 @@ class ClienteDao extends DatabaseAccessor<AppDatabase> with _$ClienteDaoMixin {
   /// Aceita um objeto Customer do domínio e o converte para Companion.
   /// Retorna o ID gerado automaticamente.
   Future<int> insertCliente(Customer customer) {
-    return into(clientesRecords).insert(customer.toCompanion());
+    return into(
+      clientesRecords,
+    ).insert(customer.toCompanion(), mode: InsertMode.insertOrReplace);
   }
 
   /// Atualiza um cliente existente no banco de dados.

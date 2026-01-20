@@ -2,7 +2,8 @@ import 'package:system_loja/core/managers/configuration_repository.dart';
 import 'package:system_loja/core/repository/cliente_repository.dart';
 import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/data/database/app_database.dart';
-import 'package:system_loja/data/database/cliente_dao.dart';
+import 'package:system_loja/data/database/dao/cliente_dao.dart';
+import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
 class AppInjection {
@@ -12,7 +13,8 @@ class AppInjection {
     return _instance!;
   }
 
-    final AppDatabase appDatabase = AppDatabase();
+  final AppDatabase appDatabase = AppDatabase();
+  final SystemDatabase systemDatabase = SystemDatabase();
   late final ClienteRepository clienteRepository = ClienteRepository(
     ClienteDao(appDatabase),
   );

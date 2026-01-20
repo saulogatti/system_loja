@@ -47,3 +47,4 @@ analyzer:
     inference_failure_on_function_invocation: ignore
     await_only_futures: warning
     avoid_void_async: warning
+    avoid_dynamic_calls: error

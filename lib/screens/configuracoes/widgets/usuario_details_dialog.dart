@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:system_loja/core/models/extensions/nivel_permissao_extension.dart';
-import 'package:system_loja/core/models/usuario.dart';
+import 'package:system_loja/core/models/user.dart';
 
 /// Widget do dialog de detalhes do usuário
 ///
 /// Exibe todas as informações do usuário em um dialog modal.
 class UsuarioDetailsDialog extends StatelessWidget {
-  final Usuario usuario;
+  final User usuario;
 
   const UsuarioDetailsDialog({super.key, required this.usuario});
 
@@ -70,7 +69,7 @@ class UsuarioDetailsDialog extends StatelessWidget {
   }
 
   /// Mostra o dialog de detalhes do usuário
-  static void show(BuildContext context, Usuario usuario) {
+  static void show(BuildContext context, User usuario) {
     showDialog(
       context: context,
       builder: (context) => UsuarioDetailsDialog(usuario: usuario),

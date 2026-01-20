@@ -377,7 +377,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void _confirmarExclusao() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (_) => AlertDialog(
         title: const Text('Confirmar Exclusão'),
         content: Text(
           'Tem certeza que deseja excluir o produto "${widget.product.name}"?\n\nEsta ação não pode ser desfeita.',
@@ -390,7 +390,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context); // Fecha o diálogo
-              context.read<ProductCubit>().deleteProduct(widget.product.code);
+              context.read<ProductCubit>().deleteProduct(widget.product.id);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,

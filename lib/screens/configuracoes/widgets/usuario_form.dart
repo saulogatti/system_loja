@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/usuario.dart';
+import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/core/utils/validators.dart';
 
@@ -11,11 +11,11 @@ class UsuarioForm extends StatefulWidget {
   final TextEditingController nomeController;
   final TextEditingController emailController;
   final TextEditingController senhaController;
-  final NivelPermissao nivelPermissaoSelecionado;
-  final Usuario? usuarioEditando;
+  final AuthorizationLevel nivelPermissaoSelecionado;
+  final User? usuarioEditando;
   final VoidCallback onSubmit;
   final VoidCallback? onCancel;
-  final ValueChanged<NivelPermissao> onPermissaoChanged;
+  final ValueChanged<AuthorizationLevel> onPermissaoChanged;
 
   const UsuarioForm({
     super.key,
@@ -46,10 +46,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
         children: [
           Text(
             widget.usuarioEditando == null ? 'Novo Usuário' : 'Editar Usuário',
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
           TextFormField(
@@ -128,7 +125,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
             },
           ),
           const SizedBox(height: 16),
-          DropdownButtonFormField<NivelPermissao>(
+          DropdownButtonFormField<AuthorizationLevel>(
             initialValue: widget.nivelPermissaoSelecionado,
             decoration: const InputDecoration(
               labelText: 'Nível de Permissão *',
@@ -137,11 +134,11 @@ class _UsuarioFormState extends State<UsuarioForm> {
             ),
             items: const [
               DropdownMenuItem(
-                value: NivelPermissao.usuarioComum,
+                value: AuthorizationLevel.usuarioComum,
                 child: Text('Usuário Comum'),
               ),
               DropdownMenuItem(
-                value: NivelPermissao.administrador,
+                value: AuthorizationLevel.administrador,
                 child: Text('Administrador'),
               ),
             ],
@@ -171,7 +168,8 @@ class _UsuarioFormState extends State<UsuarioForm> {
                   ),
                 ),
               ),
-              if (widget.usuarioEditando != null && widget.onCancel != null) ...[
+              if (widget.usuarioEditando != null &&
+                  widget.onCancel != null) ...[
                 const SizedBox(width: 8),
                 ElevatedButton.icon(
                   onPressed: widget.onCancel,

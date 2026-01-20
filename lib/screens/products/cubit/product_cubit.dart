@@ -75,8 +75,7 @@ class ProductCubit extends Cubit<ProductState> {
   ///
   /// Parâmetros:
   ///   - [id]: Identificador único do produto a ser removido.
-  Future<void> deleteProduct(String code) async {
-    final id = int.tryParse(code) ?? 0;
+  Future<void> deleteProduct(int id) async {
     final deleteResult = await _manager.deleteProduct(id);
     switch (deleteResult) {
       case ExecutionSucess():

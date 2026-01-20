@@ -1,6 +1,6 @@
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/data/database/product_dao.dart';
+import 'package:system_loja/data/database/dao/product_dao.dart';
 import 'package:system_loja/screens/injection/app_injection.dart';
 
 class ProductRepository {
@@ -65,7 +65,8 @@ class ProductRepository {
   ///
   /// **Nota**: Este método utiliza internamente [salvarProduto], pois o storage
   /// não diferencia entre inserção e atualização (upsert pattern).
-  Future<ExecutionResult<bool, String>> updateProduct(Product produto) {
-    return salvarProduto(produto);
+  Future<ExecutionResult<bool, String>> updateProduct(Product produto) async {
+    final result = await defaultDataStorage.updateProduct(produto);
+    return ExecutionSucess(result);
   }
 }

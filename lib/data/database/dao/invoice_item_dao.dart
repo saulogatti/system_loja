@@ -67,6 +67,6 @@ class InvoiceItemDao extends DatabaseAccessor<AppDatabase>
     required int invoiceId,
   }) {
     return into(invoiceItemsRecords)
-        .insert(item.toCompanion(invoiceId: invoiceId));
+        .insert(item.toCompanion(invoiceId: invoiceId), mode: InsertMode.insertOrReplace);
   }
 }

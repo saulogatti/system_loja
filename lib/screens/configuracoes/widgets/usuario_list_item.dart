@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/extensions/nivel_permissao_extension.dart';
-import 'package:system_loja/core/models/usuario.dart';
+import 'package:system_loja/core/models/user.dart';
 
 /// Widget do item individual da lista de usuários
 ///
 /// Exibe as informações do usuário em formato de card com ações de editar e excluir.
 class UsuarioListItem extends StatelessWidget {
-  final Usuario usuario;
+  final User usuario;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final VoidCallback onTap;
@@ -29,11 +28,12 @@ class UsuarioListItem extends StatelessWidget {
         minVerticalPadding: 0,
         titleAlignment: ListTileTitleAlignment.center,
         leading: CircleAvatar(
-          backgroundColor: usuario.nivelPermissao == NivelPermissao.administrador
+          backgroundColor:
+              usuario.nivelPermissao == AuthorizationLevel.administrador
               ? Colors.purple
               : Colors.blue,
           child: Icon(
-            usuario.nivelPermissao == NivelPermissao.administrador
+            usuario.nivelPermissao == AuthorizationLevel.administrador
                 ? Icons.admin_panel_settings
                 : Icons.person,
             color: Colors.white,
@@ -41,9 +41,7 @@ class UsuarioListItem extends StatelessWidget {
         ),
         title: Text(
           usuario.nome,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
           '${usuario.email}\n${usuario.nivelPermissao.toDisplayName()}',
@@ -53,17 +51,11 @@ class UsuarioListItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(
-                Icons.edit,
-                color: Colors.blue,
-              ),
+              icon: const Icon(Icons.edit, color: Colors.blue),
               onPressed: onEdit,
             ),
             IconButton(
-              icon: const Icon(
-                Icons.delete,
-                color: Colors.red,
-              ),
+              icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: onDelete,
             ),
           ],

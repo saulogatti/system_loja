@@ -9,7 +9,7 @@ import 'package:system_loja/screens/configuracoes/widgets/usuario_form.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_list.dart';
 import 'package:system_loja/screens/widgets/overlay_app_widget.dart';
 
-import '../../core/models/usuario.dart';
+import '../../core/models/user.dart';
 
 /// Tela de gestão de usuários com listagem, adição, edição e exclusão.
 ///
@@ -33,10 +33,11 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
-  NivelPermissao _nivelPermissaoSelecionado = NivelPermissao.usuarioComum;
-  Usuario? _usuarioEditando;
+  AuthorizationLevel _nivelPermissaoSelecionado =
+      AuthorizationLevel.usuarioComum;
+  User? _usuarioEditando;
   final OverlayApp _overlayLoader = OverlayApp();
-  List<Usuario> _usuarios = List.empty(growable: true);
+  List<User> _usuarios = List.empty(growable: true);
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +99,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                 setState(() {});
               }
             },
-            usuarioAdicionado: (Usuario usuario, bool novoUsuario) {
+            usuarioAdicionado: (User usuario, bool novoUsuario) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
@@ -190,7 +191,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     });
   }
 
-  void _confirmarExclusao(Usuario usuario) {
+  void _confirmarExclusao(User usuario) {
     UsuarioDeleteConfirmDialog.show(
       context,
       usuario,
@@ -198,7 +199,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     );
   }
 
-  void _editarUsuario(Usuario usuario) {
+  void _editarUsuario(User usuario) {
     setState(() {
       _usuarioEditando = usuario;
       _nomeController.text = usuario.nome;
@@ -218,7 +219,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     }
   }
 
-  Future<void> _excluirUsuario(Usuario usuario) async {
+  Future<void> _excluirUsuario(User usuario) async {
     _bloc.removerUsuario(usuario.id);
 
     // Se estava editando o usuário excluído, cancela a edição
@@ -232,10 +233,10 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     _nomeController.clear();
     _emailController.clear();
     _senhaController.clear();
-    _nivelPermissaoSelecionado = NivelPermissao.usuarioComum;
+    _nivelPermissaoSelecionado = AuthorizationLevel.usuarioComum;
   }
 
-  void _mostrarDetalhesUsuario(Usuario usuario) {
+  void _mostrarDetalhesUsuario(User usuario) {
     UsuarioDetailsDialog.show(context, usuario);
   }
 

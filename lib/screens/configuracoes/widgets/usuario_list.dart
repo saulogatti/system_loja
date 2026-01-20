@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/usuario.dart';
+import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_list_item.dart';
 
 /// Widget da lista de usuários cadastrados
 ///
 /// Exibe os usuários em formato de lista com cards ou mensagem quando vazio.
 class UsuarioList extends StatelessWidget {
-  final List<Usuario> usuarios;
-  final Function(Usuario) onEdit;
-  final Function(Usuario) onDelete;
-  final Function(Usuario) onTap;
+  final List<User> usuarios;
+  final Function(User) onEdit;
+  final Function(User) onDelete;
+  final Function(User) onTap;
 
   const UsuarioList({
     super.key,
@@ -26,10 +26,7 @@ class UsuarioList extends StatelessWidget {
       children: [
         const Text(
           'Usuários Cadastrados',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         if (usuarios.isEmpty)
@@ -38,10 +35,7 @@ class UsuarioList extends StatelessWidget {
               padding: EdgeInsets.all(32.0),
               child: Text(
                 'Nenhum usuário cadastrado',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
             ),
           )
