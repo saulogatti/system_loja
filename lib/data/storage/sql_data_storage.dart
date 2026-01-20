@@ -1,11 +1,38 @@
 import 'dart:convert';
 
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/database_config.dart';
-import 'package:system_loja/data/database/database_helper.dart';
 import 'package:system_loja/data/storage/base_data_storage.dart';
+
+class ConflictAlgorithm {
+  static const replace = 1;
+}
+
+class Database {
+  Future<dynamic> delete(
+    String tablePersistentDataStore, {
+    required String where,
+    required List<Object> whereArgs,
+  }) async {}
+
+  Future<dynamic> insert(
+    String tablePersistentDataStore,
+    Map<String, dynamic> row, {
+    required conflictAlgorithm,
+  }) async {}
+
+  Future<List<Map<String, dynamic>>> query(
+    String tablePersistentDataStore, {
+      String? where,
+      List<String>? whereArgs,
+      String? orderBy,
+  }) async {
+    return [];
+  }
+
+  Future<dynamic> rawQuery(String s, List<int>? list) async {}
+}
 
 /// Implementação de armazenamento de dados utilizando SQL.
 ///
@@ -93,9 +120,10 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
   ///     print('Erro ao deletar: $erro');
   /// }
   /// ```
-  final _dbHelper = DatabaseHelper();
+  // final _dbHelper = DatabaseHelper();
   SqlDataStorage({required super.storageCategory});
-  Future<Database> get _database => _dbHelper.database;
+  Future<Database> get _database => Future.value(Database());
+  Database get database => Database();
   @override
   Future<ExecutionResult<bool, String>> delete(int id) async {
     try {
@@ -153,7 +181,8 @@ class SqlDataStorage extends BaseDataStorage with LoggerClassMixin {
       final List<Map<String, dynamic>> results = await db.query(
         DatabaseConfig.tablePersistentDataStore,
         where: 'id = ? AND storage_category = ?',
-        whereArgs: [id, storageCategory],
+        whereArgs: [id.toString(), storageCategory],
+        orderBy: '',
       );
 
       if (results.isEmpty) {

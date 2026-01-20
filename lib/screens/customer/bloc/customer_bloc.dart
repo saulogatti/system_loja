@@ -4,8 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/managers/exceptions/customer_exception.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/repository/customer_repository.dart';
+import 'package:system_loja/core/repository/cliente_repository.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
+import 'package:system_loja/data/database/app_database.dart';
+import 'package:system_loja/data/database/cliente_dao.dart';
 
 part 'customer_bloc.freezed.dart';
 part 'customer_bloc_event.dart';
@@ -16,10 +18,11 @@ part 'customer_bloc_state.dart';
 /// Utiliza o ClienteSqlManager para operações de banco de dados
 /// e implementa o padrão BLoC para separação de lógica de negócio da UI.
 class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
-  final CustomerRepository _customerRepository;
+  final ClienteRepository _customerRepository;
 
   CustomerBloc()
-    : _customerRepository = CustomerRepository(),
+    //Todo passar para injeção de dependência
+    : _customerRepository = ClienteRepository(ClienteDao(AppDatabase())),
       super(const _Initial()) {
     on<_LoadCustomers>(_onLoadCustomers);
     on<_RegisterCustomer>(_onRegisterCustomer);
@@ -34,9 +37,9 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   ) async {
     emit(const CustomerBlocState.loading());
     try {
-      await _customerRepository.deleteWithId(event.id);
+      await _customerRepository.excluir(event.id);
       // Recarrega a lista de clientes após deletar
-      final customers = await _customerRepository.loadAll();
+      final customers = await _customerRepository.listarMapeado();
       emit(
         CustomerBlocState.customersLoaded(
           customers: customers,
@@ -90,7 +93,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   ) async {
     emit(const CustomerBlocState.loading());
     try {
-      final customers = await _customerRepository.loadAll();
+      final customers = await _customerRepository.listarMapeado();
       emit(
         CustomerBlocState.customersLoaded(
           customers: customers,
@@ -138,9 +141,8 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
         return;
       }
 
-      final int newId = await _customerRepository.obtainNextId();
       final customer = Customer(
-        id: newId,
+        id: 0,
         name: event.name,
         cpf: event.cpf,
         email: event.email,
@@ -148,10 +150,10 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
         address: event.address,
       );
 
-      await _customerRepository.saveNewCustomer(customer);
+      await _customerRepository.salvar(customer);
 
       // Recarrega a lista de clientes após adicionar
-      final customers = await _customerRepository.loadAll();
+      final customers = await _customerRepository.listarMapeado();
       emit(
         CustomerBlocState.customersLoaded(
           customers: customers,
@@ -180,9 +182,9 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   ) async {
     emit(const CustomerBlocState.loading());
     try {
-      await _customerRepository.updateCustomer(event.customer);
+      await _customerRepository.salvar(event.customer);
       // Recarrega a lista de clientes após atualizar
-      final customers = await _customerRepository.loadAll();
+      final customers = await _customerRepository.listarMapeado();
       emit(
         CustomerBlocState.customersLoaded(
           customers: customers,

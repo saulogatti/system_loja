@@ -1,23 +1,24 @@
 import 'package:bloc/bloc.dart';
 import 'package:system_loja/core/models/invoice.dart';
-import 'package:system_loja/core/repository/customer_repository.dart';
+import 'package:system_loja/core/repository/cliente_repository.dart';
 import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/repository/sales_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/screens/injection/app_injection.dart';
 import 'package:system_loja/screens/sales/sales_state.dart';
 
 class SalesCubit extends Cubit<SalesState> {
   late SalesRepository _salesRepository;
-  late CustomerRepository _customerRepository;
+  late final ClienteRepository _customerRepository =
+      AppInjection.instance.clienteRepository;
   SalesCubit() : super(SalesInitial()) {
     _salesRepository = SalesRepository();
-    _customerRepository = CustomerRepository();
   }
   Future<void> loadAllCustomers() async {
     // Implement loading customers logic here
     emit(SalesState.loading());
     // Assuming you have a method to load customers in SalesRepository
-    final customers = await _customerRepository.loadAll();
+    final customers = await _customerRepository.listarMapeado();
     emit(SalesState.loadedCustomers(customers: customers));
   }
 
