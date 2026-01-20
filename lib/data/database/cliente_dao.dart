@@ -47,8 +47,10 @@ class ClienteDao extends DatabaseAccessor<AppDatabase> with _$ClienteDaoMixin {
 
   /// Atualiza um cliente existente no banco de dados.
   ///
-  /// Retorna 1 se a atualização foi bem-sucedida, 0 caso contrário.
-  Future<int> updateCliente(Customer customer) async {
-    return await update(clientesRecords).replace(customer.toCompanion(forUpdate: true)) ? 1 : 0;
+  /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
+  Future<bool> updateCliente(Customer customer) {
+    return update(
+      clientesRecords,
+    ).replace(customer.toCompanion(forUpdate: true));
   }
 }

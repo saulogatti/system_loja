@@ -23,22 +23,19 @@ part 'app_database.g.dart';
     InvoicesRecords,
     InvoiceItemsRecords,
   ],
-  daos: [
-    ClienteDao,
-    ProductDao,
-    InvoiceDao,
-    InvoiceItemDao,
-  ],
+  daos: [ClienteDao, ProductDao, InvoiceDao, InvoiceItemDao],
 )
 class AppDatabase extends _$AppDatabase {
+  static final _nameBd = 'system_loja';
+
   AppDatabase() : super(_openConnection());
 
   @override
   int get schemaVersion => 2;
-  
+
   static QueryExecutor _openConnection() {
     return driftDatabase(
-      name: ' system_loja',
+      name: _nameBd,
       native: const DriftNativeOptions(
         // By default, `driftDatabase` from `package:drift_flutter` stores the
         // database files in `getApplicationDocumentsDirectory()`.

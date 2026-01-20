@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/extension/invoice_to_companion.dart';
-import 'package:system_loja/data/database/invoice_item_dao.dart';
 import 'package:system_loja/data/database/table/invoices_records.dart';
 
 part 'invoice_dao.g.dart';
@@ -29,14 +29,28 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   /// Carrega os itens de cada nota fiscal automaticamente.
   Future<List<Invoice>> getAll() async {
     final records = await select(invoicesRecords).get();
-    final invoiceItemDao = InvoiceItemDao(db);
-    
-    final invoices = <Invoice>[];
-    for (final record in records) {
-      final items = await invoiceItemDao.getByInvoiceId(record.id);
-      invoices.add(record.toDomain(items));
+    if (records.isEmpty) return [];
+
+    final invoiceIds = records.map((r) => r.id).toList();
+
+    // Fetch all items for all invoices in a single query
+    final itemRecords = await (select(
+      db.invoiceItemsRecords,
+    )..where((t) => t.invoiceId.isIn(invoiceIds))).get();
+
+    // Group items by invoice ID for efficient lookup
+    final itemsByInvoiceId = <int, List<InvoiceItem>>{};
+    for (final itemRecord in itemRecords) {
+      (itemsByInvoiceId[itemRecord.invoiceId] ??= []).add(
+        itemRecord.toDomain(),
+      );
     }
-    return invoices;
+
+    // Build domain objects
+    return [
+      for (final record in records)
+        record.toDomain(itemsByInvoiceId[record.id] ?? []),
+    ];
   }
 
   /// Busca uma nota fiscal pelo ID.
@@ -47,10 +61,10 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
     final record = await (select(
       invoicesRecords,
     )..where((t) => t.id.equals(id))).getSingleOrNull();
-    
+
     if (record == null) return null;
-    
-    final invoiceItemDao = InvoiceItemDao(db);
+
+    final invoiceItemDao = db.invoiceItemDao;
     final items = await invoiceItemDao.getByInvoiceId(record.id);
     return record.toDomain(items);
   }
@@ -72,13 +86,13 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
     return await transaction(() async {
       // Insere a nota fiscal
       final invoiceId = await insertInvoice(invoice);
-      
+
       // Insere os itens
-      final invoiceItemDao = InvoiceItemDao(db);
+      final invoiceItemDao = db.invoiceItemDao;
       for (final item in invoice.data.items) {
         await invoiceItemDao.insertInvoiceItem(item, invoiceId: invoiceId);
       }
-      
+
       return invoiceId;
     });
   }
@@ -87,31 +101,33 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   ///
   /// Nota: Os itens não são atualizados automaticamente.
   /// Use InvoiceItemDao para gerenciar os itens separadamente.
-  /// Retorna 1 se a atualização foi bem-sucedida, 0 caso contrário.
-  Future<int> updateInvoice(Invoice invoice) async {
-    return await update(invoicesRecords).replace(invoice.toCompanion(forUpdate: true)) ? 1 : 0;
+  /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
+  Future<bool> updateInvoice(Invoice invoice) async {
+    return await update(
+      invoicesRecords,
+    ).replace(invoice.toCompanion(forUpdate: true));
   }
 
   /// Atualiza uma nota fiscal e seus itens em uma transação.
   ///
   /// Remove todos os itens existentes e insere os novos.
-  /// Retorna 1 se a atualização foi bem-sucedida, 0 caso contrário.
-  Future<int> updateInvoiceWithItems(Invoice invoice) async {
+  /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
+  Future<bool> updateInvoiceWithItems(Invoice invoice) async {
     return await transaction(() async {
       // Atualiza a nota fiscal
       final result = await updateInvoice(invoice);
-      
-      if (result > 0) {
+
+      if (result) {
         // Remove os itens antigos
-        final invoiceItemDao = InvoiceItemDao(db);
+        final invoiceItemDao = db.invoiceItemDao;
         await invoiceItemDao.deleteByInvoiceId(invoice.id);
-        
+
         // Insere os novos itens
         for (final item in invoice.data.items) {
           await invoiceItemDao.insertInvoiceItem(item, invoiceId: invoice.id);
         }
       }
-      
+
       return result;
     });
   }
