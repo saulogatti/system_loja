@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/repository/user_repository.dart';
-import 'package:system_loja/screens/configuracoes/bloc/usuario_cubit.dart';
+import 'package:system_loja/screens/configuracoes/bloc/user_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_delete_confirm_dialog.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_details_dialog.dart';
@@ -27,7 +27,7 @@ class UsuarioScreen extends StatefulWidget {
 }
 
 class _UsuarioScreenState extends State<UsuarioScreen> {
-  late final UsuarioCubit _bloc = UsuarioCubit(UserRepository());
+  late final UserCubit _bloc = UserCubit(UserRepository());
 
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
@@ -46,7 +46,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         title: const Text('Gestão de Usuários'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: BlocListener<UsuarioCubit, UsuarioState>(
+      body: BlocListener<UserCubit, UsuarioState>(
         bloc: _bloc,
         listener: (context, state) {
           state.when(
@@ -87,7 +87,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'Usuário "${usuario.nome}" excluído com sucesso!',
+                    'Usuário "${usuario.name}" excluído com sucesso!',
                   ),
                   backgroundColor: Colors.orange,
                 ),
@@ -104,8 +104,8 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                 SnackBar(
                   content: Text(
                     novoUsuario
-                        ? 'Usuário "${usuario.nome}" adicionado com sucesso!'
-                        : 'Usuário "${usuario.nome}" atualizado com sucesso!',
+                        ? 'Usuário "${usuario.name}" adicionado com sucesso!'
+                        : 'Usuário "${usuario.name}" atualizado com sucesso!',
                   ),
                   backgroundColor: Colors.green,
                 ),
@@ -202,10 +202,12 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   void _editarUsuario(User usuario) {
     setState(() {
       _usuarioEditando = usuario;
-      _nomeController.text = usuario.nome;
+      _nomeController.text = usuario.name;
       _emailController.text = usuario.email;
       _senhaController.clear();
-      _nivelPermissaoSelecionado = usuario.nivelPermissao;
+      _nivelPermissaoSelecionado = AuthorizationLevel.values.firstWhere(
+        (level) => level.value == usuario.permission,
+      );
     });
 
     // Scroll para o topo
@@ -261,31 +263,20 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         //   entidade: 'Usuario',
         //   entidadeId: usuario.id,
         //   usuarioId: usuario.id,
-        //   usuarioNome: usuario.nome,
+        //   usuarioNome: usuario.name,
         //   detalhes:
-        //       'Usuário ${usuario.nome} (${usuario.email}) criado com nível ${_getNivelPermissaoTexto(usuario.nivelPermissao)}',
+        //       'Usuário ${usuario.name} (${usuario.email}) criado com nível ${_getNivelPermissaoTexto(usuario.nivelPermissao)}',
         // );
       } else {
         // Atualizar usuário existente
         final user = _usuarioEditando!.copyWith(
-          nome: _nomeController.text.trim(),
+          name: _nomeController.text.trim(),
           email: email,
-          senhaHash: senha,
+          passwordHash: senha,
 
-          nivelPermissao: _nivelPermissaoSelecionado,
-          dataUltimaAtualizacao: DateTime.now(),
+          permission: _nivelPermissaoSelecionado.value,
         );
         await _bloc.atualizarUsuario(usuarioAtualizado: user);
-
-        // // Registra log de atividade
-        // await _logManager.criarERegistrarLog(
-        //   tipoAcao: TipoAcao.atualizar,
-        //   entidade: 'Usuario',
-        //   entidadeId: usuarioAtualizado.id,
-        //   usuarioId: usuarioAtualizado.id,
-        //   usuarioNome: usuarioAtualizado.nome,
-        //   detalhes: 'Usuário ${usuarioAtualizado.nome} atualizado',
-        // );
       }
     }
   }

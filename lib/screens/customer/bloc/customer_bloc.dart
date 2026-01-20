@@ -179,7 +179,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   ) async {
     emit(const CustomerBlocState.loading());
     try {
-      await _customerRepository.salvar(event.customer);
+      await _customerRepository.update(event.customer);
       // Recarrega a lista de clientes após atualizar
       final customers = await _customerRepository.listarMapeado();
       emit(

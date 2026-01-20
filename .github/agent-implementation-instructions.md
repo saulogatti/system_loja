@@ -640,8 +640,8 @@ Future<void> _registrarLogOperacao(Usuario usuario) async {
     entidade: 'Usuario',
     entidadeId: usuario.id,
     usuarioId: usuario.id,
-    usuarioNome: usuario.nome,
-    detalhes: 'Usuário ${usuario.nome} ${tipoAcao == TipoAcao.criar ? 'criado' : 'atualizado'}',
+    usuarioNome: usuario.name,
+    detalhes: 'Usuário ${usuario.name} ${tipoAcao == TipoAcao.criar ? 'criado' : 'atualizado'}',
   );
 }
 

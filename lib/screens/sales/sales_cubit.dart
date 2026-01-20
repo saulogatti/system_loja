@@ -6,54 +6,112 @@ import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/injection/app_injection.dart';
 import 'package:system_loja/screens/sales/sales_state.dart';
 
+/// Cubit para gerenciamento de estado de vendas
+///
+/// Coordena as operações de vendas usando os repositories
+/// e emite estados apropriados para a UI.
 class SalesCubit extends Cubit<SalesState> {
   late SalesRepository _salesRepository;
   late final ClienteRepository _customerRepository =
       AppInjection.instance.clienteRepository;
+
   SalesCubit() : super(SalesInitial()) {
     _salesRepository = SalesRepository();
   }
-  Future<void> loadAllCustomers() async {
-    // Implement loading customers logic here
-    emit(SalesState.loading());
-    // Assuming you have a method to load customers in SalesRepository
-    final customers = await _customerRepository.listarMapeado();
-    emit(SalesState.loadedCustomers(customers: customers));
-  }
 
-  Future<void> loadProducts() async {
-    emit(SalesState.loadingProducts());
-    final productRepository = AppInjection.instance.productRepository;
-    final result = await productRepository.getProdutos();
-    switch (result) {
-      case ExecutionSucess(result: final products):
-        emit(SalesState.loadedProducts(products: products));
-      case ExecutionError(failure: final errorMessage):
-        emit(
-          SalesState.loadProductsFailure(
-            message: 'Erro ao carregar produtos: $errorMessage',
-          ),
-        );
+  /// Deleta uma venda pelo ID
+  Future<void> deleteSale(int id) async {
+    try {
+      emit(SalesState.loading());
+      await _salesRepository.deleteSale(id);
+
+      final updatedSales = await _salesRepository.loadAllSales();
+      emit(SalesState.loaded(items: updatedSales));
+    } catch (e) {
+      emit(SalesState.error(message: 'Erro ao deletar venda: $e'));
     }
-    // final products = await _productRepository.loadAllProducts();
-    // emit(SalesState.loadedProducts(products: products));
   }
 
+  /// Carrega todos os clientes disponíveis
+  Future<void> loadAllCustomers() async {
+    try {
+      emit(SalesState.loading());
+      final customers = await _customerRepository.listarMapeado();
+      emit(SalesState.loadedCustomers(customers: customers));
+    } catch (e) {
+      emit(SalesState.error(message: 'Erro ao carregar clientes: $e'));
+    }
+  }
+
+  /// Carrega todos os produtos disponíveis
+  Future<void> loadProducts() async {
+    try {
+      emit(SalesState.loadingProducts());
+      final productRepository = AppInjection.instance.productRepository;
+      final result = await productRepository.getProdutos();
+
+      switch (result) {
+        case ExecutionSucess(result: final products):
+          emit(SalesState.loadedProducts(products: products));
+        case ExecutionError(failure: final errorMessage):
+          emit(
+            SalesState.loadProductsFailure(
+              message: 'Erro ao carregar produtos: $errorMessage',
+            ),
+          );
+      }
+    } catch (e) {
+      emit(
+        SalesState.loadProductsFailure(
+          message: 'Erro ao carregar produtos: $e',
+        ),
+      );
+    }
+  }
+
+  /// Carrega todas as vendas cadastradas
   Future<void> loadSales() async {
-    // Implement loading sales logic here
-    emit(SalesState.loading());
-    final sales = await _salesRepository.loadAllSales();
-
-    emit(SalesState.loaded(items: sales));
+    try {
+      emit(SalesState.loading());
+      final sales = await _salesRepository.loadAllSales();
+      emit(SalesState.loaded(items: sales));
+    } catch (e) {
+      emit(SalesState.error(message: 'Erro ao carregar vendas: $e'));
+    }
   }
 
+  /// Registra uma nova venda
+  ///
+  /// Cria um novo invoice com ID gerado automaticamente
+  /// e salva no banco de dados.
   Future<void> registerSale(InvoiceData invoiceData) async {
-    emit(SalesState.loading());
-    final invoice = Invoice(
-      id: await _salesRepository.getNextSaleId(),
-      data: invoiceData,
-    );
-    await _salesRepository.saveSale(invoice);
-    emit(SalesState.saved(items: await _salesRepository.loadAllSales()));
+    try {
+      emit(SalesState.loading());
+
+      final invoice = Invoice(
+        id: await _salesRepository.getNextSaleId(),
+        data: invoiceData,
+      );
+
+      await _salesRepository.saveSale(invoice);
+
+      final updatedSales = await _salesRepository.loadAllSales();
+      emit(SalesState.saved(items: updatedSales));
+    } catch (e) {
+      emit(SalesState.error(message: 'Erro ao registrar venda: $e'));
+    }
+  }
+
+  /// Atualiza uma venda existente
+  Future<void> updateSale(Invoice invoice) async {
+    try {
+      emit(SalesState.loading());
+      await _salesRepository.updateSale(invoice);
+
+      final updatedSales = await _salesRepository.loadAllSales();
+      emit(SalesState.loaded(items: updatedSales));
+    } catch (e) {
+      emit(SalesState.error(message: 'Erro ao atualizar venda: $e'));
+    }
   }
 }

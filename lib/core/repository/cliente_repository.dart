@@ -38,4 +38,8 @@ class ClienteRepository {
   Future<void> salvar(Customer cliente) async {
     await dao.insertCliente(cliente);
   }
+
+  Future<void> update(Customer customer) async {
+    await dao.updateCliente(customer);
+  }
 }

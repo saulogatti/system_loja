@@ -5,10 +5,10 @@ import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 
-class UsuarioCubit extends Cubit<UsuarioState> {
+class UserCubit extends Cubit<UsuarioState> {
   final UserRepository _userRepository;
 
-  UsuarioCubit(this._userRepository) : super(UsuarioState.initial());
+  UserCubit(this._userRepository) : super(UsuarioState.initial());
 
   Future<void> adicionarUsuario({
     required String nome,
@@ -18,15 +18,14 @@ class UsuarioCubit extends Cubit<UsuarioState> {
   }) async {
     // Lógica para adicionar usuário
     try {
-      final int usuarioId = await _userRepository
-          .obtainNextId(); // Exemplo de ID
+      // Exemplo de ID
       final usuario = User(
-        id: usuarioId,
-        userName: nome,
+        id: 0,
+        name: nome,
         email: email,
         passwordHash: senha.hashSenha(),
 
-        permissionLevel: nivelPermissao,
+        permission: nivelPermissao.value,
       );
 
       final ExecutionResult<bool, String> executionResult =

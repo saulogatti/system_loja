@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/models/extensions/nivel_permissao_extension.dart';
 import 'package:system_loja/core/models/user.dart';
 
 /// Widget do item individual da lista de usuários
@@ -29,22 +30,22 @@ class UsuarioListItem extends StatelessWidget {
         titleAlignment: ListTileTitleAlignment.center,
         leading: CircleAvatar(
           backgroundColor:
-              usuario.nivelPermissao == AuthorizationLevel.administrador
+              usuario.permission == AuthorizationLevel.administrador.value
               ? Colors.purple
               : Colors.blue,
           child: Icon(
-            usuario.nivelPermissao == AuthorizationLevel.administrador
+            usuario.permission == AuthorizationLevel.administrador.value
                 ? Icons.admin_panel_settings
                 : Icons.person,
             color: Colors.white,
           ),
         ),
         title: Text(
-          usuario.nome,
+          usuario.name,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          '${usuario.email}\n${usuario.nivelPermissao.toDisplayName()}',
+          '${usuario.email}\n${AuthorizationLevel.values.firstWhere((level) => level.value == usuario.permission).toDisplayName()}',
         ),
         isThreeLine: true,
         trailing: Row(

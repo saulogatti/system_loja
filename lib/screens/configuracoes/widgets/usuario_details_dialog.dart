@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:system_loja/core/models/extensions/nivel_permissao_extension.dart';
 import 'package:system_loja/core/models/user.dart';
 
 /// Widget do dialog de detalhes do usuário
@@ -13,7 +14,7 @@ class UsuarioDetailsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(usuario.nome),
+      title: Text(usuario.name),
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,7 +24,9 @@ class UsuarioDetailsDialog extends StatelessWidget {
             _buildDetailRow('Email', usuario.email),
             _buildDetailRow(
               'Nível de Permissão',
-              usuario.nivelPermissao.toDisplayName(),
+            AuthorizationLevel.values
+                  .firstWhere((level) => level.value == usuario.permission)
+                  .toDisplayName(),
             ),
             _buildDetailRow(
               'Data de Cadastro',
