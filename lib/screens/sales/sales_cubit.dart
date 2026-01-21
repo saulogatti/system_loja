@@ -16,7 +16,7 @@ class SalesCubit extends Cubit<SalesState> {
       AppInjection.instance.clienteRepository;
 
   SalesCubit() : super(SalesInitial()) {
-    _salesRepository = SalesRepository();
+    _salesRepository = AppInjection.instance.salesRepository;
   }
 
   /// Deleta uma venda pelo ID

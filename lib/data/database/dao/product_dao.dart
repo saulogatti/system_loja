@@ -20,9 +20,17 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   }
 
   Future<int> insertProduct(Product data) async {
-    return await into(
-      productsRecords,
-    ).insert(data.toInsertable(), mode: InsertMode.insertOrReplace);
+    return await into(productsRecords).insert(
+      ProductsRecordsCompanion.insert(
+        code: data.code,
+        category: data.category,
+        description: data.description,
+        name: data.name,
+        price: data.price,
+        stockQuantity: data.stockQuantity,
+      ),
+      mode: InsertMode.insertOrAbort, onConflict: DoNothing(),
+    );
   }
 
   Future<bool> remove(int id) async {
@@ -31,6 +39,17 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   }
 
   Future<bool> updateProduct(Product data) async {
-    return await update(productsRecords).replace(data.toInsertable());
+    return await update(productsRecords).replace(
+      ProductsRecordsCompanion(
+        id: Value(data.id),
+        code: Value(data.code),
+        category: Value(data.category),
+        description: Value(data.description),
+        name: Value(data.name),
+        price: Value(data.price),
+        stockQuantity: Value(data.stockQuantity),
+        lastUpdatedDate: Value(data.lastUpdatedDate),
+      ),
+    );
   }
 }

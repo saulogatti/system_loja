@@ -19,3 +19,4 @@ macos/Flutter/GeneratedPluginRegistrant.swift
 build/
 
 .DS_Store
+data/logs_atividade.json

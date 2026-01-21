@@ -45,7 +45,6 @@ class ProductCubit extends Cubit<ProductState> {
     required String categoria,
   }) async {
     final produto = Product(
-      id: 0,
       name: nome,
       code: codigo,
       price: preco,
@@ -54,14 +53,31 @@ class ProductCubit extends Cubit<ProductState> {
       category: categoria,
     );
 
-    await _manager.salvarProduto(produto);
-    final result = await _manager.getProdutos();
-    switch (result) {
-      case ExecutionSuccess(result: final produtos):
-        emit(ProductState.insertSuccess(produtos: produtos.toList()));
+    final resultSave = await _manager.salvarProduto(produto);
+    switch (resultSave) {
+      case ExecutionSuccess(result: final saved):
+        if (!saved) {
+          emit(
+            ProductState.error(
+              message: 'Erro ao adicionar produto: operação falhou',
+            ),
+          );
+          return;
+        }
+        final result = await _manager.getProdutos();
+        switch (result) {
+          case ExecutionSuccess(result: final produtos):
+            emit(ProductState.insertSuccess(produtos: produtos.toList()));
+          case ExecutionError(failure: final errorMessage):
+            emit(
+              ProductState.error(
+                message: 'Erro ao adicionar produto: $errorMessage',
+              ),
+            );
+        }
       case ExecutionError(failure: final errorMessage):
         emit(
-          ProductState.findByCodeFailure(
+          ProductState.error(
             message: 'Erro ao adicionar produto: $errorMessage',
           ),
         );
@@ -106,16 +122,19 @@ class ProductCubit extends Cubit<ProductState> {
   /// Parâmetros:
   ///   - [codigo]: Código do produto a ser localizado.
   Future<void> findByCode(int codigo) async {
+    // TODO implementar falta implementação na tela
     final result = await _manager.findByCode(codigo);
     switch (result) {
       case ExecutionSuccess(result: final produto):
-        emit(ProductState.findByCodeSuccess(produto: produto));
+        emit(
+          ProductState.error(
+            message: 'Funcionalidade não implementada: ${produto.name}',
+          ),
+        );
 
       case ExecutionError(failure: final errorMessage):
         emit(
-          ProductState.findByCodeFailure(
-            message: 'Erro ao buscar produto: $errorMessage',
-          ),
+          ProductState.error(message: 'Erro ao buscar produto: $errorMessage'),
         );
     }
   }
@@ -124,10 +143,10 @@ class ProductCubit extends Cubit<ProductState> {
     final result = await _manager.getProdutos();
     switch (result) {
       case ExecutionSuccess(result: final produtos):
-        emit(ProductState.insertSuccess(produtos: produtos.toList()));
+        emit(ProductState.loaded(produtos: produtos.toList()));
       case ExecutionError(failure: final errorMessage):
         emit(
-          ProductState.findByCodeFailure(
+          ProductState.error(
             message: 'Erro ao carregar produtos: $errorMessage',
           ),
         );

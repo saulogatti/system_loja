@@ -9,7 +9,6 @@ part of 'product.dart';
 Product _$ProductFromJson(Map<String, dynamic> json) =>
     $checkedCreate('Product', json, ($checkedConvert) {
       final val = Product(
-        id: $checkedConvert('id', (v) => (v as num).toInt()),
         name: $checkedConvert('name', (v) => v as String),
         description: $checkedConvert('description', (v) => v as String),
         price: $checkedConvert('price', (v) => (v as num).toDouble()),
@@ -23,6 +22,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) =>
         ),
         category: $checkedConvert('category', (v) => v as String),
         code: $checkedConvert('code', (v) => v as String),
+        id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
       );
       return val;
     }, fieldKeyMap: const {'lastUpdatedDate': 'last_updated_date'});
