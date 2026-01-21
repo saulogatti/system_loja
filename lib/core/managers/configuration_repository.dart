@@ -1,6 +1,5 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/managers/configuration_repository_cache.dart';
-import 'package:system_loja/core/managers/log_atividade_manager.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
 import 'package:system_loja/screens/injection/app_injection.dart';
 
@@ -18,7 +17,7 @@ class ConfigurationRepository
   /// Configuração atual do sistema
   AppSettings _configuracao = AppSettings.createDefaultSettings();
 
-  ConfigurationRepository.injection();
+  ConfigurationRepository();
 
   CacheManager get _cache => CacheManager.instance;
 
@@ -48,12 +47,13 @@ class ConfigurationRepository
 
   Future<bool> limparLogsAntigos() async {
     try {
-      final LogAtividadeManager logManager = LogAtividadeManager();
       final int diasManterLogs = _configuracao.diasManterLogs;
-      final DateTime dataLimite = DateTime.now().subtract(
-        Duration(days: diasManterLogs),
-      );
-      await logManager.limparLogsAntigos(dataLimite);
+      if (diasManterLogs > 0) {
+        final DateTime dataLimite = DateTime.now().subtract(
+          Duration(days: diasManterLogs),
+        );
+        await AppInjection.instance.logRepository.limparLogsAntigos(dataLimite);
+      }
       return true;
     } catch (e) {
       return false;

@@ -13,7 +13,7 @@ void main() {
     // Cria arquivo temporário para os testes
     testDataFile =
         'test/data/test_configuracao_${DateTime.now().millisecondsSinceEpoch}.json';
-    manager = ConfigurationRepository.injection();
+    manager = ConfigurationRepository();
   });
 
   tearDown(() {
@@ -70,7 +70,7 @@ void main() {
       await manager.atualizarConfiguracao(novaConfig);
 
       // Cria novo manager para verificar persistência
-      final manager2 = ConfigurationRepository.injection();
+      final manager2 = ConfigurationRepository();
 
       final updatedConfig2 = await manager2.carregarConfiguracao();
 
@@ -243,7 +243,7 @@ void main() {
         await manager.atualizarConfiguracao(configOriginal);
 
         // Cria novo manager para verificar serialização
-        final manager2 = ConfigurationRepository.injection();
+        final manager2 = ConfigurationRepository();
         final configuracao = await manager2.carregarConfiguracao();
         expect(
           configuracao.notificacoesAtivadas,

@@ -1,6 +1,6 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:system_loja/core/managers/log_atividade_manager.dart';
 import 'package:system_loja/core/models/log_atividade.dart';
+import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/data/database/dao/users_dao.dart';
@@ -14,7 +14,7 @@ import '../../models/user.dart';
 /// e recarrega dados antes de salvar para prevenir perda de dados.
 /// Implementa funcionalidades de hash de senha para segurança.
 class UserRepository with LoggerClassMixin {
-  final LogAtividadeManager _logManager = LogAtividadeManager();
+  final LogRepository _logManager = LogRepository();
 
   /// Tamanho mínimo da senha
   UsersDao defaultDataStorage = AppInjection.instance.systemDatabase.usersDao;
@@ -29,7 +29,6 @@ class UserRepository with LoggerClassMixin {
     await _logManager.criarERegistrarLog(
       tipoAcao: TipoAcao.criar,
       entidade: runtimeType.toString(),
-      entidadeId: usuario.id,
       detalhes: 'Usuário ${usuario.name} (ID: ${usuario.id}) criado.',
       usuarioId: usuario.id,
       usuarioNome: usuario.name,
