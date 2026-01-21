@@ -6,6 +6,7 @@ import 'package:synchronized/synchronized.dart';
 
 import '../models/log_atividade.dart';
 
+//TODO refactor: usar injeção de dependência, melhorar logica de salvar e recuperar dados. Criar testes unitários e banco de dados de teste.
 /// Gerenciador de Logs de Atividade
 ///
 /// Registra todas as atividades realizadas no sistema para fins de auditoria.
@@ -19,49 +20,6 @@ class LogAtividadeManager with LoggerClassMixin {
 
   LogAtividadeManager({this.dataFile = 'data/logs_atividade.json'}) {
     _carregarDados();
-  }
-
-  /// Obtém todos os logs
-  List<LogAtividade> obterTodosLogs() {
-    return logs;
-  }
-
-  /// Obtém logs de um usuário específico
-  List<LogAtividade> obterLogsPorUsuario(int usuarioId) {
-    return logs.where((log) => log.usuarioId == usuarioId).toList();
-  }
-
-  /// Obtém logs de uma entidade específica
-  List<LogAtividade> obterLogsPorEntidade(String entidade, {int? entidadeId}) {
-    if (entidadeId != null) {
-      return logs.where((log) => log.entidade == entidade && log.entidadeId == entidadeId).toList();
-    }
-    return logs.where((log) => log.entidade == entidade).toList();
-  }
-
-  /// Obtém logs por tipo de ação
-  List<LogAtividade> obterLogsPorTipoAcao(TipoAcao tipoAcao) {
-    return logs.where((log) => log.tipoAcao == tipoAcao).toList();
-  }
-
-  /// Obtém logs por período
-  ///
-  /// Inclui logs nos limites do período (dataInicio e dataFim são inclusos).
-  List<LogAtividade> obterLogsPorPeriodo(DateTime dataInicio, DateTime dataFim) {
-    return logs.where((log) {
-      return (log.dataHora.isAtSameMomentAs(dataInicio) || log.dataHora.isAfter(dataInicio)) && 
-             (log.dataHora.isAtSameMomentAs(dataFim) || log.dataHora.isBefore(dataFim));
-    }).toList();
-  }
-
-  /// Registra uma nova atividade no log
-  ///
-  /// Este método é usado para registrar todas as operações CRUD
-  /// realizadas no sistema.
-  Future<void> registrarLog(LogAtividade log) async {
-    logs.add(log);
-    await salvarDadosSincronizado();
-    logInfo('Log registrado: ${log.tipoAcao.name} - ${log.entidade} - ${log.usuarioNome}');
   }
 
   /// Cria e registra um log de atividade
@@ -97,10 +55,63 @@ class LogAtividadeManager with LoggerClassMixin {
   ///
   /// Remove logs mais antigos que a data especificada.
   Future<void> limparLogsAntigos(DateTime dataLimite) async {
-    final logsAntigos = logs.where((log) => log.dataHora.isBefore(dataLimite)).length;
     logs.removeWhere((log) => log.dataHora.isBefore(dataLimite));
     await salvarDadosSincronizado();
-    logInfo('Logs antigos removidos: $logsAntigos registros');
+    logInfo('Logs antigos removidos até $dataLimite');
+  }
+
+  /// Obtém logs de uma entidade específica
+  List<LogAtividade> obterLogsPorEntidade(String entidade, {int? entidadeId}) {
+    if (entidadeId != null) {
+      return logs
+          .where(
+            (log) => log.entidade == entidade && log.entidadeId == entidadeId,
+          )
+          .toList();
+    }
+    return logs.where((log) => log.entidade == entidade).toList();
+  }
+
+  /// Obtém logs por período
+  ///
+  /// Inclui logs nos limites do período (dataInicio e dataFim são inclusos).
+  List<LogAtividade> obterLogsPorPeriodo(
+    DateTime dataInicio,
+    DateTime dataFim,
+  ) {
+    return logs.where((log) {
+      return (log.dataHora.isAtSameMomentAs(dataInicio) ||
+              log.dataHora.isAfter(dataInicio)) &&
+          (log.dataHora.isAtSameMomentAs(dataFim) ||
+              log.dataHora.isBefore(dataFim));
+    }).toList();
+  }
+
+  /// Obtém logs por tipo de ação
+  List<LogAtividade> obterLogsPorTipoAcao(TipoAcao tipoAcao) {
+    return logs.where((log) => log.tipoAcao == tipoAcao).toList();
+  }
+
+  /// Obtém logs de um usuário específico
+  List<LogAtividade> obterLogsPorUsuario(int usuarioId) {
+    return logs.where((log) => log.usuarioId == usuarioId).toList();
+  }
+
+  /// Obtém todos os logs
+  List<LogAtividade> obterTodosLogs() {
+    return logs;
+  }
+
+  /// Registra uma nova atividade no log
+  ///
+  /// Este método é usado para registrar todas as operações CRUD
+  /// realizadas no sistema.
+  Future<void> registrarLog(LogAtividade log) async {
+    logs.add(log);
+    await salvarDadosSincronizado();
+    logInfo(
+      'Log registrado: ${log.tipoAcao.name} - ${log.entidade} - ${log.usuarioNome}',
+    );
   }
 
   /// Salva dados de forma segura e sincronizada
@@ -145,8 +156,10 @@ class LogAtividadeManager with LoggerClassMixin {
     if (file.existsSync()) {
       try {
         final jsonString = file.readAsStringSync();
-        final List<dynamic> jsonList = jsonDecode(jsonString) as List<dynamic>;
-        logs = jsonList.map((json) => LogAtividade.fromJson(json as Map<String, dynamic>)).toList();
+        final List<dynamic> jsonList = List.from(jsonDecode(jsonString));
+        logs = jsonList
+            .map((json) => LogAtividade.fromJson(json as Map<String, dynamic>))
+            .toList();
       } catch (e, stackTrace) {
         logError('Erro ao carregar logs de atividade: $e', stackTrace);
         logs = [];
@@ -161,7 +174,9 @@ class LogAtividadeManager with LoggerClassMixin {
       try {
         final jsonString = await file.readAsString();
         final List<dynamic> jsonList = jsonDecode(jsonString) as List<dynamic>;
-        return jsonList.map((json) => LogAtividade.fromJson(json as Map<String, dynamic>)).toList();
+        return jsonList
+            .map((json) => LogAtividade.fromJson(json as Map<String, dynamic>))
+            .toList();
       } catch (e) {
         return [];
       }

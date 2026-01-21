@@ -55,23 +55,23 @@ class Database {
 ///
 /// ### Método [delete]
 /// - Remove um registro pelo [id] do banco de dados
-/// - Retorna [ExecutionSucess] com `true` se deletado com sucesso
+/// - Retorna [ExecutionSuccess] com `true` se deletado com sucesso
 /// - Retorna [ExecutionError] com mensagem descritiva se falhar (ID não existe, erro SQL, etc.)
 ///
 /// ### Método [fetchById]
 /// - Recupera um registro específico pelo [id]
-/// - Retorna [ExecutionSucess] contendo o objeto [PersistentDataStore] se encontrado
+/// - Retorna [ExecutionSuccess] contendo o objeto [PersistentDataStore] se encontrado
 /// - Retorna [ExecutionError] se ID não existe, erro de banco ou falha de desserialização
 /// - Usa [fromJson] do objeto para converter dados SQL em objeto Dart
 ///
 /// ### Método [loadAll]
 /// - Carrega todos os registros da categoria de armazenamento
-/// - Retorna [ExecutionSucess] com lista (vazia se nenhum registro)
+/// - Retorna [ExecutionSuccess] com lista (vazia se nenhum registro)
 /// - Retorna [ExecutionError] em caso de erro de acesso ao banco
 /// - Cada item da lista deve ser validado e convertido via [fromJson]
 ///
 /// ## Padrões de Erro
-/// - Use [ExecutionSucess] para operações bem-sucedidas
+/// - Use [ExecutionSuccess] para operações bem-sucedidas
 /// - Use [ExecutionError] com mensagem clara do erro (ex: "Cliente com ID 123 não encontrado")
 /// - Não lance exceções; encapsule erros em [ExecutionResult]
 ///

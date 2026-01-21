@@ -57,7 +57,7 @@ class ProductCubit extends Cubit<ProductState> {
     await _manager.salvarProduto(produto);
     final result = await _manager.getProdutos();
     switch (result) {
-      case ExecutionSucess(result: final produtos):
+      case ExecutionSuccess(result: final produtos):
         emit(ProductState.insertSuccess(produtos: produtos.toList()));
       case ExecutionError(failure: final errorMessage):
         emit(
@@ -78,10 +78,10 @@ class ProductCubit extends Cubit<ProductState> {
   Future<void> deleteProduct(int id) async {
     final deleteResult = await _manager.deleteProduct(id);
     switch (deleteResult) {
-      case ExecutionSucess():
+      case ExecutionSuccess():
         final result = await _manager.getProdutos();
         switch (result) {
-          case ExecutionSucess(result: final produtos):
+          case ExecutionSuccess(result: final produtos):
             emit(ProductState.deleteSuccess(produtos: produtos.toList()));
           case ExecutionError(failure: final errorMessage):
             emit(
@@ -108,7 +108,7 @@ class ProductCubit extends Cubit<ProductState> {
   Future<void> findByCode(int codigo) async {
     final result = await _manager.findByCode(codigo);
     switch (result) {
-      case ExecutionSucess(result: final produto):
+      case ExecutionSuccess(result: final produto):
         emit(ProductState.findByCodeSuccess(produto: produto));
 
       case ExecutionError(failure: final errorMessage):
@@ -123,7 +123,7 @@ class ProductCubit extends Cubit<ProductState> {
   Future<void> loadAllProducts() async {
     final result = await _manager.getProdutos();
     switch (result) {
-      case ExecutionSucess(result: final produtos):
+      case ExecutionSuccess(result: final produtos):
         emit(ProductState.insertSuccess(produtos: produtos.toList()));
       case ExecutionError(failure: final errorMessage):
         emit(
@@ -145,10 +145,10 @@ class ProductCubit extends Cubit<ProductState> {
     emit(ProductState.loading());
     final updateResult = await _manager.updateProduct(produto);
     switch (updateResult) {
-      case ExecutionSucess():
+      case ExecutionSuccess():
         final result = await _manager.getProdutos();
         switch (result) {
-          case ExecutionSucess(result: final produtos):
+          case ExecutionSuccess(result: final produtos):
             emit(ProductState.updateSuccess(produtos: produtos.toList()));
           case ExecutionError(failure: final errorMessage):
             emit(

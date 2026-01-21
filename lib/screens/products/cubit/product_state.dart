@@ -22,8 +22,6 @@ sealed class ProductState with _$ProductState {
   factory ProductState.insertSuccess({required List<Product> produtos}) =
       ProductStateInsertSuccess;
   factory ProductState.loading() = ProductStateLoading;
-  factory ProductState.newIdGenerated({required int newId}) =
-      ProductStateNewIdGenerated;
   // Update product success state
   factory ProductState.updateSuccess({required List<Product> produtos}) =
       ProductStateUpdateSuccess;

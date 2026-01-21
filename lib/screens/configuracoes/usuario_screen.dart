@@ -256,17 +256,6 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
           senha: senha,
           nivelPermissao: _nivelPermissaoSelecionado,
         );
-
-        // Registra log de atividade
-        // await _logManager.criarERegistrarLog(
-        //   tipoAcao: TipoAcao.criar,
-        //   entidade: 'Usuario',
-        //   entidadeId: usuario.id,
-        //   usuarioId: usuario.id,
-        //   usuarioNome: usuario.name,
-        //   detalhes:
-        //       'Usuário ${usuario.name} (${usuario.email}) criado com nível ${_getNivelPermissaoTexto(usuario.nivelPermissao)}',
-        // );
       } else {
         // Atualizar usuário existente
         final user = _usuarioEditando!.copyWith(

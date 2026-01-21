@@ -50,7 +50,7 @@ class UserCubit extends Cubit<UsuarioState> {
       final ExecutionResult<bool, String> resultAdd = await _userRepository
           .atualizarUsuario(usuarioAtualizado);
       switch (resultAdd) {
-        case ExecutionSucess(result: final sucesso):
+        case ExecutionSuccess(result: final sucesso):
           if (sucesso) {
             emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
           }
