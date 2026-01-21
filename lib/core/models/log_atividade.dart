@@ -4,25 +4,6 @@ import 'package:system_loja/core/models/default/default_object.dart';
 
 part 'log_atividade.g.dart';
 
-/// Tipos de ação que podem ser registradas no log
-enum TipoAcao {
-  /// Criação de um novo registro
-  @JsonValue('CRIAR')
-  criar,
-
-  /// Leitura/consulta de um registro
-  @JsonValue('LER')
-  ler,
-
-  /// Atualização de um registro
-  @JsonValue('ATUALIZAR')
-  atualizar,
-
-  /// Exclusão de um registro
-  @JsonValue('DELETAR')
-  deletar,
-}
-
 /// Modelo de dados para Log de Atividade
 ///
 /// Registra as atividades realizadas no sistema para fins de auditoria.
@@ -31,7 +12,7 @@ enum TipoAcao {
 @JsonSerializable(explicitToJson: true)
 class LogAtividade extends DefaultObject {
   @JsonKey(name: 'tipo_acao')
-  final TipoAcao tipoAcao;
+  TipoAcao tipoAcao;
 
   @JsonKey(name: 'entidade')
   final String entidade;
@@ -52,7 +33,7 @@ class LogAtividade extends DefaultObject {
 
   LogAtividade({
     required super.id,
-    required this.tipoAcao,
+    this.tipoAcao = TipoAcao.ler,
     required this.entidade,
     this.entidadeId,
     required this.usuarioId,
@@ -64,7 +45,8 @@ class LogAtividade extends DefaultObject {
   }) : dataHora = dataHora ?? DateTime.now();
 
   /// Cria um objeto a partir de JSON
-  factory LogAtividade.fromJson(Map<String, dynamic> json) => _$LogAtividadeFromJson(json);
+  factory LogAtividade.fromJson(Map<String, dynamic> json) =>
+      _$LogAtividadeFromJson(json);
 
   /// Converte o objeto para JSON
   @override
@@ -73,4 +55,23 @@ class LogAtividade extends DefaultObject {
   @override
   String toString() =>
       'LogAtividade(id: $id, tipoAcao: $tipoAcao, entidade: $entidade, entidadeId: $entidadeId, usuarioId: $usuarioId, usuarioNome: $usuarioNome, dataHora: $dataHora, detalhes: $detalhes)';
+}
+
+/// Tipos de ação que podem ser registradas no log
+enum TipoAcao {
+  /// Criação de um novo registro
+  @JsonValue('CRIAR')
+  criar,
+
+  /// Leitura/consulta de um registro
+  @JsonValue('LER')
+  ler,
+
+  /// Atualização de um registro
+  @JsonValue('ATUALIZAR')
+  atualizar,
+
+  /// Exclusão de um registro
+  @JsonValue('DELETAR')
+  deletar,
 }

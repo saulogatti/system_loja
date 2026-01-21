@@ -15,7 +15,7 @@ LogAtividade _$LogAtividadeFromJson(Map<String, dynamic> json) =>
           id: $checkedConvert('id', (v) => (v as num).toInt()),
           tipoAcao: $checkedConvert(
             'tipo_acao',
-            (v) => $enumDecode(_$TipoAcaoEnumMap, v),
+            (v) => $enumDecodeNullable(_$TipoAcaoEnumMap, v) ?? TipoAcao.ler,
           ),
           entidade: $checkedConvert('entidade', (v) => v as String),
           entidadeId: $checkedConvert(

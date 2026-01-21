@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/data/database/system_database.dart';
-import 'package:system_loja/data/database/table/users_records.dart';
+import 'package:system_loja/data/database/table/system/users_records.dart';
 
 part 'users_dao.g.dart';
 

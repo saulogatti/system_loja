@@ -346,16 +346,435 @@ extension UserToInsertable on User {
   }
 }
 
+class $LogsRecordsTable extends LogsRecords
+    with TableInfo<$LogsRecordsTable, LogAtividade> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LogsRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _dataHoraMeta = const VerificationMeta(
+    'dataHora',
+  );
+  @override
+  late final GeneratedColumn<DateTime> dataHora = GeneratedColumn<DateTime>(
+    'data_hora',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _detalhesMeta = const VerificationMeta(
+    'detalhes',
+  );
+  @override
+  late final GeneratedColumn<String> detalhes = GeneratedColumn<String>(
+    'detalhes',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _entidadeMeta = const VerificationMeta(
+    'entidade',
+  );
+  @override
+  late final GeneratedColumn<String> entidade = GeneratedColumn<String>(
+    'entidade',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _entidadeIdMeta = const VerificationMeta(
+    'entidadeId',
+  );
+  @override
+  late final GeneratedColumn<int> entidadeId = GeneratedColumn<int>(
+    'entidade_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
+    'lastUpdatedDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastUpdatedDate =
+      GeneratedColumn<DateTime>(
+        'last_updated_date',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+        defaultValue: currentDateAndTime,
+      );
+  static const VerificationMeta _registrationDateMeta = const VerificationMeta(
+    'registrationDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> registrationDate =
+      GeneratedColumn<DateTime>(
+        'registration_date',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+        defaultValue: currentDateAndTime,
+      );
+  static const VerificationMeta _usuarioIdMeta = const VerificationMeta(
+    'usuarioId',
+  );
+  @override
+  late final GeneratedColumn<int> usuarioId = GeneratedColumn<int>(
+    'usuario_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _usuarioNomeMeta = const VerificationMeta(
+    'usuarioNome',
+  );
+  @override
+  late final GeneratedColumn<String> usuarioNome = GeneratedColumn<String>(
+    'usuario_nome',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    dataHora,
+    detalhes,
+    entidade,
+    entidadeId,
+    id,
+    lastUpdatedDate,
+    registrationDate,
+    usuarioId,
+    usuarioNome,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'logs_records';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<LogAtividade> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('data_hora')) {
+      context.handle(
+        _dataHoraMeta,
+        dataHora.isAcceptableOrUnknown(data['data_hora']!, _dataHoraMeta),
+      );
+    }
+    if (data.containsKey('detalhes')) {
+      context.handle(
+        _detalhesMeta,
+        detalhes.isAcceptableOrUnknown(data['detalhes']!, _detalhesMeta),
+      );
+    }
+    if (data.containsKey('entidade')) {
+      context.handle(
+        _entidadeMeta,
+        entidade.isAcceptableOrUnknown(data['entidade']!, _entidadeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_entidadeMeta);
+    }
+    if (data.containsKey('entidade_id')) {
+      context.handle(
+        _entidadeIdMeta,
+        entidadeId.isAcceptableOrUnknown(data['entidade_id']!, _entidadeIdMeta),
+      );
+    }
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('last_updated_date')) {
+      context.handle(
+        _lastUpdatedDateMeta,
+        lastUpdatedDate.isAcceptableOrUnknown(
+          data['last_updated_date']!,
+          _lastUpdatedDateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('registration_date')) {
+      context.handle(
+        _registrationDateMeta,
+        registrationDate.isAcceptableOrUnknown(
+          data['registration_date']!,
+          _registrationDateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('usuario_id')) {
+      context.handle(
+        _usuarioIdMeta,
+        usuarioId.isAcceptableOrUnknown(data['usuario_id']!, _usuarioIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_usuarioIdMeta);
+    }
+    if (data.containsKey('usuario_nome')) {
+      context.handle(
+        _usuarioNomeMeta,
+        usuarioNome.isAcceptableOrUnknown(
+          data['usuario_nome']!,
+          _usuarioNomeMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_usuarioNomeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  LogAtividade map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LogAtividade(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      entidade: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}entidade'],
+      )!,
+      entidadeId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}entidade_id'],
+      ),
+      usuarioId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}usuario_id'],
+      )!,
+      usuarioNome: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}usuario_nome'],
+      )!,
+      dataHora: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}data_hora'],
+      )!,
+      detalhes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}detalhes'],
+      )!,
+      lastUpdatedDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_updated_date'],
+      )!,
+      registrationDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}registration_date'],
+      )!,
+    );
+  }
+
+  @override
+  $LogsRecordsTable createAlias(String alias) {
+    return $LogsRecordsTable(attachedDatabase, alias);
+  }
+}
+
+class LogsRecordsCompanion extends UpdateCompanion<LogAtividade> {
+  final Value<DateTime> dataHora;
+  final Value<String> detalhes;
+  final Value<String> entidade;
+  final Value<int?> entidadeId;
+  final Value<int> id;
+  final Value<DateTime> lastUpdatedDate;
+  final Value<DateTime> registrationDate;
+  final Value<int> usuarioId;
+  final Value<String> usuarioNome;
+  const LogsRecordsCompanion({
+    this.dataHora = const Value.absent(),
+    this.detalhes = const Value.absent(),
+    this.entidade = const Value.absent(),
+    this.entidadeId = const Value.absent(),
+    this.id = const Value.absent(),
+    this.lastUpdatedDate = const Value.absent(),
+    this.registrationDate = const Value.absent(),
+    this.usuarioId = const Value.absent(),
+    this.usuarioNome = const Value.absent(),
+  });
+  LogsRecordsCompanion.insert({
+    this.dataHora = const Value.absent(),
+    this.detalhes = const Value.absent(),
+    required String entidade,
+    this.entidadeId = const Value.absent(),
+    this.id = const Value.absent(),
+    this.lastUpdatedDate = const Value.absent(),
+    this.registrationDate = const Value.absent(),
+    required int usuarioId,
+    required String usuarioNome,
+  }) : entidade = Value(entidade),
+       usuarioId = Value(usuarioId),
+       usuarioNome = Value(usuarioNome);
+  static Insertable<LogAtividade> custom({
+    Expression<DateTime>? dataHora,
+    Expression<String>? detalhes,
+    Expression<String>? entidade,
+    Expression<int>? entidadeId,
+    Expression<int>? id,
+    Expression<DateTime>? lastUpdatedDate,
+    Expression<DateTime>? registrationDate,
+    Expression<int>? usuarioId,
+    Expression<String>? usuarioNome,
+  }) {
+    return RawValuesInsertable({
+      if (dataHora != null) 'data_hora': dataHora,
+      if (detalhes != null) 'detalhes': detalhes,
+      if (entidade != null) 'entidade': entidade,
+      if (entidadeId != null) 'entidade_id': entidadeId,
+      if (id != null) 'id': id,
+      if (lastUpdatedDate != null) 'last_updated_date': lastUpdatedDate,
+      if (registrationDate != null) 'registration_date': registrationDate,
+      if (usuarioId != null) 'usuario_id': usuarioId,
+      if (usuarioNome != null) 'usuario_nome': usuarioNome,
+    });
+  }
+
+  LogsRecordsCompanion copyWith({
+    Value<DateTime>? dataHora,
+    Value<String>? detalhes,
+    Value<String>? entidade,
+    Value<int?>? entidadeId,
+    Value<int>? id,
+    Value<DateTime>? lastUpdatedDate,
+    Value<DateTime>? registrationDate,
+    Value<int>? usuarioId,
+    Value<String>? usuarioNome,
+  }) {
+    return LogsRecordsCompanion(
+      dataHora: dataHora ?? this.dataHora,
+      detalhes: detalhes ?? this.detalhes,
+      entidade: entidade ?? this.entidade,
+      entidadeId: entidadeId ?? this.entidadeId,
+      id: id ?? this.id,
+      lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
+      registrationDate: registrationDate ?? this.registrationDate,
+      usuarioId: usuarioId ?? this.usuarioId,
+      usuarioNome: usuarioNome ?? this.usuarioNome,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (dataHora.present) {
+      map['data_hora'] = Variable<DateTime>(dataHora.value);
+    }
+    if (detalhes.present) {
+      map['detalhes'] = Variable<String>(detalhes.value);
+    }
+    if (entidade.present) {
+      map['entidade'] = Variable<String>(entidade.value);
+    }
+    if (entidadeId.present) {
+      map['entidade_id'] = Variable<int>(entidadeId.value);
+    }
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (lastUpdatedDate.present) {
+      map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate.value);
+    }
+    if (registrationDate.present) {
+      map['registration_date'] = Variable<DateTime>(registrationDate.value);
+    }
+    if (usuarioId.present) {
+      map['usuario_id'] = Variable<int>(usuarioId.value);
+    }
+    if (usuarioNome.present) {
+      map['usuario_nome'] = Variable<String>(usuarioNome.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LogsRecordsCompanion(')
+          ..write('dataHora: $dataHora, ')
+          ..write('detalhes: $detalhes, ')
+          ..write('entidade: $entidade, ')
+          ..write('entidadeId: $entidadeId, ')
+          ..write('id: $id, ')
+          ..write('lastUpdatedDate: $lastUpdatedDate, ')
+          ..write('registrationDate: $registrationDate, ')
+          ..write('usuarioId: $usuarioId, ')
+          ..write('usuarioNome: $usuarioNome')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class _$LogAtividadeInsertable implements Insertable<LogAtividade> {
+  LogAtividade _object;
+  _$LogAtividadeInsertable(this._object);
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    return LogsRecordsCompanion(
+      dataHora: Value(_object.dataHora),
+      detalhes: Value(_object.detalhes),
+      entidade: Value(_object.entidade),
+      entidadeId: Value(_object.entidadeId),
+      id: Value(_object.id),
+      lastUpdatedDate: Value(_object.lastUpdatedDate),
+      registrationDate: Value(_object.registrationDate),
+      usuarioId: Value(_object.usuarioId),
+      usuarioNome: Value(_object.usuarioNome),
+    ).toColumns(false);
+  }
+}
+
+extension LogAtividadeToInsertable on LogAtividade {
+  _$LogAtividadeInsertable toInsertable() {
+    return _$LogAtividadeInsertable(this);
+  }
+}
+
 abstract class _$SystemDatabase extends GeneratedDatabase {
   _$SystemDatabase(QueryExecutor e) : super(e);
   $SystemDatabaseManager get managers => $SystemDatabaseManager(this);
   late final $UsersRecordsTable usersRecords = $UsersRecordsTable(this);
+  late final $LogsRecordsTable logsRecords = $LogsRecordsTable(this);
   late final UsersDao usersDao = UsersDao(this as SystemDatabase);
+  late final LogDao logDao = LogDao(this as SystemDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [usersRecords];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    usersRecords,
+    logsRecords,
+  ];
 }
 
 typedef $$UsersRecordsTableCreateCompanionBuilder =
@@ -592,10 +1011,290 @@ typedef $$UsersRecordsTableProcessedTableManager =
       User,
       PrefetchHooks Function()
     >;
+typedef $$LogsRecordsTableCreateCompanionBuilder =
+    LogsRecordsCompanion Function({
+      Value<DateTime> dataHora,
+      Value<String> detalhes,
+      required String entidade,
+      Value<int?> entidadeId,
+      Value<int> id,
+      Value<DateTime> lastUpdatedDate,
+      Value<DateTime> registrationDate,
+      required int usuarioId,
+      required String usuarioNome,
+    });
+typedef $$LogsRecordsTableUpdateCompanionBuilder =
+    LogsRecordsCompanion Function({
+      Value<DateTime> dataHora,
+      Value<String> detalhes,
+      Value<String> entidade,
+      Value<int?> entidadeId,
+      Value<int> id,
+      Value<DateTime> lastUpdatedDate,
+      Value<DateTime> registrationDate,
+      Value<int> usuarioId,
+      Value<String> usuarioNome,
+    });
+
+class $$LogsRecordsTableFilterComposer
+    extends Composer<_$SystemDatabase, $LogsRecordsTable> {
+  $$LogsRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<DateTime> get dataHora => $composableBuilder(
+    column: $table.dataHora,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get detalhes => $composableBuilder(
+    column: $table.detalhes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get entidade => $composableBuilder(
+    column: $table.entidade,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get entidadeId => $composableBuilder(
+    column: $table.entidadeId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get usuarioId => $composableBuilder(
+    column: $table.usuarioId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get usuarioNome => $composableBuilder(
+    column: $table.usuarioNome,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$LogsRecordsTableOrderingComposer
+    extends Composer<_$SystemDatabase, $LogsRecordsTable> {
+  $$LogsRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<DateTime> get dataHora => $composableBuilder(
+    column: $table.dataHora,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get detalhes => $composableBuilder(
+    column: $table.detalhes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get entidade => $composableBuilder(
+    column: $table.entidade,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get entidadeId => $composableBuilder(
+    column: $table.entidadeId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get usuarioId => $composableBuilder(
+    column: $table.usuarioId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get usuarioNome => $composableBuilder(
+    column: $table.usuarioNome,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$LogsRecordsTableAnnotationComposer
+    extends Composer<_$SystemDatabase, $LogsRecordsTable> {
+  $$LogsRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<DateTime> get dataHora =>
+      $composableBuilder(column: $table.dataHora, builder: (column) => column);
+
+  GeneratedColumn<String> get detalhes =>
+      $composableBuilder(column: $table.detalhes, builder: (column) => column);
+
+  GeneratedColumn<String> get entidade =>
+      $composableBuilder(column: $table.entidade, builder: (column) => column);
+
+  GeneratedColumn<int> get entidadeId => $composableBuilder(
+    column: $table.entidadeId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get usuarioId =>
+      $composableBuilder(column: $table.usuarioId, builder: (column) => column);
+
+  GeneratedColumn<String> get usuarioNome => $composableBuilder(
+    column: $table.usuarioNome,
+    builder: (column) => column,
+  );
+}
+
+class $$LogsRecordsTableTableManager
+    extends
+        RootTableManager<
+          _$SystemDatabase,
+          $LogsRecordsTable,
+          LogAtividade,
+          $$LogsRecordsTableFilterComposer,
+          $$LogsRecordsTableOrderingComposer,
+          $$LogsRecordsTableAnnotationComposer,
+          $$LogsRecordsTableCreateCompanionBuilder,
+          $$LogsRecordsTableUpdateCompanionBuilder,
+          (
+            LogAtividade,
+            BaseReferences<_$SystemDatabase, $LogsRecordsTable, LogAtividade>,
+          ),
+          LogAtividade,
+          PrefetchHooks Function()
+        > {
+  $$LogsRecordsTableTableManager(_$SystemDatabase db, $LogsRecordsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$LogsRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LogsRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LogsRecordsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<DateTime> dataHora = const Value.absent(),
+                Value<String> detalhes = const Value.absent(),
+                Value<String> entidade = const Value.absent(),
+                Value<int?> entidadeId = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<DateTime> lastUpdatedDate = const Value.absent(),
+                Value<DateTime> registrationDate = const Value.absent(),
+                Value<int> usuarioId = const Value.absent(),
+                Value<String> usuarioNome = const Value.absent(),
+              }) => LogsRecordsCompanion(
+                dataHora: dataHora,
+                detalhes: detalhes,
+                entidade: entidade,
+                entidadeId: entidadeId,
+                id: id,
+                lastUpdatedDate: lastUpdatedDate,
+                registrationDate: registrationDate,
+                usuarioId: usuarioId,
+                usuarioNome: usuarioNome,
+              ),
+          createCompanionCallback:
+              ({
+                Value<DateTime> dataHora = const Value.absent(),
+                Value<String> detalhes = const Value.absent(),
+                required String entidade,
+                Value<int?> entidadeId = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<DateTime> lastUpdatedDate = const Value.absent(),
+                Value<DateTime> registrationDate = const Value.absent(),
+                required int usuarioId,
+                required String usuarioNome,
+              }) => LogsRecordsCompanion.insert(
+                dataHora: dataHora,
+                detalhes: detalhes,
+                entidade: entidade,
+                entidadeId: entidadeId,
+                id: id,
+                lastUpdatedDate: lastUpdatedDate,
+                registrationDate: registrationDate,
+                usuarioId: usuarioId,
+                usuarioNome: usuarioNome,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$LogsRecordsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SystemDatabase,
+      $LogsRecordsTable,
+      LogAtividade,
+      $$LogsRecordsTableFilterComposer,
+      $$LogsRecordsTableOrderingComposer,
+      $$LogsRecordsTableAnnotationComposer,
+      $$LogsRecordsTableCreateCompanionBuilder,
+      $$LogsRecordsTableUpdateCompanionBuilder,
+      (
+        LogAtividade,
+        BaseReferences<_$SystemDatabase, $LogsRecordsTable, LogAtividade>,
+      ),
+      LogAtividade,
+      PrefetchHooks Function()
+    >;
 
 class $SystemDatabaseManager {
   final _$SystemDatabase _db;
   $SystemDatabaseManager(this._db);
   $$UsersRecordsTableTableManager get usersRecords =>
       $$UsersRecordsTableTableManager(_db, _db.usersRecords);
+  $$LogsRecordsTableTableManager get logsRecords =>
+      $$LogsRecordsTableTableManager(_db, _db.logsRecords);
 }
