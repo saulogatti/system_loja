@@ -32,4 +32,9 @@ class UsersDao extends DatabaseAccessor<SystemDatabase> with _$UsersDaoMixin {
   Future<bool> updateUser(User user) {
     return update(usersRecords).replace(user.toInsertable());
   }
+
+  Future<User?> findByEmail(String email) {
+    return (select(usersRecords)..where((tbl) => tbl.email.equals(email)))
+        .getSingleOrNull();
+  }
 }
