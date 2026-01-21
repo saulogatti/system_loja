@@ -51,11 +51,17 @@ class ProductRepository {
   /// para persistir as alterações de forma segura. Não aguarda o término da
   /// operação (fire-and-forget) — adaptar conforme necessidade do chamador.
   Future<ExecutionResult<bool, String>> salvarProduto(Product produto) async {
-    final result = await defaultDataStorage.insertProduct(produto);
-    if (result == 0) {
-      return ExecutionError('Falha ao salvar produto: ${produto.name}');
+    try {
+      final result = await defaultDataStorage.insertProduct(produto);
+      if (result <= 0) {
+        return ExecutionError('Falha ao salvar produto: ${produto.name}');
+      }
+      return ExecutionSuccess(result > 0);
+    } on Exception catch (err) {
+      return ExecutionError(
+        'Falha ao salvar produto: ${produto.name} - ${err.toString()}',
+      );
     }
-    return ExecutionSuccess(result > 0);
   }
 
   /// Atualiza um produto existente no armazenamento.

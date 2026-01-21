@@ -28,18 +28,20 @@ part 'app_database.g.dart';
 class AppDatabase extends _$AppDatabase {
   static final _nameBd = 'system_loja';
 
-  AppDatabase() : super(_openConnection());
+  AppDatabase() : super(_openConnection(getApplicationSupportDirectory));
 
   @override
   int get schemaVersion => 2;
 
-  static QueryExecutor _openConnection() {
+  static QueryExecutor _openConnection(
+    Future<Object> Function()? applicationSupportDirectory,
+  ) {
     return driftDatabase(
       name: _nameBd,
-      native: const DriftNativeOptions(
+      native: DriftNativeOptions(
         // By default, `driftDatabase` from `package:drift_flutter` stores the
         // database files in `getApplicationDocumentsDirectory()`.
-        databaseDirectory: getApplicationSupportDirectory,
+        databaseDirectory: applicationSupportDirectory,
       ),
       // If you need web support, see https://drift.simonbinder.eu/platforms/web/
     );

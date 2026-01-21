@@ -42,6 +42,12 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
               state is ProductStateDeleteSuccess) {
             // Recarregar a lista após atualização ou exclusão
             _produtoCubit.loadAllProducts();
+          } else if (state is ProductStateInsertSuccess) {
+            _mostrarSucesso('Produto $_mensagemSucesso');
+            _limparFormulario();
+
+          } else if (state is ProductStateError) {
+            _mostrarErro(state.message);
           }
         },
         child: BlocBuilder<ProductCubit, ProductState>(
@@ -52,6 +58,8 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
             } else if (state is ProductStateUpdateSuccess) {
               produtos.addAll(state.produtos);
             } else if (state is ProductStateDeleteSuccess) {
+              produtos.addAll(state.produtos);
+            } else if (state is ProductStateLoaded) {
               produtos.addAll(state.produtos);
             }
             return Scaffold(
@@ -123,7 +131,7 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
       return;
     }
 
-    try {
+   
       // Converte valores já validados pelos validators
       // Os validators garantem que esses valores são parseáveis
       final preco = double.parse(_precoController.text.trim());
@@ -139,17 +147,8 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
         descricao: _descricaoController.text.trim(),
         categoria: _categoriaController.text.trim(),
       );
-      _mostrarSucesso('Produto "$nome" $_mensagemSucesso');
-      _limparFormulario();
-    } on FormatException catch (e) {
-      // Isto não deve acontecer devido aos validators, mas tratamos por segurança
-      _mostrarErro(
-        'Erro de formato ao processar dados numéricos: ${e.message}',
-      );
-    } catch (e) {
-      // Captura erros inesperados do repositório/banco de dados
-      _mostrarErro('Erro ao salvar produto: ${e.toString()}');
-    }
+   
+   
   }
 
   /// Limpa todos os campos do formulário.

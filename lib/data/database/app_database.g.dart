@@ -517,21 +517,22 @@ class $ProductsRecordsTable extends ProductsRecords
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ProductsRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _codeMeta = const VerificationMeta('code');
+  @override
+  late final GeneratedColumn<String> code = GeneratedColumn<String>(
+    'code',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
   static const VerificationMeta _categoryMeta = const VerificationMeta(
     'category',
   );
   @override
   late final GeneratedColumn<String> category = GeneratedColumn<String>(
     'category',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _codeMeta = const VerificationMeta('code');
-  @override
-  late final GeneratedColumn<String> code = GeneratedColumn<String>(
-    'code',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -617,8 +618,8 @@ class $ProductsRecordsTable extends ProductsRecords
   );
   @override
   List<GeneratedColumn> get $columns => [
-    category,
     code,
+    category,
     description,
     id,
     lastUpdatedDate,
@@ -639,14 +640,6 @@ class $ProductsRecordsTable extends ProductsRecords
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('category')) {
-      context.handle(
-        _categoryMeta,
-        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_categoryMeta);
-    }
     if (data.containsKey('code')) {
       context.handle(
         _codeMeta,
@@ -654,6 +647,14 @@ class $ProductsRecordsTable extends ProductsRecords
       );
     } else if (isInserting) {
       context.missing(_codeMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
@@ -723,10 +724,6 @@ class $ProductsRecordsTable extends ProductsRecords
   Product map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Product(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
       name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}name'],
@@ -755,6 +752,10 @@ class $ProductsRecordsTable extends ProductsRecords
         DriftSqlType.string,
         data['${effectivePrefix}code'],
       )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
     );
   }
 
@@ -765,8 +766,8 @@ class $ProductsRecordsTable extends ProductsRecords
 }
 
 class ProductsRecordsCompanion extends UpdateCompanion<Product> {
-  final Value<String> category;
   final Value<String> code;
+  final Value<String> category;
   final Value<String> description;
   final Value<int> id;
   final Value<DateTime?> lastUpdatedDate;
@@ -775,8 +776,8 @@ class ProductsRecordsCompanion extends UpdateCompanion<Product> {
   final Value<DateTime> registrationDate;
   final Value<int> stockQuantity;
   const ProductsRecordsCompanion({
-    this.category = const Value.absent(),
     this.code = const Value.absent(),
+    this.category = const Value.absent(),
     this.description = const Value.absent(),
     this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
@@ -786,8 +787,8 @@ class ProductsRecordsCompanion extends UpdateCompanion<Product> {
     this.stockQuantity = const Value.absent(),
   });
   ProductsRecordsCompanion.insert({
-    required String category,
     required String code,
+    required String category,
     required String description,
     this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
@@ -795,15 +796,15 @@ class ProductsRecordsCompanion extends UpdateCompanion<Product> {
     required double price,
     this.registrationDate = const Value.absent(),
     required int stockQuantity,
-  }) : category = Value(category),
-       code = Value(code),
+  }) : code = Value(code),
+       category = Value(category),
        description = Value(description),
        name = Value(name),
        price = Value(price),
        stockQuantity = Value(stockQuantity);
   static Insertable<Product> custom({
-    Expression<String>? category,
     Expression<String>? code,
+    Expression<String>? category,
     Expression<String>? description,
     Expression<int>? id,
     Expression<DateTime>? lastUpdatedDate,
@@ -813,8 +814,8 @@ class ProductsRecordsCompanion extends UpdateCompanion<Product> {
     Expression<int>? stockQuantity,
   }) {
     return RawValuesInsertable({
-      if (category != null) 'category': category,
       if (code != null) 'code': code,
+      if (category != null) 'category': category,
       if (description != null) 'description': description,
       if (id != null) 'id': id,
       if (lastUpdatedDate != null) 'last_updated_date': lastUpdatedDate,
@@ -826,8 +827,8 @@ class ProductsRecordsCompanion extends UpdateCompanion<Product> {
   }
 
   ProductsRecordsCompanion copyWith({
-    Value<String>? category,
     Value<String>? code,
+    Value<String>? category,
     Value<String>? description,
     Value<int>? id,
     Value<DateTime?>? lastUpdatedDate,
@@ -837,8 +838,8 @@ class ProductsRecordsCompanion extends UpdateCompanion<Product> {
     Value<int>? stockQuantity,
   }) {
     return ProductsRecordsCompanion(
-      category: category ?? this.category,
       code: code ?? this.code,
+      category: category ?? this.category,
       description: description ?? this.description,
       id: id ?? this.id,
       lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
@@ -852,11 +853,11 @@ class ProductsRecordsCompanion extends UpdateCompanion<Product> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (category.present) {
-      map['category'] = Variable<String>(category.value);
-    }
     if (code.present) {
       map['code'] = Variable<String>(code.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
@@ -885,8 +886,8 @@ class ProductsRecordsCompanion extends UpdateCompanion<Product> {
   @override
   String toString() {
     return (StringBuffer('ProductsRecordsCompanion(')
-          ..write('category: $category, ')
           ..write('code: $code, ')
+          ..write('category: $category, ')
           ..write('description: $description, ')
           ..write('id: $id, ')
           ..write('lastUpdatedDate: $lastUpdatedDate, ')
@@ -896,31 +897,6 @@ class ProductsRecordsCompanion extends UpdateCompanion<Product> {
           ..write('stockQuantity: $stockQuantity')
           ..write(')'))
         .toString();
-  }
-}
-
-class _$ProductInsertable implements Insertable<Product> {
-  Product _object;
-  _$ProductInsertable(this._object);
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    return ProductsRecordsCompanion(
-      category: Value(_object.category),
-      code: Value(_object.code),
-      description: Value(_object.description),
-      id: Value(_object.id),
-      lastUpdatedDate: Value(_object.lastUpdatedDate),
-      name: Value(_object.name),
-      price: Value(_object.price),
-      registrationDate: Value(_object.registrationDate),
-      stockQuantity: Value(_object.stockQuantity),
-    ).toColumns(false);
-  }
-}
-
-extension ProductToInsertable on Product {
-  _$ProductInsertable toInsertable() {
-    return _$ProductInsertable(this);
   }
 }
 
@@ -2404,8 +2380,8 @@ typedef $$ClientesRecordsTableProcessedTableManager =
     >;
 typedef $$ProductsRecordsTableCreateCompanionBuilder =
     ProductsRecordsCompanion Function({
-      required String category,
       required String code,
+      required String category,
       required String description,
       Value<int> id,
       Value<DateTime?> lastUpdatedDate,
@@ -2416,8 +2392,8 @@ typedef $$ProductsRecordsTableCreateCompanionBuilder =
     });
 typedef $$ProductsRecordsTableUpdateCompanionBuilder =
     ProductsRecordsCompanion Function({
-      Value<String> category,
       Value<String> code,
+      Value<String> category,
       Value<String> description,
       Value<int> id,
       Value<DateTime?> lastUpdatedDate,
@@ -2436,13 +2412,13 @@ class $$ProductsRecordsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<String> get category => $composableBuilder(
-    column: $table.category,
+  ColumnFilters<String> get code => $composableBuilder(
+    column: $table.code,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get code => $composableBuilder(
-    column: $table.code,
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2491,13 +2467,13 @@ class $$ProductsRecordsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<String> get category => $composableBuilder(
-    column: $table.category,
+  ColumnOrderings<String> get code => $composableBuilder(
+    column: $table.code,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get code => $composableBuilder(
-    column: $table.code,
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -2546,11 +2522,11 @@ class $$ProductsRecordsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<String> get category =>
-      $composableBuilder(column: $table.category, builder: (column) => column);
-
   GeneratedColumn<String> get code =>
       $composableBuilder(column: $table.code, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
 
   GeneratedColumn<String> get description => $composableBuilder(
     column: $table.description,
@@ -2615,8 +2591,8 @@ class $$ProductsRecordsTableTableManager
               $$ProductsRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<String> category = const Value.absent(),
                 Value<String> code = const Value.absent(),
+                Value<String> category = const Value.absent(),
                 Value<String> description = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
@@ -2625,8 +2601,8 @@ class $$ProductsRecordsTableTableManager
                 Value<DateTime> registrationDate = const Value.absent(),
                 Value<int> stockQuantity = const Value.absent(),
               }) => ProductsRecordsCompanion(
-                category: category,
                 code: code,
+                category: category,
                 description: description,
                 id: id,
                 lastUpdatedDate: lastUpdatedDate,
@@ -2637,8 +2613,8 @@ class $$ProductsRecordsTableTableManager
               ),
           createCompanionCallback:
               ({
-                required String category,
                 required String code,
+                required String category,
                 required String description,
                 Value<int> id = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
@@ -2647,8 +2623,8 @@ class $$ProductsRecordsTableTableManager
                 Value<DateTime> registrationDate = const Value.absent(),
                 required int stockQuantity,
               }) => ProductsRecordsCompanion.insert(
-                category: category,
                 code: code,
+                category: category,
                 description: description,
                 id: id,
                 lastUpdatedDate: lastUpdatedDate,

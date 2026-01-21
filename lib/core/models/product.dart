@@ -13,7 +13,6 @@ class Product extends DefaultObject {
   final String category;
   final String code;
   Product({
-    required super.id,
     required this.name,
     required this.description,
     required this.price,
@@ -21,7 +20,8 @@ class Product extends DefaultObject {
     super.lastUpdatedDate,
     required this.category,
     required this.code,
-  });
+    int? id,
+  }) : super(id: id ?? -1);
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);
   @override

@@ -48,3 +48,4 @@ analyzer:
     await_only_futures: warning
     avoid_void_async: warning
     avoid_dynamic_calls: error
+    return_without_value: error

@@ -261,6 +261,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           _formatDate(widget.product.registrationDate),
                           Icons.calendar_today,
                         ),
+                        const Divider(),
+                        _buildInfoRow(
+                          'Data de Atualização',
+                          _formatDate(widget.product.lastUpdatedDate),
+                          Icons.calendar_today,
+                        ),
                       ],
                     ),
                   ),

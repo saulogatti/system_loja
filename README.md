@@ -19,9 +19,10 @@ Sistema de gerenciamento de loja desenvolvido em Flutter com arquitetura moderna
 Aplicação Flutter **multiplataforma** (Windows, macOS, iOS, Android) para gerenciamento de loja com arquitetura moderna:
 
 - **State Management**: BLoC com `flutter_bloc` e `freezed`
-- **Persistência Dual**: JSON (legacy) + SQLite (novo)
-- **Code Generation**: `json_serializable`, `freezed`, `build_runner`
+- **Persistência**: Drift ORM (SQLite type-safe) + JSON (legacy)
+- **Code Generation**: `drift`, `json_serializable`, `freezed`, `build_runner`
 - **Padrões**: Repository Pattern, Manager Pattern, OperationResult
+- **Navegação**: Auto Route para navegação declarativa
 - **Material Design 3**: Interface moderna e responsiva
 
 ### Funcionalidades
@@ -47,17 +48,17 @@ Aplicação Flutter **multiplataforma** (Windows, macOS, iOS, Android) para gere
 
 ## Requisitos
 
-- Flutter SDK 3.27 ou superior
-- Dart SDK 3.10.1 ou superior (incluído no Flutter)
+- Flutter SDK 3.38 ou superior
+- Dart SDK 3.10.3 ou superior (incluído no Flutter)
 - SQLite (incluído no Flutter desktop)
 
 ## Como Instalar o Flutter
 
 ### Linux/macOS
 ```bash
-# Baixe o Flutter SDK
-wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.27.1-stable.tar.xz
-tar xf flutter_linux_3.27.1-stable.tar.xz
+# Baixe o Flutter SDK (versão 3.38 ou superior)
+wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.38.0-stable.tar.xz
+tar xf flutter_linux_3.38.0-stable.tar.xz
 export PATH="$PATH:`pwd`/flutter/bin"
 
 # Verifique a instalação
@@ -104,17 +105,19 @@ flutter run
 
 O projeto utiliza **persistência dual**:
 
-### Sistema Legacy (JSON)
+### Sistema Principal (Drift ORM)
+- **ORM Type-Safe**: Drift para SQLite com validações em tempo de compilação
+- **Banco**: `system_loja.db` (criado automaticamente)
+- **Tabelas**: `customers`, `products`, `invoices`, `invoice_items`, `users`, `log_atividades`
+- **DAOs**: Data Access Objects em `lib/data/database/dao/`
+- **Migrations**: Versionamento de schema com drift_dev
+- **Suporte**: Transações, relacionamentos, queries type-safe
+
+### Sistema Legacy (JSON - Descontinuado)
 - `data/clientes.json` - Dados dos clientes
 - `data/produtos.json` - Dados dos produtos
 - `data/notas_fiscais.json` - Dados das notas fiscais
-- Gerenciadores em `lib/core/managers/`
-
-### Sistema Novo (SQLite)
-- Banco: `system_loja.db` (criado automaticamente)
-- Tabelas: `clientes`, `produtos`, `notas_fiscais`, `itens_nota_fiscal`
-- Managers em `lib/data/database/`
-- Suporte a transações e relacionamentos
+- Managers em `lib/core/managers/` (em processo de migração)
 
 ## Estrutura do Projeto
 
@@ -125,38 +128,65 @@ system_loja/
 │   ├── core/
 │   │   ├── models/            # Modelos com @JsonSerializable
 │   │   │   ├── customer.dart  # Customer (Cliente)
-│   │   │   ├── produto.dart   # Produto
-│   │   │   └── nota_fiscal.dart
-│   │   ├── managers/          # Managers JSON (legacy)
-│   │   │   ├── cliente_manager.dart
-│   │   │   ├── produto_manager.dart
-│   │   │   └── nota_fiscal_manager.dart
+│   │   │   ├── product.dart   # Product (Produto)
+│   │   │   ├── invoice.dart   # Invoice (Nota Fiscal)
+│   │   │   ├── user.dart      # User (Usuário)
+│   │   │   └── log_atividade.dart
+│   │   ├── repository/        # Repositories (Repository Pattern)
+│   │   │   ├── cliente_repository.dart
+│   │   │   ├── product_repository.dart
+│   │   │   ├── sales_repository.dart
+│   │   │   └── user_repository.dart
+│   │   ├── managers/          # Managers JSON (legacy - descontinuado)
 │   │   └── utils/
 │   │       ├── command_result.dart     # OperationResult pattern
-│   │       └── string_extensions.dart  # File name safety
+│   │       ├── string_extensions.dart  # File name safety
+│   │       ├── validators.dart         # Validações
+│   │       └── input_formatters.dart   # Formatadores de entrada
 │   ├── data/
-│   │   ├── database/          # SQL Managers (novo)
-│   │   │   ├── database_helper.dart
-│   │   │   ├── cliente_sql_manager.dart
-│   │   │   ├── produto_sql_manager.dart
-│   │   │   └── nota_fiscal_sql_manager.dart
-│   │   ├── cache/             # Sistema de cache
-│   │   │   └── cache_manager.dart
-│   │   └── files_system/      # File operations
-│   │       └── file_system_helper.dart
+│   │   ├── database/          # Drift ORM (principal)
+│   │   │   ├── app_database.dart       # AppDatabase com @DriftDatabase
+│   │   │   ├── system_database.dart    # SystemDatabase (Drift)
+│   │   │   ├── database_config.dart
+│   │   │   ├── table/                  # Tabelas Drift
+│   │   │   │   ├── customers_table.dart
+│   │   │   │   ├── products_table.dart
+│   │   │   │   ├── invoices_table.dart
+│   │   │   │   └── users_table.dart
+│   │   │   └── dao/                    # Data Access Objects
+│   │   │       ├── customers_dao.dart
+│   │   │       ├── products_dao.dart
+│   │   │       └── invoices_dao.dart
+│   │   └── storage/           # Storage abstrato
+│   │       ├── base_data_storage.dart
+│   │       └── sql_data_storage.dart
 │   ├── screens/
-│   │   ├── home_screen.dart
-│   │   ├── customer/
+│   │   ├── home/              # Tela principal
+│   │   │   └── home_screen.dart
+│   │   ├── customer/          # Módulo de clientes
 │   │   │   ├── customer_view.dart
 │   │   │   └── bloc/          # BLoC com freezed
 │   │   │       ├── customer_bloc.dart
 │   │   │       ├── customer_bloc_event.dart
 │   │   │       └── customer_bloc_state.dart
-│   │   ├── produto_screen.dart
-│   │   └── nota_fiscal_screen.dart
-│   └── utils/
-│       └── input_helper.dart  # CLI legacy
+│   │   ├── products/          # Módulo de produtos
+│   │   ├── sales/             # Módulo de vendas
+│   │   │   └── sales_cubit.dart
+│   │   ├── configuracoes/     # Configurações
+│   │   │   └── bloc/
+│   │   │       └── user_cubit.dart
+│   │   ├── settings/          # Settings service
+│   │   ├── injection/         # Dependency Injection
+│   │   │   └── app_injection.dart
+│   │   ├── route/             # Auto Route
+│   │   └── widgets/           # Widgets compartilhados
+│   └── colors.dart            # Cores Material Design
 ├── test/                      # Testes unitários e integração
+├── docs/                      # Documentação detalhada
+│   ├── DRIFT_ARCHITECTURE.md
+│   ├── DRIFT_MIGRATION.md
+│   ├── DATABASE_NORMALIZATION.md
+│   └── ...
 ├── data/                      # Arquivos JSON (legacy)
 ├── pubspec.yaml
 └── README.md
@@ -199,38 +229,47 @@ system_loja/
 - **freezed**: Classes imutáveis para eventos/states
 
 ### Persistência
-- **sqflite**: Banco de dados SQLite
-- **sqflite_common_ffi**: Suporte SQLite para desktop
-- **json_serializable**: Serialização automática JSON
-- **synchronized**: Controle de concorrência para JSON
+- **drift**: ORM type-safe para SQLite com queries reativas
+- **drift_flutter**: Integração Drift com Flutter
+- **drift_dev**: Code generation para Drift
+- **sqlite3_flutter_libs**: Bibliotecas SQLite nativas
+- **json_serializable**: Serialização automática JSON (legacy)
+- **synchronized**: Controle de concorrência para JSON (legacy)
 
 ### Utilities
+- **auto_route**: Navegação declarativa type-safe
+- **intl**: Internacionalização e formatação de datas/números
 - **path_provider**: Acesso a diretórios da aplicação
 - **path**: Manipulação de caminhos de arquivos
 - **async**: AsyncMemoizer para inicialização única
+- **equatable**: Comparação de objetos por valor
+- **crypto**: Funções criptográficas
 
 ## 🏗️ Arquitetura
 
 ### Padrões de Design
 
 1. **BLoC Pattern**: Separação clara entre UI e lógica de negócio
-2. **Repository Pattern**: Abstração da camada de dados (SQL managers)
-3. **Manager Pattern**: Gerenciamento de dados JSON (legacy)
-4. **OperationResult Pattern**: Tratamento type-safe de erros
-5. **Mixin Pattern**: Reutilização de código (FileSystemManager)
+2. **Repository Pattern**: Abstração da camada de dados com repositórios
+3. **DAO Pattern**: Data Access Objects para acesso ao banco Drift
+4. **Dependency Injection**: Gerenciamento de dependências com AppInjection
+5. **OperationResult Pattern**: Tratamento type-safe de erros
+6. **Manager Pattern**: Gerenciamento de dados JSON (legacy - descontinuado)
+7. **Mixin Pattern**: Reutilização de código (FileSystemManager)
 
 ### Code Generation
 
 O projeto usa **build_runner** para gerar código automaticamente:
 
 ```bash
-# Após modificar models ou BLoC
+# Após modificar models, BLoC ou tabelas Drift
 dart run build_runner build --delete-conflicting-outputs
 ```
 
 Gera:
-- `.g.dart` - Serialização JSON (@JsonSerializable)
+- `.g.dart` - Serialização JSON (@JsonSerializable) e tabelas Drift (@DriftDatabase)
 - `.freezed.dart` - Classes imutáveis (@freezed)
+- `*.drift.dart` - Queries SQL type-safe do Drift
 
 ### Tratamento de Erros
 
@@ -290,10 +329,18 @@ Inclua sempre **critérios de aceitação** claros para facilitar o trabalho do 
 
 ## 📖 Documentação
 
+### Guias Principais
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guia de contribuição detalhado
 - **[.github/copilot-instructions.md](.github/copilot-instructions.md)** - Instruções para Copilot Agent
 - **[.github/instructions/dartcode.instructions.md](.github/instructions/dartcode.instructions.md)** - Padrões de código Dart
 - **[SETUP_MCP.md](SETUP_MCP.md)** - Informações sobre servidores MCP
+
+### Documentação Técnica
+- **[docs/DRIFT_ARCHITECTURE.md](docs/DRIFT_ARCHITECTURE.md)** - Arquitetura Drift ORM
+- **[docs/DRIFT_MIGRATION.md](docs/DRIFT_MIGRATION.md)** - Guia de migração para Drift
+- **[docs/DATABASE_NORMALIZATION.md](docs/DATABASE_NORMALIZATION.md)** - Normalização do banco de dados
+- **[docs/VALIDATION_SYSTEM.md](docs/VALIDATION_SYSTEM.md)** - Sistema de validações
+- **[docs/REFACTORING_BLOC.md](docs/REFACTORING_BLOC.md)** - Refatoração BLoC
 - **[docs/](docs/)** - Documentação adicional do projeto
 
 ---
