@@ -33,9 +33,6 @@ class SystemLojaApp extends StatelessWidget {
         valueListenable:
             AppInjection.instance.settingsService.currentThemeNotifier,
         builder: (context, value, child) {
-          print(
-            ' Rebuild MaterialApp with color: ${value.colorScheme.primary} and dark mode: ${value.brightness == Brightness.dark}',
-          );
           return MaterialApp(
             title: 'Sistema de Gerenciamento de Loja',
             theme: value,

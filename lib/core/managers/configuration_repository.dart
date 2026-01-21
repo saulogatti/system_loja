@@ -1,5 +1,6 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/managers/configuration_repository_cache.dart';
+import 'package:system_loja/core/managers/log_atividade_manager.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
 import 'package:system_loja/screens/injection/app_injection.dart';
 
@@ -45,7 +46,19 @@ class ConfigurationRepository
     await _carregarDados();
   }
 
-  Future<dynamic> limparLogsAntigos() async {}
+  Future<bool> limparLogsAntigos() async {
+    try {
+      final LogAtividadeManager logManager = LogAtividadeManager();
+      final int diasManterLogs = _configuracao.diasManterLogs;
+      final DateTime dataLimite = DateTime.now().subtract(
+        Duration(days: diasManterLogs),
+      );
+      await logManager.limparLogsAntigos(dataLimite);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   /// Limpa todos os dados do sistema
   ///

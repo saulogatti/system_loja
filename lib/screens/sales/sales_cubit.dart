@@ -51,7 +51,7 @@ class SalesCubit extends Cubit<SalesState> {
       final result = await productRepository.getProdutos();
 
       switch (result) {
-        case ExecutionSucess(result: final products):
+        case ExecutionSuccess(result: final products):
           emit(SalesState.loadedProducts(products: products));
         case ExecutionError(failure: final errorMessage):
           emit(

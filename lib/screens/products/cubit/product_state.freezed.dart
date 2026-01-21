@@ -55,7 +55,7 @@ extension ProductStatePatterns on ProductState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ProductStateDeleteSuccess value)?  deleteSuccess,TResult Function( ProductStateError value)?  error,TResult Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult Function( ProductStateInsertSuccess value)?  insertSuccess,TResult Function( ProductStateLoading value)?  loading,TResult Function( ProductStateNewIdGenerated value)?  newIdGenerated,TResult Function( ProductStateUpdateSuccess value)?  updateSuccess,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ProductStateDeleteSuccess value)?  deleteSuccess,TResult Function( ProductStateError value)?  error,TResult Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult Function( ProductStateInsertSuccess value)?  insertSuccess,TResult Function( ProductStateLoading value)?  loading,TResult Function( ProductStateUpdateSuccess value)?  updateSuccess,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case ProductStateDeleteSuccess() when deleteSuccess != null:
@@ -65,8 +65,7 @@ return findByCodeFailure(_that);case ProductStateFindByCodeSuccess() when findBy
 return findByCodeSuccess(_that);case ProductStateFindByIdSuccess() when findByIdSuccess != null:
 return findByIdSuccess(_that);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that);case ProductStateLoading() when loading != null:
-return loading(_that);case ProductStateNewIdGenerated() when newIdGenerated != null:
-return newIdGenerated(_that);case ProductStateUpdateSuccess() when updateSuccess != null:
+return loading(_that);case ProductStateUpdateSuccess() when updateSuccess != null:
 return updateSuccess(_that);case _:
   return orElse();
 
@@ -85,7 +84,7 @@ return updateSuccess(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ProductStateDeleteSuccess value)  deleteSuccess,required TResult Function( ProductStateError value)  error,required TResult Function( ProductStateFindByCodeFailure value)  findByCodeFailure,required TResult Function( ProductStateFindByCodeSuccess value)  findByCodeSuccess,required TResult Function( ProductStateFindByIdSuccess value)  findByIdSuccess,required TResult Function( ProductStateInsertSuccess value)  insertSuccess,required TResult Function( ProductStateLoading value)  loading,required TResult Function( ProductStateNewIdGenerated value)  newIdGenerated,required TResult Function( ProductStateUpdateSuccess value)  updateSuccess,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ProductStateDeleteSuccess value)  deleteSuccess,required TResult Function( ProductStateError value)  error,required TResult Function( ProductStateFindByCodeFailure value)  findByCodeFailure,required TResult Function( ProductStateFindByCodeSuccess value)  findByCodeSuccess,required TResult Function( ProductStateFindByIdSuccess value)  findByIdSuccess,required TResult Function( ProductStateInsertSuccess value)  insertSuccess,required TResult Function( ProductStateLoading value)  loading,required TResult Function( ProductStateUpdateSuccess value)  updateSuccess,}){
 final _that = this;
 switch (_that) {
 case ProductStateDeleteSuccess():
@@ -95,8 +94,7 @@ return findByCodeFailure(_that);case ProductStateFindByCodeSuccess():
 return findByCodeSuccess(_that);case ProductStateFindByIdSuccess():
 return findByIdSuccess(_that);case ProductStateInsertSuccess():
 return insertSuccess(_that);case ProductStateLoading():
-return loading(_that);case ProductStateNewIdGenerated():
-return newIdGenerated(_that);case ProductStateUpdateSuccess():
+return loading(_that);case ProductStateUpdateSuccess():
 return updateSuccess(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -111,7 +109,7 @@ return updateSuccess(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ProductStateDeleteSuccess value)?  deleteSuccess,TResult? Function( ProductStateError value)?  error,TResult? Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult? Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult? Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult? Function( ProductStateInsertSuccess value)?  insertSuccess,TResult? Function( ProductStateLoading value)?  loading,TResult? Function( ProductStateNewIdGenerated value)?  newIdGenerated,TResult? Function( ProductStateUpdateSuccess value)?  updateSuccess,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ProductStateDeleteSuccess value)?  deleteSuccess,TResult? Function( ProductStateError value)?  error,TResult? Function( ProductStateFindByCodeFailure value)?  findByCodeFailure,TResult? Function( ProductStateFindByCodeSuccess value)?  findByCodeSuccess,TResult? Function( ProductStateFindByIdSuccess value)?  findByIdSuccess,TResult? Function( ProductStateInsertSuccess value)?  insertSuccess,TResult? Function( ProductStateLoading value)?  loading,TResult? Function( ProductStateUpdateSuccess value)?  updateSuccess,}){
 final _that = this;
 switch (_that) {
 case ProductStateDeleteSuccess() when deleteSuccess != null:
@@ -121,8 +119,7 @@ return findByCodeFailure(_that);case ProductStateFindByCodeSuccess() when findBy
 return findByCodeSuccess(_that);case ProductStateFindByIdSuccess() when findByIdSuccess != null:
 return findByIdSuccess(_that);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that);case ProductStateLoading() when loading != null:
-return loading(_that);case ProductStateNewIdGenerated() when newIdGenerated != null:
-return newIdGenerated(_that);case ProductStateUpdateSuccess() when updateSuccess != null:
+return loading(_that);case ProductStateUpdateSuccess() when updateSuccess != null:
 return updateSuccess(_that);case _:
   return null;
 
@@ -140,7 +137,7 @@ return updateSuccess(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( List<Product> produtos)?  deleteSuccess,TResult Function( String message)?  error,TResult Function( String message)?  findByCodeFailure,TResult Function( Product produto)?  findByCodeSuccess,TResult Function( Product produto)?  findByIdSuccess,TResult Function( List<Product> produtos)?  insertSuccess,TResult Function()?  loading,TResult Function( int newId)?  newIdGenerated,TResult Function( List<Product> produtos)?  updateSuccess,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( List<Product> produtos)?  deleteSuccess,TResult Function( String message)?  error,TResult Function( String message)?  findByCodeFailure,TResult Function( Product produto)?  findByCodeSuccess,TResult Function( Product produto)?  findByIdSuccess,TResult Function( List<Product> produtos)?  insertSuccess,TResult Function()?  loading,TResult Function( List<Product> produtos)?  updateSuccess,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ProductStateDeleteSuccess() when deleteSuccess != null:
 return deleteSuccess(_that.produtos);case ProductStateError() when error != null:
@@ -149,8 +146,7 @@ return findByCodeFailure(_that.message);case ProductStateFindByCodeSuccess() whe
 return findByCodeSuccess(_that.produto);case ProductStateFindByIdSuccess() when findByIdSuccess != null:
 return findByIdSuccess(_that.produto);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that.produtos);case ProductStateLoading() when loading != null:
-return loading();case ProductStateNewIdGenerated() when newIdGenerated != null:
-return newIdGenerated(_that.newId);case ProductStateUpdateSuccess() when updateSuccess != null:
+return loading();case ProductStateUpdateSuccess() when updateSuccess != null:
 return updateSuccess(_that.produtos);case _:
   return orElse();
 
@@ -169,7 +165,7 @@ return updateSuccess(_that.produtos);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( List<Product> produtos)  deleteSuccess,required TResult Function( String message)  error,required TResult Function( String message)  findByCodeFailure,required TResult Function( Product produto)  findByCodeSuccess,required TResult Function( Product produto)  findByIdSuccess,required TResult Function( List<Product> produtos)  insertSuccess,required TResult Function()  loading,required TResult Function( int newId)  newIdGenerated,required TResult Function( List<Product> produtos)  updateSuccess,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( List<Product> produtos)  deleteSuccess,required TResult Function( String message)  error,required TResult Function( String message)  findByCodeFailure,required TResult Function( Product produto)  findByCodeSuccess,required TResult Function( Product produto)  findByIdSuccess,required TResult Function( List<Product> produtos)  insertSuccess,required TResult Function()  loading,required TResult Function( List<Product> produtos)  updateSuccess,}) {final _that = this;
 switch (_that) {
 case ProductStateDeleteSuccess():
 return deleteSuccess(_that.produtos);case ProductStateError():
@@ -178,8 +174,7 @@ return findByCodeFailure(_that.message);case ProductStateFindByCodeSuccess():
 return findByCodeSuccess(_that.produto);case ProductStateFindByIdSuccess():
 return findByIdSuccess(_that.produto);case ProductStateInsertSuccess():
 return insertSuccess(_that.produtos);case ProductStateLoading():
-return loading();case ProductStateNewIdGenerated():
-return newIdGenerated(_that.newId);case ProductStateUpdateSuccess():
+return loading();case ProductStateUpdateSuccess():
 return updateSuccess(_that.produtos);}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -194,7 +189,7 @@ return updateSuccess(_that.produtos);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( List<Product> produtos)?  deleteSuccess,TResult? Function( String message)?  error,TResult? Function( String message)?  findByCodeFailure,TResult? Function( Product produto)?  findByCodeSuccess,TResult? Function( Product produto)?  findByIdSuccess,TResult? Function( List<Product> produtos)?  insertSuccess,TResult? Function()?  loading,TResult? Function( int newId)?  newIdGenerated,TResult? Function( List<Product> produtos)?  updateSuccess,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( List<Product> produtos)?  deleteSuccess,TResult? Function( String message)?  error,TResult? Function( String message)?  findByCodeFailure,TResult? Function( Product produto)?  findByCodeSuccess,TResult? Function( Product produto)?  findByIdSuccess,TResult? Function( List<Product> produtos)?  insertSuccess,TResult? Function()?  loading,TResult? Function( List<Product> produtos)?  updateSuccess,}) {final _that = this;
 switch (_that) {
 case ProductStateDeleteSuccess() when deleteSuccess != null:
 return deleteSuccess(_that.produtos);case ProductStateError() when error != null:
@@ -203,8 +198,7 @@ return findByCodeFailure(_that.message);case ProductStateFindByCodeSuccess() whe
 return findByCodeSuccess(_that.produto);case ProductStateFindByIdSuccess() when findByIdSuccess != null:
 return findByIdSuccess(_that.produto);case ProductStateInsertSuccess() when insertSuccess != null:
 return insertSuccess(_that.produtos);case ProductStateLoading() when loading != null:
-return loading();case ProductStateNewIdGenerated() when newIdGenerated != null:
-return newIdGenerated(_that.newId);case ProductStateUpdateSuccess() when updateSuccess != null:
+return loading();case ProductStateUpdateSuccess() when updateSuccess != null:
 return updateSuccess(_that.produtos);case _:
   return null;
 
@@ -652,72 +646,6 @@ String toString() {
 
 
 
-
-/// @nodoc
-
-
-class ProductStateNewIdGenerated implements ProductState {
-   ProductStateNewIdGenerated({required this.newId});
-  
-
- final  int newId;
-
-/// Create a copy of ProductState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$ProductStateNewIdGeneratedCopyWith<ProductStateNewIdGenerated> get copyWith => _$ProductStateNewIdGeneratedCopyWithImpl<ProductStateNewIdGenerated>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateNewIdGenerated&&(identical(other.newId, newId) || other.newId == newId));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,newId);
-
-@override
-String toString() {
-  return 'ProductState.newIdGenerated(newId: $newId)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $ProductStateNewIdGeneratedCopyWith<$Res> implements $ProductStateCopyWith<$Res> {
-  factory $ProductStateNewIdGeneratedCopyWith(ProductStateNewIdGenerated value, $Res Function(ProductStateNewIdGenerated) _then) = _$ProductStateNewIdGeneratedCopyWithImpl;
-@useResult
-$Res call({
- int newId
-});
-
-
-
-
-}
-/// @nodoc
-class _$ProductStateNewIdGeneratedCopyWithImpl<$Res>
-    implements $ProductStateNewIdGeneratedCopyWith<$Res> {
-  _$ProductStateNewIdGeneratedCopyWithImpl(this._self, this._then);
-
-  final ProductStateNewIdGenerated _self;
-  final $Res Function(ProductStateNewIdGenerated) _then;
-
-/// Create a copy of ProductState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? newId = null,}) {
-  return _then(ProductStateNewIdGenerated(
-newId: null == newId ? _self.newId : newId // ignore: cast_nullable_to_non_nullable
-as int,
-  ));
-}
-
-
-}
 
 /// @nodoc
 

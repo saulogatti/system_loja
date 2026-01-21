@@ -17,7 +17,7 @@ class ProductRepository {
     final result = await defaultDataStorage.remove(id);
     switch (result) {
       case true:
-        return ExecutionSucess(result);
+        return ExecutionSuccess(result);
       case false:
         return ExecutionError(
           'Falha ao deletar produto com ID: $id - não encontrado',
@@ -30,7 +30,7 @@ class ProductRepository {
   Future<ExecutionResult<Product, String>> findByCode(int codigo) async {
     final result = await defaultDataStorage.getById(codigo);
     if (result != null) {
-      return ExecutionSucess(result);
+      return ExecutionSuccess(result);
     } else {
       return ExecutionError('Produto com código $codigo não encontrado');
     }
@@ -42,7 +42,7 @@ class ProductRepository {
   /// feitas pelo chamador.
   Future<ExecutionResult<List<Product>, String>> getProdutos() async {
     final result = await defaultDataStorage.getAll();
-    return ExecutionSucess(result);
+    return ExecutionSuccess(result);
   }
 
   /// Adiciona ou atualiza um produto na lista em memória e agenda persistência.
@@ -55,7 +55,7 @@ class ProductRepository {
     if (result == 0) {
       return ExecutionError('Falha ao salvar produto: ${produto.name}');
     }
-    return ExecutionSucess(result > 0);
+    return ExecutionSuccess(result > 0);
   }
 
   /// Atualiza um produto existente no armazenamento.
@@ -67,6 +67,6 @@ class ProductRepository {
   /// não diferencia entre inserção e atualização (upsert pattern).
   Future<ExecutionResult<bool, String>> updateProduct(Product produto) async {
     final result = await defaultDataStorage.updateProduct(produto);
-    return ExecutionSucess(result);
+    return ExecutionSuccess(result);
   }
 }

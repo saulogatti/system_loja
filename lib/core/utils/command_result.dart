@@ -60,9 +60,9 @@ sealed class ExecutionResult<R, E> {
 
   /// Cria um resultado de sucesso com o valor especificado.
   ///
-  /// Factory constructor que retorna uma instância de [ExecutionSucess].
+  /// Factory constructor que retorna uma instância de [ExecutionSuccess].
   factory ExecutionResult.success(R result) {
-    return ExecutionSucess<R, E>(result);
+    return ExecutionSuccess<R, E>(result);
   }
 
   /// Retorna o erro se o resultado for uma falha.
@@ -81,8 +81,8 @@ sealed class ExecutionResult<R, E> {
   /// Lança [StateError] se o resultado for uma falha.
   /// Use [isSuccessful] para verificar antes de acessar este getter.
   R get asSuccess {
-    if (this is ExecutionSucess<R, E>) {
-      return (this as ExecutionSucess<R, E>).result;
+    if (this is ExecutionSuccess<R, E>) {
+      return (this as ExecutionSuccess<R, E>).result;
     }
     throw StateError('OperationResult is not a success');
   }
@@ -95,7 +95,7 @@ sealed class ExecutionResult<R, E> {
   /// Verifica se o resultado representa um sucesso.
   ///
   /// Retorna `true` se a operação foi bem-sucedida, `false` caso contrário.
-  bool get isSuccessful => this is ExecutionSucess<R, E>;
+  bool get isSuccessful => this is ExecutionSuccess<R, E>;
 
   /// Executa uma função baseada no tipo de resultado.
   ///
@@ -113,8 +113,8 @@ sealed class ExecutionResult<R, E> {
     required void Function(R valor) onSuccess,
     required void Function(E error) onError,
   }) {
-    if (this is ExecutionSucess<R, E>) {
-      onSuccess((this as ExecutionSucess<R, E>).result);
+    if (this is ExecutionSuccess<R, E>) {
+      onSuccess((this as ExecutionSuccess<R, E>).result);
     } else if (this is ExecutionError<R, E>) {
       onError((this as ExecutionError<R, E>).failure);
     }
@@ -130,10 +130,10 @@ sealed class ExecutionResult<R, E> {
 /// Tipo genérico:
 /// - [R]: Tipo do resultado em caso de sucesso
 /// - [E]: Tipo do erro em caso de falha
-class ExecutionSucess<R, E> extends ExecutionResult<R, E> {
+class ExecutionSuccess<R, E> extends ExecutionResult<R, E> {
   /// O valor resultante da operação bem-sucedida.
   final R result;
 
   /// Cria uma instância de sucesso com o resultado especificado.
-  ExecutionSucess(this.result);
+  ExecutionSuccess(this.result);
 }
