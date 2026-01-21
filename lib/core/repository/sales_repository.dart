@@ -1,6 +1,6 @@
 import 'package:system_loja/core/models/invoice.dart';
-import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/dao/invoice_dao.dart';
+import 'package:system_loja/screens/injection/app_injection.dart';
 
 /// Repositório para gerenciamento de vendas usando Drift
 ///
@@ -10,7 +10,7 @@ class SalesRepository {
   final InvoiceDao _invoiceDao;
 
   SalesRepository({InvoiceDao? invoiceDao})
-    : _invoiceDao = invoiceDao ?? AppDatabase().invoiceDao;
+    : _invoiceDao = invoiceDao ?? AppInjection.instance.appDatabase.invoiceDao;
 
   /// Deleta uma venda pelo ID
   ///
