@@ -72,19 +72,7 @@ class UserRepository with LoggerClassMixin {
 
   /// Obtém um usuário por email
   Future<User?> obterUsuarioPorEmail(String email) async {
-    final dados = await defaultDataStorage.getAll();
-    if (dados.isNotEmpty) {
-      final dataList = dados;
-      final usuariosCarregados = dataList.indexWhere(
-        (data) => data.email == email,
-      );
-      if (usuariosCarregados != -1) {
-        return dataList[usuariosCarregados];
-      }
-
-      return null;
-    }
-    return null;
+    return await defaultDataStorage.findByEmail(email);
   }
 
   /// Obtém um usuário por ID
