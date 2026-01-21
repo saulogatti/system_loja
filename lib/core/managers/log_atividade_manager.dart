@@ -33,9 +33,9 @@ class LogAtividadeManager with LoggerClassMixin {
   }) async {
     final log = LogAtividade(
       id: gerarProximoId(),
-      tipoAcao: tipoAcao,
+      action: tipoAcao.name,
       entidade: entidade,
-      entidadeId: entidadeId,
+
       usuarioId: usuarioId,
       usuarioNome: usuarioNome,
       detalhes: detalhes,
@@ -58,18 +58,6 @@ class LogAtividadeManager with LoggerClassMixin {
     logs.removeWhere((log) => log.dataHora.isBefore(dataLimite));
     await salvarDadosSincronizado();
     logInfo('Logs antigos removidos até $dataLimite');
-  }
-
-  /// Obtém logs de uma entidade específica
-  List<LogAtividade> obterLogsPorEntidade(String entidade, {int? entidadeId}) {
-    if (entidadeId != null) {
-      return logs
-          .where(
-            (log) => log.entidade == entidade && log.entidadeId == entidadeId,
-          )
-          .toList();
-    }
-    return logs.where((log) => log.entidade == entidade).toList();
   }
 
   /// Obtém logs por período

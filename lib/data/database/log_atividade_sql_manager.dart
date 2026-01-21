@@ -223,7 +223,6 @@ class LogAtividadeSqlManager extends SqlDataStorage {
       'id': log.id,
       'tipo_acao': log.tipoAcao.toStringValue(),
       'entidade': log.entidade,
-      'entidade_id': log.entidadeId,
       'usuario_id': log.usuarioId,
       'usuario_nome': log.usuarioNome,
       'data_hora': log.dataHora.toIso8601String(),
@@ -235,9 +234,7 @@ class LogAtividadeSqlManager extends SqlDataStorage {
   LogAtividade _mapToLogAtividade(Map<String, dynamic> map) {
     return LogAtividade(
       id: map['id'] as int,
-      tipoAcao: TipoAcaoExtension.fromString(map['tipo_acao'] as String),
       entidade: map['entidade'] as String,
-      entidadeId: map['entidade_id'] as int?,
       usuarioId: map['usuario_id'] as int,
       usuarioNome: map['usuario_nome'] as String,
       dataHora: DateTime.parse(map['data_hora'] as String),

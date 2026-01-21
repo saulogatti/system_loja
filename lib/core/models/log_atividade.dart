@@ -17,9 +17,6 @@ class LogAtividade extends DefaultObject {
   @JsonKey(name: 'entidade')
   final String entidade;
 
-  @JsonKey(name: 'entidade_id')
-  final int? entidadeId;
-
   @JsonKey(name: 'usuario_id')
   final int usuarioId;
 
@@ -33,20 +30,24 @@ class LogAtividade extends DefaultObject {
 
   LogAtividade({
     required super.id,
-    this.tipoAcao = TipoAcao.ler,
     required this.entidade,
-    this.entidadeId,
     required this.usuarioId,
     required this.usuarioNome,
     DateTime? dataHora,
     this.detalhes = '',
     super.lastUpdatedDate,
     super.registrationDate,
-  }) : dataHora = dataHora ?? DateTime.now();
+    String? action,
+  }) : dataHora = dataHora ?? DateTime.now(),
+       tipoAcao = TipoAcao.values.firstWhere(
+         (e) => e.name == action,
+         orElse: () => TipoAcao.ler,
+       );
 
   /// Cria um objeto a partir de JSON
   factory LogAtividade.fromJson(Map<String, dynamic> json) =>
       _$LogAtividadeFromJson(json);
+  String get action => tipoAcao.name;
 
   /// Converte o objeto para JSON
   @override
@@ -54,7 +55,7 @@ class LogAtividade extends DefaultObject {
 
   @override
   String toString() =>
-      'LogAtividade(id: $id, tipoAcao: $tipoAcao, entidade: $entidade, entidadeId: $entidadeId, usuarioId: $usuarioId, usuarioNome: $usuarioNome, dataHora: $dataHora, detalhes: $detalhes)';
+      'LogAtividade(id: $id, tipoAcao: $tipoAcao, entidade: $entidade,  usuarioId: $usuarioId, usuarioNome: $usuarioNome, dataHora: $dataHora, detalhes: $detalhes)';
 }
 
 /// Tipos de ação que podem ser registradas no log
