@@ -1,12 +1,12 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:system_loja/core/managers/log_atividade_manager.dart';
-import 'package:system_loja/core/models/log_atividade.dart';
+import 'package:system_loja/core/models/activity_log.dart';
+import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/data/database/dao/users_dao.dart';
 import 'package:system_loja/screens/injection/app_injection.dart';
 
-import '../models/user.dart';
+import '../../models/user.dart';
 
 /// Gerenciador de Usuários
 ///
@@ -14,7 +14,7 @@ import '../models/user.dart';
 /// e recarrega dados antes de salvar para prevenir perda de dados.
 /// Implementa funcionalidades de hash de senha para segurança.
 class UserRepository with LoggerClassMixin {
-  final LogAtividadeManager _logManager = LogAtividadeManager();
+  final LogRepository _logManager = LogRepository();
 
   /// Tamanho mínimo da senha
   UsersDao defaultDataStorage = AppInjection.instance.systemDatabase.usersDao;
@@ -24,37 +24,34 @@ class UserRepository with LoggerClassMixin {
   ///
   /// A senha será automaticamente convertida em hash antes de salvar.
   /// Retorna true se o usuário foi adicionado com sucesso.
-  Future<ExecutionResult<bool, String>> adicionarUsuario(User usuario) async {
+  Future<ResultStatus<bool, String>> adicionarUsuario(User usuario) async {
     final result = await defaultDataStorage.insertUser(usuario);
-    await _logManager.criarERegistrarLog(
-      tipoAcao: TipoAcao.criar,
-      entidade: runtimeType.toString(),
-      entidadeId: usuario.id,
-      detalhes: 'Usuário ${usuario.name} (ID: ${usuario.id}) criado.',
-      usuarioId: usuario.id,
-      usuarioNome: usuario.name,
+    await _logManager.createAndLogEntry(
+      logActionType: ActionType.criar,
+      entityName: runtimeType.toString(),
+      logDetails: 'Usuário ${usuario.name} (ID: ${usuario.id}) criado.',
+      userId: usuario.id,
+      username: usuario.name,
     );
-    return ExecutionResult.success(result > 0);
+    return ResultStatus.success(result > 0);
   }
 
   /// Atualiza um usuário existente
   ///
   /// Retorna true se o usuário foi atualizado com sucesso.
-  Future<ExecutionResult<bool, String>> atualizarUsuario(User usuario) async {
+  Future<ResultStatus<bool, String>> atualizarUsuario(User usuario) async {
     final exists = await defaultDataStorage.getById(usuario.id);
     if (exists == null) {
-      return ExecutionResult.error(
-        'Usuário com ID ${usuario.id} não encontrado.',
-      );
+      return ResultStatus.error('Usuário com ID ${usuario.id} não encontrado.');
     } else {
-      await _logManager.criarERegistrarLog(
-        tipoAcao: TipoAcao.atualizar,
-        entidade: runtimeType.toString(),
-        usuarioId: usuario.id,
-        usuarioNome: usuario.name,
+      await _logManager.createAndLogEntry(
+        logActionType: ActionType.atualizar,
+        entityName: runtimeType.toString(),
+        userId: usuario.id,
+        username: usuario.name,
       );
       final result = await defaultDataStorage.updateUser(usuario);
-      return ExecutionResult.success(result);
+      return ResultStatus.success(result);
     }
   }
 
@@ -80,12 +77,12 @@ class UserRepository with LoggerClassMixin {
     final dados = await defaultDataStorage.getById(id);
     if (dados != null) {
       final user = dados;
-      await _logManager.criarERegistrarLog(
-        tipoAcao: TipoAcao.ler,
-        entidade: runtimeType.toString(),
-        usuarioId: id,
-        usuarioNome: user.name,
-        detalhes: 'Usuário ${user.name} (ID: ${user.id}) carregado.',
+      await _logManager.createAndLogEntry(
+        logActionType: ActionType.ler,
+        entityName: runtimeType.toString(),
+        userId: id,
+        username: user.name,
+        logDetails: 'Usuário ${user.name} (ID: ${user.id}) carregado.',
       );
       return user;
     }
@@ -100,12 +97,12 @@ class UserRepository with LoggerClassMixin {
     if (resultado > 0) {
       final success = true;
       logInfo('Usuário removido com sucesso: ID $id');
-      await _logManager.criarERegistrarLog(
-        tipoAcao: TipoAcao.deletar,
-        entidade: runtimeType.toString(),
-        usuarioId: id,
-        usuarioNome: '',
-        detalhes: 'Usuário com ID $id removido.',
+      await _logManager.createAndLogEntry(
+        logActionType: ActionType.deletar,
+        entityName: runtimeType.toString(),
+        userId: id,
+        username: '',
+        logDetails: 'Usuário com ID $id removido.',
       );
       return success;
     }

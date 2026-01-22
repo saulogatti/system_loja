@@ -1,13 +1,14 @@
 import 'package:drift/drift.dart';
-
+import 'package:system_loja/core/models/customer.dart';
+@UseRowClass(Customer)
 class ClientesRecords extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get name => text()();
+  TextColumn get address => text().nullable()();
   TextColumn get cpf => text().unique()();
-  TextColumn get email => text()();
-  TextColumn get phone => text()();
-  TextColumn get address => text()();
+  TextColumn get email => text().nullable()();
+  IntColumn get id => integer().autoIncrement()();
+  DateTimeColumn get lastUpdatedDate => dateTime().nullable()();
+  TextColumn get name => text()();
+  TextColumn get phone => text().nullable()();
   DateTimeColumn get registrationDate =>
       dateTime().withDefault(currentDateAndTime)();
-  DateTimeColumn get lastUpdatedDate => dateTime().nullable()();
 }

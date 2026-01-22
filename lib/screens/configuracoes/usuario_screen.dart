@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/repository/user_repository.dart';
+import 'package:system_loja/core/repository/system/user_repository.dart';
+import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/user_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_delete_confirm_dialog.dart';
@@ -203,7 +204,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     setState(() {
       _usuarioEditando = usuario;
       _nomeController.text = usuario.name;
-      _emailController.text = usuario.email;
+      _emailController.text = usuario.email ?? '';
       _senhaController.clear();
       _nivelPermissaoSelecionado = AuthorizationLevel.values.firstWhere(
         (level) => level.value == usuario.permission,
@@ -261,7 +262,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         final user = _usuarioEditando!.copyWith(
           name: _nomeController.text.trim(),
           email: email,
-          passwordHash: senha,
+          passwordHash: senha.isNotEmpty ? senha.hashSenha() : null,
 
           permission: _nivelPermissaoSelecionado.value,
         );

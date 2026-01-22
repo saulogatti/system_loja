@@ -21,7 +21,7 @@ class UsuarioDetailsDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildDetailRow('ID', usuario.id.toString()),
-            _buildDetailRow('Email', usuario.email),
+            _buildDetailRow('Email', usuario.email ?? 'N/A'),
             _buildDetailRow(
               'Nível de Permissão',
             AuthorizationLevel.values

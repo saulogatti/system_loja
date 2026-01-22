@@ -13,13 +13,13 @@ class ProductRepository {
   ///
   /// [id] ID do produto a ser removido.
   /// Retorna resultado da operação de exclusão.
-  Future<ExecutionResult<bool, String>> deleteProduct(int id) async {
+  Future<ResultStatus<bool, String>> deleteProduct(int id) async {
     final result = await defaultDataStorage.remove(id);
     switch (result) {
       case true:
-        return ExecutionSuccess(result);
+        return ResultSuccess(result);
       case false:
-        return ExecutionError(
+        return ResultError(
           'Falha ao deletar produto com ID: $id - não encontrado',
         );
     }
@@ -27,12 +27,12 @@ class ProductRepository {
 
   /// Retorna a lista de produtos em cache, carregando do disco se vazia.
 
-  Future<ExecutionResult<Product, String>> findByCode(int codigo) async {
+  Future<ResultStatus<Product, String>> findByCode(int codigo) async {
     final result = await defaultDataStorage.getById(codigo);
     if (result != null) {
-      return ExecutionSuccess(result);
+      return ResultSuccess(result);
     } else {
-      return ExecutionError('Produto com código $codigo não encontrado');
+      return ResultError('Produto com código $codigo não encontrado');
     }
   }
 
@@ -40,9 +40,9 @@ class ProductRepository {
   ///
   /// A cópia protege o cache interno contra modificações acidentais
   /// feitas pelo chamador.
-  Future<ExecutionResult<List<Product>, String>> getProdutos() async {
+  Future<ResultStatus<List<Product>, String>> getProdutos() async {
     final result = await defaultDataStorage.getAll();
-    return ExecutionSuccess(result);
+    return ResultSuccess(result);
   }
 
   /// Adiciona ou atualiza um produto na lista em memória e agenda persistência.
@@ -50,15 +50,15 @@ class ProductRepository {
   /// Este método atualiza o cache interno e chama [salvarDadosSincronizado]
   /// para persistir as alterações de forma segura. Não aguarda o término da
   /// operação (fire-and-forget) — adaptar conforme necessidade do chamador.
-  Future<ExecutionResult<bool, String>> salvarProduto(Product produto) async {
+  Future<ResultStatus<bool, String>> salvarProduto(Product produto) async {
     try {
       final result = await defaultDataStorage.insertProduct(produto);
       if (result <= 0) {
-        return ExecutionError('Falha ao salvar produto: ${produto.name}');
+        return ResultError('Falha ao salvar produto: ${produto.name}');
       }
-      return ExecutionSuccess(result > 0);
+      return ResultSuccess(result > 0);
     } on Exception catch (err) {
-      return ExecutionError(
+      return ResultError(
         'Falha ao salvar produto: ${produto.name} - ${err.toString()}',
       );
     }
@@ -71,8 +71,8 @@ class ProductRepository {
   ///
   /// **Nota**: Este método utiliza internamente [salvarProduto], pois o storage
   /// não diferencia entre inserção e atualização (upsert pattern).
-  Future<ExecutionResult<bool, String>> updateProduct(Product produto) async {
+  Future<ResultStatus<bool, String>> updateProduct(Product produto) async {
     final result = await defaultDataStorage.updateProduct(produto);
-    return ExecutionSuccess(result);
+    return ResultSuccess(result);
   }
 }

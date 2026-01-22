@@ -10,12 +10,13 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) => $checkedCreate(
   'Customer',
   json,
   ($checkedConvert) {
-    final val = Customer.withData(
+    final val = Customer(
       id: $checkedConvert('id', (v) => (v as num).toInt()),
-      customerInfo: $checkedConvert(
-        'customerInfo',
-        (v) => CustomerInfo.fromJson(v as Map<String, dynamic>),
-      ),
+      name: $checkedConvert('name', (v) => v as String),
+      email: $checkedConvert('email', (v) => v as String?),
+      cpf: $checkedConvert('cpf', (v) => v as String),
+      phone: $checkedConvert('phone', (v) => v as String?),
+      address: $checkedConvert('address', (v) => v as String?),
       registrationDate: $checkedConvert(
         'registration_date',
         (v) => v == null ? null : DateTime.parse(v as String),
@@ -37,26 +38,9 @@ Map<String, dynamic> _$CustomerToJson(Customer instance) => <String, dynamic>{
   'id': instance.id,
   'registration_date': instance.registrationDate.toIso8601String(),
   'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
-  'customerInfo': instance.customerInfo.toJson(),
+  'name': instance.name,
+  'email': instance.email,
+  'cpf': instance.cpf,
+  'phone': instance.phone,
+  'address': instance.address,
 };
-
-CustomerInfo _$CustomerInfoFromJson(Map<String, dynamic> json) =>
-    $checkedCreate('CustomerInfo', json, ($checkedConvert) {
-      final val = CustomerInfo(
-        name: $checkedConvert('name', (v) => v as String),
-        cpf: $checkedConvert('cpf', (v) => v as String),
-        email: $checkedConvert('email', (v) => v as String),
-        phone: $checkedConvert('phone', (v) => v as String),
-        address: $checkedConvert('address', (v) => v as String),
-      );
-      return val;
-    });
-
-Map<String, dynamic> _$CustomerInfoToJson(CustomerInfo instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'cpf': instance.cpf,
-      'email': instance.email,
-      'phone': instance.phone,
-      'address': instance.address,
-    };

@@ -49,8 +49,8 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
   ) async {
     emit(const ConfiguracoesLoading());
     try {
-      final configuracao =
-          await AppInjection.instance.configurationRepository.carregarConfiguracao();
+      final configuracao = await AppInjection.instance.configurationRepository
+          .carregarConfiguracao();
       emit(ConfiguracoesLoaded(configuracao));
     } catch (e) {
       emit(ConfiguracoesError('Erro ao carregar configurações: $e'));
@@ -68,7 +68,7 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
     emit(const ConfiguracoesLoading());
     try {
       final sucesso = await AppInjection.instance.configurationRepository
-          .limparLogsAntigos();
+          .clearOldLogs();
       if (sucesso) {
         emit(
           ConfiguracoesSuccess(
@@ -158,8 +158,8 @@ class ConfiguracoesBloc extends Bloc<ConfiguracoesEvent, ConfiguracoesState> {
     emit(const ConfiguracoesLoading());
     try {
       await AppInjection.instance.configurationRepository.restaurarPadrao();
-      final configuracao =
-          await AppInjection.instance.configurationRepository.carregarConfiguracao();
+      final configuracao = await AppInjection.instance.configurationRepository
+          .carregarConfiguracao();
       emit(
         ConfiguracoesSuccess(
           configuracao,

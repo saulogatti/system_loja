@@ -10,21 +10,21 @@ User _$UserFromJson(Map<String, dynamic> json) => $checkedCreate(
   'User',
   json,
   ($checkedConvert) {
-    final val = User.withDados(
+    final val = User(
       id: $checkedConvert('id', (v) => (v as num).toInt()),
       name: $checkedConvert('name', (v) => v as String),
-      email: $checkedConvert('email', (v) => v as String),
+      email: $checkedConvert('email', (v) => v as String?),
       passwordHash: $checkedConvert('senha_hash', (v) => v as String),
       permission: $checkedConvert(
         'nivel_permissao',
         (v) => (v as num?)?.toInt() ?? 0,
       ),
-      lastUpdatedDate: $checkedConvert(
-        'last_updated_date',
-        (v) => v == null ? null : DateTime.parse(v as String),
-      ),
       registrationDate: $checkedConvert(
         'registration_date',
+        (v) => v == null ? null : DateTime.parse(v as String),
+      ),
+      lastUpdatedDate: $checkedConvert(
+        'last_updated_date',
         (v) => v == null ? null : DateTime.parse(v as String),
       ),
     );
@@ -33,8 +33,8 @@ User _$UserFromJson(Map<String, dynamic> json) => $checkedCreate(
   fieldKeyMap: const {
     'passwordHash': 'senha_hash',
     'permission': 'nivel_permissao',
-    'lastUpdatedDate': 'last_updated_date',
     'registrationDate': 'registration_date',
+    'lastUpdatedDate': 'last_updated_date',
   },
 );
 

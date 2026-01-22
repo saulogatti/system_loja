@@ -55,7 +55,7 @@ class ProductCubit extends Cubit<ProductState> {
 
     final resultSave = await _manager.salvarProduto(produto);
     switch (resultSave) {
-      case ExecutionSuccess(result: final saved):
+      case ResultSuccess(result: final saved):
         if (!saved) {
           emit(
             ProductState.error(
@@ -66,16 +66,16 @@ class ProductCubit extends Cubit<ProductState> {
         }
         final result = await _manager.getProdutos();
         switch (result) {
-          case ExecutionSuccess(result: final produtos):
+          case ResultSuccess(result: final produtos):
             emit(ProductState.insertSuccess(produtos: produtos.toList()));
-          case ExecutionError(failure: final errorMessage):
+          case ResultError(resultError: final errorMessage):
             emit(
               ProductState.error(
                 message: 'Erro ao adicionar produto: $errorMessage',
               ),
             );
         }
-      case ExecutionError(failure: final errorMessage):
+      case ResultError(resultError: final errorMessage):
         emit(
           ProductState.error(
             message: 'Erro ao adicionar produto: $errorMessage',
@@ -94,12 +94,12 @@ class ProductCubit extends Cubit<ProductState> {
   Future<void> deleteProduct(int id) async {
     final deleteResult = await _manager.deleteProduct(id);
     switch (deleteResult) {
-      case ExecutionSuccess():
+      case ResultSuccess():
         final result = await _manager.getProdutos();
         switch (result) {
-          case ExecutionSuccess(result: final produtos):
+          case ResultSuccess(result: final produtos):
             emit(ProductState.deleteSuccess(produtos: produtos.toList()));
-          case ExecutionError(failure: final errorMessage):
+          case ResultError(resultError: final errorMessage):
             emit(
               ProductState.error(
                 message:
@@ -107,7 +107,7 @@ class ProductCubit extends Cubit<ProductState> {
               ),
             );
         }
-      case ExecutionError(failure: final errorMessage):
+      case ResultError(resultError: final errorMessage):
         emit(
           ProductState.error(message: 'Erro ao deletar produto: $errorMessage'),
         );
@@ -125,14 +125,14 @@ class ProductCubit extends Cubit<ProductState> {
     // TODO implementar falta implementação na tela
     final result = await _manager.findByCode(codigo);
     switch (result) {
-      case ExecutionSuccess(result: final produto):
+      case ResultSuccess(result: final produto):
         emit(
           ProductState.error(
             message: 'Funcionalidade não implementada: ${produto.name}',
           ),
         );
 
-      case ExecutionError(failure: final errorMessage):
+      case ResultError(resultError: final errorMessage):
         emit(
           ProductState.error(message: 'Erro ao buscar produto: $errorMessage'),
         );
@@ -142,9 +142,9 @@ class ProductCubit extends Cubit<ProductState> {
   Future<void> loadAllProducts() async {
     final result = await _manager.getProdutos();
     switch (result) {
-      case ExecutionSuccess(result: final produtos):
+      case ResultSuccess(result: final produtos):
         emit(ProductState.loaded(produtos: produtos.toList()));
-      case ExecutionError(failure: final errorMessage):
+      case ResultError(resultError: final errorMessage):
         emit(
           ProductState.error(
             message: 'Erro ao carregar produtos: $errorMessage',
@@ -164,12 +164,12 @@ class ProductCubit extends Cubit<ProductState> {
     emit(ProductState.loading());
     final updateResult = await _manager.updateProduct(produto);
     switch (updateResult) {
-      case ExecutionSuccess():
+      case ResultSuccess():
         final result = await _manager.getProdutos();
         switch (result) {
-          case ExecutionSuccess(result: final produtos):
+          case ResultSuccess(result: final produtos):
             emit(ProductState.updateSuccess(produtos: produtos.toList()));
-          case ExecutionError(failure: final errorMessage):
+          case ResultError(resultError: final errorMessage):
             emit(
               ProductState.error(
                 message:
@@ -177,7 +177,7 @@ class ProductCubit extends Cubit<ProductState> {
               ),
             );
         }
-      case ExecutionError(failure: final errorMessage):
+      case ResultError(resultError: final errorMessage):
         emit(
           ProductState.error(
             message: 'Erro ao atualizar produto: $errorMessage',

@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/data/database/system_database.dart';
-import 'package:system_loja/data/database/table/users_records.dart';
+import 'package:system_loja/data/database/table/system/users_records.dart';
 
 part 'users_dao.g.dart';
 
@@ -26,11 +26,25 @@ class UsersDao extends DatabaseAccessor<SystemDatabase> with _$UsersDaoMixin {
   }
 
   Future<int> insertUser(User user) {
-    return into(usersRecords).insert(user.toInsertable());
+    return into(usersRecords).insert(UsersRecordsCompanion(
+      email: Value(user.email),
+      name: Value(user.name),
+      passwordHash: Value(user.passwordHash),
+      permission: Value(user.permission),
+      registrationDate: Value(user.registrationDate),
+      lastUpdatedDate: Value(user.lastUpdatedDate),
+    ));
   }
 
   Future<bool> updateUser(User user) {
-    return update(usersRecords).replace(user.toInsertable());
+    return update(usersRecords).replace(UsersRecordsCompanion(
+      id: Value(user.id),
+      email: Value(user.email),
+      name: Value(user.name),
+      passwordHash: Value(user.passwordHash),
+      permission: Value(user.permission),
+      lastUpdatedDate: Value(DateTime.now()),
+    ));
   }
 
   Future<User?> findByEmail(String email) {

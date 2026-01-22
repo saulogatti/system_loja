@@ -51,12 +51,12 @@ class SalesCubit extends Cubit<SalesState> {
       final result = await productRepository.getProdutos();
 
       switch (result) {
-        case ExecutionSuccess(result: final products):
+        case ResultSuccess(result: final products):
           emit(SalesState.loadedProducts(products: products));
-        case ExecutionError(failure: final errorMessage):
+        case ResultError(resultError: final resultError):
           emit(
             SalesState.loadProductsFailure(
-              message: 'Erro ao carregar produtos: $errorMessage',
+              message: 'Erro ao carregar produtos: $resultError',
             ),
           );
       }
