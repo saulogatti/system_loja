@@ -14,7 +14,13 @@ class ClienteRepository {
   }
 
   Future<void> excluir(int id) async {
-    
+    _logRepository.createAndLogEntry(
+      logActionType: .deletar,
+      entityName: runtimeType.toString(),
+      userId: 0,
+      username: 'system',
+      logDetails: 'Deleted customer with ID $id',
+    );
     await dao.deleteCliente(id);
   }
 

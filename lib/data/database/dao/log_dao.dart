@@ -40,7 +40,7 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
   Future<List<ActivityLog>> getWithAction(ActionType tipoAcao) async {
     return await (select(
       logsRecords,
-    )..where((tbl) => tbl.action.equals(tipoAcao.name))).get();
+    )..where((tbl) => tbl.actionType.isValue(tipoAcao.index))).get();
   }
 
   Future<List<ActivityLog>> getWithFilter(String entity) async {
