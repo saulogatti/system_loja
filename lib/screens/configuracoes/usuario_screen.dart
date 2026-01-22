@@ -261,7 +261,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         final user = _usuarioEditando!.copyWith(
           name: _nomeController.text.trim(),
           email: email,
-          passwordHash: senha.isNotEmpty ? senha : null,
+          passwordHash: senha.isNotEmpty ? senha.hashSenha() : null,
 
           permission: _nivelPermissaoSelecionado.value,
         );
