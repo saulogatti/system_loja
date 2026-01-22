@@ -1,7 +1,9 @@
 import 'package:system_loja/core/models/customer.dart';
+import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/data/database/dao/cliente_dao.dart';
 
 class ClienteRepository {
+  LogRepository _logRepository = LogRepository();
   final ClienteDao dao;
 
   ClienteRepository(this.dao);
@@ -12,6 +14,7 @@ class ClienteRepository {
   }
 
   Future<void> excluir(int id) async {
+    
     await dao.deleteCliente(id);
   }
 

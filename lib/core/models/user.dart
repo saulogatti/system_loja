@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
-import 'package:system_loja/core/models/default/default_object.dart';
+import 'package:system_loja/core/models/default/people_data.dart';
 
 part 'user.g.dart';
 
@@ -22,11 +22,8 @@ enum AuthorizationLevel {
 ///
 /// Representa um usuário do sistema com informações de autenticação
 /// e nível de permissão para controle de acesso.
-@JsonSerializable(constructor: 'withDados', explicitToJson: true)
-class User extends DefaultObject {
-  final String name;
-  final String email;
-
+@JsonSerializable(explicitToJson: true)
+class User extends PeopleData {
   @JsonKey(name: 'senha_hash')
   final String passwordHash;
 
@@ -35,8 +32,8 @@ class User extends DefaultObject {
 
   User({
     required super.id,
-    required this.name,
-    required this.email,
+    required super.name,
+    required super.email,
     required this.passwordHash,
     this.permission = 0,
     super.registrationDate,
@@ -46,35 +43,24 @@ class User extends DefaultObject {
   /// Cria um objeto a partir de JSON
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
-  User.withDados({
-    required super.id,
-    required this.name,
-    required this.email,
-    required this.passwordHash,
-    this.permission = 0,
-    super.lastUpdatedDate,
-    super.registrationDate,
-  });
-
   /// Cria uma cópia do usuário com campos atualizados
   ///
   /// Atualiza automaticamente a data de última atualização para o momento atual,
   /// a menos que uma data específica seja fornecida.
   User copyWith({
-    int? id,
     String? name,
     String? email,
     String? passwordHash,
     int? permission,
   }) {
     return User(
-      id: id ?? this.id,
+      id: id,
       name: name ?? this.name,
       email: email ?? this.email,
       passwordHash: passwordHash ?? this.passwordHash,
       permission: permission ?? this.permission,
       registrationDate: registrationDate,
-      lastUpdatedDate: DateTime.now(),
+      lastUpdatedDate: lastUpdatedDate,
     );
   }
 
@@ -87,5 +73,3 @@ class User extends DefaultObject {
     return 'User(name: $name, email: $email, passwordHash: $passwordHash, permission: $permission)';
   }
 }
-
-/// Dados do usuário

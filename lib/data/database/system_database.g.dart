@@ -14,10 +14,9 @@ class $UsersRecordsTable extends UsersRecords
   late final GeneratedColumn<String> email = GeneratedColumn<String>(
     'email',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
@@ -115,8 +114,6 @@ class $UsersRecordsTable extends UsersRecords
         _emailMeta,
         email.isAcceptableOrUnknown(data['email']!, _emailMeta),
       );
-    } else if (isInserting) {
-      context.missing(_emailMeta);
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
@@ -186,7 +183,7 @@ class $UsersRecordsTable extends UsersRecords
       email: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}email'],
-      )!,
+      ),
       passwordHash: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}password_hash'],
@@ -213,7 +210,7 @@ class $UsersRecordsTable extends UsersRecords
 }
 
 class UsersRecordsCompanion extends UpdateCompanion<User> {
-  final Value<String> email;
+  final Value<String?> email;
   final Value<int> id;
   final Value<DateTime?> lastUpdatedDate;
   final Value<String> name;
@@ -230,15 +227,14 @@ class UsersRecordsCompanion extends UpdateCompanion<User> {
     this.registrationDate = const Value.absent(),
   });
   UsersRecordsCompanion.insert({
-    required String email,
+    this.email = const Value.absent(),
     this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
     required String name,
     required String passwordHash,
     required int permission,
     this.registrationDate = const Value.absent(),
-  }) : email = Value(email),
-       name = Value(name),
+  }) : name = Value(name),
        passwordHash = Value(passwordHash),
        permission = Value(permission);
   static Insertable<User> custom({
@@ -262,7 +258,7 @@ class UsersRecordsCompanion extends UpdateCompanion<User> {
   }
 
   UsersRecordsCompanion copyWith({
-    Value<String>? email,
+    Value<String?>? email,
     Value<int>? id,
     Value<DateTime?>? lastUpdatedDate,
     Value<String>? name,
@@ -320,29 +316,6 @@ class UsersRecordsCompanion extends UpdateCompanion<User> {
           ..write('registrationDate: $registrationDate')
           ..write(')'))
         .toString();
-  }
-}
-
-class _$UserInsertable implements Insertable<User> {
-  User _object;
-  _$UserInsertable(this._object);
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    return UsersRecordsCompanion(
-      email: Value(_object.email),
-      id: Value(_object.id),
-      lastUpdatedDate: Value(_object.lastUpdatedDate),
-      name: Value(_object.name),
-      passwordHash: Value(_object.passwordHash),
-      permission: Value(_object.permission),
-      registrationDate: Value(_object.registrationDate),
-    ).toColumns(false);
-  }
-}
-
-extension UserToInsertable on User {
-  _$UserInsertable toInsertable() {
-    return _$UserInsertable(this);
   }
 }
 
@@ -771,7 +744,7 @@ abstract class _$SystemDatabase extends GeneratedDatabase {
 
 typedef $$UsersRecordsTableCreateCompanionBuilder =
     UsersRecordsCompanion Function({
-      required String email,
+      Value<String?> email,
       Value<int> id,
       Value<DateTime?> lastUpdatedDate,
       required String name,
@@ -781,7 +754,7 @@ typedef $$UsersRecordsTableCreateCompanionBuilder =
     });
 typedef $$UsersRecordsTableUpdateCompanionBuilder =
     UsersRecordsCompanion Function({
-      Value<String> email,
+      Value<String?> email,
       Value<int> id,
       Value<DateTime?> lastUpdatedDate,
       Value<String> name,
@@ -947,7 +920,7 @@ class $$UsersRecordsTableTableManager
               $$UsersRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<String> email = const Value.absent(),
+                Value<String?> email = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
                 Value<String> name = const Value.absent(),
@@ -965,7 +938,7 @@ class $$UsersRecordsTableTableManager
               ),
           createCompanionCallback:
               ({
-                required String email,
+                Value<String?> email = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
                 required String name,

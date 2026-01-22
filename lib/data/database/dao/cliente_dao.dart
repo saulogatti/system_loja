@@ -24,7 +24,7 @@ class ClienteDao extends DatabaseAccessor<AppDatabase> with _$ClienteDaoMixin {
   /// Retorna todos os clientes como objetos de domínio Customer.
   Future<List<Customer>> getAll() async {
     final records = await select(clientesRecords).get();
-    return records.map((record) => record.toDomain()).toList();
+    return records;
   }
 
   /// Busca um cliente pelo ID.
@@ -34,7 +34,7 @@ class ClienteDao extends DatabaseAccessor<AppDatabase> with _$ClienteDaoMixin {
     final record = await (select(
       clientesRecords,
     )..where((t) => t.id.equals(id))).getSingleOrNull();
-    return record?.toDomain();
+    return record;
   }
 
   /// Insere um novo cliente no banco de dados.
@@ -44,7 +44,7 @@ class ClienteDao extends DatabaseAccessor<AppDatabase> with _$ClienteDaoMixin {
   Future<int> insertCliente(Customer customer) {
     return into(
       clientesRecords,
-    ).insert(customer.toCompanion(), mode: InsertMode.insertOrReplace);
+    ).insert(customer.toCompanion(), mode: InsertMode.insertOrAbort);
   }
 
   /// Atualiza um cliente existente no banco de dados.

@@ -34,8 +34,8 @@ class UserCubit extends Cubit<UsuarioState> {
         onSuccess: (sucess) {
           emit(UsuarioState.usuarioAdicionado(usuario, true));
         },
-        onError: (error) {
-          emit(UsuarioState.loadFailure(errorMessage: error));
+        onError: (resultError) {
+          emit(UsuarioState.loadFailure(errorMessage: resultError));
         },
       );
     } catch (e) {
@@ -54,10 +54,10 @@ class UserCubit extends Cubit<UsuarioState> {
           if (sucesso) {
             emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
           }
-        case ResultError(failure: final errorMessage):
+        case ResultError(:final resultError):
           emit(
             UsuarioState.loadFailure(
-              errorMessage: 'Falha ao atualizar usuário: $errorMessage',
+              errorMessage: 'Falha ao atualizar usuário: $resultError',
             ),
           );
       }

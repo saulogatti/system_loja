@@ -147,9 +147,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     setState(() {
       _isEditing = false;
       _nomeController.text = widget.customer.name;
-      _emailController.text = widget.customer.email;
-      _telefoneController.text = widget.customer.phone;
-      _enderecoController.text = widget.customer.address;
+      _emailController.text = widget.customer.email ?? '';
+      _telefoneController.text = widget.customer.phone ?? '';
+      _enderecoController.text = widget.customer.address ?? '';
     });
   }
 

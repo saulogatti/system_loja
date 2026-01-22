@@ -68,14 +68,14 @@ class ProductCubit extends Cubit<ProductState> {
         switch (result) {
           case ResultSuccess(result: final produtos):
             emit(ProductState.insertSuccess(produtos: produtos.toList()));
-          case ResultError(failure: final errorMessage):
+          case ResultError(resultError: final errorMessage):
             emit(
               ProductState.error(
                 message: 'Erro ao adicionar produto: $errorMessage',
               ),
             );
         }
-      case ResultError(failure: final errorMessage):
+      case ResultError(resultError: final errorMessage):
         emit(
           ProductState.error(
             message: 'Erro ao adicionar produto: $errorMessage',
@@ -99,7 +99,7 @@ class ProductCubit extends Cubit<ProductState> {
         switch (result) {
           case ResultSuccess(result: final produtos):
             emit(ProductState.deleteSuccess(produtos: produtos.toList()));
-          case ResultError(failure: final errorMessage):
+          case ResultError(resultError: final errorMessage):
             emit(
               ProductState.error(
                 message:
@@ -107,7 +107,7 @@ class ProductCubit extends Cubit<ProductState> {
               ),
             );
         }
-      case ResultError(failure: final errorMessage):
+      case ResultError(resultError: final errorMessage):
         emit(
           ProductState.error(message: 'Erro ao deletar produto: $errorMessage'),
         );
@@ -132,7 +132,7 @@ class ProductCubit extends Cubit<ProductState> {
           ),
         );
 
-      case ResultError(failure: final errorMessage):
+      case ResultError(resultError: final errorMessage):
         emit(
           ProductState.error(message: 'Erro ao buscar produto: $errorMessage'),
         );
@@ -144,7 +144,7 @@ class ProductCubit extends Cubit<ProductState> {
     switch (result) {
       case ResultSuccess(result: final produtos):
         emit(ProductState.loaded(produtos: produtos.toList()));
-      case ResultError(failure: final errorMessage):
+      case ResultError(resultError: final errorMessage):
         emit(
           ProductState.error(
             message: 'Erro ao carregar produtos: $errorMessage',
@@ -169,7 +169,7 @@ class ProductCubit extends Cubit<ProductState> {
         switch (result) {
           case ResultSuccess(result: final produtos):
             emit(ProductState.updateSuccess(produtos: produtos.toList()));
-          case ResultError(failure: final errorMessage):
+          case ResultError(resultError: final errorMessage):
             emit(
               ProductState.error(
                 message:
@@ -177,7 +177,7 @@ class ProductCubit extends Cubit<ProductState> {
               ),
             );
         }
-      case ResultError(failure: final errorMessage):
+      case ResultError(resultError: final errorMessage):
         emit(
           ProductState.error(
             message: 'Erro ao atualizar produto: $errorMessage',

@@ -10,10 +10,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 /// - `E`: tipo do erro em caso de falha
 class ResultError<R, E> extends ResultStatus<R, E> {
   /// Erro ocorrido durante a operação.
-  final E failure;
+  final E resultError;
 
   /// Cria uma instância de erro com o erro fornecido.
-  ResultError(this.failure);
+  ResultError(this.resultError);
 }
 
 /// Resultado selado de uma operação que pode ser sucesso ou falha.
@@ -46,7 +46,7 @@ sealed class ResultStatus<R, E> {
 
   /// Factory que cria um resultado de sucesso contendo `result`.
   factory ResultStatus.success(R result) {
-    return ResultSuccess<R, E>(result);
+    return ResultSuccess(result);
   }
 
   /// Retorna o erro quando o resultado é uma falha.
@@ -55,7 +55,7 @@ sealed class ResultStatus<R, E> {
   /// Verifique `hasError` antes de acessar este getter.
   E get asError {
     if (this is ResultError<R, E>) {
-      return (this as ResultError<R, E>).failure;
+      return (this as ResultError<R, E>).resultError;
     }
     throw StateError('ResultStatus is not an error');
   }
@@ -88,7 +88,7 @@ sealed class ResultStatus<R, E> {
     if (this is ResultSuccess<R, E>) {
       onSuccess((this as ResultSuccess<R, E>).result);
     } else if (this is ResultError<R, E>) {
-      onError((this as ResultError<R, E>).failure);
+      onError((this as ResultError<R, E>).resultError);
     }
   }
 }

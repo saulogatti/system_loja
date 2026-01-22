@@ -203,7 +203,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     setState(() {
       _usuarioEditando = usuario;
       _nomeController.text = usuario.name;
-      _emailController.text = usuario.email;
+      _emailController.text = usuario.email ?? '';
       _senhaController.clear();
       _nivelPermissaoSelecionado = AuthorizationLevel.values.firstWhere(
         (level) => level.value == usuario.permission,
@@ -261,7 +261,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
         final user = _usuarioEditando!.copyWith(
           name: _nomeController.text.trim(),
           email: email,
-          passwordHash: senha,
+          passwordHash: senha.isNotEmpty ? senha : null,
 
           permission: _nivelPermissaoSelecionado.value,
         );

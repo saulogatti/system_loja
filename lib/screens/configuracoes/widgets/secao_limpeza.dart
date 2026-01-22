@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/screens/configuracoes/logs_analytics_screen.dart';
 
 /// Widget da seção de configurações de limpeza de dados
 class SecaoLimpeza extends StatelessWidget {
@@ -73,8 +74,8 @@ class SecaoLimpeza extends StatelessWidget {
             ListTile(
               title: const Text('Analisar logs do sistema'),
               subtitle: const Text('Abrir análise detalhada dos logs'),
-              leading: const Icon(Icons. analytics),
-              onTap: onOpenLogsAnalysis,
+              leading: const Icon(Icons.analytics),
+              onTap: () => onOpenLogsAnalysis(context),
             ),
             ListTile(
               title: const Text('Limpar logs antigos agora'),
@@ -97,6 +98,10 @@ class SecaoLimpeza extends StatelessWidget {
     );
   }
 
-  void onOpenLogsAnalysis() {
+  void onOpenLogsAnalysis(BuildContext context) {
+    Navigator.push<MaterialPageRoute>(
+      context,
+      MaterialPageRoute(builder: (context) => const LogsAnalyticsScreen()),
+    );
   }
 }
