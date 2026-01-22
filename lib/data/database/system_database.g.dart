@@ -325,37 +325,6 @@ class $LogsRecordsTable extends LogsRecords
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $LogsRecordsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _actionMeta = const VerificationMeta('action');
-  @override
-  late final GeneratedColumn<String> action = GeneratedColumn<String>(
-    'action',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant('LER'),
-  );
-  static const VerificationMeta _detailsMeta = const VerificationMeta(
-    'details',
-  );
-  @override
-  late final GeneratedColumn<String> details = GeneratedColumn<String>(
-    'details',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(''),
-  );
-  static const VerificationMeta _entityMeta = const VerificationMeta('entity');
-  @override
-  late final GeneratedColumn<String> entity = GeneratedColumn<String>(
-    'entity',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -369,43 +338,34 @@ class $LogsRecordsTable extends LogsRecords
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
-    'lastUpdatedDate',
-  );
   @override
-  late final GeneratedColumn<DateTime> lastUpdatedDate =
-      GeneratedColumn<DateTime>(
-        'last_updated_date',
+  late final GeneratedColumnWithTypeConverter<ActionType, int> actionType =
+      GeneratedColumn<int>(
+        'action_type',
         aliasedName,
         false,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-        defaultValue: currentDateAndTime,
-      );
-  static const VerificationMeta _registrationDateMeta = const VerificationMeta(
-    'registrationDate',
-  );
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<ActionType>($LogsRecordsTable.$converteractionType);
+  static const VerificationMeta _entityMeta = const VerificationMeta('entity');
   @override
-  late final GeneratedColumn<DateTime> registrationDate =
-      GeneratedColumn<DateTime>(
-        'registration_date',
-        aliasedName,
-        false,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-        defaultValue: currentDateAndTime,
-      );
-  static const VerificationMeta _timestampMeta = const VerificationMeta(
-    'timestamp',
-  );
-  @override
-  late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
-    'timestamp',
+  late final GeneratedColumn<String> entity = GeneratedColumn<String>(
+    'entity',
     aliasedName,
     false,
-    type: DriftSqlType.dateTime,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _entityIdMeta = const VerificationMeta(
+    'entityId',
+  );
+  @override
+  late final GeneratedColumn<int> entityId = GeneratedColumn<int>(
+    'entity_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultValue: currentDateAndTime,
   );
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
@@ -427,17 +387,68 @@ class $LogsRecordsTable extends LogsRecords
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _timestampMeta = const VerificationMeta(
+    'timestamp',
+  );
+  @override
+  late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
+    'timestamp',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _detailsMeta = const VerificationMeta(
+    'details',
+  );
+  @override
+  late final GeneratedColumn<String> details = GeneratedColumn<String>(
+    'details',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _registrationDateMeta = const VerificationMeta(
+    'registrationDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> registrationDate =
+      GeneratedColumn<DateTime>(
+        'registration_date',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+        defaultValue: currentDateAndTime,
+      );
+  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
+    'lastUpdatedDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastUpdatedDate =
+      GeneratedColumn<DateTime>(
+        'last_updated_date',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+        defaultValue: currentDateAndTime,
+      );
   @override
   List<GeneratedColumn> get $columns => [
-    action,
-    details,
-    entity,
     id,
-    lastUpdatedDate,
-    registrationDate,
-    timestamp,
+    actionType,
+    entity,
+    entityId,
     userId,
     userName,
+    timestamp,
+    details,
+    registrationDate,
+    lastUpdatedDate,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -451,17 +462,8 @@ class $LogsRecordsTable extends LogsRecords
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('action')) {
-      context.handle(
-        _actionMeta,
-        action.isAcceptableOrUnknown(data['action']!, _actionMeta),
-      );
-    }
-    if (data.containsKey('details')) {
-      context.handle(
-        _detailsMeta,
-        details.isAcceptableOrUnknown(data['details']!, _detailsMeta),
-      );
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('entity')) {
       context.handle(
@@ -471,31 +473,10 @@ class $LogsRecordsTable extends LogsRecords
     } else if (isInserting) {
       context.missing(_entityMeta);
     }
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('last_updated_date')) {
+    if (data.containsKey('entity_id')) {
       context.handle(
-        _lastUpdatedDateMeta,
-        lastUpdatedDate.isAcceptableOrUnknown(
-          data['last_updated_date']!,
-          _lastUpdatedDateMeta,
-        ),
-      );
-    }
-    if (data.containsKey('registration_date')) {
-      context.handle(
-        _registrationDateMeta,
-        registrationDate.isAcceptableOrUnknown(
-          data['registration_date']!,
-          _registrationDateMeta,
-        ),
-      );
-    }
-    if (data.containsKey('timestamp')) {
-      context.handle(
-        _timestampMeta,
-        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
+        _entityIdMeta,
+        entityId.isAcceptableOrUnknown(data['entity_id']!, _entityIdMeta),
       );
     }
     if (data.containsKey('user_id')) {
@@ -513,6 +494,36 @@ class $LogsRecordsTable extends LogsRecords
       );
     } else if (isInserting) {
       context.missing(_userNameMeta);
+    }
+    if (data.containsKey('timestamp')) {
+      context.handle(
+        _timestampMeta,
+        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
+      );
+    }
+    if (data.containsKey('details')) {
+      context.handle(
+        _detailsMeta,
+        details.isAcceptableOrUnknown(data['details']!, _detailsMeta),
+      );
+    }
+    if (data.containsKey('registration_date')) {
+      context.handle(
+        _registrationDateMeta,
+        registrationDate.isAcceptableOrUnknown(
+          data['registration_date']!,
+          _registrationDateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_updated_date')) {
+      context.handle(
+        _lastUpdatedDateMeta,
+        lastUpdatedDate.isAcceptableOrUnknown(
+          data['last_updated_date']!,
+          _lastUpdatedDateMeta,
+        ),
+      );
     }
     return context;
   }
@@ -555,10 +566,6 @@ class $LogsRecordsTable extends LogsRecords
         DriftSqlType.dateTime,
         data['${effectivePrefix}registration_date'],
       )!,
-      action: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}action'],
-      )!,
     );
   }
 
@@ -566,113 +573,117 @@ class $LogsRecordsTable extends LogsRecords
   $LogsRecordsTable createAlias(String alias) {
     return $LogsRecordsTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<ActionType, int, int> $converteractionType =
+      const EnumIndexConverter<ActionType>(ActionType.values);
 }
 
 class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
-  final Value<String> action;
-  final Value<String> details;
-  final Value<String> entity;
   final Value<int> id;
-  final Value<DateTime> lastUpdatedDate;
-  final Value<DateTime> registrationDate;
-  final Value<DateTime> timestamp;
+  final Value<ActionType> actionType;
+  final Value<String> entity;
+  final Value<int?> entityId;
   final Value<int> userId;
   final Value<String> userName;
+  final Value<DateTime> timestamp;
+  final Value<String> details;
+  final Value<DateTime> registrationDate;
+  final Value<DateTime> lastUpdatedDate;
   const LogsRecordsCompanion({
-    this.action = const Value.absent(),
-    this.details = const Value.absent(),
-    this.entity = const Value.absent(),
     this.id = const Value.absent(),
-    this.lastUpdatedDate = const Value.absent(),
-    this.registrationDate = const Value.absent(),
-    this.timestamp = const Value.absent(),
+    this.actionType = const Value.absent(),
+    this.entity = const Value.absent(),
+    this.entityId = const Value.absent(),
     this.userId = const Value.absent(),
     this.userName = const Value.absent(),
+    this.timestamp = const Value.absent(),
+    this.details = const Value.absent(),
+    this.registrationDate = const Value.absent(),
+    this.lastUpdatedDate = const Value.absent(),
   });
   LogsRecordsCompanion.insert({
-    this.action = const Value.absent(),
-    this.details = const Value.absent(),
-    required String entity,
     this.id = const Value.absent(),
-    this.lastUpdatedDate = const Value.absent(),
-    this.registrationDate = const Value.absent(),
-    this.timestamp = const Value.absent(),
+    required ActionType actionType,
+    required String entity,
+    this.entityId = const Value.absent(),
     required int userId,
     required String userName,
-  }) : entity = Value(entity),
+    this.timestamp = const Value.absent(),
+    this.details = const Value.absent(),
+    this.registrationDate = const Value.absent(),
+    this.lastUpdatedDate = const Value.absent(),
+  }) : actionType = Value(actionType),
+       entity = Value(entity),
        userId = Value(userId),
        userName = Value(userName);
   static Insertable<ActivityLog> custom({
-    Expression<String>? action,
-    Expression<String>? details,
-    Expression<String>? entity,
     Expression<int>? id,
-    Expression<DateTime>? lastUpdatedDate,
-    Expression<DateTime>? registrationDate,
-    Expression<DateTime>? timestamp,
+    Expression<int>? actionType,
+    Expression<String>? entity,
+    Expression<int>? entityId,
     Expression<int>? userId,
     Expression<String>? userName,
+    Expression<DateTime>? timestamp,
+    Expression<String>? details,
+    Expression<DateTime>? registrationDate,
+    Expression<DateTime>? lastUpdatedDate,
   }) {
     return RawValuesInsertable({
-      if (action != null) 'action': action,
-      if (details != null) 'details': details,
-      if (entity != null) 'entity': entity,
       if (id != null) 'id': id,
-      if (lastUpdatedDate != null) 'last_updated_date': lastUpdatedDate,
-      if (registrationDate != null) 'registration_date': registrationDate,
-      if (timestamp != null) 'timestamp': timestamp,
+      if (actionType != null) 'action_type': actionType,
+      if (entity != null) 'entity': entity,
+      if (entityId != null) 'entity_id': entityId,
       if (userId != null) 'user_id': userId,
       if (userName != null) 'user_name': userName,
+      if (timestamp != null) 'timestamp': timestamp,
+      if (details != null) 'details': details,
+      if (registrationDate != null) 'registration_date': registrationDate,
+      if (lastUpdatedDate != null) 'last_updated_date': lastUpdatedDate,
     });
   }
 
   LogsRecordsCompanion copyWith({
-    Value<String>? action,
-    Value<String>? details,
-    Value<String>? entity,
     Value<int>? id,
-    Value<DateTime>? lastUpdatedDate,
-    Value<DateTime>? registrationDate,
-    Value<DateTime>? timestamp,
+    Value<ActionType>? actionType,
+    Value<String>? entity,
+    Value<int?>? entityId,
     Value<int>? userId,
     Value<String>? userName,
+    Value<DateTime>? timestamp,
+    Value<String>? details,
+    Value<DateTime>? registrationDate,
+    Value<DateTime>? lastUpdatedDate,
   }) {
     return LogsRecordsCompanion(
-      action: action ?? this.action,
-      details: details ?? this.details,
-      entity: entity ?? this.entity,
       id: id ?? this.id,
-      lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
-      registrationDate: registrationDate ?? this.registrationDate,
-      timestamp: timestamp ?? this.timestamp,
+      actionType: actionType ?? this.actionType,
+      entity: entity ?? this.entity,
+      entityId: entityId ?? this.entityId,
       userId: userId ?? this.userId,
       userName: userName ?? this.userName,
+      timestamp: timestamp ?? this.timestamp,
+      details: details ?? this.details,
+      registrationDate: registrationDate ?? this.registrationDate,
+      lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (action.present) {
-      map['action'] = Variable<String>(action.value);
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
     }
-    if (details.present) {
-      map['details'] = Variable<String>(details.value);
+    if (actionType.present) {
+      map['action_type'] = Variable<int>(
+        $LogsRecordsTable.$converteractionType.toSql(actionType.value),
+      );
     }
     if (entity.present) {
       map['entity'] = Variable<String>(entity.value);
     }
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (lastUpdatedDate.present) {
-      map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate.value);
-    }
-    if (registrationDate.present) {
-      map['registration_date'] = Variable<DateTime>(registrationDate.value);
-    }
-    if (timestamp.present) {
-      map['timestamp'] = Variable<DateTime>(timestamp.value);
+    if (entityId.present) {
+      map['entity_id'] = Variable<int>(entityId.value);
     }
     if (userId.present) {
       map['user_id'] = Variable<int>(userId.value);
@@ -680,21 +691,34 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
     if (userName.present) {
       map['user_name'] = Variable<String>(userName.value);
     }
+    if (timestamp.present) {
+      map['timestamp'] = Variable<DateTime>(timestamp.value);
+    }
+    if (details.present) {
+      map['details'] = Variable<String>(details.value);
+    }
+    if (registrationDate.present) {
+      map['registration_date'] = Variable<DateTime>(registrationDate.value);
+    }
+    if (lastUpdatedDate.present) {
+      map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('LogsRecordsCompanion(')
-          ..write('action: $action, ')
-          ..write('details: $details, ')
-          ..write('entity: $entity, ')
           ..write('id: $id, ')
-          ..write('lastUpdatedDate: $lastUpdatedDate, ')
-          ..write('registrationDate: $registrationDate, ')
-          ..write('timestamp: $timestamp, ')
+          ..write('actionType: $actionType, ')
+          ..write('entity: $entity, ')
+          ..write('entityId: $entityId, ')
           ..write('userId: $userId, ')
-          ..write('userName: $userName')
+          ..write('userName: $userName, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('details: $details, ')
+          ..write('registrationDate: $registrationDate, ')
+          ..write('lastUpdatedDate: $lastUpdatedDate')
           ..write(')'))
         .toString();
   }
@@ -706,15 +730,15 @@ class _$ActivityLogInsertable implements Insertable<ActivityLog> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     return LogsRecordsCompanion(
-      action: Value(_object.action),
-      details: Value(_object.details),
-      entity: Value(_object.entity),
       id: Value(_object.id),
-      lastUpdatedDate: Value(_object.lastUpdatedDate),
-      registrationDate: Value(_object.registrationDate),
-      timestamp: Value(_object.timestamp),
+      actionType: Value(_object.actionType),
+      entity: Value(_object.entity),
       userId: Value(_object.userId),
       userName: Value(_object.userName),
+      timestamp: Value(_object.timestamp),
+      details: Value(_object.details),
+      registrationDate: Value(_object.registrationDate),
+      lastUpdatedDate: Value(_object.lastUpdatedDate),
     ).toColumns(false);
   }
 }
@@ -978,27 +1002,29 @@ typedef $$UsersRecordsTableProcessedTableManager =
     >;
 typedef $$LogsRecordsTableCreateCompanionBuilder =
     LogsRecordsCompanion Function({
-      Value<String> action,
-      Value<String> details,
-      required String entity,
       Value<int> id,
-      Value<DateTime> lastUpdatedDate,
-      Value<DateTime> registrationDate,
-      Value<DateTime> timestamp,
+      required ActionType actionType,
+      required String entity,
+      Value<int?> entityId,
       required int userId,
       required String userName,
+      Value<DateTime> timestamp,
+      Value<String> details,
+      Value<DateTime> registrationDate,
+      Value<DateTime> lastUpdatedDate,
     });
 typedef $$LogsRecordsTableUpdateCompanionBuilder =
     LogsRecordsCompanion Function({
-      Value<String> action,
-      Value<String> details,
-      Value<String> entity,
       Value<int> id,
-      Value<DateTime> lastUpdatedDate,
-      Value<DateTime> registrationDate,
-      Value<DateTime> timestamp,
+      Value<ActionType> actionType,
+      Value<String> entity,
+      Value<int?> entityId,
       Value<int> userId,
       Value<String> userName,
+      Value<DateTime> timestamp,
+      Value<String> details,
+      Value<DateTime> registrationDate,
+      Value<DateTime> lastUpdatedDate,
     });
 
 class $$LogsRecordsTableFilterComposer
@@ -1010,38 +1036,24 @@ class $$LogsRecordsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<String> get action => $composableBuilder(
-    column: $table.action,
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get details => $composableBuilder(
-    column: $table.details,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnWithTypeConverterFilters<ActionType, ActionType, int> get actionType =>
+      $composableBuilder(
+        column: $table.actionType,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   ColumnFilters<String> get entity => $composableBuilder(
     column: $table.entity,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get timestamp => $composableBuilder(
-    column: $table.timestamp,
+  ColumnFilters<int> get entityId => $composableBuilder(
+    column: $table.entityId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1052,6 +1064,26 @@ class $$LogsRecordsTableFilterComposer
 
   ColumnFilters<String> get userName => $composableBuilder(
     column: $table.userName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get timestamp => $composableBuilder(
+    column: $table.timestamp,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get details => $composableBuilder(
+    column: $table.details,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1065,13 +1097,13 @@ class $$LogsRecordsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<String> get action => $composableBuilder(
-    column: $table.action,
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get details => $composableBuilder(
-    column: $table.details,
+  ColumnOrderings<int> get actionType => $composableBuilder(
+    column: $table.actionType,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1080,23 +1112,8 @@ class $$LogsRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get timestamp => $composableBuilder(
-    column: $table.timestamp,
+  ColumnOrderings<int> get entityId => $composableBuilder(
+    column: $table.entityId,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1107,6 +1124,26 @@ class $$LogsRecordsTableOrderingComposer
 
   ColumnOrderings<String> get userName => $composableBuilder(
     column: $table.userName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get timestamp => $composableBuilder(
+    column: $table.timestamp,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get details => $composableBuilder(
+    column: $table.details,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -1120,36 +1157,42 @@ class $$LogsRecordsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<String> get action =>
-      $composableBuilder(column: $table.action, builder: (column) => column);
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get details =>
-      $composableBuilder(column: $table.details, builder: (column) => column);
+  GeneratedColumnWithTypeConverter<ActionType, int> get actionType =>
+      $composableBuilder(
+        column: $table.actionType,
+        builder: (column) => column,
+      );
 
   GeneratedColumn<String> get entity =>
       $composableBuilder(column: $table.entity, builder: (column) => column);
 
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<DateTime> get timestamp =>
-      $composableBuilder(column: $table.timestamp, builder: (column) => column);
+  GeneratedColumn<int> get entityId =>
+      $composableBuilder(column: $table.entityId, builder: (column) => column);
 
   GeneratedColumn<int> get userId =>
       $composableBuilder(column: $table.userId, builder: (column) => column);
 
   GeneratedColumn<String> get userName =>
       $composableBuilder(column: $table.userName, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get timestamp =>
+      $composableBuilder(column: $table.timestamp, builder: (column) => column);
+
+  GeneratedColumn<String> get details =>
+      $composableBuilder(column: $table.details, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
+    builder: (column) => column,
+  );
 }
 
 class $$LogsRecordsTableTableManager
@@ -1183,47 +1226,51 @@ class $$LogsRecordsTableTableManager
               $$LogsRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<String> action = const Value.absent(),
-                Value<String> details = const Value.absent(),
-                Value<String> entity = const Value.absent(),
                 Value<int> id = const Value.absent(),
-                Value<DateTime> lastUpdatedDate = const Value.absent(),
-                Value<DateTime> registrationDate = const Value.absent(),
-                Value<DateTime> timestamp = const Value.absent(),
+                Value<ActionType> actionType = const Value.absent(),
+                Value<String> entity = const Value.absent(),
+                Value<int?> entityId = const Value.absent(),
                 Value<int> userId = const Value.absent(),
                 Value<String> userName = const Value.absent(),
+                Value<DateTime> timestamp = const Value.absent(),
+                Value<String> details = const Value.absent(),
+                Value<DateTime> registrationDate = const Value.absent(),
+                Value<DateTime> lastUpdatedDate = const Value.absent(),
               }) => LogsRecordsCompanion(
-                action: action,
-                details: details,
-                entity: entity,
                 id: id,
-                lastUpdatedDate: lastUpdatedDate,
-                registrationDate: registrationDate,
-                timestamp: timestamp,
+                actionType: actionType,
+                entity: entity,
+                entityId: entityId,
                 userId: userId,
                 userName: userName,
+                timestamp: timestamp,
+                details: details,
+                registrationDate: registrationDate,
+                lastUpdatedDate: lastUpdatedDate,
               ),
           createCompanionCallback:
               ({
-                Value<String> action = const Value.absent(),
-                Value<String> details = const Value.absent(),
-                required String entity,
                 Value<int> id = const Value.absent(),
-                Value<DateTime> lastUpdatedDate = const Value.absent(),
-                Value<DateTime> registrationDate = const Value.absent(),
-                Value<DateTime> timestamp = const Value.absent(),
+                required ActionType actionType,
+                required String entity,
+                Value<int?> entityId = const Value.absent(),
                 required int userId,
                 required String userName,
+                Value<DateTime> timestamp = const Value.absent(),
+                Value<String> details = const Value.absent(),
+                Value<DateTime> registrationDate = const Value.absent(),
+                Value<DateTime> lastUpdatedDate = const Value.absent(),
               }) => LogsRecordsCompanion.insert(
-                action: action,
-                details: details,
-                entity: entity,
                 id: id,
-                lastUpdatedDate: lastUpdatedDate,
-                registrationDate: registrationDate,
-                timestamp: timestamp,
+                actionType: actionType,
+                entity: entity,
+                entityId: entityId,
                 userId: userId,
                 userName: userName,
+                timestamp: timestamp,
+                details: details,
+                registrationDate: registrationDate,
+                lastUpdatedDate: lastUpdatedDate,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
