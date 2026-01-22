@@ -151,7 +151,7 @@ void main() {
           .join(',');
       File('data/logs_atividade.json').writeAsStringSync('[$jsonContent]');
 
-      final sucesso = await manager.limparLogsAntigos();
+      final sucesso = await manager.clearOldLogs();
 
       expect(sucesso, isTrue);
 

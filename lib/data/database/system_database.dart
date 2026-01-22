@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:system_loja/core/models/log_atividade.dart';
+import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/data/database/dao/log_dao.dart';
 import 'package:system_loja/data/database/dao/users_dao.dart';

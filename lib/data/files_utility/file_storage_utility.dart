@@ -124,11 +124,11 @@ mixin FileStorageUtility {
   }
 
   @protected
-  Future<ExecutionResult<List<String>, String>> fetchAllDataFiles() async {
+  Future<ResultStatus<List<String>, String>> fetchAllDataFiles() async {
     try {
       final cacheDir = Directory(await _initializeDirectory());
       if (!await cacheDir.exists()) {
-        return ExecutionResult.success([]);
+        return ResultStatus.success([]);
       }
 
       final availableData = <String>[];
@@ -138,10 +138,10 @@ mixin FileStorageUtility {
           availableData.add(data);
         }
       }
-      return ExecutionResult.success(availableData);
+      return ResultStatus.success(availableData);
     } catch (e, stackTrace) {
       logError('Erro ao listar arquivos no diretório de cache: $e', stackTrace);
-      return ExecutionResult.error('Erro ao listar arquivos: $e');
+      return ResultStatus.error('Erro ao listar arquivos: $e');
     }
   }
 
@@ -163,7 +163,7 @@ mixin FileStorageUtility {
   /// final data = jsonDecode(content);
   /// ```
   @protected
-  Future<ExecutionResult<String, String>> fetchDataFromFile(
+  Future<ResultStatus<String, String>> fetchDataFromFile(
     String fileName,
   ) async {
     if (fileName.isEmpty || p.extension(fileName).isEmpty) {
@@ -174,15 +174,15 @@ mixin FileStorageUtility {
 
     final File file = await _mountFileSystem(fileName);
     if (!await file.exists()) {
-      return ExecutionResult.error('Arquivo $fileName não encontrado.');
+      return ResultStatus.error('Arquivo $fileName não encontrado.');
     }
     try {
       final String content = await file.readAsString();
 
-      return ExecutionResult.success(content);
+      return ResultStatus.success(content);
     } catch (e, stackTrace) {
       logError('Erro ao carregar arquivo JSON em $fileName: $e', stackTrace);
-      return ExecutionResult.error('Erro ao ler arquivo $fileName: $e');
+      return ResultStatus.error('Erro ao ler arquivo $fileName: $e');
     }
   }
 

@@ -347,7 +347,7 @@ extension UserToInsertable on User {
 }
 
 class $LogsRecordsTable extends LogsRecords
-    with TableInfo<$LogsRecordsTable, LogAtividade> {
+    with TableInfo<$LogsRecordsTable, ActivityLog> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -362,36 +362,22 @@ class $LogsRecordsTable extends LogsRecords
     requiredDuringInsert: false,
     defaultValue: const Constant('LER'),
   );
-  static const VerificationMeta _dataHoraMeta = const VerificationMeta(
-    'dataHora',
+  static const VerificationMeta _detailsMeta = const VerificationMeta(
+    'details',
   );
   @override
-  late final GeneratedColumn<DateTime> dataHora = GeneratedColumn<DateTime>(
-    'data_hora',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-    defaultValue: currentDateAndTime,
-  );
-  static const VerificationMeta _detalhesMeta = const VerificationMeta(
-    'detalhes',
-  );
-  @override
-  late final GeneratedColumn<String> detalhes = GeneratedColumn<String>(
-    'detalhes',
+  late final GeneratedColumn<String> details = GeneratedColumn<String>(
+    'details',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     defaultValue: const Constant(''),
   );
-  static const VerificationMeta _entidadeMeta = const VerificationMeta(
-    'entidade',
-  );
+  static const VerificationMeta _entityMeta = const VerificationMeta('entity');
   @override
-  late final GeneratedColumn<String> entidade = GeneratedColumn<String>(
-    'entidade',
+  late final GeneratedColumn<String> entity = GeneratedColumn<String>(
+    'entity',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -436,23 +422,33 @@ class $LogsRecordsTable extends LogsRecords
         requiredDuringInsert: false,
         defaultValue: currentDateAndTime,
       );
-  static const VerificationMeta _usuarioIdMeta = const VerificationMeta(
-    'usuarioId',
+  static const VerificationMeta _timestampMeta = const VerificationMeta(
+    'timestamp',
   );
   @override
-  late final GeneratedColumn<int> usuarioId = GeneratedColumn<int>(
-    'usuario_id',
+  late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
+    'timestamp',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
+    'user_id',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _usuarioNomeMeta = const VerificationMeta(
-    'usuarioNome',
+  static const VerificationMeta _userNameMeta = const VerificationMeta(
+    'userName',
   );
   @override
-  late final GeneratedColumn<String> usuarioNome = GeneratedColumn<String>(
-    'usuario_nome',
+  late final GeneratedColumn<String> userName = GeneratedColumn<String>(
+    'user_name',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -461,14 +457,14 @@ class $LogsRecordsTable extends LogsRecords
   @override
   List<GeneratedColumn> get $columns => [
     action,
-    dataHora,
-    detalhes,
-    entidade,
+    details,
+    entity,
     id,
     lastUpdatedDate,
     registrationDate,
-    usuarioId,
-    usuarioNome,
+    timestamp,
+    userId,
+    userName,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -477,7 +473,7 @@ class $LogsRecordsTable extends LogsRecords
   static const String $name = 'logs_records';
   @override
   VerificationContext validateIntegrity(
-    Insertable<LogAtividade> instance, {
+    Insertable<ActivityLog> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -488,25 +484,19 @@ class $LogsRecordsTable extends LogsRecords
         action.isAcceptableOrUnknown(data['action']!, _actionMeta),
       );
     }
-    if (data.containsKey('data_hora')) {
+    if (data.containsKey('details')) {
       context.handle(
-        _dataHoraMeta,
-        dataHora.isAcceptableOrUnknown(data['data_hora']!, _dataHoraMeta),
+        _detailsMeta,
+        details.isAcceptableOrUnknown(data['details']!, _detailsMeta),
       );
     }
-    if (data.containsKey('detalhes')) {
+    if (data.containsKey('entity')) {
       context.handle(
-        _detalhesMeta,
-        detalhes.isAcceptableOrUnknown(data['detalhes']!, _detalhesMeta),
-      );
-    }
-    if (data.containsKey('entidade')) {
-      context.handle(
-        _entidadeMeta,
-        entidade.isAcceptableOrUnknown(data['entidade']!, _entidadeMeta),
+        _entityMeta,
+        entity.isAcceptableOrUnknown(data['entity']!, _entityMeta),
       );
     } else if (isInserting) {
-      context.missing(_entidadeMeta);
+      context.missing(_entityMeta);
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
@@ -529,24 +519,27 @@ class $LogsRecordsTable extends LogsRecords
         ),
       );
     }
-    if (data.containsKey('usuario_id')) {
+    if (data.containsKey('timestamp')) {
       context.handle(
-        _usuarioIdMeta,
-        usuarioId.isAcceptableOrUnknown(data['usuario_id']!, _usuarioIdMeta),
+        _timestampMeta,
+        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
       );
-    } else if (isInserting) {
-      context.missing(_usuarioIdMeta);
     }
-    if (data.containsKey('usuario_nome')) {
+    if (data.containsKey('user_id')) {
       context.handle(
-        _usuarioNomeMeta,
-        usuarioNome.isAcceptableOrUnknown(
-          data['usuario_nome']!,
-          _usuarioNomeMeta,
-        ),
+        _userIdMeta,
+        userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta),
       );
     } else if (isInserting) {
-      context.missing(_usuarioNomeMeta);
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('user_name')) {
+      context.handle(
+        _userNameMeta,
+        userName.isAcceptableOrUnknown(data['user_name']!, _userNameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_userNameMeta);
     }
     return context;
   }
@@ -554,32 +547,32 @@ class $LogsRecordsTable extends LogsRecords
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  LogAtividade map(Map<String, dynamic> data, {String? tablePrefix}) {
+  ActivityLog map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return LogAtividade(
+    return ActivityLog(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      entidade: attachedDatabase.typeMapping.read(
+      entity: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}entidade'],
+        data['${effectivePrefix}entity'],
       )!,
-      usuarioId: attachedDatabase.typeMapping.read(
+      userId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}usuario_id'],
+        data['${effectivePrefix}user_id'],
       )!,
-      usuarioNome: attachedDatabase.typeMapping.read(
+      userName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}usuario_nome'],
+        data['${effectivePrefix}user_name'],
       )!,
-      dataHora: attachedDatabase.typeMapping.read(
+      timestamp: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
-        data['${effectivePrefix}data_hora'],
+        data['${effectivePrefix}timestamp'],
       )!,
-      detalhes: attachedDatabase.typeMapping.read(
+      details: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}detalhes'],
+        data['${effectivePrefix}details'],
       )!,
       lastUpdatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -602,85 +595,85 @@ class $LogsRecordsTable extends LogsRecords
   }
 }
 
-class LogsRecordsCompanion extends UpdateCompanion<LogAtividade> {
+class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
   final Value<String> action;
-  final Value<DateTime> dataHora;
-  final Value<String> detalhes;
-  final Value<String> entidade;
+  final Value<String> details;
+  final Value<String> entity;
   final Value<int> id;
   final Value<DateTime> lastUpdatedDate;
   final Value<DateTime> registrationDate;
-  final Value<int> usuarioId;
-  final Value<String> usuarioNome;
+  final Value<DateTime> timestamp;
+  final Value<int> userId;
+  final Value<String> userName;
   const LogsRecordsCompanion({
     this.action = const Value.absent(),
-    this.dataHora = const Value.absent(),
-    this.detalhes = const Value.absent(),
-    this.entidade = const Value.absent(),
+    this.details = const Value.absent(),
+    this.entity = const Value.absent(),
     this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
     this.registrationDate = const Value.absent(),
-    this.usuarioId = const Value.absent(),
-    this.usuarioNome = const Value.absent(),
+    this.timestamp = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.userName = const Value.absent(),
   });
   LogsRecordsCompanion.insert({
     this.action = const Value.absent(),
-    this.dataHora = const Value.absent(),
-    this.detalhes = const Value.absent(),
-    required String entidade,
+    this.details = const Value.absent(),
+    required String entity,
     this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
     this.registrationDate = const Value.absent(),
-    required int usuarioId,
-    required String usuarioNome,
-  }) : entidade = Value(entidade),
-       usuarioId = Value(usuarioId),
-       usuarioNome = Value(usuarioNome);
-  static Insertable<LogAtividade> custom({
+    this.timestamp = const Value.absent(),
+    required int userId,
+    required String userName,
+  }) : entity = Value(entity),
+       userId = Value(userId),
+       userName = Value(userName);
+  static Insertable<ActivityLog> custom({
     Expression<String>? action,
-    Expression<DateTime>? dataHora,
-    Expression<String>? detalhes,
-    Expression<String>? entidade,
+    Expression<String>? details,
+    Expression<String>? entity,
     Expression<int>? id,
     Expression<DateTime>? lastUpdatedDate,
     Expression<DateTime>? registrationDate,
-    Expression<int>? usuarioId,
-    Expression<String>? usuarioNome,
+    Expression<DateTime>? timestamp,
+    Expression<int>? userId,
+    Expression<String>? userName,
   }) {
     return RawValuesInsertable({
       if (action != null) 'action': action,
-      if (dataHora != null) 'data_hora': dataHora,
-      if (detalhes != null) 'detalhes': detalhes,
-      if (entidade != null) 'entidade': entidade,
+      if (details != null) 'details': details,
+      if (entity != null) 'entity': entity,
       if (id != null) 'id': id,
       if (lastUpdatedDate != null) 'last_updated_date': lastUpdatedDate,
       if (registrationDate != null) 'registration_date': registrationDate,
-      if (usuarioId != null) 'usuario_id': usuarioId,
-      if (usuarioNome != null) 'usuario_nome': usuarioNome,
+      if (timestamp != null) 'timestamp': timestamp,
+      if (userId != null) 'user_id': userId,
+      if (userName != null) 'user_name': userName,
     });
   }
 
   LogsRecordsCompanion copyWith({
     Value<String>? action,
-    Value<DateTime>? dataHora,
-    Value<String>? detalhes,
-    Value<String>? entidade,
+    Value<String>? details,
+    Value<String>? entity,
     Value<int>? id,
     Value<DateTime>? lastUpdatedDate,
     Value<DateTime>? registrationDate,
-    Value<int>? usuarioId,
-    Value<String>? usuarioNome,
+    Value<DateTime>? timestamp,
+    Value<int>? userId,
+    Value<String>? userName,
   }) {
     return LogsRecordsCompanion(
       action: action ?? this.action,
-      dataHora: dataHora ?? this.dataHora,
-      detalhes: detalhes ?? this.detalhes,
-      entidade: entidade ?? this.entidade,
+      details: details ?? this.details,
+      entity: entity ?? this.entity,
       id: id ?? this.id,
       lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
       registrationDate: registrationDate ?? this.registrationDate,
-      usuarioId: usuarioId ?? this.usuarioId,
-      usuarioNome: usuarioNome ?? this.usuarioNome,
+      timestamp: timestamp ?? this.timestamp,
+      userId: userId ?? this.userId,
+      userName: userName ?? this.userName,
     );
   }
 
@@ -690,14 +683,11 @@ class LogsRecordsCompanion extends UpdateCompanion<LogAtividade> {
     if (action.present) {
       map['action'] = Variable<String>(action.value);
     }
-    if (dataHora.present) {
-      map['data_hora'] = Variable<DateTime>(dataHora.value);
+    if (details.present) {
+      map['details'] = Variable<String>(details.value);
     }
-    if (detalhes.present) {
-      map['detalhes'] = Variable<String>(detalhes.value);
-    }
-    if (entidade.present) {
-      map['entidade'] = Variable<String>(entidade.value);
+    if (entity.present) {
+      map['entity'] = Variable<String>(entity.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
@@ -708,11 +698,14 @@ class LogsRecordsCompanion extends UpdateCompanion<LogAtividade> {
     if (registrationDate.present) {
       map['registration_date'] = Variable<DateTime>(registrationDate.value);
     }
-    if (usuarioId.present) {
-      map['usuario_id'] = Variable<int>(usuarioId.value);
+    if (timestamp.present) {
+      map['timestamp'] = Variable<DateTime>(timestamp.value);
     }
-    if (usuarioNome.present) {
-      map['usuario_nome'] = Variable<String>(usuarioNome.value);
+    if (userId.present) {
+      map['user_id'] = Variable<int>(userId.value);
+    }
+    if (userName.present) {
+      map['user_name'] = Variable<String>(userName.value);
     }
     return map;
   }
@@ -721,41 +714,41 @@ class LogsRecordsCompanion extends UpdateCompanion<LogAtividade> {
   String toString() {
     return (StringBuffer('LogsRecordsCompanion(')
           ..write('action: $action, ')
-          ..write('dataHora: $dataHora, ')
-          ..write('detalhes: $detalhes, ')
-          ..write('entidade: $entidade, ')
+          ..write('details: $details, ')
+          ..write('entity: $entity, ')
           ..write('id: $id, ')
           ..write('lastUpdatedDate: $lastUpdatedDate, ')
           ..write('registrationDate: $registrationDate, ')
-          ..write('usuarioId: $usuarioId, ')
-          ..write('usuarioNome: $usuarioNome')
+          ..write('timestamp: $timestamp, ')
+          ..write('userId: $userId, ')
+          ..write('userName: $userName')
           ..write(')'))
         .toString();
   }
 }
 
-class _$LogAtividadeInsertable implements Insertable<LogAtividade> {
-  LogAtividade _object;
-  _$LogAtividadeInsertable(this._object);
+class _$ActivityLogInsertable implements Insertable<ActivityLog> {
+  ActivityLog _object;
+  _$ActivityLogInsertable(this._object);
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     return LogsRecordsCompanion(
       action: Value(_object.action),
-      dataHora: Value(_object.dataHora),
-      detalhes: Value(_object.detalhes),
-      entidade: Value(_object.entidade),
+      details: Value(_object.details),
+      entity: Value(_object.entity),
       id: Value(_object.id),
       lastUpdatedDate: Value(_object.lastUpdatedDate),
       registrationDate: Value(_object.registrationDate),
-      usuarioId: Value(_object.usuarioId),
-      usuarioNome: Value(_object.usuarioNome),
+      timestamp: Value(_object.timestamp),
+      userId: Value(_object.userId),
+      userName: Value(_object.userName),
     ).toColumns(false);
   }
 }
 
-extension LogAtividadeToInsertable on LogAtividade {
-  _$LogAtividadeInsertable toInsertable() {
-    return _$LogAtividadeInsertable(this);
+extension ActivityLogToInsertable on ActivityLog {
+  _$ActivityLogInsertable toInsertable() {
+    return _$ActivityLogInsertable(this);
   }
 }
 
@@ -1013,26 +1006,26 @@ typedef $$UsersRecordsTableProcessedTableManager =
 typedef $$LogsRecordsTableCreateCompanionBuilder =
     LogsRecordsCompanion Function({
       Value<String> action,
-      Value<DateTime> dataHora,
-      Value<String> detalhes,
-      required String entidade,
+      Value<String> details,
+      required String entity,
       Value<int> id,
       Value<DateTime> lastUpdatedDate,
       Value<DateTime> registrationDate,
-      required int usuarioId,
-      required String usuarioNome,
+      Value<DateTime> timestamp,
+      required int userId,
+      required String userName,
     });
 typedef $$LogsRecordsTableUpdateCompanionBuilder =
     LogsRecordsCompanion Function({
       Value<String> action,
-      Value<DateTime> dataHora,
-      Value<String> detalhes,
-      Value<String> entidade,
+      Value<String> details,
+      Value<String> entity,
       Value<int> id,
       Value<DateTime> lastUpdatedDate,
       Value<DateTime> registrationDate,
-      Value<int> usuarioId,
-      Value<String> usuarioNome,
+      Value<DateTime> timestamp,
+      Value<int> userId,
+      Value<String> userName,
     });
 
 class $$LogsRecordsTableFilterComposer
@@ -1049,18 +1042,13 @@ class $$LogsRecordsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get dataHora => $composableBuilder(
-    column: $table.dataHora,
+  ColumnFilters<String> get details => $composableBuilder(
+    column: $table.details,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get detalhes => $composableBuilder(
-    column: $table.detalhes,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get entidade => $composableBuilder(
-    column: $table.entidade,
+  ColumnFilters<String> get entity => $composableBuilder(
+    column: $table.entity,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1079,13 +1067,18 @@ class $$LogsRecordsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get usuarioId => $composableBuilder(
-    column: $table.usuarioId,
+  ColumnFilters<DateTime> get timestamp => $composableBuilder(
+    column: $table.timestamp,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get usuarioNome => $composableBuilder(
-    column: $table.usuarioNome,
+  ColumnFilters<int> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get userName => $composableBuilder(
+    column: $table.userName,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1104,18 +1097,13 @@ class $$LogsRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get dataHora => $composableBuilder(
-    column: $table.dataHora,
+  ColumnOrderings<String> get details => $composableBuilder(
+    column: $table.details,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get detalhes => $composableBuilder(
-    column: $table.detalhes,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get entidade => $composableBuilder(
-    column: $table.entidade,
+  ColumnOrderings<String> get entity => $composableBuilder(
+    column: $table.entity,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -1134,13 +1122,18 @@ class $$LogsRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get usuarioId => $composableBuilder(
-    column: $table.usuarioId,
+  ColumnOrderings<DateTime> get timestamp => $composableBuilder(
+    column: $table.timestamp,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get usuarioNome => $composableBuilder(
-    column: $table.usuarioNome,
+  ColumnOrderings<int> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get userName => $composableBuilder(
+    column: $table.userName,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -1157,14 +1150,11 @@ class $$LogsRecordsTableAnnotationComposer
   GeneratedColumn<String> get action =>
       $composableBuilder(column: $table.action, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get dataHora =>
-      $composableBuilder(column: $table.dataHora, builder: (column) => column);
+  GeneratedColumn<String> get details =>
+      $composableBuilder(column: $table.details, builder: (column) => column);
 
-  GeneratedColumn<String> get detalhes =>
-      $composableBuilder(column: $table.detalhes, builder: (column) => column);
-
-  GeneratedColumn<String> get entidade =>
-      $composableBuilder(column: $table.entidade, builder: (column) => column);
+  GeneratedColumn<String> get entity =>
+      $composableBuilder(column: $table.entity, builder: (column) => column);
 
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
@@ -1179,13 +1169,14 @@ class $$LogsRecordsTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<int> get usuarioId =>
-      $composableBuilder(column: $table.usuarioId, builder: (column) => column);
+  GeneratedColumn<DateTime> get timestamp =>
+      $composableBuilder(column: $table.timestamp, builder: (column) => column);
 
-  GeneratedColumn<String> get usuarioNome => $composableBuilder(
-    column: $table.usuarioNome,
-    builder: (column) => column,
-  );
+  GeneratedColumn<int> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get userName =>
+      $composableBuilder(column: $table.userName, builder: (column) => column);
 }
 
 class $$LogsRecordsTableTableManager
@@ -1193,17 +1184,17 @@ class $$LogsRecordsTableTableManager
         RootTableManager<
           _$SystemDatabase,
           $LogsRecordsTable,
-          LogAtividade,
+          ActivityLog,
           $$LogsRecordsTableFilterComposer,
           $$LogsRecordsTableOrderingComposer,
           $$LogsRecordsTableAnnotationComposer,
           $$LogsRecordsTableCreateCompanionBuilder,
           $$LogsRecordsTableUpdateCompanionBuilder,
           (
-            LogAtividade,
-            BaseReferences<_$SystemDatabase, $LogsRecordsTable, LogAtividade>,
+            ActivityLog,
+            BaseReferences<_$SystemDatabase, $LogsRecordsTable, ActivityLog>,
           ),
-          LogAtividade,
+          ActivityLog,
           PrefetchHooks Function()
         > {
   $$LogsRecordsTableTableManager(_$SystemDatabase db, $LogsRecordsTable table)
@@ -1220,46 +1211,46 @@ class $$LogsRecordsTableTableManager
           updateCompanionCallback:
               ({
                 Value<String> action = const Value.absent(),
-                Value<DateTime> dataHora = const Value.absent(),
-                Value<String> detalhes = const Value.absent(),
-                Value<String> entidade = const Value.absent(),
+                Value<String> details = const Value.absent(),
+                Value<String> entity = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<DateTime> lastUpdatedDate = const Value.absent(),
                 Value<DateTime> registrationDate = const Value.absent(),
-                Value<int> usuarioId = const Value.absent(),
-                Value<String> usuarioNome = const Value.absent(),
+                Value<DateTime> timestamp = const Value.absent(),
+                Value<int> userId = const Value.absent(),
+                Value<String> userName = const Value.absent(),
               }) => LogsRecordsCompanion(
                 action: action,
-                dataHora: dataHora,
-                detalhes: detalhes,
-                entidade: entidade,
+                details: details,
+                entity: entity,
                 id: id,
                 lastUpdatedDate: lastUpdatedDate,
                 registrationDate: registrationDate,
-                usuarioId: usuarioId,
-                usuarioNome: usuarioNome,
+                timestamp: timestamp,
+                userId: userId,
+                userName: userName,
               ),
           createCompanionCallback:
               ({
                 Value<String> action = const Value.absent(),
-                Value<DateTime> dataHora = const Value.absent(),
-                Value<String> detalhes = const Value.absent(),
-                required String entidade,
+                Value<String> details = const Value.absent(),
+                required String entity,
                 Value<int> id = const Value.absent(),
                 Value<DateTime> lastUpdatedDate = const Value.absent(),
                 Value<DateTime> registrationDate = const Value.absent(),
-                required int usuarioId,
-                required String usuarioNome,
+                Value<DateTime> timestamp = const Value.absent(),
+                required int userId,
+                required String userName,
               }) => LogsRecordsCompanion.insert(
                 action: action,
-                dataHora: dataHora,
-                detalhes: detalhes,
-                entidade: entidade,
+                details: details,
+                entity: entity,
                 id: id,
                 lastUpdatedDate: lastUpdatedDate,
                 registrationDate: registrationDate,
-                usuarioId: usuarioId,
-                usuarioNome: usuarioNome,
+                timestamp: timestamp,
+                userId: userId,
+                userName: userName,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -1273,17 +1264,17 @@ typedef $$LogsRecordsTableProcessedTableManager =
     ProcessedTableManager<
       _$SystemDatabase,
       $LogsRecordsTable,
-      LogAtividade,
+      ActivityLog,
       $$LogsRecordsTableFilterComposer,
       $$LogsRecordsTableOrderingComposer,
       $$LogsRecordsTableAnnotationComposer,
       $$LogsRecordsTableCreateCompanionBuilder,
       $$LogsRecordsTableUpdateCompanionBuilder,
       (
-        LogAtividade,
-        BaseReferences<_$SystemDatabase, $LogsRecordsTable, LogAtividade>,
+        ActivityLog,
+        BaseReferences<_$SystemDatabase, $LogsRecordsTable, ActivityLog>,
       ),
-      LogAtividade,
+      ActivityLog,
       PrefetchHooks Function()
     >;
 

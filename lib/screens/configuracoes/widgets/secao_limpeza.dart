@@ -71,6 +71,12 @@ class SecaoLimpeza extends StatelessWidget {
                 trailing: Text('${config.diasManterLogs}'),
               ),
             ListTile(
+              title: const Text('Analisar logs do sistema'),
+              subtitle: const Text('Abrir análise detalhada dos logs'),
+              leading: const Icon(Icons. analytics),
+              onTap: onOpenLogsAnalysis,
+            ),
+            ListTile(
               title: const Text('Limpar logs antigos agora'),
               subtitle: const Text('Remover logs com base na configuração'),
               leading: const Icon(Icons.delete_sweep),
@@ -89,5 +95,8 @@ class SecaoLimpeza extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void onOpenLogsAnalysis() {
   }
 }

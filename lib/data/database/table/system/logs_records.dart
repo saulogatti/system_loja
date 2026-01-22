@@ -1,18 +1,18 @@
 import 'package:drift/drift.dart';
-import 'package:system_loja/core/models/log_atividade.dart';
+import 'package:system_loja/core/models/activity_log.dart';
 
-@UseRowClass(LogAtividade, generateInsertable: true)
+@UseRowClass(ActivityLog, generateInsertable: true)
 class LogsRecords extends Table {
   TextColumn get action => text().withDefault(const Constant('LER'))();
-  DateTimeColumn get dataHora =>
-      dateTime().named('data_hora').withDefault(currentDateAndTime)();
-  TextColumn get detalhes => text().withDefault(const Constant(''))();
-  TextColumn get entidade => text()();
+  TextColumn get details => text().withDefault(const Constant(''))();
+  TextColumn get entity => text()();
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get lastUpdatedDate =>
       dateTime().named('last_updated_date').withDefault(currentDateAndTime)();
   DateTimeColumn get registrationDate =>
       dateTime().named('registration_date').withDefault(currentDateAndTime)();
-  IntColumn get usuarioId => integer().named('usuario_id')();
-  TextColumn get usuarioNome => text().named('usuario_nome')();
+  DateTimeColumn get timestamp =>
+      dateTime().named('timestamp').withDefault(currentDateAndTime)();
+  IntColumn get userId => integer().named('user_id')();
+  TextColumn get userName => text().named('user_name')();
 }

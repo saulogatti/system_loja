@@ -45,14 +45,14 @@ class ConfigurationRepository
     await _carregarDados();
   }
 
-  Future<bool> limparLogsAntigos() async {
+  Future<bool> clearOldLogs() async {
     try {
       final int diasManterLogs = _configuracao.diasManterLogs;
       if (diasManterLogs > 0) {
         final DateTime dataLimite = DateTime.now().subtract(
           Duration(days: diasManterLogs),
         );
-        await AppInjection.instance.logRepository.limparLogsAntigos(dataLimite);
+        await AppInjection.instance.logRepository.clearOldLogs(dataLimite);
       }
       return true;
     } catch (e) {

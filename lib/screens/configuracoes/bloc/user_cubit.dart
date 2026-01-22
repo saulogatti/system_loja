@@ -28,8 +28,8 @@ class UserCubit extends Cubit<UsuarioState> {
         permission: nivelPermissao.value,
       );
 
-      final ExecutionResult<bool, String> executionResult =
-          await _userRepository.adicionarUsuario(usuario);
+      final ResultStatus<bool, String> executionResult = await _userRepository
+          .adicionarUsuario(usuario);
       executionResult.when(
         onSuccess: (sucess) {
           emit(UsuarioState.usuarioAdicionado(usuario, true));
@@ -47,14 +47,14 @@ class UserCubit extends Cubit<UsuarioState> {
 
   Future<void> atualizarUsuario({required User usuarioAtualizado}) async {
     try {
-      final ExecutionResult<bool, String> resultAdd = await _userRepository
+      final ResultStatus<bool, String> resultAdd = await _userRepository
           .atualizarUsuario(usuarioAtualizado);
       switch (resultAdd) {
-        case ExecutionSuccess(result: final sucesso):
+        case ResultSuccess(result: final sucesso):
           if (sucesso) {
             emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
           }
-        case ExecutionError(failure: final errorMessage):
+        case ResultError(failure: final errorMessage):
           emit(
             UsuarioState.loadFailure(
               errorMessage: 'Falha ao atualizar usuário: $errorMessage',

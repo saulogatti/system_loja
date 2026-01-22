@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:system_loja/core/models/log_atividade.dart';
+import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/data/database/table/system/logs_records.dart';
 
@@ -16,47 +16,47 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
 
   Future<bool> deleteLogsBefore(DateTime dataLimite) async {
     return await (delete(logsRecords)
-          ..where((tbl) => tbl.dataHora.isSmallerThanValue(dataLimite)))
+          ..where((tbl) => tbl.timestamp.isSmallerThanValue(dataLimite)))
         .go()
         .then((rowsAffected) => rowsAffected > 0);
   }
 
   // Obter todos os registros de log
-  Future<List<LogAtividade>> getAll() {
+  Future<List<ActivityLog>> getAll() {
     return (select(
       logsRecords,
-    )..orderBy([(t) => OrderingTerm.desc(t.dataHora)])).get();
+    )..orderBy([(t) => OrderingTerm.desc(t.timestamp)])).get();
   }
 
-  Future<List<LogAtividade>> getInDate(
+  Future<List<ActivityLog>> getInDate(
     DateTime dataInicio,
     DateTime dataFim,
   ) async {
-    return await (select(
-      logsRecords,
-    )..where((tbl) => tbl.dataHora.isBetweenValues(dataInicio, dataFim))).get();
+    return await (select(logsRecords)
+          ..where((tbl) => tbl.timestamp.isBetweenValues(dataInicio, dataFim)))
+        .get();
   }
 
-  Future<List<LogAtividade>> getWithAction(TipoAcao tipoAcao) async {
+  Future<List<ActivityLog>> getWithAction(ActionType tipoAcao) async {
     return await (select(
       logsRecords,
     )..where((tbl) => tbl.action.equals(tipoAcao.name))).get();
   }
 
-  Future<List<LogAtividade>> getWithFilter(String entidade) async {
+  Future<List<ActivityLog>> getWithFilter(String entity) async {
     return await (select(
       logsRecords,
-    )..where((tbl) => tbl.entidade.equals(entidade))).get();
+    )..where((tbl) => tbl.entity.equals(entity))).get();
   }
 
-  Future<List<LogAtividade>> getWithUserId(int usuarioId) async {
+  Future<List<ActivityLog>> getWithUserId(int userId) async {
     return await (select(
       logsRecords,
-    )..where((tbl) => tbl.usuarioId.equals(usuarioId))).get();
+    )..where((tbl) => tbl.userId.equals(userId))).get();
   }
 
   // Carregar um registro de log por ID
-  Future<LogAtividade?> load(int id) {
+  Future<ActivityLog?> load(int id) {
     return (select(
       logsRecords,
     )..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
@@ -68,7 +68,7 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
   }
 
   // Salvar um novo registro de log
-  Future<int> save(LogAtividade log) {
+  Future<int> save(ActivityLog log) {
     return into(logsRecords).insert(log.toInsertable());
   }
 }
