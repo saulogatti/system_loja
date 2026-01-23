@@ -1,4 +1,5 @@
 import 'package:system_loja/core/models/product.dart';
+import 'package:system_loja/core/services/code_generator_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
 import 'package:system_loja/screens/injection/app_injection.dart';
@@ -7,6 +8,9 @@ class ProductRepository {
   /// Mapa estático de locks por caminho de arquivo, para serializar I/O
   final ProductDao defaultDataStorage =
       AppInjection.instance.appDatabase.productDao; //
+  final CodeGeneratorService _codeGeneratorService =
+      AppInjection.instance.codeGeneratorService;
+      
   ProductRepository();
 
   /// Remove um produto do armazenamento.
@@ -74,5 +78,26 @@ class ProductRepository {
   Future<ResultStatus<bool, String>> updateProduct(Product produto) async {
     final result = await defaultDataStorage.updateProduct(produto);
     return ResultSuccess(result);
+  }
+
+  /// Gera um código único para um novo produto.
+  ///
+  /// Retorna um código no formato PRD-YYYYMMDD-NNNN que não existe no banco.
+  Future<String> generateProductCode() async {
+    return await _codeGeneratorService.generateProductCode();
+  }
+
+  /// Valida um código de produto fornecido pelo usuário.
+  ///
+  /// [code] Código a ser validado.
+  /// Retorna resultado da validação com mensagem descritiva.
+  Future<ResultStatus<bool, String>> validateProductCode(String code) async {
+    final validationResult = await _codeGeneratorService.validateProductCode(code);
+    
+    if (validationResult.isValid) {
+      return ResultSuccess(true);
+    } else {
+      return ResultError(validationResult.message);
+    }
   }
 }

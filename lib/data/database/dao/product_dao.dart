@@ -52,4 +52,23 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
       ),
     );
   }
+
+  /// Busca um produto pelo código.
+  ///
+  /// [code] Código do produto a ser buscado.
+  /// Retorna o produto encontrado ou null se não existir.
+  Future<Product?> getByCode(String code) {
+    return (select(
+      productsRecords,
+    )..where((t) => t.code.equals(code))).getSingleOrNull();
+  }
+
+  /// Verifica se um código de produto já existe no banco de dados.
+  ///
+  /// [code] Código a ser verificado.
+  /// Retorna true se o código já existe, false caso contrário.
+  Future<bool> codeExists(String code) async {
+    final product = await getByCode(code);
+    return product != null;
+  }
 }
