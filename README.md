@@ -315,6 +315,7 @@ Contribuições são bem-vindas! Por favor, leia o [Guia de Contribuição](CONT
 O projeto está configurado para trabalhar efetivamente com o GitHub Copilot Coding Agent. Consulte:
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Guia completo de contribuição
 - [.github/copilot-instructions.md](.github/copilot-instructions.md) - Instruções técnicas
+- [.github/agents/](.github/agents/) - Custom agents especializados (Flutter Developer, Test Specialist, Documentation Specialist)
 - [SETUP_MCP.md](SETUP_MCP.md) - Configuração de servidores MCP (futuro)
 
 ### Criando Issues
@@ -332,6 +333,7 @@ Inclua sempre **critérios de aceitação** claros para facilitar o trabalho do 
 ### Guias Principais
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guia de contribuição detalhado
 - **[.github/copilot-instructions.md](.github/copilot-instructions.md)** - Instruções para Copilot Agent
+- **[.github/agents/](.github/agents/)** - Custom agents (Flutter Developer, Test Specialist, Documentation Specialist)
 - **[.github/instructions/dartcode.instructions.md](.github/instructions/dartcode.instructions.md)** - Padrões de código Dart
 - **[SETUP_MCP.md](SETUP_MCP.md)** - Informações sobre servidores MCP
 
