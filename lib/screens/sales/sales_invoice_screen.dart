@@ -7,6 +7,7 @@ import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/input_formatters.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
+
 @RoutePage()
 class SalesInvoiceScreen extends StatefulWidget {
   final Map<int, Customer> customers;
@@ -56,6 +57,11 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
     });
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Cadastro de Nota Fiscal'),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        leading: AutoLeadingButton(),
+      ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(

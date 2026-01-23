@@ -21,20 +21,20 @@ class SalesView extends StatefulWidget {
 
 class _SalesViewState extends State<SalesView> {
   List<Product> _productList = [];
-  final SalesCubit _salesCubit = SalesCubit();
+  // REMOVIDO: final SalesCubit _salesCubit = SalesCubit();
 
   Map<int, Invoice> _mapToNotaFiscal = {};
 
   Map<int, Customer> _mapCustomers = {};
+
   @override
   Widget build(BuildContext context) {
+    // Usar o SalesCubit do contexto (Provider global)
+    final salesCubit = context.read<SalesCubit>();
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cadastro de Nota Fiscal'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
       body: BlocConsumer<SalesCubit, SalesState>(
-        bloc: _salesCubit,
+        // REMOVIDO: bloc: _salesCubit,
         listener: (context, state) {
           switch (state) {
             case SalesInitial():
@@ -81,7 +81,8 @@ class _SalesViewState extends State<SalesView> {
                   backgroundColor: Colors.green,
                 ),
               );
-              Navigator.pop(context, true);
+              // CORRIGIDO: Usar AutoRouter
+              context.router.maybePop(true);
               break;
             case SalesLoadingProducts():
               // Loading overlay é exibido através do builder
@@ -150,7 +151,7 @@ class _SalesViewState extends State<SalesView> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _adicionarNotaFiscal,
+        onPressed: () => _adicionarNotaFiscal(salesCubit),
         icon: const Icon(Icons.add),
         label: const Text('Nova Nota Fiscal'),
       ),
@@ -160,12 +161,16 @@ class _SalesViewState extends State<SalesView> {
   @override
   void initState() {
     super.initState();
-    _salesCubit.loadAllCustomers();
-    _salesCubit.loadSales();
-    _salesCubit.loadProducts();
+    // Usar o cubit do contexto após o primeiro frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final salesCubit = context.read<SalesCubit>();
+      salesCubit.loadAllCustomers();
+      salesCubit.loadSales();
+      salesCubit.loadProducts();
+    });
   }
 
-  Future<void> _adicionarNotaFiscal() async {
+  Future<void> _adicionarNotaFiscal(SalesCubit salesCubit) async {
     if (_mapCustomers.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -186,10 +191,10 @@ class _SalesViewState extends State<SalesView> {
       return;
     }
 
-    final result = await AutoRouter.of(context).push(
+    final result = await context.router.root.push(
       SalesInvoiceRoute(
         products: _productList,
-        salesCubit: _salesCubit,
+        salesCubit: salesCubit,
         customers: _mapCustomers,
       ),
     );
@@ -271,5 +276,3 @@ class _SalesViewState extends State<SalesView> {
     );
   }
 }
-
-// Dialog to select a product

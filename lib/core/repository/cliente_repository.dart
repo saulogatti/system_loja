@@ -3,7 +3,7 @@ import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/data/database/dao/cliente_dao.dart';
 
 class ClienteRepository {
-  LogRepository _logRepository = LogRepository();
+  final LogRepository _logRepository = LogRepository();
   final ClienteDao dao;
 
   ClienteRepository(this.dao);

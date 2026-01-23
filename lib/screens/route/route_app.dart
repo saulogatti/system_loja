@@ -27,7 +27,7 @@ class HostScreen extends StatelessWidget {
       transitionBuilder: (context, child, animation) {
         return FadeTransition(opacity: animation, child: child);
       },
- 
+
       bottomNavigationBuilder: (context, tabsRouter) {
         return BottomNavigationBar(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
@@ -88,10 +88,7 @@ class RouteApp extends RootStackRouter {
           title: (context, data) => 'Product Info',
         ),
         AutoRoute(page: SalesRoute.page, title: (context, data) => 'Sales'),
-        AutoRoute(
-          page: SalesInvoiceRoute.page,
-          title: (context, data) => 'Sales Invoice',
-        ),
+
         AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuario'),
         AutoRoute(
           page: ConfiguracoesRoute.page,
@@ -102,6 +99,10 @@ class RouteApp extends RootStackRouter {
           title: (context, data) => 'Customer Detail',
         ),
       ],
+    ),
+    AutoRoute(
+      page: SalesInvoiceRoute.page,
+      title: (context, data) => 'Sales Invoice',
     ),
   ];
 }
