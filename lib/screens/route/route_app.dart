@@ -8,14 +8,64 @@ class HostScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.topRoute.title(context)),
-
-        /// This will automatically display a back button if the nested router can pop
-        leading: AutoLeadingButton(),
-      ),
-      body: const AutoRouter(),
+    return AutoTabsScaffold(
+      appBarBuilder: (context, tabsRouter) {
+        return AppBar(
+          title: Text(tabsRouter.topRoute.title(context)),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          leading: AutoLeadingButton(),
+        );
+      },
+      routes: const [
+        HomeRoute(),
+        CustomerRoute(),
+        ProductInfoRoute(),
+        SalesRoute(),
+        UsuarioRoute(),
+        ConfiguracoesRoute(),
+      ],
+      transitionBuilder: (context, child, animation) {
+        return FadeTransition(opacity: animation, child: child);
+      },
+ 
+      bottomNavigationBuilder: (context, tabsRouter) {
+        return BottomNavigationBar(
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          // selectedItemColor: Colors.white,
+          elevation: 4,
+          useLegacyColorScheme: false,
+          currentIndex: tabsRouter.activeIndex,
+          onTap: (index) {
+            tabsRouter.setActiveIndex(index);
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Customer',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.info),
+              label: 'Product Info',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart),
+              label: 'Sales',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'Usuario',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Configuracoes',
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -28,26 +78,29 @@ class RouteApp extends RootStackRouter {
       page: HostRoute.page,
       initial: true,
       children: [
-        AutoRoute(
-          page: HomeRoute.page,
-          title: (context, data) => 'Home',
-          initial: true,
-        ),
+        AutoRoute(page: HomeRoute.page, title: (context, data) => 'Home'),
         AutoRoute(
           page: CustomerRoute.page,
-          title: (context, data) => 'Customer Detail',
+          title: (context, data) => 'Customer',
         ),
         AutoRoute(
           page: ProductInfoRoute.page,
           title: (context, data) => 'Product Info',
         ),
         AutoRoute(page: SalesRoute.page, title: (context, data) => 'Sales'),
+        AutoRoute(
+          page: SalesInvoiceRoute.page,
+          title: (context, data) => 'Sales Invoice',
+        ),
         AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuario'),
         AutoRoute(
           page: ConfiguracoesRoute.page,
           title: (context, data) => 'Configuracoes',
         ),
-        AutoRoute(page: CustomerDetailRoute.page),
+        AutoRoute(
+          page: CustomerDetailRoute.page,
+          title: (context, data) => 'Customer Detail',
+        ),
       ],
     ),
   ];

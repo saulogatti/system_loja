@@ -63,38 +63,45 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
             } else if (state is ProductStateLoaded) {
               produtos.addAll(state.produtos);
             }
-            return Scaffold(
-              body: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ProductForm(
-                            formKey: _formKey,
-                            nomeController: _nomeController,
-                            codigoController: _codigoController,
-                            precoController: _precoController,
-                            estoqueController: _estoqueController,
-                            descricaoController: _descricaoController,
-                            categoriaController: _categoriaController,
-                            onSubmit: _adicionarProduto,
-                            products: produtos,
-                          ),
-                          const SizedBox(height: 32),
-                          ProductList(
-                            products: produtos,
-                            onProductTap: (produto) =>
-                                _mostrarDetalhesProduto(produto, produtos),
-                          ),
-                        ],
-                      ),
+            return Column(
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      _tituloAppBar,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                   ),
-                ],
-              ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ProductForm(
+                          formKey: _formKey,
+                          nomeController: _nomeController,
+                          codigoController: _codigoController,
+                          precoController: _precoController,
+                          estoqueController: _estoqueController,
+                          descricaoController: _descricaoController,
+                          categoriaController: _categoriaController,
+                          onSubmit: _adicionarProduto,
+                          products: produtos,
+                        ),
+                        const SizedBox(height: 32),
+                        ProductList(
+                          products: produtos,
+                          onProductTap: (produto) =>
+                              _mostrarDetalhesProduto(produto, produtos),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             );
           },
         ),
