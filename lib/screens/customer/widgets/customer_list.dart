@@ -96,6 +96,7 @@ class _CustomerListState extends State<CustomerList> {
                       title: cliente.name,
                       subTitle: 'CPF: ${cliente.cpf}\n${cliente.email}',
                       onTap: () => widget.onCustomerTap(cliente),
+                      onDelete: () => _confirmarExclusao(cliente),
                     );
                   },
                 ),
@@ -103,6 +104,36 @@ class _CustomerListState extends State<CustomerList> {
           ),
         ),
       ],
+    );
+  }
+   void _confirmarExclusao(Customer customer) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar Exclusão'),
+        content: Text(
+          'Tem certeza que deseja excluir o cliente "${customer.name}"?\n\nEsta ação não pode ser desfeita.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              context.read<CustomerBloc>().add(
+                CustomerBlocEvent.deleteCustomer(id: customer.id),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            child: const Text('Deletar'),
+          ),
+        ],
+      ),
     );
   }
 }

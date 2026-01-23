@@ -1,23 +1,23 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/screens/route/route_app.gr.dart';
 
 import '../../core/models/customer.dart';
 import 'bloc/customer_bloc.dart';
-import 'customer_detail_screen.dart';
 import 'widgets/customer_form.dart';
 import 'widgets/customer_list.dart';
 import 'widgets/customer_search_section.dart';
 
 @RoutePage()
-class CustomerDetailView extends StatefulWidget {
-  const CustomerDetailView({super.key});
+class CustomerView extends StatefulWidget {
+  const CustomerView({super.key});
 
   @override
-  State<CustomerDetailView> createState() => _CustomerDetailViewState();
+  State<CustomerView> createState() => _CustomerViewState();
 }
 
-class _CustomerDetailViewState extends State<CustomerDetailView> {
+class _CustomerViewState extends State<CustomerView> {
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _cpfController = TextEditingController();
@@ -63,48 +63,42 @@ class _CustomerDetailViewState extends State<CustomerDetailView> {
           },
         );
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Cadastro de Cliente'),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Formulário de cadastro
-                    CustomerForm(
-                      formKey: _formKey,
-                      nomeController: _nomeController,
-                      cpfController: _cpfController,
-                      emailController: _emailController,
-                      telefoneController: _telefoneController,
-                      enderecoController: _enderecoController,
-                      onSubmit: _adicionarCliente,
-                    ),
-                    const SizedBox(height: 32),
-                    const Divider(),
-                    const SizedBox(height: 32),
-                    // Seção de busca por CPF
-                    CustomerSearchSection(
-                      searchCpfController: _searchCpfController,
-                      onSearch: _buscarClientePorCpf,
-                    ),
-                    const SizedBox(height: 32),
-                    const Divider(),
-                    const SizedBox(height: 32),
-                    // Lista de clientes
-                    CustomerList(onCustomerTap: _mostrarDetalhesCliente),
-                  ],
-                ),
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Formulário de cadastro
+                  CustomerForm(
+                    formKey: _formKey,
+                    nomeController: _nomeController,
+                    cpfController: _cpfController,
+                    emailController: _emailController,
+                    telefoneController: _telefoneController,
+                    enderecoController: _enderecoController,
+                    onSubmit: _adicionarCliente,
+                  ),
+                  const SizedBox(height: 32),
+                  const Divider(),
+                  const SizedBox(height: 32),
+                  // Seção de busca por CPF
+                  CustomerSearchSection(
+                    searchCpfController: _searchCpfController,
+                    onSearch: _buscarClientePorCpf,
+                  ),
+                  const SizedBox(height: 32),
+                  const Divider(),
+                  const SizedBox(height: 32),
+                  // Lista de clientes
+                  CustomerList(onCustomerTap: _mostrarDetalhesCliente),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -169,11 +163,6 @@ class _CustomerDetailViewState extends State<CustomerDetailView> {
     _searchCpfController.clear();
 
     // Navega para a tela de detalhes do cliente
-    Navigator.push(
-      context,
-      MaterialPageRoute<void>(
-        builder: (context) => CustomerDetailScreen(customer: customer),
-      ),
-    );
+    AutoRouter.of(context).push(CustomerDetailRoute(customer: customer));
   }
 }

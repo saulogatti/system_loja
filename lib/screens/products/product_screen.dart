@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/product.dart';
@@ -11,14 +12,15 @@ import 'package:system_loja/screens/products/widgets/product_list.dart';
 ///
 /// Permite adicionar novos produtos, visualizar a lista de produtos
 /// cadastrados e ver detalhes de cada produto.
-class ProductViewScreen extends StatefulWidget {
-  const ProductViewScreen({super.key});
+@RoutePage()
+class ProductInfoScreen extends StatefulWidget {
+  const ProductInfoScreen({super.key});
 
   @override
-  State<ProductViewScreen> createState() => _ProductViewScreenState();
+  State<ProductInfoScreen> createState() => _ProductInfoScreenState();
 }
 
-class _ProductViewScreenState extends State<ProductViewScreen> {
+class _ProductInfoScreenState extends State<ProductInfoScreen> {
   // Constantes
   static const String _tituloAppBar = 'Cadastro de Produto';
   static const String _mensagemSucesso = 'cadastrado com sucesso!';
@@ -45,7 +47,6 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
           } else if (state is ProductStateInsertSuccess) {
             _mostrarSucesso('Produto $_mensagemSucesso');
             _limparFormulario();
-
           } else if (state is ProductStateError) {
             _mostrarErro(state.message);
           }
@@ -63,10 +64,6 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
               produtos.addAll(state.produtos);
             }
             return Scaffold(
-              appBar: AppBar(
-                title: const Text(_tituloAppBar),
-                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-              ),
               body: Column(
                 children: [
                   Expanded(
@@ -131,24 +128,21 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
       return;
     }
 
-   
-      // Converte valores já validados pelos validators
-      // Os validators garantem que esses valores são parseáveis
-      final preco = double.parse(_precoController.text.trim());
-      final codigo = _codigoController.text.trim();
-      final estoque = int.parse(_estoqueController.text.trim());
-      final nome = _nomeController.text.trim();
+    // Converte valores já validados pelos validators
+    // Os validators garantem que esses valores são parseáveis
+    final preco = double.parse(_precoController.text.trim());
+    final codigo = _codigoController.text.trim();
+    final estoque = int.parse(_estoqueController.text.trim());
+    final nome = _nomeController.text.trim();
 
-      _produtoCubit.adicionarProduto(
-        nome: nome,
-        codigo: codigo,
-        preco: preco,
-        estoque: estoque,
-        descricao: _descricaoController.text.trim(),
-        categoria: _categoriaController.text.trim(),
-      );
-   
-   
+    _produtoCubit.adicionarProduto(
+      nome: nome,
+      codigo: codigo,
+      preco: preco,
+      estoque: estoque,
+      descricao: _descricaoController.text.trim(),
+      categoria: _categoriaController.text.trim(),
+    );
   }
 
   /// Limpa todos os campos do formulário.

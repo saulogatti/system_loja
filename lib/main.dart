@@ -8,8 +8,6 @@ import 'package:system_loja/screens/customer/bloc/customer_bloc.dart';
 import 'package:system_loja/screens/injection/app_injection.dart';
 import 'package:system_loja/screens/sales/sales_cubit.dart';
 
-import 'screens/home/home_screen.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppInjection.instance.initializeDependencies();
@@ -35,13 +33,13 @@ class SystemLojaApp extends StatelessWidget {
         valueListenable:
             AppInjection.instance.settingsService.currentThemeNotifier,
         builder: (context, value, child) {
-          return MaterialApp(
+          return MaterialApp.router(
             title: 'Sistema de Gerenciamento de Loja',
             theme: value,
             themeMode: AppInjection.instance.settingsService.temaEscuro
                 ? ThemeMode.dark
                 : ThemeMode.light,
-            home: const HomeScreen(),
+            routerConfig: AppInjection.instance.routeApp.config(),
             debugShowCheckedModeBanner: kDebugMode,
           );
         },

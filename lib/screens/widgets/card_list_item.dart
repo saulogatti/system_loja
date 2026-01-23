@@ -8,13 +8,14 @@ class CardListItem extends StatelessWidget {
   final String subTitle;
 
   final GestureTapCallback onTap;
-
+  final GestureTapCallback? onDelete;
   const CardListItem({
     super.key,
     required this.colorAvatar,
     required this.title,
     required this.subTitle,
     required this.onTap,
+    this.onDelete,
   });
 
   @override
@@ -38,7 +39,18 @@ class CardListItem extends StatelessWidget {
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subTitle),
         isThreeLine: true,
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        trailing: onDelete != null
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: onDelete,
+                  ),
+                  const Icon(Icons.arrow_forward_ios, size: 16),
+                ],
+              )
+            : null,
         onTap: onTap,
       ),
     );

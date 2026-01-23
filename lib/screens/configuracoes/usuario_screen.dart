@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/repository/system/user_repository.dart';
@@ -20,6 +21,8 @@ import '../../core/models/user.dart';
 /// - UsuarioListItem: item individual da lista
 /// - UsuarioDetailsDialog: dialog com detalhes do usuário
 /// - UsuarioDeleteConfirmDialog: dialog de confirmação de exclusão
+///
+@RoutePage()
 class UsuarioScreen extends StatefulWidget {
   const UsuarioScreen({super.key});
 
@@ -43,10 +46,6 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gestão de Usuários'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
       body: BlocListener<UserCubit, UsuarioState>(
         bloc: _bloc,
         listener: (context, state) {

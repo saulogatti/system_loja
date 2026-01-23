@@ -356,17 +356,6 @@ class $LogsRecordsTable extends LogsRecords
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _entityIdMeta = const VerificationMeta(
-    'entityId',
-  );
-  @override
-  late final GeneratedColumn<int> entityId = GeneratedColumn<int>(
-    'entity_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-  );
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
@@ -442,7 +431,6 @@ class $LogsRecordsTable extends LogsRecords
     id,
     actionType,
     entity,
-    entityId,
     userId,
     userName,
     timestamp,
@@ -472,12 +460,6 @@ class $LogsRecordsTable extends LogsRecords
       );
     } else if (isInserting) {
       context.missing(_entityMeta);
-    }
-    if (data.containsKey('entity_id')) {
-      context.handle(
-        _entityIdMeta,
-        entityId.isAcceptableOrUnknown(data['entity_id']!, _entityIdMeta),
-      );
     }
     if (data.containsKey('user_id')) {
       context.handle(
@@ -582,7 +564,6 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
   final Value<int> id;
   final Value<ActionType> actionType;
   final Value<String> entity;
-  final Value<int?> entityId;
   final Value<int> userId;
   final Value<String> userName;
   final Value<DateTime> timestamp;
@@ -593,7 +574,6 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
     this.id = const Value.absent(),
     this.actionType = const Value.absent(),
     this.entity = const Value.absent(),
-    this.entityId = const Value.absent(),
     this.userId = const Value.absent(),
     this.userName = const Value.absent(),
     this.timestamp = const Value.absent(),
@@ -605,7 +585,6 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
     this.id = const Value.absent(),
     required ActionType actionType,
     required String entity,
-    this.entityId = const Value.absent(),
     required int userId,
     required String userName,
     this.timestamp = const Value.absent(),
@@ -620,7 +599,6 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
     Expression<int>? id,
     Expression<int>? actionType,
     Expression<String>? entity,
-    Expression<int>? entityId,
     Expression<int>? userId,
     Expression<String>? userName,
     Expression<DateTime>? timestamp,
@@ -632,7 +610,6 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
       if (id != null) 'id': id,
       if (actionType != null) 'action_type': actionType,
       if (entity != null) 'entity': entity,
-      if (entityId != null) 'entity_id': entityId,
       if (userId != null) 'user_id': userId,
       if (userName != null) 'user_name': userName,
       if (timestamp != null) 'timestamp': timestamp,
@@ -646,7 +623,6 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
     Value<int>? id,
     Value<ActionType>? actionType,
     Value<String>? entity,
-    Value<int?>? entityId,
     Value<int>? userId,
     Value<String>? userName,
     Value<DateTime>? timestamp,
@@ -658,7 +634,6 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
       id: id ?? this.id,
       actionType: actionType ?? this.actionType,
       entity: entity ?? this.entity,
-      entityId: entityId ?? this.entityId,
       userId: userId ?? this.userId,
       userName: userName ?? this.userName,
       timestamp: timestamp ?? this.timestamp,
@@ -681,9 +656,6 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
     }
     if (entity.present) {
       map['entity'] = Variable<String>(entity.value);
-    }
-    if (entityId.present) {
-      map['entity_id'] = Variable<int>(entityId.value);
     }
     if (userId.present) {
       map['user_id'] = Variable<int>(userId.value);
@@ -712,7 +684,6 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
           ..write('id: $id, ')
           ..write('actionType: $actionType, ')
           ..write('entity: $entity, ')
-          ..write('entityId: $entityId, ')
           ..write('userId: $userId, ')
           ..write('userName: $userName, ')
           ..write('timestamp: $timestamp, ')
@@ -1005,7 +976,6 @@ typedef $$LogsRecordsTableCreateCompanionBuilder =
       Value<int> id,
       required ActionType actionType,
       required String entity,
-      Value<int?> entityId,
       required int userId,
       required String userName,
       Value<DateTime> timestamp,
@@ -1018,7 +988,6 @@ typedef $$LogsRecordsTableUpdateCompanionBuilder =
       Value<int> id,
       Value<ActionType> actionType,
       Value<String> entity,
-      Value<int?> entityId,
       Value<int> userId,
       Value<String> userName,
       Value<DateTime> timestamp,
@@ -1049,11 +1018,6 @@ class $$LogsRecordsTableFilterComposer
 
   ColumnFilters<String> get entity => $composableBuilder(
     column: $table.entity,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get entityId => $composableBuilder(
-    column: $table.entityId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1112,11 +1076,6 @@ class $$LogsRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get entityId => $composableBuilder(
-    column: $table.entityId,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<int> get userId => $composableBuilder(
     column: $table.userId,
     builder: (column) => ColumnOrderings(column),
@@ -1168,9 +1127,6 @@ class $$LogsRecordsTableAnnotationComposer
 
   GeneratedColumn<String> get entity =>
       $composableBuilder(column: $table.entity, builder: (column) => column);
-
-  GeneratedColumn<int> get entityId =>
-      $composableBuilder(column: $table.entityId, builder: (column) => column);
 
   GeneratedColumn<int> get userId =>
       $composableBuilder(column: $table.userId, builder: (column) => column);
@@ -1229,7 +1185,6 @@ class $$LogsRecordsTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<ActionType> actionType = const Value.absent(),
                 Value<String> entity = const Value.absent(),
-                Value<int?> entityId = const Value.absent(),
                 Value<int> userId = const Value.absent(),
                 Value<String> userName = const Value.absent(),
                 Value<DateTime> timestamp = const Value.absent(),
@@ -1240,7 +1195,6 @@ class $$LogsRecordsTableTableManager
                 id: id,
                 actionType: actionType,
                 entity: entity,
-                entityId: entityId,
                 userId: userId,
                 userName: userName,
                 timestamp: timestamp,
@@ -1253,7 +1207,6 @@ class $$LogsRecordsTableTableManager
                 Value<int> id = const Value.absent(),
                 required ActionType actionType,
                 required String entity,
-                Value<int?> entityId = const Value.absent(),
                 required int userId,
                 required String userName,
                 Value<DateTime> timestamp = const Value.absent(),
@@ -1264,7 +1217,6 @@ class $$LogsRecordsTableTableManager
                 id: id,
                 actionType: actionType,
                 entity: entity,
-                entityId: entityId,
                 userId: userId,
                 userName: userName,
                 timestamp: timestamp,

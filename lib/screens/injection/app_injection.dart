@@ -6,6 +6,7 @@ import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/dao/cliente_dao.dart';
 import 'package:system_loja/data/database/system_database.dart';
+import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
 class AppInjection {
@@ -28,6 +29,7 @@ class AppInjection {
   late final SalesRepository salesRepository = SalesRepository(
     invoiceDao: appDatabase.invoiceDao,
   );
+  late final RouteApp routeApp = RouteApp();
 
   AppInjection._internal();
   Future<void> initializeDependencies() async {

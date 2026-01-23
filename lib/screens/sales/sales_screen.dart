@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
@@ -11,22 +12,26 @@ import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
 import '../../core/models/invoice.dart';
-class _AddSaleTemp {
-  final List<_ProductSelection> product;
- 
-  _AddSaleTemp({required this.product,  });
-}
-class _ProductSelection {
-  final Product product;
-  final int quantity;
 
-  _ProductSelection({required this.product, required this.quantity});
-}
+@RoutePage()
 class SalesView extends StatefulWidget {
   const SalesView({super.key});
 
   @override
   State<SalesView> createState() => _SalesViewState();
+}
+
+class _AddSaleTemp {
+  final List<_ProductSelection> product;
+
+  _AddSaleTemp({required this.product});
+}
+
+class _ProductSelection {
+  final Product product;
+  final int quantity;
+
+  _ProductSelection({required this.product, required this.quantity});
 }
 
 // Form screen for creating a new nota fiscal
@@ -50,24 +55,20 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
   final _numeroNotaController = TextEditingController();
   final _formaPagamentoController = TextEditingController();
   Customer? _clienteSelecionado;
-  final  _AddSaleTemp _itensSelecionados = _AddSaleTemp(product: []);
+  final _AddSaleTemp _itensSelecionados = _AddSaleTemp(product: []);
 
   @override
   Widget build(BuildContext context) {
-    final valorTotal = _itensSelecionados.product.fold<double>(
-      0.0,
-      (previousValue, item) {
-        final productItem = item.product;
-        final quantidade = item.quantity;
-        return previousValue + (productItem.price * quantidade);
-      },
-    );
+    final valorTotal = _itensSelecionados.product.fold<double>(0.0, (
+      previousValue,
+      item,
+    ) {
+      final productItem = item.product;
+      final quantidade = item.quantity;
+      return previousValue + (productItem.price * quantidade);
+    });
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nova Nota Fiscal'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -255,7 +256,9 @@ class _SalesInvoiceScreenState extends State<_SalesInvoiceScreen> {
         }
 
         setState(() {
-          _itensSelecionados.product.add(_ProductSelection(product: product, quantity: quantidade));
+          _itensSelecionados.product.add(
+            _ProductSelection(product: product, quantity: quantidade),
+          );
         });
       }
     }

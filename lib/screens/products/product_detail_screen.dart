@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:system_loja/screens/products/widgets/product_category.dart';
 /// Permite visualizar informações completas do produto e realizar operações como:
 /// - Editar dados do produto
 /// - Deletar produto
+@RoutePage()
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
   final List<Product> productList;
@@ -69,8 +71,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Detalhes do Produto'),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           actions: [
             if (!_isEditing)
               IconButton(

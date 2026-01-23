@@ -1,10 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:system_loja/screens/configuracoes/configuracoes_screen.dart';
-import 'package:system_loja/screens/configuracoes/usuario_screen.dart';
-
-import '../customer/customer_view.dart';
-import '../products/product_screen.dart';
-import '../sales/sales_screen.dart';
+import 'package:system_loja/screens/route/route_app.gr.dart';
 
 /// Tela principal do sistema de gerenciamento de loja.
 ///
@@ -13,6 +9,7 @@ import '../sales/sales_screen.dart';
 /// - Cadastro de Produto
 /// - Cadastro de Nota Fiscal
 /// - Gestão de Usuários
+@RoutePage()
 class HomeScreen extends StatelessWidget {
   /// Cria uma instância de [HomeScreen].
   const HomeScreen({super.key});
@@ -25,49 +22,38 @@ class HomeScreen extends StatelessWidget {
         title: 'Cadastro de Cliente',
         icon: Icons.person,
         color: Colors.blue,
-        onTap: () => _navigateToScreen(context, const CustomerDetailView()),
+        onTap: () => _navigateToScreen(context, const CustomerRoute()),
       ),
       _buildMenuCard(
         context,
         title: 'Cadastro de Produto',
         icon: Icons.inventory,
         color: Colors.green,
-        onTap: () => _navigateToScreen(context, const ProductViewScreen()),
+        onTap: () => _navigateToScreen(context, const ProductInfoRoute()),
       ),
       _buildMenuCard(
         context,
         title: 'Cadastro de Nota Fiscal',
         icon: Icons.receipt_long,
         color: Colors.orange,
-        onTap: () => _navigateToScreen(context, const SalesView()),
+        onTap: () => _navigateToScreen(context, const SalesRoute()),
       ),
       _buildMenuCard(
         context,
         title: 'Gestão de Usuários',
         icon: Icons.people,
         color: Colors.purple,
-        onTap: () => _navigateToScreen(context, const UsuarioScreen()),
+        onTap: () => _navigateToScreen(context, const UsuarioRoute()),
       ),
       _buildMenuCard(
         context,
         title: 'Configurações do Sistema',
         icon: Icons.settings,
         color: Colors.teal,
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ConfiguracoesScreen(),
-            ),
-          );
-        },
+        onTap: () => _navigateToScreen(context, const ConfiguracoesRoute()),
       ),
     ];
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sistema de Gerenciamento de Loja'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -179,10 +165,7 @@ class HomeScreen extends StatelessWidget {
   /// Navega para a tela especificada.
   ///
   /// Encapsula a lógica de navegação para reduzir duplicação de código.
-  void _navigateToScreen(BuildContext context, Widget screen) {
-    Navigator.push(
-      context,
-      MaterialPageRoute<void>(builder: (context) => screen),
-    );
+  void _navigateToScreen(BuildContext context, PageRouteInfo screen) {
+    AutoRouter.of(context).push(screen);
   }
 }

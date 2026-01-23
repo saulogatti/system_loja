@@ -7,7 +7,6 @@ class LogsRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get actionType => intEnum<ActionType>()();
   TextColumn get entity => text()();
-  IntColumn get entityId => integer().named('entity_id').nullable()();
   IntColumn get userId => integer().named('user_id')();
   TextColumn get userName => text().named('user_name')();
   DateTimeColumn get timestamp =>

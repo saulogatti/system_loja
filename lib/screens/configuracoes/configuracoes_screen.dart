@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
@@ -17,6 +18,7 @@ import 'widgets/secao_tema.dart';
 /// Permite aos administradores ajustar preferências de notificação,
 /// temas visuais, backup, limpeza de dados, segurança e tipo de banco.
 /// Utiliza BLoC para gerenciamento de estado.
+@RoutePage()
 class ConfiguracoesScreen extends StatelessWidget {
   const ConfiguracoesScreen({super.key});
 
@@ -37,8 +39,6 @@ class _ConfiguracoesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Configurações do Sistema'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
             icon: const Icon(Icons.restore),
