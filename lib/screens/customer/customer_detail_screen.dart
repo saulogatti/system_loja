@@ -31,7 +31,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   late final TextEditingController _telefoneController;
   late final TextEditingController _enderecoController;
   final _formKey = GlobalKey<FormState>();
- 
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +45,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   backgroundColor: Colors.green,
                 ),
               );
-       
             } else if (stateType == EnumStateCustomerLoaded.deleteCustomer) {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
@@ -64,34 +62,40 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           },
         );
       },
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CustomerAvatar(name: widget.customer.name),
-              const SizedBox(height: 24),
-              CustomerInfoForm(
-                isEditing: true,
-                nomeController: _nomeController,
-                cpfController: _cpfController,
-                emailController: _emailController,
-                telefoneController: _telefoneController,
-                enderecoController: _enderecoController,
-              ),
-              const SizedBox(height: 16),
-              CustomerSystemInfoCard(
-                customer: widget.customer,
-                formatDate: _formatDate,
-              ),
-              const SizedBox(height: 24),
-              CustomerActionButtons(
-                onCancel: _cancelEditing,
-                onSave: _salvarAlteracoes,
-              ),
-            ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Detalhes do Cliente: ${widget.customer.name}'),
+          leading: AutoLeadingButton(),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                CustomerAvatar(name: widget.customer.name),
+                const SizedBox(height: 24),
+                CustomerInfoForm(
+                  isEditing: true,
+                  nomeController: _nomeController,
+                  cpfController: _cpfController,
+                  emailController: _emailController,
+                  telefoneController: _telefoneController,
+                  enderecoController: _enderecoController,
+                ),
+                const SizedBox(height: 16),
+                CustomerSystemInfoCard(
+                  customer: widget.customer,
+                  formatDate: _formatDate,
+                ),
+                const SizedBox(height: 24),
+                CustomerActionButtons(
+                  onCancel: _cancelEditing,
+                  onSave: _salvarAlteracoes,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -126,8 +130,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       _enderecoController.text = widget.customer.address ?? '';
     });
   }
-
- 
 
   /// Formata uma data no formato DD/MM/YYYY HH:MM
   String _formatDate(DateTime date) {

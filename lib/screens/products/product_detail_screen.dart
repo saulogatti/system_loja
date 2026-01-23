@@ -13,7 +13,7 @@ import 'package:system_loja/screens/products/widgets/product_category.dart';
 /// - Editar dados do produto
 /// - Deletar produto
 @RoutePage()
-class ProductDetailScreen extends StatefulWidget {
+class ProductDetailScreen extends StatefulWidget implements AutoRouteWrapper {
   final Product product;
   final List<Product> productList;
 
@@ -25,6 +25,14 @@ class ProductDetailScreen extends StatefulWidget {
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<ProductCubit>(
+      create: (_) => ProductCubit(),
+      child: this,
+    );
+  }
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {

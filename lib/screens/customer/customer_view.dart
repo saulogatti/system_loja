@@ -163,6 +163,6 @@ class _CustomerViewState extends State<CustomerView> {
     _searchCpfController.clear();
 
     // Navega para a tela de detalhes do cliente
-    AutoRouter.of(context).push(CustomerDetailRoute(customer: customer));
+    context.router.root.push(CustomerDetailRoute(customer: customer));
   }
 }
