@@ -36,24 +36,24 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection(getApplicationSupportDirectory));
 
   @override
-  int get schemaVersion => 3;
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (Migrator m) => m.createAll(),
+    onUpgrade: (Migrator m, int from, int to) async {
+      if (from < 3) {
+        // Criar tabela de categorias
+        await m.createTable(categoriesRecords);
+
+        // Adicionar coluna categoryId à tabela products
+        await m.addColumn(productsRecords, productsRecords.categoryId);
+
+        // Migrar categorias existentes dos produtos para a nova tabela
+        await _migrateCategoriesFromProducts();
+      }
+    },
+  );
 
   @override
-  MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (Migrator m) => m.createAll(),
-        onUpgrade: (Migrator m, int from, int to) async {
-          if (from < 3) {
-            // Criar tabela de categorias
-            await m.createTable(categoriesRecords);
-            
-            // Adicionar coluna categoryId à tabela products
-            await m.addColumn(productsRecords, productsRecords.categoryId);
-            
-            // Migrar categorias existentes dos produtos para a nova tabela
-            await _migrateCategoriesFromProducts();
-          }
-        },
-      );
+  int get schemaVersion => 3;
 
   /// Migra categorias existentes dos produtos para a tabela categories_records.
   ///
@@ -64,8 +64,8 @@ class AppDatabase extends _$AppDatabase {
     // Nota: Como a coluna antiga 'category' foi removida, não podemos migrá-la.
     // Os produtos novos precisarão ter categorias atribuídas manualmente.
     // Podemos criar uma categoria padrão para produtos sem categoria.
-    
-    final defaultCategoryId = await into(categoriesRecords).insert(
+
+    await into(categoriesRecords).insert(
       CategoriesRecordsCompanion.insert(
         name: 'Sem Categoria',
         description: const Value('Categoria padrão para produtos migrados'),

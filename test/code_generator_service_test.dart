@@ -56,7 +56,7 @@ void main() {
           description: 'Descrição teste 1',
           price: 10.0,
           stockQuantity: 5,
-          category: 'Teste',
+          categoryId: 1,
           code: code1,
         );
         await database.productDao.insertProduct(product1);
@@ -88,7 +88,7 @@ void main() {
           description: 'Descrição teste',
           price: 10.0,
           stockQuantity: 5,
-          category: 'Teste',
+          categoryId: 1,
           code: code,
         );
         await database.productDao.insertProduct(product);
@@ -136,7 +136,7 @@ void main() {
         description: 'Descrição',
         price: 10.0,
         stockQuantity: 5,
-        category: 'Teste',
+        categoryId: 1,
         code: code,
       );
       await database.productDao.insertProduct(product);
@@ -197,7 +197,7 @@ void main() {
             customerCpf: '12345678900',
             items: [
               InvoiceItem(
-                productId:  kInvalidId,
+                productId: kInvalidId,
                 productCode: 'PRD-001',
                 productName: 'Produto 1',
                 quantity: 1,

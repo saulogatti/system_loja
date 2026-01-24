@@ -68,7 +68,7 @@ class _ProductCategoryState extends State<ProductCategory> {
       children: [
         Expanded(
           child: DropdownButtonFormField<int>(
-            value: _selectedCategoryId,
+            initialValue: _selectedCategoryId,
             hint: const Text('Selecione uma categoria'),
             decoration: InputDecoration(
               labelText: widget.required ? 'Categoria *' : 'Categoria',
@@ -188,7 +188,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                   final currentState = cubit.state;
                   Navigator.of(context).pop();
                   
-                  if (currentState is _Created) {
+                  if (currentState is CategoryCreated) {
                     ScaffoldMessenger.of(parentContext).showSnackBar(
                       const SnackBar(
                         content: Text('Categoria criada com sucesso'),

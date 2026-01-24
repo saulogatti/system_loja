@@ -55,17 +55,17 @@ extension CategoryStatePatterns on CategoryState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Loaded value)?  loaded,TResult Function( _Created value)?  created,TResult Function( _Updated value)?  updated,TResult Function( _Deleted value)?  deleted,TResult Function( _Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( CategoryCreated value)?  created,TResult Function( CategoryDeleted value)?  deleted,TResult Function( CategoryError value)?  error,TResult Function( CategoryInitial value)?  initial,TResult Function( CategoryLoaded value)?  loaded,TResult Function( CategoryLoading value)?  loading,TResult Function( CategoryUpdated value)?  updated,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _Created() when created != null:
-return created(_that);case _Updated() when updated != null:
-return updated(_that);case _Deleted() when deleted != null:
-return deleted(_that);case _Error() when error != null:
-return error(_that);case _:
+case CategoryCreated() when created != null:
+return created(_that);case CategoryDeleted() when deleted != null:
+return deleted(_that);case CategoryError() when error != null:
+return error(_that);case CategoryInitial() when initial != null:
+return initial(_that);case CategoryLoaded() when loaded != null:
+return loaded(_that);case CategoryLoading() when loading != null:
+return loading(_that);case CategoryUpdated() when updated != null:
+return updated(_that);case _:
   return orElse();
 
 }
@@ -83,17 +83,17 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Loaded value)  loaded,required TResult Function( _Created value)  created,required TResult Function( _Updated value)  updated,required TResult Function( _Deleted value)  deleted,required TResult Function( _Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( CategoryCreated value)  created,required TResult Function( CategoryDeleted value)  deleted,required TResult Function( CategoryError value)  error,required TResult Function( CategoryInitial value)  initial,required TResult Function( CategoryLoaded value)  loaded,required TResult Function( CategoryLoading value)  loading,required TResult Function( CategoryUpdated value)  updated,}){
 final _that = this;
 switch (_that) {
-case _Initial():
-return initial(_that);case _Loading():
-return loading(_that);case _Loaded():
-return loaded(_that);case _Created():
-return created(_that);case _Updated():
-return updated(_that);case _Deleted():
-return deleted(_that);case _Error():
-return error(_that);}
+case CategoryCreated():
+return created(_that);case CategoryDeleted():
+return deleted(_that);case CategoryError():
+return error(_that);case CategoryInitial():
+return initial(_that);case CategoryLoaded():
+return loaded(_that);case CategoryLoading():
+return loading(_that);case CategoryUpdated():
+return updated(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -107,17 +107,17 @@ return error(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Loaded value)?  loaded,TResult? Function( _Created value)?  created,TResult? Function( _Updated value)?  updated,TResult? Function( _Deleted value)?  deleted,TResult? Function( _Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( CategoryCreated value)?  created,TResult? Function( CategoryDeleted value)?  deleted,TResult? Function( CategoryError value)?  error,TResult? Function( CategoryInitial value)?  initial,TResult? Function( CategoryLoaded value)?  loaded,TResult? Function( CategoryLoading value)?  loading,TResult? Function( CategoryUpdated value)?  updated,}){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _Created() when created != null:
-return created(_that);case _Updated() when updated != null:
-return updated(_that);case _Deleted() when deleted != null:
-return deleted(_that);case _Error() when error != null:
-return error(_that);case _:
+case CategoryCreated() when created != null:
+return created(_that);case CategoryDeleted() when deleted != null:
+return deleted(_that);case CategoryError() when error != null:
+return error(_that);case CategoryInitial() when initial != null:
+return initial(_that);case CategoryLoaded() when loaded != null:
+return loaded(_that);case CategoryLoading() when loading != null:
+return loading(_that);case CategoryUpdated() when updated != null:
+return updated(_that);case _:
   return null;
 
 }
@@ -134,16 +134,16 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Category> categories)?  loaded,TResult Function( List<Category> categories)?  created,TResult Function( List<Category> categories)?  updated,TResult Function( List<Category> categories)?  deleted,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( List<Category> categories)?  created,TResult Function( List<Category> categories)?  deleted,TResult Function( String message)?  error,TResult Function()?  initial,TResult Function( List<Category> categories)?  loaded,TResult Function()?  loading,TResult Function( List<Category> categories)?  updated,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
-return loading();case _Loaded() when loaded != null:
-return loaded(_that.categories);case _Created() when created != null:
-return created(_that.categories);case _Updated() when updated != null:
-return updated(_that.categories);case _Deleted() when deleted != null:
-return deleted(_that.categories);case _Error() when error != null:
-return error(_that.message);case _:
+case CategoryCreated() when created != null:
+return created(_that.categories);case CategoryDeleted() when deleted != null:
+return deleted(_that.categories);case CategoryError() when error != null:
+return error(_that.message);case CategoryInitial() when initial != null:
+return initial();case CategoryLoaded() when loaded != null:
+return loaded(_that.categories);case CategoryLoading() when loading != null:
+return loading();case CategoryUpdated() when updated != null:
+return updated(_that.categories);case _:
   return orElse();
 
 }
@@ -161,16 +161,16 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Category> categories)  loaded,required TResult Function( List<Category> categories)  created,required TResult Function( List<Category> categories)  updated,required TResult Function( List<Category> categories)  deleted,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( List<Category> categories)  created,required TResult Function( List<Category> categories)  deleted,required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( List<Category> categories)  loaded,required TResult Function()  loading,required TResult Function( List<Category> categories)  updated,}) {final _that = this;
 switch (_that) {
-case _Initial():
-return initial();case _Loading():
-return loading();case _Loaded():
-return loaded(_that.categories);case _Created():
-return created(_that.categories);case _Updated():
-return updated(_that.categories);case _Deleted():
-return deleted(_that.categories);case _Error():
-return error(_that.message);}
+case CategoryCreated():
+return created(_that.categories);case CategoryDeleted():
+return deleted(_that.categories);case CategoryError():
+return error(_that.message);case CategoryInitial():
+return initial();case CategoryLoaded():
+return loaded(_that.categories);case CategoryLoading():
+return loading();case CategoryUpdated():
+return updated(_that.categories);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -184,16 +184,16 @@ return error(_that.message);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Category> categories)?  loaded,TResult? Function( List<Category> categories)?  created,TResult? Function( List<Category> categories)?  updated,TResult? Function( List<Category> categories)?  deleted,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( List<Category> categories)?  created,TResult? Function( List<Category> categories)?  deleted,TResult? Function( String message)?  error,TResult? Function()?  initial,TResult? Function( List<Category> categories)?  loaded,TResult? Function()?  loading,TResult? Function( List<Category> categories)?  updated,}) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
-return loading();case _Loaded() when loaded != null:
-return loaded(_that.categories);case _Created() when created != null:
-return created(_that.categories);case _Updated() when updated != null:
-return updated(_that.categories);case _Deleted() when deleted != null:
-return deleted(_that.categories);case _Error() when error != null:
-return error(_that.message);case _:
+case CategoryCreated() when created != null:
+return created(_that.categories);case CategoryDeleted() when deleted != null:
+return deleted(_that.categories);case CategoryError() when error != null:
+return error(_that.message);case CategoryInitial() when initial != null:
+return initial();case CategoryLoaded() when loaded != null:
+return loaded(_that.categories);case CategoryLoading() when loading != null:
+return loading();case CategoryUpdated() when updated != null:
+return updated(_that.categories);case _:
   return null;
 
 }
@@ -204,8 +204,218 @@ return error(_that.message);case _:
 /// @nodoc
 
 
-class _Initial implements CategoryState {
-  const _Initial();
+class CategoryCreated implements CategoryState {
+  const CategoryCreated({required final  List<Category> categories}): _categories = categories;
+  
+
+ final  List<Category> _categories;
+ List<Category> get categories {
+  if (_categories is EqualUnmodifiableListView) return _categories;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_categories);
+}
+
+
+/// Create a copy of CategoryState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CategoryCreatedCopyWith<CategoryCreated> get copyWith => _$CategoryCreatedCopyWithImpl<CategoryCreated>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryCreated&&const DeepCollectionEquality().equals(other._categories, _categories));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+
+@override
+String toString() {
+  return 'CategoryState.created(categories: $categories)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CategoryCreatedCopyWith<$Res> implements $CategoryStateCopyWith<$Res> {
+  factory $CategoryCreatedCopyWith(CategoryCreated value, $Res Function(CategoryCreated) _then) = _$CategoryCreatedCopyWithImpl;
+@useResult
+$Res call({
+ List<Category> categories
+});
+
+
+
+
+}
+/// @nodoc
+class _$CategoryCreatedCopyWithImpl<$Res>
+    implements $CategoryCreatedCopyWith<$Res> {
+  _$CategoryCreatedCopyWithImpl(this._self, this._then);
+
+  final CategoryCreated _self;
+  final $Res Function(CategoryCreated) _then;
+
+/// Create a copy of CategoryState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
+  return _then(CategoryCreated(
+categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
+as List<Category>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class CategoryDeleted implements CategoryState {
+  const CategoryDeleted({required final  List<Category> categories}): _categories = categories;
+  
+
+ final  List<Category> _categories;
+ List<Category> get categories {
+  if (_categories is EqualUnmodifiableListView) return _categories;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_categories);
+}
+
+
+/// Create a copy of CategoryState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CategoryDeletedCopyWith<CategoryDeleted> get copyWith => _$CategoryDeletedCopyWithImpl<CategoryDeleted>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryDeleted&&const DeepCollectionEquality().equals(other._categories, _categories));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+
+@override
+String toString() {
+  return 'CategoryState.deleted(categories: $categories)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CategoryDeletedCopyWith<$Res> implements $CategoryStateCopyWith<$Res> {
+  factory $CategoryDeletedCopyWith(CategoryDeleted value, $Res Function(CategoryDeleted) _then) = _$CategoryDeletedCopyWithImpl;
+@useResult
+$Res call({
+ List<Category> categories
+});
+
+
+
+
+}
+/// @nodoc
+class _$CategoryDeletedCopyWithImpl<$Res>
+    implements $CategoryDeletedCopyWith<$Res> {
+  _$CategoryDeletedCopyWithImpl(this._self, this._then);
+
+  final CategoryDeleted _self;
+  final $Res Function(CategoryDeleted) _then;
+
+/// Create a copy of CategoryState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
+  return _then(CategoryDeleted(
+categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
+as List<Category>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class CategoryError implements CategoryState {
+  const CategoryError({required this.message});
+  
+
+ final  String message;
+
+/// Create a copy of CategoryState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CategoryErrorCopyWith<CategoryError> get copyWith => _$CategoryErrorCopyWithImpl<CategoryError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryError&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'CategoryState.error(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CategoryErrorCopyWith<$Res> implements $CategoryStateCopyWith<$Res> {
+  factory $CategoryErrorCopyWith(CategoryError value, $Res Function(CategoryError) _then) = _$CategoryErrorCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class _$CategoryErrorCopyWithImpl<$Res>
+    implements $CategoryErrorCopyWith<$Res> {
+  _$CategoryErrorCopyWithImpl(this._self, this._then);
+
+  final CategoryError _self;
+  final $Res Function(CategoryError) _then;
+
+/// Create a copy of CategoryState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(CategoryError(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class CategoryInitial implements CategoryState {
+  const CategoryInitial();
   
 
 
@@ -215,7 +425,7 @@ class _Initial implements CategoryState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryInitial);
 }
 
 
@@ -236,8 +446,80 @@ String toString() {
 /// @nodoc
 
 
-class _Loading implements CategoryState {
-  const _Loading();
+class CategoryLoaded implements CategoryState {
+  const CategoryLoaded({required final  List<Category> categories}): _categories = categories;
+  
+
+ final  List<Category> _categories;
+ List<Category> get categories {
+  if (_categories is EqualUnmodifiableListView) return _categories;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_categories);
+}
+
+
+/// Create a copy of CategoryState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CategoryLoadedCopyWith<CategoryLoaded> get copyWith => _$CategoryLoadedCopyWithImpl<CategoryLoaded>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryLoaded&&const DeepCollectionEquality().equals(other._categories, _categories));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+
+@override
+String toString() {
+  return 'CategoryState.loaded(categories: $categories)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CategoryLoadedCopyWith<$Res> implements $CategoryStateCopyWith<$Res> {
+  factory $CategoryLoadedCopyWith(CategoryLoaded value, $Res Function(CategoryLoaded) _then) = _$CategoryLoadedCopyWithImpl;
+@useResult
+$Res call({
+ List<Category> categories
+});
+
+
+
+
+}
+/// @nodoc
+class _$CategoryLoadedCopyWithImpl<$Res>
+    implements $CategoryLoadedCopyWith<$Res> {
+  _$CategoryLoadedCopyWithImpl(this._self, this._then);
+
+  final CategoryLoaded _self;
+  final $Res Function(CategoryLoaded) _then;
+
+/// Create a copy of CategoryState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
+  return _then(CategoryLoaded(
+categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
+as List<Category>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class CategoryLoading implements CategoryState {
+  const CategoryLoading();
   
 
 
@@ -247,7 +529,7 @@ class _Loading implements CategoryState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryLoading);
 }
 
 
@@ -268,8 +550,8 @@ String toString() {
 /// @nodoc
 
 
-class _Loaded implements CategoryState {
-  const _Loaded({required final  List<Category> categories}): _categories = categories;
+class CategoryUpdated implements CategoryState {
+  const CategoryUpdated({required final  List<Category> categories}): _categories = categories;
   
 
  final  List<Category> _categories;
@@ -284,157 +566,13 @@ class _Loaded implements CategoryState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$LoadedCopyWith<_Loaded> get copyWith => __$LoadedCopyWithImpl<_Loaded>(this, _$identity);
+$CategoryUpdatedCopyWith<CategoryUpdated> get copyWith => _$CategoryUpdatedCopyWithImpl<CategoryUpdated>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&const DeepCollectionEquality().equals(other._categories, _categories));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
-
-@override
-String toString() {
-  return 'CategoryState.loaded(categories: $categories)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$LoadedCopyWith<$Res> implements $CategoryStateCopyWith<$Res> {
-  factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) = __$LoadedCopyWithImpl;
-@useResult
-$Res call({
- List<Category> categories
-});
-
-
-
-
-}
-/// @nodoc
-class __$LoadedCopyWithImpl<$Res>
-    implements _$LoadedCopyWith<$Res> {
-  __$LoadedCopyWithImpl(this._self, this._then);
-
-  final _Loaded _self;
-  final $Res Function(_Loaded) _then;
-
-/// Create a copy of CategoryState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
-  return _then(_Loaded(
-categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as List<Category>,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class _Created implements CategoryState {
-  const _Created({required final  List<Category> categories}): _categories = categories;
-  
-
- final  List<Category> _categories;
- List<Category> get categories {
-  if (_categories is EqualUnmodifiableListView) return _categories;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_categories);
-}
-
-
-/// Create a copy of CategoryState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$CreatedCopyWith<_Created> get copyWith => __$CreatedCopyWithImpl<_Created>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Created&&const DeepCollectionEquality().equals(other._categories, _categories));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
-
-@override
-String toString() {
-  return 'CategoryState.created(categories: $categories)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$CreatedCopyWith<$Res> implements $CategoryStateCopyWith<$Res> {
-  factory _$CreatedCopyWith(_Created value, $Res Function(_Created) _then) = __$CreatedCopyWithImpl;
-@useResult
-$Res call({
- List<Category> categories
-});
-
-
-
-
-}
-/// @nodoc
-class __$CreatedCopyWithImpl<$Res>
-    implements _$CreatedCopyWith<$Res> {
-  __$CreatedCopyWithImpl(this._self, this._then);
-
-  final _Created _self;
-  final $Res Function(_Created) _then;
-
-/// Create a copy of CategoryState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
-  return _then(_Created(
-categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as List<Category>,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class _Updated implements CategoryState {
-  const _Updated({required final  List<Category> categories}): _categories = categories;
-  
-
- final  List<Category> _categories;
- List<Category> get categories {
-  if (_categories is EqualUnmodifiableListView) return _categories;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_categories);
-}
-
-
-/// Create a copy of CategoryState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$UpdatedCopyWith<_Updated> get copyWith => __$UpdatedCopyWithImpl<_Updated>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Updated&&const DeepCollectionEquality().equals(other._categories, _categories));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryUpdated&&const DeepCollectionEquality().equals(other._categories, _categories));
 }
 
 
@@ -450,8 +588,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$UpdatedCopyWith<$Res> implements $CategoryStateCopyWith<$Res> {
-  factory _$UpdatedCopyWith(_Updated value, $Res Function(_Updated) _then) = __$UpdatedCopyWithImpl;
+abstract mixin class $CategoryUpdatedCopyWith<$Res> implements $CategoryStateCopyWith<$Res> {
+  factory $CategoryUpdatedCopyWith(CategoryUpdated value, $Res Function(CategoryUpdated) _then) = _$CategoryUpdatedCopyWithImpl;
 @useResult
 $Res call({
  List<Category> categories
@@ -462,157 +600,19 @@ $Res call({
 
 }
 /// @nodoc
-class __$UpdatedCopyWithImpl<$Res>
-    implements _$UpdatedCopyWith<$Res> {
-  __$UpdatedCopyWithImpl(this._self, this._then);
+class _$CategoryUpdatedCopyWithImpl<$Res>
+    implements $CategoryUpdatedCopyWith<$Res> {
+  _$CategoryUpdatedCopyWithImpl(this._self, this._then);
 
-  final _Updated _self;
-  final $Res Function(_Updated) _then;
-
-/// Create a copy of CategoryState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
-  return _then(_Updated(
-categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as List<Category>,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class _Deleted implements CategoryState {
-  const _Deleted({required final  List<Category> categories}): _categories = categories;
-  
-
- final  List<Category> _categories;
- List<Category> get categories {
-  if (_categories is EqualUnmodifiableListView) return _categories;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_categories);
-}
-
-
-/// Create a copy of CategoryState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$DeletedCopyWith<_Deleted> get copyWith => __$DeletedCopyWithImpl<_Deleted>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Deleted&&const DeepCollectionEquality().equals(other._categories, _categories));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
-
-@override
-String toString() {
-  return 'CategoryState.deleted(categories: $categories)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$DeletedCopyWith<$Res> implements $CategoryStateCopyWith<$Res> {
-  factory _$DeletedCopyWith(_Deleted value, $Res Function(_Deleted) _then) = __$DeletedCopyWithImpl;
-@useResult
-$Res call({
- List<Category> categories
-});
-
-
-
-
-}
-/// @nodoc
-class __$DeletedCopyWithImpl<$Res>
-    implements _$DeletedCopyWith<$Res> {
-  __$DeletedCopyWithImpl(this._self, this._then);
-
-  final _Deleted _self;
-  final $Res Function(_Deleted) _then;
+  final CategoryUpdated _self;
+  final $Res Function(CategoryUpdated) _then;
 
 /// Create a copy of CategoryState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
-  return _then(_Deleted(
+  return _then(CategoryUpdated(
 categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
 as List<Category>,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class _Error implements CategoryState {
-  const _Error({required this.message});
-  
-
- final  String message;
-
-/// Create a copy of CategoryState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.message, message) || other.message == message));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,message);
-
-@override
-String toString() {
-  return 'CategoryState.error(message: $message)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$ErrorCopyWith<$Res> implements $CategoryStateCopyWith<$Res> {
-  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
-@useResult
-$Res call({
- String message
-});
-
-
-
-
-}
-/// @nodoc
-class __$ErrorCopyWithImpl<$Res>
-    implements _$ErrorCopyWith<$Res> {
-  __$ErrorCopyWithImpl(this._self, this._then);
-
-  final _Error _self;
-  final $Res Function(_Error) _then;
-
-/// Create a copy of CategoryState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(_Error(
-message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
   ));
 }
 

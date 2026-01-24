@@ -89,9 +89,10 @@ class _ProductFormState extends State<ProductForm> {
                     prefixIcon: Icon(Icons.attach_money),
                     helperText: 'Ex: 10,50',
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [CurrencyInputFormatter()],
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: [PriceInputFormatter()],
                   validator: validatePrice,
                 ),
               ),

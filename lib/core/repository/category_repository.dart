@@ -1,7 +1,6 @@
 import 'package:system_loja/core/models/category.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/category_dao.dart';
-import 'package:system_loja/data/database/extension/category_extension.dart';
 import 'package:system_loja/screens/injection/app_injection.dart';
 
 /// Repositório para gerenciar operações de categorias de produtos.
@@ -12,51 +11,6 @@ class CategoryRepository {
   final CategoryDao _dao = AppInjection.instance.appDatabase.categoryDao;
 
   CategoryRepository();
-
-  /// Retorna todas as categorias cadastradas.
-  ///
-  /// As categorias são ordenadas por nome.
-  Future<ResultStatus<List<Category>, String>> getAllCategories() async {
-    try {
-      final records = await _dao.getAll();
-      final categories = records.map((record) => record.toDomain()).toList();
-      return ResultSuccess(categories);
-    } on Exception catch (e) {
-      return ResultError('Erro ao carregar categorias: ${e.toString()}');
-    }
-  }
-
-  /// Busca uma categoria por ID.
-  ///
-  /// [id] Identificador único da categoria.
-  /// Retorna a categoria encontrada ou erro se não existir.
-  Future<ResultStatus<Category, String>> getCategoryById(int id) async {
-    try {
-      final record = await _dao.getById(id);
-      if (record != null) {
-        return ResultSuccess(record.toDomain());
-      }
-      return ResultError('Categoria com ID $id não encontrada');
-    } on Exception catch (e) {
-      return ResultError('Erro ao buscar categoria: ${e.toString()}');
-    }
-  }
-
-  /// Busca uma categoria por nome.
-  ///
-  /// [name] Nome da categoria a ser buscada.
-  /// Retorna a categoria encontrada ou erro se não existir.
-  Future<ResultStatus<Category, String>> getCategoryByName(String name) async {
-    try {
-      final record = await _dao.getByName(name);
-      if (record != null) {
-        return ResultSuccess(record.toDomain());
-      }
-      return ResultError('Categoria "$name" não encontrada');
-    } on Exception catch (e) {
-      return ResultError('Erro ao buscar categoria: ${e.toString()}');
-    }
-  }
 
   /// Cria uma nova categoria.
   ///
@@ -82,6 +36,85 @@ class CategoryRepository {
     } on Exception catch (e) {
       return ResultError('Erro ao criar categoria: ${e.toString()}');
     }
+  }
+
+  /// Remove uma categoria.
+  ///
+  /// [id] Identificador da categoria a ser removida.
+  /// Retorna sucesso ou erro.
+  ///
+  /// Nota: A remoção falhará se houver produtos associados à categoria.
+  Future<ResultStatus<bool, String>> deleteCategory(int id) async {
+    try {
+      // Verificar se há produtos associados
+      final hasProducts = await _dao.hasProducts(id);
+      if (hasProducts) {
+        return ResultError(
+          'Não é possível remover esta categoria pois há produtos associados a ela',
+        );
+      }
+
+      final success = await _dao.remove(id);
+      if (success) {
+        return ResultSuccess(true);
+      }
+      return ResultError('Categoria não encontrada');
+    } on Exception catch (e) {
+      return ResultError('Erro ao remover categoria: ${e.toString()}');
+    }
+  }
+
+  /// Retorna todas as categorias cadastradas.
+  ///
+  /// As categorias são ordenadas por nome.
+  Future<ResultStatus<List<Category>, String>> getAllCategories() async {
+    try {
+      final records = await _dao.getAll();
+
+      return ResultSuccess(records);
+    } on Exception catch (e) {
+      return ResultError('Erro ao carregar categorias: ${e.toString()}');
+    }
+  }
+
+  /// Busca uma categoria por ID.
+  ///
+  /// [id] Identificador único da categoria.
+  /// Retorna a categoria encontrada ou erro se não existir.
+  Future<ResultStatus<Category, String>> getCategoryById(int id) async {
+    try {
+      final record = await _dao.getById(id);
+      if (record != null) {
+        return ResultSuccess(record);
+      }
+      return ResultError('Categoria com ID $id não encontrada');
+    } on Exception catch (e) {
+      return ResultError('Erro ao buscar categoria: ${e.toString()}');
+    }
+  }
+
+  /// Busca uma categoria por nome.
+  ///
+  /// [name] Nome da categoria a ser buscada.
+  /// Retorna a categoria encontrada ou erro se não existir.
+  Future<ResultStatus<Category, String>> getCategoryByName(String name) async {
+    try {
+      final record = await _dao.getByName(name);
+      if (record != null) {
+        return ResultSuccess(record);
+      }
+      return ResultError('Categoria "$name" não encontrada');
+    } on Exception catch (e) {
+      return ResultError('Erro ao buscar categoria: ${e.toString()}');
+    }
+  }
+
+  /// Verifica se uma categoria está em uso por algum produto.
+  ///
+  /// [categoryId] ID da categoria a ser verificada.
+  /// Retorna true se a categoria está em uso.
+  Future<bool> isCategoryInUse(int categoryId) async {
+    return await _dao.hasProducts(categoryId);
   }
 
   /// Atualiza uma categoria existente.
@@ -113,7 +146,7 @@ class CategoryRepository {
         name: name,
         description: description,
       );
-      
+
       if (success) {
         return ResultSuccess(true);
       }
@@ -121,39 +154,5 @@ class CategoryRepository {
     } on Exception catch (e) {
       return ResultError('Erro ao atualizar categoria: ${e.toString()}');
     }
-  }
-
-  /// Remove uma categoria.
-  ///
-  /// [id] Identificador da categoria a ser removida.
-  /// Retorna sucesso ou erro.
-  /// 
-  /// Nota: A remoção falhará se houver produtos associados à categoria.
-  Future<ResultStatus<bool, String>> deleteCategory(int id) async {
-    try {
-      // Verificar se há produtos associados
-      final hasProducts = await _dao.hasProducts(id);
-      if (hasProducts) {
-        return ResultError(
-          'Não é possível remover esta categoria pois há produtos associados a ela',
-        );
-      }
-
-      final success = await _dao.remove(id);
-      if (success) {
-        return ResultSuccess(true);
-      }
-      return ResultError('Categoria não encontrada');
-    } on Exception catch (e) {
-      return ResultError('Erro ao remover categoria: ${e.toString()}');
-    }
-  }
-
-  /// Verifica se uma categoria está em uso por algum produto.
-  ///
-  /// [categoryId] ID da categoria a ser verificada.
-  /// Retorna true se a categoria está em uso.
-  Future<bool> isCategoryInUse(int categoryId) async {
-    return await _dao.hasProducts(categoryId);
   }
 }

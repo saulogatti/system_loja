@@ -6,34 +6,27 @@ part 'category_state.freezed.dart';
 /// Estados da tela de gerenciamento de categorias.
 @freezed
 sealed class CategoryState with _$CategoryState {
-  /// Estado inicial
-  const factory CategoryState.initial() = _Initial;
+  /// Categoria criada com sucesso
+  const factory CategoryState.created({required List<Category> categories}) =
+      CategoryCreated;
 
-  /// Carregando dados
-  const factory CategoryState.loading() = _Loading;
+  const factory CategoryState.deleted({required List<Category> categories}) =
+      CategoryDeleted;
+
+  /// Erro ao carregar ou manipular categorias
+  const factory CategoryState.error({required String message}) = CategoryError;
+
+  /// Estado inicial
+  const factory CategoryState.initial() = CategoryInitial;
 
   /// Categorias carregadas com sucesso
-  const factory CategoryState.loaded({
-    required List<Category> categories,
-  }) = _Loaded;
+  const factory CategoryState.loaded({required List<Category> categories}) =
+      CategoryLoaded;
 
-  /// Categoria criada com sucesso
-  const factory CategoryState.created({
-    required List<Category> categories,
-  }) = _Created;
+  /// Carregando dados
+  const factory CategoryState.loading() = CategoryLoading;
 
   /// Categoria atualizada com sucesso
-  const factory CategoryState.updated({
-    required List<Category> categories,
-  }) = _Updated;
-
-  /// Categoria removida com sucesso
-  const factory CategoryState.deleted({
-    required List<Category> categories,
-  }) = _Deleted;
-
-  /// Erro ao processar operação
-  const factory CategoryState.error({
-    required String message,
-  }) = _Error;
+  const factory CategoryState.updated({required List<Category> categories}) =
+      CategoryUpdated;
 }
