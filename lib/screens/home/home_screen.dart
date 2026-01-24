@@ -87,7 +87,8 @@ class HomeScreen extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 320, // cada card no máximo 320px
+                  maxCrossAxisExtent:
+                      300, // cada card no máximo  300 pixels de largura
                   mainAxisSpacing: 12,
                   crossAxisSpacing: 12,
                   childAspectRatio: 1.5,
@@ -127,6 +128,7 @@ class HomeScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
@@ -146,13 +148,6 @@ class HomeScreen extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   maxLines: 2,
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
             ],
