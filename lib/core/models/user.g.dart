@@ -11,7 +11,7 @@ User _$UserFromJson(Map<String, dynamic> json) => $checkedCreate(
   json,
   ($checkedConvert) {
     final val = User(
-      id: $checkedConvert('id', (v) => (v as num).toInt()),
+      id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
       name: $checkedConvert('name', (v) => v as String),
       email: $checkedConvert('email', (v) => v as String?),
       passwordHash: $checkedConvert('senha_hash', (v) => v as String),

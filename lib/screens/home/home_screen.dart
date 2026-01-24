@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
         title: 'Configurações do Sistema',
         icon: Icons.settings,
         color: Colors.teal,
-        onTap: () => _navigateToScreen(context, const ConfiguracoesRoute()),
+        onTap: () => _navigateToScreen(context, const SettingsRoute()),
       ),
     ];
     return Scaffold(

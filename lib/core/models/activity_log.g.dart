@@ -11,7 +11,7 @@ ActivityLog _$ActivityLogFromJson(Map<String, dynamic> json) => $checkedCreate(
   json,
   ($checkedConvert) {
     final val = ActivityLog(
-      id: $checkedConvert('id', (v) => (v as num).toInt()),
+      id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
       entity: $checkedConvert('entidade', (v) => v as String),
       userId: $checkedConvert('usuario_id', (v) => (v as num).toInt()),
       userName: $checkedConvert('usuario_nome', (v) => v as String),

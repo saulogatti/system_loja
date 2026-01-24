@@ -22,7 +22,7 @@ class HostScreen extends StatelessWidget {
         ProductInfoRoute(),
         SalesRoute(),
         UsuarioRoute(),
-        ConfiguracoesRoute(),
+        SettingsRoute(),
       ],
       transitionBuilder: (context, child, animation) {
         return FadeTransition(opacity: animation, child: child);
@@ -61,7 +61,7 @@ class HostScreen extends StatelessWidget {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),
-              label: 'Configuracoes',
+              label: 'Settings',
             ),
           ],
         );
@@ -91,8 +91,8 @@ class RouteApp extends RootStackRouter {
 
         AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuario'),
         AutoRoute(
-          page: ConfiguracoesRoute.page,
-          title: (context, data) => 'Configuracoes',
+          page: SettingsRoute.page,
+          title: (context, data) => 'Settings',
         ),
       ],
     ),
