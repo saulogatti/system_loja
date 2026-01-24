@@ -10,8 +10,9 @@ class Product extends DefaultObject {
   final String description;
   final double price;
   final int stockQuantity;
+  // TODO separar em outra tabela, quando apaga o produto a categoria some e isso não é desejado, pode ser ou classe para salvar as categorias, assim aproveitamos adicionamos um campo nos settigs para gerenciar as categorias (adicionar, remover, editar) e aqui só referenciamos
   final String
-  category; // TODO separar em outra tabela, quando apaga o produto a categoria some e isso não é desejado
+  category; 
   final String code;
   Product({
     required this.name,
