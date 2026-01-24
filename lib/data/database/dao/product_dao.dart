@@ -23,7 +23,7 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
     return await into(productsRecords).insert(
       ProductsRecordsCompanion.insert(
         code: data.code,
-        category: data.category,
+        categoryId: Value(data.categoryId),
         description: data.description,
         name: data.name,
         price: data.price,
@@ -43,7 +43,7 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
       ProductsRecordsCompanion(
         id: Value(data.id),
         code: Value(data.code),
-        category: Value(data.category),
+        categoryId: Value(data.categoryId),
         description: Value(data.description),
         name: Value(data.name),
         price: Value(data.price),

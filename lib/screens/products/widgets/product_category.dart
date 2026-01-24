@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/product.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/models/category.dart';
+import 'package:system_loja/screens/categories/cubit/category_cubit.dart';
+import 'package:system_loja/screens/categories/cubit/category_state.dart';
 
-/// Widget de seleção e criação de categorias de produto
+/// Widget de seleção e criação de categorias de produto.
 ///
 /// Permite selecionar uma categoria existente de um dropdown ou criar uma nova
-/// digitando no campo de texto. As categorias são extraídas dinamicamente
-/// da lista de produtos existentes.
+/// através de um diálogo. As categorias são carregadas do banco de dados
+/// através do CategoryCubit.
 class ProductCategory extends StatefulWidget {
-  /// Controller para gerenciar o texto da categoria
-  final TextEditingController controller;
+  /// ID da categoria selecionada
+  final int? selectedCategoryId;
 
-  /// Lista de produtos para extrair categorias existentes
-  final List<Product> products;
+  /// Callback chamado quando a categoria é alterada
+  final ValueChanged<int?>? onChanged;
 
   /// Indica se o campo é obrigatório
   final bool required;
@@ -19,16 +22,12 @@ class ProductCategory extends StatefulWidget {
   /// Indica se o campo está habilitado
   final bool enabled;
 
-  /// Callback chamado quando a categoria é alterada
-  final ValueChanged<String?>? onChanged;
-
   const ProductCategory({
     super.key,
-    required this.controller,
-    required this.products,
+    this.selectedCategoryId,
+    this.onChanged,
     this.required = false,
     this.enabled = true,
-    this.onChanged,
   });
 
   @override
@@ -36,108 +35,69 @@ class ProductCategory extends StatefulWidget {
 }
 
 class _ProductCategoryState extends State<ProductCategory> {
-  /// Lista de categorias únicas extraídas dos produtos
-  List<String> _categories = [];
-
-  /// Categoria atualmente selecionada no dropdown
-  String? _selectedCategory;
-
-  /// Indica se o modo de entrada manual está ativo
-  bool _manualEntryMode = false;
-
-  @override
-  Widget build(BuildContext context) {
-    // Se não há categorias cadastradas ou modo manual ativo, mostra apenas o campo de texto
-    if (_categories.isEmpty || _manualEntryMode) {
-      return _buildCampoTexto();
-    }
-
-    // Se há categorias, mostra dropdown + opção de adicionar nova
-    return _buildCampoComDropdown();
-  }
-
-  @override
-  void didUpdateWidget(ProductCategory oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.products != widget.products) {
-      _atualizarCategorias();
-    }
-  }
+  int? _selectedCategoryId;
+  late CategoryCubit _categoryCubit;
 
   @override
   void initState() {
     super.initState();
-    // Atualiza categorias antes de inicializar valor, pois depende da lista
-    _atualizarCategorias();
-    _inicializarValor();
+    _selectedCategoryId = widget.selectedCategoryId;
+    _categoryCubit = CategoryCubit();
   }
 
-  /// Alterna entre modo dropdown e modo entrada manual
-  void _alternarModo() {
-    setState(() {
-      _manualEntryMode = !_manualEntryMode;
-      if (_manualEntryMode) {
-        _selectedCategory = null;
-      } else {
-        // Preserva o valor do controller ao alternar para dropdown
-        // Se o valor existir nas categorias, seleciona-o no dropdown
-        final currentValue = widget.controller.text.trim();
-        if (currentValue.isNotEmpty && _categories.contains(currentValue)) {
-          _selectedCategory = currentValue;
-        } else {
-          // Valor não existe nas categorias, limpa o controller
-          widget.controller.clear();
-        }
-      }
-    });
+  @override
+  void dispose() {
+    _categoryCubit.close();
+    super.dispose();
   }
 
-  /// Extrai categorias únicas dos produtos
-  void _atualizarCategorias() {
-    setState(() {
-      _categories =
-          widget.products
-              .where((product) => product.category.isNotEmpty)
-              .map((product) => product.category)
-              .toSet()
-              .toList()
-            ..sort();
-    });
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CategoryCubit, CategoryState>(
+      bloc: _categoryCubit,
+      builder: (context, state) {
+        return state.when(
+          initial: () => const CircularProgressIndicator(),
+          loading: () => const CircularProgressIndicator(),
+          loaded: (categories) => _buildDropdown(categories),
+          created: (categories) => _buildDropdown(categories),
+          updated: (categories) => _buildDropdown(categories),
+          deleted: (categories) => _buildDropdown(categories),
+          error: (message) => _buildErrorWidget(message),
+        );
+      },
+    );
   }
 
-  /// Constrói o campo com dropdown de categorias existentes
-  Widget _buildCampoComDropdown() {
+  Widget _buildDropdown(List<Category> categories) {
     return Row(
       children: [
         Expanded(
-          child: DropdownButtonFormField<String>(
-            padding: EdgeInsets.zero,
-            initialValue: _selectedCategory,
-            hint: const Text('Selecione ou crie uma nova'),
+          child: DropdownButtonFormField<int>(
+            value: _selectedCategoryId,
+            hint: const Text('Selecione uma categoria'),
             decoration: InputDecoration(
               labelText: widget.required ? 'Categoria *' : 'Categoria',
               border: const OutlineInputBorder(),
               prefixIcon: const Icon(Icons.category),
             ),
-            items: [
-              ..._categories.map((category) {
-                return DropdownMenuItem(value: category, child: Text(category));
-              }),
-            ],
+            items: categories.map((category) {
+              return DropdownMenuItem<int>(
+                value: category.id,
+                child: Text(category.name),
+              );
+            }).toList(),
             onChanged: widget.enabled
                 ? (value) {
                     setState(() {
-                      _selectedCategory = value;
-                      if (value != null) {
-                        widget.controller.text = value;
-                      }
+                      _selectedCategoryId = value;
                     });
                     widget.onChanged?.call(value);
                   }
                 : null,
             validator: widget.required
                 ? (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null) {
                       return 'Selecione uma categoria';
                     }
                     return null;
@@ -147,7 +107,7 @@ class _ProductCategoryState extends State<ProductCategory> {
         ),
         const SizedBox(width: 8),
         IconButton(
-          onPressed: widget.enabled ? _alternarModo : null,
+          onPressed: widget.enabled ? () => _showCreateCategoryDialog() : null,
           icon: const Icon(Icons.add),
           tooltip: 'Adicionar nova categoria',
         ),
@@ -155,52 +115,92 @@ class _ProductCategoryState extends State<ProductCategory> {
     );
   }
 
-  /// Constrói o campo de texto para entrada manual
-  Widget _buildCampoTexto() {
-    return Row(
+  Widget _buildErrorWidget(String message) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Expanded(
-          child: TextFormField(
-            controller: widget.controller,
-            enabled: widget.enabled,
-            decoration: InputDecoration(
-              labelText: widget.required ? 'Categoria *' : 'Categoria',
-              border: const OutlineInputBorder(),
-              prefixIcon: const Icon(Icons.category),
-              hintText: 'Digite uma nova categoria',
-            ),
-            validator: widget.required
-                ? (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Categoria é obrigatória';
-                    }
-                    return null;
-                  }
-                : null,
-            onChanged: (value) => widget.onChanged?.call(value),
-          ),
+        Text(
+          'Erro ao carregar categorias: $message',
+          style: TextStyle(color: Theme.of(context).colorScheme.error),
         ),
-        if (_categories.isNotEmpty) ...[
-          const SizedBox(width: 8),
-          IconButton(
-            onPressed: widget.enabled ? _alternarModo : null,
-            icon: const Icon(Icons.list),
-            tooltip: 'Selecionar categoria existente',
-          ),
-        ],
+        const SizedBox(height: 8),
+        ElevatedButton.icon(
+          onPressed: () => _categoryCubit.loadCategories(),
+          icon: const Icon(Icons.refresh),
+          label: const Text('Tentar novamente'),
+        ),
       ],
     );
   }
 
-  /// Inicializa o valor do dropdown com base no controller
-  void _inicializarValor() {
-    final currentValue = widget.controller.text.trim();
-    if (currentValue.isNotEmpty && _categories.contains(currentValue)) {
-      _selectedCategory = currentValue;
-      _manualEntryMode = false;
-    } else if (currentValue.isNotEmpty) {
-      _selectedCategory = null;
-      _manualEntryMode = true;
-    }
+  Future<void> _showCreateCategoryDialog() async {
+    final nameController = TextEditingController();
+    final descriptionController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Nova Categoria'),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Nome *',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Nome é obrigatório';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: descriptionController,
+                decoration: const InputDecoration(
+                  labelText: 'Descrição',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 2,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (formKey.currentState!.validate()) {
+                await _categoryCubit.createCategory(
+                  name: nameController.text.trim(),
+                  description: descriptionController.text.trim().isEmpty
+                      ? null
+                      : descriptionController.text.trim(),
+                );
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Categoria criada com sucesso'),
+                    ),
+                  );
+                }
+              }
+            },
+            child: const Text('Criar'),
+          ),
+        ],
+      ),
+    );
   }
 }
+

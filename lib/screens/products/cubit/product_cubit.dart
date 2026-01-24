@@ -35,14 +35,14 @@ class ProductCubit extends Cubit<ProductState> {
   ///   - [preco]: Preço unitário do produto.
   ///   - [estoque]: Quantidade disponível em estoque.
   ///   - [descricao]: Descrição detalhada do produto.
-  ///   - [categoria]: Categoria à qual o produto pertence.
+  ///   - [categoryId]: ID da categoria à qual o produto pertence.
   Future<void> adicionarProduto({
     required String nome,
     required String codigo,
     required double preco,
     required int estoque,
     required String descricao,
-    required String categoria,
+    int? categoryId,
   }) async {
     final produto = Product(
       name: nome,
@@ -50,7 +50,7 @@ class ProductCubit extends Cubit<ProductState> {
       price: preco,
       stockQuantity: estoque,
       description: descricao,
-      category: categoria,
+      categoryId: categoryId,
     );
 
     final resultSave = await _manager.salvarProduto(produto);

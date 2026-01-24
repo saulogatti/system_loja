@@ -1,4 +1,5 @@
 import 'package:system_loja/core/managers/configuration_repository.dart';
+import 'package:system_loja/core/repository/category_repository.dart';
 import 'package:system_loja/core/repository/cliente_repository.dart';
 import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/repository/sales_repository.dart';
@@ -22,6 +23,7 @@ class AppInjection {
   late final ClienteRepository clienteRepository = ClienteRepository(
     ClienteDao(appDatabase),
   );
+  late final CategoryRepository categoryRepository = CategoryRepository();
   late final SettingsService settingsService = SettingsService.injection();
   late final ConfigurationRepository configurationRepository =
       ConfigurationRepository();
