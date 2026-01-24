@@ -10,7 +10,7 @@ class Invoice extends DefaultObject {
   final InvoiceData data;
 
   Invoice({
-    required super.id,
+    super.id,
     required this.data,
     super.registrationDate,
     super.lastUpdatedDate,

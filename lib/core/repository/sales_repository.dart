@@ -1,5 +1,7 @@
 import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/services/code_generator_service.dart';
 import 'package:system_loja/data/database/dao/invoice_dao.dart';
+import 'package:system_loja/screens/injection/app_injection.dart';
 
 /// Repositório para gerenciamento de vendas usando Drift
 ///
@@ -7,8 +9,11 @@ import 'package:system_loja/data/database/dao/invoice_dao.dart';
 /// utilizando os DAOs do Drift.
 class SalesRepository {
   final InvoiceDao _invoiceDao;
+  late final CodeGeneratorService _codeGeneratorService;
 
-  SalesRepository({required InvoiceDao invoiceDao}) : _invoiceDao = invoiceDao;
+  SalesRepository({required InvoiceDao invoiceDao}) : _invoiceDao = invoiceDao {
+    _codeGeneratorService = AppInjection.instance.codeGeneratorService;
+  }
 
   /// Deleta uma venda pelo ID
   ///
@@ -86,4 +91,38 @@ class SalesRepository {
       throw Exception('Erro ao atualizar venda: $e');
     }
   }
+
+  /// Gera um número único para uma nova nota fiscal.
+  ///
+  /// Retorna um número no formato NF-YYYYMMDD-NNNN que não existe no banco.
+  Future<String> generateInvoiceNumber() async {
+    return await _codeGeneratorService.generateInvoiceNumber();
+  }
+
+  /// Valida um número de nota fiscal fornecido pelo usuário.
+  ///
+  /// [invoiceNumber] Número da nota a ser validado.
+  /// Retorna resultado da validação.
+  Future<ValidationResult> validateInvoiceNumber(String invoiceNumber) async {
+    final validationResult = await _codeGeneratorService.validateInvoiceNumber(invoiceNumber);
+    
+    return ValidationResult(
+      isValid: validationResult.isValid,
+      message: validationResult.message,
+    );
+  }
+}
+
+/// Resultado da validação de número de nota fiscal.
+class ValidationResult {
+  /// Indica se o número é válido.
+  final bool isValid;
+  
+  /// Mensagem descritiva do resultado da validação.
+  final String message;
+
+  ValidationResult({
+    required this.isValid,
+    required this.message,
+  });
 }
