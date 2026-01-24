@@ -72,14 +72,15 @@ class CodeGeneratorExamples {
     final productRepository = AppInjection.instance.productRepository;
 
     // Código fornecido pelo usuário
-    String? userProvidedCode = 'MOUSE-001'; // Pode vir de um TextField
+    final String userProvidedCode = 'MOUSE-001'; // Pode vir de um TextField
 
     String finalCode;
 
-    if (userProvidedCode != null && userProvidedCode.isNotEmpty) {
+    if (userProvidedCode.isNotEmpty) {
       // Usuário forneceu código - validar
-      final validation =
-          await productRepository.validateProductCode(userProvidedCode);
+      final validation = await productRepository.validateProductCode(
+        userProvidedCode,
+      );
 
       if (validation.isSuccessful) {
         finalCode = userProvidedCode;
@@ -119,7 +120,7 @@ class CodeGeneratorExamples {
 
     // Criar nota fiscal com o número gerado
     final invoice = Invoice(
-      id: -1, // Será gerado pelo banco
+      // Será gerado pelo banco
       data: InvoiceData(
         invoiceNumber: invoiceNumber,
         customerId: 1,
@@ -156,7 +157,9 @@ class CodeGeneratorExamples {
     final customNumber = 'NF-VENDA-ESPECIAL-001';
 
     // Validar número personalizado
-    final validation = await salesRepository.validateInvoiceNumber(customNumber);
+    final validation = await salesRepository.validateInvoiceNumber(
+      customNumber,
+    );
 
     if (validation.isValid) {
       // Número válido - pode usar
@@ -249,7 +252,9 @@ class CodeGeneratorExamples {
       } else {
         // Fallback para código automático
         finalCode = await productRepository.generateProductCode();
-        print('Aviso: Usando código automático ($finalCode) porque: ${validation.asError}');
+        print(
+          'Aviso: Usando código automático ($finalCode) porque: ${validation.asError}',
+        );
       }
 
       // Criar produto
