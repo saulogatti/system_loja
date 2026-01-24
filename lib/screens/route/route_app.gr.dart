@@ -318,7 +318,7 @@ class SettingsRoute extends _i11.PageRouteInfo<void> {
   static _i11.PageInfo page = _i11.PageInfo(
     name,
     builder: (data) {
-      return const _i9.SettingsScreen();
+      return _i11.WrappedRoute(child: const _i9.SettingsScreen());
     },
   );
 }

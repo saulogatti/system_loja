@@ -197,7 +197,7 @@ void main() {
             customerCpf: '12345678900',
             items: [
               InvoiceItem(
-                productId: -1,
+                productId:  kInvalidId,
                 productCode: 'PRD-001',
                 productName: 'Produto 1',
                 quantity: 1,
@@ -233,7 +233,7 @@ void main() {
       () async {
         final invoiceNumber = 'NF-TEST-0001';
         final invoice = Invoice(
-          id: -1,
+          id: kInvalidId,
           data: InvoiceData(
             invoiceNumber: invoiceNumber,
             customerId: 1,
@@ -241,7 +241,7 @@ void main() {
             customerCpf: '12345678900',
             items: [
               InvoiceItem(
-                productId: -1,
+                productId: kInvalidId,
                 productCode: 'PRD-001',
                 productName: 'Produto 1',
                 quantity: 1,
@@ -296,7 +296,7 @@ void main() {
     test('validateInvoiceNumber deve rejeitar número já existente', () async {
       final invoiceNumber = 'NF-EXISTING-0001';
       final invoice = Invoice(
-        id: -1,
+        id: kInvalidId,
         data: InvoiceData(
           invoiceNumber: invoiceNumber,
           customerId: 1,
@@ -304,7 +304,7 @@ void main() {
           customerCpf: '12345678900',
           items: [
             InvoiceItem(
-              productId: -1,
+              productId: kInvalidId,
               productCode: 'PRD-001',
               productName: 'Produto 1',
               quantity: 1,

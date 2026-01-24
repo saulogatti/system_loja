@@ -10,7 +10,8 @@ class Product extends DefaultObject {
   final String description;
   final double price;
   final int stockQuantity;
-  final String category;
+  final String
+  category; // TODO separar em outra tabela, quando apaga o produto a categoria some e isso não é desejado
   final String code;
   Product({
     required this.name,

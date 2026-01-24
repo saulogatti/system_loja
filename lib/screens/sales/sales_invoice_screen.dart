@@ -281,19 +281,6 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
 
       final numeroNota = _numeroNotaController.text.trim();
 
-      // Check if invoice number already exists
-      // if (widget.notaFiscalManager.notasFiscais.any(
-      //   (nf) => nf.numeroNota == numeroNota,
-      // )) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     const SnackBar(
-      //       content: Text('Erro: Número da nota já cadastrado!'),
-      //       backgroundColor: Colors.red,
-      //     ),
-      //   );
-      //   return;
-      // }
-
       final itens = _itensSelecionados.product.map((item) {
         final product = item.product;
         final quantity = item.quantity;

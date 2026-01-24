@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Evento para realizar backup dos dados
@@ -27,11 +26,8 @@ class ResetDefaultSettingsEvent extends SettingsEvent {
 }
 
 /// Eventos do BLoC de Configurações
-abstract class SettingsEvent extends Equatable {
+abstract class SettingsEvent {
   const SettingsEvent();
-
-  @override
-  List<Object?> get props => [];
 }
 
 /// Evento para atualizar as configurações
@@ -40,7 +36,4 @@ class UpdateSettingsEvent extends SettingsEvent {
   final AppSettings appSettings;
 
   const UpdateSettingsEvent(this.appSettings);
-
-  @override
-  List<Object?> get props => [appSettings];
 }

@@ -25,18 +25,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     emit(const SettingsLoadingState());
     try {
-      await AppInjection.instance.configurationRepository.atualizarConfiguracao(
-        event.appSettings,
-      );
+      final updatedSettings = await AppInjection
+          .instance
+          .configurationRepository
+          .atualizarConfiguracao(event.appSettings);
       emit(
-        SettingsConfirmedState(
-          event.appSettings,
+        SettingsLoadedState(
+          updatedSettings,
           'Configurações salvas com sucesso!',
         ),
       );
-      // Retorna ao estado loaded após sucesso
-      await Future.delayed(const Duration(milliseconds: 500));
-      emit(SettingsLoadedState(event.appSettings));
     } catch (e) {
       emit(SettingsError('Erro ao salvar configurações: $e'));
     }
@@ -51,7 +49,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     try {
       final configuracao = await AppInjection.instance.configurationRepository
           .carregarConfiguracao();
-      emit(SettingsLoadedState(configuracao));
+      emit(
+        SettingsLoadedState(
+          configuracao,
+          'Configurações carregadas com sucesso!',
+        ),
+      );
     } catch (e) {
       emit(SettingsError('Erro ao carregar configurações: $e'));
     }
@@ -62,29 +65,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     ClearOldLogsEvent event,
     Emitter<SettingsState> emit,
   ) async {
-    final currentState = state;
-    if (currentState is! SettingsConfirmedState) return;
-
     emit(const SettingsLoadingState());
     try {
       final sucesso = await AppInjection.instance.configurationRepository
           .clearOldLogs();
-      if (sucesso) {
-        emit(
-          SettingsConfirmedState(
-            currentState.appSettings,
-            'Logs antigos removidos com sucesso!',
-          ),
-        );
-      } else {
-        emit(const SettingsError('Erro ao remover logs'));
-      }
-      await Future.delayed(const Duration(milliseconds: 500));
-      emit(SettingsLoadedState(currentState.appSettings));
+
+      emit(SettingsLoadedState(sucesso, 'Logs antigos limpos com sucesso!'));
     } catch (e) {
       emit(SettingsError('Erro ao limpar logs: $e'));
-      await Future.delayed(const Duration(milliseconds: 500));
-      emit(SettingsLoadedState(currentState.appSettings));
     }
   }
 
@@ -93,29 +81,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     ClearAllDataEvent event,
     Emitter<SettingsState> emit,
   ) async {
-    final currentState = state;
-    if (currentState is! SettingsConfirmedState) return;
-
     emit(const SettingsLoadingState());
     try {
       final sucesso = await AppInjection.instance.configurationRepository
           .limparTodosDados();
-      if (sucesso) {
-        emit(
-          SettingsConfirmedState(
-            currentState.appSettings,
-            'Todos os dados foram removidos!',
-          ),
-        );
-      } else {
-        emit(const SettingsError('Erro ao remover dados'));
-      }
-      await Future.delayed(const Duration(milliseconds: 500));
-      emit(SettingsLoadedState(currentState.appSettings));
+
+      emit(SettingsLoadedState(sucesso, 'Todos os dados foram removidos!'));
     } catch (e) {
       emit(SettingsError('Erro ao limpar dados: $e'));
-      await Future.delayed(const Duration(milliseconds: 500));
-      emit(SettingsLoadedState(currentState.appSettings));
     }
   }
 
@@ -124,29 +97,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     BackupSettingsEvent event,
     Emitter<SettingsState> emit,
   ) async {
-    final currentState = state;
-    if (currentState is! SettingsConfirmedState) return;
-
     emit(const SettingsLoadingState());
     try {
       final sucesso = await AppInjection.instance.configurationRepository
           .realizarBackup();
-      if (sucesso) {
-        emit(
-          SettingsConfirmedState(
-            currentState.appSettings,
-            'Backup realizado com sucesso!',
-          ),
-        );
-      } else {
-        emit(const SettingsError('Erro ao realizar backup'));
-      }
-      await Future.delayed(const Duration(milliseconds: 500));
-      emit(SettingsLoadedState(currentState.appSettings));
+
+      emit(SettingsLoadedState(sucesso, 'Backup realizado com sucesso!'));
     } catch (e) {
       emit(SettingsError('Erro ao realizar backup: $e'));
-      await Future.delayed(const Duration(milliseconds: 500));
-      emit(SettingsLoadedState(currentState.appSettings));
     }
   }
 
@@ -160,14 +118,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       await AppInjection.instance.configurationRepository.restaurarPadrao();
       final configuracao = await AppInjection.instance.configurationRepository
           .carregarConfiguracao();
+
       emit(
-        SettingsConfirmedState(
+        SettingsLoadedState(
           configuracao,
-          'Configurações restauradas para padrão!',
+          'Configurações restauradas para o padrão!',
         ),
       );
-      await Future.delayed(const Duration(milliseconds: 500));
-      emit(SettingsLoadedState(configuracao));
     } catch (e) {
       emit(SettingsError('Erro ao restaurar configurações: $e'));
     }

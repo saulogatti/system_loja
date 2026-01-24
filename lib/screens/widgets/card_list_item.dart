@@ -39,18 +39,17 @@ class CardListItem extends StatelessWidget {
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subTitle),
         isThreeLine: true,
-        trailing: onDelete != null
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: onDelete,
-                  ),
-                  const Icon(Icons.arrow_forward_ios, size: 16),
-                ],
-              )
-            : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (onDelete != null)
+              IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red),
+                onPressed: onDelete,
+              ),
+            const Icon(Icons.arrow_forward_ios, size: 16),
+          ],
+        ),
         onTap: onTap,
       ),
     );
