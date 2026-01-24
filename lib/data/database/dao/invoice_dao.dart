@@ -69,6 +69,22 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
     return record.toDomain(items);
   }
 
+  /// Busca uma nota fiscal pelo número da nota.
+  ///
+  /// [invoiceNumber] Número da nota fiscal a ser buscada.
+  /// Retorna a nota fiscal encontrada ou null se não existir.
+  Future<Invoice?> getByInvoiceNumber(String invoiceNumber) async {
+    final record = await (select(
+      invoicesRecords,
+    )..where((t) => t.invoiceNumber.equals(invoiceNumber))).getSingleOrNull();
+
+    if (record == null) return null;
+
+    final invoiceItemDao = db.invoiceItemDao;
+    final items = await invoiceItemDao.getByInvoiceId(record.id);
+    return record.toDomain(items);
+  }
+
   /// Insere uma nova nota fiscal no banco de dados.
   ///
   /// Aceita um objeto Invoice do domínio e o converte para Companion.
@@ -77,7 +93,7 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   Future<int> insertInvoice(Invoice invoice) {
     return into(
       invoicesRecords,
-    ).insert(invoice.toCompanion(), mode: InsertMode.insertOrReplace);
+    ).insert(invoice.toCompanion(), mode: InsertMode.insertOrAbort);
   }
 
   /// Insere uma nova nota fiscal com seus itens em uma transação.
@@ -97,6 +113,15 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
 
       return invoiceId;
     });
+  }
+
+  /// Verifica se um número de nota fiscal já existe no banco de dados.
+  ///
+  /// [invoiceNumber] Número da nota fiscal a ser verificado.
+  /// Retorna true se o número já existe, false caso contrário.
+  Future<bool> invoiceNumberExists(String invoiceNumber) async {
+    final invoice = await getByInvoiceNumber(invoiceNumber);
+    return invoice != null;
   }
 
   /// Atualiza uma nota fiscal existente no banco de dados.
@@ -132,30 +157,5 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
 
       return result;
     });
-  }
-
-  /// Busca uma nota fiscal pelo número da nota.
-  ///
-  /// [invoiceNumber] Número da nota fiscal a ser buscada.
-  /// Retorna a nota fiscal encontrada ou null se não existir.
-  Future<Invoice?> getByInvoiceNumber(String invoiceNumber) async {
-    final record = await (select(
-      invoicesRecords,
-    )..where((t) => t.invoiceNumber.equals(invoiceNumber))).getSingleOrNull();
-
-    if (record == null) return null;
-
-    final invoiceItemDao = db.invoiceItemDao;
-    final items = await invoiceItemDao.getByInvoiceId(record.id);
-    return record.toDomain(items);
-  }
-
-  /// Verifica se um número de nota fiscal já existe no banco de dados.
-  ///
-  /// [invoiceNumber] Número da nota fiscal a ser verificado.
-  /// Retorna true se o número já existe, false caso contrário.
-  Future<bool> invoiceNumberExists(String invoiceNumber) async {
-    final invoice = await getByInvoiceNumber(invoiceNumber);
-    return invoice != null;
   }
 }
