@@ -36,40 +36,34 @@ class ProductCategory extends StatefulWidget {
 
 class _ProductCategoryState extends State<ProductCategory> {
   int? _selectedCategoryId;
-  late CategoryCubit _categoryCubit;
 
   @override
   void initState() {
     super.initState();
     _selectedCategoryId = widget.selectedCategoryId;
-    _categoryCubit = CategoryCubit();
-  }
-
-  @override
-  void dispose() {
-    _categoryCubit.close();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CategoryCubit, CategoryState>(
-      bloc: _categoryCubit,
-      builder: (context, state) {
-        return state.when(
-          initial: () => const CircularProgressIndicator(),
-          loading: () => const CircularProgressIndicator(),
-          loaded: (categories) => _buildDropdown(categories),
-          created: (categories) => _buildDropdown(categories),
-          updated: (categories) => _buildDropdown(categories),
-          deleted: (categories) => _buildDropdown(categories),
-          error: (message) => _buildErrorWidget(message),
-        );
-      },
+    return BlocProvider(
+      create: (context) => CategoryCubit(),
+      child: BlocBuilder<CategoryCubit, CategoryState>(
+        builder: (context, state) {
+          return state.when(
+            initial: () => const CircularProgressIndicator(),
+            loading: () => const CircularProgressIndicator(),
+            loaded: (categories) => _buildDropdown(context, categories),
+            created: (categories) => _buildDropdown(context, categories),
+            updated: (categories) => _buildDropdown(context, categories),
+            deleted: (categories) => _buildDropdown(context, categories),
+            error: (message) => _buildErrorWidget(context, message),
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildDropdown(List<Category> categories) {
+  Widget _buildDropdown(BuildContext context, List<Category> categories) {
     return Row(
       children: [
         Expanded(
@@ -107,7 +101,7 @@ class _ProductCategoryState extends State<ProductCategory> {
         ),
         const SizedBox(width: 8),
         IconButton(
-          onPressed: widget.enabled ? () => _showCreateCategoryDialog() : null,
+          onPressed: widget.enabled ? () => _showCreateCategoryDialog(context) : null,
           icon: const Icon(Icons.add),
           tooltip: 'Adicionar nova categoria',
         ),
@@ -115,7 +109,7 @@ class _ProductCategoryState extends State<ProductCategory> {
     );
   }
 
-  Widget _buildErrorWidget(String message) {
+  Widget _buildErrorWidget(BuildContext context, String message) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -125,7 +119,7 @@ class _ProductCategoryState extends State<ProductCategory> {
         ),
         const SizedBox(height: 8),
         ElevatedButton.icon(
-          onPressed: () => _categoryCubit.loadCategories(),
+          onPressed: () => context.read<CategoryCubit>().loadCategories(),
           icon: const Icon(Icons.refresh),
           label: const Text('Tentar novamente'),
         ),
@@ -133,7 +127,7 @@ class _ProductCategoryState extends State<ProductCategory> {
     );
   }
 
-  Future<void> _showCreateCategoryDialog() async {
+  Future<void> _showCreateCategoryDialog(BuildContext parentContext) async {
     final nameController = TextEditingController();
     final descriptionController = TextEditingController();
     final formKey = GlobalKey<FormState>();
@@ -180,19 +174,27 @@ class _ProductCategoryState extends State<ProductCategory> {
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState!.validate()) {
-                await _categoryCubit.createCategory(
+                // Use parent context to access the cubit
+                final cubit = parentContext.read<CategoryCubit>();
+                await cubit.createCategory(
                   name: nameController.text.trim(),
                   description: descriptionController.text.trim().isEmpty
                       ? null
                       : descriptionController.text.trim(),
                 );
+                
+                // Check if successful before showing message
                 if (context.mounted) {
+                  final currentState = cubit.state;
                   Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Categoria criada com sucesso'),
-                    ),
-                  );
+                  
+                  if (currentState is _Created) {
+                    ScaffoldMessenger.of(parentContext).showSnackBar(
+                      const SnackBar(
+                        content: Text('Categoria criada com sucesso'),
+                      ),
+                    );
+                  }
                 }
               }
             },
