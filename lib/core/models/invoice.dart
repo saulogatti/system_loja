@@ -51,7 +51,7 @@ class Invoice extends DefaultObject {
 @JsonSerializable()
 class InvoiceData {
   @JsonKey(name: 'numero_nota')
-  final String invoiceNumber;
+  String invoiceNumber;
   @JsonKey(name: 'cliente_id')
   final int customerId;
   @JsonKey(name: 'cliente_nome')

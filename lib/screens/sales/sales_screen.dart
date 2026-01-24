@@ -229,7 +229,7 @@ class _SalesViewState extends State<SalesView> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Nota Fiscal ${nf.data.invoiceNumber}'),
+        title: Text('Nota Fiscal'),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

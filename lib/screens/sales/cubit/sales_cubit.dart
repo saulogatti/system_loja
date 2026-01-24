@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/repository/cliente_repository.dart';
 import 'package:system_loja/core/repository/sales_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
@@ -87,7 +88,10 @@ class SalesCubit extends Cubit<SalesState> {
   Future<void> registerSale(InvoiceData invoiceData) async {
     try {
       emit(SalesState.loading());
-
+      if (invoiceData.invoiceNumber == kStringGenerate) {
+        invoiceData.invoiceNumber = await _salesRepository
+            .generateInvoiceNumber();
+      }
       final invoice = Invoice(
         id: await _salesRepository.getNextSaleId(),
         data: invoiceData,

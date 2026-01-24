@@ -69,15 +69,27 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextFormField(
-                controller: _numeroNotaController,
-                decoration: const InputDecoration(
-                  labelText: 'Número da Nota *',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.numbers),
-                  helperText: 'Ex: NF-001, 12345',
-                ),
-                validator: (value) => validateRequired(value, 'Número da nota'),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _numeroNotaController,
+                      decoration: const InputDecoration(
+                        labelText: 'Número da Nota *',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.numbers),
+                      ),
+                      validator: (value) =>
+                          validateRequired(value, 'Número da nota'),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      _numeroNotaController.text = kStringGenerate;
+                    },
+                    icon: Icon(Icons.generating_tokens_outlined),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<Customer>(
