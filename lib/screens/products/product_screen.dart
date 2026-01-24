@@ -8,6 +8,7 @@ import 'package:system_loja/screens/products/widgets/product_form.dart';
 import 'package:system_loja/screens/products/widgets/product_list.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 
+
 /// Tela de cadastro e listagem de produtos.
 ///
 /// Permite adicionar novos produtos, visualizar a lista de produtos
@@ -18,7 +19,7 @@ class ProductInfoScreen extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   State<ProductInfoScreen> createState() => _ProductInfoScreenState();
-  
+
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<ProductCubit>(
@@ -33,7 +34,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
   static const String _tituloAppBar = 'Cadastro de Produto';
   static const String _mensagemSucesso = 'cadastrado com sucesso!';
 
-   final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _codigoController = TextEditingController();
   final _precoController = TextEditingController();
@@ -99,6 +100,10 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                           });
                         },
                         onSubmit: _adicionarProduto,
+                        onGenerateCode: () {
+                          final generatedCode = kStringGenerate;
+                          _codigoController.text = generatedCode;
+                        },
                       ),
                       const SizedBox(height: 32),
                       ProductList(

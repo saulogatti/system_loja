@@ -16,6 +16,7 @@ class ProductForm extends StatefulWidget {
   final VoidCallback onSubmit;
   final int? selectedCategoryId;
   final ValueChanged<int?> onCategoryChanged;
+  final VoidCallback onGenerateCode;
 
   const ProductForm({
     super.key,
@@ -28,6 +29,7 @@ class ProductForm extends StatefulWidget {
     required this.onSubmit,
     this.selectedCategoryId,
     required this.onCategoryChanged,
+    required this.onGenerateCode,
   });
 
   @override
@@ -63,19 +65,29 @@ class _ProductFormState extends State<ProductForm> {
             },
           ),
           const SizedBox(height: 16),
-          TextFormField(
-            controller: widget.codigoController,
-            decoration: const InputDecoration(
-              labelText: 'Código *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.qr_code),
-            ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Código é obrigatório';
-              }
-              return null;
-            },
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: widget.codigoController,
+                  decoration: const InputDecoration(
+                    labelText: 'Código *',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.qr_code),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Código é obrigatório';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              IconButton(
+                onPressed: widget.onGenerateCode,
+                icon: Icon(Icons.generating_tokens_outlined),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           Row(

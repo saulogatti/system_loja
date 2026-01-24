@@ -44,6 +44,9 @@ class ProductCubit extends Cubit<ProductState> {
     required String descricao,
     int? categoryId,
   }) async {
+    if (codigo == kStringGenerate) {
+      codigo = await _manager.generateProductCode();
+    }
     final produto = Product(
       name: nome,
       code: codigo,
