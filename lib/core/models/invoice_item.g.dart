@@ -11,7 +11,10 @@ InvoiceItem _$InvoiceItemFromJson(Map<String, dynamic> json) => $checkedCreate(
   json,
   ($checkedConvert) {
     final val = InvoiceItem(
-      productId: $checkedConvert('produto_id', (v) => (v as num).toInt()),
+      productId: $checkedConvert(
+        'produto_id',
+        (v) => (v as num?)?.toInt() ?? kInvalidId,
+      ),
       productName: $checkedConvert('produto_nome', (v) => v as String),
       productCode: $checkedConvert('produto_codigo', (v) => v as String),
       quantity: $checkedConvert('quantidade', (v) => (v as num).toInt()),

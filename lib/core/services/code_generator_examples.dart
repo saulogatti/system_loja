@@ -1,3 +1,4 @@
+import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/product.dart';
@@ -7,14 +8,14 @@ import 'package:system_loja/screens/injection/app_injection.dart';
 ///
 /// Este arquivo demonstra diferentes cenários de uso do gerador de código
 /// para produtos e notas fiscais.
-class CodeGeneratorExamples {
+class CodeGeneratorExamples with LoggerClassMixin {
   /// Exemplo 1: Criar produto com código gerado automaticamente
   Future<void> example1CreateProductWithAutoCode() async {
     final productRepository = AppInjection.instance.productRepository;
 
     // Gerar código automaticamente
     final code = await productRepository.generateProductCode();
-    print('Código gerado: $code'); // Exemplo: PRD-20260123-0001
+    logDebug('Código gerado: $code'); // Exemplo: PRD-20260123-0001
 
     // Criar produto com o código gerado
     final product = Product(
@@ -29,7 +30,7 @@ class CodeGeneratorExamples {
     // Salvar no banco
     final result = await productRepository.salvarProduto(product);
     if (result.isSuccessful) {
-      print('Produto salvo com sucesso!');
+      logInfo('Produto salvo com sucesso!');
     }
   }
 
@@ -55,10 +56,10 @@ class CodeGeneratorExamples {
       );
 
       await productRepository.salvarProduto(product);
-      print('Produto salvo com código personalizado: $customCode');
+      logInfo('Produto salvo com código personalizado: $customCode');
     } else {
       // Código inválido - mostrar erro
-      print('Erro ao validar código: ${validation.asError}');
+      logWarning('Erro ao validar código: ${validation.asError}');
       // Possíveis erros:
       // - "Código não pode ser vazio"
       // - "Código deve ter no mínimo 3 caracteres"
@@ -84,17 +85,17 @@ class CodeGeneratorExamples {
 
       if (validation.isSuccessful) {
         finalCode = userProvidedCode;
-        print('Usando código personalizado: $finalCode');
+        logInfo('Usando código personalizado: $finalCode');
       } else {
         // Código inválido - usar código automático como fallback
-        print('Código personalizado inválido, gerando automaticamente...');
+        logWarning('Código personalizado inválido, gerando automaticamente...');
         finalCode = await productRepository.generateProductCode();
-        print('Código automático gerado: $finalCode');
+        logInfo('Código automático gerado: $finalCode');
       }
     } else {
       // Usuário não forneceu código - gerar automaticamente
       finalCode = await productRepository.generateProductCode();
-      print('Código gerado automaticamente: $finalCode');
+      logInfo('Código gerado automaticamente: $finalCode');
     }
 
     // Criar e salvar produto
@@ -108,6 +109,7 @@ class CodeGeneratorExamples {
     );
 
     await productRepository.salvarProduto(product);
+    logInfo('Produto salvo com código: $finalCode');
   }
 
   /// Exemplo 4: Criar nota fiscal com número gerado automaticamente
@@ -116,7 +118,9 @@ class CodeGeneratorExamples {
 
     // Gerar número de nota automaticamente
     final invoiceNumber = await salesRepository.generateInvoiceNumber();
-    print('Número de nota gerado: $invoiceNumber'); // Exemplo: NF-20260123-0001
+    logInfo(
+      'Número de nota gerado: $invoiceNumber',
+    ); // Exemplo: NF-20260123-0001
 
     // Criar nota fiscal com o número gerado
     final invoice = Invoice(
@@ -128,12 +132,14 @@ class CodeGeneratorExamples {
         customerCpf: '12345678900',
         items: [
           InvoiceItem(
+            productId: -1,
             productCode: 'PRD-20260123-0001',
             productName: 'Notebook Dell Inspiron 15',
             quantity: 1,
             unitPrice: 3500.00,
           ),
           InvoiceItem(
+            productId: -1,
             productCode: 'MOUSE-001',
             productName: 'Mouse Logitech MX Master 3',
             quantity: 2,
@@ -146,7 +152,7 @@ class CodeGeneratorExamples {
 
     // Salvar nota fiscal
     await salesRepository.saveSale(invoice);
-    print('Nota fiscal salva com sucesso!');
+    logInfo('Nota fiscal salva com sucesso!');
   }
 
   /// Exemplo 5: Criar nota fiscal com número personalizado
@@ -172,6 +178,7 @@ class CodeGeneratorExamples {
           customerCpf: '98765432100',
           items: [
             InvoiceItem(
+              productId: -1,
               productCode: 'PRD-20260123-0001',
               productName: 'Notebook Dell Inspiron 15',
               quantity: 1,
@@ -183,10 +190,10 @@ class CodeGeneratorExamples {
       );
 
       await salesRepository.saveSale(invoice);
-      print('Nota fiscal salva com número personalizado: $customNumber');
+      logInfo('Nota fiscal salva com número personalizado: $customNumber');
     } else {
       // Número inválido - mostrar erro
-      print('Erro ao validar número: ${validation.message}');
+      logWarning('Erro ao validar número: ${validation.message}');
     }
   }
 
@@ -201,12 +208,12 @@ class CodeGeneratorExamples {
     final exists = await codeGenerator.checkProductCodeExists(codeToCheck);
 
     if (exists) {
-      print('Código $codeToCheck já existe no banco de dados');
+      logWarning('Código $codeToCheck já existe no banco de dados');
       // Sugerir código automático
       final newCode = await codeGenerator.generateProductCode();
-      print('Sugestão de código disponível: $newCode');
+      logInfo('Sugestão de código disponível: $newCode');
     } else {
-      print('Código $codeToCheck está disponível');
+      logInfo('Código $codeToCheck está disponível');
     }
   }
 
@@ -214,12 +221,11 @@ class CodeGeneratorExamples {
   Future<void> example7GenerateMultipleCodes() async {
     final productRepository = AppInjection.instance.productRepository;
 
-    print('Gerando 5 códigos de produto...');
+    logInfo('Gerando 5 códigos de produto...');
 
     for (int i = 0; i < 5; i++) {
       final code = await productRepository.generateProductCode();
-      print('Código ${i + 1}: $code');
-
+      logInfo('Código ${i + 1}: $code');
       // Criar produto para ocupar o código
       final product = Product(
         name: 'Produto $i',
@@ -233,7 +239,7 @@ class CodeGeneratorExamples {
       await productRepository.salvarProduto(product);
     }
 
-    print('5 produtos criados com códigos únicos!');
+    logInfo('5 produtos criados com códigos únicos!');
   }
 
   /// Exemplo 8: Tratamento completo com try-catch
@@ -252,7 +258,7 @@ class CodeGeneratorExamples {
       } else {
         // Fallback para código automático
         finalCode = await productRepository.generateProductCode();
-        print(
+        logWarning(
           'Aviso: Usando código automático ($finalCode) porque: ${validation.asError}',
         );
       }
@@ -271,12 +277,12 @@ class CodeGeneratorExamples {
       final result = await productRepository.salvarProduto(product);
 
       if (result.isSuccessful) {
-        print('✅ Produto salvo com sucesso com código: $finalCode');
+        logInfo('✅ Produto salvo com sucesso com código: $finalCode');
       } else {
-        print('❌ Erro ao salvar produto: ${result.asError}');
+        logWarning('❌ Erro ao salvar produto: ${result.asError}');
       }
-    } catch (e) {
-      print('❌ Erro inesperado: $e');
+    } catch (e, stack) {
+      logError('❌ Erro inesperado: $e', stack);
     }
   }
 }

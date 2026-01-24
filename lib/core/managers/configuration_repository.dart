@@ -24,7 +24,7 @@ class ConfigurationRepository
   /// Atualiza a configuração do sistema
   ///
   /// Salva automaticamente após atualizar.
-  Future<void> atualizarConfiguracao(AppSettings novaConfiguracao) async {
+  Future<AppSettings> atualizarConfiguracao(AppSettings novaConfiguracao) async {
     _configuracao = novaConfiguracao;
     await _salvarDados();
     AppInjection.instance.settingsService.updateSettings(
@@ -32,6 +32,7 @@ class ConfigurationRepository
       novaConfiguracao.temaEscuro,
     );
     logInfo('Configuração atualizada com sucesso');
+    return _configuracao;
   }
 
   /// Carrega a configuração atual do sistema
@@ -40,63 +41,55 @@ class ConfigurationRepository
     return _configuracao;
   }
 
+  Future<AppSettings> clearOldLogs() async {
+    final int diasManterLogs = _configuracao.diasManterLogs;
+    if (diasManterLogs > 0) {
+      final DateTime dataLimite = DateTime.now().subtract(
+        Duration(days: diasManterLogs),
+      );
+      await AppInjection.instance.logRepository.clearOldLogs(dataLimite);
+    }
+    return _configuracao;
+  }
+
   @override
   Future<void> initializeDependencies() async {
     await _carregarDados();
-  }
-
-  Future<bool> clearOldLogs() async {
-    try {
-      final int diasManterLogs = _configuracao.diasManterLogs;
-      if (diasManterLogs > 0) {
-        final DateTime dataLimite = DateTime.now().subtract(
-          Duration(days: diasManterLogs),
-        );
-        await AppInjection.instance.logRepository.clearOldLogs(dataLimite);
-      }
-      return true;
-    } catch (e) {
-      return false;
-    }
   }
 
   /// Limpa todos os dados do sistema
   ///
   /// Remove todos os clientes, produtos, notas fiscais e logs.
   /// Mantém as configurações atuais.
-  Future<bool> limparTodosDados() async {
-    try {
-      await _cache.clearAll();
+  Future<AppSettings> limparTodosDados() async {
+    await _cache.clearAll();
 
-      logInfo('Todos os dados foram limpos com sucesso');
-      return true;
-    } catch (e, stackTrace) {
-      logError('Erro ao limpar dados: $e', stackTrace);
-      return false;
-    }
+    logInfo('Todos os dados foram limpos com sucesso');
+    return _configuracao;
   }
 
   /// Realiza backup dos dados do sistema
   ///
   /// Cria uma cópia dos arquivos JSON em um diretório de backup
   /// com timestamp.
-  Future<bool> realizarBackup() async {
+  Future<AppSettings> realizarBackup() async {
     try {
       final backupFiles = await _cache.createBackup(_configuracao.localBackup);
 
       logInfo('Backup realizado com sucesso: $backupFiles arquivos copiados');
-      return backupFiles;
+      return _configuracao;
     } catch (e, stackTrace) {
       logError('Erro ao realizar backup: $e', stackTrace);
-      return false;
+      return _configuracao;
     }
   }
 
   /// Restaura configurações para valores padrão
-  Future<void> restaurarPadrao() async {
+  Future<AppSettings> restaurarPadrao() async {
     _configuracao = AppSettings.createDefaultSettings();
     _salvarDados();
     logInfo('Configurações restauradas para padrão');
+    return _configuracao;
   }
 
   /// Carrega dados do arquivo JSON

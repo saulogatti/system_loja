@@ -1,11 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/app_theme_settings.dart';
 
-import 'bloc/configuracoes_bloc.dart';
-import 'bloc/configuracoes_event.dart';
-import 'bloc/configuracoes_state.dart';
+import 'bloc/settings_bloc.dart';
+import 'bloc/settings_event.dart';
+import 'bloc/settings_state.dart';
 import 'widgets/secao_backup.dart';
 import 'widgets/secao_limpeza.dart';
 import 'widgets/secao_notificacoes.dart';
@@ -17,46 +18,39 @@ import 'widgets/secao_tema.dart';
 /// Permite aos administradores ajustar preferências de notificação,
 /// temas visuais, backup, limpeza de dados, segurança e tipo de banco.
 /// Utiliza BLoC para gerenciamento de estado.
-class ConfiguracoesScreen extends StatelessWidget {
-  const ConfiguracoesScreen({super.key});
+@RoutePage()
+class SettingsScreen extends StatefulWidget implements AutoRouteWrapper {
+  const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          ConfiguracoesBloc()..add(const CarregarConfiguracoesEvent()),
-      child: const _ConfiguracoesView(),
-    );
+  State<SettingsScreen> createState() => _SettingsScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider(create: (context) => SettingsBloc(), child: this);
   }
 }
 
-class _ConfiguracoesView extends StatelessWidget {
-  const _ConfiguracoesView();
-
+class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Configurações do Sistema'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.restore),
-            tooltip: 'Restaurar Padrão',
-            onPressed: () => _restaurarPadrao(context),
-          ),
-        ],
-      ),
-      body: BlocConsumer<ConfiguracoesBloc, ConfiguracoesState>(
+      persistentFooterButtons: [
+        TextButton(
+          onPressed: () => _resetToDefault(context),
+          child: const Text('Restaurar Padrão'),
+        ),
+      ],
+      body: BlocConsumer<SettingsBloc, SettingsState>(
         listener: (context, state) {
-          if (state is ConfiguracoesSuccess) {
+          if (state is SettingsLoadedState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.mensagem),
                 backgroundColor: Colors.green,
               ),
             );
-          } else if (state is ConfiguracoesError) {
+          } else if (state is SettingsError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.mensagem),
@@ -65,93 +59,99 @@ class _ConfiguracoesView extends StatelessWidget {
             );
           }
         },
+
         builder: (context, state) {
-          if (state is ConfiguracoesLoading || state is ConfiguracoesInitial) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state is ConfiguracoesError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error, size: 64, color: Colors.red),
-                  const SizedBox(height: 16),
-                  Text(state.mensagem),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => context.read<ConfiguracoesBloc>().add(
-                      const CarregarConfiguracoesEvent(),
+          switch (state) {
+            case SettingsError():
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error, size: 64, color: Colors.red),
+                    const SizedBox(height: 16),
+                    Text(state.mensagem),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => context.read<SettingsBloc>().add(
+                        const LoadSettingsEvent(),
+                      ),
+                      child: const Text('Tentar Novamente'),
                     ),
-                    child: const Text('Tentar Novamente'),
-                  ),
-                ],
-              ),
-            );
+                  ],
+                ),
+              );
+            case SettingsLoadingState():
+            case SettingsInitialState():
+              return const Center(child: CircularProgressIndicator());
+
+            case SettingsLoadedState():
+              final currentConfig = state.appSettings;
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SecaoNotificacoes(
+                      config: currentConfig,
+                      onConfigChanged: (newConfig) =>
+                          _updateConfig(context, newConfig),
+                    ),
+                    const SizedBox(height: 24),
+                    SecaoTema(
+                      config: currentConfig,
+                      onConfigChanged: (newConfig) =>
+                          _updateConfig(context, newConfig),
+                      onMostrarSeletorCor: () =>
+                          _mostrarSeletorCor(context, currentConfig),
+                    ),
+                    const SizedBox(height: 24),
+                    SecaoBackup(
+                      config: currentConfig,
+                      onConfigChanged: (newConfig) =>
+                          _updateConfig(context, newConfig),
+                      onRealizarBackup: () => context.read<SettingsBloc>().add(
+                        const BackupSettingsEvent(),
+                      ),
+                      onSelecionarFrequencia: () =>
+                          _selecionarFrequenciaBackup(context, currentConfig),
+                    ),
+                    const SizedBox(height: 24),
+                    SecaoLimpeza(
+                      config: currentConfig,
+                      onConfigChanged: (newConfig) =>
+                          _updateConfig(context, newConfig),
+                      onLimparLogsAntigos: () =>
+                          _limparLogsAntigos(context, currentConfig),
+                      onLimparTodosDados: () => _limparTodosDados(context),
+                    ),
+                    const SizedBox(height: 24),
+                    SecaoSeguranca(
+                      config: currentConfig,
+                      onConfigChanged: (newConfig) =>
+                          _updateConfig(context, newConfig),
+                    ),
+                    const SizedBox(height: 24),
+                    // SecaoBancoDados(
+                    //   config: _currentConfig,
+                    //   onConfigChanged: (newConfig) =>
+                    //       _updateConfig(context, newConfig),
+                    // ),
+                    const SizedBox(height: 32),
+                    _buildBotaoSalvar(context, currentConfig),
+                  ],
+                ),
+              );
           }
-
-          final config = state is ConfiguracoesLoaded
-              ? state.configuracao
-              : (state as ConfiguracoesSuccess).configuracao;
-
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SecaoNotificacoes(
-                  config: config,
-                  onConfigChanged: (newConfig) =>
-                      _updateConfig(context, newConfig),
-                ),
-                const SizedBox(height: 24),
-                SecaoTema(
-                  config: config,
-                  onConfigChanged: (newConfig) =>
-                      _updateConfig(context, newConfig),
-                  onMostrarSeletorCor: () =>
-                      _mostrarSeletorCor(context, config),
-                ),
-                const SizedBox(height: 24),
-                SecaoBackup(
-                  config: config,
-                  onConfigChanged: (newConfig) =>
-                      _updateConfig(context, newConfig),
-                  onRealizarBackup: () => context.read<ConfiguracoesBloc>().add(
-                    const RealizarBackupEvent(),
-                  ),
-                  onSelecionarFrequencia: () =>
-                      _selecionarFrequenciaBackup(context, config),
-                ),
-                const SizedBox(height: 24),
-                SecaoLimpeza(
-                  config: config,
-                  onConfigChanged: (newConfig) =>
-                      _updateConfig(context, newConfig),
-                  onLimparLogsAntigos: () =>
-                      _limparLogsAntigos(context, config),
-                  onLimparTodosDados: () => _limparTodosDados(context),
-                ),
-                const SizedBox(height: 24),
-                SecaoSeguranca(
-                  config: config,
-                  onConfigChanged: (newConfig) =>
-                      _updateConfig(context, newConfig),
-                ),
-                const SizedBox(height: 24),
-                // SecaoBancoDados(
-                //   config: config,
-                //   onConfigChanged: (newConfig) =>
-                //       _updateConfig(context, newConfig),
-                // ),
-                const SizedBox(height: 32),
-                _buildBotaoSalvar(context, config),
-              ],
-            ),
-          );
         },
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Carrega as configurações iniciais ao iniciar a tela
+    context.read<SettingsBloc>().add(const LoadSettingsEvent());
   }
 
   /// Botão de salvar configurações
@@ -163,9 +163,7 @@ class _ConfiguracoesView extends StatelessWidget {
         label: const Text('Salvar Configurações'),
         style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
         onPressed: () {
-          context.read<ConfiguracoesBloc>().add(
-            AtualizarConfiguracoesEvent(config),
-          );
+          context.read<SettingsBloc>().add(UpdateSettingsEvent(config));
         },
       ),
     );
@@ -197,7 +195,7 @@ class _ConfiguracoesView extends StatelessWidget {
     );
 
     if (confirmado == true && context.mounted) {
-      context.read<ConfiguracoesBloc>().add(const LimparLogsAntigosEvent());
+      context.read<SettingsBloc>().add(const ClearOldLogsEvent());
     }
   }
 
@@ -228,7 +226,7 @@ class _ConfiguracoesView extends StatelessWidget {
     );
 
     if (confirmado == true && context.mounted) {
-      context.read<ConfiguracoesBloc>().add(const LimparTodosDadosEvent());
+      context.read<SettingsBloc>().add(const ClearAllDataEvent());
     }
   }
 
@@ -269,14 +267,12 @@ class _ConfiguracoesView extends StatelessWidget {
 
     if (selecionada != null && context.mounted) {
       final newConfig = config.copyWith(corPrimaria: selecionada);
-      context.read<ConfiguracoesBloc>().add(
-        AtualizarConfiguracoesEvent(newConfig),
-      );
+      context.read<SettingsBloc>().add(UpdateSettingsEvent(newConfig));
     }
   }
 
   /// Restaura configurações padrão
-  Future<void> _restaurarPadrao(BuildContext context) async {
+  Future<void> _resetToDefault(BuildContext context) async {
     final confirmado = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -298,7 +294,7 @@ class _ConfiguracoesView extends StatelessWidget {
     );
 
     if (confirmado == true && context.mounted) {
-      context.read<ConfiguracoesBloc>().add(const RestaurarPadraoEvent());
+      context.read<SettingsBloc>().add(const ResetDefaultSettingsEvent());
     }
   }
 
@@ -330,16 +326,14 @@ class _ConfiguracoesView extends StatelessWidget {
 
     if (selecionado != null && context.mounted) {
       final newConfig = config.copyWith(frequenciaBackup: selecionado);
-      context.read<ConfiguracoesBloc>().add(
-        AtualizarConfiguracoesEvent(newConfig),
-      );
+      context.read<SettingsBloc>().add(UpdateSettingsEvent(newConfig));
     }
   }
 
   /// Atualiza a configuração no estado local (não salva ainda)
   void _updateConfig(BuildContext context, AppSettings newConfig) {
-    context.read<ConfiguracoesBloc>().add(
-      AtualizarConfiguracoesEvent(newConfig),
+    context.read<SettingsBloc>().add(
+      UpdateSettingsEvent(newConfig),
     ); // Recarrega para manter estado
     // Aqui mantemos o config local até salvar
     // Em uma implementação mais complexa, usaríamos outro evento

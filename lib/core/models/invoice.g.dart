@@ -11,7 +11,7 @@ Invoice _$InvoiceFromJson(Map<String, dynamic> json) => $checkedCreate(
   json,
   ($checkedConvert) {
     final val = Invoice(
-      id: $checkedConvert('id', (v) => (v as num).toInt()),
+      id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
       data: $checkedConvert(
         'data',
         (v) => InvoiceData.fromJson(v as Map<String, dynamic>),

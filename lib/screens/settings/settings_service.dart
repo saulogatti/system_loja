@@ -20,6 +20,7 @@ class SettingsService {
       textTheme: temaEscuro
           ? ThemeData.dark().textTheme
           : ThemeData.light().textTheme,
+   
     );
     _temaEscuro = temaEscuro;
     currentThemeNotifier.value = _appTheme;

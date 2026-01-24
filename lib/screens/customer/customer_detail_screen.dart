@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/customer.dart';
@@ -13,6 +14,7 @@ import 'package:system_loja/screens/customer/widgets/customer_system_info_card.d
 /// - Editar dados do cliente
 /// - Deletar cliente
 /// - Consultar outro cliente pelo CPF
+@RoutePage()
 class CustomerDetailScreen extends StatefulWidget {
   final Customer customer;
 
@@ -29,7 +31,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   late final TextEditingController _telefoneController;
   late final TextEditingController _enderecoController;
   final _formKey = GlobalKey<FormState>();
-  bool _isEditing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +45,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   backgroundColor: Colors.green,
                 ),
               );
-              setState(() {
-                _isEditing = false;
-              });
             } else if (stateType == EnumStateCustomerLoaded.deleteCustomer) {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
@@ -66,26 +64,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Detalhes do Cliente'),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          actions: [
-            if (!_isEditing)
-              IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: () {
-                  setState(() {
-                    _isEditing = true;
-                  });
-                },
-                tooltip: 'Editar',
-              ),
-            if (!_isEditing)
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: _confirmarExclusao,
-                tooltip: 'Deletar',
-              ),
-          ],
+          title: Text('Detalhes do Cliente: ${widget.customer.name}'),
+          leading: AutoLeadingButton(),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -97,7 +77,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 CustomerAvatar(name: widget.customer.name),
                 const SizedBox(height: 24),
                 CustomerInfoForm(
-                  isEditing: _isEditing,
+                  isEditing: true,
                   nomeController: _nomeController,
                   cpfController: _cpfController,
                   emailController: _emailController,
@@ -110,11 +90,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   formatDate: _formatDate,
                 ),
                 const SizedBox(height: 24),
-                if (_isEditing)
-                  CustomerActionButtons(
-                    onCancel: _cancelEditing,
-                    onSave: _salvarAlteracoes,
-                  ),
+                CustomerActionButtons(
+                  onCancel: _cancelEditing,
+                  onSave: _salvarAlteracoes,
+                ),
               ],
             ),
           ),
@@ -145,43 +124,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
   void _cancelEditing() {
     setState(() {
-      _isEditing = false;
       _nomeController.text = widget.customer.name;
       _emailController.text = widget.customer.email ?? '';
       _telefoneController.text = widget.customer.phone ?? '';
       _enderecoController.text = widget.customer.address ?? '';
     });
-  }
-
-  void _confirmarExclusao() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirmar Exclusão'),
-        content: Text(
-          'Tem certeza que deseja excluir o cliente "${widget.customer.name}"?\n\nEsta ação não pode ser desfeita.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              context.read<CustomerBloc>().add(
-                CustomerBlocEvent.deleteCustomer(id: widget.customer.id),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
-              foregroundColor: Theme.of(context).colorScheme.onError,
-            ),
-            child: const Text('Deletar'),
-          ),
-        ],
-      ),
-    );
   }
 
   /// Formata uma data no formato DD/MM/YYYY HH:MM
