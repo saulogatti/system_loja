@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/input_formatters.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/products/widgets/product_category.dart';
@@ -7,16 +6,16 @@ import 'package:system_loja/screens/products/widgets/product_category.dart';
 /// Widget do formulário de cadastro de produto
 ///
 /// Encapsula os campos de entrada e validações para criação de novos produtos.
-class ProductForm extends StatelessWidget {
+class ProductForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nomeController;
   final TextEditingController codigoController;
   final TextEditingController precoController;
   final TextEditingController estoqueController;
   final TextEditingController descricaoController;
-  final TextEditingController categoriaController;
   final VoidCallback onSubmit;
-  final List<Product> products;
+  final int? selectedCategoryId;
+  final ValueChanged<int?> onCategoryChanged;
 
   const ProductForm({
     super.key,
@@ -26,15 +25,20 @@ class ProductForm extends StatelessWidget {
     required this.precoController,
     required this.estoqueController,
     required this.descricaoController,
-    required this.categoriaController,
     required this.onSubmit,
-    required this.products,
+    this.selectedCategoryId,
+    required this.onCategoryChanged,
   });
 
   @override
+  State<ProductForm> createState() => _ProductFormState();
+}
+
+class _ProductFormState extends State<ProductForm> {
+  @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
+      key: widget.formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -45,7 +49,7 @@ class ProductForm extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           TextFormField(
-            controller: nomeController,
+            controller: widget.nomeController,
             decoration: const InputDecoration(
               labelText: 'Nome do Produto *',
               border: OutlineInputBorder(),
@@ -60,7 +64,7 @@ class ProductForm extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           TextFormField(
-            controller: codigoController,
+            controller: widget.codigoController,
             decoration: const InputDecoration(
               labelText: 'Código *',
               border: OutlineInputBorder(),
@@ -78,12 +82,12 @@ class ProductForm extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
-                  controller: precoController,
+                  controller: widget.precoController,
                   decoration: const InputDecoration(
-                    labelText: 'Preço (R\$) *',
+                    labelText: 'Preço *',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.attach_money),
-                    helperText: 'Ex: 10.50',
+                    helperText: 'Ex: 10,50',
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
@@ -95,7 +99,7 @@ class ProductForm extends StatelessWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: TextFormField(
-                  controller: estoqueController,
+                  controller: widget.estoqueController,
                   decoration: const InputDecoration(
                     labelText: 'Estoque *',
                     border: OutlineInputBorder(),
@@ -110,10 +114,13 @@ class ProductForm extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          ProductCategory(controller: categoriaController, products: products),
+          ProductCategory(
+            selectedCategoryId: widget.selectedCategoryId,
+            onChanged: widget.onCategoryChanged,
+          ),
           const SizedBox(height: 16),
           TextFormField(
-            controller: descricaoController,
+            controller: widget.descricaoController,
             decoration: const InputDecoration(
               labelText: 'Descrição',
               border: OutlineInputBorder(),
@@ -123,7 +130,7 @@ class ProductForm extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
-            onPressed: onSubmit,
+            onPressed: widget.onSubmit,
             icon: const Icon(Icons.add),
             label: const Text('Adicionar Produto'),
             style: ElevatedButton.styleFrom(

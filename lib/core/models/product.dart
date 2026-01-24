@@ -10,8 +10,8 @@ class Product extends DefaultObject {
   final String description;
   final double price;
   final int stockQuantity;
-  final String
-  category; // TODO separar em outra tabela, quando apaga o produto a categoria some e isso não é desejado
+  /// ID da categoria à qual o produto pertence (referência FK para categories_records)
+  final int? categoryId;
   final String code;
   Product({
     required this.name,
@@ -19,7 +19,7 @@ class Product extends DefaultObject {
     required this.price,
     required this.stockQuantity,
     super.lastUpdatedDate,
-    required this.category,
+    this.categoryId,
     required this.code,
     int? id,
   }) : super(id: id ?? -1);

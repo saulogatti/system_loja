@@ -1,0 +1,285 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/models/category.dart';
+import 'package:system_loja/screens/categories/cubit/category_cubit.dart';
+import 'package:system_loja/screens/categories/cubit/category_state.dart';
+
+/// Tela de gerenciamento de categorias de produtos.
+///
+/// Permite visualizar, criar, editar e excluir categorias.
+/// Acessível através das configurações da aplicação.
+@RoutePage()
+class CategoryManagementScreen extends StatefulWidget
+    implements AutoRouteWrapper {
+  const CategoryManagementScreen({super.key});
+
+  @override
+  State<CategoryManagementScreen> createState() =>
+      _CategoryManagementScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<CategoryCubit>(
+      create: (_) => CategoryCubit(),
+      child: this,
+    );
+  }
+}
+
+class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Gerenciar Categorias')),
+      body: BlocConsumer<CategoryCubit, CategoryState>(
+        listener: (context, state) {
+          state.when(
+            initial: () {},
+            loading: () {},
+            loaded: (_) {},
+            created: (_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Categoria criada com sucesso'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            },
+            updated: (_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Categoria atualizada com sucesso'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            },
+            deleted: (_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Categoria removida com sucesso'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            },
+            error: (message) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(message), backgroundColor: Colors.red),
+              );
+            },
+          );
+        },
+        builder: (context, state) {
+          return state.when(
+            initial: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            loaded: _buildCategoryList,
+            created: _buildCategoryList,
+            updated: _buildCategoryList,
+            deleted: _buildCategoryList,
+            error: _buildErrorWidget,
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showCategoryDialog,
+        tooltip: 'Adicionar Categoria',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildCategoryList(List<Category> categories) {
+    if (categories.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.category_outlined,
+              size: 64,
+              color: Theme.of(context).colorScheme.primary.withAlpha(128),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Nenhuma categoria cadastrada',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            const Text('Toque no botão + para adicionar'),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: categories.length,
+      padding: const EdgeInsets.all(16),
+      itemBuilder: (context, index) {
+        final category = categories[index];
+        return Card(
+          child: ListTile(
+            leading: const Icon(Icons.category),
+            title: Text(category.name),
+            subtitle: category.description != null
+                ? Text(category.description!)
+                : null,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () => _showCategoryDialog(category: category),
+                  tooltip: 'Editar',
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () => _confirmDeleteCategory(category),
+                  tooltip: 'Excluir',
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildErrorWidget(String message) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: 64,
+            color: Theme.of(context).colorScheme.error,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Erro ao carregar categorias',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 8),
+          Text(message),
+          const SizedBox(height: 16),
+          ElevatedButton.icon(
+            onPressed: () => context.read<CategoryCubit>().loadCategories(),
+            icon: const Icon(Icons.refresh),
+            label: const Text('Tentar novamente'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _confirmDeleteCategory(Category category) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Confirmar Exclusão'),
+        content: Text(
+          'Tem certeza que deseja excluir a categoria "${category.name}"?\n\n'
+          'Esta ação não poderá ser desfeita e falhará se houver produtos associados.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      context.read<CategoryCubit>().deleteCategory(category.id);
+    }
+  }
+
+  Future<void> _showCategoryDialog({Category? category}) async {
+    final nameController = TextEditingController(text: category?.name ?? '');
+    final descriptionController = TextEditingController(
+      text: category?.description ?? '',
+    );
+    final formKey = GlobalKey<FormState>();
+    final isEdit = category != null;
+
+    await showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(isEdit ? 'Editar Categoria' : 'Nova Categoria'),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Nome *',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.category),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Nome é obrigatório';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: descriptionController,
+                decoration: const InputDecoration(
+                  labelText: 'Descrição',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.description),
+                ),
+                maxLines: 3,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (formKey.currentState!.validate()) {
+                if (isEdit) {
+                  await context.read<CategoryCubit>().updateCategory(
+                    id: category.id,
+                    name: nameController.text.trim(),
+                    description: descriptionController.text.trim().isEmpty
+                        ? null
+                        : descriptionController.text.trim(),
+                  );
+                } else {
+                  await context.read<CategoryCubit>().createCategory(
+                    name: nameController.text.trim(),
+                    description: descriptionController.text.trim().isEmpty
+                        ? null
+                        : descriptionController.text.trim(),
+                  );
+                }
+                if (dialogContext.mounted) {
+                  Navigator.of(dialogContext).pop();
+                }
+              }
+            },
+            child: Text(isEdit ? 'Salvar' : 'Criar'),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -39,7 +39,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
   final _precoController = TextEditingController();
   final _estoqueController = TextEditingController();
   final _descricaoController = TextEditingController();
-  final _categoriaController = TextEditingController();
+  int? _selectedCategoryId;
 
   @override
   Widget build(BuildContext context) {
@@ -92,9 +92,13 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                         precoController: _precoController,
                         estoqueController: _estoqueController,
                         descricaoController: _descricaoController,
-                        categoriaController: _categoriaController,
+                        selectedCategoryId: _selectedCategoryId,
+                        onCategoryChanged: (categoryId) {
+                          setState(() {
+                            _selectedCategoryId = categoryId;
+                          });
+                        },
                         onSubmit: _adicionarProduto,
-                        products: produtos,
                       ),
                       const SizedBox(height: 32),
                       ProductList(
@@ -121,7 +125,6 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
     _precoController.dispose();
     _estoqueController.dispose();
     _descricaoController.dispose();
-    _categoriaController.dispose();
     super.dispose();
   }
 
@@ -152,7 +155,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
       preco: preco,
       estoque: estoque,
       descricao: _descricaoController.text.trim(),
-      categoria: _categoriaController.text.trim(),
+      categoryId: _selectedCategoryId,
     );
   }
 
@@ -164,7 +167,9 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
     _precoController.clear();
     _estoqueController.clear();
     _descricaoController.clear();
-    _categoriaController.clear();
+    setState(() {
+      _selectedCategoryId = null;
+    });
   }
 
   /// Navega para a tela de detalhes do produto.
