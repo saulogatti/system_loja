@@ -89,12 +89,13 @@ class _SalesViewState extends State<SalesView> {
           }
         },
         builder: (context, state) {
+          final invoices = _mapToNotaFiscal.values.toList(growable: false);
           return Stack(
             children: [
               Column(
                 children: [
                   Expanded(
-                    child: _mapToNotaFiscal.isEmpty
+                    child: invoices.isEmpty
                         ? Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -124,11 +125,9 @@ class _SalesViewState extends State<SalesView> {
                                   crossAxisSpacing: 16,
                                   childAspectRatio: 1.3,
                                 ),
-                            itemCount: _mapToNotaFiscal.length,
+                            itemCount: invoices.length,
                             itemBuilder: (context, index) {
-                              final nf = _mapToNotaFiscal.values.elementAt(
-                                index,
-                              );
+                              final nf = invoices[index];
                               return _buildInvoiceCard(nf);
                             },
                           ),
