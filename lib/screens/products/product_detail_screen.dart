@@ -41,7 +41,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late final TextEditingController _precoController;
   late final TextEditingController _estoqueController;
   late final TextEditingController _descricaoController;
-  late final TextEditingController _categoriaController;
+  int? _selectedCategoryId;
   final _formKey = GlobalKey<FormState>();
   bool _isEditing = false;
 
@@ -221,9 +221,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         const SizedBox(height: 16),
                         ProductCategory(
-                          controller: _categoriaController,
-                          products: widget.productList,
+                          selectedCategoryId: _selectedCategoryId,
                           enabled: _isEditing,
+                          onChanged: (categoryId) {
+                            setState(() {
+                              _selectedCategoryId = categoryId;
+                            });
+                          },
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
@@ -299,8 +303,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   .product
                                   .stockQuantity
                                   .toString();
-                              _categoriaController.text =
-                                  widget.product.category;
+                              _selectedCategoryId = widget.product.categoryId;
                               _descricaoController.text =
                                   widget.product.description;
                             });
@@ -332,7 +335,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     _precoController.dispose();
     _estoqueController.dispose();
     _descricaoController.dispose();
-    _categoriaController.dispose();
     super.dispose();
   }
 
@@ -350,7 +352,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     _descricaoController = TextEditingController(
       text: widget.product.description,
     );
-    _categoriaController = TextEditingController(text: widget.product.category);
+    _selectedCategoryId = widget.product.categoryId;
   }
 
   Widget _buildInfoRow(String label, String value, IconData icon) {
@@ -440,8 +442,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         price: preco,
         stockQuantity: estoque,
         description: _descricaoController.text.trim(),
-        category: _categoriaController.text.trim(),
+        categoryId: _selectedCategoryId,
         id: widget.product.id,
+        lastUpdatedDate: DateTime.now(),
       );
 
       context.read<ProductCubit>().updateProduct(updatedProduct);
