@@ -20,23 +20,20 @@ Product _$ProductFromJson(Map<String, dynamic> json) =>
           'last_updated_date',
           (v) => v == null ? null : DateTime.parse(v as String),
         ),
-        categoryId: $checkedConvert('category_id', (v) => (v as num?)?.toInt()),
+        categoryId: $checkedConvert('categoryId', (v) => (v as num?)?.toInt()),
         code: $checkedConvert('code', (v) => v as String),
         id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
       );
       return val;
-    }, fieldKeyMap: const {
-      'lastUpdatedDate': 'last_updated_date',
-      'categoryId': 'category_id'
-    });
+    }, fieldKeyMap: const {'lastUpdatedDate': 'last_updated_date'});
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
   'id': instance.id,
-  'last_updated_date': instance.lastUpdatedDate?.toIso8601String(),
+  'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
   'name': instance.name,
   'description': instance.description,
   'price': instance.price,
   'stockQuantity': instance.stockQuantity,
-  'category_id': instance.categoryId,
+  'categoryId': instance.categoryId,
   'code': instance.code,
 };

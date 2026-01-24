@@ -22,7 +22,7 @@ Category _$CategoryFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
   'id': instance.id,
-  'last_updated_date': instance.lastUpdatedDate?.toIso8601String(),
+  'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
   'name': instance.name,
   'description': instance.description,
 };
