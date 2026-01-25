@@ -18,7 +18,7 @@ class ProductInfoScreen extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   State<ProductInfoScreen> createState() => _ProductInfoScreenState();
-  
+
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<ProductCubit>(
@@ -33,7 +33,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
   static const String _tituloAppBar = 'Cadastro de Produto';
   static const String _mensagemSucesso = 'cadastrado com sucesso!';
 
-   final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _codigoController = TextEditingController();
   final _precoController = TextEditingController();
@@ -135,7 +135,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
   }
 
   /// Adiciona um novo produto após validação.
-  void _adicionarProduto() {
+  void _adicionarProduto(bool generatedCode) {
     // Valida o formulário usando os validadores
     // Os validadores já exibem mensagens específicas para cada campo
     if (!_formKey.currentState!.validate()) {
@@ -156,6 +156,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
       estoque: estoque,
       descricao: _descricaoController.text.trim(),
       categoryId: _selectedCategoryId,
+      codeGenerate: generatedCode,
     );
   }
 

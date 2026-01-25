@@ -4,12 +4,14 @@ import 'package:system_loja/core/models/default/default_object.dart';
 
 part 'product.g.dart';
 
+
 @JsonSerializable()
 class Product extends DefaultObject {
   final String name;
   final String description;
   final double price;
   final int stockQuantity;
+
   /// ID da categoria à qual o produto pertence (referência FK para categories_records)
   final int? categoryId;
   final String code;

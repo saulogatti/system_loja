@@ -7,6 +7,7 @@ import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/input_formatters.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
+import 'package:system_loja/screens/utils/constants.dart';
 
 @RoutePage()
 class SalesInvoiceScreen extends StatefulWidget {
@@ -44,6 +45,8 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
   final _formaPagamentoController = TextEditingController();
   Customer? _clienteSelecionado;
   final _AddSaleTemp _itensSelecionados = _AddSaleTemp(product: []);
+  /// Controla se a geração automática do número da nota está habilitada
+  bool _enableCodeGeneration = false;
 
   @override
   Widget build(BuildContext context) {
@@ -69,15 +72,31 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextFormField(
-                controller: _numeroNotaController,
-                decoration: const InputDecoration(
-                  labelText: 'Número da Nota *',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.numbers),
-                  helperText: 'Ex: NF-001, 12345',
-                ),
-                validator: (value) => validateRequired(value, 'Número da nota'),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField( 
+                      readOnly: _enableCodeGeneration,
+                      controller: _numeroNotaController,
+                      decoration: const InputDecoration(
+                        labelText: 'Número da Nota *',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.numbers),
+                      ),
+                      validator: (value) =>
+                          validateRequired(value, 'Número da nota'),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _enableCodeGeneration = !_enableCodeGeneration;
+                        _numeroNotaController.text = _enableCodeGeneration ? kStringGenerate : '';
+                      });
+                    },
+                    icon: Icon(Icons.generating_tokens_outlined),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<Customer>(
@@ -302,7 +321,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
         paymentMethod: _formaPagamentoController.text.trim(),
       );
 
-      widget.salesCubit.registerSale(notaFiscal);
+      widget.salesCubit.registerSale(notaFiscal, _enableCodeGeneration);
     }
   }
 

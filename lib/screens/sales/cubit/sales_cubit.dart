@@ -84,10 +84,16 @@ class SalesCubit extends Cubit<SalesState> {
   ///
   /// Cria um novo invoice com ID gerado automaticamente
   /// e salva no banco de dados.
-  Future<void> registerSale(InvoiceData invoiceData) async {
+  Future<void> registerSale(
+    InvoiceData invoiceData,
+    bool enableCodeGeneration,
+  ) async {
     try {
       emit(SalesState.loading());
-
+      if (enableCodeGeneration) {
+        invoiceData.invoiceNumber = await _salesRepository
+            .generateInvoiceNumber();
+      }
       final invoice = Invoice(
         id: await _salesRepository.getNextSaleId(),
         data: invoiceData,

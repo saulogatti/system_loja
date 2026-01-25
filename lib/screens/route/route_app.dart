@@ -108,5 +108,9 @@ class RouteApp extends RootStackRouter {
       page: ProductDetailRoute.page,
       title: (context, data) => 'Product Detail',
     ),
+    AutoRoute(
+      page: CategoryManagementRoute.page,
+      title: (context, data) => 'Category Management',
+    ),
   ];
 }

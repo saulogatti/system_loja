@@ -981,25 +981,12 @@ class $InvoicesRecordsTable extends InvoicesRecords
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $InvoicesRecordsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
-  static const VerificationMeta _invoiceNumberMeta = const VerificationMeta(
-    'invoiceNumber',
+  static const VerificationMeta _customerCpfMeta = const VerificationMeta(
+    'customerCpf',
   );
   @override
-  late final GeneratedColumn<String> invoiceNumber = GeneratedColumn<String>(
-    'numero_nota',
+  late final GeneratedColumn<String> customerCpf = GeneratedColumn<String>(
+    'cliente_cpf',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -1027,38 +1014,30 @@ class $InvoicesRecordsTable extends InvoicesRecords
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _customerCpfMeta = const VerificationMeta(
-    'customerCpf',
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _invoiceNumberMeta = const VerificationMeta(
+    'invoiceNumber',
   );
   @override
-  late final GeneratedColumn<String> customerCpf = GeneratedColumn<String>(
-    'cliente_cpf',
+  late final GeneratedColumn<String> invoiceNumber = GeneratedColumn<String>(
+    'numero_nota',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-  );
-  static const VerificationMeta _totalValueMeta = const VerificationMeta(
-    'totalValue',
-  );
-  @override
-  late final GeneratedColumn<double> totalValue = GeneratedColumn<double>(
-    'valor_total',
-    aliasedName,
-    false,
-    type: DriftSqlType.double,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _paymentMethodMeta = const VerificationMeta(
-    'paymentMethod',
-  );
-  @override
-  late final GeneratedColumn<String> paymentMethod = GeneratedColumn<String>(
-    'forma_pagamento',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   static const VerificationMeta _issueDateMeta = const VerificationMeta(
     'issueDate',
@@ -1069,6 +1048,29 @@ class $InvoicesRecordsTable extends InvoicesRecords
     aliasedName,
     false,
     type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
+    'lastUpdatedDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastUpdatedDate =
+      GeneratedColumn<DateTime>(
+        'last_updated_date',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _paymentMethodMeta = const VerificationMeta(
+    'paymentMethod',
+  );
+  @override
+  late final GeneratedColumn<String> paymentMethod = GeneratedColumn<String>(
+    'forma_pagamento',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
   static const VerificationMeta _registrationDateMeta = const VerificationMeta(
@@ -1084,30 +1086,29 @@ class $InvoicesRecordsTable extends InvoicesRecords
         requiredDuringInsert: false,
         defaultValue: currentDateAndTime,
       );
-  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
-    'lastUpdatedDate',
+  static const VerificationMeta _totalValueMeta = const VerificationMeta(
+    'totalValue',
   );
   @override
-  late final GeneratedColumn<DateTime> lastUpdatedDate =
-      GeneratedColumn<DateTime>(
-        'last_updated_date',
-        aliasedName,
-        true,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-      );
+  late final GeneratedColumn<double> totalValue = GeneratedColumn<double>(
+    'valor_total',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-    id,
-    invoiceNumber,
+    customerCpf,
     customerId,
     customerName,
-    customerCpf,
-    totalValue,
-    paymentMethod,
+    id,
+    invoiceNumber,
     issueDate,
-    registrationDate,
     lastUpdatedDate,
+    paymentMethod,
+    registrationDate,
+    totalValue,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1121,19 +1122,16 @@ class $InvoicesRecordsTable extends InvoicesRecords
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('numero_nota')) {
+    if (data.containsKey('cliente_cpf')) {
       context.handle(
-        _invoiceNumberMeta,
-        invoiceNumber.isAcceptableOrUnknown(
-          data['numero_nota']!,
-          _invoiceNumberMeta,
+        _customerCpfMeta,
+        customerCpf.isAcceptableOrUnknown(
+          data['cliente_cpf']!,
+          _customerCpfMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_invoiceNumberMeta);
+      context.missing(_customerCpfMeta);
     }
     if (data.containsKey('cliente_id')) {
       context.handle(
@@ -1154,24 +1152,36 @@ class $InvoicesRecordsTable extends InvoicesRecords
     } else if (isInserting) {
       context.missing(_customerNameMeta);
     }
-    if (data.containsKey('cliente_cpf')) {
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('numero_nota')) {
       context.handle(
-        _customerCpfMeta,
-        customerCpf.isAcceptableOrUnknown(
-          data['cliente_cpf']!,
-          _customerCpfMeta,
+        _invoiceNumberMeta,
+        invoiceNumber.isAcceptableOrUnknown(
+          data['numero_nota']!,
+          _invoiceNumberMeta,
         ),
       );
     } else if (isInserting) {
-      context.missing(_customerCpfMeta);
+      context.missing(_invoiceNumberMeta);
     }
-    if (data.containsKey('valor_total')) {
+    if (data.containsKey('data_emissao')) {
       context.handle(
-        _totalValueMeta,
-        totalValue.isAcceptableOrUnknown(data['valor_total']!, _totalValueMeta),
+        _issueDateMeta,
+        issueDate.isAcceptableOrUnknown(data['data_emissao']!, _issueDateMeta),
       );
     } else if (isInserting) {
-      context.missing(_totalValueMeta);
+      context.missing(_issueDateMeta);
+    }
+    if (data.containsKey('last_updated_date')) {
+      context.handle(
+        _lastUpdatedDateMeta,
+        lastUpdatedDate.isAcceptableOrUnknown(
+          data['last_updated_date']!,
+          _lastUpdatedDateMeta,
+        ),
+      );
     }
     if (data.containsKey('forma_pagamento')) {
       context.handle(
@@ -1184,14 +1194,6 @@ class $InvoicesRecordsTable extends InvoicesRecords
     } else if (isInserting) {
       context.missing(_paymentMethodMeta);
     }
-    if (data.containsKey('data_emissao')) {
-      context.handle(
-        _issueDateMeta,
-        issueDate.isAcceptableOrUnknown(data['data_emissao']!, _issueDateMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_issueDateMeta);
-    }
     if (data.containsKey('registration_date')) {
       context.handle(
         _registrationDateMeta,
@@ -1201,14 +1203,13 @@ class $InvoicesRecordsTable extends InvoicesRecords
         ),
       );
     }
-    if (data.containsKey('last_updated_date')) {
+    if (data.containsKey('valor_total')) {
       context.handle(
-        _lastUpdatedDateMeta,
-        lastUpdatedDate.isAcceptableOrUnknown(
-          data['last_updated_date']!,
-          _lastUpdatedDateMeta,
-        ),
+        _totalValueMeta,
+        totalValue.isAcceptableOrUnknown(data['valor_total']!, _totalValueMeta),
       );
+    } else if (isInserting) {
+      context.missing(_totalValueMeta);
     }
     return context;
   }
@@ -1219,13 +1220,9 @@ class $InvoicesRecordsTable extends InvoicesRecords
   InvoicesRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return InvoicesRecord(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      invoiceNumber: attachedDatabase.typeMapping.read(
+      customerCpf: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}numero_nota'],
+        data['${effectivePrefix}cliente_cpf'],
       )!,
       customerId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
@@ -1235,30 +1232,34 @@ class $InvoicesRecordsTable extends InvoicesRecords
         DriftSqlType.string,
         data['${effectivePrefix}cliente_nome'],
       )!,
-      customerCpf: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}cliente_cpf'],
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
       )!,
-      totalValue: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}valor_total'],
-      )!,
-      paymentMethod: attachedDatabase.typeMapping.read(
+      invoiceNumber: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}forma_pagamento'],
+        data['${effectivePrefix}numero_nota'],
       )!,
       issueDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}data_emissao'],
       )!,
-      registrationDate: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}registration_date'],
-      )!,
       lastUpdatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_updated_date'],
       ),
+      paymentMethod: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}forma_pagamento'],
+      )!,
+      registrationDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}registration_date'],
+      )!,
+      totalValue: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}valor_total'],
+      )!,
     );
   }
 
@@ -1269,78 +1270,77 @@ class $InvoicesRecordsTable extends InvoicesRecords
 }
 
 class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
-  final int id;
-
-  /// Número da nota fiscal
-  final String invoiceNumber;
+  /// CPF do cliente (desnormalizado para facilitar consultas)
+  final String customerCpf;
 
   /// ID do cliente
   final int customerId;
 
   /// Nome do cliente (desnormalizado para facilitar consultas)
   final String customerName;
+  final int id;
 
-  /// CPF do cliente (desnormalizado para facilitar consultas)
-  final String customerCpf;
-
-  /// Valor total da nota fiscal
-  final double totalValue;
-
-  /// Forma de pagamento
-  final String paymentMethod;
+  /// Número da nota fiscal
+  final String invoiceNumber;
 
   /// Data de emissão da nota
   final DateTime issueDate;
 
+  /// Data da última atualização
+  final DateTime? lastUpdatedDate;
+
+  /// Forma de pagamento
+  final String paymentMethod;
+
   /// Data de cadastro no sistema
   final DateTime registrationDate;
 
-  /// Data da última atualização
-  final DateTime? lastUpdatedDate;
+  /// Valor total da nota fiscal
+  final double totalValue;
   const InvoicesRecord({
-    required this.id,
-    required this.invoiceNumber,
+    required this.customerCpf,
     required this.customerId,
     required this.customerName,
-    required this.customerCpf,
-    required this.totalValue,
-    required this.paymentMethod,
+    required this.id,
+    required this.invoiceNumber,
     required this.issueDate,
-    required this.registrationDate,
     this.lastUpdatedDate,
+    required this.paymentMethod,
+    required this.registrationDate,
+    required this.totalValue,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['numero_nota'] = Variable<String>(invoiceNumber);
+    map['cliente_cpf'] = Variable<String>(customerCpf);
     map['cliente_id'] = Variable<int>(customerId);
     map['cliente_nome'] = Variable<String>(customerName);
-    map['cliente_cpf'] = Variable<String>(customerCpf);
-    map['valor_total'] = Variable<double>(totalValue);
-    map['forma_pagamento'] = Variable<String>(paymentMethod);
+    map['id'] = Variable<int>(id);
+    map['numero_nota'] = Variable<String>(invoiceNumber);
     map['data_emissao'] = Variable<DateTime>(issueDate);
-    map['registration_date'] = Variable<DateTime>(registrationDate);
     if (!nullToAbsent || lastUpdatedDate != null) {
       map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate);
     }
+    map['forma_pagamento'] = Variable<String>(paymentMethod);
+    map['registration_date'] = Variable<DateTime>(registrationDate);
+    map['valor_total'] = Variable<double>(totalValue);
     return map;
   }
 
   InvoicesRecordsCompanion toCompanion(bool nullToAbsent) {
     return InvoicesRecordsCompanion(
-      id: Value(id),
-      invoiceNumber: Value(invoiceNumber),
+      customerCpf: Value(customerCpf),
       customerId: Value(customerId),
       customerName: Value(customerName),
-      customerCpf: Value(customerCpf),
-      totalValue: Value(totalValue),
-      paymentMethod: Value(paymentMethod),
+      id: Value(id),
+      invoiceNumber: Value(invoiceNumber),
       issueDate: Value(issueDate),
-      registrationDate: Value(registrationDate),
       lastUpdatedDate: lastUpdatedDate == null && nullToAbsent
           ? const Value.absent()
           : Value(lastUpdatedDate),
+      paymentMethod: Value(paymentMethod),
+      registrationDate: Value(registrationDate),
+      totalValue: Value(totalValue),
     );
   }
 
@@ -1350,238 +1350,235 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return InvoicesRecord(
-      id: serializer.fromJson<int>(json['id']),
-      invoiceNumber: serializer.fromJson<String>(json['invoiceNumber']),
+      customerCpf: serializer.fromJson<String>(json['customerCpf']),
       customerId: serializer.fromJson<int>(json['customerId']),
       customerName: serializer.fromJson<String>(json['customerName']),
-      customerCpf: serializer.fromJson<String>(json['customerCpf']),
-      totalValue: serializer.fromJson<double>(json['totalValue']),
-      paymentMethod: serializer.fromJson<String>(json['paymentMethod']),
+      id: serializer.fromJson<int>(json['id']),
+      invoiceNumber: serializer.fromJson<String>(json['invoiceNumber']),
       issueDate: serializer.fromJson<DateTime>(json['issueDate']),
-      registrationDate: serializer.fromJson<DateTime>(json['registrationDate']),
       lastUpdatedDate: serializer.fromJson<DateTime?>(json['lastUpdatedDate']),
+      paymentMethod: serializer.fromJson<String>(json['paymentMethod']),
+      registrationDate: serializer.fromJson<DateTime>(json['registrationDate']),
+      totalValue: serializer.fromJson<double>(json['totalValue']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'invoiceNumber': serializer.toJson<String>(invoiceNumber),
+      'customerCpf': serializer.toJson<String>(customerCpf),
       'customerId': serializer.toJson<int>(customerId),
       'customerName': serializer.toJson<String>(customerName),
-      'customerCpf': serializer.toJson<String>(customerCpf),
-      'totalValue': serializer.toJson<double>(totalValue),
-      'paymentMethod': serializer.toJson<String>(paymentMethod),
+      'id': serializer.toJson<int>(id),
+      'invoiceNumber': serializer.toJson<String>(invoiceNumber),
       'issueDate': serializer.toJson<DateTime>(issueDate),
-      'registrationDate': serializer.toJson<DateTime>(registrationDate),
       'lastUpdatedDate': serializer.toJson<DateTime?>(lastUpdatedDate),
+      'paymentMethod': serializer.toJson<String>(paymentMethod),
+      'registrationDate': serializer.toJson<DateTime>(registrationDate),
+      'totalValue': serializer.toJson<double>(totalValue),
     };
   }
 
   InvoicesRecord copyWith({
-    int? id,
-    String? invoiceNumber,
+    String? customerCpf,
     int? customerId,
     String? customerName,
-    String? customerCpf,
-    double? totalValue,
-    String? paymentMethod,
+    int? id,
+    String? invoiceNumber,
     DateTime? issueDate,
-    DateTime? registrationDate,
     Value<DateTime?> lastUpdatedDate = const Value.absent(),
+    String? paymentMethod,
+    DateTime? registrationDate,
+    double? totalValue,
   }) => InvoicesRecord(
-    id: id ?? this.id,
-    invoiceNumber: invoiceNumber ?? this.invoiceNumber,
+    customerCpf: customerCpf ?? this.customerCpf,
     customerId: customerId ?? this.customerId,
     customerName: customerName ?? this.customerName,
-    customerCpf: customerCpf ?? this.customerCpf,
-    totalValue: totalValue ?? this.totalValue,
-    paymentMethod: paymentMethod ?? this.paymentMethod,
+    id: id ?? this.id,
+    invoiceNumber: invoiceNumber ?? this.invoiceNumber,
     issueDate: issueDate ?? this.issueDate,
-    registrationDate: registrationDate ?? this.registrationDate,
     lastUpdatedDate: lastUpdatedDate.present
         ? lastUpdatedDate.value
         : this.lastUpdatedDate,
+    paymentMethod: paymentMethod ?? this.paymentMethod,
+    registrationDate: registrationDate ?? this.registrationDate,
+    totalValue: totalValue ?? this.totalValue,
   );
   InvoicesRecord copyWithCompanion(InvoicesRecordsCompanion data) {
     return InvoicesRecord(
-      id: data.id.present ? data.id.value : this.id,
-      invoiceNumber: data.invoiceNumber.present
-          ? data.invoiceNumber.value
-          : this.invoiceNumber,
+      customerCpf: data.customerCpf.present
+          ? data.customerCpf.value
+          : this.customerCpf,
       customerId: data.customerId.present
           ? data.customerId.value
           : this.customerId,
       customerName: data.customerName.present
           ? data.customerName.value
           : this.customerName,
-      customerCpf: data.customerCpf.present
-          ? data.customerCpf.value
-          : this.customerCpf,
-      totalValue: data.totalValue.present
-          ? data.totalValue.value
-          : this.totalValue,
-      paymentMethod: data.paymentMethod.present
-          ? data.paymentMethod.value
-          : this.paymentMethod,
+      id: data.id.present ? data.id.value : this.id,
+      invoiceNumber: data.invoiceNumber.present
+          ? data.invoiceNumber.value
+          : this.invoiceNumber,
       issueDate: data.issueDate.present ? data.issueDate.value : this.issueDate,
-      registrationDate: data.registrationDate.present
-          ? data.registrationDate.value
-          : this.registrationDate,
       lastUpdatedDate: data.lastUpdatedDate.present
           ? data.lastUpdatedDate.value
           : this.lastUpdatedDate,
+      paymentMethod: data.paymentMethod.present
+          ? data.paymentMethod.value
+          : this.paymentMethod,
+      registrationDate: data.registrationDate.present
+          ? data.registrationDate.value
+          : this.registrationDate,
+      totalValue: data.totalValue.present
+          ? data.totalValue.value
+          : this.totalValue,
     );
   }
 
   @override
   String toString() {
     return (StringBuffer('InvoicesRecord(')
-          ..write('id: $id, ')
-          ..write('invoiceNumber: $invoiceNumber, ')
+          ..write('customerCpf: $customerCpf, ')
           ..write('customerId: $customerId, ')
           ..write('customerName: $customerName, ')
-          ..write('customerCpf: $customerCpf, ')
-          ..write('totalValue: $totalValue, ')
-          ..write('paymentMethod: $paymentMethod, ')
+          ..write('id: $id, ')
+          ..write('invoiceNumber: $invoiceNumber, ')
           ..write('issueDate: $issueDate, ')
+          ..write('lastUpdatedDate: $lastUpdatedDate, ')
+          ..write('paymentMethod: $paymentMethod, ')
           ..write('registrationDate: $registrationDate, ')
-          ..write('lastUpdatedDate: $lastUpdatedDate')
+          ..write('totalValue: $totalValue')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(
-    id,
-    invoiceNumber,
+    customerCpf,
     customerId,
     customerName,
-    customerCpf,
-    totalValue,
-    paymentMethod,
+    id,
+    invoiceNumber,
     issueDate,
-    registrationDate,
     lastUpdatedDate,
+    paymentMethod,
+    registrationDate,
+    totalValue,
   );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is InvoicesRecord &&
-          other.id == this.id &&
-          other.invoiceNumber == this.invoiceNumber &&
+          other.customerCpf == this.customerCpf &&
           other.customerId == this.customerId &&
           other.customerName == this.customerName &&
-          other.customerCpf == this.customerCpf &&
-          other.totalValue == this.totalValue &&
-          other.paymentMethod == this.paymentMethod &&
+          other.id == this.id &&
+          other.invoiceNumber == this.invoiceNumber &&
           other.issueDate == this.issueDate &&
+          other.lastUpdatedDate == this.lastUpdatedDate &&
+          other.paymentMethod == this.paymentMethod &&
           other.registrationDate == this.registrationDate &&
-          other.lastUpdatedDate == this.lastUpdatedDate);
+          other.totalValue == this.totalValue);
 }
 
 class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
-  final Value<int> id;
-  final Value<String> invoiceNumber;
+  final Value<String> customerCpf;
   final Value<int> customerId;
   final Value<String> customerName;
-  final Value<String> customerCpf;
-  final Value<double> totalValue;
-  final Value<String> paymentMethod;
+  final Value<int> id;
+  final Value<String> invoiceNumber;
   final Value<DateTime> issueDate;
-  final Value<DateTime> registrationDate;
   final Value<DateTime?> lastUpdatedDate;
+  final Value<String> paymentMethod;
+  final Value<DateTime> registrationDate;
+  final Value<double> totalValue;
   const InvoicesRecordsCompanion({
-    this.id = const Value.absent(),
-    this.invoiceNumber = const Value.absent(),
+    this.customerCpf = const Value.absent(),
     this.customerId = const Value.absent(),
     this.customerName = const Value.absent(),
-    this.customerCpf = const Value.absent(),
-    this.totalValue = const Value.absent(),
-    this.paymentMethod = const Value.absent(),
+    this.id = const Value.absent(),
+    this.invoiceNumber = const Value.absent(),
     this.issueDate = const Value.absent(),
-    this.registrationDate = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
+    this.paymentMethod = const Value.absent(),
+    this.registrationDate = const Value.absent(),
+    this.totalValue = const Value.absent(),
   });
   InvoicesRecordsCompanion.insert({
-    this.id = const Value.absent(),
-    required String invoiceNumber,
+    required String customerCpf,
     required int customerId,
     required String customerName,
-    required String customerCpf,
-    required double totalValue,
-    required String paymentMethod,
+    this.id = const Value.absent(),
+    required String invoiceNumber,
     required DateTime issueDate,
-    this.registrationDate = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
-  }) : invoiceNumber = Value(invoiceNumber),
+    required String paymentMethod,
+    this.registrationDate = const Value.absent(),
+    required double totalValue,
+  }) : customerCpf = Value(customerCpf),
        customerId = Value(customerId),
        customerName = Value(customerName),
-       customerCpf = Value(customerCpf),
-       totalValue = Value(totalValue),
+       invoiceNumber = Value(invoiceNumber),
+       issueDate = Value(issueDate),
        paymentMethod = Value(paymentMethod),
-       issueDate = Value(issueDate);
+       totalValue = Value(totalValue);
   static Insertable<InvoicesRecord> custom({
-    Expression<int>? id,
-    Expression<String>? invoiceNumber,
+    Expression<String>? customerCpf,
     Expression<int>? customerId,
     Expression<String>? customerName,
-    Expression<String>? customerCpf,
-    Expression<double>? totalValue,
-    Expression<String>? paymentMethod,
+    Expression<int>? id,
+    Expression<String>? invoiceNumber,
     Expression<DateTime>? issueDate,
-    Expression<DateTime>? registrationDate,
     Expression<DateTime>? lastUpdatedDate,
+    Expression<String>? paymentMethod,
+    Expression<DateTime>? registrationDate,
+    Expression<double>? totalValue,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (invoiceNumber != null) 'numero_nota': invoiceNumber,
+      if (customerCpf != null) 'cliente_cpf': customerCpf,
       if (customerId != null) 'cliente_id': customerId,
       if (customerName != null) 'cliente_nome': customerName,
-      if (customerCpf != null) 'cliente_cpf': customerCpf,
-      if (totalValue != null) 'valor_total': totalValue,
-      if (paymentMethod != null) 'forma_pagamento': paymentMethod,
+      if (id != null) 'id': id,
+      if (invoiceNumber != null) 'numero_nota': invoiceNumber,
       if (issueDate != null) 'data_emissao': issueDate,
-      if (registrationDate != null) 'registration_date': registrationDate,
       if (lastUpdatedDate != null) 'last_updated_date': lastUpdatedDate,
+      if (paymentMethod != null) 'forma_pagamento': paymentMethod,
+      if (registrationDate != null) 'registration_date': registrationDate,
+      if (totalValue != null) 'valor_total': totalValue,
     });
   }
 
   InvoicesRecordsCompanion copyWith({
-    Value<int>? id,
-    Value<String>? invoiceNumber,
+    Value<String>? customerCpf,
     Value<int>? customerId,
     Value<String>? customerName,
-    Value<String>? customerCpf,
-    Value<double>? totalValue,
-    Value<String>? paymentMethod,
+    Value<int>? id,
+    Value<String>? invoiceNumber,
     Value<DateTime>? issueDate,
-    Value<DateTime>? registrationDate,
     Value<DateTime?>? lastUpdatedDate,
+    Value<String>? paymentMethod,
+    Value<DateTime>? registrationDate,
+    Value<double>? totalValue,
   }) {
     return InvoicesRecordsCompanion(
-      id: id ?? this.id,
-      invoiceNumber: invoiceNumber ?? this.invoiceNumber,
+      customerCpf: customerCpf ?? this.customerCpf,
       customerId: customerId ?? this.customerId,
       customerName: customerName ?? this.customerName,
-      customerCpf: customerCpf ?? this.customerCpf,
-      totalValue: totalValue ?? this.totalValue,
-      paymentMethod: paymentMethod ?? this.paymentMethod,
+      id: id ?? this.id,
+      invoiceNumber: invoiceNumber ?? this.invoiceNumber,
       issueDate: issueDate ?? this.issueDate,
-      registrationDate: registrationDate ?? this.registrationDate,
       lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      registrationDate: registrationDate ?? this.registrationDate,
+      totalValue: totalValue ?? this.totalValue,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (invoiceNumber.present) {
-      map['numero_nota'] = Variable<String>(invoiceNumber.value);
+    if (customerCpf.present) {
+      map['cliente_cpf'] = Variable<String>(customerCpf.value);
     }
     if (customerId.present) {
       map['cliente_id'] = Variable<int>(customerId.value);
@@ -1589,23 +1586,26 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     if (customerName.present) {
       map['cliente_nome'] = Variable<String>(customerName.value);
     }
-    if (customerCpf.present) {
-      map['cliente_cpf'] = Variable<String>(customerCpf.value);
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
     }
-    if (totalValue.present) {
-      map['valor_total'] = Variable<double>(totalValue.value);
-    }
-    if (paymentMethod.present) {
-      map['forma_pagamento'] = Variable<String>(paymentMethod.value);
+    if (invoiceNumber.present) {
+      map['numero_nota'] = Variable<String>(invoiceNumber.value);
     }
     if (issueDate.present) {
       map['data_emissao'] = Variable<DateTime>(issueDate.value);
     }
+    if (lastUpdatedDate.present) {
+      map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate.value);
+    }
+    if (paymentMethod.present) {
+      map['forma_pagamento'] = Variable<String>(paymentMethod.value);
+    }
     if (registrationDate.present) {
       map['registration_date'] = Variable<DateTime>(registrationDate.value);
     }
-    if (lastUpdatedDate.present) {
-      map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate.value);
+    if (totalValue.present) {
+      map['valor_total'] = Variable<double>(totalValue.value);
     }
     return map;
   }
@@ -1613,16 +1613,16 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
   @override
   String toString() {
     return (StringBuffer('InvoicesRecordsCompanion(')
-          ..write('id: $id, ')
-          ..write('invoiceNumber: $invoiceNumber, ')
+          ..write('customerCpf: $customerCpf, ')
           ..write('customerId: $customerId, ')
           ..write('customerName: $customerName, ')
-          ..write('customerCpf: $customerCpf, ')
-          ..write('totalValue: $totalValue, ')
-          ..write('paymentMethod: $paymentMethod, ')
+          ..write('id: $id, ')
+          ..write('invoiceNumber: $invoiceNumber, ')
           ..write('issueDate: $issueDate, ')
+          ..write('lastUpdatedDate: $lastUpdatedDate, ')
+          ..write('paymentMethod: $paymentMethod, ')
           ..write('registrationDate: $registrationDate, ')
-          ..write('lastUpdatedDate: $lastUpdatedDate')
+          ..write('totalValue: $totalValue')
           ..write(')'))
         .toString();
   }
@@ -3181,29 +3181,29 @@ typedef $$ProductsRecordsTableProcessedTableManager =
     >;
 typedef $$InvoicesRecordsTableCreateCompanionBuilder =
     InvoicesRecordsCompanion Function({
-      Value<int> id,
-      required String invoiceNumber,
+      required String customerCpf,
       required int customerId,
       required String customerName,
-      required String customerCpf,
-      required double totalValue,
-      required String paymentMethod,
+      Value<int> id,
+      required String invoiceNumber,
       required DateTime issueDate,
-      Value<DateTime> registrationDate,
       Value<DateTime?> lastUpdatedDate,
+      required String paymentMethod,
+      Value<DateTime> registrationDate,
+      required double totalValue,
     });
 typedef $$InvoicesRecordsTableUpdateCompanionBuilder =
     InvoicesRecordsCompanion Function({
-      Value<int> id,
-      Value<String> invoiceNumber,
+      Value<String> customerCpf,
       Value<int> customerId,
       Value<String> customerName,
-      Value<String> customerCpf,
-      Value<double> totalValue,
-      Value<String> paymentMethod,
+      Value<int> id,
+      Value<String> invoiceNumber,
       Value<DateTime> issueDate,
-      Value<DateTime> registrationDate,
       Value<DateTime?> lastUpdatedDate,
+      Value<String> paymentMethod,
+      Value<DateTime> registrationDate,
+      Value<double> totalValue,
     });
 
 class $$InvoicesRecordsTableFilterComposer
@@ -3215,13 +3215,8 @@ class $$InvoicesRecordsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get invoiceNumber => $composableBuilder(
-    column: $table.invoiceNumber,
+  ColumnFilters<String> get customerCpf => $composableBuilder(
+    column: $table.customerCpf,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3235,18 +3230,13 @@ class $$InvoicesRecordsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get customerCpf => $composableBuilder(
-    column: $table.customerCpf,
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<double> get totalValue => $composableBuilder(
-    column: $table.totalValue,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get paymentMethod => $composableBuilder(
-    column: $table.paymentMethod,
+  ColumnFilters<String> get invoiceNumber => $composableBuilder(
+    column: $table.invoiceNumber,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3255,13 +3245,23 @@ class $$InvoicesRecordsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get paymentMethod => $composableBuilder(
+    column: $table.paymentMethod,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<DateTime> get registrationDate => $composableBuilder(
     column: $table.registrationDate,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
+  ColumnFilters<double> get totalValue => $composableBuilder(
+    column: $table.totalValue,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -3275,13 +3275,8 @@ class $$InvoicesRecordsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get invoiceNumber => $composableBuilder(
-    column: $table.invoiceNumber,
+  ColumnOrderings<String> get customerCpf => $composableBuilder(
+    column: $table.customerCpf,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3295,18 +3290,13 @@ class $$InvoicesRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get customerCpf => $composableBuilder(
-    column: $table.customerCpf,
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<double> get totalValue => $composableBuilder(
-    column: $table.totalValue,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get paymentMethod => $composableBuilder(
-    column: $table.paymentMethod,
+  ColumnOrderings<String> get invoiceNumber => $composableBuilder(
+    column: $table.invoiceNumber,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3315,13 +3305,23 @@ class $$InvoicesRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get paymentMethod => $composableBuilder(
+    column: $table.paymentMethod,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
     column: $table.registrationDate,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
+  ColumnOrderings<double> get totalValue => $composableBuilder(
+    column: $table.totalValue,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -3335,11 +3335,8 @@ class $$InvoicesRecordsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get invoiceNumber => $composableBuilder(
-    column: $table.invoiceNumber,
+  GeneratedColumn<String> get customerCpf => $composableBuilder(
+    column: $table.customerCpf,
     builder: (column) => column,
   );
 
@@ -3353,13 +3350,19 @@ class $$InvoicesRecordsTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get customerCpf => $composableBuilder(
-    column: $table.customerCpf,
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get invoiceNumber => $composableBuilder(
+    column: $table.invoiceNumber,
     builder: (column) => column,
   );
 
-  GeneratedColumn<double> get totalValue => $composableBuilder(
-    column: $table.totalValue,
+  GeneratedColumn<DateTime> get issueDate =>
+      $composableBuilder(column: $table.issueDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
     builder: (column) => column,
   );
 
@@ -3368,16 +3371,13 @@ class $$InvoicesRecordsTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<DateTime> get issueDate =>
-      $composableBuilder(column: $table.issueDate, builder: (column) => column);
-
   GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
     column: $table.registrationDate,
     builder: (column) => column,
   );
 
-  GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
+  GeneratedColumn<double> get totalValue => $composableBuilder(
+    column: $table.totalValue,
     builder: (column) => column,
   );
 }
@@ -3419,51 +3419,51 @@ class $$InvoicesRecordsTableTableManager
               $$InvoicesRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                Value<String> invoiceNumber = const Value.absent(),
+                Value<String> customerCpf = const Value.absent(),
                 Value<int> customerId = const Value.absent(),
                 Value<String> customerName = const Value.absent(),
-                Value<String> customerCpf = const Value.absent(),
-                Value<double> totalValue = const Value.absent(),
-                Value<String> paymentMethod = const Value.absent(),
+                Value<int> id = const Value.absent(),
+                Value<String> invoiceNumber = const Value.absent(),
                 Value<DateTime> issueDate = const Value.absent(),
-                Value<DateTime> registrationDate = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
+                Value<String> paymentMethod = const Value.absent(),
+                Value<DateTime> registrationDate = const Value.absent(),
+                Value<double> totalValue = const Value.absent(),
               }) => InvoicesRecordsCompanion(
-                id: id,
-                invoiceNumber: invoiceNumber,
+                customerCpf: customerCpf,
                 customerId: customerId,
                 customerName: customerName,
-                customerCpf: customerCpf,
-                totalValue: totalValue,
-                paymentMethod: paymentMethod,
+                id: id,
+                invoiceNumber: invoiceNumber,
                 issueDate: issueDate,
-                registrationDate: registrationDate,
                 lastUpdatedDate: lastUpdatedDate,
+                paymentMethod: paymentMethod,
+                registrationDate: registrationDate,
+                totalValue: totalValue,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                required String invoiceNumber,
+                required String customerCpf,
                 required int customerId,
                 required String customerName,
-                required String customerCpf,
-                required double totalValue,
-                required String paymentMethod,
+                Value<int> id = const Value.absent(),
+                required String invoiceNumber,
                 required DateTime issueDate,
-                Value<DateTime> registrationDate = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
+                required String paymentMethod,
+                Value<DateTime> registrationDate = const Value.absent(),
+                required double totalValue,
               }) => InvoicesRecordsCompanion.insert(
-                id: id,
-                invoiceNumber: invoiceNumber,
+                customerCpf: customerCpf,
                 customerId: customerId,
                 customerName: customerName,
-                customerCpf: customerCpf,
-                totalValue: totalValue,
-                paymentMethod: paymentMethod,
+                id: id,
+                invoiceNumber: invoiceNumber,
                 issueDate: issueDate,
-                registrationDate: registrationDate,
                 lastUpdatedDate: lastUpdatedDate,
+                paymentMethod: paymentMethod,
+                registrationDate: registrationDate,
+                totalValue: totalValue,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
