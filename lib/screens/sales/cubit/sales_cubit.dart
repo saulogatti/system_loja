@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:system_loja/core/models/invoice.dart';
-import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/repository/cliente_repository.dart';
 import 'package:system_loja/core/repository/sales_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
@@ -85,10 +84,13 @@ class SalesCubit extends Cubit<SalesState> {
   ///
   /// Cria um novo invoice com ID gerado automaticamente
   /// e salva no banco de dados.
-  Future<void> registerSale(InvoiceData invoiceData) async {
+  Future<void> registerSale(
+    InvoiceData invoiceData,
+    bool enableCodeGeneration,
+  ) async {
     try {
       emit(SalesState.loading());
-      if (invoiceData.invoiceNumber == kStringGenerate) {
+      if (enableCodeGeneration) {
         invoiceData.invoiceNumber = await _salesRepository
             .generateInvoiceNumber();
       }

@@ -8,7 +8,6 @@ import 'package:system_loja/screens/products/widgets/product_form.dart';
 import 'package:system_loja/screens/products/widgets/product_list.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 
-
 /// Tela de cadastro e listagem de produtos.
 ///
 /// Permite adicionar novos produtos, visualizar a lista de produtos
@@ -100,10 +99,6 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                           });
                         },
                         onSubmit: _adicionarProduto,
-                        onGenerateCode: () {
-                          final generatedCode = kStringGenerate;
-                          _codigoController.text = generatedCode;
-                        },
                       ),
                       const SizedBox(height: 32),
                       ProductList(
@@ -140,7 +135,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
   }
 
   /// Adiciona um novo produto após validação.
-  void _adicionarProduto() {
+  void _adicionarProduto(bool generatedCode) {
     // Valida o formulário usando os validadores
     // Os validadores já exibem mensagens específicas para cada campo
     if (!_formKey.currentState!.validate()) {
@@ -161,6 +156,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
       estoque: estoque,
       descricao: _descricaoController.text.trim(),
       categoryId: _selectedCategoryId,
+      codeGenerate: generatedCode,
     );
   }
 

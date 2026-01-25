@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:system_loja/core/utils/input_formatters.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/products/widgets/product_category.dart';
+import 'package:system_loja/screens/utils/constants.dart';
 
 /// Widget do formulário de cadastro de produto
 ///
@@ -13,10 +14,9 @@ class ProductForm extends StatefulWidget {
   final TextEditingController precoController;
   final TextEditingController estoqueController;
   final TextEditingController descricaoController;
-  final VoidCallback onSubmit;
+  final ValueChanged<bool> onSubmit;
   final int? selectedCategoryId;
   final ValueChanged<int?> onCategoryChanged;
-  final VoidCallback onGenerateCode;
 
   const ProductForm({
     super.key,
@@ -29,7 +29,6 @@ class ProductForm extends StatefulWidget {
     required this.onSubmit,
     this.selectedCategoryId,
     required this.onCategoryChanged,
-    required this.onGenerateCode,
   });
 
   @override
@@ -37,6 +36,8 @@ class ProductForm extends StatefulWidget {
 }
 
 class _ProductFormState extends State<ProductForm> {
+  bool _generatedCode = false;
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -69,6 +70,7 @@ class _ProductFormState extends State<ProductForm> {
             children: [
               Expanded(
                 child: TextFormField(
+                  readOnly: _generatedCode,
                   controller: widget.codigoController,
                   decoration: const InputDecoration(
                     labelText: 'Código *',
@@ -84,7 +86,12 @@ class _ProductFormState extends State<ProductForm> {
                 ),
               ),
               IconButton(
-                onPressed: widget.onGenerateCode,
+                onPressed: () {
+                  _generatedCode = !_generatedCode;
+                  widget.codigoController.text = _generatedCode
+                      ? kStringGenerate
+                      : '';
+                },
                 icon: Icon(Icons.generating_tokens_outlined),
               ),
             ],
@@ -142,7 +149,7 @@ class _ProductFormState extends State<ProductForm> {
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
-            onPressed: widget.onSubmit,
+            onPressed: () => widget.onSubmit(_generatedCode),
             icon: const Icon(Icons.add),
             label: const Text('Adicionar Produto'),
             style: ElevatedButton.styleFrom(

@@ -4,7 +4,6 @@ import 'package:system_loja/core/models/default/default_object.dart';
 
 part 'product.g.dart';
 
-const String kStringGenerate = 'Será gerado automaticamente';
 
 @JsonSerializable()
 class Product extends DefaultObject {
