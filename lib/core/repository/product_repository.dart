@@ -35,6 +35,20 @@ class ProductRepository {
     }
   }
 
+  /// Retorna uma cópia da lista de produtos atualmente carregada.
+  ///
+  /// A cópia protege o cache interno contra modificações acidentais
+  /// feitas pelo chamador.
+  Future<ResultStatus<List<Product>, String>> fetchProducts() async {
+    try {
+      final result = await defaultDataStorage.getAll();
+      return ResultSuccess(result);
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Erro ao carregar produtos');
+    }
+  }
+
   /// Retorna a lista de produtos em cache, carregando do disco se vazia.
 
   Future<ResultStatus<Product, String>> findByCode(int codigo) async {
@@ -58,43 +72,39 @@ class ProductRepository {
     return await _codeGeneratorService.generateProductCode();
   }
 
-  /// Retorna uma cópia da lista de produtos atualmente carregada.
-  ///
-  /// A cópia protege o cache interno contra modificações acidentais
-  /// feitas pelo chamador.
-  Future<ResultStatus<List<Product>, String>> getProdutos() async {
-    final result = await defaultDataStorage.getAll();
-    return ResultSuccess(result);
-  }
-
   /// Adiciona ou atualiza um produto na lista em memória e agenda persistência.
   ///
-  /// Este método atualiza o cache interno e chama [salvarDadosSincronizado]
+  /// Este método atualiza o cache interno e chama [saveDataSynchronized]
   /// para persistir as alterações de forma segura. Não aguarda o término da
   /// operação (fire-and-forget) — adaptar conforme necessidade do chamador.
-  Future<ResultStatus<bool, String>> salvarProduto(Product produto) async {
+  Future<ResultStatus<bool, String>> saveProduct(Product product) async {
     try {
-      final result = await defaultDataStorage.insertProduct(produto);
+      final result = await defaultDataStorage.insertProduct(product);
       if (result <= 0) {
-        return ResultError('Falha ao salvar produto: ${produto.name}');
+        return ResultError('Falha ao salvar produto: ${product.name}');
       }
       return ResultSuccess(result > 0);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      return ResultError('Falha ao salvar produto: ${produto.name}');
+      return ResultError('Falha ao salvar produto: ${product.name}');
     }
   }
 
   /// Atualiza um produto existente no armazenamento.
   ///
-  /// [produto] Produto com os dados atualizados.
+  /// [product] Produto com os dados atualizados.
   /// Retorna resultado da operação de atualização.
   ///
-  /// **Nota**: Este método utiliza internamente [salvarProduto], pois o storage
+  /// **Nota**: Este método utiliza internamente [saveProduct], pois o storage
   /// não diferencia entre inserção e atualização (upsert pattern).
-  Future<ResultStatus<bool, String>> updateProduct(Product produto) async {
-    final result = await defaultDataStorage.updateProduct(produto);
-    return ResultSuccess(result);
+  Future<ResultStatus<bool, String>> updateProduct(Product product) async {
+    try {
+      final result = await defaultDataStorage.updateProduct(product);
+      return ResultSuccess(result);
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Falha ao atualizar produto: ${product.name}');
+    }
   }
 
   /// Valida um código de produto fornecido pelo usuário.

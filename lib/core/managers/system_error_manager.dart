@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:system_loja/data/cache/models/system_model/system_error_model.dart';
 import 'package:system_loja/data/cache/system_cache_manager.dart';
 
@@ -23,6 +25,12 @@ class SystemErrorManager {
   }
 
   Future<void> saveErrorToCache(SystemErrorModel error) async {
+    log(
+      'Saving error to cache: ${error.message}',
+      time: DateTime.now(),
+      name: 'SystemErrorManager',
+      stackTrace: error.stackTrace,
+    );
     await _cacheManager.saveError(error);
   }
 }

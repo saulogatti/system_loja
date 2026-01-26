@@ -246,12 +246,12 @@ class CategoriesRecordsCompanion extends UpdateCompanion<Category> {
   }
 }
 
-class $ClientesRecordsTable extends ClientesRecords
-    with TableInfo<$ClientesRecordsTable, Customer> {
+class $CustomerRecordsTable extends CustomerRecords
+    with TableInfo<$CustomerRecordsTable, Customer> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ClientesRecordsTable(this.attachedDatabase, [this._alias]);
+  $CustomerRecordsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _addressMeta = const VerificationMeta(
     'address',
   );
@@ -353,7 +353,7 @@ class $ClientesRecordsTable extends ClientesRecords
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'clientes_records';
+  static const String $name = 'customer_records';
   @override
   VerificationContext validateIntegrity(
     Insertable<Customer> instance, {
@@ -461,12 +461,12 @@ class $ClientesRecordsTable extends ClientesRecords
   }
 
   @override
-  $ClientesRecordsTable createAlias(String alias) {
-    return $ClientesRecordsTable(attachedDatabase, alias);
+  $CustomerRecordsTable createAlias(String alias) {
+    return $CustomerRecordsTable(attachedDatabase, alias);
   }
 }
 
-class ClientesRecordsCompanion extends UpdateCompanion<Customer> {
+class CustomerRecordsCompanion extends UpdateCompanion<Customer> {
   final Value<String?> address;
   final Value<String> cpf;
   final Value<String?> email;
@@ -475,7 +475,7 @@ class ClientesRecordsCompanion extends UpdateCompanion<Customer> {
   final Value<String> name;
   final Value<String?> phone;
   final Value<DateTime> registrationDate;
-  const ClientesRecordsCompanion({
+  const CustomerRecordsCompanion({
     this.address = const Value.absent(),
     this.cpf = const Value.absent(),
     this.email = const Value.absent(),
@@ -485,7 +485,7 @@ class ClientesRecordsCompanion extends UpdateCompanion<Customer> {
     this.phone = const Value.absent(),
     this.registrationDate = const Value.absent(),
   });
-  ClientesRecordsCompanion.insert({
+  CustomerRecordsCompanion.insert({
     this.address = const Value.absent(),
     required String cpf,
     this.email = const Value.absent(),
@@ -518,7 +518,7 @@ class ClientesRecordsCompanion extends UpdateCompanion<Customer> {
     });
   }
 
-  ClientesRecordsCompanion copyWith({
+  CustomerRecordsCompanion copyWith({
     Value<String?>? address,
     Value<String>? cpf,
     Value<String?>? email,
@@ -528,7 +528,7 @@ class ClientesRecordsCompanion extends UpdateCompanion<Customer> {
     Value<String?>? phone,
     Value<DateTime>? registrationDate,
   }) {
-    return ClientesRecordsCompanion(
+    return CustomerRecordsCompanion(
       address: address ?? this.address,
       cpf: cpf ?? this.cpf,
       email: email ?? this.email,
@@ -572,7 +572,7 @@ class ClientesRecordsCompanion extends UpdateCompanion<Customer> {
 
   @override
   String toString() {
-    return (StringBuffer('ClientesRecordsCompanion(')
+    return (StringBuffer('CustomerRecordsCompanion(')
           ..write('address: $address, ')
           ..write('cpf: $cpf, ')
           ..write('email: $email, ')
@@ -2165,7 +2165,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $CategoriesRecordsTable categoriesRecords =
       $CategoriesRecordsTable(this);
-  late final $ClientesRecordsTable clientesRecords = $ClientesRecordsTable(
+  late final $CustomerRecordsTable customerRecords = $CustomerRecordsTable(
     this,
   );
   late final $ProductsRecordsTable productsRecords = $ProductsRecordsTable(
@@ -2177,7 +2177,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $InvoiceItemsRecordsTable invoiceItemsRecords =
       $InvoiceItemsRecordsTable(this);
   late final CategoryDao categoryDao = CategoryDao(this as AppDatabase);
-  late final ClienteDao clienteDao = ClienteDao(this as AppDatabase);
+  late final CustomerDao customerDao = CustomerDao(this as AppDatabase);
   late final ProductDao productDao = ProductDao(this as AppDatabase);
   late final InvoiceDao invoiceDao = InvoiceDao(this as AppDatabase);
   late final InvoiceItemDao invoiceItemDao = InvoiceItemDao(
@@ -2189,7 +2189,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     categoriesRecords,
-    clientesRecords,
+    customerRecords,
     productsRecords,
     invoicesRecords,
     invoiceItemsRecords,
@@ -2513,8 +2513,8 @@ typedef $$CategoriesRecordsTableProcessedTableManager =
       Category,
       PrefetchHooks Function({bool productsRecordsRefs})
     >;
-typedef $$ClientesRecordsTableCreateCompanionBuilder =
-    ClientesRecordsCompanion Function({
+typedef $$CustomerRecordsTableCreateCompanionBuilder =
+    CustomerRecordsCompanion Function({
       Value<String?> address,
       required String cpf,
       Value<String?> email,
@@ -2524,8 +2524,8 @@ typedef $$ClientesRecordsTableCreateCompanionBuilder =
       Value<String?> phone,
       Value<DateTime> registrationDate,
     });
-typedef $$ClientesRecordsTableUpdateCompanionBuilder =
-    ClientesRecordsCompanion Function({
+typedef $$CustomerRecordsTableUpdateCompanionBuilder =
+    CustomerRecordsCompanion Function({
       Value<String?> address,
       Value<String> cpf,
       Value<String?> email,
@@ -2536,9 +2536,9 @@ typedef $$ClientesRecordsTableUpdateCompanionBuilder =
       Value<DateTime> registrationDate,
     });
 
-class $$ClientesRecordsTableFilterComposer
-    extends Composer<_$AppDatabase, $ClientesRecordsTable> {
-  $$ClientesRecordsTableFilterComposer({
+class $$CustomerRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $CustomerRecordsTable> {
+  $$CustomerRecordsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2586,9 +2586,9 @@ class $$ClientesRecordsTableFilterComposer
   );
 }
 
-class $$ClientesRecordsTableOrderingComposer
-    extends Composer<_$AppDatabase, $ClientesRecordsTable> {
-  $$ClientesRecordsTableOrderingComposer({
+class $$CustomerRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $CustomerRecordsTable> {
+  $$CustomerRecordsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2636,9 +2636,9 @@ class $$ClientesRecordsTableOrderingComposer
   );
 }
 
-class $$ClientesRecordsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $ClientesRecordsTable> {
-  $$ClientesRecordsTableAnnotationComposer({
+class $$CustomerRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CustomerRecordsTable> {
+  $$CustomerRecordsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2674,37 +2674,37 @@ class $$ClientesRecordsTableAnnotationComposer
   );
 }
 
-class $$ClientesRecordsTableTableManager
+class $$CustomerRecordsTableTableManager
     extends
         RootTableManager<
           _$AppDatabase,
-          $ClientesRecordsTable,
+          $CustomerRecordsTable,
           Customer,
-          $$ClientesRecordsTableFilterComposer,
-          $$ClientesRecordsTableOrderingComposer,
-          $$ClientesRecordsTableAnnotationComposer,
-          $$ClientesRecordsTableCreateCompanionBuilder,
-          $$ClientesRecordsTableUpdateCompanionBuilder,
+          $$CustomerRecordsTableFilterComposer,
+          $$CustomerRecordsTableOrderingComposer,
+          $$CustomerRecordsTableAnnotationComposer,
+          $$CustomerRecordsTableCreateCompanionBuilder,
+          $$CustomerRecordsTableUpdateCompanionBuilder,
           (
             Customer,
-            BaseReferences<_$AppDatabase, $ClientesRecordsTable, Customer>,
+            BaseReferences<_$AppDatabase, $CustomerRecordsTable, Customer>,
           ),
           Customer,
           PrefetchHooks Function()
         > {
-  $$ClientesRecordsTableTableManager(
+  $$CustomerRecordsTableTableManager(
     _$AppDatabase db,
-    $ClientesRecordsTable table,
+    $CustomerRecordsTable table,
   ) : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$ClientesRecordsTableFilterComposer($db: db, $table: table),
+              $$CustomerRecordsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$ClientesRecordsTableOrderingComposer($db: db, $table: table),
+              $$CustomerRecordsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$ClientesRecordsTableAnnotationComposer($db: db, $table: table),
+              $$CustomerRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String?> address = const Value.absent(),
@@ -2715,7 +2715,7 @@ class $$ClientesRecordsTableTableManager
                 Value<String> name = const Value.absent(),
                 Value<String?> phone = const Value.absent(),
                 Value<DateTime> registrationDate = const Value.absent(),
-              }) => ClientesRecordsCompanion(
+              }) => CustomerRecordsCompanion(
                 address: address,
                 cpf: cpf,
                 email: email,
@@ -2735,7 +2735,7 @@ class $$ClientesRecordsTableTableManager
                 required String name,
                 Value<String?> phone = const Value.absent(),
                 Value<DateTime> registrationDate = const Value.absent(),
-              }) => ClientesRecordsCompanion.insert(
+              }) => CustomerRecordsCompanion.insert(
                 address: address,
                 cpf: cpf,
                 email: email,
@@ -2753,19 +2753,19 @@ class $$ClientesRecordsTableTableManager
       );
 }
 
-typedef $$ClientesRecordsTableProcessedTableManager =
+typedef $$CustomerRecordsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
-      $ClientesRecordsTable,
+      $CustomerRecordsTable,
       Customer,
-      $$ClientesRecordsTableFilterComposer,
-      $$ClientesRecordsTableOrderingComposer,
-      $$ClientesRecordsTableAnnotationComposer,
-      $$ClientesRecordsTableCreateCompanionBuilder,
-      $$ClientesRecordsTableUpdateCompanionBuilder,
+      $$CustomerRecordsTableFilterComposer,
+      $$CustomerRecordsTableOrderingComposer,
+      $$CustomerRecordsTableAnnotationComposer,
+      $$CustomerRecordsTableCreateCompanionBuilder,
+      $$CustomerRecordsTableUpdateCompanionBuilder,
       (
         Customer,
-        BaseReferences<_$AppDatabase, $ClientesRecordsTable, Customer>,
+        BaseReferences<_$AppDatabase, $CustomerRecordsTable, Customer>,
       ),
       Customer,
       PrefetchHooks Function()
@@ -3769,8 +3769,8 @@ class $AppDatabaseManager {
   $AppDatabaseManager(this._db);
   $$CategoriesRecordsTableTableManager get categoriesRecords =>
       $$CategoriesRecordsTableTableManager(_db, _db.categoriesRecords);
-  $$ClientesRecordsTableTableManager get clientesRecords =>
-      $$ClientesRecordsTableTableManager(_db, _db.clientesRecords);
+  $$CustomerRecordsTableTableManager get customerRecords =>
+      $$CustomerRecordsTableTableManager(_db, _db.customerRecords);
   $$ProductsRecordsTableTableManager get productsRecords =>
       $$ProductsRecordsTableTableManager(_db, _db.productsRecords);
   $$InvoicesRecordsTableTableManager get invoicesRecords =>

@@ -1,16 +1,18 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/category.dart';
 import 'package:system_loja/core/models/customer.dart' show Customer;
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/data/database/dao/category_dao.dart';
-import 'package:system_loja/data/database/dao/cliente_dao.dart';
+import 'package:system_loja/data/database/dao/customer_dao.dart';
 import 'package:system_loja/data/database/dao/invoice_dao.dart';
 import 'package:system_loja/data/database/dao/invoice_item_dao.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
+import 'package:system_loja/data/database/extension/customer_to_companion.dart';
 import 'package:system_loja/data/database/table/categories_records.dart';
-import 'package:system_loja/data/database/table/clientes_records.dart';
+import 'package:system_loja/data/database/table/customer_records.dart';
 import 'package:system_loja/data/database/table/invoice_items_records.dart';
 import 'package:system_loja/data/database/table/invoices_records.dart';
 import 'package:system_loja/data/database/table/products_records.dart';
@@ -23,12 +25,12 @@ part 'app_database.g.dart';
 @DriftDatabase(
   tables: [
     CategoriesRecords,
-    ClientesRecords,
+    CustomerRecords,
     ProductsRecords,
     InvoicesRecords,
     InvoiceItemsRecords,
   ],
-  daos: [CategoryDao, ClienteDao, ProductDao, InvoiceDao, InvoiceItemDao],
+  daos: [CategoryDao, CustomerDao, ProductDao, InvoiceDao, InvoiceItemDao],
 )
 class AppDatabase extends _$AppDatabase {
   static final _nameBd = 'system_loja';
@@ -48,12 +50,17 @@ class AppDatabase extends _$AppDatabase {
 
         // Migrar categorias existentes dos produtos para a nova tabela
         await _migrateCategoriesFromProducts();
+      } else if (from < 8) {
+        // Criar tabela de clientes, ele cria automaticamente a partir do modelo
+        await m.createAll();
+        // Migrar dados da tabela ClientesRecords para CustomerRecords
+        await _migrateClientesToCustomers();
       }
     },
   );
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 8;
 
   /// Migra categorias existentes dos produtos para a tabela categories_records.
   ///
@@ -73,6 +80,43 @@ class AppDatabase extends _$AppDatabase {
     );
 
     // Não é necessário atualizar produtos pois categoryId já será null por padrão
+  }
+
+  /// Migrar ClientesRecords para CustomerRecords
+  Future<void> _migrateClientesToCustomers() async {
+    try {
+      final clienteRows = await customSelect(
+        'SELECT id, name, cpf, email, phone, address, registration_date, last_updated_date FROM clientes_records',
+      ).get();
+
+      for (final row in clienteRows) {
+        final customer = Customer(
+          id: row.data['id'] as int,
+          name: row.data['name'] as String,
+          cpf: row.data['cpf'] as String,
+          email: row.data['email'] as String?,
+          phone: row.data['phone'] as String?,
+          address: row.data['address'] as String?,
+          registrationDate: (row.data['registration_date'] as int) != 0
+              ? DateTime.fromMillisecondsSinceEpoch(
+                  (row.data['registration_date'] as int) * 1000,
+                )
+              : DateTime.now(),
+          lastUpdatedDate: (row.data['last_updated_date'] as int?) != null
+              ? DateTime.fromMillisecondsSinceEpoch(
+                  (row.data['last_updated_date'] as int) * 1000,
+                )
+              : null,
+        );
+
+        await into(customerRecords).insert(customer.toCompanion());
+      }
+      // Após a migração, você pode optar por remover a tabela ClientesRecords
+      await customStatement('DROP TABLE IF EXISTS clientes_records;');
+    } catch (e, stackTrace) {
+      reportError(e, stackTrace);
+      // Trate erros de migração aqui, se necessário
+    }
   }
 
   static QueryExecutor _openConnection(

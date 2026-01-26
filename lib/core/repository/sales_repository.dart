@@ -27,7 +27,7 @@ class SalesRepository {
       return ResultSuccess(true);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      return ResultError('Erro ao deletar venda: ${e.toString()}');
+      return ResultError('Erro ao deletar venda.');
     }
   }
 
@@ -40,9 +40,7 @@ class SalesRepository {
       return ResultSuccess(invoiceNumber);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      return ResultError(
-        'Erro ao gerar número de nota fiscal: ${e.toString()}',
-      );
+      return ResultError('Erro ao gerar número de nota fiscal.');
     }
   }
 
@@ -63,7 +61,7 @@ class SalesRepository {
       return ResultSuccess(maxId + 1);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      return ResultError('Erro ao obter próximo ID: ${e.toString()}');
+      return ResultError('Erro ao obter próximo ID.');
     }
   }
 
@@ -79,7 +77,7 @@ class SalesRepository {
       return ResultError('Venda com ID $id não encontrada');
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      return ResultError('Erro ao buscar venda: ${e.toString()}');
+      return ResultError('Erro ao buscar venda.');
     }
   }
 
@@ -99,7 +97,7 @@ class SalesRepository {
       return ResultSuccess(sales);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      return ResultError('Erro ao carregar vendas: ${e.toString()}');
+      return ResultError('Erro ao carregar vendas.');
     }
   }
 
@@ -113,7 +111,7 @@ class SalesRepository {
       return ResultSuccess(true);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      return ResultError('Erro ao salvar venda: ${e.toString()}');
+      return ResultError('Erro ao salvar venda.');
     }
   }
 
@@ -128,7 +126,7 @@ class SalesRepository {
       return ResultSuccess(true);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      return ResultError('Erro ao atualizar venda: ${e.toString()}');
+      return ResultError('Erro ao atualizar venda.');
     }
   }
 
@@ -150,9 +148,7 @@ class SalesRepository {
       }
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      return ResultError(
-        'Erro ao validar número de nota fiscal: ${e.toString()}',
-      );
+      return ResultError('Erro ao validar número de nota fiscal.');
     }
   }
 }

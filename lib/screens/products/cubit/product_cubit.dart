@@ -57,7 +57,7 @@ class ProductCubit extends Cubit<ProductState> {
       categoryId: categoryId,
     );
 
-    final resultSave = await _manager.salvarProduto(produto);
+    final resultSave = await _manager.saveProduct(produto);
     switch (resultSave) {
       case ResultSuccess(result: final saved):
         if (!saved) {
@@ -68,7 +68,7 @@ class ProductCubit extends Cubit<ProductState> {
           );
           return;
         }
-        final result = await _manager.getProdutos();
+        final result = await _manager.fetchProducts();
         switch (result) {
           case ResultSuccess(result: final produtos):
             emit(ProductState.insertSuccess(produtos: produtos.toList()));
@@ -99,7 +99,7 @@ class ProductCubit extends Cubit<ProductState> {
     final deleteResult = await _manager.deleteProduct(id);
     switch (deleteResult) {
       case ResultSuccess():
-        final result = await _manager.getProdutos();
+        final result = await _manager.fetchProducts();
         switch (result) {
           case ResultSuccess(result: final produtos):
             emit(ProductState.deleteSuccess(produtos: produtos.toList()));
@@ -144,7 +144,7 @@ class ProductCubit extends Cubit<ProductState> {
   }
 
   Future<void> loadAllProducts() async {
-    final result = await _manager.getProdutos();
+    final result = await _manager.fetchProducts();
     switch (result) {
       case ResultSuccess(result: final produtos):
         emit(ProductState.loaded(produtos: produtos.toList()));
@@ -169,7 +169,7 @@ class ProductCubit extends Cubit<ProductState> {
     final updateResult = await _manager.updateProduct(produto);
     switch (updateResult) {
       case ResultSuccess():
-        final result = await _manager.getProdutos();
+        final result = await _manager.fetchProducts();
         switch (result) {
           case ResultSuccess(result: final produtos):
             emit(ProductState.updateSuccess(produtos: produtos.toList()));

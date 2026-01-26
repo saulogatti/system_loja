@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:system_loja/core/models/invoice.dart';
-import 'package:system_loja/core/repository/cliente_repository.dart';
+import 'package:system_loja/core/repository/customer_repository.dart';
 import 'package:system_loja/core/repository/sales_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/injection/app_injection.dart';
@@ -12,7 +12,7 @@ import 'package:system_loja/screens/sales/sales_state.dart';
 /// e emite estados apropriados para a UI.
 class SalesCubit extends Cubit<SalesState> {
   late SalesRepository _salesRepository;
-  late final ClienteRepository _customerRepository =
+  late final CustomerRepository _customerRepository =
       AppInjection.instance.clienteRepository;
 
   SalesCubit() : super(SalesInitial()) {
@@ -40,38 +40,31 @@ class SalesCubit extends Cubit<SalesState> {
 
   /// Carrega todos os clientes disponíveis
   Future<void> loadAllCustomers() async {
-    try {
-      emit(SalesState.loading());
-      final customers = await _customerRepository.listarMapeado();
-      emit(SalesState.loadedCustomers(customers: customers));
-    } catch (e) {
-      emit(SalesState.error(message: 'Erro ao carregar clientes: $e'));
+    emit(SalesState.loading());
+    final resultMap = await _customerRepository.fetchMappedCustomers();
+    switch (resultMap) {
+      case ResultSuccess(result: final customers):
+        emit(SalesState.loadedCustomers(customers: customers));
+      case ResultError(resultError: final error):
+        emit(SalesState.error(message: 'Erro ao carregar clientes: $error'));
     }
   }
 
   /// Carrega todos os produtos disponíveis
   Future<void> loadProducts() async {
-    try {
-      emit(SalesState.loadingProducts());
-      final productRepository = AppInjection.instance.productRepository;
-      final result = await productRepository.getProdutos();
+    emit(SalesState.loadingProducts());
+    final productRepository = AppInjection.instance.productRepository;
+    final result = await productRepository.fetchProducts();
 
-      switch (result) {
-        case ResultSuccess(result: final products):
-          emit(SalesState.loadedProducts(products: products));
-        case ResultError(resultError: final resultError):
-          emit(
-            SalesState.loadProductsFailure(
-              message: 'Erro ao carregar produtos: $resultError',
-            ),
-          );
-      }
-    } catch (e) {
-      emit(
-        SalesState.loadProductsFailure(
-          message: 'Erro ao carregar produtos: $e',
-        ),
-      );
+    switch (result) {
+      case ResultSuccess(result: final products):
+        emit(SalesState.loadedProducts(products: products));
+      case ResultError(resultError: final resultError):
+        emit(
+          SalesState.loadProductsFailure(
+            message: 'Erro ao carregar produtos: $resultError',
+          ),
+        );
     }
   }
 
