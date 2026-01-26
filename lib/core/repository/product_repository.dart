@@ -1,3 +1,4 @@
+import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/services/code_generator_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
@@ -10,7 +11,7 @@ class ProductRepository {
       AppInjection.instance.appDatabase.productDao; //
   final CodeGeneratorService _codeGeneratorService =
       AppInjection.instance.codeGeneratorService;
-      
+
   ProductRepository();
 
   /// Remove um produto do armazenamento.
@@ -18,26 +19,43 @@ class ProductRepository {
   /// [id] ID do produto a ser removido.
   /// Retorna resultado da operação de exclusão.
   Future<ResultStatus<bool, String>> deleteProduct(int id) async {
-    final result = await defaultDataStorage.remove(id);
-    switch (result) {
-      case true:
-        return ResultSuccess(result);
-      case false:
-        return ResultError(
-          'Falha ao deletar produto com ID: $id - não encontrado',
-        );
+    try {
+      final result = await defaultDataStorage.remove(id);
+      switch (result) {
+        case true:
+          return ResultSuccess(result);
+        case false:
+          return ResultError(
+            'Falha ao deletar produto com ID: $id - não encontrado',
+          );
+      }
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Erro ao deletar produto com ID: $id ');
     }
   }
 
   /// Retorna a lista de produtos em cache, carregando do disco se vazia.
 
   Future<ResultStatus<Product, String>> findByCode(int codigo) async {
-    final result = await defaultDataStorage.getById(codigo);
-    if (result != null) {
-      return ResultSuccess(result);
-    } else {
-      return ResultError('Produto com código $codigo não encontrado');
+    try {
+      final result = await defaultDataStorage.getById(codigo);
+      if (result != null) {
+        return ResultSuccess(result);
+      } else {
+        return ResultError('Produto com código $codigo não encontrado');
+      }
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Erro ao buscar produto com código $codigo ');
     }
+  }
+
+  /// Gera um código único para um novo produto.
+  ///
+  /// Retorna um código no formato PRD-YYYYMMDD-NNNN que não existe no banco.
+  Future<String> generateProductCode() async {
+    return await _codeGeneratorService.generateProductCode();
   }
 
   /// Retorna uma cópia da lista de produtos atualmente carregada.
@@ -61,10 +79,9 @@ class ProductRepository {
         return ResultError('Falha ao salvar produto: ${produto.name}');
       }
       return ResultSuccess(result > 0);
-    } on Exception catch (err) {
-      return ResultError(
-        'Falha ao salvar produto: ${produto.name} - ${err.toString()}',
-      );
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Falha ao salvar produto: ${produto.name}');
     }
   }
 
@@ -80,20 +97,15 @@ class ProductRepository {
     return ResultSuccess(result);
   }
 
-  /// Gera um código único para um novo produto.
-  ///
-  /// Retorna um código no formato PRD-YYYYMMDD-NNNN que não existe no banco.
-  Future<String> generateProductCode() async {
-    return await _codeGeneratorService.generateProductCode();
-  }
-
   /// Valida um código de produto fornecido pelo usuário.
   ///
   /// [code] Código a ser validado.
   /// Retorna resultado da validação com mensagem descritiva.
   Future<ResultStatus<bool, String>> validateProductCode(String code) async {
-    final validationResult = await _codeGeneratorService.validateProductCode(code);
-    
+    final validationResult = await _codeGeneratorService.validateProductCode(
+      code,
+    );
+
     if (validationResult.isValid) {
       return ResultSuccess(true);
     } else {

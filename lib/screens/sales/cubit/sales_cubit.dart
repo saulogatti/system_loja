@@ -21,14 +21,20 @@ class SalesCubit extends Cubit<SalesState> {
 
   /// Deleta uma venda pelo ID
   Future<void> deleteSale(int id) async {
-    try {
-      emit(SalesState.loading());
-      await _salesRepository.deleteSale(id);
+    emit(SalesState.loading());
+    final result = await _salesRepository.deleteSale(id);
 
-      final updatedSales = await _salesRepository.loadAllSales();
-      emit(SalesState.loaded(items: updatedSales));
-    } catch (e) {
-      emit(SalesState.error(message: 'Erro ao deletar venda: $e'));
+    switch (result) {
+      case ResultSuccess():
+        final updatedSalesResult = await _salesRepository.loadAllSales();
+        switch (updatedSalesResult) {
+          case ResultSuccess(result: final sales):
+            emit(SalesState.loaded(items: sales));
+          case ResultError(resultError: final error):
+            emit(SalesState.error(message: error));
+        }
+      case ResultError(resultError: final error):
+        emit(SalesState.error(message: error));
     }
   }
 
@@ -71,12 +77,14 @@ class SalesCubit extends Cubit<SalesState> {
 
   /// Carrega todas as vendas cadastradas
   Future<void> loadSales() async {
-    try {
-      emit(SalesState.loading());
-      final sales = await _salesRepository.loadAllSales();
-      emit(SalesState.loaded(items: sales));
-    } catch (e) {
-      emit(SalesState.error(message: 'Erro ao carregar vendas: $e'));
+    emit(SalesState.loading());
+    final result = await _salesRepository.loadAllSales();
+
+    switch (result) {
+      case ResultSuccess(result: final sales):
+        emit(SalesState.loaded(items: sales));
+      case ResultError(resultError: final error):
+        emit(SalesState.error(message: error));
     }
   }
 
@@ -88,36 +96,66 @@ class SalesCubit extends Cubit<SalesState> {
     InvoiceData invoiceData,
     bool enableCodeGeneration,
   ) async {
-    try {
-      emit(SalesState.loading());
-      if (enableCodeGeneration) {
-        invoiceData.invoiceNumber = await _salesRepository
-            .generateInvoiceNumber();
+    emit(SalesState.loading());
+
+    // Gerar número da nota se necessário
+    if (enableCodeGeneration) {
+      final invoiceNumberResult = await _salesRepository
+          .generateInvoiceNumber();
+      switch (invoiceNumberResult) {
+        case ResultSuccess(result: final invoiceNumber):
+          invoiceData.invoiceNumber = invoiceNumber;
+        case ResultError(resultError: final error):
+          emit(SalesState.error(message: error));
+          return;
       }
-      final invoice = Invoice(
-        id: await _salesRepository.getNextSaleId(),
-        data: invoiceData,
-      );
+    }
 
-      await _salesRepository.saveSale(invoice);
+    // Obter próximo ID
+    final nextIdResult = await _salesRepository.getNextSaleId();
+    final int nextId;
+    switch (nextIdResult) {
+      case ResultSuccess(result: final id):
+        nextId = id;
+      case ResultError(resultError: final error):
+        emit(SalesState.error(message: error));
+        return;
+    }
 
-      final updatedSales = await _salesRepository.loadAllSales();
-      emit(SalesState.saved(items: updatedSales));
-    } catch (e) {
-      emit(SalesState.error(message: 'Erro ao registrar venda: $e'));
+    // Criar e salvar invoice
+    final invoice = Invoice(id: nextId, data: invoiceData);
+
+    final saveResult = await _salesRepository.saveSale(invoice);
+    switch (saveResult) {
+      case ResultSuccess():
+        final updatedSalesResult = await _salesRepository.loadAllSales();
+        switch (updatedSalesResult) {
+          case ResultSuccess(result: final sales):
+            emit(SalesState.saved(items: sales));
+          case ResultError(resultError: final error):
+            emit(SalesState.error(message: error));
+        }
+      case ResultError(resultError: final error):
+        emit(SalesState.error(message: error));
     }
   }
 
   /// Atualiza uma venda existente
   Future<void> updateSale(Invoice invoice) async {
-    try {
-      emit(SalesState.loading());
-      await _salesRepository.updateSale(invoice);
+    emit(SalesState.loading());
+    final result = await _salesRepository.updateSale(invoice);
 
-      final updatedSales = await _salesRepository.loadAllSales();
-      emit(SalesState.loaded(items: updatedSales));
-    } catch (e) {
-      emit(SalesState.error(message: 'Erro ao atualizar venda: $e'));
+    switch (result) {
+      case ResultSuccess():
+        final updatedSalesResult = await _salesRepository.loadAllSales();
+        switch (updatedSalesResult) {
+          case ResultSuccess(result: final sales):
+            emit(SalesState.loaded(items: sales));
+          case ResultError(resultError: final error):
+            emit(SalesState.error(message: error));
+        }
+      case ResultError(resultError: final error):
+        emit(SalesState.error(message: error));
     }
   }
 }

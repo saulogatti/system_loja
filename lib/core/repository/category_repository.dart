@@ -1,3 +1,4 @@
+import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/category.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/category_dao.dart';
@@ -33,7 +34,8 @@ class CategoryRepository {
         description: description,
       );
       return ResultSuccess(id);
-    } on Exception catch (e) {
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
       return ResultError('Erro ao criar categoria: ${e.toString()}');
     }
   }
@@ -59,7 +61,8 @@ class CategoryRepository {
         return ResultSuccess(true);
       }
       return ResultError('Categoria não encontrada');
-    } on Exception catch (e) {
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
       return ResultError('Erro ao remover categoria: ${e.toString()}');
     }
   }
@@ -72,7 +75,8 @@ class CategoryRepository {
       final records = await _dao.getAll();
 
       return ResultSuccess(records);
-    } on Exception catch (e) {
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
       return ResultError('Erro ao carregar categorias: ${e.toString()}');
     }
   }
@@ -88,7 +92,8 @@ class CategoryRepository {
         return ResultSuccess(record);
       }
       return ResultError('Categoria com ID $id não encontrada');
-    } on Exception catch (e) {
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
       return ResultError('Erro ao buscar categoria: ${e.toString()}');
     }
   }
@@ -104,7 +109,8 @@ class CategoryRepository {
         return ResultSuccess(record);
       }
       return ResultError('Categoria "$name" não encontrada');
-    } on Exception catch (e) {
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
       return ResultError('Erro ao buscar categoria: ${e.toString()}');
     }
   }
@@ -151,7 +157,8 @@ class CategoryRepository {
         return ResultSuccess(true);
       }
       return ResultError('Erro ao atualizar categoria');
-    } on Exception catch (e) {
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
       return ResultError('Erro ao atualizar categoria: ${e.toString()}');
     }
   }

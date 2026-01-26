@@ -1,3 +1,4 @@
+import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/data/database/dao/cliente_dao.dart';
@@ -28,7 +29,8 @@ class ClienteRepository {
     final allCustomers = await dao.getAll();
     try {
       return allCustomers.firstWhere((customer) => customer.cpf == cpf);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
       return null;
     }
   }
