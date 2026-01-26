@@ -10,58 +10,32 @@ import 'settings_state.dart';
 /// e gerencia os estados da tela de configurações.
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc() : super(const SettingsInitialState()) {
-    on<LoadSettingsEvent>(_onCarregarConfiguracoes);
-    on<UpdateSettingsEvent>(_onAtualizarConfiguracoes);
-    on<ResetDefaultSettingsEvent>(_onRestaurarPadrao);
-    on<BackupSettingsEvent>(_onRealizarBackup);
-    on<ClearOldLogsEvent>(_onLimparLogsAntigos);
-    on<ClearAllDataEvent>(_onLimparTodosDados);
+    on<LoadSettingsEvent>(_onLoadSettings);
+    on<UpdateSettingsEvent>(_onUpdateSettings);
+    on<ResetDefaultSettingsEvent>(_onResetToDefault);
+    on<BackupSettingsEvent>(_onCreateBackup);
+    on<ClearOldLogsEvent>(_onClearOldLogs);
+    on<ClearAllDataEvent>(_onClearAllData);
   }
 
-  /// Atualiza as configurações do sistema
-  Future<void> _onAtualizarConfiguracoes(
-    UpdateSettingsEvent event,
+  /// Limpa todos os dados do sistema
+  Future<void> _onClearAllData(
+    ClearAllDataEvent event,
     Emitter<SettingsState> emit,
   ) async {
     emit(const SettingsLoadingState());
     try {
-      final updatedSettings = await AppInjection
-          .instance
-          .configurationRepository
-          .atualizarConfiguracao(event.appSettings);
-      emit(
-        SettingsLoadedState(
-          updatedSettings,
-          'Configurações salvas com sucesso!',
-        ),
-      );
-    } catch (e) {
-      emit(SettingsError('Erro ao salvar configurações: $e'));
-    }
-  }
+      final sucesso = await AppInjection.instance.configurationRepository
+          .clearAllData();
 
-  /// Carrega as configurações iniciais
-  Future<void> _onCarregarConfiguracoes(
-    LoadSettingsEvent event,
-    Emitter<SettingsState> emit,
-  ) async {
-    emit(const SettingsLoadingState());
-    try {
-      final configuracao = await AppInjection.instance.configurationRepository
-          .carregarConfiguracao();
-      emit(
-        SettingsLoadedState(
-          configuracao,
-          'Configurações carregadas com sucesso!',
-        ),
-      );
+      emit(SettingsLoadedState(sucesso, SettingsSuccessStatus.cleared));
     } catch (e) {
-      emit(SettingsError('Erro ao carregar configurações: $e'));
+      emit(SettingsError('Erro ao limpar dados: $e'));
     }
   }
 
   /// Limpa logs antigos baseado na configuração
-  Future<void> _onLimparLogsAntigos(
+  Future<void> _onClearOldLogs(
     ClearOldLogsEvent event,
     Emitter<SettingsState> emit,
   ) async {
@@ -70,63 +44,79 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       final sucesso = await AppInjection.instance.configurationRepository
           .clearOldLogs();
 
-      emit(SettingsLoadedState(sucesso, 'Logs antigos limpos com sucesso!'));
+      emit(SettingsLoadedState(sucesso, SettingsSuccessStatus.clearedOldLogs));
     } catch (e) {
       emit(SettingsError('Erro ao limpar logs: $e'));
     }
   }
 
-  /// Limpa todos os dados do sistema
-  Future<void> _onLimparTodosDados(
-    ClearAllDataEvent event,
-    Emitter<SettingsState> emit,
-  ) async {
-    emit(const SettingsLoadingState());
-    try {
-      final sucesso = await AppInjection.instance.configurationRepository
-          .limparTodosDados();
-
-      emit(SettingsLoadedState(sucesso, 'Todos os dados foram removidos!'));
-    } catch (e) {
-      emit(SettingsError('Erro ao limpar dados: $e'));
-    }
-  }
-
   /// Realiza backup dos dados do sistema
-  Future<void> _onRealizarBackup(
+  Future<void> _onCreateBackup(
     BackupSettingsEvent event,
     Emitter<SettingsState> emit,
   ) async {
     emit(const SettingsLoadingState());
     try {
       final sucesso = await AppInjection.instance.configurationRepository
-          .realizarBackup();
+          .createBackup();
 
-      emit(SettingsLoadedState(sucesso, 'Backup realizado com sucesso!'));
+      emit(SettingsLoadedState(sucesso, SettingsSuccessStatus.backupDone));
     } catch (e) {
       emit(SettingsError('Erro ao realizar backup: $e'));
     }
   }
 
+  /// Carrega as configurações iniciais
+  Future<void> _onLoadSettings(
+    LoadSettingsEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    emit(const SettingsLoadingState());
+    try {
+      final configuracao = await AppInjection.instance.configurationRepository
+          .loadConfiguration();
+      emit(SettingsLoadedState(configuracao, SettingsSuccessStatus.loaded));
+    } catch (e) {
+      emit(SettingsError('Erro ao carregar configurações: $e'));
+    }
+  }
+
   /// Restaura as configurações para valores padrão
-  Future<void> _onRestaurarPadrao(
+  Future<void> _onResetToDefault(
     ResetDefaultSettingsEvent event,
     Emitter<SettingsState> emit,
   ) async {
     emit(const SettingsLoadingState());
     try {
-      await AppInjection.instance.configurationRepository.restaurarPadrao();
+      await AppInjection.instance.configurationRepository.resetToDefaults();
       final configuracao = await AppInjection.instance.configurationRepository
-          .carregarConfiguracao();
+          .loadConfiguration();
 
       emit(
         SettingsLoadedState(
           configuracao,
-          'Configurações restauradas para o padrão!',
+          SettingsSuccessStatus.restoredToDefault,
         ),
       );
     } catch (e) {
       emit(SettingsError('Erro ao restaurar configurações: $e'));
+    }
+  }
+
+  /// Atualiza as configurações do sistema
+  Future<void> _onUpdateSettings(
+    UpdateSettingsEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    emit(const SettingsLoadingState());
+    try {
+      final updatedSettings = await AppInjection
+          .instance
+          .configurationRepository
+          .updateAppSettings(event.appSettings);
+      emit(SettingsLoadedState(updatedSettings, SettingsSuccessStatus.updated));
+    } catch (e) {
+      emit(SettingsError('Erro ao salvar configurações: $e'));
     }
   }
 }

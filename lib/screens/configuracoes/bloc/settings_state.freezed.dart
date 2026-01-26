@@ -125,12 +125,12 @@ return loading(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String mensagem)?  error,TResult Function()?  initial,TResult Function( AppSettings appSettings,  String mensagem)?  loaded,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String mensagem)?  error,TResult Function()?  initial,TResult Function( AppSettings appSettings,  SettingsSuccessStatus status)?  loaded,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SettingsError() when error != null:
 return error(_that.mensagem);case SettingsInitialState() when initial != null:
 return initial();case SettingsLoadedState() when loaded != null:
-return loaded(_that.appSettings,_that.mensagem);case SettingsLoadingState() when loading != null:
+return loaded(_that.appSettings,_that.status);case SettingsLoadingState() when loading != null:
 return loading();case _:
   return orElse();
 
@@ -149,12 +149,12 @@ return loading();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String mensagem)  error,required TResult Function()  initial,required TResult Function( AppSettings appSettings,  String mensagem)  loaded,required TResult Function()  loading,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String mensagem)  error,required TResult Function()  initial,required TResult Function( AppSettings appSettings,  SettingsSuccessStatus status)  loaded,required TResult Function()  loading,}) {final _that = this;
 switch (_that) {
 case SettingsError():
 return error(_that.mensagem);case SettingsInitialState():
 return initial();case SettingsLoadedState():
-return loaded(_that.appSettings,_that.mensagem);case SettingsLoadingState():
+return loaded(_that.appSettings,_that.status);case SettingsLoadingState():
 return loading();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -169,12 +169,12 @@ return loading();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String mensagem)?  error,TResult? Function()?  initial,TResult? Function( AppSettings appSettings,  String mensagem)?  loaded,TResult? Function()?  loading,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String mensagem)?  error,TResult? Function()?  initial,TResult? Function( AppSettings appSettings,  SettingsSuccessStatus status)?  loaded,TResult? Function()?  loading,}) {final _that = this;
 switch (_that) {
 case SettingsError() when error != null:
 return error(_that.mensagem);case SettingsInitialState() when initial != null:
 return initial();case SettingsLoadedState() when loaded != null:
-return loaded(_that.appSettings,_that.mensagem);case SettingsLoadingState() when loading != null:
+return loaded(_that.appSettings,_that.status);case SettingsLoadingState() when loading != null:
 return loading();case _:
   return null;
 
@@ -285,11 +285,11 @@ String toString() {
 
 
 class SettingsLoadedState implements SettingsState {
-  const SettingsLoadedState(this.appSettings, this.mensagem);
+  const SettingsLoadedState(this.appSettings, this.status);
   
 
  final  AppSettings appSettings;
- final  String mensagem;
+ final  SettingsSuccessStatus status;
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
@@ -301,16 +301,16 @@ $SettingsLoadedStateCopyWith<SettingsLoadedState> get copyWith => _$SettingsLoad
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsLoadedState&&(identical(other.appSettings, appSettings) || other.appSettings == appSettings)&&(identical(other.mensagem, mensagem) || other.mensagem == mensagem));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsLoadedState&&(identical(other.appSettings, appSettings) || other.appSettings == appSettings)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,appSettings,mensagem);
+int get hashCode => Object.hash(runtimeType,appSettings,status);
 
 @override
 String toString() {
-  return 'SettingsState.loaded(appSettings: $appSettings, mensagem: $mensagem)';
+  return 'SettingsState.loaded(appSettings: $appSettings, status: $status)';
 }
 
 
@@ -321,7 +321,7 @@ abstract mixin class $SettingsLoadedStateCopyWith<$Res> implements $SettingsStat
   factory $SettingsLoadedStateCopyWith(SettingsLoadedState value, $Res Function(SettingsLoadedState) _then) = _$SettingsLoadedStateCopyWithImpl;
 @useResult
 $Res call({
- AppSettings appSettings, String mensagem
+ AppSettings appSettings, SettingsSuccessStatus status
 });
 
 
@@ -338,11 +338,11 @@ class _$SettingsLoadedStateCopyWithImpl<$Res>
 
 /// Create a copy of SettingsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? appSettings = null,Object? mensagem = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? appSettings = null,Object? status = null,}) {
   return _then(SettingsLoadedState(
 null == appSettings ? _self.appSettings : appSettings // ignore: cast_nullable_to_non_nullable
-as AppSettings,null == mensagem ? _self.mensagem : mensagem // ignore: cast_nullable_to_non_nullable
-as String,
+as AppSettings,null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as SettingsSuccessStatus,
   ));
 }
 
