@@ -1,12 +1,12 @@
 import 'package:system_loja/core/managers/configuration_repository.dart';
 import 'package:system_loja/core/repository/category_repository.dart';
-import 'package:system_loja/core/repository/cliente_repository.dart';
+import 'package:system_loja/core/repository/customer_repository.dart';
 import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/repository/sales_repository.dart';
 import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/core/services/code_generator_service.dart';
 import 'package:system_loja/data/database/app_database.dart';
-import 'package:system_loja/data/database/dao/cliente_dao.dart';
+import 'package:system_loja/data/database/dao/customer_dao.dart';
 import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
@@ -20,8 +20,8 @@ class AppInjection {
 
   final AppDatabase appDatabase = AppDatabase();
   final SystemDatabase systemDatabase = SystemDatabase();
-  late final ClienteRepository clienteRepository = ClienteRepository(
-    ClienteDao(appDatabase),
+  late final CustomerRepository clienteRepository = CustomerRepository(
+    CustomerDao(appDatabase),
   );
   late final CategoryRepository categoryRepository = CategoryRepository();
   late final SettingsService settingsService = SettingsService.injection();

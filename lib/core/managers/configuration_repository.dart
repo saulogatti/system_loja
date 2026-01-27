@@ -21,23 +21,14 @@ class ConfigurationRepository
 
   CacheManager get _cache => CacheManager.instance;
 
-  /// Atualiza a configuração do sistema
+  /// Limpa todos os dados do sistema
   ///
-  /// Salva automaticamente após atualizar.
-  Future<AppSettings> atualizarConfiguracao(AppSettings novaConfiguracao) async {
-    _configuracao = novaConfiguracao;
-    await _salvarDados();
-    AppInjection.instance.settingsService.updateSettings(
-      novaConfiguracao.corPrimaria,
-      novaConfiguracao.temaEscuro,
-    );
-    logInfo('Configuração atualizada com sucesso');
-    return _configuracao;
-  }
+  /// Remove todos os clientes, produtos, notas fiscais e logs.
+  /// Mantém as configurações atuais.
+  Future<AppSettings> clearAllData() async {
+    await _cache.clearAll();
 
-  /// Carrega a configuração atual do sistema
-  Future<AppSettings> carregarConfiguracao() async {
-    await _carregarDados();
+    logInfo('Todos os dados foram limpos com sucesso');
     return _configuracao;
   }
 
@@ -52,27 +43,11 @@ class ConfigurationRepository
     return _configuracao;
   }
 
-  @override
-  Future<void> initializeDependencies() async {
-    await _carregarDados();
-  }
-
-  /// Limpa todos os dados do sistema
-  ///
-  /// Remove todos os clientes, produtos, notas fiscais e logs.
-  /// Mantém as configurações atuais.
-  Future<AppSettings> limparTodosDados() async {
-    await _cache.clearAll();
-
-    logInfo('Todos os dados foram limpos com sucesso');
-    return _configuracao;
-  }
-
   /// Realiza backup dos dados do sistema
   ///
   /// Cria uma cópia dos arquivos JSON em um diretório de backup
   /// com timestamp.
-  Future<AppSettings> realizarBackup() async {
+  Future<AppSettings> createBackup() async {
     try {
       final backupFiles = await _cache.createBackup(_configuracao.localBackup);
 
@@ -84,11 +59,36 @@ class ConfigurationRepository
     }
   }
 
+  @override
+  Future<void> initializeDependencies() async {
+    await _carregarDados();
+  }
+
+  /// Carrega a configuração atual do sistema
+  Future<AppSettings> loadConfiguration() async {
+    await _carregarDados();
+    return _configuracao;
+  }
+
   /// Restaura configurações para valores padrão
-  Future<AppSettings> restaurarPadrao() async {
+  Future<AppSettings> resetToDefaults() async {
     _configuracao = AppSettings.createDefaultSettings();
     _salvarDados();
     logInfo('Configurações restauradas para padrão');
+    return _configuracao;
+  }
+
+  /// Atualiza a configuração do sistema
+  ///
+  /// Salva automaticamente após atualizar.
+  Future<AppSettings> updateAppSettings(AppSettings novaConfiguracao) async {
+    _configuracao = novaConfiguracao;
+    await _salvarDados();
+    AppInjection.instance.settingsService.updateSettings(
+      novaConfiguracao.corPrimaria,
+      novaConfiguracao.temaEscuro,
+    );
+    logInfo('Configuração atualizada com sucesso');
     return _configuracao;
   }
 

@@ -3,14 +3,14 @@ import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/data/database/app_database.dart';
 
 
-/// Extensão para converter Customer (domínio) para ClientesRecordsCompanion (Drift).
-extension ClienteToCompanion on Customer {
+/// Extensão para converter Customer (domínio) para CustomerRecordsCompanion (Drift).
+extension CustomerToCompanion on Customer {
   /// Converte um modelo de domínio Customer para Companion usado em insert/update.
   ///
   /// Para inserções, usa .insert(). Para atualizações, inclui o ID.
-  ClientesRecordsCompanion toCompanion({bool forUpdate = false}) {
+  CustomerRecordsCompanion toCompanion({bool forUpdate = false}) {
     if (forUpdate) {
-      return ClientesRecordsCompanion(
+      return CustomerRecordsCompanion(
         id: Value(id),
         name: Value(name),
         cpf: Value(cpf),
@@ -21,7 +21,7 @@ extension ClienteToCompanion on Customer {
         registrationDate: Value(registrationDate),
       );
     }
-    return ClientesRecordsCompanion.insert(
+    return CustomerRecordsCompanion.insert(
       name: name,
       cpf: cpf,
       email: Value(email),

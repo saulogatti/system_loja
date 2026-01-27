@@ -46,7 +46,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           if (state is SettingsLoadedState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.mensagem),
+                content: Text(state.status.mensagem),
                 backgroundColor: Colors.green,
               ),
             );
