@@ -168,7 +168,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
       },
       onError: (error) {
         emit(
-          const CustomerBlocState.customerError(message: 'Erro: CPF inválido!'),
+          CustomerBlocState.customerError(message: error),
         );
         return;
       },
