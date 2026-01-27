@@ -31,12 +31,14 @@ mixin FileStorageUtility {
   ///
   /// Retorna o número de arquivos copiados com sucesso.
   /// Em caso de erro, registra via `logError` e retorna 0.
-  Future<int> backup() async {
+  Future<int> backup([String localBackup = '']) async {
     try {
       // Obtém o diretório principal do app (não o subdiretório específico)
       final appDocDir = await getApplicationSupportDirectory();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final backupDir = Directory(p.join(appDocDir.path, 'backup_$timestamp'));
+      final backupDir = localBackup.isNotEmpty
+          ? Directory(p.join(localBackup, 'backup_$timestamp'))
+          : Directory(p.join(appDocDir.path, 'backup_$timestamp'));
 
       if (!await backupDir.exists()) {
         await backupDir.create(recursive: true);
@@ -47,7 +49,7 @@ mixin FileStorageUtility {
       // Lista todos os itens no diretório principal do app
       await for (final entity in appDocDir.list()) {
         // Ignora diretórios de backup existentes para evitar recursão
-        if (entity is Directory &&
+        if (
             p.basename(entity.path).startsWith('backup_')) {
           continue;
         }

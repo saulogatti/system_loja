@@ -85,13 +85,8 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// com timestamp.
   Future<bool> createBackup(String localBackup) async {
     try {
-      final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
-      final backupDir = Directory('$localBackup/$timestamp');
-
-      if (!backupDir.existsSync()) {
-        backupDir.createSync(recursive: true);
-      }
-      final arquivosCopiados = await backup();
+    
+      final arquivosCopiados = await backup(localBackup);
       // Lista de arquivos para backup
 
       logInfo(
