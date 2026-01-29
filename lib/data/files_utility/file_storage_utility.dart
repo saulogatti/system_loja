@@ -28,7 +28,7 @@ mixin FileStorageUtility {
   /// Realiza backup de todos os dados do sistema.
   ///
   /// Copia todos os arquivos e diretórios do diretório de suporte da aplicação
-  /// para um novo diretório de backup com timestamp. Ignora diretórios de backup 
+  /// para um novo diretório de backup com timestamp. Ignora diretórios de backup
   /// existentes para evitar recursão.
   ///
   /// [localBackup] - Caminho opcional para o diretório de backup. Se vazio, usa o diretório padrão.
@@ -59,7 +59,7 @@ mixin FileStorageUtility {
       // Lista todos os itens no diretório principal do app
       await for (final entity in appDocDir.list()) {
         final basename = p.basename(entity.path);
-        
+
         // Ignora diretórios de backup existentes para evitar recursão
         if (basename.startsWith(_maskBackup)) {
           continue;
@@ -254,7 +254,12 @@ mixin FileStorageUtility {
           // Restaura arquivos diretamente no diretório principal
           final nomeArquivo = p.basename(entity.path);
           final destino = File(p.join(appDocDir.path, nomeArquivo));
-          await entity.copy(destino.path);
+          if (await destino.exists()) {
+            logDebug('Restaurando arquivo ${entity.path} para ${destino.path}');
+            await entity.rename('${destino.path}.bak');
+          } else {
+            await entity.copy(destino.path);
+          }
           arquivosRestaurados++;
         } else if (entity is Directory) {
           // Restaura diretórios recursivamente
@@ -388,6 +393,22 @@ mixin FileStorageUtility {
 
         if (!await cacheDir.exists()) {
           await cacheDir.create(recursive: true);
+        }
+        for (final element in cacheDir.listSync()) {
+          if (element is! File) continue;
+          final String ext = p.extension(element.path).toLowerCase();
+          if (ext == '.bak') {
+            // bak vai subistituir o original
+            final originalPath = element.path.substring(
+              0,
+              element.path.length - ext.length,
+            );
+            final originalFile = File(originalPath);
+            if (await originalFile.exists()) {
+              await originalFile.delete();
+            }
+            await element.rename(originalPath);
+          }
         }
         return cacheDirectory;
       } catch (e) {

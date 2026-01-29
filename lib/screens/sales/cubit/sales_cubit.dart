@@ -4,7 +4,6 @@ import 'package:system_loja/core/repository/customer_repository.dart';
 import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/repository/sales_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/screens/injection/app_injection.dart';
 import 'package:system_loja/screens/sales/sales_state.dart';
 
 /// Cubit para gerenciamento de estado de vendas
@@ -18,9 +17,7 @@ class SalesCubit extends Cubit<SalesState> {
   final _productRepository = ProductRepository();
 
   SalesCubit() : super(SalesInitial()) {
-    _salesRepository = SalesRepository(
-
-    );
+    _salesRepository = SalesRepository();
   }
 
   /// Deleta uma venda pelo ID
