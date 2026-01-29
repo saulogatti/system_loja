@@ -10,15 +10,10 @@ import 'package:system_loja/screens/route/route_app.gr.dart';
 /// - Cadastro de Nota Fiscal
 /// - Gestão de Usuários
 @RoutePage()
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   /// Cria uma instância de [HomeScreen].
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final items = [

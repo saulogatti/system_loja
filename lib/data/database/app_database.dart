@@ -61,9 +61,15 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 8;
   // Dentro da sua classe de banco (Database)
+  /// Cria um backup manual do banco de dados usando o comando `VACUUM INTO`.
+  ///
+  /// Escapa aspas simples no [backupFile] para evitar erros de SQL e reduzir
+  /// a superfície de injeção caso o caminho não seja totalmente confiável.
   Future<void> manualBackup(String backupFile) async {
+    final sanitizedBackupFile = backupFile.replaceAll("'", "''");
+
     // O comando VACUUM INTO cria um backup consistente "a quente"
-    await customStatement("VACUUM INTO '$backupFile'");
+    await customStatement("VACUUM INTO '$sanitizedBackupFile'");
   }
 
   /// Migra categorias existentes dos produtos para a tabela categories_records.

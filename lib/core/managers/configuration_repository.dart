@@ -80,15 +80,21 @@ class ConfigurationRepository
     return _configuracao;
   }
 
-  Future<dynamic> restoreBackup(String direBackup) async {
+  /// Restaura um backup das configurações e dados do sistema.
+  ///
+  /// Após restaurar, recarrega as configurações para refletir o conteúdo
+  /// do backup restaurado. Em caso de falha, a exceção é relançada para
+  /// que a camada de apresentação possa tratá-la adequadamente.
+  Future<AppSettings> restoreBackup(String direBackup) async {
     try {
       await _cache.restoreBackupFrom(direBackup);
+      await _carregarDados();
 
       logInfo('Restauração de backup realizada com sucesso');
       return _configuracao;
     } catch (e, stackTrace) {
       logError('Erro ao restaurar backup: $e', stackTrace);
-      return _configuracao;
+      rethrow;
     }
   }
 

@@ -15,9 +15,11 @@ class SalesCubit extends Cubit<SalesState> {
   late SalesRepository _salesRepository;
   late final CustomerRepository _customerRepository = CustomerRepository();
 
+  final _productRepository = ProductRepository();
+
   SalesCubit() : super(SalesInitial()) {
     _salesRepository = SalesRepository(
-      invoiceDao: AppInjection.instance.appDatabase.invoiceDao,
+
     );
   }
 
@@ -55,8 +57,7 @@ class SalesCubit extends Cubit<SalesState> {
   /// Carrega todos os produtos disponíveis
   Future<void> loadProducts() async {
     emit(SalesState.loadingProducts());
-    final productRepository = ProductRepository();
-    final result = await productRepository.fetchProducts();
+    final result = await _productRepository.fetchProducts();
 
     switch (result) {
       case ResultSuccess(result: final products):

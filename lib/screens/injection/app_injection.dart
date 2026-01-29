@@ -30,9 +30,9 @@ class AppInjection {
 
   Future<void> initializeDependencies() async {
     // Inicializações assíncronas, se necessário
-    final ConfigurationRepository configurationRepository =
-        ConfigurationRepository();
-    await configurationRepository.loadConfiguration();
+    final configurationRepository = ConfigurationRepository();
+    final settings = await configurationRepository.loadConfiguration();
+    settingsService.updateSettings(settings.corPrimaria, settings.temaEscuro);
     await systemDatabase.customStatement('PRAGMA foreign_keys = ON;');
   }
 }

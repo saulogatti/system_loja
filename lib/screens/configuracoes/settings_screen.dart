@@ -13,6 +13,25 @@ import 'widgets/secao_notificacoes.dart';
 import 'widgets/secao_seguranca.dart';
 import 'widgets/secao_tema.dart';
 
+/// Enum para frequência de backup
+enum FrequenciaBackup {
+  diario('diario', 'Diário'),
+  semanal('semanal', 'Semanal'),
+  mensal('mensal', 'Mensal');
+
+  final String value;
+  final String label;
+
+  const FrequenciaBackup(this.value, this.label);
+
+  static FrequenciaBackup fromValue(String value) {
+    return FrequenciaBackup.values.firstWhere(
+      (e) => e.value == value,
+      orElse: () => FrequenciaBackup.diario,
+    );
+  }
+}
+
 /// Tela de Configurações do Sistema
 ///
 /// Permite aos administradores ajustar preferências de notificação,
@@ -38,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       persistentFooterButtons: [
         TextButton(
           onPressed: () => _resetToDefault(context),
-          child: const Text('Restaurar  Dados'),
+          child: const Text('Restaurar Dados'),
         ),
       ],
       body: BlocConsumer<SettingsBloc, SettingsState>(
@@ -333,22 +352,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
     BuildContext context,
     AppSettings config,
   ) async {
-    final opcoes = [
-      'diario',
-      'semanal',
-      'mensal',
-    ]; // TODO passar para enum (depois que criar o objeto de backup)
-    final selecionado = await showDialog<String>(
+    final selecionado = await showDialog<FrequenciaBackup>(
       context: context,
       builder: (dialogContext) => SimpleDialog(
         title: const Text('Frequência de Backup'),
-        children: opcoes.map((opcao) {
+        children: FrequenciaBackup.values.map((opcao) {
           return SimpleDialogOption(
             onPressed: () => Navigator.pop(dialogContext, opcao),
             child: Text(
-              opcao[0].toUpperCase() + opcao.substring(1),
+              opcao.label,
               style: TextStyle(
-                fontWeight: config.frequenciaBackup == opcao
+                fontWeight: config.frequenciaBackup == opcao.value
                     ? FontWeight.bold
                     : FontWeight.normal,
               ),
@@ -359,7 +373,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
 
     if (selecionado != null && context.mounted) {
-      final newConfig = config.copyWith(frequenciaBackup: selecionado);
+      final newConfig = config.copyWith(frequenciaBackup: selecionado.value);
       context.read<SettingsBloc>().add(UpdateSettingsEvent(newConfig));
     }
   }

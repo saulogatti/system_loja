@@ -28,12 +28,20 @@ mixin FileStorageUtility {
   /// Realiza backup de todos os dados do sistema.
   ///
   /// Copia todos os arquivos e diretórios do diretório de suporte da aplicação
-  /// (incluindo `system_loja_cache` e `system_loja_database`) para um novo
-  /// diretório de backup com timestamp.
+  /// para um novo diretório de backup com timestamp. Ignora diretórios de backup 
+  /// existentes para evitar recursão.
+  ///
+  /// [localBackup] - Caminho opcional para o diretório de backup. Se vazio, usa o diretório padrão.
+  /// [excludeDirectories] - Lista de nomes de diretórios a serem excluídos do backup.
+  /// Use para excluir diretórios de banco de dados (ex: 'system_loja_database') que devem
+  /// usar mecanismos transacionais próprios (VACUUM INTO, etc) para evitar backups corrompidos.
   ///
   /// Retorna o número de arquivos copiados com sucesso.
   /// Em caso de erro, registra via `logError` e retorna 0.
-  Future<int> backup([String localBackup = '']) async {
+  Future<int> backup([
+    String localBackup = '',
+    List<String> excludeDirectories = const [],
+  ]) async {
     try {
       // Obtém o diretório principal do app (não o subdiretório específico)
       final appDocDir = await getApplicationSupportDirectory();
@@ -50,20 +58,30 @@ mixin FileStorageUtility {
 
       // Lista todos os itens no diretório principal do app
       await for (final entity in appDocDir.list()) {
+        final basename = p.basename(entity.path);
+        
         // Ignora diretórios de backup existentes para evitar recursão
-        if (p.basename(entity.path).startsWith(_maskBackup)) {
+        if (basename.startsWith(_maskBackup)) {
+          continue;
+        }
+
+        // Ignora diretórios excluídos (ex: banco de dados SQLite/Drift)
+        if (entity is Directory && excludeDirectories.contains(basename)) {
+          logDebug(
+            'Diretório "$basename" excluído do backup (requer mecanismo transacional)',
+          );
           continue;
         }
 
         if (entity is File) {
           // Copia arquivos diretamente no diretório principal
-          final nomeArquivo = p.basename(entity.path);
+          final nomeArquivo = basename;
           final destino = File(p.join(backupDir.path, nomeArquivo));
           await entity.copy(destino.path);
           arquivosCopiados++;
         } else if (entity is Directory) {
-          // Copia diretórios recursivamente (ex: system_loja_cache, system_loja_database)
-          final nomeDiretorio = p.basename(entity.path);
+          // Copia diretórios recursivamente (ex: system_loja_cache)
+          final nomeDiretorio = basename;
           final destinoDir = Directory(p.join(backupDir.path, nomeDiretorio));
           arquivosCopiados += await _copyDirectoryRecursively(
             entity,
@@ -212,8 +230,15 @@ mixin FileStorageUtility {
   @protected
   Future<int> restoreBackup(String direBackup) async {
     try {
-      if (direBackup.isEmpty || !direBackup.contains(_maskBackup)) {
+      if (direBackup.isEmpty) {
         throw CacheReadException('Caminho de backup não pode ser vazio', null);
+      }
+      if (!direBackup.contains(_maskBackup)) {
+        throw CacheReadException(
+          'Diretório de backup inválido: nome não contém a máscara '
+          '"$_maskBackup"',
+          null,
+        );
       }
       final backupDir = Directory(direBackup);
       if (!await backupDir.exists()) {
@@ -325,9 +350,9 @@ mixin FileStorageUtility {
       if (entity is File) {
         final nomeArquivo = p.basename(entity.path);
         final destino = File(p.join(destination.path, nomeArquivo));
-        if (destino.existsSync()) {
+        if (await destino.exists()) {
           logDebug('Copying file ${entity.path} to ${destino.path}');
-          destino.renameSync('${destino.path}.old');
+          await destino.rename('${destino.path}.old');
         }
         await entity.copy(destino.path);
         filesCopied++;

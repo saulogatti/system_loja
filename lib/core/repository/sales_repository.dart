@@ -10,10 +10,10 @@ import 'package:system_loja/screens/injection/app_injection.dart';
 /// Responsável por coordenar operações de CRUD de vendas (invoices)
 /// utilizando os DAOs do Drift.
 class SalesRepository {
-  final InvoiceDao _invoiceDao;
+  final InvoiceDao _invoiceDao = AppInjection.instance.appDatabase.invoiceDao;
   late final CodeGeneratorService _codeGeneratorService;
 
-  SalesRepository({required InvoiceDao invoiceDao}) : _invoiceDao = invoiceDao {
+  SalesRepository() {
     _codeGeneratorService = AppInjection.instance.codeGeneratorService;
   }
 
