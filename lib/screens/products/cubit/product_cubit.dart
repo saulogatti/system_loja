@@ -124,7 +124,6 @@ class ProductCubit extends Cubit<ProductState> {
   /// Parâmetros:
   ///   - [codigo]: Código do produto a ser localizado.
   Future<void> findByCode(int codigo) async {
-    // TODO implementar falta implementação na tela
     final result = await _manager.findByCode(codigo);
     switch (result) {
       case ResultSuccess(result: final produto):
