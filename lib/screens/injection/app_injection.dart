@@ -1,12 +1,7 @@
 import 'package:system_loja/core/managers/configuration_repository.dart';
-import 'package:system_loja/core/repository/category_repository.dart';
-import 'package:system_loja/core/repository/customer_repository.dart';
-import 'package:system_loja/core/repository/product_repository.dart';
-import 'package:system_loja/core/repository/sales_repository.dart';
 import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/core/services/code_generator_service.dart';
 import 'package:system_loja/data/database/app_database.dart';
-import 'package:system_loja/data/database/dao/customer_dao.dart';
 import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
@@ -18,20 +13,13 @@ class AppInjection {
     return _instance!;
   }
 
-  final AppDatabase appDatabase = AppDatabase();
-  final SystemDatabase systemDatabase = SystemDatabase();
-  late final CustomerRepository clienteRepository = CustomerRepository(
-    CustomerDao(appDatabase),
-  );
-  late final CategoryRepository categoryRepository = CategoryRepository();
+  AppDatabase appDatabase = AppDatabase();
+  SystemDatabase systemDatabase = SystemDatabase();
+
   late final SettingsService settingsService = SettingsService.injection();
-  late final ConfigurationRepository configurationRepository =
-      ConfigurationRepository();
-  late final ProductRepository productRepository = ProductRepository();
+
   late final LogRepository logRepository = LogRepository();
-  late final SalesRepository salesRepository = SalesRepository(
-    invoiceDao: appDatabase.invoiceDao,
-  );
+
   late final RouteApp routeApp = RouteApp();
   late final CodeGeneratorService codeGeneratorService = CodeGeneratorService(
     productDao: appDatabase.productDao,
@@ -39,8 +27,13 @@ class AppInjection {
   );
 
   AppInjection._internal();
+
   Future<void> initializeDependencies() async {
-    await configurationRepository.initializeDependencies();
+    // Inicializações assíncronas, se necessário
+    final configurationRepository = ConfigurationRepository();
+    final settings = await configurationRepository.loadConfiguration();
+    settingsService.updateSettings(settings.corPrimaria, settings.temaEscuro);
+    await systemDatabase.customStatement('PRAGMA foreign_keys = ON;');
   }
 }
 

@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/screens/injection/app_injection.dart';
 import 'package:system_loja/screens/products/cubit/product_state.dart';
 
 /// Gerencia o estado da tela de produtos e operações com a base de dados.
@@ -13,8 +12,7 @@ import 'package:system_loja/screens/products/cubit/product_state.dart';
 /// operação para a UI.
 class ProductCubit extends Cubit<ProductState> {
   /// Repositório utilizado para acessar dados de produtos.
-  late final ProductRepository _manager =
-      AppInjection.instance.productRepository;
+  late final ProductRepository _manager = ProductRepository();
 
   /// Inicializa o Cubit com estado de carregamento.
   ///
@@ -126,7 +124,6 @@ class ProductCubit extends Cubit<ProductState> {
   /// Parâmetros:
   ///   - [codigo]: Código do produto a ser localizado.
   Future<void> findByCode(int codigo) async {
-    // TODO implementar falta implementação na tela
     final result = await _manager.findByCode(codigo);
     switch (result) {
       case ResultSuccess(result: final produto):

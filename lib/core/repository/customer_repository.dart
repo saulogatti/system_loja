@@ -1,3 +1,4 @@
+import 'package:drift/remote.dart';
 import 'package:system_loja/core/managers/exceptions/customer_exception.dart';
 import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/activity_log.dart';
@@ -5,12 +6,13 @@ import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/customer_dao.dart';
+import 'package:system_loja/screens/injection/app_injection.dart';
 
 class CustomerRepository {
   final LogRepository _logRepository = LogRepository();
-  final CustomerDao dao;
+  final CustomerDao dao = AppInjection.instance.appDatabase.customerDao;
 
-  CustomerRepository(this.dao);
+  CustomerRepository();
 
   /// Deleta um cliente pelo ID.
   ///
@@ -117,6 +119,11 @@ class CustomerRepository {
       return ResultStatus.error(e.message);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
+      if (e is DriftRemoteException) {
+        return ResultStatus.error(
+          'Erro ao buscar todos os clientes: ${e.remoteCause.toString()}',
+        );
+      }
       return ResultStatus.error('Erro ao buscar todos os clientes.');
     }
   }
@@ -142,6 +149,11 @@ class CustomerRepository {
       return ResultStatus.error(e.message);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
+      if (e is DriftRemoteException) {
+        return ResultStatus.error(
+          'Erro ao salvar cliente: ${e.remoteCause.toString()}',
+        );
+      }
       return ResultStatus.error('Erro ao salvar cliente.');
     }
   }
@@ -174,6 +186,11 @@ class CustomerRepository {
       return ResultStatus.error(e.message);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
+      if (e is DriftRemoteException) {
+        return ResultStatus.error(
+          'Erro ao atualizar cliente: ${e.remoteCause.toString()}',
+        );
+      }
       return ResultStatus.error('Erro ao atualizar cliente.');
     }
   }

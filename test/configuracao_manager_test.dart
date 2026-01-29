@@ -104,7 +104,7 @@ void main() {
       File('data/clientes.json').writeAsStringSync('[]');
       File('data/produtos.json').writeAsStringSync('[]');
 
-      final sucesso = await manager.createBackup();
+      final sucesso = await manager.createBackup('data/backups');
 
       expect(sucesso, isTrue);
       expect(Directory('data/backups').existsSync(), isTrue);
@@ -115,7 +115,7 @@ void main() {
     });
 
     test('Deve lidar com backup sem arquivos existentes', () async {
-      final sucesso = await manager.createBackup();
+      final sucesso = await manager.createBackup('data/backups');
 
       // Deve retornar true mesmo sem arquivos para backup
       expect(sucesso, isTrue);

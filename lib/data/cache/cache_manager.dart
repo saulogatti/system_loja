@@ -85,13 +85,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// com timestamp.
   Future<bool> createBackup(String localBackup) async {
     try {
-      final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
-      final backupDir = Directory('$localBackup/$timestamp');
-
-      if (!backupDir.existsSync()) {
-        backupDir.createSync(recursive: true);
-      }
-      final arquivosCopiados = await backup();
+      final arquivosCopiados = await backup(localBackup);
       // Lista de arquivos para backup
 
       logInfo(
@@ -261,6 +255,16 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     }
   }
 
+  Future<void> restoreBackupFrom(String direBackup) async {
+    try {
+      await restoreBackup(direBackup);
+      logInfo('Restauração de backup realizada com sucesso');
+    } catch (e, stackTrace) {
+      logError('Erro ao restaurar backup: $e', stackTrace);
+      throw CacheReadException('Erro ao restaurar backup', e);
+    }
+  }
+
   /// Retorna o nome do diretório do sistema de cache.
   ///
   /// Este método sobrescreve o comportamento do [FileStorageUtility]
@@ -268,7 +272,6 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// armazenados dentro do diretório de suporte da aplicação.
   @override
   String retrieveDirectoryName() {
-   
     return 'system_loja_cache';
   }
 

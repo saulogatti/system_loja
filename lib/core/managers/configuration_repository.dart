@@ -29,6 +29,7 @@ class ConfigurationRepository
     await _cache.clearAll();
 
     logInfo('Todos os dados foram limpos com sucesso');
+    await _salvarDados();
     return _configuracao;
   }
 
@@ -40,6 +41,7 @@ class ConfigurationRepository
       );
       await AppInjection.instance.logRepository.clearOldLogs(dataLimite);
     }
+    await _salvarDados();
     return _configuracao;
   }
 
@@ -47,9 +49,9 @@ class ConfigurationRepository
   ///
   /// Cria uma cópia dos arquivos JSON em um diretório de backup
   /// com timestamp.
-  Future<AppSettings> createBackup() async {
+  Future<AppSettings> createBackup(String directoryPath) async {
     try {
-      final backupFiles = await _cache.createBackup(_configuracao.localBackup);
+      final backupFiles = await _cache.createBackup(directoryPath);
 
       logInfo('Backup realizado com sucesso: $backupFiles arquivos copiados');
       return _configuracao;
@@ -73,9 +75,27 @@ class ConfigurationRepository
   /// Restaura configurações para valores padrão
   Future<AppSettings> resetToDefaults() async {
     _configuracao = AppSettings.createDefaultSettings();
-    _salvarDados();
+    await _salvarDados();
     logInfo('Configurações restauradas para padrão');
     return _configuracao;
+  }
+
+  /// Restaura um backup das configurações e dados do sistema.
+  ///
+  /// Após restaurar, recarrega as configurações para refletir o conteúdo
+  /// do backup restaurado. Em caso de falha, a exceção é relançada para
+  /// que a camada de apresentação possa tratá-la adequadamente.
+  Future<AppSettings> restoreBackup(String direBackup) async {
+    try {
+      await _cache.restoreBackupFrom(direBackup);
+      await _carregarDados();
+
+      logInfo('Restauração de backup realizada com sucesso');
+      return _configuracao;
+    } catch (e, stackTrace) {
+      logError('Erro ao restaurar backup: $e', stackTrace);
+      rethrow;
+    }
   }
 
   /// Atualiza a configuração do sistema

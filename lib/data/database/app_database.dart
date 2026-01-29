@@ -58,9 +58,19 @@ class AppDatabase extends _$AppDatabase {
       }
     },
   );
-
   @override
   int get schemaVersion => 8;
+  // Dentro da sua classe de banco (Database)
+  /// Cria um backup manual do banco de dados usando o comando `VACUUM INTO`.
+  ///
+  /// Escapa aspas simples no [backupFile] para evitar erros de SQL e reduzir
+  /// a superfície de injeção caso o caminho não seja totalmente confiável.
+  Future<void> manualBackup(String backupFile) async {
+    final sanitizedBackupFile = backupFile.replaceAll("'", "''");
+
+    // O comando VACUUM INTO cria um backup consistente "a quente"
+    await customStatement("VACUUM INTO '$sanitizedBackupFile'");
+  }
 
   /// Migra categorias existentes dos produtos para a tabela categories_records.
   ///
@@ -71,7 +81,6 @@ class AppDatabase extends _$AppDatabase {
     // Nota: Como a coluna antiga 'category' foi removida, não podemos migrá-la.
     // Os produtos novos precisarão ter categorias atribuídas manualmente.
     // Podemos criar uma categoria padrão para produtos sem categoria.
-
     await into(categoriesRecords).insert(
       CategoriesRecordsCompanion.insert(
         name: 'Sem Categoria',

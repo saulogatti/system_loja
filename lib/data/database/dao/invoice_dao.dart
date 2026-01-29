@@ -99,16 +99,22 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   /// Insere uma nova nota fiscal com seus itens em uma transação.
   ///
   /// Garante que tanto a nota quanto seus itens sejam salvos atomicamente.
+  /// Também atualiza o estoque dos produtos vendidos.
   /// Retorna o ID da nota fiscal criada.
   Future<int> insertInvoiceWithItems(Invoice invoice) async {
     return await transaction(() async {
       // Insere a nota fiscal
       final invoiceId = await insertInvoice(invoice);
 
-      // Insere os itens
+      // Insere os itens e atualiza estoque
       final invoiceItemDao = db.invoiceItemDao;
+      final productDao = db.productDao;
+
       for (final item in invoice.data.items) {
         await invoiceItemDao.insertInvoiceItem(item, invoiceId: invoiceId);
+
+        // Atualiza o estoque do produto (remove a quantidade vendida)
+        await productDao.updateStockQuantity(item.productId, -item.quantity);
       }
 
       return invoiceId;

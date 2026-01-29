@@ -29,7 +29,8 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
         price: data.price,
         stockQuantity: data.stockQuantity,
       ),
-      mode: InsertMode.insertOrAbort, onConflict: DoNothing(),
+      mode: InsertMode.insertOrAbort,
+      onConflict: DoNothing(),
     );
   }
 
@@ -70,5 +71,31 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   Future<bool> codeExists(String code) async {
     final product = await getByCode(code);
     return product != null;
+  }
+
+  /// Atualiza a quantidade em estoque de um produto.
+  ///
+  /// [productId] ID do produto a ser atualizado.
+  /// [quantityChange] Quantidade a ser adicionada (positivo) ou removida (negativo).
+  /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
+  Future<bool> updateStockQuantity(int productId, int quantityChange) async {
+    final product = await getById(productId);
+    if (product == null) return false;
+
+    final newQuantity = product.stockQuantity + quantityChange;
+    if (newQuantity < 0) return false;
+
+    return await update(productsRecords).replace(
+      ProductsRecordsCompanion(
+        id: Value(productId),
+        code: Value(product.code),
+        categoryId: Value(product.categoryId),
+        description: Value(product.description),
+        name: Value(product.name),
+        price: Value(product.price),
+        stockQuantity: Value(newQuantity),
+        lastUpdatedDate: Value(DateTime.now()),
+      ),
+    );
   }
 }
