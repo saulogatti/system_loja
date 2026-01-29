@@ -6,7 +6,6 @@ import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/repository/customer_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
-import 'package:system_loja/screens/injection/app_injection.dart';
 
 part 'customer_bloc.freezed.dart';
 part 'customer_bloc_event.dart';
@@ -18,9 +17,7 @@ part 'customer_bloc_state.dart';
 /// Utiliza o ClienteSqlManager para operações de banco de dados
 /// e implementa o padrão BLoC para separação de lógica de negócio da UI.
 class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
-  final CustomerRepository _customerRepository =
-      AppInjection.instance.clienteRepository;
-
+  final CustomerRepository _customerRepository = CustomerRepository();
   CustomerBloc() : super(const _Initial()) {
     on<_LoadCustomers>(_onLoadCustomers);
     on<_RegisterCustomer>(_onRegisterCustomer);
@@ -167,9 +164,7 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
         );
       },
       onError: (error) {
-        emit(
-          CustomerBlocState.customerError(message: error),
-        );
+        emit(CustomerBlocState.customerError(message: error));
         return;
       },
     );

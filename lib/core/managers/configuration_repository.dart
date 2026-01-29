@@ -80,6 +80,18 @@ class ConfigurationRepository
     return _configuracao;
   }
 
+  Future<dynamic> restoreBackup(String direBackup) async {
+    try {
+      await _cache.restoreBackupFrom(direBackup);
+
+      logInfo('Restauração de backup realizada com sucesso');
+      return _configuracao;
+    } catch (e, stackTrace) {
+      logError('Erro ao restaurar backup: $e', stackTrace);
+      return _configuracao;
+    }
+  }
+
   /// Atualiza a configuração do sistema
   ///
   /// Salva automaticamente após atualizar.

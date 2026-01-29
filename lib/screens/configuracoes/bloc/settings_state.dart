@@ -23,7 +23,8 @@ enum SettingsSuccessStatus {
   updated,
   backupDone,
   restoredToDefault,
-  clearedOldLogs;
+  clearedOldLogs,
+  backupRestored;
 
   String get mensagem {
     switch (this) {
@@ -43,6 +44,8 @@ enum SettingsSuccessStatus {
         return 'Backup realizado com sucesso!';
       case SettingsSuccessStatus.restoredToDefault:
         return 'Configurações restauradas para o padrão com sucesso!';
+      case SettingsSuccessStatus.backupRestored:
+        return 'Backup restaurado com sucesso!';
     }
   }
 }

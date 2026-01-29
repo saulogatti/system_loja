@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/repository/customer_repository.dart';
+import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/repository/sales_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/injection/app_injection.dart';
@@ -12,11 +13,12 @@ import 'package:system_loja/screens/sales/sales_state.dart';
 /// e emite estados apropriados para a UI.
 class SalesCubit extends Cubit<SalesState> {
   late SalesRepository _salesRepository;
-  late final CustomerRepository _customerRepository =
-      AppInjection.instance.clienteRepository;
+  late final CustomerRepository _customerRepository = CustomerRepository();
 
   SalesCubit() : super(SalesInitial()) {
-    _salesRepository = AppInjection.instance.salesRepository;
+    _salesRepository = SalesRepository(
+      invoiceDao: AppInjection.instance.appDatabase.invoiceDao,
+    );
   }
 
   /// Deleta uma venda pelo ID
@@ -53,7 +55,7 @@ class SalesCubit extends Cubit<SalesState> {
   /// Carrega todos os produtos disponíveis
   Future<void> loadProducts() async {
     emit(SalesState.loadingProducts());
-    final productRepository = AppInjection.instance.productRepository;
+    final productRepository = ProductRepository();
     final result = await productRepository.fetchProducts();
 
     switch (result) {

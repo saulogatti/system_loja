@@ -38,7 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       persistentFooterButtons: [
         TextButton(
           onPressed: () => _resetToDefault(context),
-          child: const Text('Restaurar Padrão'),
+          child: const Text('Restaurar  Dados'),
         ),
       ],
       body: BlocConsumer<SettingsBloc, SettingsState>(
@@ -169,6 +169,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  Future<void> _confirmarRestaurarPadrao(BuildContext context) async {
+    final confirmado = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Restaurar Configurações'),
+        content: const Text(
+          'Deseja restaurar todas as configurações para os valores padrão?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Restaurar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmado == true && context.mounted) {
+      context.read<SettingsBloc>().add(const ResetDefaultSettingsEvent());
+    }
+  }
+
   /// Limpa logs antigos
   Future<void> _limparLogsAntigos(
     BuildContext context,
@@ -273,29 +299,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   /// Restaura configurações padrão
   Future<void> _resetToDefault(BuildContext context) async {
-    final confirmado = await showDialog<bool>(
+    // Neste modal bottom sheet vai ter opções de recuperar padrão ou recuperar do backup. //
+    showModalBottomSheet(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Restaurar Configurações'),
-        content: const Text(
-          'Deseja restaurar todas as configurações para os valores padrão?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('Restaurar'),
-          ),
-        ],
-      ),
+      builder: (buildContext) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.restore),
+              title: const Text('Restaurar Configurações Padrão'),
+              onTap: () {
+                Navigator.pop(buildContext);
+                _confirmarRestaurarPadrao(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.backup),
+              title: const Text('Restaurar de Backup'),
+              onTap: () {
+                Navigator.pop(buildContext);
+               context.read<SettingsBloc>().add(const RestoreBackupEvent());
+              },
+            ),
+          ],
+        );
+      },
     );
-
-    if (confirmado == true && context.mounted) {
-      context.read<SettingsBloc>().add(const ResetDefaultSettingsEvent());
-    }
   }
 
   /// Seleciona a frequência de backup
@@ -303,7 +333,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     BuildContext context,
     AppSettings config,
   ) async {
-    final opcoes = ['diario', 'semanal', 'mensal'];
+    final opcoes = [
+      'diario',
+      'semanal',
+      'mensal',
+    ]; // TODO passar para enum (depois que criar o objeto de backup)
     final selecionado = await showDialog<String>(
       context: context,
       builder: (dialogContext) => SimpleDialog(

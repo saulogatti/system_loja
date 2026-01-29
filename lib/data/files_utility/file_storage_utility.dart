@@ -16,6 +16,8 @@ import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 ///
 /// Classes que utilizam este mixin devem implementar o método `logError`.
 mixin FileStorageUtility {
+  static const String _maskBackup = 'backup_';
+
   /// Memoizador para garantir inicialização única do diretório de cache.
   ///
   /// Armazena o resultado da primeira chamada a [_initializeDirectory] e
@@ -37,8 +39,8 @@ mixin FileStorageUtility {
       final appDocDir = await getApplicationSupportDirectory();
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final backupDir = localBackup.isNotEmpty
-          ? Directory(p.join(localBackup, 'backup_$timestamp'))
-          : Directory(p.join(appDocDir.path, 'backup_$timestamp'));
+          ? Directory(p.join(localBackup, '$_maskBackup$timestamp'))
+          : Directory(p.join(appDocDir.path, '$_maskBackup$timestamp'));
 
       if (!await backupDir.exists()) {
         await backupDir.create(recursive: true);
@@ -49,8 +51,7 @@ mixin FileStorageUtility {
       // Lista todos os itens no diretório principal do app
       await for (final entity in appDocDir.list()) {
         // Ignora diretórios de backup existentes para evitar recursão
-        if (
-            p.basename(entity.path).startsWith('backup_')) {
+        if (p.basename(entity.path).startsWith(_maskBackup)) {
           continue;
         }
 
@@ -203,6 +204,54 @@ mixin FileStorageUtility {
   /// este mixin, tipicamente usando `LoggerClassMixin` ou similar.
   void logError(String message, StackTrace stackTrace);
 
+  /// Restaura dados de um backup existente.
+  ///
+  /// Precisa conter a máscara 'backup_' no nome do diretório. Um diretório válido.
+  /// Diretorio de backup deve conter os arquivos copiados anteriormente e subdiretórios.
+  /// Retorna o número de arquivos restaurados com sucesso.
+  @protected
+  Future<int> restoreBackup(String direBackup) async {
+    try {
+      if (direBackup.isEmpty || !direBackup.contains(_maskBackup)) {
+        throw CacheReadException('Caminho de backup não pode ser vazio', null);
+      }
+      final backupDir = Directory(direBackup);
+      if (!await backupDir.exists()) {
+        throw CacheReadException('Diretório de backup não encontrado', null);
+      }
+
+      final appDocDir = await getApplicationSupportDirectory();
+      var arquivosRestaurados = 0;
+
+      // Lista todos os itens no diretório de backup
+      await for (final entity in backupDir.list()) {
+        if (entity is File) {
+          // Restaura arquivos diretamente no diretório principal
+          final nomeArquivo = p.basename(entity.path);
+          final destino = File(p.join(appDocDir.path, nomeArquivo));
+          await entity.copy(destino.path);
+          arquivosRestaurados++;
+        } else if (entity is Directory) {
+          // Restaura diretórios recursivamente
+          final nomeDiretorio = p.basename(entity.path);
+          final destinoDir = Directory(p.join(appDocDir.path, nomeDiretorio));
+          arquivosRestaurados += await _copyDirectoryRecursively(
+            entity,
+            destinoDir,
+          );
+        }
+      }
+
+      logDebug(
+        'Restauração de backup realizada com sucesso: $arquivosRestaurados arquivos restaurados',
+      );
+      return arquivosRestaurados;
+    } catch (e, stackTrace) {
+      logError('Erro ao restaurar backup: $e', stackTrace);
+      throw CacheReadException('Erro ao restaurar backup', e);
+    }
+  }
+
   /// Retorna o nome do diretório de cache específico da aplicação.
   ///
   /// Este método abstrato deve ser implementado pelas classes que usam
@@ -268,7 +317,6 @@ mixin FileStorageUtility {
     Directory destination,
   ) async {
     var filesCopied = 0;
-
     if (!await destination.exists()) {
       await destination.create(recursive: true);
     }
@@ -277,6 +325,10 @@ mixin FileStorageUtility {
       if (entity is File) {
         final nomeArquivo = p.basename(entity.path);
         final destino = File(p.join(destination.path, nomeArquivo));
+        if (destino.existsSync()) {
+          logDebug('Copying file ${entity.path} to ${destino.path}');
+          destino.renameSync('${destino.path}.old');
+        }
         await entity.copy(destino.path);
         filesCopied++;
       } else if (entity is Directory) {
