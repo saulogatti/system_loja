@@ -695,31 +695,6 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
   }
 }
 
-class _$ActivityLogInsertable implements Insertable<ActivityLog> {
-  ActivityLog _object;
-  _$ActivityLogInsertable(this._object);
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    return LogsRecordsCompanion(
-      actionType: Value(_object.actionType),
-      details: Value(_object.details),
-      entity: Value(_object.entity),
-      id: Value(_object.id),
-      lastUpdatedDate: Value(_object.lastUpdatedDate),
-      registrationDate: Value(_object.registrationDate),
-      timestamp: Value(_object.timestamp),
-      userId: Value(_object.userId),
-      userName: Value(_object.userName),
-    ).toColumns(false);
-  }
-}
-
-extension ActivityLogToInsertable on ActivityLog {
-  _$ActivityLogInsertable toInsertable() {
-    return _$ActivityLogInsertable(this);
-  }
-}
-
 abstract class _$SystemDatabase extends GeneratedDatabase {
   _$SystemDatabase(QueryExecutor e) : super(e);
   $SystemDatabaseManager get managers => $SystemDatabaseManager(this);

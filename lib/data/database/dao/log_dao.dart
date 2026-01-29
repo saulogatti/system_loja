@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/activity_log.dart';
+import 'package:system_loja/data/database/extension/log_to_companion.dart';
 import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/data/database/table/system/logs_records.dart';
 
@@ -69,6 +70,8 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
 
   // Salvar um novo registro de log
   Future<int> save(ActivityLog log) {
-    return into(logsRecords).insert(log.toInsertable());
+    return into(
+      logsRecords,
+    ).insert(log.toCompanion(), mode: InsertMode.insertOrIgnore);
   }
 }

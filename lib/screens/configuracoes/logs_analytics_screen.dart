@@ -29,7 +29,7 @@ class _LogsAnalyticsScreenState extends State<LogsAnalyticsScreen> {
                   return ListTile(
                     title: Text('Ação: ${log.action}'),
                     subtitle: Text(
-                      'Usuário: ${log.userName} - Entidade: ${log.entity}\nDetalhes: ${log.details}',
+                      'Usuário: ${log.userName} - Entidade: ${log.entity}\nDetalhes: ${log.details} - Timestamp: ${log.timestamp} createdAt: ${log.registrationDate}',
                     ),
                     isThreeLine: true,
                   );
