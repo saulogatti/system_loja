@@ -6,9 +6,11 @@ import 'package:system_loja/screens/route/route_app.gr.dart';
 ///
 /// Exibe um menu com cartões de navegação para as principais funcionalidades:
 /// - Cadastro de Cliente
+/// - Cadastro de Empresa
 /// - Cadastro de Produto
 /// - Cadastro de Nota Fiscal
 /// - Gestão de Usuários
+/// - Configurações do Sistema
 @RoutePage()
 class HomeScreen extends StatelessWidget {
   /// Cria uma instância de [HomeScreen].
@@ -23,6 +25,13 @@ class HomeScreen extends StatelessWidget {
         icon: Icons.person,
         color: Colors.blue,
         onTap: () => _navigateToScreen(context, const CustomerRoute()),
+      ),
+      _buildMenuCard(
+        context,
+        title: 'Cadastro de Empresa',
+        icon: Icons.business,
+        color: Colors.indigo,
+        onTap: () => _navigateToScreen(context, const CompanyRoute()),
       ),
       _buildMenuCard(
         context,

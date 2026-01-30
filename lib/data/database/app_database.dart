@@ -3,15 +3,19 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/category.dart';
+import 'package:system_loja/core/models/company.dart' show Company;
 import 'package:system_loja/core/models/customer.dart' show Customer;
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/data/database/dao/category_dao.dart';
+import 'package:system_loja/data/database/dao/company_dao.dart';
 import 'package:system_loja/data/database/dao/customer_dao.dart';
 import 'package:system_loja/data/database/dao/invoice_dao.dart';
 import 'package:system_loja/data/database/dao/invoice_item_dao.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
+import 'package:system_loja/data/database/extension/company_to_companion.dart';
 import 'package:system_loja/data/database/extension/customer_to_companion.dart';
 import 'package:system_loja/data/database/table/categories_records.dart';
+import 'package:system_loja/data/database/table/company_records.dart';
 import 'package:system_loja/data/database/table/customer_records.dart';
 import 'package:system_loja/data/database/table/invoice_items_records.dart';
 import 'package:system_loja/data/database/table/invoices_records.dart';
@@ -25,12 +29,20 @@ part 'app_database.g.dart';
 @DriftDatabase(
   tables: [
     CategoriesRecords,
+    CompanyRecords,
     CustomerRecords,
     ProductsRecords,
     InvoicesRecords,
     InvoiceItemsRecords,
   ],
-  daos: [CategoryDao, CustomerDao, ProductDao, InvoiceDao, InvoiceItemDao],
+  daos: [
+    CategoryDao,
+    CompanyDao,
+    CustomerDao,
+    ProductDao,
+    InvoiceDao,
+    InvoiceItemDao
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   static final _nameBd = 'system_loja';
@@ -56,10 +68,14 @@ class AppDatabase extends _$AppDatabase {
         // Migrar dados da tabela ClientesRecords para CustomerRecords
         await _migrateClientesToCustomers();
       }
+      if (from < 9) {
+        // Criar tabela de empresas
+        await m.createTable(companyRecords);
+      }
     },
   );
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
   // Dentro da sua classe de banco (Database)
   /// Cria um backup manual do banco de dados usando o comando `VACUUM INTO`.
   ///

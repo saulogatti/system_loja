@@ -19,6 +19,7 @@ class HostScreen extends StatelessWidget {
       routes: const [
         HomeRoute(),
         CustomerRoute(),
+        CompanyRoute(),
         ProductInfoRoute(),
         SalesRoute(),
         UsuarioRoute(),
@@ -46,6 +47,10 @@ class HostScreen extends StatelessWidget {
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Customer',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.business),
+              label: 'Company',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.info),
@@ -82,6 +87,10 @@ class RouteApp extends RootStackRouter {
         AutoRoute(
           page: CustomerRoute.page,
           title: (context, data) => 'Customer',
+        ),
+        AutoRoute(
+          page: CompanyRoute.page,
+          title: (context, data) => 'Company',
         ),
         AutoRoute(
           page: ProductInfoRoute.page,
