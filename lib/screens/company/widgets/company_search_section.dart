@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/screens/company/bloc/company_bloc.dart';
 
 /// Widget de busca de empresa por CNPJ
 ///

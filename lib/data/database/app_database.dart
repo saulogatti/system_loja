@@ -12,7 +12,6 @@ import 'package:system_loja/data/database/dao/customer_dao.dart';
 import 'package:system_loja/data/database/dao/invoice_dao.dart';
 import 'package:system_loja/data/database/dao/invoice_item_dao.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
-import 'package:system_loja/data/database/extension/company_to_companion.dart';
 import 'package:system_loja/data/database/extension/customer_to_companion.dart';
 import 'package:system_loja/data/database/table/categories_records.dart';
 import 'package:system_loja/data/database/table/company_records.dart';
@@ -41,7 +40,7 @@ part 'app_database.g.dart';
     CustomerDao,
     ProductDao,
     InvoiceDao,
-    InvoiceItemDao
+    InvoiceItemDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {

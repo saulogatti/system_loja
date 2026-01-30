@@ -33,7 +33,7 @@ class CompanyBloc extends Bloc<CompanyBlocEvent, CompanyBlocState> {
   ) async {
     emit(const CompanyBlocState.loading());
     final result = await _companyRepository.deleteCompany(event.id);
-    
+
     switch (result) {
       case ResultSuccess(:final result):
         if (result) {
@@ -149,9 +149,9 @@ class CompanyBloc extends Bloc<CompanyBlocEvent, CompanyBlocState> {
         city: event.city,
       ),
     );
-
-    result.when(
-      onSuccess: (_) async {
+    switch (result) {
+      case ResultSuccess(:final result):
+      
         // Recarrega a lista de empresas após adicionar
         final companies = await _companyRepository.fetchMappedCompanies();
 
@@ -161,12 +161,9 @@ class CompanyBloc extends Bloc<CompanyBlocEvent, CompanyBlocState> {
             stateType: EnumStateCompanyLoaded.registerCompany,
           ),
         );
-      },
-      onError: (error) {
-        emit(CompanyBlocState.companyError(message: error));
-        return;
-      },
-    );
+      case ResultError<bool, String>(:final resultError):
+        emit(CompanyBlocState.companyError(message: resultError));
+    }
   }
 
   /// Atualiza uma empresa existente no banco de dados
@@ -176,9 +173,7 @@ class CompanyBloc extends Bloc<CompanyBlocEvent, CompanyBlocState> {
   ) async {
     emit(const CompanyBlocState.loading());
 
-    final resultUpdate = await _companyRepository.updateCompany(
-      event.company,
-    );
+    final resultUpdate = await _companyRepository.updateCompany(event.company);
     switch (resultUpdate) {
       case ResultSuccess(:final result):
         if (!result) {
