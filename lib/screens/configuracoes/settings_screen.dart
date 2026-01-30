@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/app_theme_settings.dart';
+import 'package:system_loja/screens/configuracoes/widgets/security_section.dart';
+import 'package:system_loja/screens/route/route_app.gr.dart';
 
 import 'bloc/settings_bloc.dart';
 import 'bloc/settings_event.dart';
 import 'bloc/settings_state.dart';
+import 'widgets/maintenance_section.dart';
 import 'widgets/secao_backup.dart';
-import 'widgets/secao_limpeza.dart';
 import 'widgets/secao_notificacoes.dart';
-import 'widgets/secao_seguranca.dart';
-import 'widgets/secao_tema.dart';
+import 'widgets/theme_settings.dart';
 
 /// Enum para frequência de backup
 enum FrequenciaBackup {
@@ -29,6 +30,59 @@ enum FrequenciaBackup {
       (e) => e.value == value,
       orElse: () => FrequenciaBackup.diario,
     );
+  }
+}
+
+class LogErrorSystemSection extends StatelessWidget {
+  /// Configuração atual do sistema
+  final AppSettings config;
+
+  /// Callback para atualizar a configuração
+  final Function(AppSettings) onConfigChanged;
+
+  const LogErrorSystemSection({
+    super.key,
+    required this.config,
+    required this.onConfigChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.analytics,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Análise de Logs do Sistema',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const Divider(),
+            ListTile(
+              title: const Text('Analisar logs de erro do sistema'),
+              subtitle: const Text('Abrir análise detalhada dos logs'),
+              leading: const Icon(Icons.analytics),
+              onTap: () => onOpenLogsAnalysis(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void onOpenLogsAnalysis(BuildContext context) {
+    // Implementar a lógica para abrir a análise de logs
+    context.router.push(const LogSystemRoute());
   }
 }
 
@@ -116,7 +170,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           _updateConfig(context, newConfig),
                     ),
                     const SizedBox(height: 24),
-                    SecaoTema(
+                    ThemeSettings(
                       config: currentConfig,
                       onConfigChanged: (newConfig) =>
                           _updateConfig(context, newConfig),
@@ -135,7 +189,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           _selecionarFrequenciaBackup(context, currentConfig),
                     ),
                     const SizedBox(height: 24),
-                    SecaoLimpeza(
+                    MaintenanceSection(
                       config: currentConfig,
                       onConfigChanged: (newConfig) =>
                           _updateConfig(context, newConfig),
@@ -144,17 +198,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       onLimparTodosDados: () => _limparTodosDados(context),
                     ),
                     const SizedBox(height: 24),
-                    SecaoSeguranca(
+                    SecuritySection(
                       config: currentConfig,
                       onConfigChanged: (newConfig) =>
                           _updateConfig(context, newConfig),
                     ),
                     const SizedBox(height: 24),
-                    // SecaoBancoDados(
-                    //   config: _currentConfig,
-                    //   onConfigChanged: (newConfig) =>
-                    //       _updateConfig(context, newConfig),
-                    // ),
+                    LogErrorSystemSection(
+                      config: currentConfig,
+                      onConfigChanged: (newConfig) =>
+                          _updateConfig(context, newConfig),
+                    ),
                     const SizedBox(height: 32),
                     _buildBotaoSalvar(context, currentConfig),
                   ],
@@ -338,7 +392,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: const Text('Restaurar de Backup'),
               onTap: () {
                 Navigator.pop(buildContext);
-               context.read<SettingsBloc>().add(const RestoreBackupEvent());
+                context.read<SettingsBloc>().add(const RestoreBackupEvent());
               },
             ),
           ],

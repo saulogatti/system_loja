@@ -1,9 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
-import 'package:system_loja/screens/configuracoes/logs_analytics_screen.dart';
+import 'package:system_loja/screens/route/route_app.gr.dart';
 
 /// Widget da seção de configurações de limpeza de dados
-class SecaoLimpeza extends StatelessWidget {
+class MaintenanceSection extends StatelessWidget {
   /// Configuração atual do sistema
   final AppSettings config;
 
@@ -16,7 +17,7 @@ class SecaoLimpeza extends StatelessWidget {
   /// Callback para limpar todos os dados
   final VoidCallback onLimparTodosDados;
 
-  const SecaoLimpeza({
+  const MaintenanceSection({
     super.key,
     required this.config,
     required this.onConfigChanged,
@@ -99,9 +100,6 @@ class SecaoLimpeza extends StatelessWidget {
   }
 
   void onOpenLogsAnalysis(BuildContext context) {
-    Navigator.push<MaterialPageRoute>(
-      context,
-      MaterialPageRoute(builder: (context) => const LogsAnalyticsScreen()),
-    );
+    AutoRouter.of(context).push(const LogsAnalyticsRoute());
   }
 }

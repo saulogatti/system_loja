@@ -86,4 +86,16 @@ class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
       logError('Failed to save error to cache: $e', stackTrace);
     }
   }
+
+  Future<void> clearErrors() async { 
+    if (_fileStorageOptions.isEmpty) {
+      logInfo('No errors to clear from cache.');
+      return;
+    }
+    for (var cacheKey in _fileStorageOptions.values) {
+      await deleteFile(cacheKey);
+    }
+    _fileStorageOptions.clear();
+    logInfo('All errors cleared from cache.');
+  }
 }
