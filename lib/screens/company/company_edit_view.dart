@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/company.dart';
-import 'package:system_loja/core/utils/text_formatters.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/company/bloc/company_bloc.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
@@ -61,7 +60,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Editar Empresa'),
-          leading: AutoLeadingButton(),
+          leading: const AutoLeadingButton(),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -70,7 +69,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
+                const Text(
                   'Editar Empresa',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
@@ -106,7 +105,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
                   isEditing: true,
                 ),
                 const SizedBox(height: 16),
-                Text(
+                const Text(
                   'Endereço',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
@@ -231,10 +230,18 @@ class _CompanyEditViewState extends State<CompanyEditView> {
   }
 
   /// Formata um CNPJ (apenas dígitos) para o padrão XX.XXX.XXX/XXXX-XX
+  /// 
+  /// Se o CNPJ não tiver exatamente 14 dígitos, retorna o valor original
+  /// sem formatação para indicar que há um problema com os dados.
   String _formatCnpjForDisplay(String cnpj) {
-    if (cnpj.length != 14) return cnpj;
+    // Remove caracteres não numéricos caso existam
+    final cnpjLimpo = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
+    
+    if (cnpjLimpo.length != 14) {
+      return cnpj; // Retorna original se inválido
+    }
 
-    return '${cnpj.substring(0, 2)}.${cnpj.substring(2, 5)}.${cnpj.substring(5, 8)}/${cnpj.substring(8, 12)}-${cnpj.substring(12, 14)}';
+    return '${cnpjLimpo.substring(0, 2)}.${cnpjLimpo.substring(2, 5)}.${cnpjLimpo.substring(5, 8)}/${cnpjLimpo.substring(8, 12)}-${cnpjLimpo.substring(12, 14)}';
   }
 
   /// Formata uma data no formato DD/MM/YYYY HH:MM
@@ -254,15 +261,22 @@ class _CompanyEditViewState extends State<CompanyEditView> {
       final cnpjLimpo =
           widget.company.cnpj.replaceAll(RegExp(r'[^0-9]'), '');
 
+      // Converte strings vazias em null para campos opcionais
+      final email = _emailController.text.trim();
+      final street = _streetController.text.trim();
+      final zipCode = _zipCodeController.text.trim();
+      final neighborhood = _neighborhoodController.text.trim();
+      final city = _cityController.text.trim();
+
       final updatedCompany = Company(
         id: widget.company.id,
         corporateName: _corporateNameController.text.trim(),
         cnpj: cnpjLimpo, // CNPJ normalizado (apenas dígitos)
-        email: _emailController.text.trim(),
-        street: _streetController.text.trim(),
-        zipCode: _zipCodeController.text.trim(),
-        neighborhood: _neighborhoodController.text.trim(),
-        city: _cityController.text.trim(),
+        email: email.isEmpty ? null : email,
+        street: street.isEmpty ? null : street,
+        zipCode: zipCode.isEmpty ? null : zipCode,
+        neighborhood: neighborhood.isEmpty ? null : neighborhood,
+        city: city.isEmpty ? null : city,
         registrationDate: widget.company.registrationDate,
         lastUpdatedDate: widget.company.lastUpdatedDate,
       );
@@ -281,7 +295,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Informações do Sistema',
               style: TextStyle(
                 fontSize: 16,

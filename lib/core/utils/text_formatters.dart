@@ -102,6 +102,9 @@ class PhoneTextInputFormatter extends TextInputFormatter {
 ///
 /// Aplica a máscara XX.XXX.XXX/XXXX-XX automaticamente enquanto o usuário digita.
 /// Remove automaticamente caracteres não-numéricos e limita a 14 dígitos.
+///
+/// **Uso recomendado**: Formulário de cadastro de empresa (company_form.dart)
+/// para permitir entrada formatada de CNPJ durante o registro.
 class CnpjTextInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
