@@ -16,18 +16,19 @@ import 'package:system_loja/core/models/customer.dart' as _i14;
 import 'package:system_loja/core/models/product.dart' as _i15;
 import 'package:system_loja/screens/categories/category_management_screen.dart'
     as _i1;
-import 'package:system_loja/screens/configuracoes/settings_screen.dart' as _i10;
-import 'package:system_loja/screens/configuracoes/usuario_screen.dart' as _i11;
+import 'package:system_loja/screens/company/company_view.dart' as _i2;
+import 'package:system_loja/screens/configuracoes/settings_screen.dart' as _i11;
+import 'package:system_loja/screens/configuracoes/usuario_screen.dart' as _i19;
 import 'package:system_loja/screens/customer/customer_detail_screen.dart'
-    as _i2;
-import 'package:system_loja/screens/customer/customer_view.dart' as _i3;
-import 'package:system_loja/screens/home/home_screen.dart' as _i4;
-import 'package:system_loja/screens/products/product_detail_screen.dart' as _i6;
-import 'package:system_loja/screens/products/product_screen.dart' as _i7;
-import 'package:system_loja/screens/route/route_app.dart' as _i5;
-import 'package:system_loja/screens/sales/cubit/sales_cubit.dart' as _i17;
-import 'package:system_loja/screens/sales/sales_invoice_screen.dart' as _i8;
-import 'package:system_loja/screens/sales/sales_screen.dart' as _i9;
+    as _i3;
+import 'package:system_loja/screens/customer/customer_view.dart' as _i4;
+import 'package:system_loja/screens/home/home_screen.dart' as _i5;
+import 'package:system_loja/screens/products/product_detail_screen.dart' as _i7;
+import 'package:system_loja/screens/products/product_screen.dart' as _i8;
+import 'package:system_loja/screens/route/route_app.dart' as _i6;
+import 'package:system_loja/screens/sales/cubit/sales_cubit.dart' as _i18;
+import 'package:system_loja/screens/sales/sales_invoice_screen.dart' as _i9;
+import 'package:system_loja/screens/sales/sales_screen.dart' as _i10;
 
 /// generated route for
 /// [_i1.CategoryManagementScreen]
@@ -93,7 +94,7 @@ class CustomerDetailRouteArgs {
 }
 
 /// generated route for
-/// [_i3.CustomerView]
+/// [_i4.CustomerView]
 class CustomerRoute extends _i12.PageRouteInfo<void> {
   const CustomerRoute({List<_i12.PageRouteInfo>? children})
     : super(CustomerRoute.name, initialChildren: children);
@@ -103,13 +104,29 @@ class CustomerRoute extends _i12.PageRouteInfo<void> {
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      return const _i3.CustomerView();
+      return const _i4.CustomerView();
     },
   );
 }
 
 /// generated route for
-/// [_i4.HomeScreen]
+/// [_i2.CompanyView]
+class CompanyRoute extends _i12.PageRouteInfo<void> {
+  const CompanyRoute({List<_i12.PageRouteInfo>? children})
+    : super(CompanyRoute.name, initialChildren: children);
+
+  static const String name = 'CompanyRoute';
+
+  static _i12.PageInfo page = _i12.PageInfo(
+    name,
+    builder: (data) {
+      return const _i2.CompanyView();
+    },
+  );
+}
+
+/// generated route for
+/// [_i5.HomeScreen]
 class HomeRoute extends _i12.PageRouteInfo<void> {
   const HomeRoute({List<_i12.PageRouteInfo>? children})
     : super(HomeRoute.name, initialChildren: children);
@@ -119,13 +136,13 @@ class HomeRoute extends _i12.PageRouteInfo<void> {
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      return const _i4.HomeScreen();
+      return const _i5.HomeScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i5.HostScreen]
+/// [_i6.HostScreen]
 class HostRoute extends _i12.PageRouteInfo<void> {
   const HostRoute({List<_i12.PageRouteInfo>? children})
     : super(HostRoute.name, initialChildren: children);
@@ -135,13 +152,13 @@ class HostRoute extends _i12.PageRouteInfo<void> {
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      return const _i5.HostScreen();
+      return const _i6.HostScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i6.ProductDetailScreen]
+/// [_i7.ProductDetailScreen]
 class ProductDetailRoute extends _i12.PageRouteInfo<ProductDetailRouteArgs> {
   ProductDetailRoute({
     _i13.Key? key,
@@ -165,7 +182,7 @@ class ProductDetailRoute extends _i12.PageRouteInfo<ProductDetailRouteArgs> {
     builder: (data) {
       final args = data.argsAs<ProductDetailRouteArgs>();
       return _i12.WrappedRoute(
-        child: _i6.ProductDetailScreen(
+        child: _i7.ProductDetailScreen(
           key: args.key,
           product: args.product,
           productList: args.productList,
@@ -213,7 +230,7 @@ class ProductDetailRouteArgs {
 }
 
 /// generated route for
-/// [_i7.ProductInfoScreen]
+/// [_i8.ProductInfoScreen]
 class ProductInfoRoute extends _i12.PageRouteInfo<void> {
   const ProductInfoRoute({List<_i12.PageRouteInfo>? children})
     : super(ProductInfoRoute.name, initialChildren: children);
@@ -223,18 +240,18 @@ class ProductInfoRoute extends _i12.PageRouteInfo<void> {
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      return _i12.WrappedRoute(child: const _i7.ProductInfoScreen());
+      return _i12.WrappedRoute(child: const _i8.ProductInfoScreen());
     },
   );
 }
 
 /// generated route for
-/// [_i8.SalesInvoiceScreen]
+/// [_i9.SalesInvoiceScreen]
 class SalesInvoiceRoute extends _i12.PageRouteInfo<SalesInvoiceRouteArgs> {
   SalesInvoiceRoute({
     _i13.Key? key,
     required Map<int, _i14.Customer> customers,
-    required _i17.SalesCubit salesCubit,
+    required _i18.SalesCubit salesCubit,
     required List<_i15.Product> products,
     List<_i12.PageRouteInfo>? children,
   }) : super(
@@ -254,7 +271,7 @@ class SalesInvoiceRoute extends _i12.PageRouteInfo<SalesInvoiceRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<SalesInvoiceRouteArgs>();
-      return _i8.SalesInvoiceScreen(
+      return _i9.SalesInvoiceScreen(
         key: args.key,
         customers: args.customers,
         salesCubit: args.salesCubit,
@@ -310,7 +327,7 @@ class SalesInvoiceRouteArgs {
 }
 
 /// generated route for
-/// [_i9.SalesView]
+/// [_i10.SalesView]
 class SalesRoute extends _i12.PageRouteInfo<void> {
   const SalesRoute({List<_i12.PageRouteInfo>? children})
     : super(SalesRoute.name, initialChildren: children);
@@ -320,13 +337,13 @@ class SalesRoute extends _i12.PageRouteInfo<void> {
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      return const _i9.SalesView();
+      return const _i10.SalesView();
     },
   );
 }
 
 /// generated route for
-/// [_i10.SettingsScreen]
+/// [_i11.SettingsScreen]
 class SettingsRoute extends _i12.PageRouteInfo<void> {
   const SettingsRoute({List<_i12.PageRouteInfo>? children})
     : super(SettingsRoute.name, initialChildren: children);
@@ -336,13 +353,13 @@ class SettingsRoute extends _i12.PageRouteInfo<void> {
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      return _i12.WrappedRoute(child: const _i10.SettingsScreen());
+      return _i12.WrappedRoute(child: const _i11.SettingsScreen());
     },
   );
 }
 
 /// generated route for
-/// [_i11.UsuarioScreen]
+/// [_i19.UsuarioScreen]
 class UsuarioRoute extends _i12.PageRouteInfo<void> {
   const UsuarioRoute({List<_i12.PageRouteInfo>? children})
     : super(UsuarioRoute.name, initialChildren: children);
@@ -352,7 +369,7 @@ class UsuarioRoute extends _i12.PageRouteInfo<void> {
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      return const _i11.UsuarioScreen();
+      return const _i19.UsuarioScreen();
     },
   );
 }
