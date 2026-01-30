@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Widget da seção de configurações de aparência/tema
-class SecaoTema extends StatelessWidget {
+class ThemeSettings extends StatelessWidget {
   /// Configuração atual do sistema
   final AppSettings config;
 
@@ -12,7 +12,7 @@ class SecaoTema extends StatelessWidget {
   /// Callback para mostrar seletor de cor
   final VoidCallback onMostrarSeletorCor;
 
-  const SecaoTema({
+  const ThemeSettings({
     super.key,
     required this.config,
     required this.onConfigChanged,

@@ -1,8 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_state_cubit.dart';
-
+@RoutePage()
 class LogsAnalyticsScreen extends StatefulWidget {
   const LogsAnalyticsScreen({super.key});
 
@@ -40,7 +41,7 @@ class _LogsAnalyticsScreenState extends State<LogsAnalyticsScreen> {
                 child: TextButton(
                   onPressed: () {
                     // Tenta carregar os logs novamente ao clicar no botão
-                    context.read<LogsCubit>().fetchLogs();
+                    context.read<LogsCubit>().fetchActivesLogs();
                   },
                   child: Text(
                     'Erro ao carregar logs: $message',
@@ -59,6 +60,6 @@ class _LogsAnalyticsScreenState extends State<LogsAnalyticsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<LogsCubit>().fetchLogs();
+    context.read<LogsCubit>().fetchActivesLogs();
   }
 }

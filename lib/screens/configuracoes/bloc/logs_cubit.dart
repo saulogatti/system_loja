@@ -8,7 +8,7 @@ class LogsCubit extends Cubit<LogsState> {
   final LogRepository _logRepository = AppInjection.instance.logRepository;
   LogsCubit() : super(const LogsStateInitial());
 
-  Future<void> fetchLogs() async {
+  Future<void> fetchActivesLogs() async {
     final logs = await _logRepository.fetchAllLogs();
     switch (logs) {
       case ResultSuccess(:final result):
