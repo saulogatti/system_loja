@@ -55,15 +55,15 @@ extension CompanyBlocEventPatterns on CompanyBlocEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _RegisterCompany value)?  registerCustomer,TResult Function( _LoadCompanies value)?  loadCustomers,TResult Function( _DeleteCompany value)?  deleteCustomer,TResult Function( _FindCompanyByCnpj value)?  findCustomerByCnpj,TResult Function( _UpdateCompany value)?  updateCustomer,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _LoadCompanies value)?  loadCompanies,TResult Function( _RegisterCompany value)?  registerCompany,TResult Function( _DeleteCompany value)?  deleteCompany,TResult Function( _FindCompanyByCnpj value)?  findCompanyByCnpj,TResult Function( _UpdateCompany value)?  updateCompany,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _RegisterCompany() when registerCompany != null:
-return registerCustomer(_that);case _LoadCompanies() when loadCustomers != null:
-return loadCustomers(_that);case _DeleteCompany() when deleteCompany != null:
-return deleteCustomer(_that);case _FindCompanyByCnpj() when findCustomerByCnpj != null:
-return findCustomerByCnpj(_that);case _UpdateCompany() when updateCompany != null:
-return updateCustomer(_that);case _:
+case _LoadCompanies() when loadCompanies != null:
+return loadCompanies(_that);case _RegisterCompany() when registerCompany != null:
+return registerCompany(_that);case _DeleteCompany() when deleteCompany != null:
+return deleteCompany(_that);case _FindCompanyByCnpj() when findCompanyByCnpj != null:
+return findCompanyByCnpj(_that);case _UpdateCompany() when updateCompany != null:
+return updateCompany(_that);case _:
   return orElse();
 
 }
@@ -81,15 +81,15 @@ return updateCustomer(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _RegisterCompany value)  registerCustomer,required TResult Function( _LoadCompanies value)  loadCustomers,required TResult Function( _DeleteCompany value)  deleteCustomer,required TResult Function( _FindCompanyByCnpj value)  findCustomerByCnpj,required TResult Function( _UpdateCompany value)  updateCustomer,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _LoadCompanies value)  loadCompanies,required TResult Function( _RegisterCompany value)  registerCompany,required TResult Function( _DeleteCompany value)  deleteCompany,required TResult Function( _FindCompanyByCnpj value)  findCompanyByCnpj,required TResult Function( _UpdateCompany value)  updateCompany,}){
 final _that = this;
 switch (_that) {
-case _RegisterCompany():
-return registerCustomer(_that);case _LoadCompanies():
-return loadCustomers(_that);case _DeleteCompany():
-return deleteCustomer(_that);case _FindCompanyByCnpj():
-return findCustomerByCnpj(_that);case _UpdateCompany():
-return updateCustomer(_that);}
+case _LoadCompanies():
+return loadCompanies(_that);case _RegisterCompany():
+return registerCompany(_that);case _DeleteCompany():
+return deleteCompany(_that);case _FindCompanyByCnpj():
+return findCompanyByCnpj(_that);case _UpdateCompany():
+return updateCompany(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -103,15 +103,15 @@ return updateCustomer(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _RegisterCompany value)?  registerCustomer,TResult? Function( _LoadCompanies value)?  loadCustomers,TResult? Function( _DeleteCompany value)?  deleteCustomer,TResult? Function( _FindCompanyByCnpj value)?  findCustomerByCnpj,TResult? Function( _UpdateCompany value)?  updateCustomer,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _LoadCompanies value)?  loadCompanies,TResult? Function( _RegisterCompany value)?  registerCompany,TResult? Function( _DeleteCompany value)?  deleteCompany,TResult? Function( _FindCompanyByCnpj value)?  findCompanyByCnpj,TResult? Function( _UpdateCompany value)?  updateCompany,}){
 final _that = this;
 switch (_that) {
-case _RegisterCompany() when registerCompany != null:
-return registerCustomer(_that);case _LoadCompanies() when loadCustomers != null:
-return loadCustomers(_that);case _DeleteCompany() when deleteCompany != null:
-return deleteCustomer(_that);case _FindCompanyByCnpj() when findCustomerByCnpj != null:
-return findCustomerByCnpj(_that);case _UpdateCompany() when updateCompany != null:
-return updateCustomer(_that);case _:
+case _LoadCompanies() when loadCompanies != null:
+return loadCompanies(_that);case _RegisterCompany() when registerCompany != null:
+return registerCompany(_that);case _DeleteCompany() when deleteCompany != null:
+return deleteCompany(_that);case _FindCompanyByCnpj() when findCompanyByCnpj != null:
+return findCompanyByCnpj(_that);case _UpdateCompany() when updateCompany != null:
+return updateCompany(_that);case _:
   return null;
 
 }
@@ -128,14 +128,14 @@ return updateCustomer(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city)?  registerCustomer,TResult Function()?  loadCustomers,TResult Function( int id)?  deleteCustomer,TResult Function( String cnpj)?  findCustomerByCnpj,TResult Function( Company company)?  updateCustomer,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadCompanies,TResult Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city)?  registerCompany,TResult Function( int id)?  deleteCompany,TResult Function( String cnpj)?  findCompanyByCnpj,TResult Function( Company company)?  updateCompany,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _RegisterCompany() when registerCompany != null:
-return registerCustomer(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode);case _LoadCompanies() when loadCustomers != null:
-return loadCustomers();case _DeleteCompany() when deleteCompany != null:
-return deleteCustomer(_that.id);case _FindCompanyByCnpj() when findCustomerByCnpj != null:
-return findCustomerByCnpj(_that.cnpj);case _UpdateCompany() when updateCompany != null:
-return updateCustomer(_that.customer);case _:
+case _LoadCompanies() when loadCompanies != null:
+return loadCompanies();case _RegisterCompany() when registerCompany != null:
+return registerCompany(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode,_that.neighborhood,_that.city);case _DeleteCompany() when deleteCompany != null:
+return deleteCompany(_that.id);case _FindCompanyByCnpj() when findCompanyByCnpj != null:
+return findCompanyByCnpj(_that.cnpj);case _UpdateCompany() when updateCompany != null:
+return updateCompany(_that.company);case _:
   return orElse();
 
 }
@@ -153,14 +153,14 @@ return updateCustomer(_that.customer);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city)  registerCustomer,required TResult Function()  loadCustomers,required TResult Function( int id)  deleteCustomer,required TResult Function( String cnpj)  findCustomerByCnpj,required TResult Function( Company company)  updateCustomer,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadCompanies,required TResult Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city)  registerCompany,required TResult Function( int id)  deleteCompany,required TResult Function( String cnpj)  findCompanyByCnpj,required TResult Function( Company company)  updateCompany,}) {final _that = this;
 switch (_that) {
-case _RegisterCompany():
-return registerCustomer(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode);case _LoadCompanies():
-return loadCustomers();case _DeleteCompany():
-return deleteCustomer(_that.id);case _FindCompanyByCnpj():
-return findCustomerByCnpj(_that.cnpj);case _UpdateCompany():
-return updateCustomer(_that.customer);}
+case _LoadCompanies():
+return loadCompanies();case _RegisterCompany():
+return registerCompany(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode,_that.neighborhood,_that.city);case _DeleteCompany():
+return deleteCompany(_that.id);case _FindCompanyByCnpj():
+return findCompanyByCnpj(_that.cnpj);case _UpdateCompany():
+return updateCompany(_that.company);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -174,94 +174,18 @@ return updateCustomer(_that.customer);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city)?  registerCustomer,TResult? Function()?  loadCustomers,TResult? Function( int id)?  deleteCustomer,TResult? Function( String cnpj)?  findCustomerByCnpj,TResult? Function( Company company)?  updateCustomer,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadCompanies,TResult? Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city)?  registerCompany,TResult? Function( int id)?  deleteCompany,TResult? Function( String cnpj)?  findCompanyByCnpj,TResult? Function( Company company)?  updateCompany,}) {final _that = this;
 switch (_that) {
-case _RegisterCompany() when registerCompany != null:
-return registerCustomer(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode);case _LoadCompanies() when loadCustomers != null:
-return loadCustomers();case _DeleteCompany() when deleteCompany != null:
-return deleteCustomer(_that.id);case _FindCompanyByCnpj() when findCustomerByCnpj != null:
-return findCustomerByCnpj(_that.cnpj);case _UpdateCompany() when updateCompany != null:
-return updateCustomer(_that.customer);case _:
+case _LoadCompanies() when loadCompanies != null:
+return loadCompanies();case _RegisterCompany() when registerCompany != null:
+return registerCompany(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode,_that.neighborhood,_that.city);case _DeleteCompany() when deleteCompany != null:
+return deleteCompany(_that.id);case _FindCompanyByCnpj() when findCompanyByCnpj != null:
+return findCompanyByCnpj(_that.cnpj);case _UpdateCompany() when updateCompany != null:
+return updateCompany(_that.company);case _:
   return null;
 
 }
 }
-
-}
-
-/// @nodoc
-
-
-class _RegisterCompany implements CompanyBlocEvent {
-  const _RegisterCompany({required this.corporateName, required this.cnpj, required this.email, required this.street, required this.zipCode, required this.neighborhood, required this.city});
-  
-
- final  String corporateName;
- final  String cnpj;
- final  String email;
- final  String street;
- final  String zipCode;
- final  String neighborhood;
- final  String city;
-
-/// Create a copy of CompanyBlocEvent
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$RegisterCompanyCopyWith<_RegisterCompany> get copyWith => __$RegisterCompanyCopyWithImpl<_RegisterCompany>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterCompany&&(identical(other.corporateName, corporateName) || other.corporateName == corporateName)&&(identical(other.cnpj, cnpj) || other.cnpj == cnpj)&&(identical(other.email, email) || other.email == email)&&(identical(other.street, street) || other.street == street)&&(identical(other.zipCode, zipCode) || other.zipCode == zipCode) && (identical(other.neighborhood, neighborhood) || other.neighborhood == neighborhood) && (identical(other.city, city) || other.city == city));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,name,cnpj,email,phone,address);
-
-@override
-String toString() {
-  return 'CompanyBlocEvent.registerCustomer(name: $name, cnpj: $cnpj, email: $email, phone: $phone, address: $address)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$RegisterCompanyCopyWith<$Res> implements $CompanyBlocEventCopyWith<$Res> {
-  factory _$RegisterCompanyCopyWith(_RegisterCompany value, $Res Function(_RegisterCompany) _then) = __$RegisterCompanyCopyWithImpl;
-@useResult
-$Res call({
- String name, String cnpj, String email, String phone, String address
-});
-
-
-
-
-}
-/// @nodoc
-class __$RegisterCompanyCopyWithImpl<$Res>
-    implements _$RegisterCompanyCopyWith<$Res> {
-  __$RegisterCompanyCopyWithImpl(this._self, this._then);
-
-  final _RegisterCompany _self;
-  final $Res Function(_RegisterCompany) _then;
-
-/// Create a copy of CompanyBlocEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? name = null,Object? cnpj = null,Object? email = null,Object? phone = null,Object? address = null,}) {
-  return _then(_RegisterCompany(
-corporateName: null == corporateName ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,cnpj: null == cnpj ? _self.cnpj : cnpj // ignore: cast_nullable_to_non_nullable
-as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
-as String,street: null == street ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,zipCode: null == zipCode ? _self.address : address // ignore: cast_nullable_to_non_nullable
-as String,
-  ));
-}
-
 
 }
 
@@ -288,7 +212,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'CompanyBlocEvent.loadCustomers()';
+  return 'CompanyBlocEvent.loadCompanies()';
 }
 
 
@@ -296,6 +220,84 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class _RegisterCompany implements CompanyBlocEvent {
+  const _RegisterCompany({required this.corporateName, required this.cnpj, required this.email, required this.street, required this.zipCode, required this.neighborhood, required this.city});
+  
+
+ final  String corporateName;
+ final  String cnpj;
+ final  String email;
+ final  String street;
+ final  String zipCode;
+ final  String neighborhood;
+ final  String city;
+
+/// Create a copy of CompanyBlocEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$RegisterCompanyCopyWith<_RegisterCompany> get copyWith => __$RegisterCompanyCopyWithImpl<_RegisterCompany>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterCompany&&(identical(other.corporateName, corporateName) || other.corporateName == corporateName)&&(identical(other.cnpj, cnpj) || other.cnpj == cnpj)&&(identical(other.email, email) || other.email == email)&&(identical(other.street, street) || other.street == street)&&(identical(other.zipCode, zipCode) || other.zipCode == zipCode)&&(identical(other.neighborhood, neighborhood) || other.neighborhood == neighborhood)&&(identical(other.city, city) || other.city == city));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,corporateName,cnpj,email,street,zipCode,neighborhood,city);
+
+@override
+String toString() {
+  return 'CompanyBlocEvent.registerCompany(corporateName: $corporateName, cnpj: $cnpj, email: $email, street: $street, zipCode: $zipCode, neighborhood: $neighborhood, city: $city)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$RegisterCompanyCopyWith<$Res> implements $CompanyBlocEventCopyWith<$Res> {
+  factory _$RegisterCompanyCopyWith(_RegisterCompany value, $Res Function(_RegisterCompany) _then) = __$RegisterCompanyCopyWithImpl;
+@useResult
+$Res call({
+ String corporateName, String cnpj, String email, String street, String zipCode, String neighborhood, String city
+});
+
+
+
+
+}
+/// @nodoc
+class __$RegisterCompanyCopyWithImpl<$Res>
+    implements _$RegisterCompanyCopyWith<$Res> {
+  __$RegisterCompanyCopyWithImpl(this._self, this._then);
+
+  final _RegisterCompany _self;
+  final $Res Function(_RegisterCompany) _then;
+
+/// Create a copy of CompanyBlocEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? corporateName = null,Object? cnpj = null,Object? email = null,Object? street = null,Object? zipCode = null,Object? neighborhood = null,Object? city = null,}) {
+  return _then(_RegisterCompany(
+corporateName: null == corporateName ? _self.corporateName : corporateName // ignore: cast_nullable_to_non_nullable
+as String,cnpj: null == cnpj ? _self.cnpj : cnpj // ignore: cast_nullable_to_non_nullable
+as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String,street: null == street ? _self.street : street // ignore: cast_nullable_to_non_nullable
+as String,zipCode: null == zipCode ? _self.zipCode : zipCode // ignore: cast_nullable_to_non_nullable
+as String,neighborhood: null == neighborhood ? _self.neighborhood : neighborhood // ignore: cast_nullable_to_non_nullable
+as String,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
@@ -325,7 +327,7 @@ int get hashCode => Object.hash(runtimeType,id);
 
 @override
 String toString() {
-  return 'CompanyBlocEvent.deleteCustomer(id: $id)';
+  return 'CompanyBlocEvent.deleteCompany(id: $id)';
 }
 
 
@@ -391,7 +393,7 @@ int get hashCode => Object.hash(runtimeType,cnpj);
 
 @override
 String toString() {
-  return 'CompanyBlocEvent.findCustomerByCnpj(cnpj: $cnpj)';
+  return 'CompanyBlocEvent.findCompanyByCnpj(cnpj: $cnpj)';
 }
 
 
@@ -433,10 +435,10 @@ as String,
 
 
 class _UpdateCompany implements CompanyBlocEvent {
-  const _UpdateCompany({required this.customer});
+  const _UpdateCompany({required this.company});
   
 
- final  Company customer;
+ final  Company company;
 
 /// Create a copy of CompanyBlocEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -448,16 +450,16 @@ _$UpdateCompanyCopyWith<_UpdateCompany> get copyWith => __$UpdateCompanyCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateCompany&&(identical(other.customer, company) || other.customer == company));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpdateCompany&&(identical(other.company, company) || other.company == company));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,customer);
+int get hashCode => Object.hash(runtimeType,company);
 
 @override
 String toString() {
-  return 'CompanyBlocEvent.updateCustomer(customer: $customer)';
+  return 'CompanyBlocEvent.updateCompany(company: $company)';
 }
 
 
@@ -468,7 +470,7 @@ abstract mixin class _$UpdateCompanyCopyWith<$Res> implements $CompanyBlocEventC
   factory _$UpdateCompanyCopyWith(_UpdateCompany value, $Res Function(_UpdateCompany) _then) = __$UpdateCompanyCopyWithImpl;
 @useResult
 $Res call({
- Company customer
+ Company company
 });
 
 
@@ -485,10 +487,10 @@ class __$UpdateCompanyCopyWithImpl<$Res>
 
 /// Create a copy of CompanyBlocEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? customer = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? company = null,}) {
   return _then(_UpdateCompany(
-customer: null == customer ? _self.customer : customer // ignore: cast_nullable_to_non_nullable
-as Customer,
+company: null == company ? _self.company : company // ignore: cast_nullable_to_non_nullable
+as Company,
   ));
 }
 
@@ -539,15 +541,15 @@ extension CompanyBlocStatePatterns on CompanyBlocState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _CompaniesLoaded value)?  companiesLoaded,TResult Function( _CustomerError value)?  customerError,TResult Function( _CustomerFound value)?  customerFound,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _CompaniesLoaded value)?  companiesLoaded,TResult Function( _CompanyFound value)?  companyFound,TResult Function( _CompanyError value)?  companyError,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _CompaniesLoaded() when companiesLoaded != null:
-return companiesLoaded(_that);case _CustomerError() when customerError != null:
-return customerError(_that);case _CustomerFound() when customerFound != null:
-return customerFound(_that);case _:
+return companiesLoaded(_that);case _CompanyFound() when companyFound != null:
+return companyFound(_that);case _CompanyError() when companyError != null:
+return companyError(_that);case _:
   return orElse();
 
 }
@@ -565,15 +567,15 @@ return customerFound(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _CompaniesLoaded value)  companiesLoaded,required TResult Function( _CustomerError value)  customerError,required TResult Function( _CustomerFound value)  customerFound,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _CompaniesLoaded value)  companiesLoaded,required TResult Function( _CompanyFound value)  companyFound,required TResult Function( _CompanyError value)  companyError,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case _Loading():
 return loading(_that);case _CompaniesLoaded():
-return companiesLoaded(_that);case _CustomerError():
-return customerError(_that);case _CustomerFound():
-return customerFound(_that);}
+return companiesLoaded(_that);case _CompanyFound():
+return companyFound(_that);case _CompanyError():
+return companyError(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -587,15 +589,15 @@ return customerFound(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _CompaniesLoaded value)?  companiesLoaded,TResult? Function( _CustomerError value)?  customerError,TResult? Function( _CustomerFound value)?  customerFound,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _CompaniesLoaded value)?  companiesLoaded,TResult? Function( _CompanyFound value)?  companyFound,TResult? Function( _CompanyError value)?  companyError,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _Loading() when loading != null:
 return loading(_that);case _CompaniesLoaded() when companiesLoaded != null:
-return companiesLoaded(_that);case _CustomerError() when customerError != null:
-return customerError(_that);case _CustomerFound() when customerFound != null:
-return customerFound(_that);case _:
+return companiesLoaded(_that);case _CompanyFound() when companyFound != null:
+return companyFound(_that);case _CompanyError() when companyError != null:
+return companyError(_that);case _:
   return null;
 
 }
@@ -612,14 +614,14 @@ return customerFound(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( Map<int, Customer> companies,  EnumStateCustomerLoaded stateType)?  companiesLoaded,TResult Function( String message)?  customerError,TResult Function( Company company)?  customerFound,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( Map<int, Company> companies,  EnumStateCompanyLoaded stateType)?  companiesLoaded,TResult Function( Company company)?  companyFound,TResult Function( String message)?  companyError,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _CompaniesLoaded() when companiesLoaded != null:
-return companiesLoaded(_that.companies,_that.stateType);case _CustomerError() when customerError != null:
-return customerError(_that.message);case _CustomerFound() when customerFound != null:
-return customerFound(_that.customer);case _:
+return companiesLoaded(_that.companies,_that.stateType);case _CompanyFound() when companyFound != null:
+return companyFound(_that.company);case _CompanyError() when companyError != null:
+return companyError(_that.message);case _:
   return orElse();
 
 }
@@ -637,14 +639,14 @@ return customerFound(_that.customer);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( Map<int, Customer> companies,  EnumStateCustomerLoaded stateType)  companiesLoaded,required TResult Function( String message)  customerError,required TResult Function( Company company)  customerFound,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( Map<int, Company> companies,  EnumStateCompanyLoaded stateType)  companiesLoaded,required TResult Function( Company company)  companyFound,required TResult Function( String message)  companyError,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _Loading():
 return loading();case _CompaniesLoaded():
-return companiesLoaded(_that.companies,_that.stateType);case _CustomerError():
-return customerError(_that.message);case _CustomerFound():
-return customerFound(_that.customer);}
+return companiesLoaded(_that.companies,_that.stateType);case _CompanyFound():
+return companyFound(_that.company);case _CompanyError():
+return companyError(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -658,14 +660,14 @@ return customerFound(_that.customer);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( Map<int, Customer> companies,  EnumStateCustomerLoaded stateType)?  companiesLoaded,TResult? Function( String message)?  customerError,TResult? Function( Company company)?  customerFound,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( Map<int, Company> companies,  EnumStateCompanyLoaded stateType)?  companiesLoaded,TResult? Function( Company company)?  companyFound,TResult? Function( String message)?  companyError,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _Loading() when loading != null:
 return loading();case _CompaniesLoaded() when companiesLoaded != null:
-return companiesLoaded(_that.companies,_that.stateType);case _CustomerError() when customerError != null:
-return customerError(_that.message);case _CustomerFound() when customerFound != null:
-return customerFound(_that.customer);case _:
+return companiesLoaded(_that.companies,_that.stateType);case _CompanyFound() when companyFound != null:
+return companyFound(_that.company);case _CompanyError() when companyError != null:
+return companyError(_that.message);case _:
   return null;
 
 }
@@ -741,17 +743,17 @@ String toString() {
 
 
 class _CompaniesLoaded implements CompanyBlocState {
-  const _CompaniesLoaded({required final  Map<int, Customer> companies, required this.stateType}): _companies = companies;
+  const _CompaniesLoaded({required final  Map<int, Company> companies, required this.stateType}): _companies = companies;
   
 
- final  Map<int, Customer> _companies;
- Map<int, Customer> get companies {
+ final  Map<int, Company> _companies;
+ Map<int, Company> get companies {
   if (_companies is EqualUnmodifiableMapView) return _companies;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableMapView(_companies);
 }
 
- final  EnumStateCustomerLoaded stateType;
+ final  EnumStateCompanyLoaded stateType;
 
 /// Create a copy of CompanyBlocState
 /// with the given fields replaced by the non-null parameter values.
@@ -783,7 +785,7 @@ abstract mixin class _$CompaniesLoadedCopyWith<$Res> implements $CompanyBlocStat
   factory _$CompaniesLoadedCopyWith(_CompaniesLoaded value, $Res Function(_CompaniesLoaded) _then) = __$CompaniesLoadedCopyWithImpl;
 @useResult
 $Res call({
- Map<int, Customer> companies, EnumStateCustomerLoaded stateType
+ Map<int, Company> companies, EnumStateCompanyLoaded stateType
 });
 
 
@@ -803,8 +805,8 @@ class __$CompaniesLoadedCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? companies = null,Object? stateType = null,}) {
   return _then(_CompaniesLoaded(
 companies: null == companies ? _self._companies : companies // ignore: cast_nullable_to_non_nullable
-as Map<int, Customer>,stateType: null == stateType ? _self.stateType : stateType // ignore: cast_nullable_to_non_nullable
-as EnumStateCustomerLoaded,
+as Map<int, Company>,stateType: null == stateType ? _self.stateType : stateType // ignore: cast_nullable_to_non_nullable
+as EnumStateCompanyLoaded,
   ));
 }
 
@@ -814,8 +816,74 @@ as EnumStateCustomerLoaded,
 /// @nodoc
 
 
-class _CustomerError implements CompanyBlocState {
-  const _CustomerError({required this.message});
+class _CompanyFound implements CompanyBlocState {
+  const _CompanyFound({required this.company});
+  
+
+ final  Company company;
+
+/// Create a copy of CompanyBlocState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CompanyFoundCopyWith<_CompanyFound> get copyWith => __$CompanyFoundCopyWithImpl<_CompanyFound>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CompanyFound&&(identical(other.company, company) || other.company == company));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,company);
+
+@override
+String toString() {
+  return 'CompanyBlocState.companyFound(company: $company)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$CompanyFoundCopyWith<$Res> implements $CompanyBlocStateCopyWith<$Res> {
+  factory _$CompanyFoundCopyWith(_CompanyFound value, $Res Function(_CompanyFound) _then) = __$CompanyFoundCopyWithImpl;
+@useResult
+$Res call({
+ Company company
+});
+
+
+
+
+}
+/// @nodoc
+class __$CompanyFoundCopyWithImpl<$Res>
+    implements _$CompanyFoundCopyWith<$Res> {
+  __$CompanyFoundCopyWithImpl(this._self, this._then);
+
+  final _CompanyFound _self;
+  final $Res Function(_CompanyFound) _then;
+
+/// Create a copy of CompanyBlocState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? company = null,}) {
+  return _then(_CompanyFound(
+company: null == company ? _self.company : company // ignore: cast_nullable_to_non_nullable
+as Company,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _CompanyError implements CompanyBlocState {
+  const _CompanyError({required this.message});
   
 
  final  String message;
@@ -824,13 +892,13 @@ class _CustomerError implements CompanyBlocState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$CustomerErrorCopyWith<_CustomerError> get copyWith => __$CustomerErrorCopyWithImpl<_CustomerError>(this, _$identity);
+_$CompanyErrorCopyWith<_CompanyError> get copyWith => __$CompanyErrorCopyWithImpl<_CompanyError>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CustomerError&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CompanyError&&(identical(other.message, message) || other.message == message));
 }
 
 
@@ -839,15 +907,15 @@ int get hashCode => Object.hash(runtimeType,message);
 
 @override
 String toString() {
-  return 'CompanyBlocState.customerError(message: $message)';
+  return 'CompanyBlocState.companyError(message: $message)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$CustomerErrorCopyWith<$Res> implements $CompanyBlocStateCopyWith<$Res> {
-  factory _$CustomerErrorCopyWith(_CustomerError value, $Res Function(_CustomerError) _then) = __$CustomerErrorCopyWithImpl;
+abstract mixin class _$CompanyErrorCopyWith<$Res> implements $CompanyBlocStateCopyWith<$Res> {
+  factory _$CompanyErrorCopyWith(_CompanyError value, $Res Function(_CompanyError) _then) = __$CompanyErrorCopyWithImpl;
 @useResult
 $Res call({
  String message
@@ -858,85 +926,19 @@ $Res call({
 
 }
 /// @nodoc
-class __$CustomerErrorCopyWithImpl<$Res>
-    implements _$CustomerErrorCopyWith<$Res> {
-  __$CustomerErrorCopyWithImpl(this._self, this._then);
+class __$CompanyErrorCopyWithImpl<$Res>
+    implements _$CompanyErrorCopyWith<$Res> {
+  __$CompanyErrorCopyWithImpl(this._self, this._then);
 
-  final _CustomerError _self;
-  final $Res Function(_CustomerError) _then;
+  final _CompanyError _self;
+  final $Res Function(_CompanyError) _then;
 
 /// Create a copy of CompanyBlocState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(_CustomerError(
+  return _then(_CompanyError(
 message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class _CustomerFound implements CompanyBlocState {
-  const _CustomerFound({required this.customer});
-  
-
- final  Company customer;
-
-/// Create a copy of CompanyBlocState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$CustomerFoundCopyWith<_CustomerFound> get copyWith => __$CustomerFoundCopyWithImpl<_CustomerFound>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CustomerFound&&(identical(other.customer, company) || other.customer == company));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,customer);
-
-@override
-String toString() {
-  return 'CompanyBlocState.customerFound(customer: $customer)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$CustomerFoundCopyWith<$Res> implements $CompanyBlocStateCopyWith<$Res> {
-  factory _$CustomerFoundCopyWith(_CustomerFound value, $Res Function(_CustomerFound) _then) = __$CustomerFoundCopyWithImpl;
-@useResult
-$Res call({
- Company customer
-});
-
-
-
-
-}
-/// @nodoc
-class __$CustomerFoundCopyWithImpl<$Res>
-    implements _$CustomerFoundCopyWith<$Res> {
-  __$CustomerFoundCopyWithImpl(this._self, this._then);
-
-  final _CustomerFound _self;
-  final $Res Function(_CustomerFound) _then;
-
-/// Create a copy of CompanyBlocState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? customer = null,}) {
-  return _then(_CustomerFound(
-customer: null == customer ? _self.customer : customer // ignore: cast_nullable_to_non_nullable
-as Customer,
   ));
 }
 
