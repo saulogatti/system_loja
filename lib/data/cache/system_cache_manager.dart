@@ -8,6 +8,19 @@ import 'package:system_loja/data/files_utility/file_storage_utility.dart';
 
 class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
   final Map<String, String> _fileStorageOptions = {};
+  Future<void> clearErrors() async {
+    await retrieveAllErrors();
+    if (_fileStorageOptions.isEmpty) {
+      logInfo('No errors to clear from cache.');
+      return;
+    }
+    for (var cacheKey in _fileStorageOptions.values) {
+      await deleteFile(cacheKey);
+    }
+    _fileStorageOptions.clear();
+    logInfo('All errors cleared from cache.');
+  }
+
   Future<List<SystemErrorModel>> retrieveAllErrors() async {
     final List<SystemErrorModel> errors = [];
     try {

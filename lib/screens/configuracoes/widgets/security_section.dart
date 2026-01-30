@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Widget da seção de configurações de segurança
-class SecaoSeguranca extends StatelessWidget {
+class SecuritySection extends StatelessWidget {
   /// Configuração atual do sistema
   final AppSettings config;
 
   /// Callback para atualizar a configuração
   final Function(AppSettings) onConfigChanged;
 
-  const SecaoSeguranca({
+  const SecuritySection({
     super.key,
     required this.config,
     required this.onConfigChanged,

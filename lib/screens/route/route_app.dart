@@ -112,5 +112,13 @@ class RouteApp extends RootStackRouter {
       page: CategoryManagementRoute.page,
       title: (context, data) => 'Category Management',
     ),
+    AutoRoute(
+      page: LogSystemRoute.page,
+      title: (context, data) => 'System Logs',
+    ),
+    AutoRoute(
+      page: LogsAnalyticsRoute.page,
+      title: (context, data) => 'Logs Analytics',
+    ),
   ];
 }
