@@ -151,7 +151,14 @@ class CompanyBloc extends Bloc<CompanyBlocEvent, CompanyBlocState> {
     );
     switch (result) {
       case ResultSuccess(:final result):
-      
+        if (result == false) {
+          emit(
+            CompanyBlocState.companyError(
+              message: 'Erro ao registrar empresa: CNPJ já cadastrado.',
+            ),
+          );
+          return;
+        }
         // Recarrega a lista de empresas após adicionar
         final companies = await _companyRepository.fetchMappedCompanies();
 
@@ -172,7 +179,15 @@ class CompanyBloc extends Bloc<CompanyBlocEvent, CompanyBlocState> {
     Emitter<CompanyBlocState> emit,
   ) async {
     emit(const CompanyBlocState.loading());
-
+    // Validação de email
+    if (event.company.email != null &&
+        event.company.email!.isNotEmpty &&
+        !event.company.email!.isValidEmail()) {
+      emit(
+        const CompanyBlocState.companyError(message: 'Erro: Email inválido!'),
+      );
+      return;
+    }
     final resultUpdate = await _companyRepository.updateCompany(event.company);
     switch (resultUpdate) {
       case ResultSuccess(:final result):

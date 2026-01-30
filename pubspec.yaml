@@ -4,7 +4,7 @@ version: 1.0.0
 publish_to: "none"
 
 environment:
-  sdk: ">=3.10.3"
+  sdk: ">=3.10.8"
 
 dependencies:
   log_custom_printer:
@@ -17,7 +17,7 @@ dependencies:
   path_provider: ^2.1.5
   synchronized: ^3.4.0
   path: ^1.9.1
-  json_annotation: ^4.9.0
+  json_annotation: ^4.10.0
 
   async: ^2.13.0
   meta: ^1.17.0
@@ -43,7 +43,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   build_runner: ^2.10.5
-  json_serializable: ^6.11.4
+  json_serializable: ^6.12.0
   drift_dev: ^2.30.1
   auto_route_generator: ^10.4.0
 flutter:
