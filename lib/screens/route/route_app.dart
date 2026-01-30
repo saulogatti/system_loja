@@ -129,5 +129,9 @@ class RouteApp extends RootStackRouter {
       page: LogsAnalyticsRoute.page,
       title: (context, data) => 'Logs Analytics',
     ),
+    AutoRoute(
+      page: CompanyEditRoute.page,
+      title: (context, data) => 'Edit Company',
+    ),
   ];
 }
