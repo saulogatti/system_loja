@@ -34,17 +34,7 @@ enum FrequenciaBackup {
 }
 
 class LogErrorSystemSection extends StatelessWidget {
-  /// Configuração atual do sistema
-  final AppSettings config;
-
-  /// Callback para atualizar a configuração
-  final Function(AppSettings) onConfigChanged;
-
-  const LogErrorSystemSection({
-    super.key,
-    required this.config,
-    required this.onConfigChanged,
-  });
+  const LogErrorSystemSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -204,11 +194,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           _updateConfig(context, newConfig),
                     ),
                     const SizedBox(height: 24),
-                    LogErrorSystemSection(
-                      config: currentConfig,
-                      onConfigChanged: (newConfig) =>
-                          _updateConfig(context, newConfig),
-                    ),
+                    const LogErrorSystemSection(),
                     const SizedBox(height: 32),
                     _buildBotaoSalvar(context, currentConfig),
                   ],

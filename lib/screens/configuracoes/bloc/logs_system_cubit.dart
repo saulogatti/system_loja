@@ -5,9 +5,9 @@ import 'package:system_loja/screens/configuracoes/bloc/logs_system_state.dart';
 class LogsSystemCubit extends Cubit<LogsSystemState> {
   LogsSystemCubit() : super(const LogsSystemState.initial());
 
-  void clearLogs() {
+  Future<void> clearLogs() async {
     emit(const LogsSystemState.loading());
-    SystemErrorManager.instance.clearAllErrors();
+    await SystemErrorManager.instance.clearAllErrors();
     emit(const LogsSystemState.loaded([]));
   }
 
