@@ -98,5 +98,58 @@ class PhoneTextInputFormatter extends TextInputFormatter {
     return buffer.toString();
   }
 }
+/// Formatador de CNPJ para campos de texto
+///
+/// Aplica a máscara XX.XXX.XXX/XXXX-XX automaticamente enquanto o usuário digita.
+/// Remove automaticamente caracteres não-numéricos e limita a 14 dígitos.
+class CnpjTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // se oldValue é maior que newValue, significa que o usuário está apagando
+    if (oldValue.text.length > newValue.text.length) {
+      return newValue;
+    }
+    // Remove todos os caracteres não-numéricos
+    final regExp = RegExp(r'[^0-9]');
+    final digitsOnly = newValue.text.replaceAll(regExp, '');
+
+    // Limita a 14 dígitos
+    final limitedDigits = digitsOnly.length > 14
+        ? digitsOnly.substring(0, 14)
+        : digitsOnly;
+
+    // Aplica a formatação
+    final formatted = _formatCnpj(limitedDigits);
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+
+  /// Formata uma string de dígitos no padrão XX.XXX.XXX/XXXX-XX
+  String _formatCnpj(String digits) {
+    if (digits.isEmpty) return '';
+
+    final buffer = StringBuffer();
+
+    for (int i = 0; i < digits.length; i++) {
+      buffer.write(digits[i]);
+      if (i == 1 || i == 4) {
+        buffer.write('.');
+      } else if (i == 7) {
+        buffer.write('/');
+      } else if (i == 11) {
+        buffer.write('-');
+      }
+    }
+
+    return buffer.toString();
+  }
+}
+
 // InputFormatters para email e outros formatos podem ser adicionados aqui conforme necessário.
 // TODO: Adicionar input formatter para email se necessário.

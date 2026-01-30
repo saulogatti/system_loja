@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/models/company.dart';
+import '../route/route_app.gr.dart';
 import 'bloc/company_bloc.dart';
 import 'widgets/company_form.dart';
 import 'widgets/company_list.dart';
@@ -205,9 +206,22 @@ class _CompanyViewState extends State<CompanyView> {
             onPressed: () => Navigator.pop(context),
             child: const Text('Fechar'),
           ),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+              _abrirTelaEdicao(company);
+            },
+            icon: const Icon(Icons.edit),
+            label: const Text('Editar'),
+          ),
         ],
       ),
     );
+  }
+
+  /// Abre a tela de edição da empresa
+  void _abrirTelaEdicao(Company company) {
+    context.pushRoute(CompanyEditRoute(company: company));
   }
 
   Widget _buildDetailRow(String label, String value) {
