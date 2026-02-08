@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/repository/company_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
@@ -143,10 +144,13 @@ class CompanyBloc extends Bloc<CompanyBlocEvent, CompanyBlocState> {
         corporateName: event.corporateName,
         cnpj: event.cnpj,
         email: event.email,
-        street: event.street,
-        zipCode: event.zipCode,
-        neighborhood: event.neighborhood,
-        city: event.city,
+        address: Address(
+          street: event.street,
+          zipCode: event.zipCode,
+          neighborhood: event.neighborhood,
+          city: event.city,
+          state: event.state,
+        ),
       ),
     );
     switch (result) {

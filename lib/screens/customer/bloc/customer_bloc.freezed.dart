@@ -128,10 +128,10 @@ return updateCustomer(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name,  String cpf,  String email,  String phone,  String address)?  registerCustomer,TResult Function()?  loadCustomers,TResult Function( int id)?  deleteCustomer,TResult Function( String cpf)?  findCustomerByCpf,TResult Function( Customer customer)?  updateCustomer,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name,  String cpf,  String email,  String phone,  String street,  String zipCode,  String neighborhood,  String city,  String state)?  registerCustomer,TResult Function()?  loadCustomers,TResult Function( int id)?  deleteCustomer,TResult Function( String cpf)?  findCustomerByCpf,TResult Function( Customer customer)?  updateCustomer,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RegisterCustomer() when registerCustomer != null:
-return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);case _LoadCustomers() when loadCustomers != null:
+return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.street,_that.zipCode,_that.neighborhood,_that.city,_that.state);case _LoadCustomers() when loadCustomers != null:
 return loadCustomers();case _DeleteCustomer() when deleteCustomer != null:
 return deleteCustomer(_that.id);case _FindCustomerByCpf() when findCustomerByCpf != null:
 return findCustomerByCpf(_that.cpf);case _UpdateCustomer() when updateCustomer != null:
@@ -153,10 +153,10 @@ return updateCustomer(_that.customer);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name,  String cpf,  String email,  String phone,  String address)  registerCustomer,required TResult Function()  loadCustomers,required TResult Function( int id)  deleteCustomer,required TResult Function( String cpf)  findCustomerByCpf,required TResult Function( Customer customer)  updateCustomer,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name,  String cpf,  String email,  String phone,  String street,  String zipCode,  String neighborhood,  String city,  String state)  registerCustomer,required TResult Function()  loadCustomers,required TResult Function( int id)  deleteCustomer,required TResult Function( String cpf)  findCustomerByCpf,required TResult Function( Customer customer)  updateCustomer,}) {final _that = this;
 switch (_that) {
 case _RegisterCustomer():
-return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);case _LoadCustomers():
+return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.street,_that.zipCode,_that.neighborhood,_that.city,_that.state);case _LoadCustomers():
 return loadCustomers();case _DeleteCustomer():
 return deleteCustomer(_that.id);case _FindCustomerByCpf():
 return findCustomerByCpf(_that.cpf);case _UpdateCustomer():
@@ -174,10 +174,10 @@ return updateCustomer(_that.customer);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name,  String cpf,  String email,  String phone,  String address)?  registerCustomer,TResult? Function()?  loadCustomers,TResult? Function( int id)?  deleteCustomer,TResult? Function( String cpf)?  findCustomerByCpf,TResult? Function( Customer customer)?  updateCustomer,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name,  String cpf,  String email,  String phone,  String street,  String zipCode,  String neighborhood,  String city,  String state)?  registerCustomer,TResult? Function()?  loadCustomers,TResult? Function( int id)?  deleteCustomer,TResult? Function( String cpf)?  findCustomerByCpf,TResult? Function( Customer customer)?  updateCustomer,}) {final _that = this;
 switch (_that) {
 case _RegisterCustomer() when registerCustomer != null:
-return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.address);case _LoadCustomers() when loadCustomers != null:
+return registerCustomer(_that.name,_that.cpf,_that.email,_that.phone,_that.street,_that.zipCode,_that.neighborhood,_that.city,_that.state);case _LoadCustomers() when loadCustomers != null:
 return loadCustomers();case _DeleteCustomer() when deleteCustomer != null:
 return deleteCustomer(_that.id);case _FindCustomerByCpf() when findCustomerByCpf != null:
 return findCustomerByCpf(_that.cpf);case _UpdateCustomer() when updateCustomer != null:
@@ -193,14 +193,18 @@ return updateCustomer(_that.customer);case _:
 
 
 class _RegisterCustomer implements CustomerBlocEvent {
-  const _RegisterCustomer({required this.name, required this.cpf, required this.email, required this.phone, required this.address});
+  const _RegisterCustomer({required this.name, required this.cpf, required this.email, required this.phone, required this.street, required this.zipCode, required this.neighborhood, required this.city, required this.state});
   
 
  final  String name;
  final  String cpf;
  final  String email;
  final  String phone;
- final  String address;
+ final  String street;
+ final  String zipCode;
+ final  String neighborhood;
+ final  String city;
+ final  String state;
 
 /// Create a copy of CustomerBlocEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -212,16 +216,16 @@ _$RegisterCustomerCopyWith<_RegisterCustomer> get copyWith => __$RegisterCustome
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterCustomer&&(identical(other.name, name) || other.name == name)&&(identical(other.cpf, cpf) || other.cpf == cpf)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.address, address) || other.address == address));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterCustomer&&(identical(other.name, name) || other.name == name)&&(identical(other.cpf, cpf) || other.cpf == cpf)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.street, street) || other.street == street)&&(identical(other.zipCode, zipCode) || other.zipCode == zipCode)&&(identical(other.neighborhood, neighborhood) || other.neighborhood == neighborhood)&&(identical(other.city, city) || other.city == city)&&(identical(other.state, state) || other.state == state));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,cpf,email,phone,address);
+int get hashCode => Object.hash(runtimeType,name,cpf,email,phone,street,zipCode,neighborhood,city,state);
 
 @override
 String toString() {
-  return 'CustomerBlocEvent.registerCustomer(name: $name, cpf: $cpf, email: $email, phone: $phone, address: $address)';
+  return 'CustomerBlocEvent.registerCustomer(name: $name, cpf: $cpf, email: $email, phone: $phone, street: $street, zipCode: $zipCode, neighborhood: $neighborhood, city: $city, state: $state)';
 }
 
 
@@ -232,7 +236,7 @@ abstract mixin class _$RegisterCustomerCopyWith<$Res> implements $CustomerBlocEv
   factory _$RegisterCustomerCopyWith(_RegisterCustomer value, $Res Function(_RegisterCustomer) _then) = __$RegisterCustomerCopyWithImpl;
 @useResult
 $Res call({
- String name, String cpf, String email, String phone, String address
+ String name, String cpf, String email, String phone, String street, String zipCode, String neighborhood, String city, String state
 });
 
 
@@ -249,13 +253,17 @@ class __$RegisterCustomerCopyWithImpl<$Res>
 
 /// Create a copy of CustomerBlocEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? name = null,Object? cpf = null,Object? email = null,Object? phone = null,Object? address = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? name = null,Object? cpf = null,Object? email = null,Object? phone = null,Object? street = null,Object? zipCode = null,Object? neighborhood = null,Object? city = null,Object? state = null,}) {
   return _then(_RegisterCustomer(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,cpf: null == cpf ? _self.cpf : cpf // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
-as String,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
+as String,street: null == street ? _self.street : street // ignore: cast_nullable_to_non_nullable
+as String,zipCode: null == zipCode ? _self.zipCode : zipCode // ignore: cast_nullable_to_non_nullable
+as String,neighborhood: null == neighborhood ? _self.neighborhood : neighborhood // ignore: cast_nullable_to_non_nullable
+as String,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

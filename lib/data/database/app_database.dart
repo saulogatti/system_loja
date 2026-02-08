@@ -2,10 +2,12 @@ import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:system_loja/core/managers/system_error_manager.dart';
+import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/category.dart';
-import 'package:system_loja/core/models/company.dart' show Company;
-import 'package:system_loja/core/models/customer.dart' show Customer;
+import 'package:system_loja/core/models/company.dart';
+import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/models/product.dart';
+import 'package:system_loja/data/database/dao/address_dao.dart';
 import 'package:system_loja/data/database/dao/category_dao.dart';
 import 'package:system_loja/data/database/dao/company_dao.dart';
 import 'package:system_loja/data/database/dao/customer_dao.dart';
@@ -13,6 +15,7 @@ import 'package:system_loja/data/database/dao/invoice_dao.dart';
 import 'package:system_loja/data/database/dao/invoice_item_dao.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
 import 'package:system_loja/data/database/extension/customer_to_companion.dart';
+import 'package:system_loja/data/database/table/address_records.dart';
 import 'package:system_loja/data/database/table/categories_records.dart';
 import 'package:system_loja/data/database/table/company_records.dart';
 import 'package:system_loja/data/database/table/customer_records.dart';
@@ -33,6 +36,7 @@ part 'app_database.g.dart';
     ProductsRecords,
     InvoicesRecords,
     InvoiceItemsRecords,
+    AddressRecords,
   ],
   daos: [
     CategoryDao,
@@ -41,6 +45,7 @@ part 'app_database.g.dart';
     ProductDao,
     InvoiceDao,
     InvoiceItemDao,
+    AddressDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -71,10 +76,15 @@ class AppDatabase extends _$AppDatabase {
         // Criar tabela de empresas
         await m.createTable(companyRecords);
       }
+      if (from < 10) {
+        // Criar tabela de endereços
+        await m.createAll();
+        await _migrateAddressesFromCompaniesAndCustomers();
+      }
     },
   );
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
   // Dentro da sua classe de banco (Database)
   /// Cria um backup manual do banco de dados usando o comando `VACUUM INTO`.
   ///
@@ -85,6 +95,18 @@ class AppDatabase extends _$AppDatabase {
 
     // O comando VACUUM INTO cria um backup consistente "a quente"
     await customStatement("VACUUM INTO '$sanitizedBackupFile'");
+  }
+
+  /// Migrar Endereços de Empresas e Clientes para AddressRecords
+  Future<void> _migrateAddressesFromCompaniesAndCustomers() async {
+    final companyRows = await companyRecords.select().get();
+    final customerRows = await customerRecords.select().get();
+    for (final company in companyRows) {
+      await into(addressRecords).insert(company.address.toCompanion());
+    }
+    for (final customer in customerRows) {
+      await into(addressRecords).insert(customer.address.toCompanion());
+    }
   }
 
   /// Migra categorias existentes dos produtos para a tabela categories_records.
@@ -120,7 +142,13 @@ class AppDatabase extends _$AppDatabase {
           cpf: row.data['cpf'] as String,
           email: row.data['email'] as String?,
           phone: row.data['phone'] as String?,
-          address: row.data['address'] as String?,
+          address: Address(
+            street: row.data['street'] as String? ?? '',
+            zipCode: row.data['zip_code'] as String? ?? '',
+            neighborhood: row.data['neighborhood'] as String? ?? '',
+            city: row.data['city'] as String? ?? '',
+            state: row.data['state'] as String? ?? '',
+          ),
           registrationDate: (row.data['registration_date'] as int) != 0
               ? DateTime.fromMillisecondsSinceEpoch(
                   (row.data['registration_date'] as int) * 1000,
@@ -154,6 +182,18 @@ class AppDatabase extends _$AppDatabase {
         databaseDirectory: applicationSupportDirectory,
       ),
       // If you need web support, see https://drift.simonbinder.eu/platforms/web/
+    );
+  }
+}
+
+extension on Address {
+  Insertable<Address> toCompanion() {
+    return AddressRecordsCompanion(
+      city: Value(city),
+      neighborhood: Value(neighborhood),
+      state: Value(state),
+      street: Value(street),
+      zipCode: Value(zipCode),
     );
   }
 }

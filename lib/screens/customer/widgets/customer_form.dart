@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
@@ -14,7 +15,11 @@ class CustomerForm extends StatelessWidget {
   final TextEditingController cpfController;
   final TextEditingController emailController;
   final TextEditingController telefoneController;
-  final TextEditingController enderecoController;
+  final TextEditingController streetController;
+  final TextEditingController zipCodeController;
+  final TextEditingController neighborhoodController;
+  final TextEditingController cityController;
+  final TextEditingController stateController;
   final VoidCallback onSubmit;
 
   const CustomerForm({
@@ -24,8 +29,12 @@ class CustomerForm extends StatelessWidget {
     required this.cpfController,
     required this.emailController,
     required this.telefoneController,
-    required this.enderecoController,
+    required this.streetController,
     required this.onSubmit,
+    required this.zipCodeController,
+    required this.neighborhoodController,
+    required this.cityController,
+    required this.stateController,
   });
 
   @override
@@ -73,14 +82,12 @@ class CustomerForm extends StatelessWidget {
             isEditing: true,
           ),
           const SizedBox(height: 16),
-          TextFormField(
-            controller: enderecoController,
-            decoration: const InputDecoration(
-              labelText: 'Endereço',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.home),
-            ),
-            maxLines: 2,
+          AddressForm(
+            streetController: streetController,
+            zipCodeController: zipCodeController,
+            neighborhoodController: neighborhoodController,
+            cityController: cityController,
+            stateController: stateController,
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(

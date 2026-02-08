@@ -16,7 +16,10 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) => $checkedCreate(
       email: $checkedConvert('email', (v) => v as String?),
       cpf: $checkedConvert('cpf', (v) => v as String),
       phone: $checkedConvert('phone', (v) => v as String?),
-      address: $checkedConvert('address', (v) => v as String?),
+      address: $checkedConvert(
+        'address',
+        (v) => v == null ? null : Address.fromJson(v as Map<String, dynamic>),
+      ),
       registrationDate: $checkedConvert(
         'registration_date',
         (v) => v == null ? null : DateTime.parse(v as String),
@@ -42,5 +45,5 @@ Map<String, dynamic> _$CustomerToJson(Customer instance) => <String, dynamic>{
   'email': instance.email,
   'cpf': instance.cpf,
   'phone': instance.phone,
-  'address': instance.address,
+  'address': instance.address.toJson(),
 };

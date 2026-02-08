@@ -2,7 +2,6 @@ import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/data/database/app_database.dart';
 
-
 /// Extensão para converter Customer (domínio) para CustomerRecordsCompanion (Drift).
 extension CustomerToCompanion on Customer {
   /// Converte um modelo de domínio Customer para Companion usado em insert/update.

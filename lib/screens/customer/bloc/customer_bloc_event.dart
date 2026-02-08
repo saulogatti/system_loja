@@ -7,7 +7,11 @@ sealed class CustomerBlocEvent with _$CustomerBlocEvent {
     required String cpf,
     required String email,
     required String phone,
-    required String address,
+    required String street,
+    required String zipCode,
+    required String neighborhood,
+    required String city,
+    required String state,
   }) = _RegisterCustomer;
   
   const factory CustomerBlocEvent.loadCustomers() = _LoadCustomers;

@@ -14,10 +14,7 @@ extension CompanyToCompanion on Company {
         corporateName: Value(corporateName),
         cnpj: Value(cnpj),
         email: Value(email),
-        street: Value(street),
-        zipCode: Value(zipCode),
-        neighborhood: Value(neighborhood),
-        city: Value(city),
+        address: Value(address),
         lastUpdatedDate: Value(DateTime.now()),
         registrationDate: Value(registrationDate),
       );
@@ -26,10 +23,8 @@ extension CompanyToCompanion on Company {
       corporateName: corporateName,
       cnpj: cnpj,
       email: Value(email),
-      street: Value(street),
-      zipCode: Value(zipCode),
-      neighborhood: Value(neighborhood),
-      city: Value(city),
+      address: Value(address),
+
       lastUpdatedDate: Value(lastUpdatedDate),
       registrationDate: Value(registrationDate),
     );

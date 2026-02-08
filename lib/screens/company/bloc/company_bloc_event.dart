@@ -14,6 +14,7 @@ sealed class CompanyBlocEvent with _$CompanyBlocEvent {
     required String zipCode,
     required String neighborhood,
     required String city,
+    required String state,
   }) = _RegisterCompany;
 
   /// Evento para deletar uma empresa

@@ -128,11 +128,11 @@ return updateCompany(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadCompanies,TResult Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city)?  registerCompany,TResult Function( int id)?  deleteCompany,TResult Function( String cnpj)?  findCompanyByCnpj,TResult Function( Company company)?  updateCompany,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadCompanies,TResult Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city,  String state)?  registerCompany,TResult Function( int id)?  deleteCompany,TResult Function( String cnpj)?  findCompanyByCnpj,TResult Function( Company company)?  updateCompany,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoadCompanies() when loadCompanies != null:
 return loadCompanies();case _RegisterCompany() when registerCompany != null:
-return registerCompany(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode,_that.neighborhood,_that.city);case _DeleteCompany() when deleteCompany != null:
+return registerCompany(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode,_that.neighborhood,_that.city,_that.state);case _DeleteCompany() when deleteCompany != null:
 return deleteCompany(_that.id);case _FindCompanyByCnpj() when findCompanyByCnpj != null:
 return findCompanyByCnpj(_that.cnpj);case _UpdateCompany() when updateCompany != null:
 return updateCompany(_that.company);case _:
@@ -153,11 +153,11 @@ return updateCompany(_that.company);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadCompanies,required TResult Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city)  registerCompany,required TResult Function( int id)  deleteCompany,required TResult Function( String cnpj)  findCompanyByCnpj,required TResult Function( Company company)  updateCompany,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadCompanies,required TResult Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city,  String state)  registerCompany,required TResult Function( int id)  deleteCompany,required TResult Function( String cnpj)  findCompanyByCnpj,required TResult Function( Company company)  updateCompany,}) {final _that = this;
 switch (_that) {
 case _LoadCompanies():
 return loadCompanies();case _RegisterCompany():
-return registerCompany(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode,_that.neighborhood,_that.city);case _DeleteCompany():
+return registerCompany(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode,_that.neighborhood,_that.city,_that.state);case _DeleteCompany():
 return deleteCompany(_that.id);case _FindCompanyByCnpj():
 return findCompanyByCnpj(_that.cnpj);case _UpdateCompany():
 return updateCompany(_that.company);}
@@ -174,11 +174,11 @@ return updateCompany(_that.company);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadCompanies,TResult? Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city)?  registerCompany,TResult? Function( int id)?  deleteCompany,TResult? Function( String cnpj)?  findCompanyByCnpj,TResult? Function( Company company)?  updateCompany,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadCompanies,TResult? Function( String corporateName,  String cnpj,  String email,  String street,  String zipCode,  String neighborhood,  String city,  String state)?  registerCompany,TResult? Function( int id)?  deleteCompany,TResult? Function( String cnpj)?  findCompanyByCnpj,TResult? Function( Company company)?  updateCompany,}) {final _that = this;
 switch (_that) {
 case _LoadCompanies() when loadCompanies != null:
 return loadCompanies();case _RegisterCompany() when registerCompany != null:
-return registerCompany(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode,_that.neighborhood,_that.city);case _DeleteCompany() when deleteCompany != null:
+return registerCompany(_that.corporateName,_that.cnpj,_that.email,_that.street,_that.zipCode,_that.neighborhood,_that.city,_that.state);case _DeleteCompany() when deleteCompany != null:
 return deleteCompany(_that.id);case _FindCompanyByCnpj() when findCompanyByCnpj != null:
 return findCompanyByCnpj(_that.cnpj);case _UpdateCompany() when updateCompany != null:
 return updateCompany(_that.company);case _:
@@ -225,7 +225,7 @@ String toString() {
 
 
 class _RegisterCompany implements CompanyBlocEvent {
-  const _RegisterCompany({required this.corporateName, required this.cnpj, required this.email, required this.street, required this.zipCode, required this.neighborhood, required this.city});
+  const _RegisterCompany({required this.corporateName, required this.cnpj, required this.email, required this.street, required this.zipCode, required this.neighborhood, required this.city, required this.state});
   
 
  final  String corporateName;
@@ -235,6 +235,7 @@ class _RegisterCompany implements CompanyBlocEvent {
  final  String zipCode;
  final  String neighborhood;
  final  String city;
+ final  String state;
 
 /// Create a copy of CompanyBlocEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -246,16 +247,16 @@ _$RegisterCompanyCopyWith<_RegisterCompany> get copyWith => __$RegisterCompanyCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterCompany&&(identical(other.corporateName, corporateName) || other.corporateName == corporateName)&&(identical(other.cnpj, cnpj) || other.cnpj == cnpj)&&(identical(other.email, email) || other.email == email)&&(identical(other.street, street) || other.street == street)&&(identical(other.zipCode, zipCode) || other.zipCode == zipCode)&&(identical(other.neighborhood, neighborhood) || other.neighborhood == neighborhood)&&(identical(other.city, city) || other.city == city));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterCompany&&(identical(other.corporateName, corporateName) || other.corporateName == corporateName)&&(identical(other.cnpj, cnpj) || other.cnpj == cnpj)&&(identical(other.email, email) || other.email == email)&&(identical(other.street, street) || other.street == street)&&(identical(other.zipCode, zipCode) || other.zipCode == zipCode)&&(identical(other.neighborhood, neighborhood) || other.neighborhood == neighborhood)&&(identical(other.city, city) || other.city == city)&&(identical(other.state, state) || other.state == state));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,corporateName,cnpj,email,street,zipCode,neighborhood,city);
+int get hashCode => Object.hash(runtimeType,corporateName,cnpj,email,street,zipCode,neighborhood,city,state);
 
 @override
 String toString() {
-  return 'CompanyBlocEvent.registerCompany(corporateName: $corporateName, cnpj: $cnpj, email: $email, street: $street, zipCode: $zipCode, neighborhood: $neighborhood, city: $city)';
+  return 'CompanyBlocEvent.registerCompany(corporateName: $corporateName, cnpj: $cnpj, email: $email, street: $street, zipCode: $zipCode, neighborhood: $neighborhood, city: $city, state: $state)';
 }
 
 
@@ -266,7 +267,7 @@ abstract mixin class _$RegisterCompanyCopyWith<$Res> implements $CompanyBlocEven
   factory _$RegisterCompanyCopyWith(_RegisterCompany value, $Res Function(_RegisterCompany) _then) = __$RegisterCompanyCopyWithImpl;
 @useResult
 $Res call({
- String corporateName, String cnpj, String email, String street, String zipCode, String neighborhood, String city
+ String corporateName, String cnpj, String email, String street, String zipCode, String neighborhood, String city, String state
 });
 
 
@@ -283,7 +284,7 @@ class __$RegisterCompanyCopyWithImpl<$Res>
 
 /// Create a copy of CompanyBlocEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? corporateName = null,Object? cnpj = null,Object? email = null,Object? street = null,Object? zipCode = null,Object? neighborhood = null,Object? city = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? corporateName = null,Object? cnpj = null,Object? email = null,Object? street = null,Object? zipCode = null,Object? neighborhood = null,Object? city = null,Object? state = null,}) {
   return _then(_RegisterCompany(
 corporateName: null == corporateName ? _self.corporateName : corporateName // ignore: cast_nullable_to_non_nullable
 as String,cnpj: null == cnpj ? _self.cnpj : cnpj // ignore: cast_nullable_to_non_nullable
@@ -292,6 +293,7 @@ as String,street: null == street ? _self.street : street // ignore: cast_nullabl
 as String,zipCode: null == zipCode ? _self.zipCode : zipCode // ignore: cast_nullable_to_non_nullable
 as String,neighborhood: null == neighborhood ? _self.neighborhood : neighborhood // ignore: cast_nullable_to_non_nullable
 as String,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

@@ -92,7 +92,8 @@ class _CompanyListState extends State<CompanyList> {
                     return CardListItem(
                       colorAvatar: Colors.teal,
                       title: company.corporateName,
-                      subTitle: 'CNPJ: ${company.cnpj}\n${company.email ?? "Sem email"}\n${company.city ?? ""}',
+                      subTitle:
+                          'CNPJ: ${company.cnpj}\n${company.email ?? "Sem email"}\n${company.address.city}',
                       onTap: () => widget.onCompanyTap(company),
                       onDelete: () => _confirmarExclusao(company),
                     );
@@ -122,8 +123,8 @@ class _CompanyListState extends State<CompanyList> {
             onPressed: () {
               Navigator.pop(context);
               context.read<CompanyBloc>().add(
-                    CompanyBlocEvent.deleteCompany(id: company.id),
-                  );
+                CompanyBlocEvent.deleteCompany(id: company.id),
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,

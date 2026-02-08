@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/company/bloc/company_bloc.dart';
@@ -29,7 +30,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
   late final TextEditingController _zipCodeController;
   late final TextEditingController _neighborhoodController;
   late final TextEditingController _cityController;
-
+  late final TextEditingController _stateController;
   @override
   Widget build(BuildContext context) {
     return BlocListener<CompanyBloc, CompanyBlocState>(
@@ -49,10 +50,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
           },
           companyError: (message) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: Colors.red,
-              ),
+              SnackBar(content: Text(message), backgroundColor: Colors.red),
             );
           },
         );
@@ -202,26 +200,80 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     _zipCodeController.dispose();
     _neighborhoodController.dispose();
     _cityController.dispose();
+    _stateController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    _corporateNameController =
-        TextEditingController(text: widget.company.corporateName);
+    _corporateNameController = TextEditingController(
+      text: widget.company.corporateName,
+    );
     // Formata o CNPJ para exibição
     _cnpjController = TextEditingController(
       text: _formatCnpjForDisplay(widget.company.cnpj),
     );
     _emailController = TextEditingController(text: widget.company.email ?? '');
-    _streetController =
-        TextEditingController(text: widget.company.street ?? '');
-    _zipCodeController =
-        TextEditingController(text: widget.company.zipCode ?? '');
-    _neighborhoodController =
-        TextEditingController(text: widget.company.neighborhood ?? '');
-    _cityController = TextEditingController(text: widget.company.city ?? '');
+    _streetController = TextEditingController(
+      text: widget.company.address.street,
+    );
+    _zipCodeController = TextEditingController(
+      text: widget.company.address.zipCode,
+    );
+    _neighborhoodController = TextEditingController(
+      text: widget.company.address.neighborhood,
+    );
+    _cityController = TextEditingController(text: widget.company.address.city);
+    _stateController = TextEditingController(
+      text: widget.company.address.state,
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: RichText(
+        text: TextSpan(
+          style: const TextStyle(color: Colors.black87, fontSize: 14),
+          children: [
+            TextSpan(
+              text: '$label: ',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(text: value),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Constrói o widget de informações do sistema
+  Widget _buildSystemInfo() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Informações do Sistema',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            _buildInfoRow('ID', widget.company.id.toString()),
+            _buildInfoRow(
+              'Data de Cadastro',
+              _formatDate(widget.company.registrationDate),
+            ),
+            _buildInfoRow(
+              'Última Atualização',
+              _formatDate(widget.company.lastUpdatedDate),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// Cancela a edição e volta para a tela anterior
@@ -230,13 +282,13 @@ class _CompanyEditViewState extends State<CompanyEditView> {
   }
 
   /// Formata um CNPJ (apenas dígitos) para o padrão XX.XXX.XXX/XXXX-XX
-  /// 
+  ///
   /// Se o CNPJ não tiver exatamente 14 dígitos, retorna o valor original
   /// sem formatação para indicar que há um problema com os dados.
   String _formatCnpjForDisplay(String cnpj) {
     // Remove caracteres não numéricos caso existam
     final cnpjLimpo = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
-    
+
     if (cnpjLimpo.length != 14) {
       return cnpj; // Retorna original se inválido
     }
@@ -258,8 +310,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
   void _salvarAlteracoes() {
     if (_formKey.currentState!.validate()) {
       // Normaliza o CNPJ (remove caracteres não numéricos)
-      final cnpjLimpo =
-          widget.company.cnpj.replaceAll(RegExp(r'[^0-9]'), '');
+      final cnpjLimpo = widget.company.cnpj.replaceAll(RegExp(r'[^0-9]'), '');
 
       // Converte strings vazias em null para campos opcionais
       final email = _emailController.text.trim();
@@ -267,68 +318,24 @@ class _CompanyEditViewState extends State<CompanyEditView> {
       final zipCode = _zipCodeController.text.trim();
       final neighborhood = _neighborhoodController.text.trim();
       final city = _cityController.text.trim();
-
+      final state = _stateController.text.trim();
       final updatedCompany = Company(
         id: widget.company.id,
         corporateName: _corporateNameController.text.trim(),
         cnpj: cnpjLimpo, // CNPJ normalizado (apenas dígitos)
         email: email.isEmpty ? null : email,
-        street: street.isEmpty ? null : street,
-        zipCode: zipCode.isEmpty ? null : zipCode,
-        neighborhood: neighborhood.isEmpty ? null : neighborhood,
-        city: city.isEmpty ? null : city,
-        registrationDate: widget.company.registrationDate,
-        lastUpdatedDate: widget.company.lastUpdatedDate,
+        address: Address(
+          street: street,
+          zipCode: zipCode,
+          neighborhood: neighborhood,
+          city: city,
+          state: state,
+        ),
       );
 
       context.read<CompanyBloc>().add(
-            CompanyBlocEvent.updateCompany(company: updatedCompany),
-          );
+        CompanyBlocEvent.updateCompany(company: updatedCompany),
+      );
     }
-  }
-
-  /// Constrói o widget de informações do sistema
-  Widget _buildSystemInfo() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Informações do Sistema',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
-            _buildInfoRow('ID', widget.company.id.toString()),
-            _buildInfoRow('Data de Cadastro',
-                _formatDate(widget.company.registrationDate)),
-            _buildInfoRow('Última Atualização',
-                _formatDate(widget.company.lastUpdatedDate)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: RichText(
-        text: TextSpan(
-          style: const TextStyle(color: Colors.black87, fontSize: 14),
-          children: [
-            TextSpan(
-              text: '$label: ',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextSpan(text: value),
-          ],
-        ),
-      ),
-    );
   }
 }

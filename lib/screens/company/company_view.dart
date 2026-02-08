@@ -27,7 +27,7 @@ class _CompanyViewState extends State<CompanyView> {
   final _neighborhoodController = TextEditingController();
   final _cityController = TextEditingController();
   final _searchCnpjController = TextEditingController();
-
+  final _stateController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocListener<CompanyBloc, CompanyBlocState>(
@@ -50,6 +50,7 @@ class _CompanyViewState extends State<CompanyView> {
                 _zipCodeController.clear();
                 _neighborhoodController.clear();
                 _cityController.clear();
+                _stateController.clear();
               case EnumStateCompanyLoaded.deleteCompany:
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -85,6 +86,7 @@ class _CompanyViewState extends State<CompanyView> {
                     zipCodeController: _zipCodeController,
                     neighborhoodController: _neighborhoodController,
                     cityController: _cityController,
+                    stateController: _stateController,
                     onSubmit: _adicionarEmpresa,
                   ),
                   const SizedBox(height: 32),
@@ -119,6 +121,7 @@ class _CompanyViewState extends State<CompanyView> {
     _neighborhoodController.dispose();
     _cityController.dispose();
     _searchCnpjController.dispose();
+    _stateController.dispose();
     super.dispose();
   }
 
@@ -129,6 +132,11 @@ class _CompanyViewState extends State<CompanyView> {
     context.read<CompanyBloc>().add(const CompanyBlocEvent.loadCompanies());
   }
 
+  /// Abre a tela de edição da empresa
+  void _abrirTelaEdicao(Company company) {
+    context.pushRoute(CompanyEditRoute(company: company));
+  }
+
   /// Adiciona uma nova empresa
   void _adicionarEmpresa() {
     if (_formKey.currentState!.validate()) {
@@ -136,17 +144,36 @@ class _CompanyViewState extends State<CompanyView> {
       final cnpjLimpo = _cnpjController.text.replaceAll(RegExp(r'[^0-9]'), '');
 
       context.read<CompanyBloc>().add(
-            CompanyBlocEvent.registerCompany(
-              corporateName: _corporateNameController.text,
-              cnpj: cnpjLimpo,
-              email: _emailController.text,
-              street: _streetController.text,
-              zipCode: _zipCodeController.text,
-              neighborhood: _neighborhoodController.text,
-              city: _cityController.text,
-            ),
-          );
+        CompanyBlocEvent.registerCompany(
+          corporateName: _corporateNameController.text,
+          cnpj: cnpjLimpo,
+          email: _emailController.text,
+          street: _streetController.text,
+          zipCode: _zipCodeController.text,
+          neighborhood: _neighborhoodController.text,
+          city: _cityController.text,
+          state: _stateController.text,
+        ),
+      );
     }
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: RichText(
+        text: TextSpan(
+          style: const TextStyle(color: Colors.black87, fontSize: 14),
+          children: [
+            TextSpan(
+              text: '$label: ',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(text: value),
+          ],
+        ),
+      ),
+    );
   }
 
   /// Busca uma empresa pelo CNPJ
@@ -166,8 +193,8 @@ class _CompanyViewState extends State<CompanyView> {
     final cnpjLimpo = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
 
     context.read<CompanyBloc>().add(
-          CompanyBlocEvent.findCompanyByCnpj(cnpj: cnpjLimpo),
-        );
+      CompanyBlocEvent.findCompanyByCnpj(cnpj: cnpjLimpo),
+    );
   }
 
   /// Mostra os detalhes de uma empresa
@@ -189,15 +216,14 @@ class _CompanyViewState extends State<CompanyView> {
               _buildDetailRow('CNPJ', company.cnpj),
               if (company.email != null && company.email!.isNotEmpty)
                 _buildDetailRow('Email', company.email!),
-              if (company.street != null && company.street!.isNotEmpty)
-                _buildDetailRow('Rua', company.street!),
-              if (company.zipCode != null && company.zipCode!.isNotEmpty)
-                _buildDetailRow('CEP', company.zipCode!),
-              if (company.neighborhood != null &&
-                  company.neighborhood!.isNotEmpty)
-                _buildDetailRow('Bairro', company.neighborhood!),
-              if (company.city != null && company.city!.isNotEmpty)
-                _buildDetailRow('Cidade', company.city!),
+              if (company.address.street.isNotEmpty)
+                _buildDetailRow('Rua', company.address.street),
+              if (company.address.zipCode.isNotEmpty)
+                _buildDetailRow('CEP', company.address.zipCode),
+              if (company.address.neighborhood.isNotEmpty)
+                _buildDetailRow('Bairro', company.address.neighborhood),
+              if (company.address.city.isNotEmpty)
+                _buildDetailRow('Cidade', company.address.city),
             ],
           ),
         ),
@@ -215,29 +241,6 @@ class _CompanyViewState extends State<CompanyView> {
             label: const Text('Editar'),
           ),
         ],
-      ),
-    );
-  }
-
-  /// Abre a tela de edição da empresa
-  void _abrirTelaEdicao(Company company) {
-    context.pushRoute(CompanyEditRoute(company: company));
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: RichText(
-        text: TextSpan(
-          style: const TextStyle(color: Colors.black87, fontSize: 14),
-          children: [
-            TextSpan(
-              text: '$label: ',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextSpan(text: value),
-          ],
-        ),
       ),
     );
   }
