@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/utils/text_formatters.dart';
 
 class AddressForm extends StatelessWidget {
   final TextEditingController streetController;
@@ -14,6 +15,13 @@ class AddressForm extends StatelessWidget {
     required this.cityController,
     required this.stateController,
   });
+
+  /// Lista de estados brasileiros (UF)
+  static const List<String> brazilianStates = [
+    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
+    'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN',
+    'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +53,7 @@ class AddressForm extends StatelessWidget {
                   hintText: '00000-000',
                 ),
                 keyboardType: TextInputType.number,
+                inputFormatters: [CepTextInputFormatter()],
               ),
             ),
             const SizedBox(width: 16),
@@ -70,13 +79,24 @@ class AddressForm extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        TextFormField(
-          controller: stateController,
+        DropdownButtonFormField<String>(
+          value: stateController.text.isEmpty ? null : stateController.text,
           decoration: const InputDecoration(
             labelText: 'Estado',
             border: OutlineInputBorder(),
-            prefixIcon: Icon(Icons.location_on),
+            prefixIcon: Icon(Icons.map),
           ),
+          items: brazilianStates.map((String state) {
+            return DropdownMenuItem<String>(
+              value: state,
+              child: Text(state),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            if (newValue != null) {
+              stateController.text = newValue;
+            }
+          },
         ),
       ],
     );
