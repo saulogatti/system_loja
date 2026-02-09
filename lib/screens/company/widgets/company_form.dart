@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/utils/constants.dart';
 import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 
@@ -72,7 +73,10 @@ class CompanyForm extends StatelessWidget {
                 return 'CNPJ é obrigatório';
               }
               // Remove caracteres não numéricos para validação
-              final cnpjNumeros = value.replaceAll(RegExp(r'[^0-9]'), '');
+              final cnpjNumeros = value.replaceAll(
+                Constants.nonNumericRegExp,
+                '',
+              );
               if (cnpjNumeros.length != 14) {
                 return 'CNPJ deve conter 14 dígitos';
               }

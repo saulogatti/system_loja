@@ -5,6 +5,7 @@ import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/company/bloc/company_bloc.dart';
+import 'package:system_loja/screens/utils/constants.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 
 /// Tela de edição de empresa com CNPJ em modo somente leitura
@@ -287,7 +288,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
   /// sem formatação para indicar que há um problema com os dados.
   String _formatCnpjForDisplay(String cnpj) {
     // Remove caracteres não numéricos caso existam
-    final cnpjLimpo = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
+    final cnpjLimpo = cnpj.replaceAll(Constants.nonNumericRegExp, '');
 
     if (cnpjLimpo.length != 14) {
       return cnpj; // Retorna original se inválido
@@ -310,7 +311,10 @@ class _CompanyEditViewState extends State<CompanyEditView> {
   void _salvarAlteracoes() {
     if (_formKey.currentState!.validate()) {
       // Normaliza o CNPJ (remove caracteres não numéricos)
-      final cnpjLimpo = widget.company.cnpj.replaceAll(RegExp(r'[^0-9]'), '');
+      final cnpjLimpo = widget.company.cnpj.replaceAll(
+        Constants.nonNumericRegExp,
+        '',
+      );
 
       // Converte strings vazias em null para campos opcionais
       final email = _emailController.text.trim();

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/models/company.dart';
 import '../route/route_app.gr.dart';
+import '../utils/constants.dart';
 import 'bloc/company_bloc.dart';
 import 'widgets/company_form.dart';
 import 'widgets/company_list.dart';
@@ -141,7 +142,10 @@ class _CompanyViewState extends State<CompanyView> {
   void _adicionarEmpresa() {
     if (_formKey.currentState!.validate()) {
       // Remove caracteres não numéricos do CNPJ
-      final cnpjLimpo = _cnpjController.text.replaceAll(RegExp(r'[^0-9]'), '');
+      final cnpjLimpo = _cnpjController.text.replaceAll(
+        Constants.nonNumericRegExp,
+        '',
+      );
 
       context.read<CompanyBloc>().add(
         CompanyBlocEvent.registerCompany(
@@ -190,7 +194,7 @@ class _CompanyViewState extends State<CompanyView> {
     }
 
     // Remove caracteres não numéricos do CNPJ
-    final cnpjLimpo = cnpj.replaceAll(RegExp(r'[^0-9]'), '');
+    final cnpjLimpo = cnpj.replaceAll(Constants.nonNumericRegExp, '');
 
     context.read<CompanyBloc>().add(
       CompanyBlocEvent.findCompanyByCnpj(cnpj: cnpjLimpo),
