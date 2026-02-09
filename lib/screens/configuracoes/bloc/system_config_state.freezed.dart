@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'configuration_data_state.dart';
+part of 'system_config_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,7 +12,7 @@ part of 'configuration_data_state.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$ConfigurationDataState {
+mixin _$SystemConfigState {
 
 
 
@@ -20,7 +20,7 @@ mixin _$ConfigurationDataState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConfigurationDataState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigState);
 }
 
 
@@ -29,20 +29,20 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ConfigurationDataState()';
+  return 'SystemConfigState()';
 }
 
 
 }
 
 /// @nodoc
-class $ConfigurationDataStateCopyWith<$Res>  {
-$ConfigurationDataStateCopyWith(ConfigurationDataState _, $Res Function(ConfigurationDataState) __);
+class $SystemConfigStateCopyWith<$Res>  {
+$SystemConfigStateCopyWith(SystemConfigState _, $Res Function(SystemConfigState) __);
 }
 
 
-/// Adds pattern-matching-related methods to [ConfigurationDataState].
-extension ConfigurationDataStatePatterns on ConfigurationDataState {
+/// Adds pattern-matching-related methods to [SystemConfigState].
+extension SystemConfigStatePatterns on SystemConfigState {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -174,7 +174,7 @@ return loaded(_that.data);case _:
 /// @nodoc
 
 
-class Initial implements ConfigurationDataState {
+class Initial implements SystemConfigState {
   const Initial();
   
 
@@ -194,7 +194,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ConfigurationDataState.initial()';
+  return 'SystemConfigState.initial()';
 }
 
 
@@ -206,13 +206,13 @@ String toString() {
 /// @nodoc
 
 
-class Loaded implements ConfigurationDataState {
+class Loaded implements SystemConfigState {
   const Loaded(this.data);
   
 
  final  SystemConfiguration data;
 
-/// Create a copy of ConfigurationDataState
+/// Create a copy of SystemConfigState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
@@ -231,14 +231,14 @@ int get hashCode => Object.hash(runtimeType,data);
 
 @override
 String toString() {
-  return 'ConfigurationDataState.loaded(data: $data)';
+  return 'SystemConfigState.loaded(data: $data)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $LoadedCopyWith<$Res> implements $ConfigurationDataStateCopyWith<$Res> {
+abstract mixin class $LoadedCopyWith<$Res> implements $SystemConfigStateCopyWith<$Res> {
   factory $LoadedCopyWith(Loaded value, $Res Function(Loaded) _then) = _$LoadedCopyWithImpl;
 @useResult
 $Res call({
@@ -257,7 +257,7 @@ class _$LoadedCopyWithImpl<$Res>
   final Loaded _self;
   final $Res Function(Loaded) _then;
 
-/// Create a copy of ConfigurationDataState
+/// Create a copy of SystemConfigState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? data = null,}) {
   return _then(Loaded(

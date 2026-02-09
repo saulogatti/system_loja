@@ -145,5 +145,9 @@ class RouteApp extends RootStackRouter {
       page: CompanyEditRoute.page,
       title: (context, data) => 'Edit Company',
     ),
+    AutoRoute(
+      page: SystemConfigRoute.page,
+      title: (context, data) => 'System Config',
+    ),
   ];
 }

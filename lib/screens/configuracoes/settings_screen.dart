@@ -110,6 +110,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           onPressed: () => _resetToDefault(context),
           child: const Text('Restaurar Dados'),
         ),
+        TextButton(
+          onPressed: () => _openSystemSettings(context),
+          child: const Text('Configurações do Sistema'),
+        ),
       ],
       body: BlocConsumer<SettingsBloc, SettingsState>(
         listener: (context, state) {
@@ -361,6 +365,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       final newConfig = config.copyWith(corPrimaria: selecionada);
       context.read<SettingsBloc>().add(UpdateSettingsEvent(newConfig));
     }
+  }
+
+  void _openSystemSettings(BuildContext context) {
+    context.router.push(const SystemConfigRoute());
   }
 
   /// Restaura configurações padrão

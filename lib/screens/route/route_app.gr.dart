@@ -24,9 +24,9 @@ import 'package:system_loja/screens/configuracoes/log_system_screen.dart'
 import 'package:system_loja/screens/configuracoes/logs_analytics_screen.dart'
     as _i9;
 import 'package:system_loja/screens/configuracoes/settings_screen.dart' as _i14;
-import 'package:system_loja/screens/configuracoes/usuario_screen.dart' as _i16;
-import 'package:system_loja/screens/configuracoes/widgets/system_config_widget.dart'
+import 'package:system_loja/screens/configuracoes/system_config_screen.dart'
     as _i15;
+import 'package:system_loja/screens/configuracoes/usuario_screen.dart' as _i16;
 import 'package:system_loja/screens/customer/customer_detail_screen.dart'
     as _i4;
 import 'package:system_loja/screens/customer/customer_view.dart' as _i5;
@@ -447,17 +447,17 @@ class SettingsRoute extends _i17.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i15.SystemConfigWidget]
-class SystemConfigWidget extends _i17.PageRouteInfo<void> {
-  const SystemConfigWidget({List<_i17.PageRouteInfo>? children})
-    : super(SystemConfigWidget.name, initialChildren: children);
+/// [_i15.SystemConfigScreen]
+class SystemConfigRoute extends _i17.PageRouteInfo<void> {
+  const SystemConfigRoute({List<_i17.PageRouteInfo>? children})
+    : super(SystemConfigRoute.name, initialChildren: children);
 
-  static const String name = 'SystemConfigWidget';
+  static const String name = 'SystemConfigRoute';
 
   static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
-      return const _i15.SystemConfigWidget();
+      return const _i15.SystemConfigScreen();
     },
   );
 }
