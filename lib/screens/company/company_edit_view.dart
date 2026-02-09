@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/company.dart';
-import 'package:system_loja/core/utils/text_formatters.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/company/bloc/company_bloc.dart';
 import 'package:system_loja/screens/utils/constants.dart';
