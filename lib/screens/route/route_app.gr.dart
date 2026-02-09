@@ -455,7 +455,7 @@ class UsuarioRoute extends _i16.PageRouteInfo<void> {
   static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
-      return const _i15.UsuarioScreen();
+      return _i16.WrappedRoute(child: const _i15.UsuarioScreen());
     },
   );
 }
