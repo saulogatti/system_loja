@@ -16,9 +16,9 @@ class HostScreen extends StatelessWidget {
           leading: AutoLeadingButton(),
         );
       },
-      routes: const [
+      routes: [
         HomeRoute(),
-        CustomerRoute(),
+        CustomerRoute(customer: null),
         CompanyRoute(),
         ProductInfoRoute(),
         SalesRoute(),
