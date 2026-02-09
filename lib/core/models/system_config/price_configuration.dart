@@ -8,14 +8,15 @@ enum PaymentMethodType { cash, card, pix, other }
 
 @JsonSerializable()
 class PriceConfiguration extends DefaultObject {
-  static drift.JsonTypeConverter2<PriceConfiguration, String,  Object?>
-  converter =  drift.TypeConverter.json2(
-        fromJson: (json) => PriceConfiguration.fromJson(json as Map<String, Object?>),
-        toJson: (address) => address.toJson(),
-      );
-  List<PaymentMethodType> types;
+  static drift.JsonTypeConverter2<PriceConfiguration, String, Object?>
+  converter = drift.TypeConverter.json2(
+    fromJson: (json) =>
+        PriceConfiguration.fromJson(json as Map<String, Object?>),
+    toJson: (address) => address.toJson(),
+  );
+  List<PaymentMethodType> types = [];
   PriceConfiguration({
-    this.types = const [],
+    required this.types,
     super.lastUpdatedDate,
     super.registrationDate,
     int? id,
@@ -27,5 +28,3 @@ class PriceConfiguration extends DefaultObject {
     return _$PriceConfigurationToJson(this);
   }
 }
-
- 

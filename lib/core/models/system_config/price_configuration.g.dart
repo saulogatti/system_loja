@@ -14,11 +14,9 @@ PriceConfiguration _$PriceConfigurationFromJson(Map<String, dynamic> json) =>
         final val = PriceConfiguration(
           types: $checkedConvert(
             'types',
-            (v) =>
-                (v as List<dynamic>?)
-                    ?.map((e) => $enumDecode(_$PaymentMethodTypeEnumMap, e))
-                    .toList() ??
-                const [],
+            (v) => (v as List<dynamic>)
+                .map((e) => $enumDecode(_$PaymentMethodTypeEnumMap, e))
+                .toList(),
           ),
           lastUpdatedDate: $checkedConvert(
             'last_updated_date',

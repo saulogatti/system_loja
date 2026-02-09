@@ -8,4 +8,5 @@ sealed class SystemConfigState with _$SystemConfigState {
   const factory SystemConfigState.initial() = SystemConfigStateInitial;
   const factory SystemConfigState.loaded(SystemConfiguration data) = SystemConfigStateLoaded;
   const factory SystemConfigState.error(String message) = SystemConfigStateError;
+  const factory SystemConfigState.loading() = SystemConfigStateLoading;
 }

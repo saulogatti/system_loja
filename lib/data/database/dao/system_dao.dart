@@ -16,6 +16,7 @@ class SystemDao extends DatabaseAccessor<SystemDatabase> with _$SystemDaoMixin {
   Future<void> saveSystemConfiguration(SystemConfiguration data) async {
     await into(systemRecords).insert(
       SystemRecordsCompanion(
+        id: Value(data.id),
         priceConfiguration: Value(data.priceConfiguration),
         registrationDate: Value(data.registrationDate),
         lastUpdatedDate: Value(data.lastUpdatedDate),

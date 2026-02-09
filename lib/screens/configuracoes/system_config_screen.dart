@@ -45,7 +45,11 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
       body: BlocConsumer<SystemConfigCubit, SystemConfigState>(
         listener: (context, state) {
           if (state is SystemConfigStateLoaded) {
-            selectedPaymentMethods = state.data.priceConfiguration.types;
+            selectedPaymentMethods = List.from(
+              state.data.priceConfiguration.types,
+              growable: true,
+            );
+            setState(() {});
           } else if (state is SystemConfigStateError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -57,6 +61,8 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
         },
         builder: (context, state) {
           switch (state) {
+            case SystemConfigStateLoading():
+              return const Center(child: CircularProgressIndicator());
             case SystemConfigStateError():
               return Center(child: Text(state.message));
             case SystemConfigStateLoaded():

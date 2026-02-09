@@ -55,13 +55,14 @@ extension SystemConfigStatePatterns on SystemConfigState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SystemConfigStateInitial value)?  initial,TResult Function( SystemConfigStateLoaded value)?  loaded,TResult Function( SystemConfigStateError value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SystemConfigStateInitial value)?  initial,TResult Function( SystemConfigStateLoaded value)?  loaded,TResult Function( SystemConfigStateError value)?  error,TResult Function( SystemConfigStateLoading value)?  loading,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case SystemConfigStateInitial() when initial != null:
 return initial(_that);case SystemConfigStateLoaded() when loaded != null:
 return loaded(_that);case SystemConfigStateError() when error != null:
-return error(_that);case _:
+return error(_that);case SystemConfigStateLoading() when loading != null:
+return loading(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SystemConfigStateInitial value)  initial,required TResult Function( SystemConfigStateLoaded value)  loaded,required TResult Function( SystemConfigStateError value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SystemConfigStateInitial value)  initial,required TResult Function( SystemConfigStateLoaded value)  loaded,required TResult Function( SystemConfigStateError value)  error,required TResult Function( SystemConfigStateLoading value)  loading,}){
 final _that = this;
 switch (_that) {
 case SystemConfigStateInitial():
 return initial(_that);case SystemConfigStateLoaded():
 return loaded(_that);case SystemConfigStateError():
-return error(_that);}
+return error(_that);case SystemConfigStateLoading():
+return loading(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -99,13 +101,14 @@ return error(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SystemConfigStateInitial value)?  initial,TResult? Function( SystemConfigStateLoaded value)?  loaded,TResult? Function( SystemConfigStateError value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SystemConfigStateInitial value)?  initial,TResult? Function( SystemConfigStateLoaded value)?  loaded,TResult? Function( SystemConfigStateError value)?  error,TResult? Function( SystemConfigStateLoading value)?  loading,}){
 final _that = this;
 switch (_that) {
 case SystemConfigStateInitial() when initial != null:
 return initial(_that);case SystemConfigStateLoaded() when loaded != null:
 return loaded(_that);case SystemConfigStateError() when error != null:
-return error(_that);case _:
+return error(_that);case SystemConfigStateLoading() when loading != null:
+return loading(_that);case _:
   return null;
 
 }
@@ -122,12 +125,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( SystemConfiguration data)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( SystemConfiguration data)?  loaded,TResult Function( String message)?  error,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SystemConfigStateInitial() when initial != null:
 return initial();case SystemConfigStateLoaded() when loaded != null:
 return loaded(_that.data);case SystemConfigStateError() when error != null:
-return error(_that.message);case _:
+return error(_that.message);case SystemConfigStateLoading() when loading != null:
+return loading();case _:
   return orElse();
 
 }
@@ -145,12 +149,13 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( SystemConfiguration data)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( SystemConfiguration data)  loaded,required TResult Function( String message)  error,required TResult Function()  loading,}) {final _that = this;
 switch (_that) {
 case SystemConfigStateInitial():
 return initial();case SystemConfigStateLoaded():
 return loaded(_that.data);case SystemConfigStateError():
-return error(_that.message);}
+return error(_that.message);case SystemConfigStateLoading():
+return loading();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -164,12 +169,13 @@ return error(_that.message);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( SystemConfiguration data)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( SystemConfiguration data)?  loaded,TResult? Function( String message)?  error,TResult? Function()?  loading,}) {final _that = this;
 switch (_that) {
 case SystemConfigStateInitial() when initial != null:
 return initial();case SystemConfigStateLoaded() when loaded != null:
 return loaded(_that.data);case SystemConfigStateError() when error != null:
-return error(_that.message);case _:
+return error(_that.message);case SystemConfigStateLoading() when loading != null:
+return loading();case _:
   return null;
 
 }
@@ -340,5 +346,37 @@ as String,
 
 
 }
+
+/// @nodoc
+
+
+class SystemConfigStateLoading implements SystemConfigState {
+  const SystemConfigStateLoading();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateLoading);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'SystemConfigState.loading()';
+}
+
+
+}
+
+
+
 
 // dart format on

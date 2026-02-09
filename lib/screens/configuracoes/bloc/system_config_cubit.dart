@@ -12,19 +12,31 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
   }
 
   Future<void> loadConfigurationData() async {
-    final configData = await _systemRepository.getSystemConfiguration();
-    if (configData != null) {
-      emit(SystemConfigState.loaded(configData));
+    emit(SystemConfigState.loading());
+    try {
+      final configData = await _systemRepository.getSystemConfiguration();
+      if (configData != null) {
+        emit(SystemConfigState.loaded(configData));
+      } else {
+        emit(SystemConfigState.error('Configuração não encontrada'));
+      }
+    } catch (e) {
+      emit(SystemConfigState.error(e.toString()));
     }
   }
 
   Future<void> saveConfigurationData({
     required List<PaymentMethodType> paymentMethods,
   }) async {
+    emit(SystemConfigState.loading());
     final data = SystemConfiguration(
       priceConfiguration: PriceConfiguration(types: paymentMethods),
     );
-    await _systemRepository.saveSystemConfiguration(data);
-    emit(SystemConfigState.loaded(data));
+    try {
+      await _systemRepository.saveSystemConfiguration(data);
+      emit(SystemConfigState.loaded(data));
+    } catch (e) {
+      emit(SystemConfigState.error(e.toString()));
+    }
   }
 }
