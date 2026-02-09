@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/system_errors/system_error.dart';
 import 'package:system_loja/data/cache/models/system_model/system_error_model.dart';
 import 'package:system_loja/data/cache/system_cache_manager.dart';
@@ -16,10 +18,30 @@ Future<void> reportError(Object error, StackTrace stackTrace) async {
 class SystemErrorManager {
   static final SystemErrorManager instance = SystemErrorManager._();
   final SystemCacheManager _cacheManager = SystemCacheManager();
-  SystemErrorManager._();
+  SystemErrorManager._() {
+    FlutterError.onError = (FlutterErrorDetails details) {
+      reportError(details.exception, details.stack ?? StackTrace.current);
+    };
+    PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+      reportError(error, stack);
+      return true;
+    };
+  }
+  Future<void> clearAllErrors() async {
+    await _cacheManager.clearErrors();
+  }
+
   Future<List<SystemError>> getAllErrors() async {
     final listLogs = await _cacheManager.retrieveAllErrors();
-    final list = listLogs.map((logError) => SystemError(message: logError.message, code: logError.code, stackTrace: logError.stackTrace)).toList();
+    final list = listLogs
+        .map(
+          (logError) => SystemError(
+            message: logError.message,
+            code: logError.code,
+            stackTrace: logError.stackTrace,
+          ),
+        )
+        .toList();
     return list;
   }
 
@@ -35,8 +57,5 @@ class SystemErrorManager {
       stackTrace: error.stackTrace,
     );
     await _cacheManager.saveError(error);
-  }
-  Future<void> clearAllErrors() async {
-    await _cacheManager.clearErrors();
   }
 }

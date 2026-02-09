@@ -1,7 +1,7 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/models/activity_log.dart';
-import 'package:system_loja/core/repository/system/log_repository.dart';
+import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/data/database/dao/users_dao.dart';
@@ -14,10 +14,10 @@ import '../../models/user.dart';
 /// e recarrega dados antes de salvar para prevenir perda de dados.
 /// Implementa funcionalidades de hash de senha para segurança.
 class UserRepository with LoggerClassMixin implements IUserRepository {
-  final LogRepository _logRepository;
+  final ILogRepository _logRepository;
   final UsersDao _usersDao;
   UserRepository({
-    required LogRepository logRepository,
+    required ILogRepository logRepository,
     required UsersDao usersDao,
   }) : _logRepository = logRepository,
        _usersDao = usersDao;

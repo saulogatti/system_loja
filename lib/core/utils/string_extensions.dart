@@ -239,7 +239,6 @@ extension ValidateDataCustomer on String {
   /// '123.456.789-09'.isValidCPF(); // true ou false
   /// ```
   bool isValidCPF() {
-    if (this == '111.111.111-11') return true; //TODO: retirar Caso Para debug
     final String cpf = replaceAll(Constants.nonNumericRegExp, '');
 
     if (cpf.length != 11 || Constants.cpfSameDigitRegExp.hasMatch(cpf)) {

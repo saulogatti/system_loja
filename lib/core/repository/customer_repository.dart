@@ -1,19 +1,19 @@
 import 'package:drift/remote.dart';
 import 'package:system_loja/core/interface/i_customer_repository.dart';
+import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/managers/exceptions/customer_exception.dart';
 import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/customer_dao.dart';
 
 class CustomerRepository implements ICustomerRepository {
-  final LogRepository _logRepository;
+  final ILogRepository _logRepository;
   final CustomerDao _customerDao;
 
   CustomerRepository({
-    required LogRepository logRepository,
+    required ILogRepository logRepository,
     required CustomerDao customerDao,
   }) : _logRepository = logRepository,
        _customerDao = customerDao;
