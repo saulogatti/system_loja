@@ -66,9 +66,9 @@
 </ol>)?, </span></li>
 <li><span class="parameter" id="maybeMap-param-loaded"><span class="type-annotation">TResult</span> <span class="parameter-name">loaded</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoaded</span> <span class="parameter-name">value</span></span></li>
 </ol>)?, </span></li>
-<li><span class="parameter" id="maybeMap-param-loadedCustomers"><span class="type-annotation">TResult</span> <span class="parameter-name">loadedCustomers</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoadedCustomers</span> <span class="parameter-name">value</span></span></li>
+<li><span class="parameter" id="maybeMap-param-loadedAll"><span class="type-annotation">TResult</span> <span class="parameter-name">loadedAll</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoadedAll</span> <span class="parameter-name">value</span></span></li>
 </ol>)?, </span></li>
-<li><span class="parameter" id="maybeMap-param-loadedProducts"><span class="type-annotation">TResult</span> <span class="parameter-name">loadedProducts</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoadedProducts</span> <span class="parameter-name">value</span></span></li>
+<li><span class="parameter" id="maybeMap-param-loadedCustomers"><span class="type-annotation">TResult</span> <span class="parameter-name">loadedCustomers</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoadedCustomers</span> <span class="parameter-name">value</span></span></li>
 </ol>)?, </span></li>
 <li><span class="parameter" id="maybeMap-param-loading"><span class="type-annotation">TResult</span> <span class="parameter-name">loading</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoading</span> <span class="parameter-name">value</span></span></li>
 </ol>)?, </span></li>
@@ -101,15 +101,15 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult maybeMap&lt;TResult extends Object?&gt;({TResult Function( SalesError value)?  error,TResult Function( SalesInitial value)?  initial,TResult Function( SalesLoaded value)?  loaded,TResult Function( SalesLoadedCustomers value)?  loadedCustomers,TResult Function( SalesLoadedProducts value)?  loadedProducts,TResult Function( SalesLoading value)?  loading,TResult Function( SalesLoadingProducts value)?  loadingProducts,TResult Function( SalesLoadProductsFailure value)?  loadProductsFailure,TResult Function( SalesSaved value)?  saved,required TResult orElse(),}){
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult maybeMap&lt;TResult extends Object?&gt;({TResult Function( SalesError value)?  error,TResult Function( SalesInitial value)?  initial,TResult Function( SalesLoaded value)?  loaded,TResult Function( SalesLoadedAll value)?  loadedAll,TResult Function( SalesLoadedCustomers value)?  loadedCustomers,TResult Function( SalesLoading value)?  loading,TResult Function( SalesLoadingProducts value)?  loadingProducts,TResult Function( SalesLoadProductsFailure value)?  loadProductsFailure,TResult Function( SalesSaved value)?  saved,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case SalesError() when error != null:
 return error(_that);case SalesInitial() when initial != null:
 return initial(_that);case SalesLoaded() when loaded != null:
-return loaded(_that);case SalesLoadedCustomers() when loadedCustomers != null:
-return loadedCustomers(_that);case SalesLoadedProducts() when loadedProducts != null:
-return loadedProducts(_that);case SalesLoading() when loading != null:
+return loaded(_that);case SalesLoadedAll() when loadedAll != null:
+return loadedAll(_that);case SalesLoadedCustomers() when loadedCustomers != null:
+return loadedCustomers(_that);case SalesLoading() when loading != null:
 return loading(_that);case SalesLoadingProducts() when loadingProducts != null:
 return loadingProducts(_that);case SalesLoadProductsFailure() when loadProductsFailure != null:
 return loadProductsFailure(_that);case SalesSaved() when saved != null:

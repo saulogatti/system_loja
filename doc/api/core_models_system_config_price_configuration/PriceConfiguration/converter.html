@@ -65,11 +65,12 @@
       
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static drift.JsonTypeConverter2&lt;PriceConfiguration, String,  Object?&gt;
-converter =  drift.TypeConverter.json2(
-      fromJson: (json) =&gt; PriceConfiguration.fromJson(json as Map&lt;String, Object?&gt;),
-      toJson: (address) =&gt; address.toJson(),
-    );</code></pre>
+  <pre class="language-dart"><code class="language-dart">static drift.JsonTypeConverter2&lt;PriceConfiguration, String, Object?&gt;
+converter = drift.TypeConverter.json2(
+  fromJson: (json) =&gt;
+      PriceConfiguration.fromJson(json as Map&lt;String, Object?&gt;),
+  toJson: (address) =&gt; address.toJson(),
+);</code></pre>
 </section>
 
 

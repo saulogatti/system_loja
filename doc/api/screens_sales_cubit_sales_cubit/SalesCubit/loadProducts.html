@@ -71,11 +71,23 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; loadProducts() async {
   emit(SalesState.loadingProducts());
+  final resultSales = await _salesRepository.loadAllSales();
   final result = await _productRepository.fetchProducts();
-
+  final resultMap = await _customerRepository.fetchMappedCustomers();
+  final resultSystem = await _systemRepository.getSystemConfiguration();
+  final customers = resultMap.asSuccess;
+  final invoices = resultSales.asSuccess;
+  final paymentMethods = resultSystem?.priceConfiguration.types ?? [];
   switch (result) {
     case ResultSuccess(result: final products):
-      emit(SalesState.loadedProducts(products: products));
+      emit(
+        SalesState.loadedAll(
+          products: products,
+          paymentMethods: paymentMethods,
+          customers: customers,
+          invoices: invoices,
+        ),
+      );
     case ResultError(resultError: final resultError):
       emit(
         SalesState.loadProductsFailure(

@@ -115,7 +115,7 @@ Widget build(BuildContext context) {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          &#39;Novo Cliente&#39;,
+          isEditMode ? &#39;Editar Cliente&#39; : &#39;Novo Cliente&#39;,
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 20),
@@ -134,7 +134,7 @@ Widget build(BuildContext context) {
         const SizedBox(height: 16),
         TextFormFieldCpf(
           cpfController: cpfController,
-          enable: true,
+          enable: !isEditMode, &#47;&#47; CPF desabilitado em modo de edição
           validatorOptions: (value) {
             if (value == null || value.trim().isEmpty) {
               return &#39;CPF é obrigatório&#39;;
@@ -160,14 +160,34 @@ Widget build(BuildContext context) {
           stateController: stateController,
         ),
         const SizedBox(height: 24),
-        ElevatedButton.icon(
-          onPressed: onSubmit,
-          icon: const Icon(Icons.add),
-          label: const Text(&#39;Adicionar Cliente&#39;),
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(16),
-            textStyle: const TextStyle(fontSize: 16),
-          ),
+        Row(
+          children: [
+            if (isEditMode &amp;&amp; onCancel != null) ...[
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: onCancel,
+                  icon: const Icon(Icons.cancel),
+                  label: const Text(&#39;Cancelar&#39;),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
+                    textStyle: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+            ],
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: onSubmit,
+                icon: Icon(isEditMode ? Icons.save : Icons.add),
+                label: Text(isEditMode ? &#39;Salvar Alterações&#39; : &#39;Adicionar Cliente&#39;),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     ),

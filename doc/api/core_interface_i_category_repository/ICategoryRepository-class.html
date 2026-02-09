@@ -55,6 +55,27 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Interface que define o contrato para operações de repositório de categorias.</p>
+<p>Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
+para entidades <a href="../core_models_category/Category-class.html">Category</a>, permitindo diferentes implementações de
+persistência (Drift, JSON, etc.).</p>
+<p>Todas as operações retornam <a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a> para tratamento type-safe
+de erros, exceto <a href="../core_interface_i_category_repository/ICategoryRepository/isCategoryInUse.html">isCategoryInUse</a> que retorna um booleano direto.</p>
+<p>Exemplo de uso:</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;CategoryRepository&gt;();
+final resultado = await repository.getCategoryById(1);
+if (resultado.isSuccessful) {
+  final category = resultado.asSuccess;
+  print('Categoria: ${category.name}');
+}
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_models_category/Category-class.html">Category</a> - modelo de domínio de categoria</li>
+<li><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a> - tipo de retorno para operações</li>
+</ul>
+</section>
 
 
     <section>
@@ -124,7 +145,7 @@
 
 </dt>
 <dd>
-  
+  Cria uma nova categoria no sistema.
   
 
 </dd>
@@ -137,7 +158,7 @@
 
 </dt>
 <dd>
-  
+  Remove uma categoria do sistema pelo ID.
   
 
 </dd>
@@ -150,7 +171,7 @@
 
 </dt>
 <dd>
-  
+  Retorna todas as categorias cadastradas no sistema.
   
 
 </dd>
@@ -163,7 +184,7 @@
 
 </dt>
 <dd>
-  
+  Busca uma categoria específica pelo ID.
   
 
 </dd>
@@ -176,7 +197,7 @@
 
 </dt>
 <dd>
-  
+  Busca uma categoria pelo nome.
   
 
 </dd>
@@ -189,7 +210,7 @@
 
 </dt>
 <dd>
-  
+  Verifica se a categoria está sendo utilizada por produtos.
   
 
 </dd>
@@ -228,7 +249,7 @@
 
 </dt>
 <dd>
-  
+  Atualiza os dados de uma categoria existente.
   
 
 </dd>

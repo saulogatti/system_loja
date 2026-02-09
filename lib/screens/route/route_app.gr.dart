@@ -15,6 +15,8 @@ import 'package:flutter/material.dart' as _i17;
 import 'package:system_loja/core/models/company.dart' as _i18;
 import 'package:system_loja/core/models/customer.dart' as _i19;
 import 'package:system_loja/core/models/product.dart' as _i20;
+import 'package:system_loja/core/models/system_config/price_configuration.dart'
+    as _i22;
 import 'package:system_loja/screens/categories/category_management_screen.dart'
     as _i1;
 import 'package:system_loja/screens/company/company_edit_view.dart' as _i2;
@@ -24,15 +26,15 @@ import 'package:system_loja/screens/configuracoes/log_system_screen.dart'
 import 'package:system_loja/screens/configuracoes/logs_analytics_screen.dart'
     as _i8;
 import 'package:system_loja/screens/configuracoes/settings_screen.dart' as _i13;
-import 'package:system_loja/screens/configuracoes/usuario_screen.dart' as _i15;
-import 'package:system_loja/screens/configuracoes/widgets/system_config_widget.dart'
+import 'package:system_loja/screens/configuracoes/system_config_screen.dart'
     as _i14;
+import 'package:system_loja/screens/configuracoes/usuario_screen.dart' as _i15;
 import 'package:system_loja/screens/customer/customer_view.dart' as _i4;
 import 'package:system_loja/screens/home/home_screen.dart' as _i5;
 import 'package:system_loja/screens/products/product_detail_screen.dart' as _i9;
 import 'package:system_loja/screens/products/product_screen.dart' as _i10;
 import 'package:system_loja/screens/route/route_app.dart' as _i6;
-import 'package:system_loja/screens/sales/cubit/sales_cubit.dart' as _i22;
+import 'package:system_loja/screens/sales/cubit/sales_cubit.dart' as _i23;
 import 'package:system_loja/screens/sales/sales_invoice_screen.dart' as _i11;
 import 'package:system_loja/screens/sales/sales_screen.dart' as _i12;
 
@@ -321,14 +323,16 @@ class ProductInfoRoute extends _i16.PageRouteInfo<void> {
 class SalesInvoiceRoute extends _i16.PageRouteInfo<SalesInvoiceRouteArgs> {
   SalesInvoiceRoute({
     _i17.Key? key,
+    required List<_i22.PaymentMethodType> paymentMethods,
     required Map<int, _i19.Customer> customers,
-    required _i22.SalesCubit salesCubit,
+    required _i23.SalesCubit salesCubit,
     required List<_i20.Product> products,
     List<_i16.PageRouteInfo>? children,
   }) : super(
          SalesInvoiceRoute.name,
          args: SalesInvoiceRouteArgs(
            key: key,
+           paymentMethods: paymentMethods,
            customers: customers,
            salesCubit: salesCubit,
            products: products,
@@ -344,6 +348,7 @@ class SalesInvoiceRoute extends _i16.PageRouteInfo<SalesInvoiceRouteArgs> {
       final args = data.argsAs<SalesInvoiceRouteArgs>();
       return _i11.SalesInvoiceScreen(
         key: args.key,
+        paymentMethods: args.paymentMethods,
         customers: args.customers,
         salesCubit: args.salesCubit,
         products: args.products,
@@ -355,6 +360,7 @@ class SalesInvoiceRoute extends _i16.PageRouteInfo<SalesInvoiceRouteArgs> {
 class SalesInvoiceRouteArgs {
   const SalesInvoiceRouteArgs({
     this.key,
+    required this.paymentMethods,
     required this.customers,
     required this.salesCubit,
     required this.products,
@@ -362,15 +368,17 @@ class SalesInvoiceRouteArgs {
 
   final _i17.Key? key;
 
+  final List<_i22.PaymentMethodType> paymentMethods;
+
   final Map<int, _i19.Customer> customers;
 
-  final _i22.SalesCubit salesCubit;
+  final _i23.SalesCubit salesCubit;
 
   final List<_i20.Product> products;
 
   @override
   String toString() {
-    return 'SalesInvoiceRouteArgs{key: $key, customers: $customers, salesCubit: $salesCubit, products: $products}';
+    return 'SalesInvoiceRouteArgs{key: $key, paymentMethods: $paymentMethods, customers: $customers, salesCubit: $salesCubit, products: $products}';
   }
 
   @override
@@ -378,6 +386,10 @@ class SalesInvoiceRouteArgs {
     if (identical(this, other)) return true;
     if (other is! SalesInvoiceRouteArgs) return false;
     return key == other.key &&
+        const _i21.ListEquality<_i22.PaymentMethodType>().equals(
+          paymentMethods,
+          other.paymentMethods,
+        ) &&
         const _i21.MapEquality<int, _i19.Customer>().equals(
           customers,
           other.customers,
@@ -392,6 +404,7 @@ class SalesInvoiceRouteArgs {
   @override
   int get hashCode =>
       key.hashCode ^
+      const _i21.ListEquality<_i22.PaymentMethodType>().hash(paymentMethods) ^
       const _i21.MapEquality<int, _i19.Customer>().hash(customers) ^
       salesCubit.hashCode ^
       const _i21.ListEquality<_i20.Product>().hash(products);
@@ -430,17 +443,17 @@ class SettingsRoute extends _i16.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i14.SystemConfigWidget]
-class SystemConfigWidget extends _i16.PageRouteInfo<void> {
-  const SystemConfigWidget({List<_i16.PageRouteInfo>? children})
-    : super(SystemConfigWidget.name, initialChildren: children);
+/// [_i14.SystemConfigScreen]
+class SystemConfigRoute extends _i16.PageRouteInfo<void> {
+  const SystemConfigRoute({List<_i16.PageRouteInfo>? children})
+    : super(SystemConfigRoute.name, initialChildren: children);
 
-  static const String name = 'SystemConfigWidget';
+  static const String name = 'SystemConfigRoute';
 
   static _i16.PageInfo page = _i16.PageInfo(
     name,
     builder: (data) {
-      return const _i14.SystemConfigWidget();
+      return _i16.WrappedRoute(child: const _i14.SystemConfigScreen());
     },
   );
 }

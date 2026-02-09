@@ -27,7 +27,7 @@
     <li><a href="../../index.html">system_loja</a></li>
     <li><a href="../../screens_route_route_app.gr/">screens\route\route_app.gr.dart</a></li>
     <li><a href="../../screens_route_route_app.gr/CustomerRoute-class.html">CustomerRoute</a></li>
-    <li class="self-crumb">CustomerRoute.new const constructor</li>
+    <li class="self-crumb">CustomerRoute.new constructor</li>
   </ol>
   <div class="self-name">CustomerRoute.new</div>
   <form class="search navbar-right" role="search">
@@ -53,8 +53,10 @@
 </h1></div>
 
     <section class="multi-line-signature">
-      const
-      <span class="name ">CustomerRoute</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-children"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span>&gt;</span>?</span> <span class="parameter-name">children</span>, </span></li>
+      
+      <span class="name ">CustomerRoute</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
+<li><span class="parameter" id="-param-customer"><span class="type-annotation"><a href="../../core_models_customer/Customer-class.html">Customer</a>?</span> <span class="parameter-name">customer</span>, </span></li>
+<li><span class="parameter" id="-param-children"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span>&gt;</span>?</span> <span class="parameter-name">children</span>, </span></li>
 </ol>})
     </section>
     
@@ -63,8 +65,15 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">const CustomerRoute({List&lt;_i17.PageRouteInfo&gt;? children})
-  : super(CustomerRoute.name, initialChildren: children);</code></pre>
+  <pre class="language-dart"><code class="language-dart">CustomerRoute({
+  _i17.Key? key,
+  _i19.Customer? customer,
+  List&lt;_i16.PageRouteInfo&gt;? children,
+}) : super(
+       CustomerRoute.name,
+       args: CustomerRouteArgs(key: key, customer: customer),
+       initialChildren: children,
+     );</code></pre>
 </section>
 
 
@@ -80,7 +89,7 @@
     <li><a href="../../index.html">system_loja</a></li>
     <li><a href="../../screens_route_route_app.gr/">route_app.gr</a></li>
     <li><a href="../../screens_route_route_app.gr/CustomerRoute-class.html">CustomerRoute</a></li>
-    <li class="self-crumb">CustomerRoute.new const constructor</li>
+    <li class="self-crumb">CustomerRoute.new constructor</li>
 </ol>
 
     <h5>CustomerRoute class</h5>

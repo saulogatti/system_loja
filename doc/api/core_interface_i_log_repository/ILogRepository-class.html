@@ -55,6 +55,37 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Interface que define o contrato para operações de repositório de logs.</p>
+<p>Esta interface gerencia o sistema de auditoria da aplicação, registrando
+todas as ações relevantes dos usuários (criação, edição, exclusão).</p>
+<p>Os logs podem ser filtrados por usuário, tipo de ação, entidade ou período,
+facilitando análise e auditoria do sistema.</p>
+<p>Exemplo de uso:</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;LogRepository&gt;();
+
+// Registrar uma ação
+await repository.createAndLogEntry(
+  logActionType: ActionType.create,
+  entityName: 'Customer',
+  userId: 1,
+  username: 'admin',
+  logDetails: 'Cliente João Silva cadastrado',
+);
+
+// Consultar logs de um período
+final resultado = await repository.fetchLogsByPeriod(
+  DateTime(2024, 1, 1),
+  DateTime(2024, 12, 31),
+);
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_models_activity_log/ActivityLog-class.html">ActivityLog</a> - modelo de domínio de log de atividade</li>
+<li><a href="../core_models_activity_log/ActionType.html">ActionType</a> - enum com tipos de ações registradas</li>
+<li><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a> - tipo de retorno para operações</li>
+</ul>
+</section>
 
 
     <section>
@@ -124,7 +155,7 @@
 
 </dt>
 <dd>
-  
+  Remove logs antigos anteriores à data de corte especificada.
   
 
 </dd>
@@ -137,7 +168,7 @@
 
 </dt>
 <dd>
-  
+  Cria e registra uma nova entrada de log de forma simplificada.
   
 
 </dd>
@@ -150,7 +181,7 @@
 
 </dt>
 <dd>
-  
+  Retorna todos os logs de atividade do sistema.
   
 
 </dd>
@@ -163,7 +194,7 @@
 
 </dt>
 <dd>
-  
+  Retorna logs filtrados por tipo de ação.
   
 
 </dd>
@@ -176,7 +207,7 @@
 
 </dt>
 <dd>
-  
+  Retorna logs filtrados por entidade.
   
 
 </dd>
@@ -189,7 +220,7 @@
 
 </dt>
 <dd>
-  
+  Retorna logs de um período específico.
   
 
 </dd>
@@ -202,7 +233,7 @@
 
 </dt>
 <dd>
-  
+  Retorna logs de um usuário específico.
   
 
 </dd>
@@ -228,7 +259,7 @@
 
 </dt>
 <dd>
-  
+  Salva um log de atividade diretamente.
   
 
 </dd>

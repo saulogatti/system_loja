@@ -55,6 +55,26 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Interface que define o contrato para operações de configuração do sistema.</p>
+<p>Esta interface gerencia as configurações técnicas e de baixo nível
+do sistema, como parâmetros de inicialização, versões, e metadados.</p>
+<p>Diferente de <a href="../core_interface_i_configuration_repository/IConfigurationRepository-class.html">IConfigurationRepository</a> que gerencia preferências do
+usuário, esta interface lida com configurações do próprio sistema.</p>
+<p>Exemplo de uso:</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;SystemRepository&gt;();
+
+final config = await repository.getSystemConfiguration();
+if (config != null) {
+  print('Versão: ${config.version}');
+}
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a> - modelo de configuração do sistema</li>
+<li><a href="../core_interface_i_configuration_repository/IConfigurationRepository-class.html">IConfigurationRepository</a> - para configurações de usuário</li>
+</ul>
+</section>
 
 
     <section>
@@ -124,7 +144,7 @@
 
 </dt>
 <dd>
-  
+  Retorna as configurações atuais do sistema.
   
 
 </dd>
@@ -150,7 +170,7 @@
 
 </dt>
 <dd>
-  
+  Salva as configurações do sistema.
   
 
 </dd>

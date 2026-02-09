@@ -4,7 +4,7 @@ import 'package:system_loja/data/database/dao/system_dao.dart';
 
 class SystemRepository implements ISystemRepository {
   final SystemDao _systemDao;
-  SystemRepository(this._systemDao);
+  SystemRepository({required SystemDao systemDao}) : _systemDao = systemDao;
   @override
   Future<SystemConfiguration?> getSystemConfiguration() {
     return _systemDao.getSystemConfiguration();

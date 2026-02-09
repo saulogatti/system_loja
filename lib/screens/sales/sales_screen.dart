@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/product.dart';
+import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/sales_state.dart';
@@ -20,7 +21,7 @@ class SalesView extends StatefulWidget {
 
 class _SalesViewState extends State<SalesView> {
   List<Product> _productList = [];
-  // REMOVIDO: final SalesCubit _salesCubit = SalesCubit();
+  List<PaymentMethodType> _paymentMethods = [];
 
   Map<int, Invoice> _mapToNotaFiscal = {};
 
@@ -65,8 +66,12 @@ class _SalesViewState extends State<SalesView> {
               break;
             case SalesLoadedCustomers():
               _mapCustomers = state.customers;
-            case SalesLoadedProducts():
+            case SalesLoadedAll():
               _productList = state.products;
+              _mapCustomers = state.customers;
+              _mapToNotaFiscal = state.invoices;
+              _paymentMethods = state.paymentMethods;
+              break;
             case SalesLoading():
               // Loading overlay é exibido através do builder
               break;
@@ -256,7 +261,7 @@ class _SalesViewState extends State<SalesView> {
     }
 
     final result = await context.router.root.push(
-      SalesInvoiceRoute(
+      SalesInvoiceRoute( paymentMethods: _paymentMethods,
         products: _productList,
         salesCubit: salesCubit,
         customers: _mapCustomers,

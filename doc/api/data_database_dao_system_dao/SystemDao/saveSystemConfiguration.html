@@ -68,23 +68,15 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; saveSystemConfiguration(SystemConfiguration data) async {
-  final existingConfig = await getSystemConfiguration();
-  if (existingConfig == null) {
-    await into(systemRecords).insert(
-      SystemRecordsCompanion(
-        priceConfiguration: Value(data.priceConfiguration),
-        registrationDate: Value(data.registrationDate),
-        lastUpdatedDate: Value(data.lastUpdatedDate),
-      ),
-    );
-  } else {
-    await update(systemRecords).replace(
-      SystemRecordsCompanion(
-        id: Value(existingConfig.id),
-        priceConfiguration: Value(data.priceConfiguration),
-      ),
-    );
-  }
+  await into(systemRecords).insert(
+    SystemRecordsCompanion(
+      id: Value(data.id),
+      priceConfiguration: Value(data.priceConfiguration),
+      registrationDate: Value(data.registrationDate),
+      lastUpdatedDate: Value(data.lastUpdatedDate),
+    ),
+    mode: InsertMode.insertOrReplace,
+  );
 }</code></pre>
 </section>
 

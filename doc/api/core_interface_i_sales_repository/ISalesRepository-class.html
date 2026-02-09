@@ -55,6 +55,37 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Interface que define o contrato para operações de repositório de vendas.</p>
+<p>Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
+para entidades <a href="../core_models_invoice/Invoice-class.html">Invoice</a> (Nota Fiscal/Venda), permitindo diferentes
+implementações de persistência (Drift, JSON, etc.).</p>
+<p>Inclui funcionalidades especiais como geração automática de número de
+nota fiscal e validação de números únicos.</p>
+<p>Exemplo de uso:</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;SalesRepository&gt;();
+
+// Gerar número de nota fiscal
+final numeroNota = await repository.generateInvoiceNumber();
+
+// Criar venda
+final invoice = Invoice(
+  invoiceNumber: numeroNota.asSuccess,
+  customerId: 1,
+  items: [...],
+);
+
+final resultado = await repository.saveSale(invoice);
+if (resultado.isSuccessful) {
+  print('Venda registrada com sucesso');
+}
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_models_invoice/Invoice-class.html">Invoice</a> - modelo de domínio de nota fiscal/venda</li>
+<li><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a> - tipo de retorno para operações</li>
+</ul>
+</section>
 
 
     <section>
@@ -124,7 +155,7 @@
 
 </dt>
 <dd>
-  
+  Remove uma venda do sistema pelo ID.
   
 
 </dd>
@@ -137,7 +168,7 @@
 
 </dt>
 <dd>
-  
+  Gera um novo número de nota fiscal único.
   
 
 </dd>
@@ -150,7 +181,7 @@
 
 </dt>
 <dd>
-  
+  Obtém o próximo ID disponível para uma venda.
   
 
 </dd>
@@ -163,7 +194,7 @@
 
 </dt>
 <dd>
-  
+  Busca uma venda específica pelo ID.
   
 
 </dd>
@@ -176,7 +207,7 @@
 
 </dt>
 <dd>
-  
+  Retorna todas as vendas mapeadas por ID.
   
 
 </dd>
@@ -202,7 +233,7 @@
 
 </dt>
 <dd>
-  
+  Salva uma nova venda no sistema.
   
 
 </dd>
@@ -228,7 +259,7 @@
 
 </dt>
 <dd>
-  
+  Atualiza os dados de uma venda existente.
   
 
 </dd>
@@ -241,7 +272,7 @@
 
 </dt>
 <dd>
-  
+  Valida se um número de nota fiscal é único no sistema.
   
 
 </dd>

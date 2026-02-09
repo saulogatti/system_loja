@@ -55,6 +55,22 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Interface que define o contrato para operações de configuração do sistema.</p>
+<p>Esta interface gerencia as configurações globais da aplicação,
+incluindo backup/restore, limpeza de dados e reset de configurações.</p>
+<p>Todas as operações retornam <a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a> atualizado após a execução,
+permitindo atualização imediata da UI.</p>
+<p>Exemplo de uso:</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;ConfigurationRepository&gt;();
+final novasConfigs = await repository.loadConfiguration();
+print('Tema escuro: ${novasConfigs.darkMode}');
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a> - modelo de configurações da aplicação</li>
+</ul>
+</section>
 
 
     <section>
@@ -124,7 +140,7 @@
 
 </dt>
 <dd>
-  
+  Limpa todos os dados do sistema (clientes, produtos, vendas, etc.).
   
 
 </dd>
@@ -137,7 +153,7 @@
 
 </dt>
 <dd>
-  
+  Remove logs antigos do sistema baseado na configuração de retenção.
   
 
 </dd>
@@ -150,7 +166,7 @@
 
 </dt>
 <dd>
-  
+  Cria um backup completo do sistema no diretório especificado.
   
 
 </dd>
@@ -163,7 +179,7 @@
 
 </dt>
 <dd>
-  
+  Carrega as configurações salvas da aplicação.
   
 
 </dd>
@@ -189,7 +205,7 @@
 
 </dt>
 <dd>
-  
+  Restaura todas as configurações para os valores padrão.
   
 
 </dd>
@@ -202,7 +218,7 @@
 
 </dt>
 <dd>
-  
+  Restaura um backup previamente criado.
   
 
 </dd>
@@ -228,7 +244,7 @@
 
 </dt>
 <dd>
-  
+  Atualiza as configurações da aplicação.
   
 
 </dd>

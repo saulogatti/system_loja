@@ -6,7 +6,7 @@ part 'system_configuration.g.dart';
 
 @JsonSerializable()
 class SystemConfiguration extends DefaultObject {
-  PriceConfiguration priceConfiguration = PriceConfiguration();
+  PriceConfiguration priceConfiguration = PriceConfiguration(types: []);
 
   List<String> productCategories = [];
   SystemConfiguration({
@@ -15,25 +15,11 @@ class SystemConfiguration extends DefaultObject {
     super.lastUpdatedDate,
     super.registrationDate,
     int? id,
-  }) : priceConfiguration = priceConfiguration ?? PriceConfiguration(),
+  }) : priceConfiguration = priceConfiguration ?? PriceConfiguration(types: []),
        productCategories = productCategories ?? [],
        super(id: id ?? -1);
   factory SystemConfiguration.fromJson(Map<String, dynamic> json) =>
       _$SystemConfigurationFromJson(json);
-  SystemConfiguration copyWith({
-    PriceConfiguration? priceConfiguration,
-    List<String>? productCategories,
-
-    int? id,
-  }) {
-    return SystemConfiguration(
-      priceConfiguration: priceConfiguration ?? this.priceConfiguration,
-      productCategories: productCategories ?? this.productCategories,
-      lastUpdatedDate: lastUpdatedDate,
-      registrationDate: registrationDate,
-      id: id ?? this.id,
-    );
-  }
 
   @override
   Map<String, dynamic> toJson() => _$SystemConfigurationToJson(this);

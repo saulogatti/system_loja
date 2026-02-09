@@ -7,6 +7,7 @@ import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
+import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/screens/company/bloc/company_bloc.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_cubit.dart';
@@ -43,6 +44,7 @@ class SystemLojaApp extends StatelessWidget {
             appInjection.get<ISalesRepository>(),
             appInjection.get<ICustomerRepository>(),
             appInjection.get<IProductRepository>(),
+            appInjection.get<ISystemRepository>(),
           ),
         ),
         BlocProvider<UserCubit>(
