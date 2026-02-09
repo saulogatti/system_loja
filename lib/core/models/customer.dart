@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/default/people_data.dart';
 
 part 'customer.g.dart';
@@ -7,18 +8,19 @@ part 'customer.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Customer extends PeopleData {
   final String cpf;
-  String? phone;
-  String? address;
+  final String? phone;
+  final Address address;
   Customer({
     required super.id,
     required super.name,
     super.email,
     required this.cpf,
     this.phone,
-    this.address,
+    Address? address,
+
     super.registrationDate,
     super.lastUpdatedDate,
-  });
+  }) : address = address ?? Address();
 
   /// Cria um objeto a partir de JSON
   factory Customer.fromJson(Map<String, dynamic> json) =>

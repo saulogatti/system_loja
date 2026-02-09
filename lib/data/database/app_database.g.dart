@@ -252,6 +252,45 @@ class $CompanyRecordsTable extends CompanyRecords
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $CompanyRecordsTable(this.attachedDatabase, [this._alias]);
+  @override
+  late final GeneratedColumnWithTypeConverter<Address?, String> address =
+      GeneratedColumn<String>(
+        'address',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<Address?>($CompanyRecordsTable.$converteraddressn);
+  static const VerificationMeta _cnpjMeta = const VerificationMeta('cnpj');
+  @override
+  late final GeneratedColumn<String> cnpj = GeneratedColumn<String>(
+    'cnpj',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _corporateNameMeta = const VerificationMeta(
+    'corporateName',
+  );
+  @override
+  late final GeneratedColumn<String> corporateName = GeneratedColumn<String>(
+    'corporate_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _emailMeta = const VerificationMeta('email');
+  @override
+  late final GeneratedColumn<String> email = GeneratedColumn<String>(
+    'email',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -265,76 +304,18 @@ class $CompanyRecordsTable extends CompanyRecords
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _corporateNameMeta = const VerificationMeta(
-    'corporateName',
+  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
+    'lastUpdatedDate',
   );
   @override
-  late final GeneratedColumn<String> corporateName = GeneratedColumn<String>(
-    'corporate_name',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _cnpjMeta = const VerificationMeta('cnpj');
-  @override
-  late final GeneratedColumn<String> cnpj = GeneratedColumn<String>(
-    'cnpj',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
-  );
-  static const VerificationMeta _emailMeta = const VerificationMeta('email');
-  @override
-  late final GeneratedColumn<String> email = GeneratedColumn<String>(
-    'email',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _streetMeta = const VerificationMeta('street');
-  @override
-  late final GeneratedColumn<String> street = GeneratedColumn<String>(
-    'street',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _zipCodeMeta = const VerificationMeta(
-    'zipCode',
-  );
-  @override
-  late final GeneratedColumn<String> zipCode = GeneratedColumn<String>(
-    'zip_code',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _neighborhoodMeta = const VerificationMeta(
-    'neighborhood',
-  );
-  @override
-  late final GeneratedColumn<String> neighborhood = GeneratedColumn<String>(
-    'neighborhood',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _cityMeta = const VerificationMeta('city');
-  @override
-  late final GeneratedColumn<String> city = GeneratedColumn<String>(
-    'city',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
+  late final GeneratedColumn<DateTime> lastUpdatedDate =
+      GeneratedColumn<DateTime>(
+        'last_updated_date',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
   static const VerificationMeta _registrationDateMeta = const VerificationMeta(
     'registrationDate',
   );
@@ -348,30 +329,15 @@ class $CompanyRecordsTable extends CompanyRecords
         requiredDuringInsert: false,
         defaultValue: currentDateAndTime,
       );
-  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
-    'lastUpdatedDate',
-  );
-  @override
-  late final GeneratedColumn<DateTime> lastUpdatedDate =
-      GeneratedColumn<DateTime>(
-        'last_updated_date',
-        aliasedName,
-        true,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-      );
   @override
   List<GeneratedColumn> get $columns => [
-    id,
-    corporateName,
+    address,
     cnpj,
+    corporateName,
     email,
-    street,
-    zipCode,
-    neighborhood,
-    city,
-    registrationDate,
+    id,
     lastUpdatedDate,
+    registrationDate,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -385,8 +351,13 @@ class $CompanyRecordsTable extends CompanyRecords
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    if (data.containsKey('cnpj')) {
+      context.handle(
+        _cnpjMeta,
+        cnpj.isAcceptableOrUnknown(data['cnpj']!, _cnpjMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_cnpjMeta);
     }
     if (data.containsKey('corporate_name')) {
       context.handle(
@@ -399,45 +370,22 @@ class $CompanyRecordsTable extends CompanyRecords
     } else if (isInserting) {
       context.missing(_corporateNameMeta);
     }
-    if (data.containsKey('cnpj')) {
-      context.handle(
-        _cnpjMeta,
-        cnpj.isAcceptableOrUnknown(data['cnpj']!, _cnpjMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_cnpjMeta);
-    }
     if (data.containsKey('email')) {
       context.handle(
         _emailMeta,
         email.isAcceptableOrUnknown(data['email']!, _emailMeta),
       );
     }
-    if (data.containsKey('street')) {
-      context.handle(
-        _streetMeta,
-        street.isAcceptableOrUnknown(data['street']!, _streetMeta),
-      );
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('zip_code')) {
+    if (data.containsKey('last_updated_date')) {
       context.handle(
-        _zipCodeMeta,
-        zipCode.isAcceptableOrUnknown(data['zip_code']!, _zipCodeMeta),
-      );
-    }
-    if (data.containsKey('neighborhood')) {
-      context.handle(
-        _neighborhoodMeta,
-        neighborhood.isAcceptableOrUnknown(
-          data['neighborhood']!,
-          _neighborhoodMeta,
+        _lastUpdatedDateMeta,
+        lastUpdatedDate.isAcceptableOrUnknown(
+          data['last_updated_date']!,
+          _lastUpdatedDateMeta,
         ),
-      );
-    }
-    if (data.containsKey('city')) {
-      context.handle(
-        _cityMeta,
-        city.isAcceptableOrUnknown(data['city']!, _cityMeta),
       );
     }
     if (data.containsKey('registration_date')) {
@@ -446,15 +394,6 @@ class $CompanyRecordsTable extends CompanyRecords
         registrationDate.isAcceptableOrUnknown(
           data['registration_date']!,
           _registrationDateMeta,
-        ),
-      );
-    }
-    if (data.containsKey('last_updated_date')) {
-      context.handle(
-        _lastUpdatedDateMeta,
-        lastUpdatedDate.isAcceptableOrUnknown(
-          data['last_updated_date']!,
-          _lastUpdatedDateMeta,
         ),
       );
     }
@@ -483,21 +422,11 @@ class $CompanyRecordsTable extends CompanyRecords
         DriftSqlType.string,
         data['${effectivePrefix}email'],
       ),
-      street: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}street'],
-      ),
-      zipCode: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}zip_code'],
-      ),
-      neighborhood: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}neighborhood'],
-      ),
-      city: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}city'],
+      address: $CompanyRecordsTable.$converteraddressn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}address'],
+        ),
       ),
       registrationDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -514,128 +443,105 @@ class $CompanyRecordsTable extends CompanyRecords
   $CompanyRecordsTable createAlias(String alias) {
     return $CompanyRecordsTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<Address, String, Object?> $converteraddress =
+      Address.converter;
+  static JsonTypeConverter2<Address?, String?, Object?> $converteraddressn =
+      JsonTypeConverter2.asNullable($converteraddress);
 }
 
 class CompanyRecordsCompanion extends UpdateCompanion<Company> {
-  final Value<int> id;
-  final Value<String> corporateName;
+  final Value<Address?> address;
   final Value<String> cnpj;
+  final Value<String> corporateName;
   final Value<String?> email;
-  final Value<String?> street;
-  final Value<String?> zipCode;
-  final Value<String?> neighborhood;
-  final Value<String?> city;
-  final Value<DateTime> registrationDate;
+  final Value<int> id;
   final Value<DateTime?> lastUpdatedDate;
+  final Value<DateTime> registrationDate;
   const CompanyRecordsCompanion({
-    this.id = const Value.absent(),
-    this.corporateName = const Value.absent(),
+    this.address = const Value.absent(),
     this.cnpj = const Value.absent(),
+    this.corporateName = const Value.absent(),
     this.email = const Value.absent(),
-    this.street = const Value.absent(),
-    this.zipCode = const Value.absent(),
-    this.neighborhood = const Value.absent(),
-    this.city = const Value.absent(),
-    this.registrationDate = const Value.absent(),
+    this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
+    this.registrationDate = const Value.absent(),
   });
   CompanyRecordsCompanion.insert({
-    this.id = const Value.absent(),
-    required String corporateName,
+    this.address = const Value.absent(),
     required String cnpj,
+    required String corporateName,
     this.email = const Value.absent(),
-    this.street = const Value.absent(),
-    this.zipCode = const Value.absent(),
-    this.neighborhood = const Value.absent(),
-    this.city = const Value.absent(),
-    this.registrationDate = const Value.absent(),
+    this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
-  }) : corporateName = Value(corporateName),
-       cnpj = Value(cnpj);
+    this.registrationDate = const Value.absent(),
+  }) : cnpj = Value(cnpj),
+       corporateName = Value(corporateName);
   static Insertable<Company> custom({
-    Expression<int>? id,
-    Expression<String>? corporateName,
+    Expression<String>? address,
     Expression<String>? cnpj,
+    Expression<String>? corporateName,
     Expression<String>? email,
-    Expression<String>? street,
-    Expression<String>? zipCode,
-    Expression<String>? neighborhood,
-    Expression<String>? city,
-    Expression<DateTime>? registrationDate,
+    Expression<int>? id,
     Expression<DateTime>? lastUpdatedDate,
+    Expression<DateTime>? registrationDate,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (corporateName != null) 'corporate_name': corporateName,
+      if (address != null) 'address': address,
       if (cnpj != null) 'cnpj': cnpj,
+      if (corporateName != null) 'corporate_name': corporateName,
       if (email != null) 'email': email,
-      if (street != null) 'street': street,
-      if (zipCode != null) 'zip_code': zipCode,
-      if (neighborhood != null) 'neighborhood': neighborhood,
-      if (city != null) 'city': city,
-      if (registrationDate != null) 'registration_date': registrationDate,
+      if (id != null) 'id': id,
       if (lastUpdatedDate != null) 'last_updated_date': lastUpdatedDate,
+      if (registrationDate != null) 'registration_date': registrationDate,
     });
   }
 
   CompanyRecordsCompanion copyWith({
-    Value<int>? id,
-    Value<String>? corporateName,
+    Value<Address?>? address,
     Value<String>? cnpj,
+    Value<String>? corporateName,
     Value<String?>? email,
-    Value<String?>? street,
-    Value<String?>? zipCode,
-    Value<String?>? neighborhood,
-    Value<String?>? city,
-    Value<DateTime>? registrationDate,
+    Value<int>? id,
     Value<DateTime?>? lastUpdatedDate,
+    Value<DateTime>? registrationDate,
   }) {
     return CompanyRecordsCompanion(
-      id: id ?? this.id,
-      corporateName: corporateName ?? this.corporateName,
+      address: address ?? this.address,
       cnpj: cnpj ?? this.cnpj,
+      corporateName: corporateName ?? this.corporateName,
       email: email ?? this.email,
-      street: street ?? this.street,
-      zipCode: zipCode ?? this.zipCode,
-      neighborhood: neighborhood ?? this.neighborhood,
-      city: city ?? this.city,
-      registrationDate: registrationDate ?? this.registrationDate,
+      id: id ?? this.id,
       lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
+      registrationDate: registrationDate ?? this.registrationDate,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (corporateName.present) {
-      map['corporate_name'] = Variable<String>(corporateName.value);
+    if (address.present) {
+      map['address'] = Variable<String>(
+        $CompanyRecordsTable.$converteraddressn.toSql(address.value),
+      );
     }
     if (cnpj.present) {
       map['cnpj'] = Variable<String>(cnpj.value);
     }
+    if (corporateName.present) {
+      map['corporate_name'] = Variable<String>(corporateName.value);
+    }
     if (email.present) {
       map['email'] = Variable<String>(email.value);
     }
-    if (street.present) {
-      map['street'] = Variable<String>(street.value);
-    }
-    if (zipCode.present) {
-      map['zip_code'] = Variable<String>(zipCode.value);
-    }
-    if (neighborhood.present) {
-      map['neighborhood'] = Variable<String>(neighborhood.value);
-    }
-    if (city.present) {
-      map['city'] = Variable<String>(city.value);
-    }
-    if (registrationDate.present) {
-      map['registration_date'] = Variable<DateTime>(registrationDate.value);
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
     }
     if (lastUpdatedDate.present) {
       map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate.value);
+    }
+    if (registrationDate.present) {
+      map['registration_date'] = Variable<DateTime>(registrationDate.value);
     }
     return map;
   }
@@ -643,16 +549,13 @@ class CompanyRecordsCompanion extends UpdateCompanion<Company> {
   @override
   String toString() {
     return (StringBuffer('CompanyRecordsCompanion(')
-          ..write('id: $id, ')
-          ..write('corporateName: $corporateName, ')
+          ..write('address: $address, ')
           ..write('cnpj: $cnpj, ')
+          ..write('corporateName: $corporateName, ')
           ..write('email: $email, ')
-          ..write('street: $street, ')
-          ..write('zipCode: $zipCode, ')
-          ..write('neighborhood: $neighborhood, ')
-          ..write('city: $city, ')
-          ..write('registrationDate: $registrationDate, ')
-          ..write('lastUpdatedDate: $lastUpdatedDate')
+          ..write('id: $id, ')
+          ..write('lastUpdatedDate: $lastUpdatedDate, ')
+          ..write('registrationDate: $registrationDate')
           ..write(')'))
         .toString();
   }
@@ -664,17 +567,15 @@ class $CustomerRecordsTable extends CustomerRecords
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $CustomerRecordsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _addressMeta = const VerificationMeta(
-    'address',
-  );
   @override
-  late final GeneratedColumn<String> address = GeneratedColumn<String>(
-    'address',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
+  late final GeneratedColumnWithTypeConverter<Address?, String> address =
+      GeneratedColumn<String>(
+        'address',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<Address?>($CustomerRecordsTable.$converteraddressn);
   static const VerificationMeta _cpfMeta = const VerificationMeta('cpf');
   @override
   late final GeneratedColumn<String> cpf = GeneratedColumn<String>(
@@ -715,9 +616,10 @@ class $CustomerRecordsTable extends CustomerRecords
       GeneratedColumn<DateTime>(
         'last_updated_date',
         aliasedName,
-        true,
+        false,
         type: DriftSqlType.dateTime,
         requiredDuringInsert: false,
+        defaultValue: currentDateAndTime,
       );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
@@ -773,12 +675,6 @@ class $CustomerRecordsTable extends CustomerRecords
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('address')) {
-      context.handle(
-        _addressMeta,
-        address.isAcceptableOrUnknown(data['address']!, _addressMeta),
-      );
-    }
     if (data.containsKey('cpf')) {
       context.handle(
         _cpfMeta,
@@ -857,9 +753,11 @@ class $CustomerRecordsTable extends CustomerRecords
         DriftSqlType.string,
         data['${effectivePrefix}phone'],
       ),
-      address: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}address'],
+      address: $CustomerRecordsTable.$converteraddressn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}address'],
+        ),
       ),
       registrationDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -868,7 +766,7 @@ class $CustomerRecordsTable extends CustomerRecords
       lastUpdatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_updated_date'],
-      ),
+      )!,
     );
   }
 
@@ -876,14 +774,19 @@ class $CustomerRecordsTable extends CustomerRecords
   $CustomerRecordsTable createAlias(String alias) {
     return $CustomerRecordsTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<Address, String, Object?> $converteraddress =
+      Address.converter;
+  static JsonTypeConverter2<Address?, String?, Object?> $converteraddressn =
+      JsonTypeConverter2.asNullable($converteraddress);
 }
 
 class CustomerRecordsCompanion extends UpdateCompanion<Customer> {
-  final Value<String?> address;
+  final Value<Address?> address;
   final Value<String> cpf;
   final Value<String?> email;
   final Value<int> id;
-  final Value<DateTime?> lastUpdatedDate;
+  final Value<DateTime> lastUpdatedDate;
   final Value<String> name;
   final Value<String?> phone;
   final Value<DateTime> registrationDate;
@@ -931,11 +834,11 @@ class CustomerRecordsCompanion extends UpdateCompanion<Customer> {
   }
 
   CustomerRecordsCompanion copyWith({
-    Value<String?>? address,
+    Value<Address?>? address,
     Value<String>? cpf,
     Value<String?>? email,
     Value<int>? id,
-    Value<DateTime?>? lastUpdatedDate,
+    Value<DateTime>? lastUpdatedDate,
     Value<String>? name,
     Value<String?>? phone,
     Value<DateTime>? registrationDate,
@@ -956,7 +859,9 @@ class CustomerRecordsCompanion extends UpdateCompanion<Customer> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (address.present) {
-      map['address'] = Variable<String>(address.value);
+      map['address'] = Variable<String>(
+        $CustomerRecordsTable.$converteraddressn.toSql(address.value),
+      );
     }
     if (cpf.present) {
       map['cpf'] = Variable<String>(cpf.value);
@@ -2572,6 +2477,296 @@ class InvoiceItemsRecordsCompanion extends UpdateCompanion<InvoiceItemsRecord> {
   }
 }
 
+class $AddressRecordsTable extends AddressRecords
+    with TableInfo<$AddressRecordsTable, Address> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AddressRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _cityMeta = const VerificationMeta('city');
+  @override
+  late final GeneratedColumn<String> city = GeneratedColumn<String>(
+    'city',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
+    'lastUpdatedDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastUpdatedDate =
+      GeneratedColumn<DateTime>(
+        'last_updated_date',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _neighborhoodMeta = const VerificationMeta(
+    'neighborhood',
+  );
+  @override
+  late final GeneratedColumn<String> neighborhood = GeneratedColumn<String>(
+    'neighborhood',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _stateMeta = const VerificationMeta('state');
+  @override
+  late final GeneratedColumn<String> state = GeneratedColumn<String>(
+    'state',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _streetMeta = const VerificationMeta('street');
+  @override
+  late final GeneratedColumn<String> street = GeneratedColumn<String>(
+    'street',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _zipCodeMeta = const VerificationMeta(
+    'zipCode',
+  );
+  @override
+  late final GeneratedColumn<String> zipCode = GeneratedColumn<String>(
+    'zip_code',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    city,
+    lastUpdatedDate,
+    neighborhood,
+    state,
+    street,
+    zipCode,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'address_records';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Address> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('city')) {
+      context.handle(
+        _cityMeta,
+        city.isAcceptableOrUnknown(data['city']!, _cityMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_cityMeta);
+    }
+    if (data.containsKey('last_updated_date')) {
+      context.handle(
+        _lastUpdatedDateMeta,
+        lastUpdatedDate.isAcceptableOrUnknown(
+          data['last_updated_date']!,
+          _lastUpdatedDateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('neighborhood')) {
+      context.handle(
+        _neighborhoodMeta,
+        neighborhood.isAcceptableOrUnknown(
+          data['neighborhood']!,
+          _neighborhoodMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_neighborhoodMeta);
+    }
+    if (data.containsKey('state')) {
+      context.handle(
+        _stateMeta,
+        state.isAcceptableOrUnknown(data['state']!, _stateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_stateMeta);
+    }
+    if (data.containsKey('street')) {
+      context.handle(
+        _streetMeta,
+        street.isAcceptableOrUnknown(data['street']!, _streetMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_streetMeta);
+    }
+    if (data.containsKey('zip_code')) {
+      context.handle(
+        _zipCodeMeta,
+        zipCode.isAcceptableOrUnknown(data['zip_code']!, _zipCodeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_zipCodeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  Address map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Address(
+      street: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}street'],
+      )!,
+      zipCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}zip_code'],
+      )!,
+      neighborhood: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}neighborhood'],
+      )!,
+      city: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}city'],
+      )!,
+      state: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}state'],
+      )!,
+    );
+  }
+
+  @override
+  $AddressRecordsTable createAlias(String alias) {
+    return $AddressRecordsTable(attachedDatabase, alias);
+  }
+}
+
+class AddressRecordsCompanion extends UpdateCompanion<Address> {
+  final Value<String> city;
+  final Value<DateTime?> lastUpdatedDate;
+  final Value<String> neighborhood;
+  final Value<String> state;
+  final Value<String> street;
+  final Value<String> zipCode;
+  final Value<int> rowid;
+  const AddressRecordsCompanion({
+    this.city = const Value.absent(),
+    this.lastUpdatedDate = const Value.absent(),
+    this.neighborhood = const Value.absent(),
+    this.state = const Value.absent(),
+    this.street = const Value.absent(),
+    this.zipCode = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AddressRecordsCompanion.insert({
+    required String city,
+    this.lastUpdatedDate = const Value.absent(),
+    required String neighborhood,
+    required String state,
+    required String street,
+    required String zipCode,
+    this.rowid = const Value.absent(),
+  }) : city = Value(city),
+       neighborhood = Value(neighborhood),
+       state = Value(state),
+       street = Value(street),
+       zipCode = Value(zipCode);
+  static Insertable<Address> custom({
+    Expression<String>? city,
+    Expression<DateTime>? lastUpdatedDate,
+    Expression<String>? neighborhood,
+    Expression<String>? state,
+    Expression<String>? street,
+    Expression<String>? zipCode,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (city != null) 'city': city,
+      if (lastUpdatedDate != null) 'last_updated_date': lastUpdatedDate,
+      if (neighborhood != null) 'neighborhood': neighborhood,
+      if (state != null) 'state': state,
+      if (street != null) 'street': street,
+      if (zipCode != null) 'zip_code': zipCode,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AddressRecordsCompanion copyWith({
+    Value<String>? city,
+    Value<DateTime?>? lastUpdatedDate,
+    Value<String>? neighborhood,
+    Value<String>? state,
+    Value<String>? street,
+    Value<String>? zipCode,
+    Value<int>? rowid,
+  }) {
+    return AddressRecordsCompanion(
+      city: city ?? this.city,
+      lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
+      neighborhood: neighborhood ?? this.neighborhood,
+      state: state ?? this.state,
+      street: street ?? this.street,
+      zipCode: zipCode ?? this.zipCode,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (city.present) {
+      map['city'] = Variable<String>(city.value);
+    }
+    if (lastUpdatedDate.present) {
+      map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate.value);
+    }
+    if (neighborhood.present) {
+      map['neighborhood'] = Variable<String>(neighborhood.value);
+    }
+    if (state.present) {
+      map['state'] = Variable<String>(state.value);
+    }
+    if (street.present) {
+      map['street'] = Variable<String>(street.value);
+    }
+    if (zipCode.present) {
+      map['zip_code'] = Variable<String>(zipCode.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AddressRecordsCompanion(')
+          ..write('city: $city, ')
+          ..write('lastUpdatedDate: $lastUpdatedDate, ')
+          ..write('neighborhood: $neighborhood, ')
+          ..write('state: $state, ')
+          ..write('street: $street, ')
+          ..write('zipCode: $zipCode, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2589,6 +2784,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $InvoiceItemsRecordsTable invoiceItemsRecords =
       $InvoiceItemsRecordsTable(this);
+  late final $AddressRecordsTable addressRecords = $AddressRecordsTable(this);
   late final CategoryDao categoryDao = CategoryDao(this as AppDatabase);
   late final CompanyDao companyDao = CompanyDao(this as AppDatabase);
   late final CustomerDao customerDao = CustomerDao(this as AppDatabase);
@@ -2597,6 +2793,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final InvoiceItemDao invoiceItemDao = InvoiceItemDao(
     this as AppDatabase,
   );
+  late final AddressDao addressDao = AddressDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2608,6 +2805,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     productsRecords,
     invoicesRecords,
     invoiceItemsRecords,
+    addressRecords,
   ];
 }
 
@@ -2930,29 +3128,23 @@ typedef $$CategoriesRecordsTableProcessedTableManager =
     >;
 typedef $$CompanyRecordsTableCreateCompanionBuilder =
     CompanyRecordsCompanion Function({
-      Value<int> id,
-      required String corporateName,
+      Value<Address?> address,
       required String cnpj,
+      required String corporateName,
       Value<String?> email,
-      Value<String?> street,
-      Value<String?> zipCode,
-      Value<String?> neighborhood,
-      Value<String?> city,
-      Value<DateTime> registrationDate,
+      Value<int> id,
       Value<DateTime?> lastUpdatedDate,
+      Value<DateTime> registrationDate,
     });
 typedef $$CompanyRecordsTableUpdateCompanionBuilder =
     CompanyRecordsCompanion Function({
-      Value<int> id,
-      Value<String> corporateName,
+      Value<Address?> address,
       Value<String> cnpj,
+      Value<String> corporateName,
       Value<String?> email,
-      Value<String?> street,
-      Value<String?> zipCode,
-      Value<String?> neighborhood,
-      Value<String?> city,
-      Value<DateTime> registrationDate,
+      Value<int> id,
       Value<DateTime?> lastUpdatedDate,
+      Value<DateTime> registrationDate,
     });
 
 class $$CompanyRecordsTableFilterComposer
@@ -2964,8 +3156,14 @@ class $$CompanyRecordsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
+  ColumnWithTypeConverterFilters<Address?, Address, String> get address =>
+      $composableBuilder(
+        column: $table.address,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<String> get cnpj => $composableBuilder(
+    column: $table.cnpj,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2974,43 +3172,23 @@ class $$CompanyRecordsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get cnpj => $composableBuilder(
-    column: $table.cnpj,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<String> get email => $composableBuilder(
     column: $table.email,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get street => $composableBuilder(
-    column: $table.street,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get zipCode => $composableBuilder(
-    column: $table.zipCode,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get neighborhood => $composableBuilder(
-    column: $table.neighborhood,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get city => $composableBuilder(
-    column: $table.city,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
     builder: (column) => ColumnFilters(column),
   );
 
   ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
     column: $table.lastUpdatedDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -3024,13 +3202,8 @@ class $$CompanyRecordsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get corporateName => $composableBuilder(
-    column: $table.corporateName,
+  ColumnOrderings<String> get address => $composableBuilder(
+    column: $table.address,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3039,38 +3212,28 @@ class $$CompanyRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get corporateName => $composableBuilder(
+    column: $table.corporateName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get email => $composableBuilder(
     column: $table.email,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get street => $composableBuilder(
-    column: $table.street,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get zipCode => $composableBuilder(
-    column: $table.zipCode,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get neighborhood => $composableBuilder(
-    column: $table.neighborhood,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get city => $composableBuilder(
-    column: $table.city,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
     builder: (column) => ColumnOrderings(column),
   );
 
   ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
     column: $table.lastUpdatedDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -3084,41 +3247,30 @@ class $$CompanyRecordsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
+  GeneratedColumnWithTypeConverter<Address?, String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get cnpj =>
+      $composableBuilder(column: $table.cnpj, builder: (column) => column);
 
   GeneratedColumn<String> get corporateName => $composableBuilder(
     column: $table.corporateName,
     builder: (column) => column,
   );
 
-  GeneratedColumn<String> get cnpj =>
-      $composableBuilder(column: $table.cnpj, builder: (column) => column);
-
   GeneratedColumn<String> get email =>
       $composableBuilder(column: $table.email, builder: (column) => column);
 
-  GeneratedColumn<String> get street =>
-      $composableBuilder(column: $table.street, builder: (column) => column);
-
-  GeneratedColumn<String> get zipCode =>
-      $composableBuilder(column: $table.zipCode, builder: (column) => column);
-
-  GeneratedColumn<String> get neighborhood => $composableBuilder(
-    column: $table.neighborhood,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get city =>
-      $composableBuilder(column: $table.city, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => column,
-  );
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
     column: $table.lastUpdatedDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
     builder: (column) => column,
   );
 }
@@ -3156,51 +3308,39 @@ class $$CompanyRecordsTableTableManager
               $$CompanyRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                Value<String> corporateName = const Value.absent(),
+                Value<Address?> address = const Value.absent(),
                 Value<String> cnpj = const Value.absent(),
+                Value<String> corporateName = const Value.absent(),
                 Value<String?> email = const Value.absent(),
-                Value<String?> street = const Value.absent(),
-                Value<String?> zipCode = const Value.absent(),
-                Value<String?> neighborhood = const Value.absent(),
-                Value<String?> city = const Value.absent(),
-                Value<DateTime> registrationDate = const Value.absent(),
+                Value<int> id = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
+                Value<DateTime> registrationDate = const Value.absent(),
               }) => CompanyRecordsCompanion(
-                id: id,
-                corporateName: corporateName,
+                address: address,
                 cnpj: cnpj,
+                corporateName: corporateName,
                 email: email,
-                street: street,
-                zipCode: zipCode,
-                neighborhood: neighborhood,
-                city: city,
-                registrationDate: registrationDate,
+                id: id,
                 lastUpdatedDate: lastUpdatedDate,
+                registrationDate: registrationDate,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                required String corporateName,
+                Value<Address?> address = const Value.absent(),
                 required String cnpj,
+                required String corporateName,
                 Value<String?> email = const Value.absent(),
-                Value<String?> street = const Value.absent(),
-                Value<String?> zipCode = const Value.absent(),
-                Value<String?> neighborhood = const Value.absent(),
-                Value<String?> city = const Value.absent(),
-                Value<DateTime> registrationDate = const Value.absent(),
+                Value<int> id = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
+                Value<DateTime> registrationDate = const Value.absent(),
               }) => CompanyRecordsCompanion.insert(
-                id: id,
-                corporateName: corporateName,
+                address: address,
                 cnpj: cnpj,
+                corporateName: corporateName,
                 email: email,
-                street: street,
-                zipCode: zipCode,
-                neighborhood: neighborhood,
-                city: city,
-                registrationDate: registrationDate,
+                id: id,
                 lastUpdatedDate: lastUpdatedDate,
+                registrationDate: registrationDate,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -3226,22 +3366,22 @@ typedef $$CompanyRecordsTableProcessedTableManager =
     >;
 typedef $$CustomerRecordsTableCreateCompanionBuilder =
     CustomerRecordsCompanion Function({
-      Value<String?> address,
+      Value<Address?> address,
       required String cpf,
       Value<String?> email,
       Value<int> id,
-      Value<DateTime?> lastUpdatedDate,
+      Value<DateTime> lastUpdatedDate,
       required String name,
       Value<String?> phone,
       Value<DateTime> registrationDate,
     });
 typedef $$CustomerRecordsTableUpdateCompanionBuilder =
     CustomerRecordsCompanion Function({
-      Value<String?> address,
+      Value<Address?> address,
       Value<String> cpf,
       Value<String?> email,
       Value<int> id,
-      Value<DateTime?> lastUpdatedDate,
+      Value<DateTime> lastUpdatedDate,
       Value<String> name,
       Value<String?> phone,
       Value<DateTime> registrationDate,
@@ -3256,10 +3396,11 @@ class $$CustomerRecordsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<String> get address => $composableBuilder(
-    column: $table.address,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnWithTypeConverterFilters<Address?, Address, String> get address =>
+      $composableBuilder(
+        column: $table.address,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   ColumnFilters<String> get cpf => $composableBuilder(
     column: $table.cpf,
@@ -3356,7 +3497,7 @@ class $$CustomerRecordsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<String> get address =>
+  GeneratedColumnWithTypeConverter<Address?, String> get address =>
       $composableBuilder(column: $table.address, builder: (column) => column);
 
   GeneratedColumn<String> get cpf =>
@@ -3418,11 +3559,11 @@ class $$CustomerRecordsTableTableManager
               $$CustomerRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<String?> address = const Value.absent(),
+                Value<Address?> address = const Value.absent(),
                 Value<String> cpf = const Value.absent(),
                 Value<String?> email = const Value.absent(),
                 Value<int> id = const Value.absent(),
-                Value<DateTime?> lastUpdatedDate = const Value.absent(),
+                Value<DateTime> lastUpdatedDate = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<String?> phone = const Value.absent(),
                 Value<DateTime> registrationDate = const Value.absent(),
@@ -3438,11 +3579,11 @@ class $$CustomerRecordsTableTableManager
               ),
           createCompanionCallback:
               ({
-                Value<String?> address = const Value.absent(),
+                Value<Address?> address = const Value.absent(),
                 required String cpf,
                 Value<String?> email = const Value.absent(),
                 Value<int> id = const Value.absent(),
-                Value<DateTime?> lastUpdatedDate = const Value.absent(),
+                Value<DateTime> lastUpdatedDate = const Value.absent(),
                 required String name,
                 Value<String?> phone = const Value.absent(),
                 Value<DateTime> registrationDate = const Value.absent(),
@@ -4474,6 +4615,228 @@ typedef $$InvoiceItemsRecordsTableProcessedTableManager =
       InvoiceItemsRecord,
       PrefetchHooks Function()
     >;
+typedef $$AddressRecordsTableCreateCompanionBuilder =
+    AddressRecordsCompanion Function({
+      required String city,
+      Value<DateTime?> lastUpdatedDate,
+      required String neighborhood,
+      required String state,
+      required String street,
+      required String zipCode,
+      Value<int> rowid,
+    });
+typedef $$AddressRecordsTableUpdateCompanionBuilder =
+    AddressRecordsCompanion Function({
+      Value<String> city,
+      Value<DateTime?> lastUpdatedDate,
+      Value<String> neighborhood,
+      Value<String> state,
+      Value<String> street,
+      Value<String> zipCode,
+      Value<int> rowid,
+    });
+
+class $$AddressRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $AddressRecordsTable> {
+  $$AddressRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get city => $composableBuilder(
+    column: $table.city,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get neighborhood => $composableBuilder(
+    column: $table.neighborhood,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get street => $composableBuilder(
+    column: $table.street,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get zipCode => $composableBuilder(
+    column: $table.zipCode,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$AddressRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $AddressRecordsTable> {
+  $$AddressRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get city => $composableBuilder(
+    column: $table.city,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get neighborhood => $composableBuilder(
+    column: $table.neighborhood,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get state => $composableBuilder(
+    column: $table.state,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get street => $composableBuilder(
+    column: $table.street,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get zipCode => $composableBuilder(
+    column: $table.zipCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$AddressRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AddressRecordsTable> {
+  $$AddressRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get city =>
+      $composableBuilder(column: $table.city, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get neighborhood => $composableBuilder(
+    column: $table.neighborhood,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get state =>
+      $composableBuilder(column: $table.state, builder: (column) => column);
+
+  GeneratedColumn<String> get street =>
+      $composableBuilder(column: $table.street, builder: (column) => column);
+
+  GeneratedColumn<String> get zipCode =>
+      $composableBuilder(column: $table.zipCode, builder: (column) => column);
+}
+
+class $$AddressRecordsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AddressRecordsTable,
+          Address,
+          $$AddressRecordsTableFilterComposer,
+          $$AddressRecordsTableOrderingComposer,
+          $$AddressRecordsTableAnnotationComposer,
+          $$AddressRecordsTableCreateCompanionBuilder,
+          $$AddressRecordsTableUpdateCompanionBuilder,
+          (
+            Address,
+            BaseReferences<_$AppDatabase, $AddressRecordsTable, Address>,
+          ),
+          Address,
+          PrefetchHooks Function()
+        > {
+  $$AddressRecordsTableTableManager(
+    _$AppDatabase db,
+    $AddressRecordsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AddressRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AddressRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AddressRecordsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> city = const Value.absent(),
+                Value<DateTime?> lastUpdatedDate = const Value.absent(),
+                Value<String> neighborhood = const Value.absent(),
+                Value<String> state = const Value.absent(),
+                Value<String> street = const Value.absent(),
+                Value<String> zipCode = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AddressRecordsCompanion(
+                city: city,
+                lastUpdatedDate: lastUpdatedDate,
+                neighborhood: neighborhood,
+                state: state,
+                street: street,
+                zipCode: zipCode,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String city,
+                Value<DateTime?> lastUpdatedDate = const Value.absent(),
+                required String neighborhood,
+                required String state,
+                required String street,
+                required String zipCode,
+                Value<int> rowid = const Value.absent(),
+              }) => AddressRecordsCompanion.insert(
+                city: city,
+                lastUpdatedDate: lastUpdatedDate,
+                neighborhood: neighborhood,
+                state: state,
+                street: street,
+                zipCode: zipCode,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$AddressRecordsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AddressRecordsTable,
+      Address,
+      $$AddressRecordsTableFilterComposer,
+      $$AddressRecordsTableOrderingComposer,
+      $$AddressRecordsTableAnnotationComposer,
+      $$AddressRecordsTableCreateCompanionBuilder,
+      $$AddressRecordsTableUpdateCompanionBuilder,
+      (Address, BaseReferences<_$AppDatabase, $AddressRecordsTable, Address>),
+      Address,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4490,4 +4853,6 @@ class $AppDatabaseManager {
       $$InvoicesRecordsTableTableManager(_db, _db.invoicesRecords);
   $$InvoiceItemsRecordsTableTableManager get invoiceItemsRecords =>
       $$InvoiceItemsRecordsTableTableManager(_db, _db.invoiceItemsRecords);
+  $$AddressRecordsTableTableManager get addressRecords =>
+      $$AddressRecordsTableTableManager(_db, _db.addressRecords);
 }

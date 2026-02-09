@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/app_injection.dart';
+import 'package:system_loja/core/interface/i_configuration_repository.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/app_theme_settings.dart';
 import 'package:system_loja/screens/configuracoes/widgets/security_section.dart';
@@ -90,7 +92,12 @@ class SettingsScreen extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(create: (context) => SettingsBloc(), child: this);
+    return BlocProvider<SettingsBloc>(
+      create: (_) => SettingsBloc(
+        configurationRepository: appInjection.get<IConfigurationRepository>(),
+      ),
+      child: this,
+    );
   }
 }
 

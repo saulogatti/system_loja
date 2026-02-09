@@ -87,21 +87,33 @@ class RouteApp extends RootStackRouter {
         AutoRoute(
           page: CustomerRoute.page,
           title: (context, data) => 'Customer',
+          maintainState: false,
         ),
         AutoRoute(
           page: CompanyRoute.page,
           title: (context, data) => 'Company',
+          maintainState: false,
         ),
         AutoRoute(
           page: ProductInfoRoute.page,
           title: (context, data) => 'Product Info',
+          maintainState: false,
         ),
-        AutoRoute(page: SalesRoute.page, title: (context, data) => 'Sales'),
+        AutoRoute(
+          page: SalesRoute.page,
+          title: (context, data) => 'Sales',
+          maintainState: false,
+        ),
 
-        AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuario'),
+        AutoRoute(
+          page: UsuarioRoute.page,
+          title: (context, data) => 'Usuario',
+          maintainState: false,
+        ),
         AutoRoute(
           page: SettingsRoute.page,
           title: (context, data) => 'Settings',
+          maintainState: false,
         ),
       ],
     ),

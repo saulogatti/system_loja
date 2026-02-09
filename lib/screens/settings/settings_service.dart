@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/interface/i_settings_service.dart';
 import 'package:system_loja/core/settings/app_theme_settings.dart';
 
-class SettingsService {
+class SettingsService implements ISettingsService {
   ValueNotifier<ThemeData> currentThemeNotifier = ValueNotifier<ThemeData>(
     ThemeData(useMaterial3: true),
   );
@@ -10,6 +11,7 @@ class SettingsService {
   SettingsService.injection();
   ThemeData get currentTheme => currentThemeNotifier.value;
   bool get temaEscuro => _temaEscuro;
+  @override
   void updateSettings(EnumColorAppThemeSettings corPrimaria, bool temaEscuro) {
     _appTheme = ThemeData.from(
       colorScheme: ColorScheme.fromSeed(
@@ -20,7 +22,6 @@ class SettingsService {
       textTheme: temaEscuro
           ? ThemeData.dark().textTheme
           : ThemeData.light().textTheme,
-   
     );
     _temaEscuro = temaEscuro;
     currentThemeNotifier.value = _appTheme;

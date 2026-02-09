@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/managers/configuration_repository.dart';
+import 'package:system_loja/core/interface/i_configuration_repository.dart';
 
 import 'settings_event.dart';
 import 'settings_state.dart';
@@ -12,9 +12,11 @@ import 'settings_state.dart';
 /// Utiliza o ConfiguracaoManager para persistência de dados
 /// e gerencia os estados da tela de configurações.
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  final ConfigurationRepository _configurationRepository =
-      ConfigurationRepository();
-  SettingsBloc() : super(const SettingsInitialState()) {
+  final IConfigurationRepository _configurationRepository;
+
+  SettingsBloc({required IConfigurationRepository configurationRepository})
+    : _configurationRepository = configurationRepository,
+      super(const SettingsInitialState()) {
     on<LoadSettingsEvent>(_onLoadSettings);
     on<UpdateSettingsEvent>(_onUpdateSettings);
     on<ResetDefaultSettingsEvent>(_onResetToDefault);

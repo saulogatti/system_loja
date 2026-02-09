@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:system_loja/screens/utils/constants.dart';
 
 /// Formatador de CNPJ para campos de texto
 ///
@@ -18,8 +19,7 @@ class CnpjTextInputFormatter extends TextInputFormatter {
       return newValue;
     }
     // Remove todos os caracteres não-numéricos
-    final regExp = RegExp(r'[^0-9]');
-    final digitsOnly = newValue.text.replaceAll(regExp, '');
+    final digitsOnly = newValue.text.replaceAll(Constants.nonNumericRegExp, '');
 
     // Limita a 14 dígitos
     final limitedDigits = digitsOnly.length > 14
@@ -71,8 +71,7 @@ class CpfTextInputFormatter extends TextInputFormatter {
       return newValue;
     }
     // Remove todos os caracteres não-numéricos
-    final regExp = RegExp(r'[^0-9]');
-    final digitsOnly = newValue.text.replaceAll(regExp, '');
+    final digitsOnly = newValue.text.replaceAll(Constants.nonNumericRegExp, '');
 
     // Limita a 11 dígitos
     final limitedDigits = digitsOnly.length > 11
@@ -117,7 +116,10 @@ class DecimalInputFormatter extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     // Permite apenas dígitos e um ponto decimal
-    String normalizedText = newValue.text.replaceAll(RegExp(r'[^0-9.]'), '');
+    String normalizedText = newValue.text.replaceAll(
+      Constants.decimalAllowedRegExp,
+      '',
+    );
 
     // Garante que haja no máximo um ponto decimal
     final parts = normalizedText.split('.');
@@ -147,7 +149,7 @@ class PhoneTextInputFormatter extends TextInputFormatter {
       return newValue;
     }
     // Remove todos os caracteres não-numéricos
-    final digitsOnly = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    final digitsOnly = newValue.text.replaceAll(Constants.nonNumericRegExp, '');
 
     // Limita a 11 dígitos
     final limitedDigits = digitsOnly.length > 11

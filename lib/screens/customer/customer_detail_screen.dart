@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/screens/customer/bloc/customer_bloc.dart';
 import 'package:system_loja/screens/customer/widgets/customer_action_buttons.dart';
@@ -30,6 +31,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   late final TextEditingController _emailController;
   late final TextEditingController _telefoneController;
   late final TextEditingController _enderecoController;
+  late final TextEditingController _zipCodeController;
+  late final TextEditingController _neighborhoodController;
+  late final TextEditingController _cityController;
+  late final TextEditingController _stateController;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -119,7 +124,19 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     _cpfController = TextEditingController(text: widget.customer.cpf);
     _emailController = TextEditingController(text: widget.customer.email);
     _telefoneController = TextEditingController(text: widget.customer.phone);
-    _enderecoController = TextEditingController(text: widget.customer.address);
+    _enderecoController = TextEditingController(
+      text: widget.customer.address.street,
+    );
+    _zipCodeController = TextEditingController(
+      text: widget.customer.address.zipCode,
+    );
+    _neighborhoodController = TextEditingController(
+      text: widget.customer.address.neighborhood,
+    );
+    _cityController = TextEditingController(text: widget.customer.address.city);
+    _stateController = TextEditingController(
+      text: widget.customer.address.state,
+    );
   }
 
   void _cancelEditing() {
@@ -127,7 +144,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       _nomeController.text = widget.customer.name;
       _emailController.text = widget.customer.email ?? '';
       _telefoneController.text = widget.customer.phone ?? '';
-      _enderecoController.text = widget.customer.address ?? '';
+      _enderecoController.text = widget.customer.address.street;
+      _zipCodeController.text = widget.customer.address.zipCode;
+      _neighborhoodController.text = widget.customer.address.neighborhood;
+      _cityController.text = widget.customer.address.city;
+      _stateController.text = widget.customer.address.state;
     });
   }
 
@@ -149,7 +170,13 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         cpf: _cpfController.text.trim(),
         email: _emailController.text.trim(),
         phone: _telefoneController.text.trim(),
-        address: _enderecoController.text.trim(),
+        address: Address(
+          street: _enderecoController.text.trim(),
+          zipCode: _zipCodeController.text.trim(),
+          neighborhood: _neighborhoodController.text.trim(),
+          city: _cityController.text.trim(),
+          state: _stateController.text.trim(),
+        ),
         registrationDate: widget.customer.registrationDate,
         lastUpdatedDate: widget.customer.lastUpdatedDate,
       );

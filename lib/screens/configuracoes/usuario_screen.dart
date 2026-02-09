@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/repository/system/user_repository.dart';
+import 'package:system_loja/app_injection.dart';
+import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/user_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
@@ -23,16 +24,21 @@ import '../../core/models/user.dart';
 /// - UsuarioDeleteConfirmDialog: dialog de confirmação de exclusão
 ///
 @RoutePage()
-class UsuarioScreen extends StatefulWidget {
+class UsuarioScreen extends StatefulWidget implements AutoRouteWrapper {
   const UsuarioScreen({super.key});
 
   @override
   State<UsuarioScreen> createState() => _UsuarioScreenState();
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<UserCubit>(
+      create: (_) => UserCubit(appInjection.get<IUserRepository>()),
+      child: this,
+    );
+  }
 }
 
 class _UsuarioScreenState extends State<UsuarioScreen> {
-  late final UserCubit _bloc = UserCubit(UserRepository());
-
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
@@ -47,7 +53,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<UserCubit, UsuarioState>(
-        bloc: _bloc,
+        bloc: context.read<UserCubit>(),
         listener: (context, state) {
           state.when(
             loadFailure: (errorMessage) {
@@ -181,7 +187,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   @override
   void initState() {
     super.initState();
-    _bloc.loadUsuarios();
+    context.read<UserCubit>().loadUsuarios();
   }
 
   void _cancelarEdicao() {
@@ -222,7 +228,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   }
 
   Future<void> _excluirUsuario(User usuario) async {
-    _bloc.removerUsuario(usuario.id);
+    context.read<UserCubit>().removerUsuario(usuario.id);
 
     // Se estava editando o usuário excluído, cancela a edição
     if (_usuarioEditando?.id == usuario.id) {
@@ -250,7 +256,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
       if (_usuarioEditando == null) {
         // Criar novo usuário
 
-        await _bloc.adicionarUsuario(
+        await context.read<UserCubit>().adicionarUsuario(
           nome: _nomeController.text.trim(),
           email: email,
           senha: senha,
@@ -265,7 +271,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
 
           permission: _nivelPermissaoSelecionado.value,
         );
-        await _bloc.atualizarUsuario(usuarioAtualizado: user);
+        await context.read<UserCubit>().atualizarUsuario(
+          usuarioAtualizado: user,
+        );
       }
     }
   }

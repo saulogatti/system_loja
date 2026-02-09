@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
+import 'package:system_loja/screens/utils/constants.dart';
 
 /// Extensões para manipulação segura de strings em nomes de arquivos.
 ///
@@ -72,7 +73,7 @@ extension FileNameStringExtensions on String {
   bool isValidFileName({int maxLength = 255}) {
     if (isEmpty || length > maxLength) return false;
     if (isReservedFileName()) return false;
-    if (contains(RegExp(r'[<>:"/\\|?*\x00-\x1F]'))) return false;
+    if (contains(Constants.invalidFileNameCharsRegExp)) return false;
 
     return true;
   }
@@ -122,10 +123,10 @@ extension FileNameStringExtensions on String {
   /// 'Nome  com   espaços'.sanitizeFileName(); // 'Nome_com_espaços'
   /// ```
   String sanitizeFileName() {
-    return replaceAll(
-      RegExp(r'[<>:"/\\|?*\x00-\x1F]'),
-      '_',
-    ).replaceAll(RegExp(r'\s+'), '_').replaceAll(RegExp(r'_+'), '_').trim();
+    return replaceAll(Constants.invalidFileNameCharsRegExp, '_')
+        .replaceAll(Constants.oneOrMoreWhitespaceRegExp, '_')
+        .replaceAll(Constants.oneOrMoreUnderscoreRegExp, '_')
+        .trim();
   }
 
   /// Converte caracteres acentuados para ASCII.
@@ -139,14 +140,14 @@ extension FileNameStringExtensions on String {
   /// 'José_García.pdf'.toAsciiFileName(); // 'Jose_Garcia.pdf'
   /// ```
   String toAsciiFileName() {
-    return replaceAll(RegExp(r'[àáâãäåÀÁÂÃÄÅ]'), 'a')
-        .replaceAll(RegExp(r'[èéêëÈÉÊË]'), 'e')
-        .replaceAll(RegExp(r'[ìíîïÌÍÎÏ]'), 'i')
-        .replaceAll(RegExp(r'[òóôõöÒÓÔÕÖ]'), 'o')
-        .replaceAll(RegExp(r'[ùúûüÙÚÛÜ]'), 'u')
-        .replaceAll(RegExp(r'[çÇ]'), 'c')
-        .replaceAll(RegExp(r'[ñÑ]'), 'n')
-        .replaceAll(RegExp(r'[ýÿÝŸ]'), 'y');
+    return replaceAll(Constants.accentARegExp, 'a')
+        .replaceAll(Constants.accentERegExp, 'e')
+        .replaceAll(Constants.accentIRegExp, 'i')
+        .replaceAll(Constants.accentORegExp, 'o')
+        .replaceAll(Constants.accentURegExp, 'u')
+        .replaceAll(Constants.cedillaRegExp, 'c')
+        .replaceAll(Constants.tildeNRegExp, 'n')
+        .replaceAll(Constants.yVariantsRegExp, 'y');
   }
 
   /// Aplica todas as proteções recomendadas para nomes de arquivo.
@@ -238,10 +239,9 @@ extension ValidateDataCustomer on String {
   /// '123.456.789-09'.isValidCPF(); // true ou false
   /// ```
   bool isValidCPF() {
-    if (this == '111.111.111-11') return true; //TODO: retirar Caso Para debug
-    final String cpf = replaceAll(RegExp(r'[^0-9]'), '');
+    final String cpf = replaceAll(Constants.nonNumericRegExp, '');
 
-    if (cpf.length != 11 || RegExp(r'^(\d)\1*$').hasMatch(cpf)) {
+    if (cpf.length != 11 || Constants.cpfSameDigitRegExp.hasMatch(cpf)) {
       return false;
     }
 
@@ -269,8 +269,7 @@ extension ValidateDataCustomer on String {
   /// 'example@example.com'.isValidEmail(); // true ou false
   /// ```
   bool isValidEmail() {
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    return emailRegex.hasMatch(this);
+    return Constants.emailRegExp.hasMatch(this);
   }
 
   /// Valida se a string é um número de telefone válido.
@@ -281,8 +280,7 @@ extension ValidateDataCustomer on String {
   /// '(11) 91234-5678'.isValidPhone(); // true ou false
   /// ```
   bool isValidPhone() {
-    final phoneRegex = RegExp(r'^\(?\d{2}\)?[\s-]?[\d\s-]{4,5}[\s-]?\d{4}$');
-    return phoneRegex.hasMatch(this);
+    return Constants.phoneRegExp.hasMatch(this);
   }
 
   /// Valida a força da senha
@@ -298,13 +296,13 @@ extension ValidateDataCustomer on String {
     if (senha.length < senhaMinLength) {
       return 'Senha deve ter no mínimo $senhaMinLength caracteres';
     }
-    if (!senha.contains(RegExp(r'[A-Z]'))) {
+    if (!senha.contains(Constants.uppercaseLetterRegExp)) {
       return 'Senha deve conter pelo menos uma letra maiúscula';
     }
-    if (!senha.contains(RegExp(r'[a-z]'))) {
+    if (!senha.contains(Constants.lowercaseLetterRegExp)) {
       return 'Senha deve conter pelo menos uma letra minúscula';
     }
-    if (!senha.contains(RegExp(r'[0-9]'))) {
+    if (!senha.contains(Constants.digitRegExp)) {
       return 'Senha deve conter pelo menos um número';
     }
     return null;

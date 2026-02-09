@@ -23,7 +23,11 @@ class _CustomerViewState extends State<CustomerView> {
   final _cpfController = TextEditingController();
   final _emailController = TextEditingController();
   final _telefoneController = TextEditingController();
-  final _enderecoController = TextEditingController();
+  final _streetController = TextEditingController();
+  final _zipCodeController = TextEditingController();
+  final _neighborhoodController = TextEditingController();
+  final _cityController = TextEditingController();
+  final _stateController = TextEditingController();
   final _searchCpfController = TextEditingController();
 
   @override
@@ -45,7 +49,10 @@ class _CustomerViewState extends State<CustomerView> {
                 _cpfController.clear();
                 _emailController.clear();
                 _telefoneController.clear();
-                _enderecoController.clear();
+                _streetController.clear();
+                _zipCodeController.clear();
+                _neighborhoodController.clear();
+                _cityController.clear();
               case EnumStateCustomerLoaded.deleteCustomer:
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -78,7 +85,11 @@ class _CustomerViewState extends State<CustomerView> {
                     cpfController: _cpfController,
                     emailController: _emailController,
                     telefoneController: _telefoneController,
-                    enderecoController: _enderecoController,
+                    streetController: _streetController,
+                    zipCodeController: _zipCodeController,
+                    neighborhoodController: _neighborhoodController,
+                    cityController: _cityController,
+                    stateController: _stateController,
                     onSubmit: _adicionarCliente,
                   ),
                   const SizedBox(height: 32),
@@ -109,7 +120,10 @@ class _CustomerViewState extends State<CustomerView> {
     _cpfController.dispose();
     _emailController.dispose();
     _telefoneController.dispose();
-    _enderecoController.dispose();
+    _streetController.dispose();
+    _zipCodeController.dispose();
+    _neighborhoodController.dispose();
+    _cityController.dispose();
     _searchCpfController.dispose();
     super.dispose();
   }
@@ -128,7 +142,11 @@ class _CustomerViewState extends State<CustomerView> {
           cpf: _cpfController.text.trim(),
           email: _emailController.text.trim(),
           phone: _telefoneController.text.trim(),
-          address: _enderecoController.text.trim(),
+          street: _streetController.text.trim(),
+          zipCode: _zipCodeController.text.trim(),
+          neighborhood: _neighborhoodController.text.trim(),
+          city: _cityController.text.trim(),
+          state: _stateController.text.trim(),
         ),
       );
     }

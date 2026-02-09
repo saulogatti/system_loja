@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/app_injection.dart';
+import 'package:system_loja/core/interface/i_category_repository.dart';
 import 'package:system_loja/core/models/category.dart';
 import 'package:system_loja/screens/categories/cubit/category_cubit.dart';
 import 'package:system_loja/screens/categories/cubit/category_state.dart';
@@ -38,15 +40,10 @@ class _ProductCategoryState extends State<ProductCategory> {
   int? _selectedCategoryId;
 
   @override
-  void initState() {
-    super.initState();
-    _selectedCategoryId = widget.selectedCategoryId;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CategoryCubit(),
+      create: (_) =>
+          CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
       child: BlocBuilder<CategoryCubit, CategoryState>(
         builder: (context, state) {
           return state.when(
@@ -61,6 +58,12 @@ class _ProductCategoryState extends State<ProductCategory> {
         },
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCategoryId = widget.selectedCategoryId;
   }
 
   Widget _buildDropdown(BuildContext context, List<Category> categories) {
@@ -101,7 +104,9 @@ class _ProductCategoryState extends State<ProductCategory> {
         ),
         const SizedBox(width: 8),
         IconButton(
-          onPressed: widget.enabled ? () => _showCreateCategoryDialog(context) : null,
+          onPressed: widget.enabled
+              ? () => _showCreateCategoryDialog(context)
+              : null,
           icon: const Icon(Icons.add),
           tooltip: 'Adicionar nova categoria',
         ),
@@ -182,12 +187,12 @@ class _ProductCategoryState extends State<ProductCategory> {
                       ? null
                       : descriptionController.text.trim(),
                 );
-                
+
                 // Check if successful before showing message
                 if (context.mounted) {
                   final currentState = cubit.state;
                   Navigator.of(context).pop();
-                  
+
                   if (currentState is CategoryCreated) {
                     ScaffoldMessenger.of(parentContext).showSnackBar(
                       const SnackBar(
@@ -205,4 +210,3 @@ class _ProductCategoryState extends State<ProductCategory> {
     );
   }
 }
-
