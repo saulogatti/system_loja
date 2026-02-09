@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/utils/input_formatters.dart';
+import 'package:system_loja/core/utils/text_formatters.dart';
 
 /// Testes para os formatadores de entrada.
 ///
@@ -218,6 +219,69 @@ void main() {
     test('deve processar entrada mista corretamente', () {
       final result = format('prod-001');
       expect(result.text, equals('PROD-001'));
+    });
+  });
+
+  group('CepTextInputFormatter', () {
+    late CepTextInputFormatter formatter;
+
+    setUp(() {
+      formatter = CepTextInputFormatter();
+    });
+
+    TextEditingValue format(String text) {
+      return formatter.formatEditUpdate(
+        const TextEditingValue(),
+        TextEditingValue(
+          text: text,
+          selection: TextSelection.collapsed(offset: text.length),
+        ),
+      );
+    }
+
+    test('deve formatar CEP com 8 dígitos', () {
+      final result = format('12345678');
+      expect(result.text, equals('12345-678'));
+    });
+
+    test('deve formatar CEP parcialmente com 5 dígitos', () {
+      final result = format('12345');
+      expect(result.text, equals('12345'));
+    });
+
+    test('deve formatar CEP parcialmente com 6 dígitos', () {
+      final result = format('123456');
+      expect(result.text, equals('12345-6'));
+    });
+
+    test('deve limitar a 8 dígitos', () {
+      final result = format('123456789');
+      expect(result.text, equals('12345-678'));
+    });
+
+    test('deve remover caracteres não numéricos', () {
+      final result = format('12345-678');
+      expect(result.text, equals('12345-678'));
+    });
+
+    test('deve remover letras', () {
+      final result = format('12a34b56c78');
+      expect(result.text, equals('12345-678'));
+    });
+
+    test('deve aceitar CEP válido', () {
+      final result = format('01310100');
+      expect(result.text, equals('01310-100'));
+    });
+
+    test('deve retornar vazio para entrada vazia', () {
+      final result = format('');
+      expect(result.text, equals(''));
+    });
+
+    test('deve manter cursor no final', () {
+      final result = format('12345678');
+      expect(result.selection.baseOffset, equals(9));
     });
   });
 }

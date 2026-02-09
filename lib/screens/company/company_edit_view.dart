@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/company.dart';
+import 'package:system_loja/core/utils/text_formatters.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/company/bloc/company_bloc.dart';
 import 'package:system_loja/screens/utils/constants.dart';
+import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 
 /// Tela de edição de empresa com CNPJ em modo somente leitura
@@ -104,55 +106,12 @@ class _CompanyEditViewState extends State<CompanyEditView> {
                   isEditing: true,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Endereço',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12),
-                TextFormField(
-                  controller: _streetController,
-                  decoration: const InputDecoration(
-                    labelText: 'Rua',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.location_on),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: _zipCodeController,
-                        decoration: const InputDecoration(
-                          labelText: 'CEP',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.markunread_mailbox),
-                          hintText: '00000-000',
-                        ),
-                        keyboardType: TextInputType.number,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: TextFormField(
-                        controller: _neighborhoodController,
-                        decoration: const InputDecoration(
-                          labelText: 'Bairro',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.map),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _cityController,
-                  decoration: const InputDecoration(
-                    labelText: 'Cidade',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.location_city),
-                  ),
+                AddressForm(
+                  streetController: _streetController,
+                  zipCodeController: _zipCodeController,
+                  neighborhoodController: _neighborhoodController,
+                  cityController: _cityController,
+                  stateController: _stateController,
                 ),
                 const SizedBox(height: 24),
                 Row(

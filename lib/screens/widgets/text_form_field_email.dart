@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:system_loja/screens/utils/constants.dart';
 
 class TextFormFieldEmail extends StatelessWidget {
   final TextEditingController emailController;
@@ -21,13 +23,19 @@ class TextFormFieldEmail extends StatelessWidget {
       ),
       enabled: isEditing,
       keyboardType: TextInputType.emailAddress,
-      onChanged: (value) {
-        final String formatted = value.trim();
-
-        emailController.value = TextEditingValue(
-          text: formatted,
-          selection: TextSelection.collapsed(offset: formatted.length),
-        );
+      inputFormatters: [
+        FilteringTextInputFormatter.deny(RegExp(r'\s')), // Remove espaços
+        FilteringTextInputFormatter.deny(RegExp(
+          r'[àáâãäåèéêëìíîïòóôõöùúûüçñÀÁÂÃÄÅÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÇÑ]',
+        )), // Remove acentos
+      ],
+      validator: (value) {
+        if (value != null && value.trim().isNotEmpty) {
+          if (!Constants.emailRegExp.hasMatch(value.trim())) {
+            return 'Email inválido';
+          }
+        }
+        return null;
       },
     );
   }

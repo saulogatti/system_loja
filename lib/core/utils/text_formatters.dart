@@ -181,3 +181,51 @@ class PhoneTextInputFormatter extends TextInputFormatter {
     return buffer.toString();
   }
 }
+
+/// Formatador de CEP para campos de texto
+///
+/// Aplica a máscara XXXXX-XXX automaticamente enquanto o usuário digita.
+/// Remove automaticamente caracteres não-numéricos e limita a 8 dígitos.
+class CepTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // se oldValue é maior que newValue, significa que o usuário está apagando
+    if (oldValue.text.length > newValue.text.length) {
+      return newValue;
+    }
+    // Remove todos os caracteres não-numéricos
+    final digitsOnly = newValue.text.replaceAll(Constants.nonNumericRegExp, '');
+
+    // Limita a 8 dígitos
+    final limitedDigits = digitsOnly.length > 8
+        ? digitsOnly.substring(0, 8)
+        : digitsOnly;
+
+    // Aplica a formatação
+    final formatted = _formatCep(limitedDigits);
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+
+  /// Formata uma string de dígitos no padrão XXXXX-XXX
+  String _formatCep(String digits) {
+    if (digits.isEmpty) return '';
+
+    final buffer = StringBuffer();
+
+    for (int i = 0; i < digits.length; i++) {
+      buffer.write(digits[i]);
+      if (i == 4) {
+        buffer.write('-');
+      }
+    }
+
+    return buffer.toString();
+  }
+}
