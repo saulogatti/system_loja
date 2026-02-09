@@ -61,6 +61,11 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Configura as dependências da aplicação.
+Isso é usado no main.dart para configurar as dependências da aplicação.
+Para acessar as dependências, use o <code>appInjection.get&lt;T&gt;()</code> onde T é o tipo da dependência.</p>
+</section>
 
 
     
@@ -117,6 +122,10 @@
       usersDao: appInjection.get&lt;SystemDatabase&gt;().usersDao,
     ),
   );
+  appInjection.registerSingleton&lt;ISystemRepository&gt;(
+    SystemRepository(systemDao: appInjection.get&lt;SystemDatabase&gt;().systemDao),
+  );
+
   appInjection.registerSingleton&lt;ICategoryRepository&gt;(
     CategoryRepository(
       categoryDao: appInjection.get&lt;AppDatabase&gt;().categoryDao,

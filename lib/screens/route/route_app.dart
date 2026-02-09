@@ -16,9 +16,9 @@ class HostScreen extends StatelessWidget {
           leading: AutoLeadingButton(),
         );
       },
-      routes: const [
+      routes: [
         HomeRoute(),
-        CustomerRoute(),
+        CustomerRoute(customer: null),
         CompanyRoute(),
         ProductInfoRoute(),
         SalesRoute(),
@@ -120,10 +120,6 @@ class RouteApp extends RootStackRouter {
     AutoRoute(
       page: SalesInvoiceRoute.page,
       title: (context, data) => 'Sales Invoice',
-    ),
-    AutoRoute(
-      page: CustomerDetailRoute.page,
-      title: (context, data) => 'Customer Detail',
     ),
     AutoRoute(
       page: ProductDetailRoute.page,

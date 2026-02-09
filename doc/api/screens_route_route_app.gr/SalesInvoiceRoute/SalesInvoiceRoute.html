@@ -55,6 +55,7 @@
     <section class="multi-line-signature">
       
       <span class="name ">SalesInvoiceRoute</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
+<li><span class="parameter" id="-param-paymentMethods"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_system_config_price_configuration/PaymentMethodType.html">PaymentMethodType</a></span>&gt;</span></span> <span class="parameter-name">paymentMethods</span>, </span></li>
 <li><span class="parameter" id="-param-customers"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>, <span class="type-parameter"><a href="../../core_models_customer/Customer-class.html">Customer</a></span>&gt;</span></span> <span class="parameter-name">customers</span>, </span></li>
 <li><span class="parameter" id="-param-salesCubit"><span>required</span> <span class="type-annotation"><a href="../../screens_sales_cubit_sales_cubit/SalesCubit-class.html">SalesCubit</a></span> <span class="parameter-name">salesCubit</span>, </span></li>
 <li><span class="parameter" id="-param-products"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_product/Product-class.html">Product</a></span>&gt;</span></span> <span class="parameter-name">products</span>, </span></li>
@@ -68,15 +69,17 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">SalesInvoiceRoute({
-  _i18.Key? key,
-  required Map&lt;int, _i20.Customer&gt; customers,
+  _i17.Key? key,
+  required List&lt;_i22.PaymentMethodType&gt; paymentMethods,
+  required Map&lt;int, _i19.Customer&gt; customers,
   required _i23.SalesCubit salesCubit,
-  required List&lt;_i21.Product&gt; products,
-  List&lt;_i17.PageRouteInfo&gt;? children,
+  required List&lt;_i20.Product&gt; products,
+  List&lt;_i16.PageRouteInfo&gt;? children,
 }) : super(
        SalesInvoiceRoute.name,
        args: SalesInvoiceRouteArgs(
          key: key,
+         paymentMethods: paymentMethods,
          customers: customers,
          salesCubit: salesCubit,
          products: products,

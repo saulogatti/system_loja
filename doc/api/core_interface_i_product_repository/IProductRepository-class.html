@@ -55,6 +55,37 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Interface que define o contrato para operações de repositório de produtos.</p>
+<p>Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
+para entidades <a href="../core_models_product/Product-class.html">Product</a>, permitindo diferentes implementações de
+persistência (Drift, JSON, etc.).</p>
+<p>Inclui funcionalidades especiais como geração automática de código de
+produto e validação de códigos únicos.</p>
+<p>Exemplo de uso:</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;ProductRepository&gt;();
+
+// Gerar código automático
+final codigo = await repository.generateProductCode();
+
+// Criar produto
+final produto = Product(
+  code: codigo,
+  name: 'Notebook Dell',
+  price: 3500.00,
+);
+
+final resultado = await repository.saveProduct(produto);
+if (resultado.isSuccessful) {
+  print('Produto salvo com sucesso');
+}
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_models_product/Product-class.html">Product</a> - modelo de domínio de produto</li>
+<li><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a> - tipo de retorno para operações</li>
+</ul>
+</section>
 
 
     <section>
@@ -124,7 +155,7 @@
 
 </dt>
 <dd>
-  
+  Remove um produto do sistema pelo ID.
   
 
 </dd>
@@ -137,7 +168,7 @@
 
 </dt>
 <dd>
-  
+  Retorna todos os produtos cadastrados no sistema.
   
 
 </dd>
@@ -150,7 +181,7 @@
 
 </dt>
 <dd>
-  
+  Busca um produto específico pelo código.
   
 
 </dd>
@@ -163,7 +194,7 @@
 
 </dt>
 <dd>
-  
+  Gera um novo código de produto único.
   
 
 </dd>
@@ -189,7 +220,7 @@
 
 </dt>
 <dd>
-  
+  Salva um novo produto no sistema.
   
 
 </dd>
@@ -215,7 +246,7 @@
 
 </dt>
 <dd>
-  
+  Atualiza os dados de um produto existente.
   
 
 </dd>
@@ -228,7 +259,7 @@
 
 </dt>
 <dd>
-  
+  Valida se um código de produto é único no sistema.
   
 
 </dd>

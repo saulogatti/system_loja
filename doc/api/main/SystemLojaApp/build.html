@@ -125,6 +125,7 @@ Widget build(BuildContext context) {
           appInjection.get&lt;ISalesRepository&gt;(),
           appInjection.get&lt;ICustomerRepository&gt;(),
           appInjection.get&lt;IProductRepository&gt;(),
+          appInjection.get&lt;ISystemRepository&gt;(),
         ),
       ),
       BlocProvider&lt;UserCubit&gt;(

@@ -6,9 +6,10 @@ import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
-/// Widget do formulário de cadastro de cliente
+/// Widget do formulário de cadastro e edição de cliente
 ///
-/// Encapsula os campos de entrada e validações para criação de novos clientes.
+/// Encapsula os campos de entrada e validações para criação e edição de clientes.
+/// Quando em modo de edição, o campo CPF fica desabilitado.
 class CustomerForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nomeController;
@@ -21,6 +22,8 @@ class CustomerForm extends StatelessWidget {
   final TextEditingController cityController;
   final TextEditingController stateController;
   final VoidCallback onSubmit;
+  final bool isEditMode;
+  final VoidCallback? onCancel;
 
   const CustomerForm({
     super.key,
@@ -35,6 +38,8 @@ class CustomerForm extends StatelessWidget {
     required this.neighborhoodController,
     required this.cityController,
     required this.stateController,
+    this.isEditMode = false,
+    this.onCancel,
   });
 
   @override
@@ -45,7 +50,7 @@ class CustomerForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Novo Cliente',
+            isEditMode ? 'Editar Cliente' : 'Novo Cliente',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
@@ -64,7 +69,7 @@ class CustomerForm extends StatelessWidget {
           const SizedBox(height: 16),
           TextFormFieldCpf(
             cpfController: cpfController,
-            enable: true,
+            enable: !isEditMode, // CPF desabilitado em modo de edição
             validatorOptions: (value) {
               if (value == null || value.trim().isEmpty) {
                 return 'CPF é obrigatório';
@@ -90,14 +95,34 @@ class CustomerForm extends StatelessWidget {
             stateController: stateController,
           ),
           const SizedBox(height: 24),
-          ElevatedButton.icon(
-            onPressed: onSubmit,
-            icon: const Icon(Icons.add),
-            label: const Text('Adicionar Cliente'),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.all(16),
-              textStyle: const TextStyle(fontSize: 16),
-            ),
+          Row(
+            children: [
+              if (isEditMode && onCancel != null) ...[
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: onCancel,
+                    icon: const Icon(Icons.cancel),
+                    label: const Text('Cancelar'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.all(16),
+                      textStyle: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+              ],
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: onSubmit,
+                  icon: Icon(isEditMode ? Icons.save : Icons.add),
+                  label: Text(isEditMode ? 'Salvar Alterações' : 'Adicionar Cliente'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
+                    textStyle: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

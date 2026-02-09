@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
         title: 'Cadastro de Cliente',
         icon: Icons.person,
         color: Colors.blue,
-        onTap: () => _navigateToScreen(context, const CustomerRoute()),
+        onTap: () => _navigateToScreen(context,  CustomerRoute()),
       ),
       _buildMenuCard(
         context,

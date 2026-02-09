@@ -55,6 +55,26 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Interface que define o contrato para serviço de configurações de tema.</p>
+<p>Esta interface gerencia as configurações visuais da aplicação,
+como cor primária e modo escuro/claro.</p>
+<p>Diferente dos repositories, este serviço não persiste dados diretamente,
+mas notifica listeners para atualização da UI em tempo real.</p>
+<p>Exemplo de uso:</p>
+<pre class="language-dart"><code class="language-dart">final service = appInjection.get&lt;SettingsService&gt;();
+
+// Atualizar para tema escuro com cor azul
+service.updateSettings(
+  EnumColorAppThemeSettings.blue,
+  true, // tema escuro
+);
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_settings_app_theme_settings/EnumColorAppThemeSettings.html">EnumColorAppThemeSettings</a> - enum com cores disponíveis</li>
+</ul>
+</section>
 
 
     <section>
@@ -150,7 +170,7 @@
 
 </dt>
 <dd>
-  
+  Atualiza as configurações de tema da aplicação.
   
 
 </dd>

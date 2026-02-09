@@ -55,6 +55,27 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Interface que define o contrato para operações de repositório de clientes.</p>
+<p>Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
+para entidades <a href="../core_models_customer/Customer-class.html">Customer</a>, permitindo diferentes implementações de
+persistência (Drift, JSON, etc.).</p>
+<p>As operações incluem busca por CPF, mapeamento de clientes por ID,
+e gerenciamento completo do cadastro de clientes.</p>
+<p>Exemplo de uso:</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;CustomerRepository&gt;();
+final resultado = await repository.findWith(cpf: '12345678900');
+if (resultado.isSuccessful &amp;&amp; resultado.asSuccess != null) {
+  final customer = resultado.asSuccess!;
+  print('Cliente: ${customer.name}');
+}
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_models_customer/Customer-class.html">Customer</a> - modelo de domínio de cliente</li>
+<li><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a> - tipo de retorno para operações</li>
+</ul>
+</section>
 
 
     <section>
@@ -124,7 +145,7 @@
 
 </dt>
 <dd>
-  
+  Remove um cliente do sistema pelo ID.
   
 
 </dd>
@@ -137,7 +158,7 @@
 
 </dt>
 <dd>
-  
+  Retorna todos os clientes mapeados por ID.
   
 
 </dd>
@@ -150,7 +171,7 @@
 
 </dt>
 <dd>
-  
+  Busca um cliente específico pelo ID.
   
 
 </dd>
@@ -163,7 +184,7 @@
 
 </dt>
 <dd>
-  
+  Busca um cliente pelo CPF.
   
 
 </dd>
@@ -176,7 +197,7 @@
 
 </dt>
 <dd>
-  
+  Retorna todos os clientes cadastrados no sistema.
   
 
 </dd>
@@ -202,7 +223,7 @@
 
 </dt>
 <dd>
-  
+  Salva um novo cliente no sistema.
   
 
 </dd>
@@ -228,7 +249,7 @@
 
 </dt>
 <dd>
-  
+  Atualiza os dados de um cliente existente.
   
 
 </dd>

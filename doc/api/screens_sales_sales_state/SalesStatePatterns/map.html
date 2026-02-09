@@ -66,9 +66,9 @@
 </ol>), </span></li>
 <li><span class="parameter" id="map-param-loaded"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loaded</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoaded</span> <span class="parameter-name">value</span></span></li>
 </ol>), </span></li>
-<li><span class="parameter" id="map-param-loadedCustomers"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loadedCustomers</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoadedCustomers</span> <span class="parameter-name">value</span></span></li>
+<li><span class="parameter" id="map-param-loadedAll"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loadedAll</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoadedAll</span> <span class="parameter-name">value</span></span></li>
 </ol>), </span></li>
-<li><span class="parameter" id="map-param-loadedProducts"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loadedProducts</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoadedProducts</span> <span class="parameter-name">value</span></span></li>
+<li><span class="parameter" id="map-param-loadedCustomers"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loadedCustomers</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoadedCustomers</span> <span class="parameter-name">value</span></span></li>
 </ol>), </span></li>
 <li><span class="parameter" id="map-param-loading"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loading</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">SalesLoading</span> <span class="parameter-name">value</span></span></li>
 </ol>), </span></li>
@@ -101,15 +101,15 @@ It is equivalent to doing:</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult map&lt;TResult extends Object?&gt;({required TResult Function( SalesError value)  error,required TResult Function( SalesInitial value)  initial,required TResult Function( SalesLoaded value)  loaded,required TResult Function( SalesLoadedCustomers value)  loadedCustomers,required TResult Function( SalesLoadedProducts value)  loadedProducts,required TResult Function( SalesLoading value)  loading,required TResult Function( SalesLoadingProducts value)  loadingProducts,required TResult Function( SalesLoadProductsFailure value)  loadProductsFailure,required TResult Function( SalesSaved value)  saved,}){
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult map&lt;TResult extends Object?&gt;({required TResult Function( SalesError value)  error,required TResult Function( SalesInitial value)  initial,required TResult Function( SalesLoaded value)  loaded,required TResult Function( SalesLoadedAll value)  loadedAll,required TResult Function( SalesLoadedCustomers value)  loadedCustomers,required TResult Function( SalesLoading value)  loading,required TResult Function( SalesLoadingProducts value)  loadingProducts,required TResult Function( SalesLoadProductsFailure value)  loadProductsFailure,required TResult Function( SalesSaved value)  saved,}){
 final _that = this;
 switch (_that) {
 case SalesError():
 return error(_that);case SalesInitial():
 return initial(_that);case SalesLoaded():
-return loaded(_that);case SalesLoadedCustomers():
-return loadedCustomers(_that);case SalesLoadedProducts():
-return loadedProducts(_that);case SalesLoading():
+return loaded(_that);case SalesLoadedAll():
+return loadedAll(_that);case SalesLoadedCustomers():
+return loadedCustomers(_that);case SalesLoading():
 return loading(_that);case SalesLoadingProducts():
 return loadingProducts(_that);case SalesLoadProductsFailure():
 return loadProductsFailure(_that);case SalesSaved():
