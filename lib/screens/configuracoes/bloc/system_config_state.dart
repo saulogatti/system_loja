@@ -5,6 +5,7 @@ part 'system_config_state.freezed.dart';
 
 @freezed
 sealed class SystemConfigState with _$SystemConfigState {
-  const factory SystemConfigState.initial() = Initial;
-  const factory SystemConfigState.loaded(SystemConfiguration data) = Loaded;
+  const factory SystemConfigState.initial() = SystemConfigStateInitial;
+  const factory SystemConfigState.loaded(SystemConfiguration data) = SystemConfigStateLoaded;
+  const factory SystemConfigState.error(String message) = SystemConfigStateError;
 }

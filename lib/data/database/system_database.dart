@@ -22,7 +22,33 @@ class SystemDatabase extends _$SystemDatabase {
   static final _nameBd = 'system_database';
   SystemDatabase() : super(_openConnection());
   @override
-  int get schemaVersion => 1;
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (Migrator m) => m.createAll(),
+    onUpgrade: (Migrator m, int from, int to) async {
+      if (from < 2) {
+        await m.createAll();
+        await _migrateSystemConfiguration();
+      }
+    },
+  );
+  @override
+  int get schemaVersion => 2;
+  Future<void> _migrateSystemConfiguration() async {
+    // nao tem nada para recuperar da tabela system_records. Inserimos um registro padrão.
+    await into(systemRecords).insert(
+      SystemRecordsCompanion(
+        id: Value(1),
+        registrationDate: Value(DateTime.now()),
+        lastUpdatedDate: Value(DateTime.now()),
+        priceConfiguration: Value(
+          PriceConfiguration(
+            types: [PaymentMethodType.cash, PaymentMethodType.pix],
+          ),
+        ),
+      ),
+    );
+  }
+
   static QueryExecutor _openConnection() {
     return driftDatabase(
       name: _nameBd,

@@ -6,6 +6,7 @@ import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
+import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/managers/configuration_repository.dart';
 import 'package:system_loja/core/repository/category_repository.dart';
@@ -14,6 +15,7 @@ import 'package:system_loja/core/repository/customer_repository.dart';
 import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/repository/sales_repository.dart';
 import 'package:system_loja/core/repository/system/log_repository.dart';
+import 'package:system_loja/core/repository/system/system_repository.dart';
 import 'package:system_loja/core/repository/system/user_repository.dart';
 import 'package:system_loja/core/services/code_generator_service.dart';
 import 'package:system_loja/data/database/app_database.dart';
@@ -76,6 +78,9 @@ void setupAppInjection() {
       logRepository: appInjection.get<ILogRepository>(),
       usersDao: appInjection.get<SystemDatabase>().usersDao,
     ),
+  );
+  appInjection.registerSingleton<ISystemRepository>(
+    SystemRepository(systemDao: appInjection.get<SystemDatabase>().systemDao),
   );
   appInjection.registerSingleton<ICategoryRepository>(
     CategoryRepository(

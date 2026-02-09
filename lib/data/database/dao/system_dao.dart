@@ -14,22 +14,13 @@ class SystemDao extends DatabaseAccessor<SystemDatabase> with _$SystemDaoMixin {
   }
 
   Future<void> saveSystemConfiguration(SystemConfiguration data) async {
-    final existingConfig = await getSystemConfiguration();
-    if (existingConfig == null) {
-      await into(systemRecords).insert(
-        SystemRecordsCompanion(
-          priceConfiguration: Value(data.priceConfiguration),
-          registrationDate: Value(data.registrationDate),
-          lastUpdatedDate: Value(data.lastUpdatedDate),
-        ),
-      );
-    } else {
-      await update(systemRecords).replace(
-        SystemRecordsCompanion(
-          id: Value(existingConfig.id),
-          priceConfiguration: Value(data.priceConfiguration),
-        ),
-      );
-    }
+    await into(systemRecords).insert(
+      SystemRecordsCompanion(
+        priceConfiguration: Value(data.priceConfiguration),
+        registrationDate: Value(data.registrationDate),
+        lastUpdatedDate: Value(data.lastUpdatedDate),
+      ),
+      mode: InsertMode.insertOrReplace,
+    );
   }
 }
