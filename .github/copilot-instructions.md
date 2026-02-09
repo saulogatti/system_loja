@@ -8,7 +8,7 @@ System Loja is a Flutter multiplatform store management app (Windows, macOS, iOS
 - **Drift Database** (`lib/data/database/`): Type-safe SQLite ORM with DAOs, Tables, and Extensions
 - **Repository Layer** (`lib/core/repository/`): Abstracts data access, uses DAOs
 - **BLoC/Cubit** (`lib/screens/*/bloc/`): State management with `flutter_bloc` and `freezed`
-- **Dependency Injection** (`lib/screens/injection/app_injection.dart`): Singleton managing dependencies
+- **Dependency Injection** (`lib/app_injection.dart`): Singleton managing dependencies
 - **Screens** (`lib/screens/`): Material 3 UI with BlocBuilder/BlocProvider
 - **Legacy Managers** (`lib/core/managers/`): JSON-based managers (being phased out)
 
@@ -87,7 +87,22 @@ class ClienteRepository {
 ```
 **Access via AppInjection:**
 ```dart
-final repository = AppInjection.instance.clienteRepository;
+final repository =  appInjection.get<ClienteRepository>();
+final resultado = await repository.listar();
+if (resultado.isSuccessful) {
+  final customers = resultado.asSuccess;
+  print('Clientes: ${customers.map((customer) => customer.name).join(', ')}');
+} else {
+  final erro = resultado.asError;
+  print('Erro: $erro');
+}
+final resultado = await repository.salvar(cliente);
+if (resultado.isSuccessful) {
+  print('Cliente salvo com sucesso');
+} else {
+  final erro = resultado.asError;
+  print('Erro: $erro');
+}
 ```
 
 ### 5. Domain ↔ Drift Conversions
@@ -129,8 +144,8 @@ extension ClienteToCompanion on Customer {
 State management uses BLoC pattern with repositories:
 ```dart
 class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
-  final ClienteRepository _customerRepository = 
-      AppInjection.instance.clienteRepository;
+  final ICustomerRepository _customerRepository = 
+      appInjection.get<ICustomerRepository>();
   
   CustomerBloc() : super(const _Initial()) {
     on<_LoadCustomers>(_onLoadCustomers);
@@ -143,14 +158,22 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
   ) async {
     emit(const CustomerBlocState.loading());
     try {
-      await _customerRepository.salvar(event.customer);
-      final customers = await _customerRepository.listarMapeado();
+      final result = await _customerRepository.saveCustomer(event.customer);
+      result.when(
+        onSuccess: (_) {
+      await _customerRepository.saveCustomer(event.customer);
+      final customers = await _customerRepository.fetchMappedCustomers();
       emit(CustomerBlocState.customersLoaded(customers: customers));
-    } on CustomerException catch (e) {
-      emit(CustomerBlocState.customerError(message: e.message));
+      },
+      onError: (error) {
+        emit(CustomerBlocState.customerError(message: error.message));
+      },
+    );  
+    } catch (error) {
+      emit(CustomerBlocState.customerError(message: error.message));
     }
   }
-}
+  }
 ```
 **Events/States use `@freezed`:**
 ```dart
@@ -174,49 +197,8 @@ sealed class CustomerBlocState with _$CustomerBlocState {
 ### 7. Dependency Injection (AppInjection)
 Singleton managing all dependencies:
 ```dart
-class AppInjection {
-  static AppInjection get instance => _instance ??= AppInjection._internal();
-  
-  final AppDatabase appDatabase = AppDatabase();
-  final SystemDatabase systemDatabase = SystemDatabase();
-  
-  late final ClienteRepository clienteRepository = ClienteRepository(
-    ClienteDao(appDatabase),
-  );
-  late final SettingsService settingsService = SettingsService.injection();
-  
-  Future<void> initializeDependencies() async {
-    await configurationRepository.initializeDependencies();
-  }
-}
-```
-**Usage in BLoC:**
-```dart
-final repository = AppInjection.instance.clienteRepository;
-```
-**Initialize in main.dart:**
-```dart
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await AppInjection.instance.initializeDependencies();
-  runApp(const SystemLojaApp());
-}
-```
-
-### 8. File Name Safety
-Use `FileNameStringExtensions` for cross-platform file names:
-```dart
-import 'package:system_loja/core/utils/string_extensions.dart';
-
-final safeFileName = 'Cliente #123.json'.toSafeFileName();
-// Result: 'Cliente_123.json'
-
-// Available methods:
-fileName.sanitizeFileName()      // Remove invalid chars
-fileName.truncateFileName(200)   // Limit length
-fileName.toAsciiFileName()       // Remove accents
-fileName.isValidFileName()       // Validate
-fileName.makeUniqueFileName()    // Add timestamp
+setupAppInjection();  
+runApp(const SystemLojaApp());
 ```
 ## Development Workflows
 
@@ -274,7 +256,7 @@ fileName.makeUniqueFileName()    // Add timestamp
 
 7. **Add to AppInjection**: Register repository
    ```dart
-   late final ProductRepository productRepository = ProductRepository();
+   appInjection.registerSingleton<ProductRepository>(ProductRepository(ProductDao(appDatabase)));
    ```
 
 8. **BLoC/Cubit**: Create in `lib/screens/products/bloc/`
@@ -372,7 +354,7 @@ class ClienteSqlManager {
    - Increment version when changing table structure
    - Old DB files need migration logic
 
-5. **AppInjection Initialization**: Call `await AppInjection.instance.initializeDependencies()` in `main()` before `runApp()`.
+5. **AppInjection Initialization**: Call `await appInjection.get<AppInjection>().initializeDependencies()` in `main()` before `runApp()`.
 
 6. **Legacy Code**: JSON managers in `lib/core/managers/` are deprecated. Use Drift DAOs + Repositories instead.
 

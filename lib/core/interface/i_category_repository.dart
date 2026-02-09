@@ -12,7 +12,7 @@ import 'package:system_loja/core/utils/command_result.dart';
 ///
 /// Exemplo de uso:
 /// ```dart
-/// final repository = AppInjection.instance.categoryRepository;
+/// final repository = appInjection.get<CategoryRepository>();
 /// final resultado = await repository.getCategoryById(1);
 /// if (resultado.isSuccessful) {
 ///   final category = resultado.asSuccess;

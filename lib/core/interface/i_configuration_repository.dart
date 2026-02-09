@@ -10,7 +10,7 @@ import 'package:system_loja/core/settings/app_settings.dart';
 ///
 /// Exemplo de uso:
 /// ```dart
-/// final repository = AppInjection.instance.configurationRepository;
+/// final repository = appInjection.get<ConfigurationRepository>();
 /// final novasConfigs = await repository.loadConfiguration();
 /// print('Tema escuro: ${novasConfigs.darkMode}');
 /// ```

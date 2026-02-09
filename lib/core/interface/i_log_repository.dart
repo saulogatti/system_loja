@@ -11,7 +11,7 @@ import 'package:system_loja/core/utils/command_result.dart';
 ///
 /// Exemplo de uso:
 /// ```dart
-/// final repository = AppInjection.instance.logRepository;
+/// final repository = appInjection.get<LogRepository>();
 /// 
 /// // Registrar uma ação
 /// await repository.createAndLogEntry(

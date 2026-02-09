@@ -27,13 +27,13 @@ Este diretório contém serviços de nível core que fornecem funcionalidades tr
 
 ```dart
 // Acesso direto
-final codeGenerator = AppInjection.instance.codeGeneratorService;
+final codeGenerator = appInjection.get<CodeGeneratorService>();
 
 // Via repository (recomendado)
-final productRepository = AppInjection.instance.productRepository;
+final productRepository =  appInjection.get<ProductRepository>();
 final code = await productRepository.generateProductCode();
 
-final salesRepository = AppInjection.instance.salesRepository;
+final salesRepository = appInjection.get<SalesRepository>();
 final invoiceNumber = await salesRepository.generateInvoiceNumber();
 ```
 

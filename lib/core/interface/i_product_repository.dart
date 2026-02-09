@@ -12,7 +12,7 @@ import 'package:system_loja/core/utils/command_result.dart';
 ///
 /// Exemplo de uso:
 /// ```dart
-/// final repository = AppInjection.instance.productRepository;
+/// final repository = appInjection.get<ProductRepository>();
 /// 
 /// // Gerar código automático
 /// final codigo = await repository.generateProductCode();

@@ -10,7 +10,7 @@ import 'package:system_loja/core/settings/app_theme_settings.dart';
 ///
 /// Exemplo de uso:
 /// ```dart
-/// final service = AppInjection.instance.settingsService;
+/// final service = appInjection.get<SettingsService>();
 /// 
 /// // Atualizar para tema escuro com cor azul
 /// service.updateSettings(

@@ -12,7 +12,7 @@ import 'package:system_loja/core/utils/command_result.dart';
 ///
 /// Exemplo de uso:
 /// ```dart
-/// final repository = AppInjection.instance.companyRepository;
+/// final repository = appInjection.get<CompanyRepository>();
 /// final resultado = await repository.findByCnpj(cnpj: '12345678000199');
 /// if (resultado.isSuccessful && resultado.asSuccess != null) {
 ///   final company = resultado.asSuccess!;

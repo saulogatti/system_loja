@@ -22,20 +22,10 @@ import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
 final appInjection = GetIt.instance;
-/*
-  AppDatabase appDatabase = AppDatabase();
-  SystemDatabase systemDatabase = SystemDatabase();
 
-  late final SettingsService settingsService = SettingsService.injection();
-
-  late final LogRepository logRepository = LogRepository();
-
-  late final RouteApp routeApp = RouteApp();
-  late final CodeGeneratorService codeGeneratorService = CodeGeneratorService(
-    productDao: appDatabase.productDao,
-    invoiceDao: appDatabase.invoiceDao,
-  );
-*/
+/// Configura as dependências da aplicação.
+/// Isso é usado no main.dart para configurar as dependências da aplicação.
+/// Para acessar as dependências, use o `appInjection.get<T>()` onde T é o tipo da dependência.
 void setupAppInjection() {
   appInjection.registerSingleton<RouteApp>(RouteApp());
   appInjection.registerSingleton<AppDatabase>(AppDatabase());

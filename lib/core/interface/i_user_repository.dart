@@ -15,7 +15,7 @@ import 'package:system_loja/core/utils/command_result.dart';
 ///
 /// Exemplo de uso:
 /// ```dart
-/// final repository = AppInjection.instance.userRepository;
+/// final repository = appInjection.get<UserRepository>();
 /// 
 /// // Buscar usuário por email
 /// final user = await repository.obterUsuarioPorEmail('admin@system.com');

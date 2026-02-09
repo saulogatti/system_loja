@@ -12,7 +12,7 @@ import 'package:system_loja/core/utils/command_result.dart';
 ///
 /// Exemplo de uso:
 /// ```dart
-/// final repository = AppInjection.instance.customerRepository;
+/// final repository = appInjection.get<CustomerRepository>();
 /// final resultado = await repository.findWith(cpf: '12345678900');
 /// if (resultado.isSuccessful && resultado.asSuccess != null) {
 ///   final customer = resultado.asSuccess!;

@@ -10,7 +10,7 @@ import 'package:system_loja/core/models/system_config/system_configuration.dart'
 ///
 /// Exemplo de uso:
 /// ```dart
-/// final repository = AppInjection.instance.systemRepository;
+/// final repository = appInjection.get<SystemRepository>();
 /// 
 /// final config = await repository.getSystemConfiguration();
 /// if (config != null) {
