@@ -181,3 +181,54 @@ class PhoneTextInputFormatter extends TextInputFormatter {
     return buffer.toString();
   }
 }
+
+/// Formatador de CEP para campos de texto
+///
+/// Aplica a máscara XXXXX-XXX automaticamente enquanto o usuário digita.
+/// Remove automaticamente caracteres não-numéricos e limita a 8 dígitos.
+class CepTextInputFormatter extends TextInputFormatter {
+  /// Posição onde o hífen deve ser inserido no formato CEP
+  static const int _cepHyphenPosition = 4;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // se o texto do oldValue é maior que o do newValue, permite que o usuário apague sem reformatar
+    if (oldValue.text.length > newValue.text.length) {
+      return newValue;
+    }
+    // Remove todos os caracteres não-numéricos
+    final digitsOnly = newValue.text.replaceAll(Constants.nonNumericRegExp, '');
+
+    // Limita a 8 dígitos
+    final limitedDigits = digitsOnly.length > 8
+        ? digitsOnly.substring(0, 8)
+        : digitsOnly;
+
+    // Aplica a formatação
+    final formatted = _formatCep(limitedDigits);
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+
+  /// Formata uma string de dígitos no padrão XXXXX-XXX
+  String _formatCep(String digits) {
+    if (digits.isEmpty) return '';
+
+    final buffer = StringBuffer();
+
+    for (int i = 0; i < digits.length; i++) {
+      buffer.write(digits[i]);
+      if (i == _cepHyphenPosition) {
+        buffer.write('-');
+      }
+    }
+
+    return buffer.toString();
+  }
+}

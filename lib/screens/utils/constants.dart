@@ -39,6 +39,11 @@ abstract final class Constants {
   /// Formato básico de e-mail.
   static final RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
+  /// Caracteres acentuados para validação de email
+  static final RegExp accentedCharsRegExp = RegExp(
+    r'[àáâãäåèéêëìíîïòóôõöùúûüçñÀÁÂÃÄÅÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÇÑ]',
+  );
+
   /// Formato básico de telefone BR.
   static final RegExp phoneRegExp = RegExp(
     r'^\(?\d{2}\)?[\s-]?[\d\s-]{4,5}[\s-]?\d{4}$',
