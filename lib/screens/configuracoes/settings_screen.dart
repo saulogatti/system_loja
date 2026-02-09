@@ -118,12 +118,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: BlocConsumer<SettingsBloc, SettingsState>(
         listener: (context, state) {
           if (state is SettingsLoadedState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.status.mensagem),
-                backgroundColor: Colors.green,
-              ),
-            );
+            if (state.status != SettingsSuccessStatus.loaded) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.status.mensagem),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
           } else if (state is SettingsError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

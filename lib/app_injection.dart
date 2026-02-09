@@ -82,6 +82,7 @@ void setupAppInjection() {
   appInjection.registerSingleton<ISystemRepository>(
     SystemRepository(systemDao: appInjection.get<SystemDatabase>().systemDao),
   );
+
   appInjection.registerSingleton<ICategoryRepository>(
     CategoryRepository(
       categoryDao: appInjection.get<AppDatabase>().categoryDao,

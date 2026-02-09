@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
+import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/sales/sales_state.dart';
@@ -14,11 +15,12 @@ class SalesCubit extends Cubit<SalesState> {
   final ISalesRepository _salesRepository;
   final ICustomerRepository _customerRepository;
   final IProductRepository _productRepository;
-
+  final ISystemRepository _systemRepository;
   SalesCubit(
     this._salesRepository,
     this._customerRepository,
     this._productRepository,
+    this._systemRepository,
   ) : super(SalesInitial());
 
   /// Deleta uma venda pelo ID
@@ -55,11 +57,23 @@ class SalesCubit extends Cubit<SalesState> {
   /// Carrega todos os produtos disponíveis
   Future<void> loadProducts() async {
     emit(SalesState.loadingProducts());
+    final resultSales = await _salesRepository.loadAllSales();
     final result = await _productRepository.fetchProducts();
-
+    final resultMap = await _customerRepository.fetchMappedCustomers();
+    final resultSystem = await _systemRepository.getSystemConfiguration();
+    final customers = resultMap.asSuccess;
+    final invoices = resultSales.asSuccess;
+    final paymentMethods = resultSystem?.priceConfiguration.types ?? [];
     switch (result) {
       case ResultSuccess(result: final products):
-        emit(SalesState.loadedProducts(products: products));
+        emit(
+          SalesState.loadedAll(
+            products: products,
+            paymentMethods: paymentMethods,
+            customers: customers,
+            invoices: invoices,
+          ),
+        );
       case ResultError(resultError: final resultError):
         emit(
           SalesState.loadProductsFailure(

@@ -15,6 +15,8 @@ import 'package:flutter/material.dart' as _i18;
 import 'package:system_loja/core/models/company.dart' as _i19;
 import 'package:system_loja/core/models/customer.dart' as _i20;
 import 'package:system_loja/core/models/product.dart' as _i21;
+import 'package:system_loja/core/models/system_config/price_configuration.dart'
+    as _i23;
 import 'package:system_loja/screens/categories/category_management_screen.dart'
     as _i1;
 import 'package:system_loja/screens/company/company_edit_view.dart' as _i2;
@@ -35,7 +37,7 @@ import 'package:system_loja/screens/products/product_detail_screen.dart'
     as _i10;
 import 'package:system_loja/screens/products/product_screen.dart' as _i11;
 import 'package:system_loja/screens/route/route_app.dart' as _i7;
-import 'package:system_loja/screens/sales/cubit/sales_cubit.dart' as _i23;
+import 'package:system_loja/screens/sales/cubit/sales_cubit.dart' as _i24;
 import 'package:system_loja/screens/sales/sales_invoice_screen.dart' as _i12;
 import 'package:system_loja/screens/sales/sales_screen.dart' as _i13;
 
@@ -338,14 +340,16 @@ class ProductInfoRoute extends _i17.PageRouteInfo<void> {
 class SalesInvoiceRoute extends _i17.PageRouteInfo<SalesInvoiceRouteArgs> {
   SalesInvoiceRoute({
     _i18.Key? key,
+    required List<_i23.PaymentMethodType> paymentMethods,
     required Map<int, _i20.Customer> customers,
-    required _i23.SalesCubit salesCubit,
+    required _i24.SalesCubit salesCubit,
     required List<_i21.Product> products,
     List<_i17.PageRouteInfo>? children,
   }) : super(
          SalesInvoiceRoute.name,
          args: SalesInvoiceRouteArgs(
            key: key,
+           paymentMethods: paymentMethods,
            customers: customers,
            salesCubit: salesCubit,
            products: products,
@@ -361,6 +365,7 @@ class SalesInvoiceRoute extends _i17.PageRouteInfo<SalesInvoiceRouteArgs> {
       final args = data.argsAs<SalesInvoiceRouteArgs>();
       return _i12.SalesInvoiceScreen(
         key: args.key,
+        paymentMethods: args.paymentMethods,
         customers: args.customers,
         salesCubit: args.salesCubit,
         products: args.products,
@@ -372,6 +377,7 @@ class SalesInvoiceRoute extends _i17.PageRouteInfo<SalesInvoiceRouteArgs> {
 class SalesInvoiceRouteArgs {
   const SalesInvoiceRouteArgs({
     this.key,
+    required this.paymentMethods,
     required this.customers,
     required this.salesCubit,
     required this.products,
@@ -379,15 +385,17 @@ class SalesInvoiceRouteArgs {
 
   final _i18.Key? key;
 
+  final List<_i23.PaymentMethodType> paymentMethods;
+
   final Map<int, _i20.Customer> customers;
 
-  final _i23.SalesCubit salesCubit;
+  final _i24.SalesCubit salesCubit;
 
   final List<_i21.Product> products;
 
   @override
   String toString() {
-    return 'SalesInvoiceRouteArgs{key: $key, customers: $customers, salesCubit: $salesCubit, products: $products}';
+    return 'SalesInvoiceRouteArgs{key: $key, paymentMethods: $paymentMethods, customers: $customers, salesCubit: $salesCubit, products: $products}';
   }
 
   @override
@@ -395,6 +403,10 @@ class SalesInvoiceRouteArgs {
     if (identical(this, other)) return true;
     if (other is! SalesInvoiceRouteArgs) return false;
     return key == other.key &&
+        const _i22.ListEquality<_i23.PaymentMethodType>().equals(
+          paymentMethods,
+          other.paymentMethods,
+        ) &&
         const _i22.MapEquality<int, _i20.Customer>().equals(
           customers,
           other.customers,
@@ -409,6 +421,7 @@ class SalesInvoiceRouteArgs {
   @override
   int get hashCode =>
       key.hashCode ^
+      const _i22.ListEquality<_i23.PaymentMethodType>().hash(paymentMethods) ^
       const _i22.MapEquality<int, _i20.Customer>().hash(customers) ^
       salesCubit.hashCode ^
       const _i22.ListEquality<_i21.Product>().hash(products);
