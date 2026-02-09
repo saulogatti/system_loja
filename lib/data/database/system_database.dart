@@ -2,15 +2,22 @@ import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:system_loja/core/models/activity_log.dart';
+import 'package:system_loja/core/models/system_config/price_configuration.dart';
+import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/data/database/dao/log_dao.dart';
+import 'package:system_loja/data/database/dao/system_dao.dart';
 import 'package:system_loja/data/database/dao/users_dao.dart';
 import 'package:system_loja/data/database/table/system/logs_records.dart';
+import 'package:system_loja/data/database/table/system/system_records.dart';
 import 'package:system_loja/data/database/table/system/users_records.dart';
 
 part 'system_database.g.dart';
 
-@DriftDatabase(tables: [UsersRecords, LogsRecords], daos: [UsersDao, LogDao])
+@DriftDatabase(
+  tables: [UsersRecords, LogsRecords, SystemRecords],
+  daos: [UsersDao, LogDao, SystemDao],
+)
 class SystemDatabase extends _$SystemDatabase {
   static final _nameBd = 'system_database';
   SystemDatabase() : super(_openConnection());
