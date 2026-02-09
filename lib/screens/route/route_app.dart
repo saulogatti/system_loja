@@ -122,10 +122,6 @@ class RouteApp extends RootStackRouter {
       title: (context, data) => 'Sales Invoice',
     ),
     AutoRoute(
-      page: CustomerDetailRoute.page,
-      title: (context, data) => 'Customer Detail',
-    ),
-    AutoRoute(
       page: ProductDetailRoute.page,
       title: (context, data) => 'Product Detail',
     ),
