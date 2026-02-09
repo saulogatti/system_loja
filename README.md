@@ -46,10 +46,23 @@ Aplicação Flutter **multiplataforma** (Windows, macOS, iOS, Android) para gere
    - Buscar nota fiscal por número
    - Dados: Número, Cliente, Itens, Valor Total, Forma de Pagamento
 
+4. **Cadastro de Empresa**
+   - Dados da empresa (razão social, CNPJ, endereço, contato)
+   - Visualização e edição com formulário dedicado
+
+5. **Categorias de Produto**
+   - Gestão de categorias para organização dos produtos
+   - Tela de gerenciamento de categorias (CRUD)
+
+6. **Configurações**
+   - Usuários e permissões
+   - Configurações do sistema (banco de dados, backup, notificações, tema)
+   - Logs do sistema e análise de atividades
+
 ## Requisitos
 
 - Flutter SDK 3.38 ou superior
-- Dart SDK 3.10.3 ou superior (incluído no Flutter)
+- Dart SDK 3.10.8 ou superior (incluído no Flutter, conforme `pubspec.yaml`)
 - SQLite (incluído no Flutter desktop)
 
 ## Como Instalar o Flutter
@@ -108,8 +121,8 @@ O projeto utiliza **persistência dual**:
 ### Sistema Principal (Drift ORM)
 - **ORM Type-Safe**: Drift para SQLite com validações em tempo de compilação
 - **Banco**: `system_loja.db` (criado automaticamente)
-- **Tabelas**: `customers`, `products`, `invoices`, `invoice_items`, `users`, `log_atividades`
-- **DAOs**: Data Access Objects em `lib/data/database/dao/`
+- **Tabelas**: clientes, produtos, categorias, empresas, endereços, notas fiscais, itens de nota, usuários, logs do sistema
+- **DAOs**: Data Access Objects em `lib/data/database/dao/` (customer_dao, product_dao, category_dao, company_dao, address_dao, invoice_dao, invoice_item_dao, users_dao, log_dao, system_dao, sales_dao)
 - **Migrations**: Versionamento de schema com drift_dev
 - **Suporte**: Transações, relacionamentos, queries type-safe
 
@@ -124,70 +137,61 @@ O projeto utiliza **persistência dual**:
 ```
 system_loja/
 ├── lib/
-│   ├── main.dart              # Ponto de entrada com Material 3
+│   ├── main.dart                 # Ponto de entrada com Material 3
+│   ├── app_injection.dart        # Dependency Injection (GetIt)
+│   ├── colors.dart               # Cores Material Design
 │   ├── core/
-│   │   ├── models/            # Modelos com @JsonSerializable
-│   │   │   ├── customer.dart  # Customer (Cliente)
-│   │   │   ├── product.dart   # Product (Produto)
-│   │   │   ├── invoice.dart   # Invoice (Nota Fiscal)
-│   │   │   ├── user.dart      # User (Usuário)
-│   │   │   └── log_atividade.dart
-│   │   ├── repository/        # Repositories (Repository Pattern)
-│   │   │   ├── cliente_repository.dart
+│   │   ├── models/               # Modelos com @JsonSerializable
+│   │   │   ├── customer.dart     # Customer (Cliente)
+│   │   │   ├── product.dart      # Product (Produto)
+│   │   │   ├── category.dart     # Category (Categoria)
+│   │   │   ├── company.dart      # Company (Empresa)
+│   │   │   ├── address.dart      # Endereço
+│   │   │   ├── invoice.dart      # Invoice (Nota Fiscal)
+│   │   │   ├── invoice_item.dart
+│   │   │   ├── user.dart         # User (Usuário)
+│   │   │   ├── activity_log.dart  # Log de atividades
+│   │   │   └── system_config/    # Configurações do sistema
+│   │   ├── interface/            # Contratos (repositórios, serviços)
+│   │   ├── repository/           # Repositories (Repository Pattern)
+│   │   │   ├── customer_repository.dart
 │   │   │   ├── product_repository.dart
+│   │   │   ├── category_repository.dart
+│   │   │   ├── company_repository.dart
 │   │   │   ├── sales_repository.dart
-│   │   │   └── user_repository.dart
-│   │   ├── managers/          # Managers JSON (legacy - descontinuado)
+│   │   │   └── system/           # log, system, user_repository
+│   │   ├── managers/             # Configuração, cache, erros
+│   │   ├── services/             # Code generator, etc.
+│   │   ├── settings/             # App settings, tema
+│   │   ├── exceptions/           # Exceções de negócio
 │   │   └── utils/
 │   │       ├── command_result.dart     # OperationResult pattern
 │   │       ├── string_extensions.dart  # File name safety
 │   │       ├── validators.dart         # Validações
 │   │       └── input_formatters.dart   # Formatadores de entrada
 │   ├── data/
-│   │   ├── database/          # Drift ORM (principal)
-│   │   │   ├── app_database.dart       # AppDatabase com @DriftDatabase
-│   │   │   ├── system_database.dart    # SystemDatabase (Drift)
-│   │   │   ├── database_config.dart
-│   │   │   ├── table/                  # Tabelas Drift
-│   │   │   │   ├── customers_table.dart
-│   │   │   │   ├── products_table.dart
-│   │   │   │   ├── invoices_table.dart
-│   │   │   │   └── users_table.dart
-│   │   │   └── dao/                    # Data Access Objects
-│   │   │       ├── customers_dao.dart
-│   │   │       ├── products_dao.dart
-│   │   │       └── invoices_dao.dart
-│   │   └── storage/           # Storage abstrato
-│   │       ├── base_data_storage.dart
-│   │       └── sql_data_storage.dart
-│   ├── screens/
-│   │   ├── home/              # Tela principal
-│   │   │   └── home_screen.dart
-│   │   ├── customer/          # Módulo de clientes
-│   │   │   ├── customer_view.dart
-│   │   │   └── bloc/          # BLoC com freezed
-│   │   │       ├── customer_bloc.dart
-│   │   │       ├── customer_bloc_event.dart
-│   │   │       └── customer_bloc_state.dart
-│   │   ├── products/          # Módulo de produtos
-│   │   ├── sales/             # Módulo de vendas
-│   │   │   └── sales_cubit.dart
-│   │   ├── configuracoes/     # Configurações
-│   │   │   └── bloc/
-│   │   │       └── user_cubit.dart
-│   │   ├── settings/          # Settings service
-│   │   ├── injection/         # Dependency Injection
-│   │   │   └── app_injection.dart
-│   │   ├── route/             # Auto Route
-│   │   └── widgets/           # Widgets compartilhados
-│   └── colors.dart            # Cores Material Design
-├── test/                      # Testes unitários e integração
-├── docs/                      # Documentação detalhada
-│   ├── DRIFT_ARCHITECTURE.md
-│   ├── DRIFT_MIGRATION.md
-│   ├── DATABASE_NORMALIZATION.md
-│   └── ...
-├── data/                      # Arquivos JSON (legacy)
+│   │   ├── database/             # Drift ORM (principal)
+│   │   │   ├── app_database.dart
+│   │   │   ├── system_database.dart
+│   │   │   ├── table/            # Tabelas Drift (customers, products, categories, company, invoices, users, logs...)
+│   │   │   ├── dao/              # Data Access Objects
+│   │   │   └── extension/       # Companions para persistência
+│   │   ├── cache/                # Cache (system_cache_manager)
+│   │   └── files_utility/       # Utilitários de arquivo
+│   └── screens/
+│       ├── home/                 # Tela principal
+│       ├── customer/             # Módulo de clientes (BLoC)
+│       ├── products/             # Módulo de produtos (Cubit)
+│       ├── sales/                # Módulo de vendas (Cubit)
+│       ├── company/              # Cadastro de empresa (BLoC)
+│       ├── categories/           # Gestão de categorias (Cubit)
+│       ├── configuracoes/        # Configurações, usuários, logs, tema
+│       ├── settings/             # Settings service
+│       ├── route/                # Auto Route (route_app.dart)
+│       ├── utils/                # Constantes
+│       └── widgets/              # Widgets compartilhados (address_form, loading_overlay, etc.)
+├── test/                        # Testes unitários e integração
+├── docs/                        # Documentação detalhada
 ├── pubspec.yaml
 └── README.md
 ```
@@ -217,11 +221,22 @@ system_loja/
 - Cálculo automático do valor total
 - Detalhes da nota em modal
 
+### Tela de Empresa
+- Visualização e edição dos dados da empresa (razão social, CNPJ, endereço, contato)
+
+### Tela de Categorias
+- Gerenciamento de categorias de produtos (CRUD)
+
+### Configurações
+- Usuários, permissões e tema
+- Backup, banco de dados, notificações
+- Logs do sistema e análise de atividades
+
 ## Tecnologias
 
 ### Core
-- **Flutter 3.38**: Framework de UI multiplataforma
-- **Dart 3.10.1**: Linguagem com null safety e pattern matching
+- **Flutter**: Framework de UI multiplataforma
+- **Dart 3.10.8+**: Linguagem com null safety e pattern matching (conforme `environment.sdk` no pubspec)
 - **Material Design 3**: Sistema de design moderno
 
 ### State Management
@@ -237,13 +252,14 @@ system_loja/
 - **synchronized**: Controle de concorrência para JSON (legacy)
 
 ### Utilities
+- **get_it**: Injeção de dependências (AppInjection)
 - **auto_route**: Navegação declarativa type-safe
 - **intl**: Internacionalização e formatação de datas/números
 - **path_provider**: Acesso a diretórios da aplicação
 - **path**: Manipulação de caminhos de arquivos
 - **async**: AsyncMemoizer para inicialização única
-- **equatable**: Comparação de objetos por valor
 - **crypto**: Funções criptográficas
+- **log_custom_printer**: Log customizado (repositório Git)
 
 ## 🏗️ Arquitetura
 
@@ -254,8 +270,8 @@ system_loja/
 3. **DAO Pattern**: Data Access Objects para acesso ao banco Drift
 4. **Dependency Injection**: Gerenciamento de dependências com AppInjection
 5. **OperationResult Pattern**: Tratamento type-safe de erros
-6. **Manager Pattern**: Gerenciamento de dados JSON (legacy - descontinuado)
-7. **Mixin Pattern**: Reutilização de código (FileSystemManager)
+6. **Interface/Repository**: Contratos em `core/interface/` e implementações em `core/repository/`
+7. **Manager Pattern**: Configuração, cache e erros (legacy JSON descontinuado)
 
 ### Code Generation
 
@@ -343,6 +359,9 @@ Inclua sempre **critérios de aceitação** claros para facilitar o trabalho do 
 - **[docs/DATABASE_NORMALIZATION.md](docs/DATABASE_NORMALIZATION.md)** - Normalização do banco de dados
 - **[docs/VALIDATION_SYSTEM.md](docs/VALIDATION_SYSTEM.md)** - Sistema de validações
 - **[docs/REFACTORING_BLOC.md](docs/REFACTORING_BLOC.md)** - Refatoração BLoC
+- **[docs/COMPANY_FEATURE.md](docs/COMPANY_FEATURE.md)** - Funcionalidade de cadastro de empresa
+- **[docs/CATEGORY_FEATURE_SUMMARY.md](docs/CATEGORY_FEATURE_SUMMARY.md)** - Resumo da funcionalidade de categorias
+- **[docs/CONFIGURACOES_SCREEN.md](docs/CONFIGURACOES_SCREEN.md)** - Tela de configurações
 - **[docs/](docs/)** - Documentação adicional do projeto
 
 ---
