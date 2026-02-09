@@ -38,7 +38,7 @@ abstract interface class ICustomerRepository {
   /// Útil para acesso rápido a clientes por ID sem necessidade de busca.
   ///
   /// Retorna:
-  /// - [ResultStatus] com Map<int, Customer> ou mensagem de erro
+  /// - [ResultStatus] com `Map<int, Customer>` ou mensagem de erro
   Future<ResultStatus<Map<int, Customer>, String>> fetchMappedCustomers();
 
   /// Busca um cliente específico pelo ID.

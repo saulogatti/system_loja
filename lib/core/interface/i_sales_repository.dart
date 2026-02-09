@@ -77,7 +77,7 @@ abstract interface class ISalesRepository {
   /// Útil para acesso rápido a vendas por ID sem necessidade de busca.
   ///
   /// Retorna:
-  /// - [ResultStatus] com Map<int, Invoice> ou mensagem de erro
+  /// - [ResultStatus] com `Map<int, Invoice>` ou mensagem de erro
   Future<ResultStatus<Map<int, Invoice>, String>> loadAllSales();
 
   /// Salva uma nova venda no sistema.

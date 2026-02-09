@@ -38,7 +38,7 @@ abstract interface class ICompanyRepository {
   /// Útil para acesso rápido a empresas por ID sem necessidade de busca.
   ///
   /// Retorna:
-  /// - [ResultStatus] com Map<int, Company> ou mensagem de erro
+  /// - [ResultStatus] com `Map<int, Company>` ou mensagem de erro
   Future<ResultStatus<Map<int, Company>, String>> fetchMappedCompanies();
 
   /// Busca uma empresa pelo CNPJ.
