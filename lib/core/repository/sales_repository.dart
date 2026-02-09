@@ -1,26 +1,29 @@
+import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/services/code_generator_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/invoice_dao.dart';
-import 'package:system_loja/screens/injection/app_injection.dart';
 
 /// Repositório para gerenciamento de vendas usando Drift
 ///
 /// Responsável por coordenar operações de CRUD de vendas (invoices)
 /// utilizando os DAOs do Drift.
-class SalesRepository {
-  final InvoiceDao _invoiceDao = AppInjection.instance.appDatabase.invoiceDao;
-  late final CodeGeneratorService _codeGeneratorService;
+class SalesRepository implements ISalesRepository {
+  final InvoiceDao _invoiceDao;
+  final CodeGeneratorService _codeGeneratorService;
 
-  SalesRepository() {
-    _codeGeneratorService = AppInjection.instance.codeGeneratorService;
-  }
+  SalesRepository({
+    required InvoiceDao invoiceDao,
+    required CodeGeneratorService codeGeneratorService,
+  }) : _codeGeneratorService = codeGeneratorService,
+       _invoiceDao = invoiceDao;
 
   /// Deleta uma venda pelo ID
   ///
   /// Remove a nota fiscal e seus itens (cascade).
   /// Retorna sucesso ou erro.
+  @override
   Future<ResultStatus<bool, String>> deleteSale(int id) async {
     try {
       await _invoiceDao.deleteInvoice(id);
@@ -34,6 +37,7 @@ class SalesRepository {
   /// Gera um número único para uma nova nota fiscal.
   ///
   /// Retorna um número no formato NF-YYYYMMDD-NNNN que não existe no banco.
+  @override
   Future<ResultStatus<String, String>> generateInvoiceNumber() async {
     try {
       final invoiceNumber = await _codeGeneratorService.generateInvoiceNumber();
@@ -47,6 +51,7 @@ class SalesRepository {
   /// Obtém o próximo ID disponível para uma nova venda
   ///
   /// Retorna 1 se não houver vendas, caso contrário retorna o maior ID + 1.
+  @override
   Future<ResultStatus<int, String>> getNextSaleId() async {
     try {
       final result = await loadAllSales();
@@ -68,6 +73,7 @@ class SalesRepository {
   /// Busca uma venda por ID
   ///
   /// Retorna a venda encontrada ou erro se não existir.
+  @override
   Future<ResultStatus<Invoice, String>> getSaleById(int id) async {
     try {
       final invoice = await _invoiceDao.getById(id);
@@ -85,6 +91,7 @@ class SalesRepository {
   ///
   /// Retorna um Map com ID como chave e Invoice como valor.
   /// Retorna sucesso com o mapa ou erro se houver falha no carregamento.
+  @override
   Future<ResultStatus<Map<int, Invoice>, String>> loadAllSales() async {
     try {
       final invoices = await _invoiceDao.getAll();
@@ -105,6 +112,7 @@ class SalesRepository {
   ///
   /// Salva tanto a nota fiscal quanto seus itens em uma transação.
   /// Retorna sucesso ou erro.
+  @override
   Future<ResultStatus<bool, String>> saveSale(Invoice invoice) async {
     try {
       await _invoiceDao.insertInvoiceWithItems(invoice);
@@ -120,6 +128,7 @@ class SalesRepository {
   /// Atualiza a nota fiscal e seus itens.
   /// Remove itens antigos e insere os novos dentro de uma transação.
   /// Retorna sucesso ou erro.
+  @override
   Future<ResultStatus<bool, String>> updateSale(Invoice invoice) async {
     try {
       await _invoiceDao.updateInvoiceWithItems(invoice);
@@ -134,6 +143,7 @@ class SalesRepository {
   ///
   /// [invoiceNumber] Número da nota a ser validado.
   /// Retorna sucesso se válido ou erro com mensagem descritiva.
+  @override
   Future<ResultStatus<bool, String>> validateInvoiceNumber(
     String invoiceNumber,
   ) async {

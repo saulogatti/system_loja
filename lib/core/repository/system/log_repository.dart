@@ -1,15 +1,17 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/log_dao.dart';
-import 'package:system_loja/screens/injection/app_injection.dart';
 
-class LogRepository with LoggerClassMixin {
-  final LogDao _logDao = AppInjection.instance.systemDatabase.logDao;
+class LogRepository with LoggerClassMixin implements ILogRepository {
+  final LogDao _logDao;
+  LogRepository({required LogDao logDao}) : _logDao = logDao;
 
   /// Limpa logs antigos (opcional - para manutenção)
   ///
   /// Remove logs mais antigos que a data especificada.
+  @override
   Future<ResultStatus<bool, String>> clearOldLogs(DateTime cutoffDate) async {
     try {
       logInfo('Logs antigos removidos até $cutoffDate');
@@ -21,6 +23,7 @@ class LogRepository with LoggerClassMixin {
   }
 
   /// Cria e registra um log de atividade
+  @override
   Future<ResultStatus<void, String>> createAndLogEntry({
     required ActionType logActionType,
     required String entityName,
@@ -45,6 +48,7 @@ class LogRepository with LoggerClassMixin {
   }
 
   /// Obtém todos os logs
+  @override
   Future<ResultStatus<List<ActivityLog>, String>> fetchAllLogs() async {
     try {
       final result = await _logDao.getAll();
@@ -55,6 +59,7 @@ class LogRepository with LoggerClassMixin {
   }
 
   /// Obtém logs por tipo de ação
+  @override
   Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByActionType(
     ActionType actionType,
   ) async {
@@ -67,6 +72,7 @@ class LogRepository with LoggerClassMixin {
   }
 
   /// Obtém logs de uma entidade específica
+  @override
   Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByEntity(
     String entity,
   ) async {
@@ -81,6 +87,7 @@ class LogRepository with LoggerClassMixin {
   /// Obtém logs por período
   ///
   /// Inclui logs nos limites do período (dataInicio e dataFim são inclusos).
+  @override
   Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByPeriod(
     DateTime startDate,
     DateTime endDate,
@@ -94,6 +101,7 @@ class LogRepository with LoggerClassMixin {
   }
 
   /// Obtém logs de um usuário específico
+  @override
   Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByUser(
     int userId,
   ) async {
@@ -109,6 +117,7 @@ class LogRepository with LoggerClassMixin {
   ///
   /// Este método é usado para registrar todas as operações CRUD
   /// realizadas no sistema.
+  @override
   Future<ResultStatus<void, String>> saveActivityLog(ActivityLog log) async {
     try {
       await _logDao.save(log);

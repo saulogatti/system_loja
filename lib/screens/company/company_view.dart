@@ -163,7 +163,7 @@ class _CompanyViewState extends State<CompanyView> {
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: RichText(
         text: TextSpan(
-          style: const TextStyle(color: Colors.black87, fontSize: 14),
+          style: const TextStyle(fontSize: 14),
           children: [
             TextSpan(
               text: '$label: ',

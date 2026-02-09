@@ -2,18 +2,26 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/managers/configuration_repository.dart';
+import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/app_theme_settings.dart';
+import 'package:system_loja/data/database/system_database.dart';
+import 'package:system_loja/screens/settings/settings_service.dart';
 
 void main() {
   late ConfigurationRepository manager;
   late String testDataFile;
-
+  late SystemDatabase systemDatabase;
   setUp(() {
+    systemDatabase = SystemDatabase();
     // Cria arquivo temporário para os testes
     testDataFile =
         'test/data/test_configuracao_${DateTime.now().millisecondsSinceEpoch}.json';
-    manager = ConfigurationRepository();
+    // TODO arquivo de teste, checar se é necessário criar ou gerar mock de cache e banco de dados
+    manager = ConfigurationRepository(
+      logRepository: LogRepository(logDao: systemDatabase.logDao),
+      settingsService: SettingsService.injection(),
+    );
   });
 
   tearDown(() {
@@ -70,7 +78,10 @@ void main() {
       await manager.updateAppSettings(novaConfig);
 
       // Cria novo manager para verificar persistência
-      final manager2 = ConfigurationRepository();
+      final manager2 = ConfigurationRepository(
+        logRepository: LogRepository(logDao: systemDatabase.logDao),
+        settingsService: SettingsService.injection(),
+      );
 
       final updatedConfig2 = await manager2.loadConfiguration();
 
@@ -243,7 +254,10 @@ void main() {
         await manager.updateAppSettings(configOriginal);
 
         // Cria novo manager para verificar serialização
-        final manager2 = ConfigurationRepository();
+        final manager2 = ConfigurationRepository(
+          logRepository: LogRepository(logDao: systemDatabase.logDao),
+          settingsService: SettingsService.injection(),
+        );
         final configuracao = await manager2.loadConfiguration();
         expect(
           configuracao.notificacoesAtivadas,

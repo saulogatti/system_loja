@@ -1,26 +1,29 @@
+import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/services/code_generator_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
-import 'package:system_loja/screens/injection/app_injection.dart';
 
-class ProductRepository {
+class ProductRepository implements IProductRepository {
   /// Mapa estático de locks por caminho de arquivo, para serializar I/O
-  final ProductDao defaultDataStorage =
-      AppInjection.instance.appDatabase.productDao; //
-  final CodeGeneratorService _codeGeneratorService =
-      AppInjection.instance.codeGeneratorService;
+  final ProductDao _productDao;
+  final CodeGeneratorService _codeGeneratorService;
 
-  ProductRepository();
+  ProductRepository({
+    required ProductDao productDao,
+    required CodeGeneratorService codeGeneratorService,
+  }) : _productDao = productDao,
+       _codeGeneratorService = codeGeneratorService;
 
   /// Remove um produto do armazenamento.
   ///
   /// [id] ID do produto a ser removido.
   /// Retorna resultado da operação de exclusão.
+  @override
   Future<ResultStatus<bool, String>> deleteProduct(int id) async {
     try {
-      final result = await defaultDataStorage.remove(id);
+      final result = await _productDao.remove(id);
       switch (result) {
         case true:
           return ResultSuccess(result);
@@ -39,9 +42,10 @@ class ProductRepository {
   ///
   /// A cópia protege o cache interno contra modificações acidentais
   /// feitas pelo chamador.
+  @override
   Future<ResultStatus<List<Product>, String>> fetchProducts() async {
     try {
-      final result = await defaultDataStorage.getAll();
+      final result = await _productDao.getAll();
       return ResultSuccess(result);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
@@ -51,9 +55,10 @@ class ProductRepository {
 
   /// Retorna a lista de produtos em cache, carregando do disco se vazia.
 
+  @override
   Future<ResultStatus<Product, String>> findByCode(int codigo) async {
     try {
-      final result = await defaultDataStorage.getById(codigo);
+      final result = await _productDao.getById(codigo);
       if (result != null) {
         return ResultSuccess(result);
       } else {
@@ -68,6 +73,7 @@ class ProductRepository {
   /// Gera um código único para um novo produto.
   ///
   /// Retorna um código no formato PRD-YYYYMMDD-NNNN que não existe no banco.
+  @override
   Future<String> generateProductCode() async {
     return await _codeGeneratorService.generateProductCode();
   }
@@ -77,9 +83,10 @@ class ProductRepository {
   /// Este método atualiza o cache interno e chama [saveDataSynchronized]
   /// para persistir as alterações de forma segura. Não aguarda o término da
   /// operação (fire-and-forget) — adaptar conforme necessidade do chamador.
+  @override
   Future<ResultStatus<bool, String>> saveProduct(Product product) async {
     try {
-      final result = await defaultDataStorage.insertProduct(product);
+      final result = await _productDao.insertProduct(product);
       if (result <= 0) {
         return ResultError('Falha ao salvar produto: ${product.name}');
       }
@@ -97,9 +104,10 @@ class ProductRepository {
   ///
   /// **Nota**: Este método utiliza internamente [saveProduct], pois o storage
   /// não diferencia entre inserção e atualização (upsert pattern).
+  @override
   Future<ResultStatus<bool, String>> updateProduct(Product product) async {
     try {
-      final result = await defaultDataStorage.updateProduct(product);
+      final result = await _productDao.updateProduct(product);
       return ResultSuccess(result);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
@@ -111,6 +119,7 @@ class ProductRepository {
   ///
   /// [code] Código a ser validado.
   /// Retorna resultado da validação com mensagem descritiva.
+  @override
   Future<ResultStatus<bool, String>> validateProductCode(String code) async {
     final validationResult = await _codeGeneratorService.validateProductCode(
       code,

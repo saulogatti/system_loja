@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
@@ -12,13 +13,13 @@ import 'package:system_loja/screens/products/cubit/product_state.dart';
 /// operação para a UI.
 class ProductCubit extends Cubit<ProductState> {
   /// Repositório utilizado para acessar dados de produtos.
-  late final ProductRepository _manager = ProductRepository();
+  final IProductRepository _productRepository;
 
   /// Inicializa o Cubit com estado de carregamento.
   ///
   /// Cria uma nova instância do repositório e carrega todos os produtos
   /// disponíveis na base de dados.
-  ProductCubit() : super(ProductState.loading()) {
+  ProductCubit(this._productRepository) : super(ProductState.loading()) {
     loadAllProducts();
   }
 
@@ -44,7 +45,7 @@ class ProductCubit extends Cubit<ProductState> {
     required bool codeGenerate,
   }) async {
     if (codeGenerate) {
-      codigo = await _manager.generateProductCode();
+      codigo = await _productRepository.generateProductCode();
     }
     final produto = Product(
       name: nome,
@@ -55,7 +56,7 @@ class ProductCubit extends Cubit<ProductState> {
       categoryId: categoryId,
     );
 
-    final resultSave = await _manager.saveProduct(produto);
+    final resultSave = await _productRepository.saveProduct(produto);
     switch (resultSave) {
       case ResultSuccess(result: final saved):
         if (!saved) {
@@ -66,7 +67,7 @@ class ProductCubit extends Cubit<ProductState> {
           );
           return;
         }
-        final result = await _manager.fetchProducts();
+        final result = await _productRepository.fetchProducts();
         switch (result) {
           case ResultSuccess(result: final produtos):
             emit(ProductState.insertSuccess(produtos: produtos.toList()));
@@ -94,10 +95,10 @@ class ProductCubit extends Cubit<ProductState> {
   /// Parâmetros:
   ///   - [id]: Identificador único do produto a ser removido.
   Future<void> deleteProduct(int id) async {
-    final deleteResult = await _manager.deleteProduct(id);
+    final deleteResult = await _productRepository.deleteProduct(id);
     switch (deleteResult) {
       case ResultSuccess():
-        final result = await _manager.fetchProducts();
+        final result = await _productRepository.fetchProducts();
         switch (result) {
           case ResultSuccess(result: final produtos):
             emit(ProductState.deleteSuccess(produtos: produtos.toList()));
@@ -124,7 +125,7 @@ class ProductCubit extends Cubit<ProductState> {
   /// Parâmetros:
   ///   - [codigo]: Código do produto a ser localizado.
   Future<void> findByCode(int codigo) async {
-    final result = await _manager.findByCode(codigo);
+    final result = await _productRepository.findByCode(codigo);
     switch (result) {
       case ResultSuccess(result: final produto):
         emit(
@@ -141,7 +142,7 @@ class ProductCubit extends Cubit<ProductState> {
   }
 
   Future<void> loadAllProducts() async {
-    final result = await _manager.fetchProducts();
+    final result = await _productRepository.fetchProducts();
     switch (result) {
       case ResultSuccess(result: final produtos):
         emit(ProductState.loaded(produtos: produtos.toList()));
@@ -163,10 +164,10 @@ class ProductCubit extends Cubit<ProductState> {
   ///   - [produto]: Objeto [Produto] contendo os dados atualizados.
   Future<void> updateProduct(Product produto) async {
     emit(ProductState.loading());
-    final updateResult = await _manager.updateProduct(produto);
+    final updateResult = await _productRepository.updateProduct(produto);
     switch (updateResult) {
       case ResultSuccess():
-        final result = await _manager.fetchProducts();
+        final result = await _productRepository.fetchProducts();
         switch (result) {
           case ResultSuccess(result: final produtos):
             emit(ProductState.updateSuccess(produtos: produtos.toList()));

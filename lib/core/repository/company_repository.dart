@@ -1,25 +1,30 @@
 import 'package:drift/remote.dart';
+import 'package:system_loja/core/interface/i_company_repository.dart';
+import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/models/company.dart';
-import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/company_dao.dart';
-import 'package:system_loja/screens/injection/app_injection.dart';
 
 /// Repository para gerenciar operações de empresas.
 ///
 /// Utiliza CompanyDao para acesso ao banco de dados e gerencia
 /// logs de atividades do sistema.
-class CompanyRepository {
-  final LogRepository _logRepository = LogRepository();
-  final CompanyDao dao = AppInjection.instance.appDatabase.companyDao;
+class CompanyRepository implements ICompanyRepository {
+  final ILogRepository _logRepository;
+  final CompanyDao dao;
 
-  CompanyRepository();
+  CompanyRepository({
+    required ILogRepository logRepository,
+    required CompanyDao companyDao,
+  }) : _logRepository = logRepository,
+       dao = companyDao;
 
   /// Deleta uma empresa pelo ID.
   ///
   /// Retorna [ResultStatus] indicando sucesso ou erro com mensagem.
+  @override
   Future<ResultStatus<bool, String>> deleteCompany(int id) async {
     try {
       final company = await dao.getById(id);
@@ -47,8 +52,8 @@ class CompanyRepository {
   /// Busca todas as empresas mapeadas por ID.
   ///
   /// Retorna [ResultStatus] com Map de empresas ou mensagem de erro.
-  Future<ResultStatus<Map<int, Company>, String>>
-      fetchMappedCompanies() async {
+  @override
+  Future<ResultStatus<Map<int, Company>, String>> fetchMappedCompanies() async {
     try {
       final data = await dao.getAll();
       final companies = data;
@@ -62,22 +67,10 @@ class CompanyRepository {
     }
   }
 
-  /// Busca uma empresa específica pelo ID.
-  ///
-  /// Retorna [ResultStatus] com a empresa encontrada ou mensagem de erro.
-  Future<ResultStatus<Company?, String>> findCompanyById(int id) async {
-    try {
-      final data = await dao.getById(id);
-      return ResultStatus.success(data);
-    } catch (e, stackTrace) {
-      await reportError(e, stackTrace);
-      return ResultStatus.error('Erro ao buscar empresa por ID.');
-    }
-  }
-
   /// Busca uma empresa pelo CNPJ.
   ///
   /// Retorna [ResultStatus] com a empresa encontrada ou mensagem de erro.
+  @override
   Future<ResultStatus<Company?, String>> findByCnpj({
     required String cnpj,
   }) async {
@@ -90,9 +83,24 @@ class CompanyRepository {
     }
   }
 
+  /// Busca uma empresa específica pelo ID.
+  ///
+  /// Retorna [ResultStatus] com a empresa encontrada ou mensagem de erro.
+  @override
+  Future<ResultStatus<Company?, String>> findCompanyById(int id) async {
+    try {
+      final data = await dao.getById(id);
+      return ResultStatus.success(data);
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultStatus.error('Erro ao buscar empresa por ID.');
+    }
+  }
+
   /// Obtém todas as empresas.
   ///
   /// Retorna [ResultStatus] com lista de empresas ou mensagem de erro.
+  @override
   Future<ResultStatus<List<Company>, String>> getAllCompanies() async {
     try {
       final data = await dao.getAll();
@@ -111,6 +119,7 @@ class CompanyRepository {
   /// Salva uma nova empresa.
   ///
   /// Retorna [ResultStatus] indicando sucesso ou erro com mensagem.
+  @override
   Future<ResultStatus<bool, String>> saveCompany(Company company) async {
     try {
       // Verifica se já existe empresa com o mesmo CNPJ
@@ -147,6 +156,7 @@ class CompanyRepository {
   /// Atualiza uma empresa existente.
   ///
   /// Retorna [ResultStatus] indicando sucesso ou erro com mensagem.
+  @override
   Future<ResultStatus<bool, String>> updateCompany(Company company) async {
     try {
       final exists = await dao.getById(company.id);

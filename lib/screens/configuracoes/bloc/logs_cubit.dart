@@ -1,12 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/repository/system/log_repository.dart';
+import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_state_cubit.dart';
-import 'package:system_loja/screens/injection/app_injection.dart';
 
 class LogsCubit extends Cubit<LogsState> {
-  final LogRepository _logRepository = AppInjection.instance.logRepository;
-  LogsCubit() : super(const LogsStateInitial());
+  final ILogRepository _logRepository;
+  LogsCubit(this._logRepository) : super(const LogsStateInitial());
 
   Future<void> fetchActivesLogs() async {
     final logs = await _logRepository.fetchAllLogs();

@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:system_loja/core/interface/i_customer_repository.dart';
+import 'package:system_loja/core/interface/i_product_repository.dart';
+import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/models/invoice.dart';
-import 'package:system_loja/core/repository/customer_repository.dart';
-import 'package:system_loja/core/repository/product_repository.dart';
-import 'package:system_loja/core/repository/sales_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/sales/sales_state.dart';
 
@@ -11,14 +11,15 @@ import 'package:system_loja/screens/sales/sales_state.dart';
 /// Coordena as operações de vendas usando os repositories
 /// e emite estados apropriados para a UI.
 class SalesCubit extends Cubit<SalesState> {
-  late SalesRepository _salesRepository;
-  late final CustomerRepository _customerRepository = CustomerRepository();
+  final ISalesRepository _salesRepository;
+  final ICustomerRepository _customerRepository;
+  final IProductRepository _productRepository;
 
-  final _productRepository = ProductRepository();
-
-  SalesCubit() : super(SalesInitial()) {
-    _salesRepository = SalesRepository();
-  }
+  SalesCubit(
+    this._salesRepository,
+    this._customerRepository,
+    this._productRepository,
+  ) : super(SalesInitial());
 
   /// Deleta uma venda pelo ID
   Future<void> deleteSale(int id) async {

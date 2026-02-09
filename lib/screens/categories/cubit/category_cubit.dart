@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/repository/category_repository.dart';
+import 'package:system_loja/core/interface/i_category_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/categories/cubit/category_state.dart';
 
@@ -8,9 +8,11 @@ import 'package:system_loja/screens/categories/cubit/category_state.dart';
 /// Este Cubit coordena operações de criação, leitura, atualização
 /// e exclusão de categorias através do CategoryRepository.
 class CategoryCubit extends Cubit<CategoryState> {
-  final CategoryRepository _repository = CategoryRepository();
+  final ICategoryRepository _repository;
 
-  CategoryCubit() : super(const CategoryState.initial()) {
+  CategoryCubit({required ICategoryRepository repository})
+    : _repository = repository,
+      super(const CategoryState.initial()) {
     loadCategories();
   }
 

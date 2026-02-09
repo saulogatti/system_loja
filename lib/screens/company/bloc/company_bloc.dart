@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/company.dart';
-import 'package:system_loja/core/repository/company_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 
@@ -17,9 +17,8 @@ part 'company_bloc_state.dart';
 /// Utiliza o CompanyRepository para operações de banco de dados
 /// e implementa o padrão BLoC para separação de lógica de negócio da UI.
 class CompanyBloc extends Bloc<CompanyBlocEvent, CompanyBlocState> {
-  final CompanyRepository _companyRepository = CompanyRepository();
-
-  CompanyBloc() : super(const _Initial()) {
+  final ICompanyRepository _companyRepository;
+  CompanyBloc(this._companyRepository) : super(const _Initial()) {
     on<_LoadCompanies>(_onLoadCompanies);
     on<_RegisterCompany>(_onRegisterCompany);
     on<_DeleteCompany>(_onDeleteCompany);

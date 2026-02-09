@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/models/user.dart';
-import 'package:system_loja/core/repository/system/user_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 
 class UserCubit extends Cubit<UsuarioState> {
-  final UserRepository _userRepository;
+  final IUserRepository _userRepository;
 
   UserCubit(this._userRepository) : super(UsuarioState.initial());
 

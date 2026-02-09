@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/app_injection.dart';
+import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/product_state.dart';
@@ -22,7 +24,7 @@ class ProductInfoScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<ProductCubit>(
-      create: (_) => ProductCubit(),
+      create: (_) => ProductCubit(appInjection.get<IProductRepository>()),
       child: this,
     );
   }
