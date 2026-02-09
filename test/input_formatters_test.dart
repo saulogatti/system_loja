@@ -260,7 +260,7 @@ void main() {
     });
 
     test('deve remover caracteres não numéricos', () {
-      final result = format('12345-678');
+      final result = format('123a45@678');
       expect(result.text, equals('12345-678'));
     });
 

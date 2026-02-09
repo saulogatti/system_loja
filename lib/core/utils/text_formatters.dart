@@ -187,12 +187,15 @@ class PhoneTextInputFormatter extends TextInputFormatter {
 /// Aplica a máscara XXXXX-XXX automaticamente enquanto o usuário digita.
 /// Remove automaticamente caracteres não-numéricos e limita a 8 dígitos.
 class CepTextInputFormatter extends TextInputFormatter {
+  /// Posição onde o hífen deve ser inserido no formato CEP
+  static const int _cepHyphenPosition = 4;
+
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    // se oldValue é maior que newValue, significa que o usuário está apagando
+    // se o texto do oldValue é maior que o do newValue, permite que o usuário apague sem reformatar
     if (oldValue.text.length > newValue.text.length) {
       return newValue;
     }
@@ -221,7 +224,7 @@ class CepTextInputFormatter extends TextInputFormatter {
 
     for (int i = 0; i < digits.length; i++) {
       buffer.write(digits[i]);
-      if (i == 4) {
+      if (i == _cepHyphenPosition) {
         buffer.write('-');
       }
     }

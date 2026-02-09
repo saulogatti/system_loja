@@ -25,9 +25,7 @@ class TextFormFieldEmail extends StatelessWidget {
       keyboardType: TextInputType.emailAddress,
       inputFormatters: [
         FilteringTextInputFormatter.deny(RegExp(r'\s')), // Remove espaços
-        FilteringTextInputFormatter.deny(RegExp(
-          r'[àáâãäåèéêëìíîïòóôõöùúûüçñÀÁÂÃÄÅÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÇÑ]',
-        )), // Remove acentos
+        FilteringTextInputFormatter.deny(Constants.accentedCharsRegExp),
       ],
       validator: (value) {
         if (value != null && value.trim().isNotEmpty) {
