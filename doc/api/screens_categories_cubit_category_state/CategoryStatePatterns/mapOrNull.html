@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the mapOrNull method from the CategoryStatePatterns extension, for the Dart programming language.">
+  <title>mapOrNull method - CategoryStatePatterns extension - category_state library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">system_loja</a></li>
+    <li><a href="../../screens_categories_cubit_category_state/">screens\categories\cubit\category_state.dart</a></li>
+    <li><a href="../../screens_categories_cubit_category_state/CategoryStatePatterns.html">CategoryStatePatterns</a></li>
+    <li class="self-crumb">mapOrNull&lt;<wbr><span class="type-parameter">TResult extends Object?</span>&gt; method</li>
+  </ol>
+  <div class="self-name">mapOrNull</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="screens_categories_cubit_category_state&#47;CategoryStatePatterns-extension-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">mapOrNull&lt;<wbr><span class="type-parameter">TResult extends Object?</span>&gt;</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://pub.dev/documentation/meta/1.17.0/meta/optionalTypeArgs-constant.html">optionalTypeArgs</a></li>
+    </ol>
+  </div>
+<span class="returntype">TResult?</span>
+<span class="name ">mapOrNull</span>&lt;<wbr><span class="type-parameter">TResult extends Object?</span>&gt;(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="mapOrNull-param-created"><span class="type-annotation">TResult?</span> <span class="parameter-name">created</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">CategoryCreated</span> <span class="parameter-name">value</span></span></li>
+</ol>)?, </span></li>
+<li><span class="parameter" id="mapOrNull-param-deleted"><span class="type-annotation">TResult?</span> <span class="parameter-name">deleted</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">CategoryDeleted</span> <span class="parameter-name">value</span></span></li>
+</ol>)?, </span></li>
+<li><span class="parameter" id="mapOrNull-param-error"><span class="type-annotation">TResult?</span> <span class="parameter-name">error</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">CategoryError</span> <span class="parameter-name">value</span></span></li>
+</ol>)?, </span></li>
+<li><span class="parameter" id="mapOrNull-param-initial"><span class="type-annotation">TResult?</span> <span class="parameter-name">initial</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">CategoryInitial</span> <span class="parameter-name">value</span></span></li>
+</ol>)?, </span></li>
+<li><span class="parameter" id="mapOrNull-param-loaded"><span class="type-annotation">TResult?</span> <span class="parameter-name">loaded</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">CategoryLoaded</span> <span class="parameter-name">value</span></span></li>
+</ol>)?, </span></li>
+<li><span class="parameter" id="mapOrNull-param-loading"><span class="type-annotation">TResult?</span> <span class="parameter-name">loading</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">CategoryLoading</span> <span class="parameter-name">value</span></span></li>
+</ol>)?, </span></li>
+<li><span class="parameter" id="mapOrNull-param-updated"><span class="type-annotation">TResult?</span> <span class="parameter-name">updated</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">CategoryUpdated</span> <span class="parameter-name">value</span></span></li>
+</ol>)?, </span></li>
+</ol>})
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>A variant of <code>map</code> that fallback to returning <code>null</code>.</p>
+<p>It is equivalent to doing:</p>
+<pre class="language-dart"><code class="language-dart">switch (sealedClass) {
+  case final Subclass value:
+    return ...;
+  case _:
+    return null;
+}
+</code></pre>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult? mapOrNull&lt;TResult extends Object?&gt;({TResult? Function( CategoryCreated value)?  created,TResult? Function( CategoryDeleted value)?  deleted,TResult? Function( CategoryError value)?  error,TResult? Function( CategoryInitial value)?  initial,TResult? Function( CategoryLoaded value)?  loaded,TResult? Function( CategoryLoading value)?  loading,TResult? Function( CategoryUpdated value)?  updated,}){
+final _that = this;
+switch (_that) {
+case CategoryCreated() when created != null:
+return created(_that);case CategoryDeleted() when deleted != null:
+return deleted(_that);case CategoryError() when error != null:
+return error(_that);case CategoryInitial() when initial != null:
+return initial(_that);case CategoryLoaded() when loaded != null:
+return loaded(_that);case CategoryLoading() when loading != null:
+return loading(_that);case CategoryUpdated() when updated != null:
+return updated(_that);case _:
+  return null;
+
+}
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">system_loja</a></li>
+    <li><a href="../../screens_categories_cubit_category_state/">category_state</a></li>
+    <li><a href="../../screens_categories_cubit_category_state/CategoryStatePatterns.html">CategoryStatePatterns</a></li>
+    <li class="self-crumb">mapOrNull&lt;<wbr><span class="type-parameter">TResult extends Object?</span>&gt; method</li>
+</ol>
+
+    <h5>CategoryStatePatterns extension on <a href="../../screens_categories_cubit_category_state/CategoryState-class.html">CategoryState</a></h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    system_loja
+      0.0.1
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

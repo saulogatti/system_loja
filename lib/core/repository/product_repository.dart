@@ -78,11 +78,10 @@ class ProductRepository implements IProductRepository {
     return await _codeGeneratorService.generateProductCode();
   }
 
-  /// Adiciona ou atualiza um produto na lista em memória e agenda persistência.
+  /// Salva um produto no banco de dados.
   ///
-  /// Este método atualiza o cache interno e chama [saveDataSynchronized]
-  /// para persistir as alterações de forma segura. Não aguarda o término da
-  /// operação (fire-and-forget) — adaptar conforme necessidade do chamador.
+  /// [product] Produto a ser salvo.
+  /// Retorna resultado da operação de salvamento.
   @override
   Future<ResultStatus<bool, String>> saveProduct(Product product) async {
     try {
@@ -101,9 +100,6 @@ class ProductRepository implements IProductRepository {
   ///
   /// [product] Produto com os dados atualizados.
   /// Retorna resultado da operação de atualização.
-  ///
-  /// **Nota**: Este método utiliza internamente [saveProduct], pois o storage
-  /// não diferencia entre inserção e atualização (upsert pattern).
   @override
   Future<ResultStatus<bool, String>> updateProduct(Product product) async {
     try {

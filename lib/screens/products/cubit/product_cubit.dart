@@ -161,7 +161,7 @@ class ProductCubit extends Cubit<ProductState> {
   /// a lista de produtos após a atualização.
   ///
   /// Parâmetros:
-  ///   - [produto]: Objeto [Produto] contendo os dados atualizados.
+  ///   - [produto]: Objeto [Product] contendo os dados atualizados.
   Future<void> updateProduct(Product produto) async {
     emit(ProductState.loading());
     final updateResult = await _productRepository.updateProduct(produto);

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the backup method from the FileStorageUtility mixin, for the Dart programming language.">
+  <title>backup method - FileStorageUtility mixin - file_storage_utility library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">system_loja</a></li>
+    <li><a href="../../data_files_utility_file_storage_utility/">data\files_utility\file_storage_utility.dart</a></li>
+    <li><a href="../../data_files_utility_file_storage_utility/FileStorageUtility-mixin.html">FileStorageUtility</a></li>
+    <li class="self-crumb">backup method</li>
+  </ol>
+  <div class="self-name">backup</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="data_files_utility_file_storage_utility&#47;FileStorageUtility-mixin-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">backup</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span>
+<span class="name ">backup</span>(<wbr>[<ol class="parameter-list single-line"> <li><span class="parameter" id="backup-param-localBackup"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">localBackup</span> = <span class="default-value">&#39;&#39;</span>, </span></li>
+<li><span class="parameter" id="backup-param-excludeDirectories"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">excludeDirectories</span> = <span class="default-value">const []</span></span></li>
+</ol>])
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Realiza backup de todos os dados do sistema.</p>
+<p>Copia todos os arquivos e diretórios do diretório de suporte da aplicação
+para um novo diretório de backup com timestamp. Ignora diretórios de backup
+existentes para evitar recursão.</p>
+<p><code>localBackup</code> - Caminho opcional para o diretório de backup. Se vazio, usa o diretório padrão.
+<code>excludeDirectories</code> - Lista de nomes de diretórios a serem excluídos do backup.
+Use para excluir diretórios de banco de dados (ex: 'system_loja_database') que devem
+usar mecanismos transacionais próprios (VACUUM INTO, etc) para evitar backups corrompidos.</p>
+<p>Retorna o número de arquivos copiados com sucesso.
+Em caso de erro, registra via <code>logError</code> e retorna 0.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; backup([
+  String localBackup = &#39;&#39;,
+  List&lt;String&gt; excludeDirectories = const [],
+]) async {
+  try {
+    &#47;&#47; Obtém o diretório principal do app (não o subdiretório específico)
+    final appDocDir = await getApplicationSupportDirectory();
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final backupDir = localBackup.isNotEmpty
+        ? Directory(p.join(localBackup, &#39;$_maskBackup$timestamp&#39;))
+        : Directory(p.join(appDocDir.path, &#39;$_maskBackup$timestamp&#39;));
+
+    if (!await backupDir.exists()) {
+      await backupDir.create(recursive: true);
+    }
+
+    var arquivosCopiados = 0;
+
+    &#47;&#47; Lista todos os itens no diretório principal do app
+    await for (final entity in appDocDir.list()) {
+      final basename = p.basename(entity.path);
+
+      &#47;&#47; Ignora diretórios de backup existentes para evitar recursão
+      if (basename.startsWith(_maskBackup)) {
+        continue;
+      }
+
+      &#47;&#47; Ignora diretórios excluídos (ex: banco de dados SQLite&#47;Drift)
+      if (entity is Directory &amp;&amp; excludeDirectories.contains(basename)) {
+        logDebug(
+          &#39;Diretório &quot;$basename&quot; excluído do backup (requer mecanismo transacional)&#39;,
+        );
+        continue;
+      }
+
+      if (entity is File) {
+        &#47;&#47; Copia arquivos diretamente no diretório principal
+        final nomeArquivo = basename;
+        final destino = File(p.join(backupDir.path, nomeArquivo));
+        await entity.copy(destino.path);
+        arquivosCopiados++;
+      } else if (entity is Directory) {
+        &#47;&#47; Copia diretórios recursivamente (ex: system_loja_cache)
+        final nomeDiretorio = basename;
+        final destinoDir = Directory(p.join(backupDir.path, nomeDiretorio));
+        arquivosCopiados += await _copyDirectoryRecursively(
+          entity,
+          destinoDir,
+        );
+      }
+    }
+
+    logDebug(
+      &#39;Backup realizado com sucesso: $arquivosCopiados arquivos copiados&#39;,
+    );
+    return arquivosCopiados;
+  } catch (e, stackTrace) {
+    logError(&#39;Erro ao realizar backup: $e&#39;, stackTrace);
+    return 0;
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">system_loja</a></li>
+    <li><a href="../../data_files_utility_file_storage_utility/">file_storage_utility</a></li>
+    <li><a href="../../data_files_utility_file_storage_utility/FileStorageUtility-mixin.html">FileStorageUtility</a></li>
+    <li class="self-crumb">backup method</li>
+</ol>
+
+    <h5>FileStorageUtility mixin</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    system_loja
+      0.0.1
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
