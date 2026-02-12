@@ -35,14 +35,13 @@ class HostScreen extends StatelessWidget {
           showSelectedLabels: true,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
-          // selectedItemColor: Colors.white,
           elevation: 4,
           useLegacyColorScheme: false,
           currentIndex: tabsRouter.activeIndex,
           onTap: (index) {
             tabsRouter.setActiveIndex(index);
           },
-          items: const [
+          items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),

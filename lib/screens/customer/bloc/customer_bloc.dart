@@ -159,24 +159,22 @@ class CustomerBloc extends Bloc<CustomerBlocEvent, CustomerBlocState> {
         lastUpdatedDate: DateTime.now(),
       ),
     );
-
-    result.when(
-      onSuccess: (_) async {
-        // Recarrega a lista de clientes após adicionar
-        final customers = await _customerRepository.fetchMappedCustomers();
-
-        emit(
-          CustomerBlocState.customersLoaded(
-            customers: customers.asSuccess,
-            stateType: EnumStateCustomerLoaded.registerCustomer,
-          ),
-        );
-      },
-      onError: (error) {
-        emit(CustomerBlocState.customerError(message: error));
-        return;
-      },
-    );
+    if (result.isSuccessful) {
+      final customers = await _customerRepository.fetchMappedCustomers();
+      switch (customers) {
+        case ResultSuccess(:final result):
+          emit(
+            CustomerBlocState.customersLoaded(
+              customers: result,
+              stateType: EnumStateCustomerLoaded.registerCustomer,
+            ),
+          );
+        case ResultError<Map<int, Customer>, String>(:final resultError):
+          emit(CustomerBlocState.customerError(message: resultError));
+      }
+    } else {
+      emit(CustomerBlocState.customerError(message: result.asError));
+    }
   }
 
   /// Atualiza um cliente existente no banco de dados

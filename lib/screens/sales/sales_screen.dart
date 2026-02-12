@@ -261,7 +261,8 @@ class _SalesViewState extends State<SalesView> {
     }
 
     final result = await context.router.root.push(
-      SalesInvoiceRoute( paymentMethods: _paymentMethods,
+      SalesInvoiceRoute(
+        paymentMethods: _paymentMethods,
         products: _productList,
         salesCubit: salesCubit,
         customers: _mapCustomers,
@@ -349,7 +350,7 @@ class _SalesViewState extends State<SalesView> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -392,6 +393,7 @@ class _SalesViewState extends State<SalesView> {
                               fontSize: 13,
                               color: Colors.grey[600],
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
