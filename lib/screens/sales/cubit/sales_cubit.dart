@@ -5,7 +5,7 @@ import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/screens/sales/sales_state.dart';
+import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 
 /// Cubit para gerenciamento de estado de vendas
 ///

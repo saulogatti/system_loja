@@ -171,9 +171,15 @@ class _CompanyViewState extends State<CompanyView> {
           children: [
             TextSpan(
               text: '$label: ',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
-            TextSpan(text: value),
+            TextSpan(
+              text: value,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            ),
           ],
         ),
       ),

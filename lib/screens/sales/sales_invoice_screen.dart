@@ -29,14 +29,14 @@ class SalesInvoiceScreen extends StatefulWidget {
 }
 
 class _AddSaleTemp {
-  final List<_ProductSelection> product;
+  final Map<int, _ProductSelection> product;
 
   _AddSaleTemp({required this.product});
 }
 
 class _ProductSelection {
   final Product product;
-  final int quantity;
+  int quantity;
 
   _ProductSelection({required this.product, required this.quantity});
 }
@@ -46,14 +46,14 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
   final _numeroNotaController = TextEditingController();
   PaymentMethodType? _paymentType;
   Customer? _clienteSelecionado;
-  final _AddSaleTemp _itensSelecionados = _AddSaleTemp(product: []);
+  final _AddSaleTemp _itensSelecionados = _AddSaleTemp(product: {});
 
   /// Controla se a geração automática do número da nota está habilitada
   bool _enableCodeGeneration = false;
 
   @override
   Widget build(BuildContext context) {
-    final valorTotal = _itensSelecionados.product.fold<double>(0.0, (
+    final valorTotal = _itensSelecionados.product.values.fold<double>(0.0, (
       previousValue,
       item,
     ) {
@@ -183,7 +183,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                   ),
                 )
               else
-                ..._itensSelecionados.product.asMap().entries.map((entry) {
+                ..._itensSelecionados.product.entries.map((entry) {
                   final index = entry.key;
                   final item = entry.value;
                   final productItem = item.product;
@@ -201,7 +201,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           setState(() {
-                            _itensSelecionados.product.removeAt(index);
+                            _itensSelecionados.product.remove(index);
                           });
                         },
                       ),
@@ -271,8 +271,12 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
     );
 
     if (product != null) {
-      final quantidade = await _solicitarQuantidade(product);
+      int? quantidade = await _solicitarQuantidade(product);
       if (quantidade != null && quantidade > 0) {
+        if (_itensSelecionados.product.containsKey(product.id)) {
+          quantidade =
+              _itensSelecionados.product[product.id]!.quantity + quantidade;
+        }
         if (quantidade > product.stockQuantity) {
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
@@ -287,8 +291,9 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
         }
 
         setState(() {
-          _itensSelecionados.product.add(
-            _ProductSelection(product: product, quantity: quantidade),
+          _itensSelecionados.product[product.id] = _ProductSelection(
+            product: product,
+            quantity: quantidade!,
           );
         });
       }
@@ -319,11 +324,11 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
 
       final numeroNota = _numeroNotaController.text.trim();
 
-      final itens = _itensSelecionados.product.map((item) {
-        final product = item.product;
-        final quantity = item.quantity;
+      final itens = _itensSelecionados.product.values.map((productSelection) {
+        final product = productSelection.product;
+        final quantity = productSelection.quantity;
         return InvoiceItem(
-          productId: product.id, // ID não é mais null por construção
+          productId: product.id,
           productName: product.name,
           productCode: product.code,
           quantity: quantity,

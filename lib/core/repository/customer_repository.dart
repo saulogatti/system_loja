@@ -1,4 +1,4 @@
-import 'package:drift/remote.dart';
+import 'package:drift/isolate.dart';
 import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/managers/exceptions/customer_exception.dart';

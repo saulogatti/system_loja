@@ -5,7 +5,7 @@ import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
-import 'package:system_loja/screens/sales/sales_state.dart';
+import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
