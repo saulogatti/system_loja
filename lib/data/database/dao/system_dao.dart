@@ -10,18 +10,40 @@ class SystemDao extends DatabaseAccessor<SystemDatabase> with _$SystemDaoMixin {
   SystemDao(super.db);
 
   Future<SystemConfiguration?> getSystemConfiguration() {
-    return (select(systemRecords)..limit(1)).getSingleOrNull();
+    return _getLatestConfiguration();
   }
 
   Future<void> saveSystemConfiguration(SystemConfiguration data) async {
-    await into(systemRecords).insert(
-      SystemRecordsCompanion(
-        id: Value(data.id),
-        priceConfiguration: Value(data.priceConfiguration),
-        registrationDate: Value(data.registrationDate),
-        lastUpdatedDate: Value(data.lastUpdatedDate),
-      ),
-      mode: InsertMode.insertOrReplace,
-    );
+    await transaction(() async {
+      final latestConfiguration = await _getLatestConfiguration();
+
+      if (latestConfiguration == null) {
+        await into(systemRecords).insert(
+          SystemRecordsCompanion.insert(
+            priceConfiguration: data.priceConfiguration,
+            registrationDate: data.registrationDate,
+            lastUpdatedDate: data.lastUpdatedDate,
+          ),
+        );
+        return;
+      }
+
+      await (update(systemRecords)..where((table) => table.id.equals(latestConfiguration.id))).write(
+        SystemRecordsCompanion(
+          priceConfiguration: Value(data.priceConfiguration),
+          registrationDate: Value(latestConfiguration.registrationDate),
+          lastUpdatedDate: Value(data.lastUpdatedDate),
+        ),
+      );
+
+      await (delete(systemRecords)..where((table) => table.id.isNotValue(latestConfiguration.id))).go();
+    });
+  }
+
+  Future<SystemConfiguration?> _getLatestConfiguration() {
+    return (select(systemRecords)
+          ..orderBy([(table) => OrderingTerm.desc(table.id)])
+          ..limit(1))
+        .getSingleOrNull();
   }
 }

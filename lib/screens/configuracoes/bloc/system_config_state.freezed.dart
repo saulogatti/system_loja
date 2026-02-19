@@ -55,13 +55,13 @@ extension SystemConfigStatePatterns on SystemConfigState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SystemConfigStateInitial value)?  initial,TResult Function( SystemConfigStateLoaded value)?  loaded,TResult Function( SystemConfigStateError value)?  error,TResult Function( SystemConfigStateLoading value)?  loading,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SystemConfigStateError value)?  error,TResult Function( SystemConfigStateInitial value)?  initial,TResult Function( SystemConfigStateLoaded value)?  loaded,TResult Function( SystemConfigStateLoading value)?  loading,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case SystemConfigStateInitial() when initial != null:
+case SystemConfigStateError() when error != null:
+return error(_that);case SystemConfigStateInitial() when initial != null:
 return initial(_that);case SystemConfigStateLoaded() when loaded != null:
-return loaded(_that);case SystemConfigStateError() when error != null:
-return error(_that);case SystemConfigStateLoading() when loading != null:
+return loaded(_that);case SystemConfigStateLoading() when loading != null:
 return loading(_that);case _:
   return orElse();
 
@@ -80,13 +80,13 @@ return loading(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SystemConfigStateInitial value)  initial,required TResult Function( SystemConfigStateLoaded value)  loaded,required TResult Function( SystemConfigStateError value)  error,required TResult Function( SystemConfigStateLoading value)  loading,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SystemConfigStateError value)  error,required TResult Function( SystemConfigStateInitial value)  initial,required TResult Function( SystemConfigStateLoaded value)  loaded,required TResult Function( SystemConfigStateLoading value)  loading,}){
 final _that = this;
 switch (_that) {
-case SystemConfigStateInitial():
+case SystemConfigStateError():
+return error(_that);case SystemConfigStateInitial():
 return initial(_that);case SystemConfigStateLoaded():
-return loaded(_that);case SystemConfigStateError():
-return error(_that);case SystemConfigStateLoading():
+return loaded(_that);case SystemConfigStateLoading():
 return loading(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -101,13 +101,13 @@ return loading(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SystemConfigStateInitial value)?  initial,TResult? Function( SystemConfigStateLoaded value)?  loaded,TResult? Function( SystemConfigStateError value)?  error,TResult? Function( SystemConfigStateLoading value)?  loading,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SystemConfigStateError value)?  error,TResult? Function( SystemConfigStateInitial value)?  initial,TResult? Function( SystemConfigStateLoaded value)?  loaded,TResult? Function( SystemConfigStateLoading value)?  loading,}){
 final _that = this;
 switch (_that) {
-case SystemConfigStateInitial() when initial != null:
+case SystemConfigStateError() when error != null:
+return error(_that);case SystemConfigStateInitial() when initial != null:
 return initial(_that);case SystemConfigStateLoaded() when loaded != null:
-return loaded(_that);case SystemConfigStateError() when error != null:
-return error(_that);case SystemConfigStateLoading() when loading != null:
+return loaded(_that);case SystemConfigStateLoading() when loading != null:
 return loading(_that);case _:
   return null;
 
@@ -125,12 +125,12 @@ return loading(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( SystemConfiguration data,  String? feedbackMessage,  SystemConfigFeedbackType? feedbackType)?  loaded,TResult Function( String message)?  error,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  error,TResult Function()?  initial,TResult Function( SystemConfiguration data,  String? feedbackMessage,  SystemConfigFeedbackType? feedbackType)?  loaded,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case SystemConfigStateInitial() when initial != null:
+case SystemConfigStateError() when error != null:
+return error(_that.message);case SystemConfigStateInitial() when initial != null:
 return initial();case SystemConfigStateLoaded() when loaded != null:
-return loaded(_that.data,_that.feedbackMessage,_that.feedbackType);case SystemConfigStateError() when error != null:
-return error(_that.message);case SystemConfigStateLoading() when loading != null:
+return loaded(_that.data,_that.feedbackMessage,_that.feedbackType);case SystemConfigStateLoading() when loading != null:
 return loading();case _:
   return orElse();
 
@@ -149,12 +149,12 @@ return loading();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( SystemConfiguration data,  String? feedbackMessage,  SystemConfigFeedbackType? feedbackType)  loaded,required TResult Function( String message)  error,required TResult Function()  loading,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( SystemConfiguration data,  String? feedbackMessage,  SystemConfigFeedbackType? feedbackType)  loaded,required TResult Function()  loading,}) {final _that = this;
 switch (_that) {
-case SystemConfigStateInitial():
+case SystemConfigStateError():
+return error(_that.message);case SystemConfigStateInitial():
 return initial();case SystemConfigStateLoaded():
-return loaded(_that.data,_that.feedbackMessage,_that.feedbackType);case SystemConfigStateError():
-return error(_that.message);case SystemConfigStateLoading():
+return loaded(_that.data,_that.feedbackMessage,_that.feedbackType);case SystemConfigStateLoading():
 return loading();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -169,17 +169,83 @@ return loading();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( SystemConfiguration data,  String? feedbackMessage,  SystemConfigFeedbackType? feedbackType)?  loaded,TResult? Function( String message)?  error,TResult? Function()?  loading,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  error,TResult? Function()?  initial,TResult? Function( SystemConfiguration data,  String? feedbackMessage,  SystemConfigFeedbackType? feedbackType)?  loaded,TResult? Function()?  loading,}) {final _that = this;
 switch (_that) {
-case SystemConfigStateInitial() when initial != null:
+case SystemConfigStateError() when error != null:
+return error(_that.message);case SystemConfigStateInitial() when initial != null:
 return initial();case SystemConfigStateLoaded() when loaded != null:
-return loaded(_that.data,_that.feedbackMessage,_that.feedbackType);case SystemConfigStateError() when error != null:
-return error(_that.message);case SystemConfigStateLoading() when loading != null:
+return loaded(_that.data,_that.feedbackMessage,_that.feedbackType);case SystemConfigStateLoading() when loading != null:
 return loading();case _:
   return null;
 
 }
 }
+
+}
+
+/// @nodoc
+
+
+class SystemConfigStateError implements SystemConfigState {
+  const SystemConfigStateError(this.message);
+  
+
+ final  String message;
+
+/// Create a copy of SystemConfigState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SystemConfigStateErrorCopyWith<SystemConfigStateError> get copyWith => _$SystemConfigStateErrorCopyWithImpl<SystemConfigStateError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateError&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'SystemConfigState.error(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SystemConfigStateErrorCopyWith<$Res> implements $SystemConfigStateCopyWith<$Res> {
+  factory $SystemConfigStateErrorCopyWith(SystemConfigStateError value, $Res Function(SystemConfigStateError) _then) = _$SystemConfigStateErrorCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class _$SystemConfigStateErrorCopyWithImpl<$Res>
+    implements $SystemConfigStateErrorCopyWith<$Res> {
+  _$SystemConfigStateErrorCopyWithImpl(this._self, this._then);
+
+  final SystemConfigStateError _self;
+  final $Res Function(SystemConfigStateError) _then;
+
+/// Create a copy of SystemConfigState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(SystemConfigStateError(
+null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
 
 }
 
@@ -279,72 +345,6 @@ null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
 as SystemConfiguration,feedbackMessage: freezed == feedbackMessage ? _self.feedbackMessage : feedbackMessage // ignore: cast_nullable_to_non_nullable
 as String?,feedbackType: freezed == feedbackType ? _self.feedbackType : feedbackType // ignore: cast_nullable_to_non_nullable
 as SystemConfigFeedbackType?,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class SystemConfigStateError implements SystemConfigState {
-  const SystemConfigStateError(this.message);
-  
-
- final  String message;
-
-/// Create a copy of SystemConfigState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$SystemConfigStateErrorCopyWith<SystemConfigStateError> get copyWith => _$SystemConfigStateErrorCopyWithImpl<SystemConfigStateError>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateError&&(identical(other.message, message) || other.message == message));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,message);
-
-@override
-String toString() {
-  return 'SystemConfigState.error(message: $message)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $SystemConfigStateErrorCopyWith<$Res> implements $SystemConfigStateCopyWith<$Res> {
-  factory $SystemConfigStateErrorCopyWith(SystemConfigStateError value, $Res Function(SystemConfigStateError) _then) = _$SystemConfigStateErrorCopyWithImpl;
-@useResult
-$Res call({
- String message
-});
-
-
-
-
-}
-/// @nodoc
-class _$SystemConfigStateErrorCopyWithImpl<$Res>
-    implements $SystemConfigStateErrorCopyWith<$Res> {
-  _$SystemConfigStateErrorCopyWithImpl(this._self, this._then);
-
-  final SystemConfigStateError _self;
-  final $Res Function(SystemConfigStateError) _then;
-
-/// Create a copy of SystemConfigState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(SystemConfigStateError(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
   ));
 }
 
