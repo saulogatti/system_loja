@@ -9,6 +9,8 @@ import 'package:system_loja/screens/configuracoes/bloc/system_config_state.dart'
 
 /// Widget para configurar as dados padrão do sistema
 /// Cadastrar dados como tipos de pagamento, categorias de produtos, etc. para facilitar o uso do sistema.
+///
+//TODO: Adicionar mais configurações, como categorias de produtos, unidades de medida, etc. para facilitar o uso do sistema. Melhorar o layout e a usabilidade da tela de configurações. Adicionar validação para os dados configurados, como verificar se o tipo de pagamento já existe antes de salvar. Adicionar feedback visual para o usuário ao salvar as configurações, como um snackbar ou um diálogo de confirmação. Adicionar a opção de resetar as configurações para os valores padrão do sistema. Adicionar a opção de exportar e importar as configurações para facilitar a migração entre sistemas ou para backup.  Adicionar a opção de configurar os relatórios gerenciais do sistema, como vendas por período, produtos mais vendidos, etc.
 @RoutePage()
 class SystemConfigScreen extends StatefulWidget implements AutoRouteWrapper {
   const SystemConfigScreen({super.key});
@@ -34,9 +36,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              context.read<SystemConfigCubit>().saveConfigurationData(
-                paymentMethods: selectedPaymentMethods,
-              );
+              context.read<SystemConfigCubit>().saveConfigurationData(paymentMethods: selectedPaymentMethods);
             },
             child: const Icon(Icons.save),
           ),
@@ -45,18 +45,12 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
       body: BlocConsumer<SystemConfigCubit, SystemConfigState>(
         listener: (context, state) {
           if (state is SystemConfigStateLoaded) {
-            selectedPaymentMethods = List.from(
-              state.data.priceConfiguration.types,
-              growable: true,
-            );
+            selectedPaymentMethods = List.from(state.data.priceConfiguration.types, growable: true);
             setState(() {});
           } else if (state is SystemConfigStateError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
           }
         },
         builder: (context, state) {
@@ -75,19 +69,13 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
                       itemCount: PaymentMethodType.values.length,
                       itemBuilder: (context, index) {
                         return CheckboxListTile(
-                          value: selectedPaymentMethods.contains(
-                            PaymentMethodType.values[index],
-                          ),
+                          value: selectedPaymentMethods.contains(PaymentMethodType.values[index]),
                           title: Text(PaymentMethodType.values[index].name),
                           onChanged: (value) {
                             if (value == true) {
-                              selectedPaymentMethods.add(
-                                PaymentMethodType.values[index],
-                              );
+                              selectedPaymentMethods.add(PaymentMethodType.values[index]);
                             } else {
-                              selectedPaymentMethods.remove(
-                                PaymentMethodType.values[index],
-                              );
+                              selectedPaymentMethods.remove(PaymentMethodType.values[index]);
                             }
                             setState(() {
                               // como alteramos a lista antes, seja tirar ou adicionar um item, o setState() é necessário para atualizar a tela. Podemos colocar um listener para atualizar o componente apenas. O que acha ? Não precisa de listener, pois o setState() é suficiente. Ok, obrigado.

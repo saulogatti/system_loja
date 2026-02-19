@@ -18,7 +18,7 @@ class HostScreen extends StatelessWidget {
       },
       routes: [
         HomeRoute(),
-        CustomerRoute(customer: null),
+        CustomerRoute(),
         CompanyRoute(),
         ProductInfoRoute(),
         SalesRoute(),
@@ -43,30 +43,12 @@ class HostScreen extends StatelessWidget {
           },
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Customer',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'Company',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.info),
-              label: 'Product Info',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart),
-              label: 'Sales',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              label: 'Usuario',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
-            ),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Customer'),
+            BottomNavigationBarItem(icon: Icon(Icons.business), label: 'Company'),
+            BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Product Info'),
+            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Sales'),
+            BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'Usuario'),
+            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
           ],
         );
       },
@@ -83,66 +65,25 @@ class RouteApp extends RootStackRouter {
       initial: true,
       children: [
         AutoRoute(page: HomeRoute.page, title: (context, data) => 'Home'),
-        AutoRoute(
-          page: CustomerRoute.page,
-          title: (context, data) => 'Customer',
-          maintainState: false,
-        ),
-        AutoRoute(
-          page: CompanyRoute.page,
-          title: (context, data) => 'Company',
-          maintainState: false,
-        ),
+        AutoRoute(page: CustomerRoute.page, title: (context, data) => 'Customer', maintainState: false),
+        AutoRoute(page: CompanyRoute.page, title: (context, data) => 'Company', maintainState: false),
         AutoRoute(
           page: ProductInfoRoute.page,
           title: (context, data) => 'Product Info',
           maintainState: false,
         ),
-        AutoRoute(
-          page: SalesRoute.page,
-          title: (context, data) => 'Sales',
-          maintainState: false,
-        ),
+        AutoRoute(page: SalesRoute.page, title: (context, data) => 'Sales', maintainState: false),
 
-        AutoRoute(
-          page: UsuarioRoute.page,
-          title: (context, data) => 'Usuario',
-          maintainState: false,
-        ),
-        AutoRoute(
-          page: SettingsRoute.page,
-          title: (context, data) => 'Settings',
-          maintainState: false,
-        ),
+        AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuario', maintainState: false),
+        AutoRoute(page: SettingsRoute.page, title: (context, data) => 'Settings', maintainState: false),
       ],
     ),
-    AutoRoute(
-      page: SalesInvoiceRoute.page,
-      title: (context, data) => 'Sales Invoice',
-    ),
-    AutoRoute(
-      page: ProductDetailRoute.page,
-      title: (context, data) => 'Product Detail',
-    ),
-    AutoRoute(
-      page: CategoryManagementRoute.page,
-      title: (context, data) => 'Category Management',
-    ),
-    AutoRoute(
-      page: LogSystemRoute.page,
-      title: (context, data) => 'System Logs',
-    ),
-    AutoRoute(
-      page: LogsAnalyticsRoute.page,
-      title: (context, data) => 'Logs Analytics',
-    ),
-    AutoRoute(
-      page: CompanyEditRoute.page,
-      title: (context, data) => 'Edit Company',
-    ),
-    AutoRoute(
-      page: SystemConfigRoute.page,
-      title: (context, data) => 'System Config',
-    ),
+    AutoRoute(page: SalesInvoiceRoute.page, title: (context, data) => 'Sales Invoice'),
+    AutoRoute(page: ProductDetailRoute.page, title: (context, data) => 'Product Detail'),
+    AutoRoute(page: CategoryManagementRoute.page, title: (context, data) => 'Category Management'),
+    AutoRoute(page: LogSystemRoute.page, title: (context, data) => 'System Logs'),
+    AutoRoute(page: LogsAnalyticsRoute.page, title: (context, data) => 'Logs Analytics'),
+    AutoRoute(page: CompanyEditRoute.page, title: (context, data) => 'Edit Company'),
+    AutoRoute(page: SystemConfigRoute.page, title: (context, data) => 'System Config'),
   ];
 }

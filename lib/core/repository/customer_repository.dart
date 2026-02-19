@@ -1,4 +1,5 @@
 import 'package:drift/isolate.dart';
+import 'package:sqlite3/common.dart';
 import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/managers/exceptions/customer_exception.dart';
@@ -12,11 +13,9 @@ class CustomerRepository implements ICustomerRepository {
   final ILogRepository _logRepository;
   final CustomerDao _customerDao;
 
-  CustomerRepository({
-    required ILogRepository logRepository,
-    required CustomerDao customerDao,
-  }) : _logRepository = logRepository,
-       _customerDao = customerDao;
+  CustomerRepository({required ILogRepository logRepository, required CustomerDao customerDao})
+    : _logRepository = logRepository,
+      _customerDao = customerDao;
 
   /// Deleta um cliente pelo ID.
   ///
@@ -53,14 +52,11 @@ class CustomerRepository implements ICustomerRepository {
   ///
   /// Retorna [ResultStatus] com Map de clientes ou mensagem de erro.
   @override
-  Future<ResultStatus<Map<int, Customer>, String>>
-  fetchMappedCustomers() async {
+  Future<ResultStatus<Map<int, Customer>, String>> fetchMappedCustomers() async {
     try {
       final data = await _customerDao.getAll();
       final customers = data;
-      final mappedCustomers = {
-        for (var customer in customers) customer.id: customer,
-      };
+      final mappedCustomers = {for (var customer in customers) customer.id: customer};
       return ResultStatus.success(mappedCustomers);
     } on CustomerException catch (e) {
       await reportError(e, StackTrace.current);
@@ -92,15 +88,11 @@ class CustomerRepository implements ICustomerRepository {
   ///
   /// Retorna [ResultStatus] com o cliente encontrado ou mensagem de erro.
   @override
-  Future<ResultStatus<Customer?, String>> findWith({
-    required String cpf,
-  }) async {
+  Future<ResultStatus<Customer?, String>> findWith({required String cpf}) async {
     try {
       final allCustomers = await _customerDao.getAll();
       try {
-        final customer = allCustomers.firstWhere(
-          (customer) => customer.cpf == cpf,
-        );
+        final customer = allCustomers.firstWhere((customer) => customer.cpf == cpf);
         return ResultStatus.success(customer);
       } on StateError {
         // Cliente não encontrado
@@ -129,9 +121,7 @@ class CustomerRepository implements ICustomerRepository {
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
       if (e is DriftRemoteException) {
-        return ResultStatus.error(
-          'Erro ao buscar todos os clientes: ${e.remoteCause.toString()}',
-        );
+        return ResultStatus.error('Erro ao buscar todos os clientes: ${e.remoteCause.toString()}');
       }
       return ResultStatus.error('Erro ao buscar todos os clientes.');
     }
@@ -159,9 +149,9 @@ class CustomerRepository implements ICustomerRepository {
       return ResultStatus.error(e.message);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      if (e is DriftRemoteException) {
+      if (e is DriftRemoteException && e.remoteCause is SqliteException) {
         return ResultStatus.error(
-          'Erro ao salvar cliente: ${e.remoteCause.toString()}',
+          'Erro ao salvar cliente: ${(e.remoteCause as SqliteException).message.toString()}',
         );
       }
       return ResultStatus.error('Erro ao salvar cliente.');
@@ -176,9 +166,7 @@ class CustomerRepository implements ICustomerRepository {
     try {
       final exists = await _customerDao.getById(customer.id);
       if (exists == null) {
-        return ResultStatus.error(
-          'Cliente com ID ${customer.id} não encontrado.',
-        );
+        return ResultStatus.error('Cliente com ID ${customer.id} não encontrado.');
       }
 
       await _customerDao.updateCustomer(customer);
@@ -197,9 +185,9 @@ class CustomerRepository implements ICustomerRepository {
       return ResultStatus.error(e.message);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      if (e is DriftRemoteException) {
+      if (e is DriftRemoteException && e.remoteCause is SqliteException) {
         return ResultStatus.error(
-          'Erro ao atualizar cliente: ${e.remoteCause.toString()}',
+          'Erro ao atualizar cliente: ${(e.remoteCause as SqliteException).message.toString()}',
         );
       }
       return ResultStatus.error('Erro ao atualizar cliente.');

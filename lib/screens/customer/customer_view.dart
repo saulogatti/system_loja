@@ -62,14 +62,19 @@ class _CustomerViewState extends State<CustomerView> {
                 _neighborhoodController.clear();
                 _cityController.clear();
               case EnumStateCustomerLoaded.updateCustomer:
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Cliente atualizado com sucesso!'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-                // Volta para a tela anterior após atualizar
-                Navigator.of(context).pop();
+                if (_isEditMode) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Cliente atualizado com sucesso!'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+
+                  // Volta para a tela anterior após atualizar
+                  if (widget.customer != null) {
+                    AutoRouter.of(context).pop();
+                  }
+                }
               case EnumStateCustomerLoaded.deleteCustomer:
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -88,6 +93,59 @@ class _CustomerViewState extends State<CustomerView> {
       },
       child: _isEditMode ? _buildEditView(context) : _buildAddView(context),
     );
+  }
+
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _cpfController.dispose();
+    _emailController.dispose();
+    _telefoneController.dispose();
+    _streetController.dispose();
+    _zipCodeController.dispose();
+    _neighborhoodController.dispose();
+    _cityController.dispose();
+    _searchCpfController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Se está em modo de edição, preenche os campos com os dados do cliente
+    if (_isEditMode) {
+      _nomeController.text = widget.customer!.name;
+      _cpfController.text = widget.customer!.cpf;
+      _emailController.text = widget.customer!.email ?? '';
+      _telefoneController.text = widget.customer!.phone ?? '';
+      _streetController.text = widget.customer!.address.street;
+      _zipCodeController.text = widget.customer!.address.zipCode;
+      _neighborhoodController.text = widget.customer!.address.neighborhood;
+      _cityController.text = widget.customer!.address.city;
+      _stateController.text = widget.customer!.address.state;
+    } else {
+      // Se não está em modo de edição, carrega a lista de clientes
+      context.read<CustomerBloc>().add(const CustomerBlocEvent.loadCustomers());
+    }
+  }
+
+  void _adicionarCliente() {
+    if (_formKey.currentState!.validate()) {
+      context.read<CustomerBloc>().add(
+        CustomerBlocEvent.registerCustomer(
+          name: _nomeController.text.trim(),
+          cpf: _cpfController.text.trim(),
+          email: _emailController.text.trim(),
+          phone: _telefoneController.text.trim(),
+          street: _streetController.text.trim(),
+          zipCode: _zipCodeController.text.trim(),
+          neighborhood: _neighborhoodController.text.trim(),
+          city: _cityController.text.trim(),
+          state: _stateController.text.trim(),
+        ),
+      );
+    }
   }
 
   /// Constrói a view de adição de cliente com lista e busca
@@ -138,10 +196,7 @@ class _CustomerViewState extends State<CustomerView> {
   /// Constrói a view de edição de cliente
   Widget _buildEditView(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Editar Cliente: ${widget.customer!.name}'),
-        leading: AutoLeadingButton(),
-      ),
+      appBar: AppBar(title: Text('Editar Cliente: ${widget.customer!.name}'), leading: AutoLeadingButton()),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -194,67 +249,58 @@ class _CustomerViewState extends State<CustomerView> {
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         children: [
-          Text(
-            '$label: ',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
+          Text('$label: ', style: const TextStyle(fontWeight: FontWeight.bold)),
           Text(value),
         ],
       ),
     );
   }
 
-  @override
-  void dispose() {
-    _nomeController.dispose();
-    _cpfController.dispose();
-    _emailController.dispose();
-    _telefoneController.dispose();
-    _streetController.dispose();
-    _zipCodeController.dispose();
-    _neighborhoodController.dispose();
-    _cityController.dispose();
-    _searchCpfController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    
-    // Se está em modo de edição, preenche os campos com os dados do cliente
-    if (_isEditMode) {
-      _nomeController.text = widget.customer!.name;
-      _cpfController.text = widget.customer!.cpf;
-      _emailController.text = widget.customer!.email ?? '';
-      _telefoneController.text = widget.customer!.phone ?? '';
-      _streetController.text = widget.customer!.address.street;
-      _zipCodeController.text = widget.customer!.address.zipCode;
-      _neighborhoodController.text = widget.customer!.address.neighborhood;
-      _cityController.text = widget.customer!.address.city;
-      _stateController.text = widget.customer!.address.state;
-    } else {
-      // Se não está em modo de edição, carrega a lista de clientes
-      context.read<CustomerBloc>().add(const CustomerBlocEvent.loadCustomers());
-    }
-  }
-
-  void _adicionarCliente() {
-    if (_formKey.currentState!.validate()) {
-      context.read<CustomerBloc>().add(
-        CustomerBlocEvent.registerCustomer(
-          name: _nomeController.text.trim(),
-          cpf: _cpfController.text.trim(),
-          email: _emailController.text.trim(),
-          phone: _telefoneController.text.trim(),
-          street: _streetController.text.trim(),
-          zipCode: _zipCodeController.text.trim(),
-          neighborhood: _neighborhoodController.text.trim(),
-          city: _cityController.text.trim(),
-          state: _stateController.text.trim(),
+  void _buscarClientePorCpf() {
+    final cpf = _searchCpfController.text.trim();
+    if (cpf.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Digite um CPF para buscar'),
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
+      return;
     }
+
+    context.read<CustomerBloc>().add(CustomerBlocEvent.findCustomerByCpf(cpf: cpf));
+  }
+
+  void _cancelarEdicao() {
+    // Restaura os valores originais do cliente
+    if (_isEditMode) {
+      AutoRouter.of(context).pop();
+    }
+  }
+
+  /// Formata uma data no formato DD/MM/YYYY HH:MM
+  String _formatDate(DateTime date) {
+    final day = date.day.toString().padLeft(2, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final year = date.year.toString();
+    final hour = date.hour.toString().padLeft(2, '0');
+    final minute = date.minute.toString().padLeft(2, '0');
+    return '$day/$month/$year $hour:$minute';
+  }
+
+  /// Navega para a tela de detalhes do cliente
+  ///
+  /// Utilizado tanto para busca por CPF quanto para seleção da lista.
+  void _mostrarDetalhesCliente(Customer cliente) {
+    _openCustomerDetails(cliente);
+  }
+
+  void _openCustomerDetails(Customer customer) {
+    // Limpa o campo de busca
+    _searchCpfController.clear();
+
+    // Navega para a mesma tela CustomerView mas em modo de edição
+    context.router.root.push(CustomerRoute(customer: customer));
   }
 
   void _salvarAlteracoes() {
@@ -276,66 +322,7 @@ class _CustomerViewState extends State<CustomerView> {
         lastUpdatedDate: widget.customer!.lastUpdatedDate,
       );
 
-      context.read<CustomerBloc>().add(
-        CustomerBlocEvent.updateCustomer(customer: updatedCustomer),
-      );
+      context.read<CustomerBloc>().add(CustomerBlocEvent.updateCustomer(customer: updatedCustomer));
     }
-  }
-
-  void _cancelarEdicao() {
-    // Restaura os valores originais do cliente
-    setState(() {
-      _nomeController.text = widget.customer!.name;
-      _cpfController.text = widget.customer!.cpf;
-      _emailController.text = widget.customer!.email ?? '';
-      _telefoneController.text = widget.customer!.phone ?? '';
-      _streetController.text = widget.customer!.address.street;
-      _zipCodeController.text = widget.customer!.address.zipCode;
-      _neighborhoodController.text = widget.customer!.address.neighborhood;
-      _cityController.text = widget.customer!.address.city;
-      _stateController.text = widget.customer!.address.state;
-    });
-  }
-
-  /// Formata uma data no formato DD/MM/YYYY HH:MM
-  String _formatDate(DateTime date) {
-    final day = date.day.toString().padLeft(2, '0');
-    final month = date.month.toString().padLeft(2, '0');
-    final year = date.year.toString();
-    final hour = date.hour.toString().padLeft(2, '0');
-    final minute = date.minute.toString().padLeft(2, '0');
-    return '$day/$month/$year $hour:$minute';
-  }
-
-  void _buscarClientePorCpf() {
-    final cpf = _searchCpfController.text.trim();
-    if (cpf.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Digite um CPF para buscar'),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
-      return;
-    }
-
-    context.read<CustomerBloc>().add(
-      CustomerBlocEvent.findCustomerByCpf(cpf: cpf),
-    );
-  }
-
-  /// Navega para a tela de detalhes do cliente
-  ///
-  /// Utilizado tanto para busca por CPF quanto para seleção da lista.
-  void _mostrarDetalhesCliente(Customer cliente) {
-    _openCustomerDetails(cliente);
-  }
-
-  void _openCustomerDetails(Customer customer) {
-    // Limpa o campo de busca
-    _searchCpfController.clear();
-
-    // Navega para a mesma tela CustomerView mas em modo de edição
-    context.router.root.push(CustomerRoute(customer: customer));
   }
 }
