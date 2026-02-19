@@ -125,11 +125,11 @@ return loading(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( SystemConfiguration data)?  loaded,TResult Function( String message)?  error,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( SystemConfiguration data,  String? feedbackMessage,  SystemConfigFeedbackType? feedbackType)?  loaded,TResult Function( String message)?  error,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SystemConfigStateInitial() when initial != null:
 return initial();case SystemConfigStateLoaded() when loaded != null:
-return loaded(_that.data);case SystemConfigStateError() when error != null:
+return loaded(_that.data,_that.feedbackMessage,_that.feedbackType);case SystemConfigStateError() when error != null:
 return error(_that.message);case SystemConfigStateLoading() when loading != null:
 return loading();case _:
   return orElse();
@@ -149,11 +149,11 @@ return loading();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( SystemConfiguration data)  loaded,required TResult Function( String message)  error,required TResult Function()  loading,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( SystemConfiguration data,  String? feedbackMessage,  SystemConfigFeedbackType? feedbackType)  loaded,required TResult Function( String message)  error,required TResult Function()  loading,}) {final _that = this;
 switch (_that) {
 case SystemConfigStateInitial():
 return initial();case SystemConfigStateLoaded():
-return loaded(_that.data);case SystemConfigStateError():
+return loaded(_that.data,_that.feedbackMessage,_that.feedbackType);case SystemConfigStateError():
 return error(_that.message);case SystemConfigStateLoading():
 return loading();}
 }
@@ -169,11 +169,11 @@ return loading();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( SystemConfiguration data)?  loaded,TResult? Function( String message)?  error,TResult? Function()?  loading,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( SystemConfiguration data,  String? feedbackMessage,  SystemConfigFeedbackType? feedbackType)?  loaded,TResult? Function( String message)?  error,TResult? Function()?  loading,}) {final _that = this;
 switch (_that) {
 case SystemConfigStateInitial() when initial != null:
 return initial();case SystemConfigStateLoaded() when loaded != null:
-return loaded(_that.data);case SystemConfigStateError() when error != null:
+return loaded(_that.data,_that.feedbackMessage,_that.feedbackType);case SystemConfigStateError() when error != null:
 return error(_that.message);case SystemConfigStateLoading() when loading != null:
 return loading();case _:
   return null;
@@ -219,10 +219,12 @@ String toString() {
 
 
 class SystemConfigStateLoaded implements SystemConfigState {
-  const SystemConfigStateLoaded(this.data);
+  const SystemConfigStateLoaded(this.data, {this.feedbackMessage, this.feedbackType});
   
 
  final  SystemConfiguration data;
+ final  String? feedbackMessage;
+ final  SystemConfigFeedbackType? feedbackType;
 
 /// Create a copy of SystemConfigState
 /// with the given fields replaced by the non-null parameter values.
@@ -234,16 +236,16 @@ $SystemConfigStateLoadedCopyWith<SystemConfigStateLoaded> get copyWith => _$Syst
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateLoaded&&(identical(other.data, data) || other.data == data));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateLoaded&&(identical(other.data, data) || other.data == data)&&(identical(other.feedbackMessage, feedbackMessage) || other.feedbackMessage == feedbackMessage)&&(identical(other.feedbackType, feedbackType) || other.feedbackType == feedbackType));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,data);
+int get hashCode => Object.hash(runtimeType,data,feedbackMessage,feedbackType);
 
 @override
 String toString() {
-  return 'SystemConfigState.loaded(data: $data)';
+  return 'SystemConfigState.loaded(data: $data, feedbackMessage: $feedbackMessage, feedbackType: $feedbackType)';
 }
 
 
@@ -254,7 +256,7 @@ abstract mixin class $SystemConfigStateLoadedCopyWith<$Res> implements $SystemCo
   factory $SystemConfigStateLoadedCopyWith(SystemConfigStateLoaded value, $Res Function(SystemConfigStateLoaded) _then) = _$SystemConfigStateLoadedCopyWithImpl;
 @useResult
 $Res call({
- SystemConfiguration data
+ SystemConfiguration data, String? feedbackMessage, SystemConfigFeedbackType? feedbackType
 });
 
 
@@ -271,10 +273,12 @@ class _$SystemConfigStateLoadedCopyWithImpl<$Res>
 
 /// Create a copy of SystemConfigState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? data = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? data = null,Object? feedbackMessage = freezed,Object? feedbackType = freezed,}) {
   return _then(SystemConfigStateLoaded(
 null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
-as SystemConfiguration,
+as SystemConfiguration,feedbackMessage: freezed == feedbackMessage ? _self.feedbackMessage : feedbackMessage // ignore: cast_nullable_to_non_nullable
+as String?,feedbackType: freezed == feedbackType ? _self.feedbackType : feedbackType // ignore: cast_nullable_to_non_nullable
+as SystemConfigFeedbackType?,
   ));
 }
 

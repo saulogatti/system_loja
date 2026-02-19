@@ -14,9 +14,21 @@ PriceConfiguration _$PriceConfigurationFromJson(Map<String, dynamic> json) =>
         final val = PriceConfiguration(
           types: $checkedConvert(
             'types',
-            (v) => (v as List<dynamic>)
-                .map((e) => $enumDecode(_$PaymentMethodTypeEnumMap, e))
-                .toList(),
+            (v) =>
+                (v as List<dynamic>?)
+                    ?.map((e) => $enumDecode(_$PaymentMethodTypeEnumMap, e))
+                    .toList() ??
+                [],
+          ),
+          measurementUnits: $checkedConvert(
+            'measurementUnits',
+            (v) =>
+                (v as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
+          ),
+          reportConfiguration: $checkedConvert(
+            'reportConfiguration',
+            (v) =>
+                PriceConfiguration._reportFromJson(v as Map<String, dynamic>?),
           ),
           lastUpdatedDate: $checkedConvert(
             'last_updated_date',
@@ -43,6 +55,10 @@ Map<String, dynamic> _$PriceConfigurationToJson(
   'registration_date': instance.registrationDate.toIso8601String(),
   'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
   'types': instance.types.map((e) => _$PaymentMethodTypeEnumMap[e]!).toList(),
+  'measurementUnits': instance.measurementUnits,
+  'reportConfiguration': PriceConfiguration._reportToJson(
+    instance.reportConfiguration,
+  ),
 };
 
 const _$PaymentMethodTypeEnumMap = {

@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/app_injection.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
+import 'package:system_loja/core/models/system_config/report_configuration.dart';
+import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/screens/configuracoes/bloc/system_config_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/system_config_state.dart';
+import 'package:system_loja/screens/route/route_app.gr.dart';
 
-/// Widget para configurar as dados padrão do sistema
-/// Cadastrar dados como tipos de pagamento, categorias de produtos, etc. para facilitar o uso do sistema.
-///
-//TODO: Adicionar mais configurações, como categorias de produtos, unidades de medida, etc. para facilitar o uso do sistema. Melhorar o layout e a usabilidade da tela de configurações. Adicionar validação para os dados configurados, como verificar se o tipo de pagamento já existe antes de salvar. Adicionar feedback visual para o usuário ao salvar as configurações, como um snackbar ou um diálogo de confirmação. Adicionar a opção de resetar as configurações para os valores padrão do sistema. Adicionar a opção de exportar e importar as configurações para facilitar a migração entre sistemas ou para backup.  Adicionar a opção de configurar os relatórios gerenciais do sistema, como vendas por período, produtos mais vendidos, etc.
+/// Tela para configurar dados padrão e parâmetros técnicos do sistema.
 @RoutePage()
 class SystemConfigScreen extends StatefulWidget implements AutoRouteWrapper {
   const SystemConfigScreen({super.key});
@@ -27,25 +27,27 @@ class SystemConfigScreen extends StatefulWidget implements AutoRouteWrapper {
 }
 
 class _SystemConfigScreenState extends State<SystemConfigScreen> {
-  List<PaymentMethodType> selectedPaymentMethods = [];
+  final TextEditingController _measurementUnitController = TextEditingController();
+  final TextEditingController _defaultPeriodController = TextEditingController(text: '30');
+
+  List<PaymentMethodType> _selectedPaymentMethods = [];
+  List<String> _measurementUnits = [];
+  bool _enableSalesByPeriod = true;
+  bool _enableTopProducts = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Configurações de Dados Padrão'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              context.read<SystemConfigCubit>().saveConfigurationData(paymentMethods: selectedPaymentMethods);
-            },
-            child: const Icon(Icons.save),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Configurações de Dados Padrão')),
       body: BlocConsumer<SystemConfigCubit, SystemConfigState>(
         listener: (context, state) {
           if (state is SystemConfigStateLoaded) {
-            selectedPaymentMethods = List.from(state.data.priceConfiguration.types, growable: true);
+            _applyLoadedData(state.data);
+            if (state.feedbackMessage != null) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.feedbackMessage!), backgroundColor: Colors.green));
+            }
             setState(() {});
           } else if (state is SystemConfigStateError) {
             ScaffoldMessenger.of(
@@ -60,32 +62,19 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
             case SystemConfigStateError():
               return Center(child: Text(state.message));
             case SystemConfigStateLoaded():
-              return Column(
-                children: [
-                  Text('Selecione os tipos de pagamentos'),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: PaymentMethodType.values.length,
-                      itemBuilder: (context, index) {
-                        return CheckboxListTile(
-                          value: selectedPaymentMethods.contains(PaymentMethodType.values[index]),
-                          title: Text(PaymentMethodType.values[index].name),
-                          onChanged: (value) {
-                            if (value == true) {
-                              selectedPaymentMethods.add(PaymentMethodType.values[index]);
-                            } else {
-                              selectedPaymentMethods.remove(PaymentMethodType.values[index]);
-                            }
-                            setState(() {
-                              // como alteramos a lista antes, seja tirar ou adicionar um item, o setState() é necessário para atualizar a tela. Podemos colocar um listener para atualizar o componente apenas. O que acha ? Não precisa de listener, pois o setState() é suficiente. Ok, obrigado.
-                            });
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ],
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: 12,
+                  children: [
+                    _buildPaymentMethodsSection(),
+                    _buildMeasurementUnitsSection(),
+                    _buildCategoriesSection(context),
+                    _buildReportsSection(),
+                    _buildActions(context),
+                  ],
+                ),
               );
             case SystemConfigStateInitial():
               return const Center(child: Text('Carregando dados...'));
@@ -96,8 +85,302 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    context.read<SystemConfigCubit>().loadConfigurationData();
+  void dispose() {
+    _measurementUnitController.dispose();
+    _defaultPeriodController.dispose();
+    super.dispose();
+  }
+
+  void _addMeasurementUnit() {
+    final rawUnit = _measurementUnitController.text.trim().toUpperCase();
+    if (rawUnit.isEmpty) {
+      return;
+    }
+
+    if (_measurementUnits.any((unit) => unit.toUpperCase() == rawUnit)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unidade de medida já adicionada.'), backgroundColor: Colors.orange),
+      );
+      return;
+    }
+
+    setState(() {
+      _measurementUnits.add(rawUnit);
+      _measurementUnitController.clear();
+      _measurementUnits.sort();
+    });
+  }
+
+  void _applyLoadedData(SystemConfiguration data) {
+    _selectedPaymentMethods = List<PaymentMethodType>.from(data.priceConfiguration.types, growable: true);
+    _measurementUnits = List<String>.from(data.priceConfiguration.measurementUnits, growable: true);
+
+    final reportConfiguration = data.priceConfiguration.reportConfiguration;
+    _enableSalesByPeriod = reportConfiguration.enableSalesByPeriod;
+    _enableTopProducts = reportConfiguration.enableTopProducts;
+    _defaultPeriodController.text = reportConfiguration.defaultPeriodInDays.toString();
+  }
+
+  Widget _buildActions(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            FilledButton.icon(
+              onPressed: () => _saveConfiguration(context),
+              icon: const Icon(Icons.save),
+              label: const Text('Salvar'),
+            ),
+            OutlinedButton.icon(
+              onPressed: () => _resetConfiguration(context),
+              icon: const Icon(Icons.restore),
+              label: const Text('Restaurar padrão'),
+            ),
+            OutlinedButton.icon(
+              onPressed: () {
+                context.read<SystemConfigCubit>().exportConfiguration();
+              },
+              icon: const Icon(Icons.upload_file),
+              label: const Text('Exportar'),
+            ),
+            OutlinedButton.icon(
+              onPressed: () => _importConfiguration(context),
+              icon: const Icon(Icons.download),
+              label: const Text('Importar'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoriesSection(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: const Text('Categorias de produtos'),
+        subtitle: const Text(
+          'O cadastro de categorias é centralizado e pode ser gerenciado em uma tela dedicada.',
+        ),
+        trailing: FilledButton.tonal(
+          onPressed: () {
+            context.router.push(const CategoryManagementRoute());
+          },
+          child: const Text('Gerenciar'),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMeasurementUnitsSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Unidades de medida padrão'),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _measurementUnitController,
+                    decoration: const InputDecoration(hintText: 'Ex.: UN, KG, CX'),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton.filled(onPressed: _addMeasurementUnit, icon: const Icon(Icons.add)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            if (_measurementUnits.isEmpty)
+              const Text('Nenhuma unidade adicionada.', style: TextStyle(color: Colors.grey))
+            else
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: _measurementUnits
+                    .map(
+                      (unit) => InputChip(
+                        label: Text(unit),
+                        onDeleted: () {
+                          setState(() {
+                            _measurementUnits.remove(unit);
+                          });
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPaymentMethodsSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Tipos de pagamento padrão'),
+            const SizedBox(height: 8),
+            ...PaymentMethodType.values.map(
+              (paymentMethod) => CheckboxListTile(
+                value: _selectedPaymentMethods.contains(paymentMethod),
+                title: Text(paymentMethod.name),
+                contentPadding: EdgeInsets.zero,
+                onChanged: (isSelected) {
+                  setState(() {
+                    if (isSelected == true) {
+                      if (!_selectedPaymentMethods.contains(paymentMethod)) {
+                        _selectedPaymentMethods.add(paymentMethod);
+                      }
+                    } else {
+                      _selectedPaymentMethods.remove(paymentMethod);
+                    }
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReportsSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Parâmetros técnicos de relatórios'),
+            const SizedBox(height: 8),
+            SwitchListTile(
+              value: _enableSalesByPeriod,
+              title: const Text('Habilitar vendas por período'),
+              contentPadding: EdgeInsets.zero,
+              onChanged: (value) {
+                setState(() {
+                  _enableSalesByPeriod = value;
+                });
+              },
+            ),
+            SwitchListTile(
+              value: _enableTopProducts,
+              title: const Text('Habilitar produtos mais vendidos'),
+              contentPadding: EdgeInsets.zero,
+              onChanged: (value) {
+                setState(() {
+                  _enableTopProducts = value;
+                });
+              },
+            ),
+            TextField(
+              controller: _defaultPeriodController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Período padrão (dias)'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _importConfiguration(BuildContext context) async {
+    final shouldImport = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Importar configurações'),
+          content: const Text('Esta ação sobrescreve a configuração atual. Deseja continuar?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(false);
+              },
+              child: const Text('Cancelar'),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(true);
+              },
+              child: const Text('Importar'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldImport != true) {
+      return;
+    }
+
+    await context.read<SystemConfigCubit>().importConfiguration();
+  }
+
+  Future<void> _resetConfiguration(BuildContext context) async {
+    final shouldReset = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Restaurar padrão'),
+          content: const Text('Deseja restaurar as configurações para os valores padrão?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(false);
+              },
+              child: const Text('Cancelar'),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(true);
+              },
+              child: const Text('Restaurar'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldReset != true) {
+      return;
+    }
+
+    await context.read<SystemConfigCubit>().resetToDefaultConfiguration();
+  }
+
+  Future<void> _saveConfiguration(BuildContext context) async {
+    final parsedPeriod = int.tryParse(_defaultPeriodController.text.trim());
+
+    if (parsedPeriod == null || parsedPeriod <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Informe um período padrão válido (maior que zero).'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    final reportConfiguration = ReportConfiguration(
+      enableSalesByPeriod: _enableSalesByPeriod,
+      enableTopProducts: _enableTopProducts,
+      defaultPeriodInDays: parsedPeriod,
+    );
+
+    await context.read<SystemConfigCubit>().saveConfigurationData(
+      paymentMethods: _selectedPaymentMethods,
+      measurementUnits: _measurementUnits,
+      reportConfiguration: reportConfiguration,
+    );
   }
 }
