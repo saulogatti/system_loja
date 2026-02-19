@@ -6,6 +6,7 @@ import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
+import 'package:system_loja/screens/utils/extension_date_time.dart';
 import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
@@ -43,9 +44,7 @@ class _SalesViewState extends State<SalesView> {
             case SalesError():
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                    'Erro ao carregar notas fiscais! ${state.message}',
-                  ),
+                  content: Text('Erro ao carregar notas fiscais! ${state.message}'),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -95,10 +94,7 @@ class _SalesViewState extends State<SalesView> {
         },
         builder: (context, state) {
           final invoices = _mapToNotaFiscal.values.toList(growable: false);
-          final totalValue = invoices.fold<double>(
-            0.0,
-            (sum, invoice) => sum + invoice.data.totalValue,
-          );
+          final totalValue = invoices.fold<double>(0.0, (sum, invoice) => sum + invoice.data.totalValue);
 
           return Stack(
             children: [
@@ -130,11 +126,7 @@ class _SalesViewState extends State<SalesView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
-                                Icons.analytics_outlined,
-                                color: Colors.white,
-                                size: 24,
-                              ),
+                              Icon(Icons.analytics_outlined, color: Colors.white, size: 24),
                               const SizedBox(width: 8),
                               Text(
                                 'Valor Total das Vendas',
@@ -158,10 +150,7 @@ class _SalesViewState extends State<SalesView> {
                           const SizedBox(height: 4),
                           Text(
                             '${invoices.length} ${invoices.length == 1 ? 'nota fiscal' : 'notas fiscais'}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white.withValues(alpha: 0.9),
-                            ),
+                            style: TextStyle(fontSize: 14, color: Colors.white.withValues(alpha: 0.9)),
                           ),
                         ],
                       ),
@@ -172,31 +161,23 @@ class _SalesViewState extends State<SalesView> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.receipt_long,
-                                  size: 80,
-                                  color: Colors.grey[400],
-                                ),
+                                Icon(Icons.receipt_long, size: 80, color: Colors.grey[400]),
                                 const SizedBox(height: 16),
                                 const Text(
                                   'Nenhuma nota fiscal cadastrada',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.grey,
-                                  ),
+                                  style: TextStyle(fontSize: 18, color: Colors.grey),
                                 ),
                               ],
                             ),
                           )
                         : GridView.builder(
                             padding: const EdgeInsets.all(16),
-                            gridDelegate:
-                                const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 350,
-                                  mainAxisSpacing: 16,
-                                  crossAxisSpacing: 16,
-                                  childAspectRatio: 1.3,
-                                ),
+                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 350,
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 16,
+                              childAspectRatio: 1.3,
+                            ),
                             itemCount: invoices.length,
                             itemBuilder: (context, index) {
                               final nf = invoices[index];
@@ -242,20 +223,14 @@ class _SalesViewState extends State<SalesView> {
   Future<void> _adicionarNotaFiscal(SalesCubit salesCubit) async {
     if (_mapCustomers.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Erro: Nenhum cliente cadastrado!'),
-          backgroundColor: Colors.red,
-        ),
+        const SnackBar(content: Text('Erro: Nenhum cliente cadastrado!'), backgroundColor: Colors.red),
       );
       return;
     }
 
     if (_productList.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Erro: Nenhum produto cadastrado!'),
-          backgroundColor: Colors.red,
-        ),
+        const SnackBar(content: Text('Erro: Nenhum produto cadastrado!'), backgroundColor: Colors.red),
       );
       return;
     }
@@ -282,11 +257,7 @@ class _SalesViewState extends State<SalesView> {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.grey,
-              fontSize: 12,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
           ),
           const SizedBox(height: 4),
           Text(value, style: const TextStyle(fontSize: 16)),
@@ -319,11 +290,7 @@ class _SalesViewState extends State<SalesView> {
                       color: Colors.orange.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(
-                      Icons.receipt_long,
-                      size: 28,
-                      color: Colors.orange,
-                    ),
+                    child: const Icon(Icons.receipt_long, size: 28, color: Colors.orange),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -332,19 +299,10 @@ class _SalesViewState extends State<SalesView> {
                       children: [
                         Text(
                           'NF ${nf.data.invoiceNumber}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Text(
-                          'ID: ${nf.id}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
-                          ),
-                        ),
+                        Text('ID: ${nf.id}', style: TextStyle(fontSize: 12, color: Colors.grey[600])),
                       ],
                     ),
                   ),
@@ -356,24 +314,23 @@ class _SalesViewState extends State<SalesView> {
                 children: [
                   Row(
                     children: [
-                      Icon(
-                        Icons.person_outline,
-                        size: 16,
-                        color: Colors.grey[600],
-                      ),
+                      Icon(Icons.person_outline, size: 16, color: Colors.grey[600]),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           nf.data.customerName,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
                       ),
                     ],
+                  ),
+                  Text(
+                    nf.registrationDate.toFormattedDate(),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -381,27 +338,17 @@ class _SalesViewState extends State<SalesView> {
                     children: [
                       Row(
                         children: [
-                          Icon(
-                            Icons.shopping_cart_outlined,
-                            size: 16,
-                            color: Colors.grey[600],
-                          ),
+                          Icon(Icons.shopping_cart_outlined, size: 16, color: Colors.grey[600]),
                           const SizedBox(width: 4),
                           Text(
                             '${nf.data.items.length} ${nf.data.items.length == 1 ? 'item' : 'itens'}',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey[600],
-                            ),
+                            style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: Colors.green.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
@@ -440,20 +387,11 @@ class _SalesViewState extends State<SalesView> {
               _buildDetailRow('Número', nf.data.invoiceNumber),
               _buildDetailRow('Cliente', nf.data.customerName),
               _buildDetailRow('CPF', nf.data.customerCpf),
-              _buildDetailRow(
-                'Valor Total',
-                'R\$ ${nf.data.totalValue.toStringAsFixed(2)}',
-              ),
+              _buildDetailRow('Valor Total', 'R\$ ${nf.data.totalValue.toStringAsFixed(2)}'),
               _buildDetailRow('Pagamento', nf.data.paymentMethod),
-              _buildDetailRow(
-                'Data de Emissão',
-                nf.data.issueDate.toString().split('.')[0],
-              ),
+              _buildDetailRow('Data de Emissão', nf.data.issueDate.toFormattedDate()),
               const SizedBox(height: 16),
-              const Text(
-                'Itens:',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
+              const Text('Itens:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               const SizedBox(height: 8),
               ...nf.data.items.map(
                 (item) => Padding(
@@ -467,12 +405,7 @@ class _SalesViewState extends State<SalesView> {
             ],
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Fechar'),
-          ),
-        ],
+        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
       ),
     );
   }
