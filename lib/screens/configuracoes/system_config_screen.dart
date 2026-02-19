@@ -135,7 +135,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
               label: const Text('Salvar'),
             ),
             OutlinedButton.icon(
-              onPressed: () => _resetConfiguration(context),
+              onPressed: () => _resetConfiguration(context, context.read<SystemConfigCubit>()),
               icon: const Icon(Icons.restore),
               label: const Text('Restaurar padrão'),
             ),
@@ -147,7 +147,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
               label: const Text('Exportar'),
             ),
             OutlinedButton.icon(
-              onPressed: () => _importConfiguration(context),
+              onPressed: () => _importConfiguration(context, context.read<SystemConfigCubit>()),
               icon: const Icon(Icons.download),
               label: const Text('Importar'),
             ),
@@ -294,7 +294,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     );
   }
 
-  Future<void> _importConfiguration(BuildContext context) async {
+  Future<void> _importConfiguration(BuildContext context, SystemConfigCubit systemConfigCubit) async {
     final shouldImport = await showDialog<bool>(
       context: context,
       builder: (dialogContext) {
@@ -323,10 +323,10 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
       return;
     }
 
-    await context.read<SystemConfigCubit>().importConfiguration();
+    await systemConfigCubit.importConfiguration();
   }
 
-  Future<void> _resetConfiguration(BuildContext context) async {
+  Future<void> _resetConfiguration(BuildContext context, SystemConfigCubit systemConfigCubit) async {
     final shouldReset = await showDialog<bool>(
       context: context,
       builder: (dialogContext) {
@@ -355,7 +355,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
       return;
     }
 
-    await context.read<SystemConfigCubit>().resetToDefaultConfiguration();
+    await systemConfigCubit.resetToDefaultConfiguration();
   }
 
   Future<void> _saveConfiguration(BuildContext context) async {
