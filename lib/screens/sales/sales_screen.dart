@@ -6,6 +6,7 @@ import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
+import 'package:system_loja/screens/sales/widgets/invoice_card.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
 import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
@@ -181,7 +182,10 @@ class _SalesViewState extends State<SalesView> {
                             itemCount: invoices.length,
                             itemBuilder: (context, index) {
                               final nf = invoices[index];
-                              return _buildInvoiceCard(nf);
+                              return InvoiceCard(
+                                invoice: nf,
+                                onTap: () => _mostrarDetalhesNota(nf),
+                              );
                             },
                           ),
                   ),
@@ -262,113 +266,6 @@ class _SalesViewState extends State<SalesView> {
           const SizedBox(height: 4),
           Text(value, style: const TextStyle(fontSize: 16)),
         ],
-      ),
-    );
-  }
-
-  /// Constrói um card visual para exibir informações da nota fiscal.
-  ///
-  /// Exibe número da nota, cliente e valor total em um formato de card
-  /// Material 3 com ícone e cores informativas.
-  Widget _buildInvoiceCard(Invoice nf) {
-    return Card(
-      elevation: 2,
-      child: InkWell(
-        onTap: () => _mostrarDetalhesNota(nf),
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.orange.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(Icons.receipt_long, size: 28, color: Colors.orange),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'NF ${nf.data.invoiceNumber}',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text('ID: ${nf.id}', style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.person_outline, size: 16, color: Colors.grey[600]),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          nf.data.customerName,
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    nf.registrationDate.toFormattedDate(),
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.shopping_cart_outlined, size: 16, color: Colors.grey[600]),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${nf.data.items.length} ${nf.data.items.length == 1 ? 'item' : 'itens'}',
-                            style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.green.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          'R\$ ${nf.data.totalValue.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
