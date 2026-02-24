@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
+import 'package:system_loja/screens/utils/extension_date_time.dart';
 
 import '../../core/models/address.dart';
 import '../../core/models/customer.dart';
@@ -232,8 +233,8 @@ class _CustomerViewState extends State<CustomerView> {
                     ),
                     const SizedBox(height: 12),
                     _buildInfoRow('ID', widget.customer!.id.toString()),
-                    _buildInfoRow('Data de Cadastro', _formatDate(widget.customer!.registrationDate)),
-                    _buildInfoRow('Última Atualização', _formatDate(widget.customer!.lastUpdatedDate)),
+                    _buildInfoRow('Data de Cadastro', widget.customer!.registrationDate.toFormattedDate()),
+                    _buildInfoRow('Última Atualização', widget.customer!.lastUpdatedDate.toFormattedDate()),
                   ],
                 ),
               ),
@@ -276,16 +277,6 @@ class _CustomerViewState extends State<CustomerView> {
     if (_isEditMode) {
       AutoRouter.of(context).pop();
     }
-  }
-
-  /// Formata uma data no formato DD/MM/YYYY HH:MM
-  String _formatDate(DateTime date) {
-    final day = date.day.toString().padLeft(2, '0');
-    final month = date.month.toString().padLeft(2, '0');
-    final year = date.year.toString();
-    final hour = date.hour.toString().padLeft(2, '0');
-    final minute = date.minute.toString().padLeft(2, '0');
-    return '$day/$month/$year $hour:$minute';
   }
 
   /// Navega para a tela de detalhes do cliente

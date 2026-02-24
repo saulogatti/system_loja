@@ -6,6 +6,7 @@ import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/company/bloc/company_bloc.dart';
 import 'package:system_loja/screens/utils/constants.dart';
+import 'package:system_loja/screens/utils/extension_date_time.dart';
 import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 
@@ -223,11 +224,11 @@ class _CompanyEditViewState extends State<CompanyEditView> {
             _buildInfoRow('ID', widget.company.id.toString()),
             _buildInfoRow(
               'Data de Cadastro',
-              _formatDate(widget.company.registrationDate),
+              widget.company.registrationDate.toFormattedDate(),
             ),
             _buildInfoRow(
               'Última Atualização',
-              _formatDate(widget.company.lastUpdatedDate),
+              widget.company.lastUpdatedDate.toFormattedDate(),
             ),
           ],
         ),
@@ -253,16 +254,6 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     }
 
     return '${cnpjLimpo.substring(0, 2)}.${cnpjLimpo.substring(2, 5)}.${cnpjLimpo.substring(5, 8)}/${cnpjLimpo.substring(8, 12)}-${cnpjLimpo.substring(12, 14)}';
-  }
-
-  /// Formata uma data no formato DD/MM/YYYY HH:MM
-  String _formatDate(DateTime date) {
-    final day = date.day.toString().padLeft(2, '0');
-    final month = date.month.toString().padLeft(2, '0');
-    final year = date.year.toString();
-    final hour = date.hour.toString().padLeft(2, '0');
-    final minute = date.minute.toString().padLeft(2, '0');
-    return '$day/$month/$year $hour:$minute';
   }
 
   /// Salva as alterações da empresa

@@ -8,6 +8,7 @@ import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/product_state.dart';
 import 'package:system_loja/screens/products/widgets/product_category.dart';
+import 'package:system_loja/screens/utils/extension_date_time.dart';
 
 /// Tela de detalhes do produto com opções de edição e exclusão
 ///
@@ -272,13 +273,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         const Divider(),
                         _buildInfoRow(
                           'Data de Cadastro',
-                          _formatDate(widget.product.registrationDate),
+                          widget.product.registrationDate.toFormattedDate(),
                           Icons.calendar_today,
                         ),
                         const Divider(),
                         _buildInfoRow(
                           'Data de Atualização',
-                          _formatDate(widget.product.lastUpdatedDate),
+                          widget.product.lastUpdatedDate.toFormattedDate(),
                           Icons.calendar_today,
                         ),
                       ],
@@ -419,16 +420,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ],
       ),
     );
-  }
-
-  /// Formata uma data no formato DD/MM/YYYY HH:MM
-  String _formatDate(DateTime date) {
-    final day = date.day.toString().padLeft(2, '0');
-    final month = date.month.toString().padLeft(2, '0');
-    final year = date.year.toString();
-    final hour = date.hour.toString().padLeft(2, '0');
-    final minute = date.minute.toString().padLeft(2, '0');
-    return '$day/$month/$year $hour:$minute';
   }
 
   void _salvarAlteracoes() {
