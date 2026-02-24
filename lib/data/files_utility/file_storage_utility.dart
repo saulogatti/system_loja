@@ -394,7 +394,7 @@ mixin FileStorageUtility {
         if (!await cacheDir.exists()) {
           await cacheDir.create(recursive: true);
         }
-        for (final element in cacheDir.listSync()) {
+        await for (final element in cacheDir.list()) {
           if (element is! File) continue;
           final String ext = p.extension(element.path).toLowerCase();
           if (ext == '.bak') {
