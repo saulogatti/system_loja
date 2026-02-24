@@ -223,6 +223,9 @@ extension ValidateDataCustomer on String {
 
   /// Gera hash SHA-256 da senha
   String hashSenha() {
+    // TODO(security): Vulnerabilidade de hash fraco (SHA-256 sem salt).
+    // Usar um algoritmo moderno como Argon2 ou bcrypt com salt único
+    // durante a próxima migração do banco de dados.
     final bytes = utf8.encode(this);
     final digest = sha256.convert(bytes);
     return digest.toString();
