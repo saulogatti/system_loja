@@ -4,20 +4,17 @@ version: 0.0.1
 publish_to: "none"
 
 environment:
-  sdk: ">=3.10.8"
+  sdk: ">=3.11.0"
 
 dependencies:
-  log_custom_printer:
-    git:
-      url: https://github.com/saulogatti/log_custom_printer.git
-      ref: uopdateLib
+  log_custom_printer: 2.0.0
   flutter:
     sdk: flutter
 
   path_provider: ^2.1.5
   synchronized: ^3.4.0
   path: ^1.9.1
-  json_annotation: ^4.10.0
+  json_annotation: ^4.11.0
 
   async: ^2.13.0
   meta: ^1.17.0
@@ -36,16 +33,16 @@ dependencies:
   drift_flutter: ^0.2.8
   sqlite3_flutter_libs: ^0.5.41
   file_selector: ^1.1.0
-  sqlite3: ^2.9.4
-  get_it: ^9.2.0
+  sqlite3: ^2.4.6
+  get_it: ^9.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  build_runner: ^2.11.0
-  json_serializable: ^6.12.0
+  build_runner: ^2.11.1
+  json_serializable: ^6.13.0
   drift_dev: ^2.31.0
-  auto_route_generator: ^10.4.0
+  auto_route_generator: ^10.5.0
 flutter:
   uses-material-design: true

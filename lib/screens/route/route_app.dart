@@ -84,6 +84,7 @@ class RouteApp extends RootStackRouter {
     AutoRoute(page: LogSystemRoute.page, title: (context, data) => 'System Logs'),
     AutoRoute(page: LogsAnalyticsRoute.page, title: (context, data) => 'Logs Analytics'),
     AutoRoute(page: CompanyEditRoute.page, title: (context, data) => 'Edit Company'),
+    AutoRoute(page: PersonRegistrationRoute.page, title: (context, data) => 'Cadastro de Pessoa'),
     AutoRoute(page: SystemConfigRoute.page, title: (context, data) => 'System Config'),
   ];
 }
