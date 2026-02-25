@@ -30,7 +30,7 @@ final appInjection = GetIt.instance;
 /// Isso é usado no main.dart para configurar as dependências da aplicação.
 /// Para acessar as dependências, use o `appInjection.get<T>()` onde T é o tipo da dependência.
 void setupAppInjection() {
-  registerLogPrinterColor(config: ConfigLog(enableLog: true));
+  registerLogPrinterColor(config: ConfigLog(enableLog: !kReleaseMode));
   appInjection.registerSingleton<RouteApp>(RouteApp());
   appInjection.registerSingleton<AppDatabase>(AppDatabase());
   appInjection.registerSingleton<SystemDatabase>(SystemDatabase());
