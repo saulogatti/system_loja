@@ -10,6 +10,7 @@ import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 ///
 /// Encapsula os campos de entrada e validações para criação e edição de clientes.
 /// Quando em modo de edição, o campo CPF fica desabilitado.
+@Deprecated.instantiate('Use PersonRegistrationForm para um formulário unificado de pessoa física e jurídica')
 class CustomerForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nomeController;
@@ -82,10 +83,7 @@ class CustomerForm extends StatelessWidget {
           const SizedBox(height: 16),
           TextFormFieldEmail(emailController: emailController, isEditing: true),
           const SizedBox(height: 16),
-          TextFormFieldPhone(
-            telefoneController: telefoneController,
-            isEditing: true,
-          ),
+          TextFormFieldPhone(telefoneController: telefoneController, isEditing: true),
           const SizedBox(height: 16),
           AddressForm(
             streetController: streetController,

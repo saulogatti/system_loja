@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/core/utils/text_formatters.dart';
 import 'package:system_loja/core/utils/validators.dart';
 import 'package:system_loja/screens/person_registration/models/person_registration_form_data.dart';
-import 'package:system_loja/screens/utils/constants.dart';
 import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
@@ -73,9 +71,7 @@ class PersonRegistrationForm extends StatelessWidget {
           const SizedBox(height: 16),
           TextFormField(
             controller: nameController,
-            decoration: InputDecoration(
-              labelText: '${selectedPersonType.nameLabel} *',
-            ),
+            decoration: InputDecoration(labelText: '${selectedPersonType.nameLabel} *'),
             validator: (value) => combineValidators([
               (v) => validateRequired(v, selectedPersonType.nameLabel),
               (v) => validateMinLength(v, 3, selectedPersonType.nameLabel),
@@ -93,7 +89,7 @@ class PersonRegistrationForm extends StatelessWidget {
             ),
             keyboardType: TextInputType.number,
             inputFormatters: _documentInputFormatters(selectedPersonType),
-            validator: (value) => _validateDocument(value: value, selectedPersonType: selectedPersonType),
+            validator: (value) => selectedPersonType.validateDocument(value: value),
           ),
           const SizedBox(height: 16),
           TextFormFieldEmail(emailController: emailController, isEditing: true),
@@ -129,32 +125,5 @@ class PersonRegistrationForm extends StatelessWidget {
     }
 
     return [CnpjTextInputFormatter()];
-  }
-
-  /// Valida o documento conforme o tipo de pessoa selecionado.
-  String? _validateDocument({required String? value, required PersonType selectedPersonType}) {
-    if (value == null || value.trim().isEmpty) {
-      return '${selectedPersonType.documentLabel} é obrigatório';
-    }
-
-    final cleanedValue = value.replaceAll(Constants.nonNumericRegExp, '');
-
-    if (selectedPersonType == PersonType.individual) {
-      if (cleanedValue.length != 11) {
-        return 'CPF deve conter 11 dígitos';
-      }
-
-      if (!value.isValidCPF()) {
-        return 'CPF inválido';
-      }
-
-      return null;
-    }
-
-    if (cleanedValue.length != 14) {
-      return 'CNPJ deve conter 14 dígitos';
-    }
-
-    return null;
   }
 }

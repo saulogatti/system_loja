@@ -1,3 +1,5 @@
+import 'package:system_loja/core/utils/documents.dart';
+
 /// Representa os dados digitados no formulário de cadastro de pessoa.
 class PersonRegistrationFormData {
   /// Armazena o tipo de pessoa selecionado.
@@ -67,5 +69,21 @@ enum PersonType {
       case PersonType.company:
         return 'CNPJ';
     }
+  }
+
+  String get nameLabel {
+    switch (this) {
+      case PersonType.individual:
+        return 'Nome Completo';
+      case PersonType.company:
+        return 'Razão Social';
+    }
+  }
+
+  String? validateDocument({required String? value}) {
+    if (value == null || value.trim().isEmpty) {
+      return '$documentLabel é obrigatório';
+    }
+    return Documents.validateDocument(value: value, selectedPersonType: this);
   }
 }
