@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
 
 import '../../core/models/address.dart';
