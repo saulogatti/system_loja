@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/interface/i_settings_service.dart';
+import 'package:system_loja/core/settings/app_theme.dart';
 import 'package:system_loja/core/settings/app_theme_settings.dart';
 
 class SettingsService implements ISettingsService {
   ValueNotifier<ThemeData> currentThemeNotifier = ValueNotifier<ThemeData>(
-    ThemeData(useMaterial3: true),
+    AppTheme.light(seedColor: EnumColorAppThemeSettings.azul.color),
   );
-  ThemeData _appTheme = ThemeData(useMaterial3: true);
+  ThemeData _appTheme = AppTheme.light(
+    seedColor: EnumColorAppThemeSettings.azul.color,
+  );
   bool _temaEscuro = false;
   SettingsService.injection();
   ThemeData get currentTheme => currentThemeNotifier.value;
   bool get temaEscuro => _temaEscuro;
   @override
   void updateSettings(EnumColorAppThemeSettings corPrimaria, bool temaEscuro) {
-    _appTheme = ThemeData.from(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: corPrimaria.color,
-        brightness: temaEscuro ? Brightness.dark : Brightness.light,
-      ),
-      useMaterial3: true,
-      textTheme: temaEscuro
-          ? ThemeData.dark().textTheme
-          : ThemeData.light().textTheme,
-    );
+    if (temaEscuro) {
+      _appTheme = AppTheme.dark(seedColor: corPrimaria.color);
+    } else {
+      _appTheme = AppTheme.light(seedColor: corPrimaria.color);
+    }
     _temaEscuro = temaEscuro;
     currentThemeNotifier.value = _appTheme;
   }

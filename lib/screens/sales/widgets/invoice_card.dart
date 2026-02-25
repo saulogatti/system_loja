@@ -30,10 +30,14 @@ class InvoiceCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.orange.withValues(alpha: 0.1),
+                      color: Theme.of(context).colorScheme.secondaryContainer,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.receipt_long, size: 28, color: Colors.orange),
+                    child: Icon(
+                      Icons.receipt_long,
+                      size: 28,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -45,7 +49,13 @@ class InvoiceCard extends StatelessWidget {
                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Text('ID: ${invoice.id}', style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                        Text(
+                          'ID: ${invoice.id}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -57,7 +67,11 @@ class InvoiceCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.person_outline, size: 16, color: Colors.grey[600]),
+                      Icon(
+                        Icons.person_outline,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
@@ -81,11 +95,18 @@ class InvoiceCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.shopping_cart_outlined, size: 16, color: Colors.grey[600]),
+                          Icon(
+                            Icons.shopping_cart_outlined,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             '${invoice.data.items.length} ${invoice.data.items.length == 1 ? 'item' : 'itens'}',
-                            style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],
@@ -93,15 +114,15 @@ class InvoiceCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.green.withValues(alpha: 0.1),
+                          color: Theme.of(context).colorScheme.primaryContainer,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           'R\$ ${invoice.data.totalValue.toStringAsFixed(2)}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.green,
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
                           ),
                         ),
                       ),
