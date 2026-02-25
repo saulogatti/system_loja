@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static ThemeData light({required Color seedColor}) {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: seedColor,
-      brightness: Brightness.light,
-    );
+  static ThemeData dark({required Color seedColor}) {
+    final colorScheme = ColorScheme.fromSeed(seedColor: seedColor, brightness: Brightness.dark);
 
     return _buildTheme(colorScheme);
   }
 
-  static ThemeData dark({required Color seedColor}) {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: seedColor,
-      brightness: Brightness.dark,
-    );
+  static ThemeData light({required Color seedColor}) {
+    final colorScheme = ColorScheme.fromSeed(seedColor: seedColor, brightness: Brightness.light);
 
     return _buildTheme(colorScheme);
   }
@@ -31,7 +25,7 @@ class AppTheme {
         centerTitle: true,
         iconTheme: IconThemeData(color: colorScheme.onSurface),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: colorScheme.surfaceContainerLow,
         elevation: 2,
         margin: const EdgeInsets.all(8),
@@ -55,10 +49,7 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: colorScheme.outlineVariant),
@@ -84,15 +75,13 @@ class AppTheme {
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: colorScheme.surfaceContainerHigh,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: colorScheme.surface,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        ),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
       ),
     );
 
