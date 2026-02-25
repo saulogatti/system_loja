@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/interface/i_category_repository.dart';
 import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
@@ -29,6 +30,7 @@ final appInjection = GetIt.instance;
 /// Isso é usado no main.dart para configurar as dependências da aplicação.
 /// Para acessar as dependências, use o `appInjection.get<T>()` onde T é o tipo da dependência.
 void setupAppInjection() {
+  registerLogPrinterColor(config: ConfigLog(enableLog: true));
   appInjection.registerSingleton<RouteApp>(RouteApp());
   appInjection.registerSingleton<AppDatabase>(AppDatabase());
   appInjection.registerSingleton<SystemDatabase>(SystemDatabase());
@@ -84,9 +86,7 @@ void setupAppInjection() {
   );
 
   appInjection.registerSingleton<ICategoryRepository>(
-    CategoryRepository(
-      categoryDao: appInjection.get<AppDatabase>().categoryDao,
-    ),
+    CategoryRepository(categoryDao: appInjection.get<AppDatabase>().categoryDao),
   );
   appInjection.get<IConfigurationRepository>().loadConfiguration();
 }
