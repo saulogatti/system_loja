@@ -46,7 +46,7 @@ class _SalesViewState extends State<SalesView> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Erro ao carregar notas fiscais! ${state.message}'),
-                  backgroundColor: Colors.red,
+                  backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
               break;
@@ -54,7 +54,7 @@ class _SalesViewState extends State<SalesView> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Erro ao carregar produtos! ${state.message}'),
-                  backgroundColor: Colors.red,
+                  backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
               break;
@@ -116,7 +116,7 @@ class _SalesViewState extends State<SalesView> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
+                            color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -127,14 +127,18 @@ class _SalesViewState extends State<SalesView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.analytics_outlined, color: Colors.white, size: 24),
+                              Icon(
+                                Icons.analytics_outlined,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                size: 24,
+                              ),
                               const SizedBox(width: 8),
                               Text(
                                 'Valor Total das Vendas',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                 ),
                               ),
                             ],
@@ -142,16 +146,19 @@ class _SalesViewState extends State<SalesView> {
                           const SizedBox(height: 8),
                           Text(
                             'R\$ ${totalValue.toStringAsFixed(2)}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.onPrimary,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             '${invoices.length} ${invoices.length == 1 ? 'nota fiscal' : 'notas fiscais'}',
-                            style: TextStyle(fontSize: 14, color: Colors.white.withValues(alpha: 0.9)),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.9),
+                            ),
                           ),
                         ],
                       ),
@@ -162,11 +169,18 @@ class _SalesViewState extends State<SalesView> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.receipt_long, size: 80, color: Colors.grey[400]),
+                                Icon(
+                                  Icons.receipt_long,
+                                  size: 80,
+                                  color: Theme.of(context).colorScheme.outline,
+                                ),
                                 const SizedBox(height: 16),
-                                const Text(
+                                Text(
                                   'Nenhuma nota fiscal cadastrada',
-                                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  ),
                                 ),
                               ],
                             ),
@@ -227,14 +241,20 @@ class _SalesViewState extends State<SalesView> {
   Future<void> _adicionarNotaFiscal(SalesCubit salesCubit) async {
     if (_mapCustomers.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro: Nenhum cliente cadastrado!'), backgroundColor: Colors.red),
+        SnackBar(
+          content: const Text('Erro: Nenhum cliente cadastrado!'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
       );
       return;
     }
 
     if (_productList.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro: Nenhum produto cadastrado!'), backgroundColor: Colors.red),
+        SnackBar(
+          content: const Text('Erro: Nenhum produto cadastrado!'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
       );
       return;
     }
@@ -261,7 +281,11 @@ class _SalesViewState extends State<SalesView> {
         children: [
           Text(
             label,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 12,
+            ),
           ),
           const SizedBox(height: 4),
           Text(value, style: const TextStyle(fontSize: 16)),
