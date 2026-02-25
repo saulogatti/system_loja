@@ -1,0 +1,28 @@
+# Configuração do Gemini Code Assist
+# Salvar em: .gemini/config.yaml
+
+have_fun: false # O negócio aqui é sério, sem tempo pra IA fazer piadinha no PR.
+
+# Opções: 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL'
+comment_severity_threshold: 'MEDIUM' 
+
+# Limita o spam. Se o PR tiver mais de 10 erros de uma vez, o código tá condenado e o cara tem que refazer.
+max_review_comments: 10 
+
+pull_request_opened:
+  summary: true # Faz um resumão automático do que o desenvolvedor tentou fazer.
+  code_review: true # Ativa a revisão linha a linha de fato.
+  help: false
+
+code_review:
+  disable: false
+
+ignore_patterns:
+  # O básico que a IA não precisa (e nem deve) perder tempo lendo
+  - "build/**"
+  - ".dart_tool/**"
+  - "ios/Pods/**"
+  - "ios/.symlinks/**"
+  - "**/*.g.dart"        # Ninguém revisa código gerado pelo build_runner/json_serializable
+  - "**/*.freezed.dart"  # Mesma coisa aqui
+  - "**.pbxproj"         # Deixa o Xcode se virar com isso
