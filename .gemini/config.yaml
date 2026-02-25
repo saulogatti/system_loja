@@ -1,7 +1,7 @@
 # Configuração do Gemini Code Assist
 # Salvar em: .gemini/config.yaml
 
-have_fun: false # O negócio aqui é sério, sem tempo pra IA fazer piadinha no PR.
+have_fun: true # O negócio aqui é sério, sem tempo pra IA fazer piadinha no PR.
 
 # Opções: 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL'
 comment_severity_threshold: 'MEDIUM' 
