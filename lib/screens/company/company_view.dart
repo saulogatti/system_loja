@@ -9,6 +9,7 @@ import 'bloc/company_bloc.dart';
 import 'widgets/company_form.dart';
 import 'widgets/company_list.dart';
 import 'widgets/company_search_section.dart';
+import 'widgets/info_row.dart';
 
 @RoutePage()
 class CompanyView extends StatefulWidget {
@@ -162,30 +163,6 @@ class _CompanyViewState extends State<CompanyView> {
     }
   }
 
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: RichText(
-        text: TextSpan(
-          style: const TextStyle(fontSize: 14),
-          children: [
-            TextSpan(
-              text: '$label: ',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-            TextSpan(
-              text: value,
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   /// Busca uma empresa pelo CNPJ
   void _buscarEmpresaPorCnpj() {
     final cnpj = _searchCnpjController.text.trim();
@@ -223,17 +200,20 @@ class _CompanyViewState extends State<CompanyView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildDetailRow('CNPJ', company.cnpj),
+              InfoRow(label: 'CNPJ', value: company.cnpj),
               if (company.email != null && company.email!.isNotEmpty)
-                _buildDetailRow('Email', company.email!),
+                InfoRow(label: 'Email', value: company.email!),
               if (company.address.street.isNotEmpty)
-                _buildDetailRow('Rua', company.address.street),
+                InfoRow(label: 'Rua', value: company.address.street),
               if (company.address.zipCode.isNotEmpty)
-                _buildDetailRow('CEP', company.address.zipCode),
+                InfoRow(label: 'CEP', value: company.address.zipCode),
               if (company.address.neighborhood.isNotEmpty)
-                _buildDetailRow('Bairro', company.address.neighborhood),
+                InfoRow(
+                  label: 'Bairro',
+                  value: company.address.neighborhood,
+                ),
               if (company.address.city.isNotEmpty)
-                _buildDetailRow('Cidade', company.address.city),
+                InfoRow(label: 'Cidade', value: company.address.city),
             ],
           ),
         ),
