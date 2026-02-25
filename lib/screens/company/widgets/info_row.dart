@@ -16,11 +16,13 @@ class InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      final theme = Theme.of(context);
+    final baseStyle = theme.textTheme.bodyMedium;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: RichText(
         text: TextSpan(
-          style: const TextStyle(fontSize: 14),
+          style: baseStyle,
           children: [
             TextSpan(
               text: '$label: ',
