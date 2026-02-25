@@ -74,13 +74,11 @@ class PersonRegistrationForm extends StatelessWidget {
           TextFormField(
             controller: nameController,
             decoration: InputDecoration(
-              labelText: isIndividual ? 'Nome Completo *' : 'Razão Social *',
-              border: const OutlineInputBorder(),
-              prefixIcon: const Icon(Icons.person),
+              labelText: '${selectedPersonType.nameLabel} *',
             ),
             validator: (value) => combineValidators([
-              (v) => validateRequired(v, isIndividual ? 'Nome Completo' : 'Razão Social'),
-              (v) => validateMinLength(v, 3, isIndividual ? 'Nome Completo' : 'Razão Social'),
+              (v) => validateRequired(v, selectedPersonType.nameLabel),
+              (v) => validateMinLength(v, 3, selectedPersonType.nameLabel),
             ])(value),
           ),
           const SizedBox(height: 16),
