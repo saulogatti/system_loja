@@ -1,0 +1,54 @@
+---
+description: Documentação em docs/ e doc comments /// em português
+globs: "docs/**"
+---
+
+# Padrões de Documentação - System Loja
+
+Regras para documentação em `docs/` e para doc comments no código. Para arquivos em `lib/`, use `///` em **português** seguindo as diretrizes abaixo.
+
+## Doc comments (Dart) — uso em lib/
+
+- **Primeira linha**: resumo em uma frase.
+- **Parágrafo vazio**: separa resumo da descrição detalhada.
+- **Seções úteis**: `Parâmetros:`, `Retorna:`, `Lança:`, `Veja também:`, `Exemplo de uso:` com código em ```dart.
+
+```dart
+/// Gerencia operações CRUD para clientes no banco SQLite usando Drift ORM.
+///
+/// Implementa o padrão Repository. Todos os métodos retornam [ResultStatus]
+/// para tratamento type-safe de erros.
+///
+/// Exemplo de uso:
+/// ```dart
+/// final resultado = await repository.buscar(id: 1);
+/// resultado.when(success: (c) => ..., error: (e) => ...);
+/// ```
+class ClienteRepository {
+  /// Busca um cliente pelo ID.
+  ///
+  /// Retorna [ResultStatus] com o cliente ou erro se não encontrado.
+  Future<ResultStatus<Customer, String>> buscar({required int id}) async { ... }
+}
+```
+
+## Documentos técnicos em docs/
+
+- **Idioma**: português.
+- **Estrutura**: Título, Índice (links), Visão Geral, seções específicas, Exemplos, Referências.
+- **Guias**: `ARCHITECTURE_*.md`, `*_MIGRATION.md`, `PATTERNS_*.md`, `API_*.md`; guias em `docs/guides/`.
+- **Markdown**: usar Mermaid para diagramas quando fizer sentido; evitar HTML; exemplos de código em cercas com linguagem.
+
+## Padrões obrigatórios
+
+- Toda documentação em português (nomes no código podem ser em inglês).
+- Terminologia consistente em toda a documentação.
+- Incluir exemplos práticos; atualizar documentação junto com o código.
+- Links relativos entre documentos; não duplicar informação (usar links).
+- Revisar ortografia; testar comandos e exemplos de código.
+
+## Restrições
+
+- Não criar documentação genérica ou óbvia.
+- Não deixar código nos exemplos sem funcionar.
+- Sempre revisar ortografia e testar comandos/exemplos.

@@ -1,0 +1,81 @@
+---
+description: Estrutura e padrões de testes - unitários, integração, nomenclatura
+globs: "test/**"
+---
+
+# Padrões de Testes - System Loja
+
+Estrutura e convenções para testes no projeto.
+
+## Localização e nomenclatura
+
+- Testes em `test/` seguindo a estrutura do `lib/`.
+- Nomenclatura: `[arquivo_origem]_test.dart` (ex.: `customer_repository_test.dart`).
+
+## Tipos de teste
+
+### Testes de model (serialização)
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:system_loja/core/models/customer.dart';
+
+void main() {
+  group('Customer', () {
+    test('serialização JSON roundtrip', () {
+      final customer = Customer(id: 1, name: 'João Silva', cpf: '12345678900');
+      final json = customer.toJson();
+      final restored = Customer.fromJson(json);
+      expect(restored.name, equals('João Silva'));
+      expect(restored.id, equals(1));
+    });
+  });
+}
+```
+
+### Testes de DAO (Drift)
+
+Usar banco em memória: `NativeDatabase.memory()`. Fechar no `tearDown`.
+
+```dart
+late AppDatabase database;
+
+setUp(() {
+  database = AppDatabase(NativeDatabase.memory());
+});
+
+tearDown(() async {
+  await database.close();
+});
+```
+
+### Testes de repository
+
+Usar mocks (Mockito): `@GenerateMocks([Classe])`, rodar build_runner para gerar `.mocks.dart`, usar `when`/`verify` nos testes.
+
+### Testes de BLoC
+
+Usar `bloc_test` para sequências de estados esperados; mockar repositórios/DAOs.
+
+## Padrões obrigatórios
+
+- Use `setUp` e `tearDown` apropriadamente; feche recursos (database, streams) no `tearDown`.
+- Use `expect` com matchers claros (`equals`, `isA`, `hasLength`).
+- Organize testes em `group`s lógicos.
+- Nomenclatura de testes em português, formato: `'[ação] [comportamento esperado]'` (ex.: `'inserir cliente retorna ID válido'`).
+- Use mocks para dependências externas; não use `await Future.delayed` arbitrários — em widget tests use `pump`/`pumpAndSettle`.
+- Não deixe testes com `skip: true` sem justificativa.
+
+## Comandos
+
+```bash
+flutter test
+flutter test test/<arquivo>_test.dart
+flutter test --coverage
+```
+
+## Restrições
+
+- Não modifique código de produção sem necessidade.
+- Sempre limpe recursos em `tearDown`.
+- Mocks gerados com build_runner quando usar `@GenerateMocks`.
