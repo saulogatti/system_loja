@@ -52,6 +52,10 @@ class SystemDatabase extends _$SystemDatabase {
   static QueryExecutor _openConnection() {
     return driftDatabase(
       name: _nameBd,
+      web: DriftWebOptions(
+        sqlite3Wasm: Uri.parse('sqlite3.wasm'),
+        driftWorker: Uri.parse('drift_worker.js'),
+      ),
       native: DriftNativeOptions(
         databaseDirectory: getApplicationSupportDirectory,
       ),
