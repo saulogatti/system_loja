@@ -108,6 +108,30 @@ class SalesRepository implements ISalesRepository {
     }
   }
 
+  /// Carrega apenas notas fiscais de entrada.
+  @override
+  Future<ResultStatus<Map<int, Invoice>, String>> loadEntryInvoices() async {
+    try {
+      final invoices = await _invoiceDao.getEntryInvoices();
+      return ResultSuccess({for (final i in invoices) i.id: i});
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Erro ao carregar notas de entrada.');
+    }
+  }
+
+  /// Carrega apenas notas fiscais de saída.
+  @override
+  Future<ResultStatus<Map<int, Invoice>, String>> loadExitInvoices() async {
+    try {
+      final invoices = await _invoiceDao.getExitInvoices();
+      return ResultSuccess({for (final i in invoices) i.id: i});
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Erro ao carregar notas de saída.');
+    }
+  }
+
   /// Salva uma nova venda no banco de dados
   ///
   /// Salva tanto a nota fiscal quanto seus itens em uma transação.

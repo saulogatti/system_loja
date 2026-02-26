@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/product.dart';
@@ -16,6 +17,7 @@ sealed class SalesState with _$SalesState {
     required List<Product> products,
     required List<PaymentMethodType> paymentMethods,
     required Map<int, Customer> customers,
+    required Map<int, Company> companies,
     required Map<int, Invoice> invoices,
   }) = SalesLoadedAll;
   factory SalesState.loadedCustomers({required Map<int, Customer> customers}) =

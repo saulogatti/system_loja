@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
+import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/extension/invoice_to_companion.dart';
 import 'package:system_loja/data/database/table/invoices_records.dart';
@@ -83,6 +84,56 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
     final invoiceItemDao = db.invoiceItemDao;
     final items = await invoiceItemDao.getByInvoiceId(record.id);
     return record.toDomain(items);
+  }
+
+  /// Retorna apenas notas fiscais de entrada (vinculadas a empresas).
+  Future<List<Invoice>> getEntryInvoices() async {
+    final records = await (select(
+      invoicesRecords,
+    )..where((t) => t.type.equalsValue(InvoiceType.entry))).get();
+    if (records.isEmpty) return [];
+
+    final invoiceIds = records.map((r) => r.id).toList();
+    final itemRecords = await (select(
+      db.invoiceItemsRecords,
+    )..where((t) => t.invoiceId.isIn(invoiceIds))).get();
+
+    final itemsByInvoiceId = <int, List<InvoiceItem>>{};
+    for (final itemRecord in itemRecords) {
+      (itemsByInvoiceId[itemRecord.invoiceId] ??= []).add(
+        itemRecord.toDomain(),
+      );
+    }
+
+    return [
+      for (final record in records)
+        record.toDomain(itemsByInvoiceId[record.id] ?? []),
+    ];
+  }
+
+  /// Retorna apenas notas fiscais de saída (vinculadas a clientes).
+  Future<List<Invoice>> getExitInvoices() async {
+    final records = await (select(
+      invoicesRecords,
+    )..where((t) => t.type.equalsValue(InvoiceType.exit))).get();
+    if (records.isEmpty) return [];
+
+    final invoiceIds = records.map((r) => r.id).toList();
+    final itemRecords = await (select(
+      db.invoiceItemsRecords,
+    )..where((t) => t.invoiceId.isIn(invoiceIds))).get();
+
+    final itemsByInvoiceId = <int, List<InvoiceItem>>{};
+    for (final itemRecord in itemRecords) {
+      (itemsByInvoiceId[itemRecord.invoiceId] ??= []).add(
+        itemRecord.toDomain(),
+      );
+    }
+
+    return [
+      for (final record in records)
+        record.toDomain(itemsByInvoiceId[record.id] ?? []),
+    ];
   }
 
   /// Insere uma nova nota fiscal no banco de dados.

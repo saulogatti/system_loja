@@ -1,34 +1,47 @@
 import 'package:drift/drift.dart';
- 
+import 'package:system_loja/core/models/invoice_type.dart';
+
 /// Tabela para armazenar notas fiscais no Drift.
+///
+/// Regra exclusiva: exatamente um de [customerId] ou [companyId] deve ser
+/// preenchido. Para notas de saída ([InvoiceType.exit]) informe [customerId];
+/// para notas de entrada ([InvoiceType.entry]) informe [companyId].
 class InvoicesRecords extends Table {
-  /// CPF do cliente (desnormalizado para facilitar consultas)
-  TextColumn get customerCpf => text().named('cliente_cpf')();
+  /// CPF do cliente (desnormalizado; null para notas de entrada).
+  TextColumn get customerCpf => text().named('cliente_cpf').nullable()();
 
-  /// ID do cliente
-  IntColumn get customerId => integer().named('cliente_id')();
+  /// ID do cliente (null para notas de entrada).
+  IntColumn get customerId => integer().named('cliente_id').nullable()();
 
-  /// Nome do cliente (desnormalizado para facilitar consultas)
-  TextColumn get customerName => text().named('cliente_nome')();
+  /// Nome do cliente (desnormalizado; null para notas de entrada).
+  TextColumn get customerName => text().named('cliente_nome').nullable()();
+
+  /// ID da empresa fornecedora (null para notas de saída).
+  IntColumn get companyId => integer().named('empresa_id').nullable()();
 
   IntColumn get id => integer().autoIncrement()();
 
-  /// Número da nota fiscal
+  /// Número da nota fiscal.
   TextColumn get invoiceNumber => text().named('numero_nota').unique()();
 
-  /// Data de emissão da nota
+  /// Data de emissão da nota.
   DateTimeColumn get issueDate => dateTime().named('data_emissao')();
 
-  /// Data da última atualização
+  /// Data da última atualização.
   DateTimeColumn get lastUpdatedDate => dateTime().nullable()();
 
-  /// Forma de pagamento
+  /// Forma de pagamento.
   TextColumn get paymentMethod => text().named('forma_pagamento')();
 
-  /// Data de cadastro no sistema
+  /// Data de cadastro no sistema.
   DateTimeColumn get registrationDate =>
       dateTime().withDefault(currentDateAndTime)();
 
-  /// Valor total da nota fiscal
+  /// Valor total da nota fiscal.
   RealColumn get totalValue => real().named('valor_total')();
+
+  /// Tipo da nota fiscal (entrada ou saída). Padrão: saída.
+  TextColumn get type => textEnum<InvoiceType>()
+      .named('tipo')
+      .withDefault(const Constant('exit'))();
 }
