@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
 
 import '../../core/models/address.dart';
@@ -9,6 +8,7 @@ import '../../core/models/customer.dart';
 import 'bloc/customer_bloc.dart';
 import 'widgets/customer_form.dart';
 import 'widgets/customer_list.dart';
+import 'widgets/customer_overview_bottom_sheet.dart';
 import 'widgets/customer_search_section.dart';
 
 @RoutePage()
@@ -290,8 +290,8 @@ class _CustomerViewState extends State<CustomerView> {
     // Limpa o campo de busca
     _searchCpfController.clear();
 
-    // Navega para a mesma tela CustomerView mas em modo de edição
-    context.router.root.push(CustomerRoute(customer: customer));
+    // Exibe o bottom sheet de visão geral do cliente
+    CustomerOverviewBottomSheet.show(context, customer);
   }
 
   void _salvarAlteracoes() {

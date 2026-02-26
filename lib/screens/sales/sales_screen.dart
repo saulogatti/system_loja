@@ -7,7 +7,7 @@ import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_card.dart';
-import 'package:system_loja/screens/utils/extension_date_time.dart';
+import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
 import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
@@ -273,61 +273,7 @@ class _SalesViewState extends State<SalesView> {
     }
   }
 
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontSize: 12,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(fontSize: 16)),
-        ],
-      ),
-    );
-  }
-
   void _mostrarDetalhesNota(Invoice nf) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Nota Fiscal'),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildDetailRow('ID', nf.id.toString()),
-              _buildDetailRow('Número', nf.data.invoiceNumber),
-              _buildDetailRow('Cliente', nf.data.customerName),
-              _buildDetailRow('CPF', nf.data.customerCpf),
-              _buildDetailRow('Valor Total', 'R\$ ${nf.data.totalValue.toStringAsFixed(2)}'),
-              _buildDetailRow('Pagamento', nf.data.paymentMethod),
-              _buildDetailRow('Data de Emissão', nf.data.issueDate.toFormattedDate()),
-              const SizedBox(height: 16),
-              const Text('Itens:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              const SizedBox(height: 8),
-              ...nf.data.items.map(
-                (item) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    '${item.quantity}x ${item.productName} - R\$ ${item.totalValue.toStringAsFixed(2)}',
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
-      ),
-    );
+    InvoiceOverviewBottomSheet.show(context, nf);
   }
 }

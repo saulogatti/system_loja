@@ -8,7 +8,7 @@ import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/product_state.dart';
 import 'package:system_loja/screens/products/widgets/product_form.dart';
 import 'package:system_loja/screens/products/widgets/product_list.dart';
-import 'package:system_loja/screens/route/route_app.gr.dart';
+import 'package:system_loja/screens/products/widgets/product_overview_bottom_sheet.dart';
 
 /// Tela de cadastro e listagem de produtos.
 ///
@@ -175,11 +175,9 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
     });
   }
 
-  /// Navega para a tela de detalhes do produto.
+  /// Exibe o bottom sheet de visão geral do produto.
   void _mostrarDetalhesProduto(Product produto, List<Product> produtos) {
-    context.router.root.push(
-      ProductDetailRoute(product: produto, productList: produtos),
-    );
+    ProductOverviewBottomSheet.show(context, produto, produtos);
   }
 
   /// Exibe mensagem de erro em SnackBar.
