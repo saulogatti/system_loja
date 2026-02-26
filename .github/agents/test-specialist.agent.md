@@ -76,7 +76,7 @@ void main() {
   });
 
   test('inserir e recuperar cliente', () async {
-    final dao = database.clienteDao;
+    final dao = database.customerDao;
     final customer = Customer(
       name: 'Maria Santos',
       cpf: '98765432100',
@@ -96,16 +96,16 @@ void main() {
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:system_loja/core/repository/cliente_repository.dart';
+import 'package:system_loja/core/repository/customer_repository.dart';
 
-@GenerateMocks([ClienteDao])
+@GenerateMocks([CustomerDao])
 void main() {
-  late ClienteRepository repository;
-  late MockClienteDao mockDao;
+  late CustomerRepository repository;
+  late MockCustomerDao mockDao;
 
   setUp(() {
-    mockDao = MockClienteDao();
-    repository = ClienteRepository(mockDao);
+    mockDao = MockCustomerDao();
+    repository = CustomerRepository(mockDao);
   });
 
   test('listar retorna clientes do DAO', () async {
@@ -132,10 +132,10 @@ import 'package:system_loja/screens/customer/bloc/customer_bloc.dart';
 
 void main() {
   late CustomerBloc bloc;
-  late MockClienteRepository mockRepository;
+  late MockCustomerRepository mockRepository;
 
   setUp(() {
-    mockRepository = MockClienteRepository();
+    mockRepository = MockCustomerRepository();
     bloc = CustomerBloc(mockRepository);
   });
 
@@ -161,11 +161,11 @@ void main() {
 ```dart
 void main() {
   late AppDatabase database;
-  late ClienteRepository repository;
+  late CustomerRepository repository;
 
   setUp(() {
     database = AppDatabase(NativeDatabase.memory());
-    repository = ClienteRepository(database.clienteDao);
+    repository = CustomerRepository(database.customerDao);
   });
 
   tearDown(() async {
@@ -188,7 +188,7 @@ void main() {
 Organize testes relacionados em grupos:
 ```dart
 void main() {
-  group('ClienteRepository', () {
+  group('CustomerRepository', () {
     group('salvar', () {
       test('insere novo cliente com sucesso', () { });
       test('atualiza cliente existente', () { });
@@ -211,14 +211,14 @@ void main() {
 3. Usar `Mock[Classe]` nos testes
 
 ```dart
-@GenerateMocks([ClienteDao, ClienteRepository])
-import 'cliente_repository_test.mocks.dart';
+@GenerateMocks([CustomerDao, CustomerRepository])
+import 'customer_repository_test.mocks.dart';
 
 void main() {
-  late MockClienteDao mockDao;
+  late MockCustomerDao mockDao;
   
   setUp(() {
-    mockDao = MockClienteDao();
+    mockDao = MockCustomerDao();
   });
 
   test('exemplo', () {
@@ -237,7 +237,7 @@ void main() {
 flutter test
 
 # Teste específico
-flutter test test/cliente_dao_test.dart
+flutter test test/customer_repository_test.dart
 
 # Com cobertura
 flutter test --coverage

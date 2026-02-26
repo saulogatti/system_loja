@@ -60,15 +60,15 @@ class ClienteRepository {
 
   /// Busca um cliente pelo ID.
   ///
-  /// Retorna [ExecutionSuccess] com o cliente encontrado ou
-  /// [ExecutionFailure] se não encontrado ou houver erro.
+  /// Retorna [ResultStatus] com o cliente encontrado
+  /// ou erro se não encontrado/houver falha.
   ///
   /// Parâmetros:
   /// - [id]: ID único do cliente
   ///
   /// Lança:
   /// - [DatabaseException] se houver erro de comunicação com o banco
-  Future<ExecutionResult<Customer, String>> buscar({
+  Future<ResultStatus<Customer, String>> buscar({
     required int id,
   }) async {
     // implementação...
@@ -175,7 +175,7 @@ Instruções passo a passo com exemplos de código.
 ///
 /// ## Tratamento de Erros
 ///
-/// Todos os métodos retornam [ExecutionResult] para tratamento
+/// Todos os métodos retornam [ResultStatus] para tratamento
 /// type-safe de erros:
 ///
 /// ```dart
