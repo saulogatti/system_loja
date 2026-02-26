@@ -189,20 +189,17 @@ class _SalesViewState extends State<SalesView> {
                             ),
                           )
                         : GridView.builder(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(10),
                             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                               maxCrossAxisExtent: 350,
-                              mainAxisSpacing: 16,
-                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
                               childAspectRatio: 1.3,
                             ),
                             itemCount: invoices.length,
                             itemBuilder: (context, index) {
                               final nf = invoices[index];
-                              return InvoiceCard(
-                                invoice: nf,
-                                onTap: () => _mostrarDetalhesNota(nf),
-                              );
+                              return InvoiceCard(invoice: nf, onTap: () => _mostrarDetalhesNota(nf));
                             },
                           ),
                   ),
@@ -245,9 +242,7 @@ class _SalesViewState extends State<SalesView> {
     if (_mapCustomers.isEmpty && _mapCompanies.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text(
-            'Erro: Nenhum cliente ou empresa cadastrada!',
-          ),
+          content: const Text('Erro: Nenhum cliente ou empresa cadastrada!'),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );

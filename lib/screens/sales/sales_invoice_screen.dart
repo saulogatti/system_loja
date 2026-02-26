@@ -137,7 +137,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
               const SizedBox(height: 16),
               if (_invoiceType == InvoiceType.exit)
                 DropdownButtonFormField<Customer>(
-                  value: _clienteSelecionado,
+                  initialValue: _clienteSelecionado,
                   decoration: const InputDecoration(
                     labelText: 'Cliente *',
                     border: OutlineInputBorder(),
@@ -163,7 +163,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                 )
               else
                 DropdownButtonFormField<Company>(
-                  value: _empresaSelecionada,
+                  initialValue: _empresaSelecionada,
                   decoration: const InputDecoration(
                     labelText: 'Empresa *',
                     border: OutlineInputBorder(),
@@ -189,7 +189,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                 ),
               const SizedBox(height: 16),
               DropdownButtonFormField<PaymentMethodType>(
-                value: _paymentType,
+                initialValue: _paymentType,
                 decoration: const InputDecoration(
                   labelText: 'Forma de Pagamento *',
                   border: OutlineInputBorder(),
