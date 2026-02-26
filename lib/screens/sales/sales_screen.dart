@@ -242,10 +242,12 @@ class _SalesViewState extends State<SalesView> {
   }
 
   Future<void> _adicionarNotaFiscal(SalesCubit salesCubit) async {
-    if (_mapCustomers.isEmpty) {
+    if (_mapCustomers.isEmpty && _mapCompanies.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Erro: Nenhum cliente cadastrado!'),
+          content: const Text(
+            'Erro: Nenhum cliente ou empresa cadastrada!',
+          ),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
