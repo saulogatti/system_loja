@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
@@ -7,7 +8,7 @@ import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 
-/// Cubit para gerenciamento de estado de vendas
+/// Cubit para gerenciamento de estado de vendas.
 ///
 /// Coordena as operações de vendas usando os repositories
 /// e emite estados apropriados para a UI.
@@ -16,14 +17,17 @@ class SalesCubit extends Cubit<SalesState> {
   final ICustomerRepository _customerRepository;
   final IProductRepository _productRepository;
   final ISystemRepository _systemRepository;
+  final ICompanyRepository _companyRepository;
+
   SalesCubit(
     this._salesRepository,
     this._customerRepository,
     this._productRepository,
     this._systemRepository,
+    this._companyRepository,
   ) : super(SalesInitial());
 
-  /// Deleta uma venda pelo ID
+  /// Deleta uma venda pelo ID.
   Future<void> deleteSale(int id) async {
     emit(SalesState.loading());
     final result = await _salesRepository.deleteSale(id);
@@ -42,7 +46,7 @@ class SalesCubit extends Cubit<SalesState> {
     }
   }
 
-  /// Carrega todos os clientes disponíveis
+  /// Carrega todos os clientes disponíveis.
   Future<void> loadAllCustomers() async {
     emit(SalesState.loading());
     final resultMap = await _customerRepository.fetchMappedCustomers();
@@ -54,15 +58,17 @@ class SalesCubit extends Cubit<SalesState> {
     }
   }
 
-  /// Carrega todos os produtos disponíveis
+  /// Carrega todos os produtos disponíveis, clientes, empresas e notas.
   Future<void> loadProducts() async {
     emit(SalesState.loadingProducts());
     final resultSales = await _salesRepository.loadAllSales();
     final result = await _productRepository.fetchProducts();
     final resultMap = await _customerRepository.fetchMappedCustomers();
     final resultSystem = await _systemRepository.getSystemConfiguration();
+    final resultCompanies = await _companyRepository.fetchMappedCompanies();
     final customers = resultMap.asSuccess;
     final invoices = resultSales.asSuccess;
+    final companies = resultCompanies.asSuccess ?? {};
     final paymentMethods = resultSystem?.priceConfiguration.types ?? [];
     switch (result) {
       case ResultSuccess(result: final products):
@@ -71,6 +77,7 @@ class SalesCubit extends Cubit<SalesState> {
             products: products,
             paymentMethods: paymentMethods,
             customers: customers,
+            companies: companies,
             invoices: invoices,
           ),
         );
@@ -83,7 +90,7 @@ class SalesCubit extends Cubit<SalesState> {
     }
   }
 
-  /// Carrega todas as vendas cadastradas
+  /// Carrega todas as vendas cadastradas.
   Future<void> loadSales() async {
     emit(SalesState.loading());
     final result = await _salesRepository.loadAllSales();
@@ -96,7 +103,7 @@ class SalesCubit extends Cubit<SalesState> {
     }
   }
 
-  /// Registra uma nova venda
+  /// Registra uma nova venda.
   ///
   /// Cria um novo invoice com ID gerado automaticamente
   /// e salva no banco de dados.
@@ -106,7 +113,6 @@ class SalesCubit extends Cubit<SalesState> {
   ) async {
     emit(SalesState.loading());
 
-    // Gerar número da nota se necessário
     if (enableCodeGeneration) {
       final invoiceNumberResult = await _salesRepository
           .generateInvoiceNumber();
@@ -119,7 +125,6 @@ class SalesCubit extends Cubit<SalesState> {
       }
     }
 
-    // Obter próximo ID
     final nextIdResult = await _salesRepository.getNextSaleId();
     final int nextId;
     switch (nextIdResult) {
@@ -130,7 +135,6 @@ class SalesCubit extends Cubit<SalesState> {
         return;
     }
 
-    // Criar e salvar invoice
     final invoice = Invoice(id: nextId, data: invoiceData);
 
     final saveResult = await _salesRepository.saveSale(invoice);
@@ -148,7 +152,7 @@ class SalesCubit extends Cubit<SalesState> {
     }
   }
 
-  /// Atualiza uma venda existente
+  /// Atualiza uma venda existente.
   Future<void> updateSale(Invoice invoice) async {
     emit(SalesState.loading());
     final result = await _salesRepository.updateSale(invoice);

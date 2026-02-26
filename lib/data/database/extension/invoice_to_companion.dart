@@ -3,12 +3,12 @@ import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/data/database/app_database.dart';
 
-/// Extensão para converter InvoicesRecord (Drift) para Invoice (domínio).
+/// Extensão para converter [InvoicesRecord] (Drift) para [Invoice] (domínio).
 extension InvoiceFromData on InvoicesRecord {
-  /// Converte um registro do banco de dados para o modelo de domínio Invoice.
+  /// Converte um registro do banco de dados para o modelo de domínio [Invoice].
   ///
-  /// Nota: Os itens da nota fiscal devem ser carregados separadamente
-  /// usando InvoiceItemDao.getByInvoiceId().
+  /// Nota: os itens da nota fiscal devem ser carregados separadamente
+  /// usando `InvoiceItemDao.getByInvoiceId()`.
   Invoice toDomain(List<InvoiceItem> items) {
     return Invoice(
       id: id,
@@ -17,6 +17,8 @@ extension InvoiceFromData on InvoicesRecord {
         customerId: customerId,
         customerName: customerName,
         customerCpf: customerCpf,
+        companyId: companyId,
+        type: type,
         items: items,
         paymentMethod: paymentMethod,
         issueDate: issueDate,
@@ -27,11 +29,11 @@ extension InvoiceFromData on InvoicesRecord {
   }
 }
 
-/// Extensão para converter Invoice (domínio) para InvoicesRecordsCompanion (Drift).
+/// Extensão para converter [Invoice] (domínio) para [InvoicesRecordsCompanion] (Drift).
 extension InvoiceToCompanion on Invoice {
-  /// Converte um modelo de domínio Invoice para Companion usado em insert/update.
+  /// Converte um modelo de domínio [Invoice] para Companion usado em insert/update.
   ///
-  /// Para inserções, usa .insert(). Para atualizações, inclui o ID.
+  /// Para inserções, usa `.insert()`. Para atualizações, inclui o ID.
   InvoicesRecordsCompanion toCompanion({bool forUpdate = false}) {
     if (forUpdate) {
       return InvoicesRecordsCompanion(
@@ -40,6 +42,8 @@ extension InvoiceToCompanion on Invoice {
         customerId: Value(data.customerId),
         customerName: Value(data.customerName),
         customerCpf: Value(data.customerCpf),
+        companyId: Value(data.companyId),
+        type: Value(data.type),
         totalValue: Value(data.totalValue),
         paymentMethod: Value(data.paymentMethod),
         issueDate: Value(data.issueDate),
@@ -49,9 +53,11 @@ extension InvoiceToCompanion on Invoice {
     }
     return InvoicesRecordsCompanion.insert(
       invoiceNumber: data.invoiceNumber,
-      customerId: data.customerId,
-      customerName: data.customerName,
-      customerCpf: data.customerCpf,
+      customerId: Value(data.customerId),
+      customerName: Value(data.customerName),
+      customerCpf: Value(data.customerCpf),
+      companyId: Value(data.companyId),
+      type: Value(data.type),
       totalValue: data.totalValue,
       paymentMethod: data.paymentMethod,
       issueDate: data.issueDate,
@@ -61,9 +67,9 @@ extension InvoiceToCompanion on Invoice {
   }
 }
 
-/// Extensão para converter InvoiceItemsRecord (Drift) para InvoiceItem (domínio).
+/// Extensão para converter [InvoiceItemsRecord] (Drift) para [InvoiceItem] (domínio).
 extension InvoiceItemFromData on InvoiceItemsRecord {
-  /// Converte um registro do banco de dados para o modelo de domínio InvoiceItem.
+  /// Converte um registro do banco de dados para o modelo de domínio [InvoiceItem].
   InvoiceItem toDomain() {
     return InvoiceItem(
       productId: productId,
@@ -75,18 +81,16 @@ extension InvoiceItemFromData on InvoiceItemsRecord {
   }
 }
 
-/// Extensão para converter InvoiceItem (domínio) para InvoiceItemsRecordsCompanion (Drift).
+/// Extensão para converter [InvoiceItem] (domínio) para [InvoiceItemsRecordsCompanion] (Drift).
 extension InvoiceItemToCompanion on InvoiceItem {
-  /// Converte um modelo de domínio InvoiceItem para Companion usado em insert.
+  /// Converte um modelo de domínio [InvoiceItem] para Companion usado em insert.
   ///
-  /// Requer o invoiceId para estabelecer o relacionamento com a nota fiscal.
+  /// Requer o [invoiceId] para estabelecer o relacionamento com a nota fiscal.
   InvoiceItemsRecordsCompanion toCompanion({
     required int invoiceId,
     bool forUpdate = false,
   }) {
     if (forUpdate) {
-      // Para update, precisaríamos do ID do item, mas InvoiceItem não tem ID
-      // Isso sugere que updates de itens devem ser feitos deletando e reinserindo
       throw UnimplementedError(
         'Update de InvoiceItem não suportado. Delete e reinsira os itens.',
       );

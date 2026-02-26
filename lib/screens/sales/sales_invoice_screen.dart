@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
+import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/utils/input_formatters.dart';
@@ -14,12 +16,15 @@ import 'package:system_loja/screens/utils/constants.dart';
 class SalesInvoiceScreen extends StatefulWidget {
   final List<PaymentMethodType> paymentMethods;
   final Map<int, Customer> customers;
+  final Map<int, Company> companies;
   final SalesCubit salesCubit;
   final List<Product> products;
+
   const SalesInvoiceScreen({
     super.key,
     required this.paymentMethods,
     required this.customers,
+    required this.companies,
     required this.salesCubit,
     required this.products,
   });
@@ -46,9 +51,11 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
   final _numeroNotaController = TextEditingController();
   PaymentMethodType? _paymentType;
   Customer? _clienteSelecionado;
+  Company? _empresaSelecionada;
+  InvoiceType _invoiceType = InvoiceType.exit;
   final _AddSaleTemp _itensSelecionados = _AddSaleTemp(product: {});
 
-  /// Controla se a geração automática do número da nota está habilitada
+  /// Controla se a geração automática do número da nota está habilitada.
   bool _enableCodeGeneration = false;
 
   @override
@@ -99,39 +106,90 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                             : '';
                       });
                     },
-                    icon: Icon(Icons.generating_tokens_outlined),
+                    icon: const Icon(Icons.generating_tokens_outlined),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              DropdownButtonFormField<Customer>(
-                initialValue: _clienteSelecionado,
-                decoration: const InputDecoration(
-                  labelText: 'Cliente *',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
-                ),
-                items: widget.customers.values.map((cliente) {
-                  return DropdownMenuItem(
-                    value: cliente,
-                    child: Text('${cliente.name} (${cliente.cpf})'),
-                  );
-                }).toList(),
-                onChanged: (value) {
+              SegmentedButton<InvoiceType>(
+                segments: const [
+                  ButtonSegment(
+                    value: InvoiceType.exit,
+                    label: Text('Saída (Venda)'),
+                    icon: Icon(Icons.arrow_upward),
+                  ),
+                  ButtonSegment(
+                    value: InvoiceType.entry,
+                    label: Text('Entrada (Compra)'),
+                    icon: Icon(Icons.arrow_downward),
+                  ),
+                ],
+                selected: {_invoiceType},
+                onSelectionChanged: (selection) {
                   setState(() {
-                    _clienteSelecionado = value;
+                    _invoiceType = selection.first;
+                    // Limpa a seleção do lado oposto ao alterar o tipo
+                    _clienteSelecionado = null;
+                    _empresaSelecionada = null;
                   });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Selecione um cliente';
-                  }
-                  return null;
                 },
               ),
               const SizedBox(height: 16),
+              if (_invoiceType == InvoiceType.exit)
+                DropdownButtonFormField<Customer>(
+                  value: _clienteSelecionado,
+                  decoration: const InputDecoration(
+                    labelText: 'Cliente *',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.person),
+                  ),
+                  items: widget.customers.values.map((cliente) {
+                    return DropdownMenuItem(
+                      value: cliente,
+                      child: Text('${cliente.name} (${cliente.cpf})'),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _clienteSelecionado = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (_invoiceType == InvoiceType.exit && value == null) {
+                      return 'Selecione um cliente';
+                    }
+                    return null;
+                  },
+                )
+              else
+                DropdownButtonFormField<Company>(
+                  value: _empresaSelecionada,
+                  decoration: const InputDecoration(
+                    labelText: 'Empresa *',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.business),
+                  ),
+                  items: widget.companies.values.map((empresa) {
+                    return DropdownMenuItem(
+                      value: empresa,
+                      child: Text('${empresa.corporateName} (${empresa.cnpj})'),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _empresaSelecionada = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (_invoiceType == InvoiceType.entry && value == null) {
+                      return 'Selecione uma empresa';
+                    }
+                    return null;
+                  },
+                ),
+              const SizedBox(height: 16),
               DropdownButtonFormField<PaymentMethodType>(
-                initialValue: _paymentType,
+                value: _paymentType,
                 decoration: const InputDecoration(
                   labelText: 'Forma de Pagamento *',
                   border: OutlineInputBorder(),
@@ -218,7 +276,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Valor Total:',
                       style: TextStyle(
                         fontSize: 20,
@@ -242,7 +300,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(16),
                 ),
-                child: Text(
+                child: const Text(
                   'Salvar Nota Fiscal',
                   style: TextStyle(fontSize: 16),
                 ),
@@ -302,10 +360,22 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
 
   Future<void> _salvarNotaFiscal() async {
     if (_formKey.currentState!.validate()) {
-      if (_clienteSelecionado == null) {
+      final isExit = _invoiceType == InvoiceType.exit;
+
+      if (isExit && _clienteSelecionado == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Erro: Selecione um cliente!'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      if (!isExit && _empresaSelecionada == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Erro: Selecione uma empresa!'),
             backgroundColor: Colors.red,
           ),
         );
@@ -338,9 +408,11 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
 
       final notaFiscal = InvoiceData(
         invoiceNumber: numeroNota,
-        customerId: _clienteSelecionado!.id,
-        customerName: _clienteSelecionado!.name,
-        customerCpf: _clienteSelecionado!.cpf,
+        type: _invoiceType,
+        customerId: isExit ? _clienteSelecionado!.id : null,
+        customerName: isExit ? _clienteSelecionado!.name : null,
+        customerCpf: isExit ? _clienteSelecionado!.cpf : null,
+        companyId: isExit ? null : _empresaSelecionada!.id,
         items: itens,
         paymentMethod: _paymentType?.name ?? '',
       );
@@ -369,11 +441,9 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
             ),
             autofocus: true,
             validator: (value) {
-              // Usa o validador padrão
               final error = validateQuantity(value);
               if (error != null) return error;
 
-              // Validação adicional para estoque
               final qtd = int.parse(value!.trim());
               if (qtd > product.stockQuantity) {
                 return 'Quantidade maior que o estoque disponível';

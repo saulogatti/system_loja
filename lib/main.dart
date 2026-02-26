@@ -41,6 +41,7 @@ class SystemLojaApp extends StatelessWidget {
             appInjection.get<ICustomerRepository>(),
             appInjection.get<IProductRepository>(),
             appInjection.get<ISystemRepository>(),
+            appInjection.get<ICompanyRepository>(),
           ),
         ),
         BlocProvider<UserCubit>(create: (context) => UserCubit(appInjection.get<IUserRepository>())),

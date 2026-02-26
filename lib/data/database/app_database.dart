@@ -6,6 +6,7 @@ import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/category.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
+import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/data/database/dao/address_dao.dart';
 import 'package:system_loja/data/database/dao/category_dao.dart';
@@ -81,10 +82,24 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
         await _migrateAddressesFromCompaniesAndCustomers();
       }
+      if (from < 11) {
+        // Recriar tabela de notas fiscais com:
+        // - customerId/customerName/customerCpf nullable
+        // - companyId nullable (novo campo)
+        // - type com default 'exit' (todas as notas antigas são de saída)
+        await m.alterTable(
+          TableMigration(
+            invoicesRecords,
+            columnTransformer: {
+              invoicesRecords.type: const Constant<String>('exit'),
+            },
+          ),
+        );
+      }
     },
   );
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
   // Dentro da sua classe de banco (Database)
   /// Cria um backup manual do banco de dados usando o comando `VACUUM INTO`.
   ///

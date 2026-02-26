@@ -75,7 +75,7 @@ class InvoiceCard extends StatelessWidget {
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          invoice.data.customerName,
+                          invoice.data.customerName ?? '',
                           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,

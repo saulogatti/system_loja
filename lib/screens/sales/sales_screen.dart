@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
@@ -28,6 +29,7 @@ class _SalesViewState extends State<SalesView> {
   Map<int, Invoice> _mapToNotaFiscal = {};
 
   Map<int, Customer> _mapCustomers = {};
+  Map<int, Company> _mapCompanies = {};
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +71,7 @@ class _SalesViewState extends State<SalesView> {
             case SalesLoadedAll():
               _productList = state.products;
               _mapCustomers = state.customers;
+              _mapCompanies = state.companies;
               _mapToNotaFiscal = state.invoices;
               _paymentMethods = state.paymentMethods;
               break;
@@ -265,6 +268,7 @@ class _SalesViewState extends State<SalesView> {
         products: _productList,
         salesCubit: salesCubit,
         customers: _mapCustomers,
+        companies: _mapCompanies,
       ),
     );
 
