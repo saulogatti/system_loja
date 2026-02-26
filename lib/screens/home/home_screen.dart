@@ -1,16 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:system_loja/screens/route/route_app.gr.dart';
 
-/// Tela principal do sistema de gerenciamento de loja.
+/// Tela inicial do sistema de gerenciamento de loja.
 ///
-/// Exibe um menu com cartões de navegação para as principais funcionalidades:
-/// - Cadastro de Cliente
-/// - Cadastro de Empresa
-/// - Cadastro de Produto
-/// - Cadastro de Nota Fiscal
-/// - Gestão de Usuários
-/// - Configurações do Sistema
+/// Exibe boas-vindas e atalhos. A navegação principal é feita pela
+/// barra inferior (Home, Cadastro, Vendas, Usuários, Configurações).
 @RoutePage()
 class HomeScreen extends StatelessWidget {
   /// Cria uma instância de [HomeScreen].
@@ -18,50 +12,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = [
-      _buildMenuCard(
-        context,
-        title: 'Cadastro de Cliente',
-        icon: Icons.person,
-        color: Colors.blue,
-        onTap: () => _navigateToScreen(context,  CustomerRoute()),
-      ),
-      _buildMenuCard(
-        context,
-        title: 'Cadastro de Empresa',
-        icon: Icons.business,
-        color: Colors.indigo,
-        onTap: () => _navigateToScreen(context, const CompanyRoute()),
-      ),
-      _buildMenuCard(
-        context,
-        title: 'Cadastro de Produto',
-        icon: Icons.inventory,
-        color: Colors.green,
-        onTap: () => _navigateToScreen(context, const ProductInfoRoute()),
-      ),
-      _buildMenuCard(
-        context,
-        title: 'Cadastro de Nota Fiscal',
-        icon: Icons.receipt_long,
-        color: Colors.orange,
-        onTap: () => _navigateToScreen(context, const SalesRoute()),
-      ),
-      _buildMenuCard(
-        context,
-        title: 'Gestão de Usuários',
-        icon: Icons.people,
-        color: Colors.purple,
-        onTap: () => _navigateToScreen(context, const UsuarioRoute()),
-      ),
-      _buildMenuCard(
-        context,
-        title: 'Configurações do Sistema',
-        icon: Icons.settings,
-        color: Colors.teal,
-        onTap: () => _navigateToScreen(context, const SettingsRoute()),
-      ),
-    ];
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -69,107 +19,25 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Icon(
-                Icons.store,
-                size: 100,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              Icon(Icons.store, size: 100, color: Theme.of(context).colorScheme.primary),
               const SizedBox(height: 40),
               Text(
                 'Bem-vindo!',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
               Text(
-                'Selecione uma opção para continuar',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                'Use o menu inferior para acessar as funcionalidades',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
-
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent:
-                      300, // cada card no máximo  300 pixels de largura
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 1.5,
-                ),
-                itemCount: items.length,
-                itemBuilder: (context, index) => items[index],
-              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  /// Constrói um cartão de menu com ícone, título e ação de navegação.
-  ///
-  /// Cada cartão é interativo e navega para uma tela específica quando tocado.
-  ///
-  /// Parâmetros:
-  /// - [context]: O contexto de build para acessar o tema e navegação
-  /// - [title]: Título exibido no cartão
-  /// - [icon]: Ícone exibido no lado esquerdo do cartão
-  /// - [color]: Cor do ícone e do fundo do container
-  /// - [onTap]: Callback executado quando o cartão é tocado
-  Widget _buildMenuCard(
-    BuildContext context, {
-    required String title,
-    required IconData icon,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return Card(
-      elevation: 4,
-      child: InkWell(
-        onTap: onTap,
-        // borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, size: 32, color: color),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  maxLines: 2,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// Navega para a tela especificada.
-  ///
-  /// Encapsula a lógica de navegação para reduzir duplicação de código.
-  void _navigateToScreen(BuildContext context, PageRouteInfo screen) {
-    AutoRouter.of(context).push(screen);
   }
 }

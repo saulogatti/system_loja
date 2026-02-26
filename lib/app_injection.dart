@@ -26,12 +26,13 @@ import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
 final appInjection = GetIt.instance;
+late LoggerCacheRepository printerLog;
 
 /// Configura as dependências da aplicação.
 /// Isso é usado no main.dart para configurar as dependências da aplicação.
 /// Para acessar as dependências, use o `appInjection.get<T>()` onde T é o tipo da dependência.
 void setupAppInjection() {
-  registerLogPrinterColor(config: ConfigLog(enableLog: kDebugMode));
+  printerLog = registerLogPrinterColor(config: ConfigLog(enableLog: kDebugMode));
   appInjection.registerSingleton<RouteApp>(RouteApp());
   appInjection.registerSingleton<AppDatabase>(AppDatabase());
   appInjection.registerSingleton<SystemDatabase>(SystemDatabase());
