@@ -10,10 +10,32 @@ class RouteApp extends RootStackRouter {
       initial: true,
       children: [
         AutoRoute(page: HomeRoute.page, title: (context, data) => 'Home'),
-        AutoRoute(page: CadastroGroupRoute.page, title: (context, data) => 'Cadastro', maintainState: false),
-        AutoRoute(page: SalesRoute.page, title: (context, data) => 'Vendas', maintainState: false),
+        AutoRoute(
+          page: CadastroGroupRoute.page,
+          title: (context, data) => 'Cadastro',
+          maintainState: false,
+          children: [
+            AutoRoute(
+              page: CustomerRoute.page,
+              title: (context, data) => 'Cadastro de Cliente',
+              maintainState: false,
+              initial: true,
+            ),
+            AutoRoute(
+              page: CompanyRoute.page,
+              title: (context, data) => 'Cadastro de Empresa',
+              maintainState: false,
+            ),
+            AutoRoute(
+              page: ProductInfoRoute.page,
+              title: (context, data) => 'Cadastro de Produto',
+              maintainState: false,
+            ),
+          ],
+        ),
+        AutoRoute(page: SalesRoute.page, title: (context, data) => 'Vendas'),
         AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuários', maintainState: false),
-        AutoRoute(page: SettingsRoute.page, title: (context, data) => 'Configurações', maintainState: false),
+        AutoRoute(page: SettingsRoute.page, title: (context, data) => 'Configurações'),
       ],
     ),
     AutoRoute(page: CustomerRoute.page, title: (context, data) => 'Cadastro de Cliente'),

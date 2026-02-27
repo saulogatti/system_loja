@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:system_loja/app_injection.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 
 @RoutePage()
@@ -43,13 +42,6 @@ class HostScreen extends StatelessWidget {
           ],
         );
       },
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.router.push(const CadastroGroupRoute());
-          printerLog.getAllLogs().then(print);
-        },
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
