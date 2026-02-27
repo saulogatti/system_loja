@@ -19,7 +19,7 @@ class _CadastroGroupScreenState extends State<CadastroGroupScreen> {
   @override
   Widget build(BuildContext context) {
     return AutoTabsRouter(
-      routes: [CustomerRoute(), CompanyRoute(), ProductInfoRoute()],
+      routes: [PersonRegistrationRoute(), ProductInfoRoute()],
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         return Scaffold(
@@ -28,14 +28,14 @@ class _CadastroGroupScreenState extends State<CadastroGroupScreen> {
             // Aqui entra a mágica da TabBar no topo
             bottom: TabBar(
               controller: TabController(
-                length: 3,
+                length: 2,
                 vsync: Scaffold.of(context), // Ou use um Hook se preferir
                 initialIndex: tabsRouter.activeIndex,
               ),
               onTap: tabsRouter.setActiveIndex,
               tabs: [
-                Tab(icon: Icon(Icons.person), text: 'Cliente'),
-                Tab(icon: Icon(Icons.business), text: 'Empresa'),
+                Tab(icon: Icon(Icons.person), text: 'Pessoa'),
+
                 Tab(icon: Icon(Icons.inventory), text: 'Produto '),
               ],
             ),
