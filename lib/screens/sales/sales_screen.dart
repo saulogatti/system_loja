@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
@@ -28,6 +29,7 @@ class _SalesViewState extends State<SalesView> {
   Map<int, Invoice> _mapToNotaFiscal = {};
 
   Map<int, Customer> _mapCustomers = {};
+  Map<int, Company> _mapCompanies = {};
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +71,7 @@ class _SalesViewState extends State<SalesView> {
             case SalesLoadedAll():
               _productList = state.products;
               _mapCustomers = state.customers;
+              _mapCompanies = state.companies;
               _mapToNotaFiscal = state.invoices;
               _paymentMethods = state.paymentMethods;
               break;
@@ -186,20 +189,17 @@ class _SalesViewState extends State<SalesView> {
                             ),
                           )
                         : GridView.builder(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(10),
                             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                               maxCrossAxisExtent: 350,
-                              mainAxisSpacing: 16,
-                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
                               childAspectRatio: 1.3,
                             ),
                             itemCount: invoices.length,
                             itemBuilder: (context, index) {
                               final nf = invoices[index];
-                              return InvoiceCard(
-                                invoice: nf,
-                                onTap: () => _mostrarDetalhesNota(nf),
-                              );
+                              return InvoiceCard(invoice: nf, onTap: () => _mostrarDetalhesNota(nf));
                             },
                           ),
                   ),
@@ -239,10 +239,10 @@ class _SalesViewState extends State<SalesView> {
   }
 
   Future<void> _adicionarNotaFiscal(SalesCubit salesCubit) async {
-    if (_mapCustomers.isEmpty) {
+    if (_mapCustomers.isEmpty && _mapCompanies.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Erro: Nenhum cliente cadastrado!'),
+          content: const Text('Erro: Nenhum cliente ou empresa cadastrada!'),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
@@ -265,6 +265,7 @@ class _SalesViewState extends State<SalesView> {
         products: _productList,
         salesCubit: salesCubit,
         customers: _mapCustomers,
+        companies: _mapCompanies,
       ),
     );
 

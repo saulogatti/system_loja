@@ -140,13 +140,13 @@ return saved(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  error,TResult Function()?  initial,TResult Function( Map<int, Invoice> items)?  loaded,TResult Function( List<Product> products,  List<PaymentMethodType> paymentMethods,  Map<int, Customer> customers,  Map<int, Invoice> invoices)?  loadedAll,TResult Function( Map<int, Customer> customers)?  loadedCustomers,TResult Function()?  loading,TResult Function()?  loadingProducts,TResult Function( String message)?  loadProductsFailure,TResult Function( Map<int, Invoice> items)?  saved,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  error,TResult Function()?  initial,TResult Function( Map<int, Invoice> items)?  loaded,TResult Function( List<Product> products,  List<PaymentMethodType> paymentMethods,  Map<int, Customer> customers,  Map<int, Company> companies,  Map<int, Invoice> invoices)?  loadedAll,TResult Function( Map<int, Customer> customers)?  loadedCustomers,TResult Function()?  loading,TResult Function()?  loadingProducts,TResult Function( String message)?  loadProductsFailure,TResult Function( Map<int, Invoice> items)?  saved,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case SalesError() when error != null:
 return error(_that.message);case SalesInitial() when initial != null:
 return initial();case SalesLoaded() when loaded != null:
 return loaded(_that.items);case SalesLoadedAll() when loadedAll != null:
-return loadedAll(_that.products,_that.paymentMethods,_that.customers,_that.invoices);case SalesLoadedCustomers() when loadedCustomers != null:
+return loadedAll(_that.products,_that.paymentMethods,_that.customers,_that.companies,_that.invoices);case SalesLoadedCustomers() when loadedCustomers != null:
 return loadedCustomers(_that.customers);case SalesLoading() when loading != null:
 return loading();case SalesLoadingProducts() when loadingProducts != null:
 return loadingProducts();case SalesLoadProductsFailure() when loadProductsFailure != null:
@@ -169,13 +169,13 @@ return saved(_that.items);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( Map<int, Invoice> items)  loaded,required TResult Function( List<Product> products,  List<PaymentMethodType> paymentMethods,  Map<int, Customer> customers,  Map<int, Invoice> invoices)  loadedAll,required TResult Function( Map<int, Customer> customers)  loadedCustomers,required TResult Function()  loading,required TResult Function()  loadingProducts,required TResult Function( String message)  loadProductsFailure,required TResult Function( Map<int, Invoice> items)  saved,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( Map<int, Invoice> items)  loaded,required TResult Function( List<Product> products,  List<PaymentMethodType> paymentMethods,  Map<int, Customer> customers,  Map<int, Company> companies,  Map<int, Invoice> invoices)  loadedAll,required TResult Function( Map<int, Customer> customers)  loadedCustomers,required TResult Function()  loading,required TResult Function()  loadingProducts,required TResult Function( String message)  loadProductsFailure,required TResult Function( Map<int, Invoice> items)  saved,}) {final _that = this;
 switch (_that) {
 case SalesError():
 return error(_that.message);case SalesInitial():
 return initial();case SalesLoaded():
 return loaded(_that.items);case SalesLoadedAll():
-return loadedAll(_that.products,_that.paymentMethods,_that.customers,_that.invoices);case SalesLoadedCustomers():
+return loadedAll(_that.products,_that.paymentMethods,_that.customers,_that.companies,_that.invoices);case SalesLoadedCustomers():
 return loadedCustomers(_that.customers);case SalesLoading():
 return loading();case SalesLoadingProducts():
 return loadingProducts();case SalesLoadProductsFailure():
@@ -194,13 +194,13 @@ return saved(_that.items);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  error,TResult? Function()?  initial,TResult? Function( Map<int, Invoice> items)?  loaded,TResult? Function( List<Product> products,  List<PaymentMethodType> paymentMethods,  Map<int, Customer> customers,  Map<int, Invoice> invoices)?  loadedAll,TResult? Function( Map<int, Customer> customers)?  loadedCustomers,TResult? Function()?  loading,TResult? Function()?  loadingProducts,TResult? Function( String message)?  loadProductsFailure,TResult? Function( Map<int, Invoice> items)?  saved,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  error,TResult? Function()?  initial,TResult? Function( Map<int, Invoice> items)?  loaded,TResult? Function( List<Product> products,  List<PaymentMethodType> paymentMethods,  Map<int, Customer> customers,  Map<int, Company> companies,  Map<int, Invoice> invoices)?  loadedAll,TResult? Function( Map<int, Customer> customers)?  loadedCustomers,TResult? Function()?  loading,TResult? Function()?  loadingProducts,TResult? Function( String message)?  loadProductsFailure,TResult? Function( Map<int, Invoice> items)?  saved,}) {final _that = this;
 switch (_that) {
 case SalesError() when error != null:
 return error(_that.message);case SalesInitial() when initial != null:
 return initial();case SalesLoaded() when loaded != null:
 return loaded(_that.items);case SalesLoadedAll() when loadedAll != null:
-return loadedAll(_that.products,_that.paymentMethods,_that.customers,_that.invoices);case SalesLoadedCustomers() when loadedCustomers != null:
+return loadedAll(_that.products,_that.paymentMethods,_that.customers,_that.companies,_that.invoices);case SalesLoadedCustomers() when loadedCustomers != null:
 return loadedCustomers(_that.customers);case SalesLoading() when loading != null:
 return loading();case SalesLoadingProducts() when loadingProducts != null:
 return loadingProducts();case SalesLoadProductsFailure() when loadProductsFailure != null:
@@ -387,7 +387,7 @@ as Map<int, Invoice>,
 
 
 class SalesLoadedAll implements SalesState {
-   SalesLoadedAll({required final  List<Product> products, required final  List<PaymentMethodType> paymentMethods, required final  Map<int, Customer> customers, required final  Map<int, Invoice> invoices}): _products = products,_paymentMethods = paymentMethods,_customers = customers,_invoices = invoices;
+   SalesLoadedAll({required final  List<Product> products, required final  List<PaymentMethodType> paymentMethods, required final  Map<int, Customer> customers, required final  Map<int, Company> companies, required final  Map<int, Invoice> invoices}): _products = products,_paymentMethods = paymentMethods,_customers = customers,_companies = companies,_invoices = invoices;
   
 
  final  List<Product> _products;
@@ -411,6 +411,13 @@ class SalesLoadedAll implements SalesState {
   return EqualUnmodifiableMapView(_customers);
 }
 
+ final  Map<int, Company> _companies;
+ Map<int, Company> get companies {
+  if (_companies is EqualUnmodifiableMapView) return _companies;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_companies);
+}
+
  final  Map<int, Invoice> _invoices;
  Map<int, Invoice> get invoices {
   if (_invoices is EqualUnmodifiableMapView) return _invoices;
@@ -429,16 +436,16 @@ $SalesLoadedAllCopyWith<SalesLoadedAll> get copyWith => _$SalesLoadedAllCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoadedAll&&const DeepCollectionEquality().equals(other._products, _products)&&const DeepCollectionEquality().equals(other._paymentMethods, _paymentMethods)&&const DeepCollectionEquality().equals(other._customers, _customers)&&const DeepCollectionEquality().equals(other._invoices, _invoices));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoadedAll&&const DeepCollectionEquality().equals(other._products, _products)&&const DeepCollectionEquality().equals(other._paymentMethods, _paymentMethods)&&const DeepCollectionEquality().equals(other._customers, _customers)&&const DeepCollectionEquality().equals(other._companies, _companies)&&const DeepCollectionEquality().equals(other._invoices, _invoices));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_products),const DeepCollectionEquality().hash(_paymentMethods),const DeepCollectionEquality().hash(_customers),const DeepCollectionEquality().hash(_invoices));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_products),const DeepCollectionEquality().hash(_paymentMethods),const DeepCollectionEquality().hash(_customers),const DeepCollectionEquality().hash(_companies),const DeepCollectionEquality().hash(_invoices));
 
 @override
 String toString() {
-  return 'SalesState.loadedAll(products: $products, paymentMethods: $paymentMethods, customers: $customers, invoices: $invoices)';
+  return 'SalesState.loadedAll(products: $products, paymentMethods: $paymentMethods, customers: $customers, companies: $companies, invoices: $invoices)';
 }
 
 
@@ -449,7 +456,7 @@ abstract mixin class $SalesLoadedAllCopyWith<$Res> implements $SalesStateCopyWit
   factory $SalesLoadedAllCopyWith(SalesLoadedAll value, $Res Function(SalesLoadedAll) _then) = _$SalesLoadedAllCopyWithImpl;
 @useResult
 $Res call({
- List<Product> products, List<PaymentMethodType> paymentMethods, Map<int, Customer> customers, Map<int, Invoice> invoices
+ List<Product> products, List<PaymentMethodType> paymentMethods, Map<int, Customer> customers, Map<int, Company> companies, Map<int, Invoice> invoices
 });
 
 
@@ -466,12 +473,13 @@ class _$SalesLoadedAllCopyWithImpl<$Res>
 
 /// Create a copy of SalesState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? products = null,Object? paymentMethods = null,Object? customers = null,Object? invoices = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? products = null,Object? paymentMethods = null,Object? customers = null,Object? companies = null,Object? invoices = null,}) {
   return _then(SalesLoadedAll(
 products: null == products ? _self._products : products // ignore: cast_nullable_to_non_nullable
 as List<Product>,paymentMethods: null == paymentMethods ? _self._paymentMethods : paymentMethods // ignore: cast_nullable_to_non_nullable
 as List<PaymentMethodType>,customers: null == customers ? _self._customers : customers // ignore: cast_nullable_to_non_nullable
-as Map<int, Customer>,invoices: null == invoices ? _self._invoices : invoices // ignore: cast_nullable_to_non_nullable
+as Map<int, Customer>,companies: null == companies ? _self._companies : companies // ignore: cast_nullable_to_non_nullable
+as Map<int, Company>,invoices: null == invoices ? _self._invoices : invoices // ignore: cast_nullable_to_non_nullable
 as Map<int, Invoice>,
   ));
 }

@@ -101,12 +101,12 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
                     _InfoRow(
                       icon: Icons.person_outline,
                       label: 'Cliente',
-                      value: data.customerName,
+                      value: data.customerName ?? '',
                     ),
                     _InfoRow(
                       icon: Icons.badge_outlined,
                       label: 'CPF',
-                      value: data.customerCpf,
+                      value: data.customerCpf ?? '',
                     ),
                     _InfoRow(
                       icon: Icons.payment_outlined,

@@ -1305,9 +1305,9 @@ class $InvoicesRecordsTable extends InvoicesRecords
   late final GeneratedColumn<String> customerCpf = GeneratedColumn<String>(
     'cliente_cpf',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _customerIdMeta = const VerificationMeta(
     'customerId',
@@ -1316,9 +1316,9 @@ class $InvoicesRecordsTable extends InvoicesRecords
   late final GeneratedColumn<int> customerId = GeneratedColumn<int>(
     'cliente_id',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _customerNameMeta = const VerificationMeta(
     'customerName',
@@ -1327,9 +1327,20 @@ class $InvoicesRecordsTable extends InvoicesRecords
   late final GeneratedColumn<String> customerName = GeneratedColumn<String>(
     'cliente_nome',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _companyIdMeta = const VerificationMeta(
+    'companyId',
+  );
+  @override
+  late final GeneratedColumn<int> companyId = GeneratedColumn<int>(
+    'empresa_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
   );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
@@ -1415,10 +1426,21 @@ class $InvoicesRecordsTable extends InvoicesRecords
     requiredDuringInsert: true,
   );
   @override
+  late final GeneratedColumnWithTypeConverter<InvoiceType, String> type =
+      GeneratedColumn<String>(
+        'tipo',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('exit'),
+      ).withConverter<InvoiceType>($InvoicesRecordsTable.$convertertype);
+  @override
   List<GeneratedColumn> get $columns => [
     customerCpf,
     customerId,
     customerName,
+    companyId,
     id,
     invoiceNumber,
     issueDate,
@@ -1426,6 +1448,7 @@ class $InvoicesRecordsTable extends InvoicesRecords
     paymentMethod,
     registrationDate,
     totalValue,
+    type,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1447,16 +1470,12 @@ class $InvoicesRecordsTable extends InvoicesRecords
           _customerCpfMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_customerCpfMeta);
     }
     if (data.containsKey('cliente_id')) {
       context.handle(
         _customerIdMeta,
         customerId.isAcceptableOrUnknown(data['cliente_id']!, _customerIdMeta),
       );
-    } else if (isInserting) {
-      context.missing(_customerIdMeta);
     }
     if (data.containsKey('cliente_nome')) {
       context.handle(
@@ -1466,8 +1485,12 @@ class $InvoicesRecordsTable extends InvoicesRecords
           _customerNameMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_customerNameMeta);
+    }
+    if (data.containsKey('empresa_id')) {
+      context.handle(
+        _companyIdMeta,
+        companyId.isAcceptableOrUnknown(data['empresa_id']!, _companyIdMeta),
+      );
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
@@ -1540,15 +1563,19 @@ class $InvoicesRecordsTable extends InvoicesRecords
       customerCpf: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}cliente_cpf'],
-      )!,
+      ),
       customerId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}cliente_id'],
-      )!,
+      ),
       customerName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}cliente_nome'],
-      )!,
+      ),
+      companyId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}empresa_id'],
+      ),
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -1577,6 +1604,12 @@ class $InvoicesRecordsTable extends InvoicesRecords
         DriftSqlType.double,
         data['${effectivePrefix}valor_total'],
       )!,
+      type: $InvoicesRecordsTable.$convertertype.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}tipo'],
+        )!,
+      ),
     );
   }
 
@@ -1584,40 +1617,50 @@ class $InvoicesRecordsTable extends InvoicesRecords
   $InvoicesRecordsTable createAlias(String alias) {
     return $InvoicesRecordsTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<InvoiceType, String, String> $convertertype =
+      const EnumNameConverter<InvoiceType>(InvoiceType.values);
 }
 
 class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
-  /// CPF do cliente (desnormalizado para facilitar consultas)
-  final String customerCpf;
+  /// CPF do cliente (desnormalizado; null para notas de entrada).
+  final String? customerCpf;
 
-  /// ID do cliente
-  final int customerId;
+  /// ID do cliente (null para notas de entrada).
+  final int? customerId;
 
-  /// Nome do cliente (desnormalizado para facilitar consultas)
-  final String customerName;
+  /// Nome do cliente (desnormalizado; null para notas de entrada).
+  final String? customerName;
+
+  /// ID da empresa fornecedora (null para notas de saída).
+  final int? companyId;
   final int id;
 
-  /// Número da nota fiscal
+  /// Número da nota fiscal.
   final String invoiceNumber;
 
-  /// Data de emissão da nota
+  /// Data de emissão da nota.
   final DateTime issueDate;
 
-  /// Data da última atualização
+  /// Data da última atualização.
   final DateTime? lastUpdatedDate;
 
-  /// Forma de pagamento
+  /// Forma de pagamento.
   final String paymentMethod;
 
-  /// Data de cadastro no sistema
+  /// Data de cadastro no sistema.
   final DateTime registrationDate;
 
-  /// Valor total da nota fiscal
+  /// Valor total da nota fiscal.
   final double totalValue;
+
+  /// Tipo da nota fiscal (entrada ou saída). Padrão: saída.
+  final InvoiceType type;
   const InvoicesRecord({
-    required this.customerCpf,
-    required this.customerId,
-    required this.customerName,
+    this.customerCpf,
+    this.customerId,
+    this.customerName,
+    this.companyId,
     required this.id,
     required this.invoiceNumber,
     required this.issueDate,
@@ -1625,13 +1668,23 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
     required this.paymentMethod,
     required this.registrationDate,
     required this.totalValue,
+    required this.type,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['cliente_cpf'] = Variable<String>(customerCpf);
-    map['cliente_id'] = Variable<int>(customerId);
-    map['cliente_nome'] = Variable<String>(customerName);
+    if (!nullToAbsent || customerCpf != null) {
+      map['cliente_cpf'] = Variable<String>(customerCpf);
+    }
+    if (!nullToAbsent || customerId != null) {
+      map['cliente_id'] = Variable<int>(customerId);
+    }
+    if (!nullToAbsent || customerName != null) {
+      map['cliente_nome'] = Variable<String>(customerName);
+    }
+    if (!nullToAbsent || companyId != null) {
+      map['empresa_id'] = Variable<int>(companyId);
+    }
     map['id'] = Variable<int>(id);
     map['numero_nota'] = Variable<String>(invoiceNumber);
     map['data_emissao'] = Variable<DateTime>(issueDate);
@@ -1641,14 +1694,28 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
     map['forma_pagamento'] = Variable<String>(paymentMethod);
     map['registration_date'] = Variable<DateTime>(registrationDate);
     map['valor_total'] = Variable<double>(totalValue);
+    {
+      map['tipo'] = Variable<String>(
+        $InvoicesRecordsTable.$convertertype.toSql(type),
+      );
+    }
     return map;
   }
 
   InvoicesRecordsCompanion toCompanion(bool nullToAbsent) {
     return InvoicesRecordsCompanion(
-      customerCpf: Value(customerCpf),
-      customerId: Value(customerId),
-      customerName: Value(customerName),
+      customerCpf: customerCpf == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customerCpf),
+      customerId: customerId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customerId),
+      customerName: customerName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customerName),
+      companyId: companyId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(companyId),
       id: Value(id),
       invoiceNumber: Value(invoiceNumber),
       issueDate: Value(issueDate),
@@ -1658,6 +1725,7 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
       paymentMethod: Value(paymentMethod),
       registrationDate: Value(registrationDate),
       totalValue: Value(totalValue),
+      type: Value(type),
     );
   }
 
@@ -1667,9 +1735,10 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return InvoicesRecord(
-      customerCpf: serializer.fromJson<String>(json['customerCpf']),
-      customerId: serializer.fromJson<int>(json['customerId']),
-      customerName: serializer.fromJson<String>(json['customerName']),
+      customerCpf: serializer.fromJson<String?>(json['customerCpf']),
+      customerId: serializer.fromJson<int?>(json['customerId']),
+      customerName: serializer.fromJson<String?>(json['customerName']),
+      companyId: serializer.fromJson<int?>(json['companyId']),
       id: serializer.fromJson<int>(json['id']),
       invoiceNumber: serializer.fromJson<String>(json['invoiceNumber']),
       issueDate: serializer.fromJson<DateTime>(json['issueDate']),
@@ -1677,15 +1746,19 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
       paymentMethod: serializer.fromJson<String>(json['paymentMethod']),
       registrationDate: serializer.fromJson<DateTime>(json['registrationDate']),
       totalValue: serializer.fromJson<double>(json['totalValue']),
+      type: $InvoicesRecordsTable.$convertertype.fromJson(
+        serializer.fromJson<String>(json['type']),
+      ),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'customerCpf': serializer.toJson<String>(customerCpf),
-      'customerId': serializer.toJson<int>(customerId),
-      'customerName': serializer.toJson<String>(customerName),
+      'customerCpf': serializer.toJson<String?>(customerCpf),
+      'customerId': serializer.toJson<int?>(customerId),
+      'customerName': serializer.toJson<String?>(customerName),
+      'companyId': serializer.toJson<int?>(companyId),
       'id': serializer.toJson<int>(id),
       'invoiceNumber': serializer.toJson<String>(invoiceNumber),
       'issueDate': serializer.toJson<DateTime>(issueDate),
@@ -1693,13 +1766,17 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
       'paymentMethod': serializer.toJson<String>(paymentMethod),
       'registrationDate': serializer.toJson<DateTime>(registrationDate),
       'totalValue': serializer.toJson<double>(totalValue),
+      'type': serializer.toJson<String>(
+        $InvoicesRecordsTable.$convertertype.toJson(type),
+      ),
     };
   }
 
   InvoicesRecord copyWith({
-    String? customerCpf,
-    int? customerId,
-    String? customerName,
+    Value<String?> customerCpf = const Value.absent(),
+    Value<int?> customerId = const Value.absent(),
+    Value<String?> customerName = const Value.absent(),
+    Value<int?> companyId = const Value.absent(),
     int? id,
     String? invoiceNumber,
     DateTime? issueDate,
@@ -1707,10 +1784,12 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
     String? paymentMethod,
     DateTime? registrationDate,
     double? totalValue,
+    InvoiceType? type,
   }) => InvoicesRecord(
-    customerCpf: customerCpf ?? this.customerCpf,
-    customerId: customerId ?? this.customerId,
-    customerName: customerName ?? this.customerName,
+    customerCpf: customerCpf.present ? customerCpf.value : this.customerCpf,
+    customerId: customerId.present ? customerId.value : this.customerId,
+    customerName: customerName.present ? customerName.value : this.customerName,
+    companyId: companyId.present ? companyId.value : this.companyId,
     id: id ?? this.id,
     invoiceNumber: invoiceNumber ?? this.invoiceNumber,
     issueDate: issueDate ?? this.issueDate,
@@ -1720,6 +1799,7 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
     paymentMethod: paymentMethod ?? this.paymentMethod,
     registrationDate: registrationDate ?? this.registrationDate,
     totalValue: totalValue ?? this.totalValue,
+    type: type ?? this.type,
   );
   InvoicesRecord copyWithCompanion(InvoicesRecordsCompanion data) {
     return InvoicesRecord(
@@ -1732,6 +1812,7 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
       customerName: data.customerName.present
           ? data.customerName.value
           : this.customerName,
+      companyId: data.companyId.present ? data.companyId.value : this.companyId,
       id: data.id.present ? data.id.value : this.id,
       invoiceNumber: data.invoiceNumber.present
           ? data.invoiceNumber.value
@@ -1749,6 +1830,7 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
       totalValue: data.totalValue.present
           ? data.totalValue.value
           : this.totalValue,
+      type: data.type.present ? data.type.value : this.type,
     );
   }
 
@@ -1758,13 +1840,15 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
           ..write('customerCpf: $customerCpf, ')
           ..write('customerId: $customerId, ')
           ..write('customerName: $customerName, ')
+          ..write('companyId: $companyId, ')
           ..write('id: $id, ')
           ..write('invoiceNumber: $invoiceNumber, ')
           ..write('issueDate: $issueDate, ')
           ..write('lastUpdatedDate: $lastUpdatedDate, ')
           ..write('paymentMethod: $paymentMethod, ')
           ..write('registrationDate: $registrationDate, ')
-          ..write('totalValue: $totalValue')
+          ..write('totalValue: $totalValue, ')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
@@ -1774,6 +1858,7 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
     customerCpf,
     customerId,
     customerName,
+    companyId,
     id,
     invoiceNumber,
     issueDate,
@@ -1781,6 +1866,7 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
     paymentMethod,
     registrationDate,
     totalValue,
+    type,
   );
   @override
   bool operator ==(Object other) =>
@@ -1789,19 +1875,22 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
           other.customerCpf == this.customerCpf &&
           other.customerId == this.customerId &&
           other.customerName == this.customerName &&
+          other.companyId == this.companyId &&
           other.id == this.id &&
           other.invoiceNumber == this.invoiceNumber &&
           other.issueDate == this.issueDate &&
           other.lastUpdatedDate == this.lastUpdatedDate &&
           other.paymentMethod == this.paymentMethod &&
           other.registrationDate == this.registrationDate &&
-          other.totalValue == this.totalValue);
+          other.totalValue == this.totalValue &&
+          other.type == this.type);
 }
 
 class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
-  final Value<String> customerCpf;
-  final Value<int> customerId;
-  final Value<String> customerName;
+  final Value<String?> customerCpf;
+  final Value<int?> customerId;
+  final Value<String?> customerName;
+  final Value<int?> companyId;
   final Value<int> id;
   final Value<String> invoiceNumber;
   final Value<DateTime> issueDate;
@@ -1809,10 +1898,12 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
   final Value<String> paymentMethod;
   final Value<DateTime> registrationDate;
   final Value<double> totalValue;
+  final Value<InvoiceType> type;
   const InvoicesRecordsCompanion({
     this.customerCpf = const Value.absent(),
     this.customerId = const Value.absent(),
     this.customerName = const Value.absent(),
+    this.companyId = const Value.absent(),
     this.id = const Value.absent(),
     this.invoiceNumber = const Value.absent(),
     this.issueDate = const Value.absent(),
@@ -1820,11 +1911,13 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     this.paymentMethod = const Value.absent(),
     this.registrationDate = const Value.absent(),
     this.totalValue = const Value.absent(),
+    this.type = const Value.absent(),
   });
   InvoicesRecordsCompanion.insert({
-    required String customerCpf,
-    required int customerId,
-    required String customerName,
+    this.customerCpf = const Value.absent(),
+    this.customerId = const Value.absent(),
+    this.customerName = const Value.absent(),
+    this.companyId = const Value.absent(),
     this.id = const Value.absent(),
     required String invoiceNumber,
     required DateTime issueDate,
@@ -1832,10 +1925,8 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     required String paymentMethod,
     this.registrationDate = const Value.absent(),
     required double totalValue,
-  }) : customerCpf = Value(customerCpf),
-       customerId = Value(customerId),
-       customerName = Value(customerName),
-       invoiceNumber = Value(invoiceNumber),
+    this.type = const Value.absent(),
+  }) : invoiceNumber = Value(invoiceNumber),
        issueDate = Value(issueDate),
        paymentMethod = Value(paymentMethod),
        totalValue = Value(totalValue);
@@ -1843,6 +1934,7 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     Expression<String>? customerCpf,
     Expression<int>? customerId,
     Expression<String>? customerName,
+    Expression<int>? companyId,
     Expression<int>? id,
     Expression<String>? invoiceNumber,
     Expression<DateTime>? issueDate,
@@ -1850,11 +1942,13 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     Expression<String>? paymentMethod,
     Expression<DateTime>? registrationDate,
     Expression<double>? totalValue,
+    Expression<String>? type,
   }) {
     return RawValuesInsertable({
       if (customerCpf != null) 'cliente_cpf': customerCpf,
       if (customerId != null) 'cliente_id': customerId,
       if (customerName != null) 'cliente_nome': customerName,
+      if (companyId != null) 'empresa_id': companyId,
       if (id != null) 'id': id,
       if (invoiceNumber != null) 'numero_nota': invoiceNumber,
       if (issueDate != null) 'data_emissao': issueDate,
@@ -1862,13 +1956,15 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
       if (paymentMethod != null) 'forma_pagamento': paymentMethod,
       if (registrationDate != null) 'registration_date': registrationDate,
       if (totalValue != null) 'valor_total': totalValue,
+      if (type != null) 'tipo': type,
     });
   }
 
   InvoicesRecordsCompanion copyWith({
-    Value<String>? customerCpf,
-    Value<int>? customerId,
-    Value<String>? customerName,
+    Value<String?>? customerCpf,
+    Value<int?>? customerId,
+    Value<String?>? customerName,
+    Value<int?>? companyId,
     Value<int>? id,
     Value<String>? invoiceNumber,
     Value<DateTime>? issueDate,
@@ -1876,11 +1972,13 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     Value<String>? paymentMethod,
     Value<DateTime>? registrationDate,
     Value<double>? totalValue,
+    Value<InvoiceType>? type,
   }) {
     return InvoicesRecordsCompanion(
       customerCpf: customerCpf ?? this.customerCpf,
       customerId: customerId ?? this.customerId,
       customerName: customerName ?? this.customerName,
+      companyId: companyId ?? this.companyId,
       id: id ?? this.id,
       invoiceNumber: invoiceNumber ?? this.invoiceNumber,
       issueDate: issueDate ?? this.issueDate,
@@ -1888,6 +1986,7 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
       paymentMethod: paymentMethod ?? this.paymentMethod,
       registrationDate: registrationDate ?? this.registrationDate,
       totalValue: totalValue ?? this.totalValue,
+      type: type ?? this.type,
     );
   }
 
@@ -1902,6 +2001,9 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     }
     if (customerName.present) {
       map['cliente_nome'] = Variable<String>(customerName.value);
+    }
+    if (companyId.present) {
+      map['empresa_id'] = Variable<int>(companyId.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
@@ -1924,6 +2026,11 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     if (totalValue.present) {
       map['valor_total'] = Variable<double>(totalValue.value);
     }
+    if (type.present) {
+      map['tipo'] = Variable<String>(
+        $InvoicesRecordsTable.$convertertype.toSql(type.value),
+      );
+    }
     return map;
   }
 
@@ -1933,13 +2040,15 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
           ..write('customerCpf: $customerCpf, ')
           ..write('customerId: $customerId, ')
           ..write('customerName: $customerName, ')
+          ..write('companyId: $companyId, ')
           ..write('id: $id, ')
           ..write('invoiceNumber: $invoiceNumber, ')
           ..write('issueDate: $issueDate, ')
           ..write('lastUpdatedDate: $lastUpdatedDate, ')
           ..write('paymentMethod: $paymentMethod, ')
           ..write('registrationDate: $registrationDate, ')
-          ..write('totalValue: $totalValue')
+          ..write('totalValue: $totalValue, ')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
@@ -4033,9 +4142,10 @@ typedef $$ProductsRecordsTableProcessedTableManager =
     >;
 typedef $$InvoicesRecordsTableCreateCompanionBuilder =
     InvoicesRecordsCompanion Function({
-      required String customerCpf,
-      required int customerId,
-      required String customerName,
+      Value<String?> customerCpf,
+      Value<int?> customerId,
+      Value<String?> customerName,
+      Value<int?> companyId,
       Value<int> id,
       required String invoiceNumber,
       required DateTime issueDate,
@@ -4043,12 +4153,14 @@ typedef $$InvoicesRecordsTableCreateCompanionBuilder =
       required String paymentMethod,
       Value<DateTime> registrationDate,
       required double totalValue,
+      Value<InvoiceType> type,
     });
 typedef $$InvoicesRecordsTableUpdateCompanionBuilder =
     InvoicesRecordsCompanion Function({
-      Value<String> customerCpf,
-      Value<int> customerId,
-      Value<String> customerName,
+      Value<String?> customerCpf,
+      Value<int?> customerId,
+      Value<String?> customerName,
+      Value<int?> companyId,
       Value<int> id,
       Value<String> invoiceNumber,
       Value<DateTime> issueDate,
@@ -4056,6 +4168,7 @@ typedef $$InvoicesRecordsTableUpdateCompanionBuilder =
       Value<String> paymentMethod,
       Value<DateTime> registrationDate,
       Value<double> totalValue,
+      Value<InvoiceType> type,
     });
 
 class $$InvoicesRecordsTableFilterComposer
@@ -4079,6 +4192,11 @@ class $$InvoicesRecordsTableFilterComposer
 
   ColumnFilters<String> get customerName => $composableBuilder(
     column: $table.customerName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get companyId => $composableBuilder(
+    column: $table.companyId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -4116,6 +4234,12 @@ class $$InvoicesRecordsTableFilterComposer
     column: $table.totalValue,
     builder: (column) => ColumnFilters(column),
   );
+
+  ColumnWithTypeConverterFilters<InvoiceType, InvoiceType, String> get type =>
+      $composableBuilder(
+        column: $table.type,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 }
 
 class $$InvoicesRecordsTableOrderingComposer
@@ -4139,6 +4263,11 @@ class $$InvoicesRecordsTableOrderingComposer
 
   ColumnOrderings<String> get customerName => $composableBuilder(
     column: $table.customerName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get companyId => $composableBuilder(
+    column: $table.companyId,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -4176,6 +4305,11 @@ class $$InvoicesRecordsTableOrderingComposer
     column: $table.totalValue,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$InvoicesRecordsTableAnnotationComposer
@@ -4201,6 +4335,9 @@ class $$InvoicesRecordsTableAnnotationComposer
     column: $table.customerName,
     builder: (column) => column,
   );
+
+  GeneratedColumn<int> get companyId =>
+      $composableBuilder(column: $table.companyId, builder: (column) => column);
 
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
@@ -4232,6 +4369,9 @@ class $$InvoicesRecordsTableAnnotationComposer
     column: $table.totalValue,
     builder: (column) => column,
   );
+
+  GeneratedColumnWithTypeConverter<InvoiceType, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
 }
 
 class $$InvoicesRecordsTableTableManager
@@ -4271,9 +4411,10 @@ class $$InvoicesRecordsTableTableManager
               $$InvoicesRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<String> customerCpf = const Value.absent(),
-                Value<int> customerId = const Value.absent(),
-                Value<String> customerName = const Value.absent(),
+                Value<String?> customerCpf = const Value.absent(),
+                Value<int?> customerId = const Value.absent(),
+                Value<String?> customerName = const Value.absent(),
+                Value<int?> companyId = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<String> invoiceNumber = const Value.absent(),
                 Value<DateTime> issueDate = const Value.absent(),
@@ -4281,10 +4422,12 @@ class $$InvoicesRecordsTableTableManager
                 Value<String> paymentMethod = const Value.absent(),
                 Value<DateTime> registrationDate = const Value.absent(),
                 Value<double> totalValue = const Value.absent(),
+                Value<InvoiceType> type = const Value.absent(),
               }) => InvoicesRecordsCompanion(
                 customerCpf: customerCpf,
                 customerId: customerId,
                 customerName: customerName,
+                companyId: companyId,
                 id: id,
                 invoiceNumber: invoiceNumber,
                 issueDate: issueDate,
@@ -4292,12 +4435,14 @@ class $$InvoicesRecordsTableTableManager
                 paymentMethod: paymentMethod,
                 registrationDate: registrationDate,
                 totalValue: totalValue,
+                type: type,
               ),
           createCompanionCallback:
               ({
-                required String customerCpf,
-                required int customerId,
-                required String customerName,
+                Value<String?> customerCpf = const Value.absent(),
+                Value<int?> customerId = const Value.absent(),
+                Value<String?> customerName = const Value.absent(),
+                Value<int?> companyId = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 required String invoiceNumber,
                 required DateTime issueDate,
@@ -4305,10 +4450,12 @@ class $$InvoicesRecordsTableTableManager
                 required String paymentMethod,
                 Value<DateTime> registrationDate = const Value.absent(),
                 required double totalValue,
+                Value<InvoiceType> type = const Value.absent(),
               }) => InvoicesRecordsCompanion.insert(
                 customerCpf: customerCpf,
                 customerId: customerId,
                 customerName: customerName,
+                companyId: companyId,
                 id: id,
                 invoiceNumber: invoiceNumber,
                 issueDate: issueDate,
@@ -4316,6 +4463,7 @@ class $$InvoicesRecordsTableTableManager
                 paymentMethod: paymentMethod,
                 registrationDate: registrationDate,
                 totalValue: totalValue,
+                type: type,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

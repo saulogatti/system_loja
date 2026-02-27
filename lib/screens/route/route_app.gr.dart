@@ -398,6 +398,7 @@ class SalesInvoiceRoute extends _i18.PageRouteInfo<SalesInvoiceRouteArgs> {
     _i19.Key? key,
     required List<_i24.PaymentMethodType> paymentMethods,
     required Map<int, _i21.Customer> customers,
+    required Map<int, _i20.Company> companies,
     required _i25.SalesCubit salesCubit,
     required List<_i22.Product> products,
     List<_i18.PageRouteInfo>? children,
@@ -407,6 +408,7 @@ class SalesInvoiceRoute extends _i18.PageRouteInfo<SalesInvoiceRouteArgs> {
            key: key,
            paymentMethods: paymentMethods,
            customers: customers,
+           companies: companies,
            salesCubit: salesCubit,
            products: products,
          ),
@@ -423,6 +425,7 @@ class SalesInvoiceRoute extends _i18.PageRouteInfo<SalesInvoiceRouteArgs> {
         key: args.key,
         paymentMethods: args.paymentMethods,
         customers: args.customers,
+        companies: args.companies,
         salesCubit: args.salesCubit,
         products: args.products,
       );
@@ -435,6 +438,7 @@ class SalesInvoiceRouteArgs {
     this.key,
     required this.paymentMethods,
     required this.customers,
+    required this.companies,
     required this.salesCubit,
     required this.products,
   });
@@ -445,13 +449,15 @@ class SalesInvoiceRouteArgs {
 
   final Map<int, _i21.Customer> customers;
 
+  final Map<int, _i20.Company> companies;
+
   final _i25.SalesCubit salesCubit;
 
   final List<_i22.Product> products;
 
   @override
   String toString() {
-    return 'SalesInvoiceRouteArgs{key: $key, paymentMethods: $paymentMethods, customers: $customers, salesCubit: $salesCubit, products: $products}';
+    return 'SalesInvoiceRouteArgs{key: $key, paymentMethods: $paymentMethods, customers: $customers, companies: $companies, salesCubit: $salesCubit, products: $products}';
   }
 
   @override
@@ -467,6 +473,10 @@ class SalesInvoiceRouteArgs {
           customers,
           other.customers,
         ) &&
+        const _i23.MapEquality<int, _i20.Company>().equals(
+          companies,
+          other.companies,
+        ) &&
         salesCubit == other.salesCubit &&
         const _i23.ListEquality<_i22.Product>().equals(
           products,
@@ -479,6 +489,7 @@ class SalesInvoiceRouteArgs {
       key.hashCode ^
       const _i23.ListEquality<_i24.PaymentMethodType>().hash(paymentMethods) ^
       const _i23.MapEquality<int, _i21.Customer>().hash(customers) ^
+      const _i23.MapEquality<int, _i20.Company>().hash(companies) ^
       salesCubit.hashCode ^
       const _i23.ListEquality<_i22.Product>().hash(products);
 }

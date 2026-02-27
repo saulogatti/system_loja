@@ -46,9 +46,10 @@ InvoiceData _$InvoiceDataFromJson(Map<String, dynamic> json) => $checkedCreate(
   ($checkedConvert) {
     final val = InvoiceData(
       invoiceNumber: $checkedConvert('numero_nota', (v) => v as String),
-      customerId: $checkedConvert('cliente_id', (v) => (v as num).toInt()),
-      customerName: $checkedConvert('cliente_nome', (v) => v as String),
-      customerCpf: $checkedConvert('cliente_cpf', (v) => v as String),
+      customerId: $checkedConvert('cliente_id', (v) => (v as num?)?.toInt()),
+      customerName: $checkedConvert('cliente_nome', (v) => v as String?),
+      customerCpf: $checkedConvert('cliente_cpf', (v) => v as String?),
+      companyId: $checkedConvert('empresa_id', (v) => (v as num?)?.toInt()),
       items: $checkedConvert(
         'items',
         (v) => (v as List<dynamic>)
@@ -60,6 +61,10 @@ InvoiceData _$InvoiceDataFromJson(Map<String, dynamic> json) => $checkedCreate(
         'data_emissao',
         (v) => v == null ? null : DateTime.parse(v as String),
       ),
+      type: $checkedConvert(
+        'type',
+        (v) => $enumDecodeNullable(_$InvoiceTypeEnumMap, v) ?? InvoiceType.exit,
+      ),
     );
     return val;
   },
@@ -68,6 +73,7 @@ InvoiceData _$InvoiceDataFromJson(Map<String, dynamic> json) => $checkedCreate(
     'customerId': 'cliente_id',
     'customerName': 'cliente_nome',
     'customerCpf': 'cliente_cpf',
+    'companyId': 'empresa_id',
     'paymentMethod': 'forma_pagamento',
     'issueDate': 'data_emissao',
   },
@@ -79,7 +85,14 @@ Map<String, dynamic> _$InvoiceDataToJson(InvoiceData instance) =>
       'cliente_id': instance.customerId,
       'cliente_nome': instance.customerName,
       'cliente_cpf': instance.customerCpf,
+      'empresa_id': instance.companyId,
       'items': instance.items.map((e) => e.toJson()).toList(),
       'forma_pagamento': instance.paymentMethod,
       'data_emissao': instance.issueDate.toIso8601String(),
+      'type': _$InvoiceTypeEnumMap[instance.type]!,
     };
+
+const _$InvoiceTypeEnumMap = {
+  InvoiceType.entry: 'entry',
+  InvoiceType.exit: 'exit',
+};
