@@ -34,7 +34,6 @@ class RouteApp extends RootStackRouter {
           ],
         ),
         AutoRoute(page: SalesRoute.page, title: (context, data) => 'Vendas'),
-        AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuários', maintainState: false),
         AutoRoute(page: SettingsRoute.page, title: (context, data) => 'Configurações'),
       ],
     ),
@@ -49,5 +48,6 @@ class RouteApp extends RootStackRouter {
     AutoRoute(page: CompanyEditRoute.page, title: (context, data) => 'Edit Company'),
     AutoRoute(page: PersonRegistrationRoute.page, title: (context, data) => 'Cadastro de Pessoa'),
     AutoRoute(page: SystemConfigRoute.page, title: (context, data) => 'System Config'),
+    AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuários', maintainState: false),
   ];
 }

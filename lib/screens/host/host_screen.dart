@@ -16,7 +16,7 @@ class HostScreen extends StatelessWidget {
           leading: AutoLeadingButton(),
         );
       },
-      routes: [HomeRoute(), CadastroGroupRoute(), SalesRoute(), UsuarioRoute(), SettingsRoute()],
+      routes: [HomeRoute(), CadastroGroupRoute(), SalesRoute(), SettingsRoute()],
       transitionBuilder: (context, child, animation) {
         return FadeTransition(opacity: animation, child: child);
       },
@@ -37,7 +37,6 @@ class HostScreen extends StatelessWidget {
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.person_add), label: 'Cadastro'),
             BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Vendas'),
-            BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Usuários'),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Configurações'),
           ],
         );

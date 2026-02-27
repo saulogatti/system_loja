@@ -28,10 +28,7 @@ enum FrequenciaBackup {
   const FrequenciaBackup(this.value, this.label);
 
   static FrequenciaBackup fromValue(String value) {
-    return FrequenciaBackup.values.firstWhere(
-      (e) => e.value == value,
-      orElse: () => FrequenciaBackup.diario,
-    );
+    return FrequenciaBackup.values.firstWhere((e) => e.value == value, orElse: () => FrequenciaBackup.diario);
   }
 }
 
@@ -48,10 +45,7 @@ class LogErrorSystemSection extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.analytics,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                Icon(Icons.analytics, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
                 const Text(
                   'Análise de Logs do Sistema',
@@ -93,9 +87,7 @@ class SettingsScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<SettingsBloc>(
-      create: (_) => SettingsBloc(
-        configurationRepository: appInjection.get<IConfigurationRepository>(),
-      ),
+      create: (_) => SettingsBloc(configurationRepository: appInjection.get<IConfigurationRepository>()),
       child: this,
     );
   }
@@ -106,33 +98,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       persistentFooterButtons: [
-        TextButton(
-          onPressed: () => _resetToDefault(context),
-          child: const Text('Restaurar Dados'),
-        ),
+        TextButton(onPressed: () => _resetToDefault(context), child: const Text('Restaurar Dados')),
         TextButton(
           onPressed: () => _openSystemSettings(context),
           child: const Text('Configurações do Sistema'),
         ),
+        TextButton(onPressed: () => context.router.push(const UsuarioRoute()), child: const Text('Usuários')),
       ],
       body: BlocConsumer<SettingsBloc, SettingsState>(
         listener: (context, state) {
           if (state is SettingsLoadedState) {
             if (state.status != SettingsSuccessStatus.loaded) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.status.mensagem),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.status.mensagem), backgroundColor: Colors.green));
             }
           } else if (state is SettingsError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.mensagem),
-                backgroundColor: Colors.red,
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.mensagem), backgroundColor: Colors.red));
           }
         },
 
@@ -148,9 +132,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Text(state.mensagem),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () => context.read<SettingsBloc>().add(
-                        const LoadSettingsEvent(),
-                      ),
+                      onPressed: () => context.read<SettingsBloc>().add(const LoadSettingsEvent()),
                       child: const Text('Tentar Novamente'),
                     ),
                   ],
@@ -169,42 +151,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     SecaoNotificacoes(
                       config: currentConfig,
-                      onConfigChanged: (newConfig) =>
-                          _updateConfig(context, newConfig),
+                      onConfigChanged: (newConfig) => _updateConfig(context, newConfig),
                     ),
                     const SizedBox(height: 24),
                     ThemeSettings(
                       config: currentConfig,
-                      onConfigChanged: (newConfig) =>
-                          _updateConfig(context, newConfig),
-                      onMostrarSeletorCor: () =>
-                          _mostrarSeletorCor(context, currentConfig),
+                      onConfigChanged: (newConfig) => _updateConfig(context, newConfig),
+                      onMostrarSeletorCor: () => _mostrarSeletorCor(context, currentConfig),
                     ),
+
                     const SizedBox(height: 24),
                     SecaoBackup(
                       config: currentConfig,
-                      onConfigChanged: (newConfig) =>
-                          _updateConfig(context, newConfig),
-                      onRealizarBackup: () => context.read<SettingsBloc>().add(
-                        const BackupSettingsEvent(),
-                      ),
-                      onSelecionarFrequencia: () =>
-                          _selecionarFrequenciaBackup(context, currentConfig),
+                      onConfigChanged: (newConfig) => _updateConfig(context, newConfig),
+                      onRealizarBackup: () => context.read<SettingsBloc>().add(const BackupSettingsEvent()),
+                      onSelecionarFrequencia: () => _selecionarFrequenciaBackup(context, currentConfig),
                     ),
                     const SizedBox(height: 24),
                     MaintenanceSection(
                       config: currentConfig,
-                      onConfigChanged: (newConfig) =>
-                          _updateConfig(context, newConfig),
-                      onLimparLogsAntigos: () =>
-                          _limparLogsAntigos(context, currentConfig),
+                      onConfigChanged: (newConfig) => _updateConfig(context, newConfig),
+                      onLimparLogsAntigos: () => _limparLogsAntigos(context, currentConfig),
                       onLimparTodosDados: () => _limparTodosDados(context),
                     ),
                     const SizedBox(height: 24),
                     SecuritySection(
                       config: currentConfig,
-                      onConfigChanged: (newConfig) =>
-                          _updateConfig(context, newConfig),
+                      onConfigChanged: (newConfig) => _updateConfig(context, newConfig),
                     ),
                     const SizedBox(height: 24),
                     const LogErrorSystemSection(),
@@ -246,18 +219,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Restaurar Configurações'),
-        content: const Text(
-          'Deseja restaurar todas as configurações para os valores padrão?',
-        ),
+        content: const Text('Deseja restaurar todas as configurações para os valores padrão?'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('Restaurar'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: const Text('Cancelar')),
+          ElevatedButton(onPressed: () => Navigator.pop(dialogContext, true), child: const Text('Restaurar')),
         ],
       ),
     );
@@ -268,26 +233,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   /// Limpa logs antigos
-  Future<void> _limparLogsAntigos(
-    BuildContext context,
-    AppSettings config,
-  ) async {
+  Future<void> _limparLogsAntigos(BuildContext context, AppSettings config) async {
     final confirmado = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Limpar Logs Antigos'),
-        content: Text(
-          'Deseja remover logs com mais de ${config.diasManterLogs} dias?',
-        ),
+        content: Text('Deseja remover logs com mais de ${config.diasManterLogs} dias?'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('Limpar'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: const Text('Cancelar')),
+          ElevatedButton(onPressed: () => Navigator.pop(dialogContext, true), child: const Text('Limpar')),
         ],
       ),
     );
@@ -310,10 +264,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           'Tem certeza que deseja continuar?',
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Cancelar'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: const Text('Cancelar')),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             onPressed: () => Navigator.pop(dialogContext, true),
@@ -329,10 +280,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   /// Mostra seletor de cor
-  Future<void> _mostrarSeletorCor(
-    BuildContext context,
-    AppSettings config,
-  ) async {
+  Future<void> _mostrarSeletorCor(BuildContext context, AppSettings config) async {
     final selecionada = await showDialog<EnumColorAppThemeSettings>(
       context: context,
       builder: (dialogContext) => SimpleDialog(
@@ -352,10 +300,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Text(
-                  entry.name,
-                  style: TextStyle(fontWeight: FontWeight.normal),
-                ),
+                Text(entry.name, style: TextStyle(fontWeight: FontWeight.normal)),
               ],
             ),
           );
@@ -405,10 +350,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   /// Seleciona a frequência de backup
-  Future<void> _selecionarFrequenciaBackup(
-    BuildContext context,
-    AppSettings config,
-  ) async {
+  Future<void> _selecionarFrequenciaBackup(BuildContext context, AppSettings config) async {
     final selecionado = await showDialog<FrequenciaBackup>(
       context: context,
       builder: (dialogContext) => SimpleDialog(
@@ -419,9 +361,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Text(
               opcao.label,
               style: TextStyle(
-                fontWeight: config.frequenciaBackup == opcao.value
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+                fontWeight: config.frequenciaBackup == opcao.value ? FontWeight.bold : FontWeight.normal,
               ),
             ),
           );
@@ -437,9 +377,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   /// Atualiza a configuração no estado local (não salva ainda)
   void _updateConfig(BuildContext context, AppSettings newConfig) {
-    context.read<SettingsBloc>().add(
-      UpdateSettingsEvent(newConfig),
-    ); // Recarrega para manter estado
+    context.read<SettingsBloc>().add(UpdateSettingsEvent(newConfig)); // Recarrega para manter estado
     // Aqui mantemos o config local até salvar
     // Em uma implementação mais complexa, usaríamos outro evento
   }
