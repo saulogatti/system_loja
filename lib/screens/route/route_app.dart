@@ -22,6 +22,7 @@ class HostScreen extends StatelessWidget {
         CompanyRoute(),
         ProductInfoRoute(),
         SalesRoute(),
+        RelatoriosRoute(),
         UsuarioRoute(),
         SettingsRoute(),
       ],
@@ -47,6 +48,10 @@ class HostScreen extends StatelessWidget {
             BottomNavigationBarItem(icon: Icon(Icons.business), label: 'Company'),
             BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Product Info'),
             BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Sales'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.bar_chart),
+              label: 'Relatórios',
+            ),
             BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'Usuario'),
             BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
           ],
@@ -73,7 +78,11 @@ class RouteApp extends RootStackRouter {
           maintainState: false,
         ),
         AutoRoute(page: SalesRoute.page, title: (context, data) => 'Sales', maintainState: false),
-
+        AutoRoute(
+          page: RelatoriosRoute.page,
+          title: (context, data) => 'Relatórios',
+          maintainState: false,
+        ),
         AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuario', maintainState: false),
         AutoRoute(page: SettingsRoute.page, title: (context, data) => 'Settings', maintainState: false),
       ],

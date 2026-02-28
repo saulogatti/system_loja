@@ -37,6 +37,7 @@ import 'package:system_loja/screens/products/product_detail_screen.dart'
     as _i10;
 import 'package:system_loja/screens/products/product_screen.dart' as _i11;
 import 'package:system_loja/screens/route/route_app.dart' as _i6;
+import 'package:system_loja/screens/relatorios/relatorio_screen.dart' as _i25;
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart' as _i24;
 import 'package:system_loja/screens/sales/sales_invoice_screen.dart' as _i12;
 import 'package:system_loja/screens/sales/sales_screen.dart' as _i13;
@@ -537,6 +538,22 @@ class UsuarioRoute extends _i17.PageRouteInfo<void> {
     name,
     builder: (data) {
       return _i17.WrappedRoute(child: const _i16.UsuarioScreen());
+    },
+  );
+}
+
+/// generated route for
+/// [_i25.RelatoriosScreen]
+class RelatoriosRoute extends _i17.PageRouteInfo<void> {
+  const RelatoriosRoute({List<_i17.PageRouteInfo>? children})
+    : super(RelatoriosRoute.name, initialChildren: children);
+
+  static const String name = 'RelatoriosRoute';
+
+  static _i17.PageInfo page = _i17.PageInfo(
+    name,
+    builder: (data) {
+      return _i17.WrappedRoute(child: const _i25.RelatoriosScreen());
     },
   );
 }
