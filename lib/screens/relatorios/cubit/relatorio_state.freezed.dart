@@ -17,6 +17,7 @@ mixin _$RelatorioState {
 
 
 
+
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioState);
@@ -43,6 +44,17 @@ $RelatorioStateCopyWith(RelatorioState _, $Res Function(RelatorioState) __);
 /// Adds pattern-matching-related methods to [RelatorioState].
 extension RelatorioStatePatterns on RelatorioState {
 /// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
 @optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( RelatorioInitial value)?  initial,TResult Function( RelatorioLoading value)?  loading,TResult Function( RelatorioLoaded value)?  loaded,TResult Function( RelatorioError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
@@ -56,6 +68,18 @@ return error(_that);case _:
 }
 }
 /// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
 @optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( RelatorioInitial value)  initial,required TResult Function( RelatorioLoading value)  loading,required TResult Function( RelatorioLoaded value)  loaded,required TResult Function( RelatorioError value)  error,}){
 final _that = this;
 switch (_that) {
@@ -66,6 +90,17 @@ return loaded(_that);case RelatorioError():
 return error(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
 @optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( RelatorioInitial value)?  initial,TResult? Function( RelatorioLoading value)?  loading,TResult? Function( RelatorioLoaded value)?  loaded,TResult? Function( RelatorioError value)?  error,}){
 final _that = this;
 switch (_that) {
@@ -79,6 +114,17 @@ return error(_that);case _:
 }
 }
 /// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case RelatorioInitial() when initial != null:
@@ -91,6 +137,18 @@ return error(_that.message);case _:
 }
 }
 /// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
 @optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products)  loaded,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case RelatorioInitial():
@@ -100,6 +158,17 @@ return loaded(_that.entryInvoices,_that.exitInvoices,_that.products);case Relato
 return error(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case RelatorioInitial() when initial != null:
@@ -120,6 +189,8 @@ return error(_that.message);case _:
 class RelatorioInitial implements RelatorioState {
    RelatorioInitial();
   
+
+
 
 
 
@@ -150,6 +221,8 @@ String toString() {
 class RelatorioLoading implements RelatorioState {
    RelatorioLoading();
   
+
+
 
 
 
