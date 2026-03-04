@@ -9,6 +9,7 @@ import 'package:system_loja/screens/route/route_app.gr.dart';
 /// - Cadastro de Empresa
 /// - Cadastro de Produto
 /// - Cadastro de Nota Fiscal
+/// - Relatórios
 /// - Gestão de Usuários
 /// - Configurações do Sistema
 @RoutePage()
@@ -46,6 +47,13 @@ class HomeScreen extends StatelessWidget {
         icon: Icons.receipt_long,
         color: Colors.orange,
         onTap: () => _navigateToScreen(context, const SalesRoute()),
+      ),
+      _buildMenuCard(
+        context,
+        title: 'Relatórios',
+        icon: Icons.bar_chart,
+        color: Colors.deepPurple,
+        onTap: () => _navigateToScreen(context, const RelatoriosRoute()),
       ),
       _buildMenuCard(
         context,
