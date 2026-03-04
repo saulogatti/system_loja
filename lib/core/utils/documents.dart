@@ -32,16 +32,20 @@ class Cnpj extends Documents {
     final digits = cleanedValue.split('').map(int.parse).toList();
 
     // Validação do primeiro dígito verificador
-    final sum1 = List.generate(12, (i) => digits[i] * (5 - i % 8)).reduce((a, b) => a + b);
-    final checkDigit1 = (sum1 * 10 % 11) % 10;
+    final firstWeights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    final sum1 = List.generate(12, (i) => digits[i] * firstWeights[i]).reduce((a, b) => a + b);
+    final remainder1 = sum1 % 11;
+    final checkDigit1 = remainder1 < 2 ? 0 : 11 - remainder1;
 
     if (checkDigit1 != digits[12]) {
       return 'CNPJ inválido - primeiro dígito verificador incorreto';
     }
 
     // Validação do segundo dígito verificador
-    final sum2 = List.generate(13, (i) => digits[i] * (6 - i % 8)).reduce((a, b) => a + b);
-    final checkDigit2 = (sum2 * 10 % 11) % 10;
+    final secondWeights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    final sum2 = List.generate(13, (i) => digits[i] * secondWeights[i]).reduce((a, b) => a + b);
+    final remainder2 = sum2 % 11;
+    final checkDigit2 = remainder2 < 2 ? 0 : 11 - remainder2;
 
     if (checkDigit2 != digits[13]) {
       return 'CNPJ inválido - segundo dígito verificador incorreto';

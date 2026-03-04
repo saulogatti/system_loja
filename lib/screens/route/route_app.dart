@@ -21,7 +21,7 @@ class RouteApp extends RootStackRouter {
               initial: true,
               maintainState: false,
             ),
-        
+
             AutoRoute(
               page: ProductInfoRoute.page,
               title: (context, data) => 'Cadastro de Produto',
@@ -29,8 +29,8 @@ class RouteApp extends RootStackRouter {
             ),
           ],
         ),
-        AutoRoute(page: SalesRoute.page, title: (context, data) => 'Vendas'),
-        AutoRoute(page: SettingsRoute.page, title: (context, data) => 'Configurações'),
+        AutoRoute(page: SalesRoute.page, title: (context, data) => 'Vendas', maintainState: false),
+        AutoRoute(page: SettingsRoute.page, title: (context, data) => 'Configurações', maintainState: false),
       ],
     ),
 
