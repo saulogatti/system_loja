@@ -41,6 +41,8 @@ import 'package:system_loja/screens/products/product_screen.dart' as _i12;
 import 'package:system_loja/screens/relatorios/relatorio_screen.dart' as _i13;
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart' as _i26;
 import 'package:system_loja/screens/sales/sales_invoice_screen.dart' as _i14;
+import 'package:system_loja/screens/configuracoes/issuer_config_screen.dart'
+    as _i27;
 import 'package:system_loja/screens/sales/sales_screen.dart' as _i15;
 
 /// generated route for
@@ -534,6 +536,22 @@ class UsuarioRoute extends _i19.PageRouteInfo<void> {
     name,
     builder: (data) {
       return _i19.WrappedRoute(child: const _i18.UsuarioScreen());
+    },
+  );
+}
+
+/// generated route for
+/// [_i27.IssuerConfigScreen]
+class IssuerConfigRoute extends _i19.PageRouteInfo<void> {
+  const IssuerConfigRoute({List<_i19.PageRouteInfo>? children})
+    : super(IssuerConfigRoute.name, initialChildren: children);
+
+  static const String name = 'IssuerConfigRoute';
+
+  static _i19.PageInfo page = _i19.PageInfo(
+    name,
+    builder: (data) {
+      return const _i27.IssuerConfigScreen();
     },
   );
 }

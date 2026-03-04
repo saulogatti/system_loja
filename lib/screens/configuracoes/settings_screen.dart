@@ -104,6 +104,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: const Text('Configurações do Sistema'),
         ),
         TextButton(onPressed: () => context.router.push(const UsuarioRoute()), child: const Text('Usuários')),
+        TextButton(
+          onPressed: () => context.router.push(const IssuerConfigRoute()),
+          child: const Text('Empresa Emitente'),
+        ),
       ],
       body: BlocConsumer<SettingsBloc, SettingsState>(
         listener: (context, state) {
