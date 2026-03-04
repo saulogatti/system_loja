@@ -271,12 +271,10 @@ class $CompanyRecordsTable extends CompanyRecords
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
-  static const VerificationMeta _corporateNameMeta = const VerificationMeta(
-    'corporateName',
-  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String> corporateName = GeneratedColumn<String>(
-    'corporate_name',
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -333,7 +331,7 @@ class $CompanyRecordsTable extends CompanyRecords
   List<GeneratedColumn> get $columns => [
     address,
     cnpj,
-    corporateName,
+    name,
     email,
     id,
     lastUpdatedDate,
@@ -359,16 +357,13 @@ class $CompanyRecordsTable extends CompanyRecords
     } else if (isInserting) {
       context.missing(_cnpjMeta);
     }
-    if (data.containsKey('corporate_name')) {
+    if (data.containsKey('name')) {
       context.handle(
-        _corporateNameMeta,
-        corporateName.isAcceptableOrUnknown(
-          data['corporate_name']!,
-          _corporateNameMeta,
-        ),
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
       );
     } else if (isInserting) {
-      context.missing(_corporateNameMeta);
+      context.missing(_nameMeta);
     }
     if (data.containsKey('email')) {
       context.handle(
@@ -410,9 +405,9 @@ class $CompanyRecordsTable extends CompanyRecords
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      corporateName: attachedDatabase.typeMapping.read(
+      name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}corporate_name'],
+        data['${effectivePrefix}name'],
       )!,
       cnpj: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -453,7 +448,7 @@ class $CompanyRecordsTable extends CompanyRecords
 class CompanyRecordsCompanion extends UpdateCompanion<Company> {
   final Value<Address?> address;
   final Value<String> cnpj;
-  final Value<String> corporateName;
+  final Value<String> name;
   final Value<String?> email;
   final Value<int> id;
   final Value<DateTime?> lastUpdatedDate;
@@ -461,7 +456,7 @@ class CompanyRecordsCompanion extends UpdateCompanion<Company> {
   const CompanyRecordsCompanion({
     this.address = const Value.absent(),
     this.cnpj = const Value.absent(),
-    this.corporateName = const Value.absent(),
+    this.name = const Value.absent(),
     this.email = const Value.absent(),
     this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
@@ -470,17 +465,17 @@ class CompanyRecordsCompanion extends UpdateCompanion<Company> {
   CompanyRecordsCompanion.insert({
     this.address = const Value.absent(),
     required String cnpj,
-    required String corporateName,
+    required String name,
     this.email = const Value.absent(),
     this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
     this.registrationDate = const Value.absent(),
   }) : cnpj = Value(cnpj),
-       corporateName = Value(corporateName);
+       name = Value(name);
   static Insertable<Company> custom({
     Expression<String>? address,
     Expression<String>? cnpj,
-    Expression<String>? corporateName,
+    Expression<String>? name,
     Expression<String>? email,
     Expression<int>? id,
     Expression<DateTime>? lastUpdatedDate,
@@ -489,7 +484,7 @@ class CompanyRecordsCompanion extends UpdateCompanion<Company> {
     return RawValuesInsertable({
       if (address != null) 'address': address,
       if (cnpj != null) 'cnpj': cnpj,
-      if (corporateName != null) 'corporate_name': corporateName,
+      if (name != null) 'name': name,
       if (email != null) 'email': email,
       if (id != null) 'id': id,
       if (lastUpdatedDate != null) 'last_updated_date': lastUpdatedDate,
@@ -500,7 +495,7 @@ class CompanyRecordsCompanion extends UpdateCompanion<Company> {
   CompanyRecordsCompanion copyWith({
     Value<Address?>? address,
     Value<String>? cnpj,
-    Value<String>? corporateName,
+    Value<String>? name,
     Value<String?>? email,
     Value<int>? id,
     Value<DateTime?>? lastUpdatedDate,
@@ -509,7 +504,7 @@ class CompanyRecordsCompanion extends UpdateCompanion<Company> {
     return CompanyRecordsCompanion(
       address: address ?? this.address,
       cnpj: cnpj ?? this.cnpj,
-      corporateName: corporateName ?? this.corporateName,
+      name: name ?? this.name,
       email: email ?? this.email,
       id: id ?? this.id,
       lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
@@ -528,8 +523,8 @@ class CompanyRecordsCompanion extends UpdateCompanion<Company> {
     if (cnpj.present) {
       map['cnpj'] = Variable<String>(cnpj.value);
     }
-    if (corporateName.present) {
-      map['corporate_name'] = Variable<String>(corporateName.value);
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
     }
     if (email.present) {
       map['email'] = Variable<String>(email.value);
@@ -551,7 +546,7 @@ class CompanyRecordsCompanion extends UpdateCompanion<Company> {
     return (StringBuffer('CompanyRecordsCompanion(')
           ..write('address: $address, ')
           ..write('cnpj: $cnpj, ')
-          ..write('corporateName: $corporateName, ')
+          ..write('name: $name, ')
           ..write('email: $email, ')
           ..write('id: $id, ')
           ..write('lastUpdatedDate: $lastUpdatedDate, ')
@@ -3239,7 +3234,7 @@ typedef $$CompanyRecordsTableCreateCompanionBuilder =
     CompanyRecordsCompanion Function({
       Value<Address?> address,
       required String cnpj,
-      required String corporateName,
+      required String name,
       Value<String?> email,
       Value<int> id,
       Value<DateTime?> lastUpdatedDate,
@@ -3249,7 +3244,7 @@ typedef $$CompanyRecordsTableUpdateCompanionBuilder =
     CompanyRecordsCompanion Function({
       Value<Address?> address,
       Value<String> cnpj,
-      Value<String> corporateName,
+      Value<String> name,
       Value<String?> email,
       Value<int> id,
       Value<DateTime?> lastUpdatedDate,
@@ -3276,8 +3271,8 @@ class $$CompanyRecordsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get corporateName => $composableBuilder(
-    column: $table.corporateName,
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3321,8 +3316,8 @@ class $$CompanyRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get corporateName => $composableBuilder(
-    column: $table.corporateName,
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3362,10 +3357,8 @@ class $$CompanyRecordsTableAnnotationComposer
   GeneratedColumn<String> get cnpj =>
       $composableBuilder(column: $table.cnpj, builder: (column) => column);
 
-  GeneratedColumn<String> get corporateName => $composableBuilder(
-    column: $table.corporateName,
-    builder: (column) => column,
-  );
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
 
   GeneratedColumn<String> get email =>
       $composableBuilder(column: $table.email, builder: (column) => column);
@@ -3419,7 +3412,7 @@ class $$CompanyRecordsTableTableManager
               ({
                 Value<Address?> address = const Value.absent(),
                 Value<String> cnpj = const Value.absent(),
-                Value<String> corporateName = const Value.absent(),
+                Value<String> name = const Value.absent(),
                 Value<String?> email = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
@@ -3427,7 +3420,7 @@ class $$CompanyRecordsTableTableManager
               }) => CompanyRecordsCompanion(
                 address: address,
                 cnpj: cnpj,
-                corporateName: corporateName,
+                name: name,
                 email: email,
                 id: id,
                 lastUpdatedDate: lastUpdatedDate,
@@ -3437,7 +3430,7 @@ class $$CompanyRecordsTableTableManager
               ({
                 Value<Address?> address = const Value.absent(),
                 required String cnpj,
-                required String corporateName,
+                required String name,
                 Value<String?> email = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
@@ -3445,7 +3438,7 @@ class $$CompanyRecordsTableTableManager
               }) => CompanyRecordsCompanion.insert(
                 address: address,
                 cnpj: cnpj,
-                corporateName: corporateName,
+                name: name,
                 email: email,
                 id: id,
                 lastUpdatedDate: lastUpdatedDate,

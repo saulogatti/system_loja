@@ -52,17 +52,14 @@ class _CompanyEditViewState extends State<CompanyEditView> {
             }
           },
           companyError: (message) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(message), backgroundColor: Colors.red),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
           },
         );
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Editar Empresa'),
-          leading: const AutoLeadingButton(),
-        ),
+        appBar: AppBar(title: const Text('Editar Empresa'), leading: const AutoLeadingButton()),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Form(
@@ -70,10 +67,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  'Editar Empresa',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
+                const Text('Editar Empresa', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: _corporateNameController,
@@ -101,10 +95,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
                   style: TextStyle(color: Colors.grey[600]),
                 ),
                 const SizedBox(height: 16),
-                TextFormFieldEmail(
-                  emailController: _emailController,
-                  isEditing: true,
-                ),
+                TextFormFieldEmail(emailController: _emailController, isEditing: true),
                 const SizedBox(height: 16),
                 AddressForm(
                   streetController: _streetController,
@@ -167,27 +158,15 @@ class _CompanyEditViewState extends State<CompanyEditView> {
   @override
   void initState() {
     super.initState();
-    _corporateNameController = TextEditingController(
-      text: widget.company.corporateName,
-    );
+    _corporateNameController = TextEditingController(text: widget.company.name);
     // Formata o CNPJ para exibição
-    _cnpjController = TextEditingController(
-      text: _formatCnpjForDisplay(widget.company.cnpj),
-    );
+    _cnpjController = TextEditingController(text: _formatCnpjForDisplay(widget.company.cnpj));
     _emailController = TextEditingController(text: widget.company.email ?? '');
-    _streetController = TextEditingController(
-      text: widget.company.address.street,
-    );
-    _zipCodeController = TextEditingController(
-      text: widget.company.address.zipCode,
-    );
-    _neighborhoodController = TextEditingController(
-      text: widget.company.address.neighborhood,
-    );
+    _streetController = TextEditingController(text: widget.company.address.street);
+    _zipCodeController = TextEditingController(text: widget.company.address.zipCode);
+    _neighborhoodController = TextEditingController(text: widget.company.address.neighborhood);
     _cityController = TextEditingController(text: widget.company.address.city);
-    _stateController = TextEditingController(
-      text: widget.company.address.state,
-    );
+    _stateController = TextEditingController(text: widget.company.address.state);
   }
 
   Widget _buildInfoRow(String label, String value) {
@@ -216,20 +195,11 @@ class _CompanyEditViewState extends State<CompanyEditView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Informações do Sistema',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+            const Text('Informações do Sistema', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
             _buildInfoRow('ID', widget.company.id.toString()),
-            _buildInfoRow(
-              'Data de Cadastro',
-              widget.company.registrationDate.toFormattedDate(),
-            ),
-            _buildInfoRow(
-              'Última Atualização',
-              widget.company.lastUpdatedDate.toFormattedDate(),
-            ),
+            _buildInfoRow('Data de Cadastro', widget.company.registrationDate.toFormattedDate()),
+            _buildInfoRow('Última Atualização', widget.company.lastUpdatedDate.toFormattedDate()),
           ],
         ),
       ),
@@ -260,10 +230,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
   void _salvarAlteracoes() {
     if (_formKey.currentState!.validate()) {
       // Normaliza o CNPJ (remove caracteres não numéricos)
-      final cnpjLimpo = widget.company.cnpj.replaceAll(
-        Constants.nonNumericRegExp,
-        '',
-      );
+      final cnpjLimpo = widget.company.cnpj.replaceAll(Constants.nonNumericRegExp, '');
 
       // Converte strings vazias em null para campos opcionais
       final email = _emailController.text.trim();
@@ -274,7 +241,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
       final state = _stateController.text.trim();
       final updatedCompany = Company(
         id: widget.company.id,
-        corporateName: _corporateNameController.text.trim(),
+        name: _corporateNameController.text.trim(),
         cnpj: cnpjLimpo, // CNPJ normalizado (apenas dígitos)
         email: email.isEmpty ? null : email,
         address: Address(
@@ -286,9 +253,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
         ),
       );
 
-      context.read<CompanyBloc>().add(
-        CompanyBlocEvent.updateCompany(company: updatedCompany),
-      );
+      context.read<CompanyBloc>().add(CompanyBlocEvent.updateCompany(company: updatedCompany));
     }
   }
 }

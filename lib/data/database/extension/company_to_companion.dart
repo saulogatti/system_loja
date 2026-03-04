@@ -11,7 +11,7 @@ extension CompanyToCompanion on Company {
     if (forUpdate) {
       return CompanyRecordsCompanion(
         id: Value(id),
-        corporateName: Value(corporateName),
+        name: Value(name),
         cnpj: Value(cnpj),
         email: Value(email),
         address: Value(address),
@@ -20,7 +20,7 @@ extension CompanyToCompanion on Company {
       );
     }
     return CompanyRecordsCompanion.insert(
-      corporateName: corporateName,
+      name: name,
       cnpj: cnpj,
       email: Value(email),
       address: Value(address),

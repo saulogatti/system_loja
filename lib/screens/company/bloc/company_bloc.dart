@@ -140,7 +140,7 @@ class CompanyBloc extends Bloc<CompanyBlocEvent, CompanyBlocState> {
     final result = await _companyRepository.saveCompany(
       Company(
         id: 0,
-        corporateName: event.corporateName,
+        name: event.corporateName,
         cnpj: event.cnpj,
         email: event.email,
         address: Address(

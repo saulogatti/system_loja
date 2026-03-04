@@ -8,14 +8,14 @@ part 'customer.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Customer extends PeopleData {
   final String cpf;
-  final String? phone;
+
   final Address address;
   Customer({
-    required super.id,
+    super.id,
     required super.name,
     super.email,
     required this.cpf,
-    this.phone,
+    super.phone,
     Address? address,
 
     super.registrationDate,
@@ -23,13 +23,12 @@ class Customer extends PeopleData {
   }) : address = address ?? Address();
 
   /// Cria um objeto a partir de JSON
-  factory Customer.fromJson(Map<String, dynamic> json) =>
-      _$CustomerFromJson(json);
+  factory Customer.fromJson(Map<String, dynamic> json) => _$CustomerFromJson(json);
 
   /// Converte o objeto para JSON
   @override
   Map<String, dynamic> toJson() => _$CustomerToJson(this);
 
   @override
-  String toString() => 'Customer(cpf: $cpf, phone: $phone, address: $address)';
+  String toString() => 'Customer(name: $name, cpf: $cpf, email: $email, phone: $phone, address: $address)';
 }

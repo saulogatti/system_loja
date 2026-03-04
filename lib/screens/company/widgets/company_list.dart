@@ -91,7 +91,7 @@ class _CompanyListState extends State<CompanyList> {
                     final company = _companies.values.elementAt(index);
                     return CardListItem(
                       colorAvatar: Colors.teal,
-                      title: company.corporateName,
+                      title: company. name,
                       subTitle:
                           'CNPJ: ${company.cnpj}\n${company.email ?? "Sem email"}\n${company.address.city}',
                       onTap: () => widget.onCompanyTap(company),
@@ -112,7 +112,7 @@ class _CompanyListState extends State<CompanyList> {
       builder: (context) => AlertDialog(
         title: const Text('Confirmar Exclusão'),
         content: Text(
-          'Tem certeza que deseja excluir a empresa "${company.corporateName}"?\n\nEsta ação não pode ser desfeita.',
+          'Tem certeza que deseja excluir a empresa "${company.name}"?\n\nEsta ação não pode ser desfeita.',
         ),
         actions: [
           TextButton(

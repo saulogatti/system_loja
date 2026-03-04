@@ -253,55 +253,18 @@ class LogsAnalyticsRoute extends _i19.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i10.PersonRegistrationView]
-class PersonRegistrationRoute
-    extends _i19.PageRouteInfo<PersonRegistrationRouteArgs> {
-  PersonRegistrationRoute({
-    _i20.Key? key,
-    _i10.OnPersonRegistrationValidated? onValidated,
-    List<_i19.PageRouteInfo>? children,
-  }) : super(
-         PersonRegistrationRoute.name,
-         args: PersonRegistrationRouteArgs(key: key, onValidated: onValidated),
-         initialChildren: children,
-       );
+class PersonRegistrationRoute extends _i19.PageRouteInfo<void> {
+  const PersonRegistrationRoute({List<_i19.PageRouteInfo>? children})
+    : super(PersonRegistrationRoute.name, initialChildren: children);
 
   static const String name = 'PersonRegistrationRoute';
 
   static _i19.PageInfo page = _i19.PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<PersonRegistrationRouteArgs>(
-        orElse: () => const PersonRegistrationRouteArgs(),
-      );
-      return _i10.PersonRegistrationView(
-        key: args.key,
-        onValidated: args.onValidated,
-      );
+      return const _i10.PersonRegistrationView();
     },
   );
-}
-
-class PersonRegistrationRouteArgs {
-  const PersonRegistrationRouteArgs({this.key, this.onValidated});
-
-  final _i20.Key? key;
-
-  final _i10.OnPersonRegistrationValidated? onValidated;
-
-  @override
-  String toString() {
-    return 'PersonRegistrationRouteArgs{key: $key, onValidated: $onValidated}';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! PersonRegistrationRouteArgs) return false;
-    return key == other.key && onValidated == other.onValidated;
-  }
-
-  @override
-  int get hashCode => key.hashCode ^ onValidated.hashCode;
 }
 
 /// generated route for

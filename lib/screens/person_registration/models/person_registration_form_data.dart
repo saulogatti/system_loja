@@ -1,3 +1,6 @@
+import 'package:system_loja/core/models/address.dart';
+import 'package:system_loja/core/models/company.dart';
+import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/utils/documents.dart';
 
 /// Representa os dados digitados no formulário de cadastro de pessoa.
@@ -44,6 +47,40 @@ class PersonRegistrationFormData {
     required this.city,
     required this.state,
   });
+
+  Company retrieveCompany() {
+    return Company(
+      name: name,
+      cnpj: document,
+      email: email,
+      phone: phone,
+      address: Address(
+        street: street,
+        zipCode: zipCode,
+        neighborhood: neighborhood,
+        city: city,
+        state: state,
+      ),
+      id: null,
+    );
+  }
+
+  Customer retrieveCustomer() {
+    return Customer(
+      name: name,
+      cpf: document,
+      email: email,
+      phone: phone,
+      address: Address(
+        street: street,
+        zipCode: zipCode,
+        neighborhood: neighborhood,
+        city: city,
+        state: state,
+      ),
+      id: null,
+    );
+  }
 }
 
 /// Define os tipos de pessoa suportados na tela de cadastro.
