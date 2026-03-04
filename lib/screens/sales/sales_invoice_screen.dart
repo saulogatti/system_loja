@@ -135,7 +135,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                   labelText: 'Cliente',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.person),
-                  helperText: 'Selecione cliente ou empresa',
+                  helperText: 'Preencha cliente ou empresa *',
                 ),
                 items: widget.customers.values.map((cliente) {
                   return DropdownMenuItem(
@@ -159,7 +159,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                   labelText: 'Empresa',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.business),
-                  helperText: 'Selecione cliente ou empresa',
+                  helperText: 'Preencha cliente ou empresa *',
                 ),
                 items: widget.companies.values.map((empresa) {
                   return DropdownMenuItem(

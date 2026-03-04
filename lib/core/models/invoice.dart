@@ -103,7 +103,15 @@ class InvoiceData {
     DateTime? issueDate,
     this.type = InvoiceType.exit,
   }) : totalValue = items.fold(0.0, (sum, item) => sum + item.totalValue),
-       issueDate = issueDate ?? DateTime.now();
+       issueDate = issueDate ?? DateTime.now() {
+    final withoutLink = customerId == null && companyId == null;
+    final withBothLinks = customerId != null && companyId != null;
+    if (withoutLink || withBothLinks) {
+      throw ArgumentError(
+        'Informe exatamente um vínculo: customerId ou companyId.',
+      );
+    }
+  }
 
   factory InvoiceData.fromJson(Map<String, dynamic> json) =>
       _$InvoiceDataFromJson(json);
