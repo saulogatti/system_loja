@@ -12,8 +12,9 @@ Company _$CompanyFromJson(Map<String, dynamic> json) => $checkedCreate(
   ($checkedConvert) {
     final val = Company(
       id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
-      corporateName: $checkedConvert('corporateName', (v) => v as String),
+      name: $checkedConvert('name', (v) => v as String),
       cnpj: $checkedConvert('cnpj', (v) => v as String),
+      phone: $checkedConvert('phone', (v) => v as String?),
       email: $checkedConvert('email', (v) => v as String?),
       address: $checkedConvert(
         'address',
@@ -40,8 +41,9 @@ Map<String, dynamic> _$CompanyToJson(Company instance) => <String, dynamic>{
   'id': instance.id,
   'registration_date': instance.registrationDate.toIso8601String(),
   'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
-  'corporateName': instance.corporateName,
-  'cnpj': instance.cnpj,
+  'name': instance.name,
   'email': instance.email,
+  'phone': instance.phone,
+  'cnpj': instance.cnpj,
   'address': instance.address.toJson(),
 };

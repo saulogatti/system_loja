@@ -13,6 +13,7 @@ import 'package:system_loja/screens/company/bloc/company_bloc.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/user_cubit.dart';
 import 'package:system_loja/screens/customer/bloc/customer_bloc.dart';
+import 'package:system_loja/screens/person_registration/bloc/person_bloc.dart';
 import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
@@ -46,6 +47,10 @@ class SystemLojaApp extends StatelessWidget {
         ),
         BlocProvider<UserCubit>(create: (context) => UserCubit(appInjection.get<IUserRepository>())),
         BlocProvider<LogsCubit>(create: (context) => LogsCubit(appInjection.get<ILogRepository>())),
+        BlocProvider<PersonBloc>(
+          create: (context) =>
+              PersonBloc(appInjection.get<ICustomerRepository>(), appInjection.get<ICompanyRepository>()),
+        ),
       ],
       child: ValueListenableBuilder(
         valueListenable: appInjection.get<SettingsService>().currentThemeNotifier,

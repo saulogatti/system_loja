@@ -39,15 +39,7 @@ part 'app_database.g.dart';
     InvoiceItemsRecords,
     AddressRecords,
   ],
-  daos: [
-    CategoryDao,
-    CompanyDao,
-    CustomerDao,
-    ProductDao,
-    InvoiceDao,
-    InvoiceItemDao,
-    AddressDao,
-  ],
+  daos: [CategoryDao, CompanyDao, CustomerDao, ProductDao, InvoiceDao, InvoiceItemDao, AddressDao],
 )
 class AppDatabase extends _$AppDatabase {
   static final _nameBd = 'system_loja';
@@ -87,14 +79,6 @@ class AppDatabase extends _$AppDatabase {
         // - customerId/customerName/customerCpf nullable
         // - companyId nullable (novo campo)
         // - type com default 'exit' (todas as notas antigas são de saída)
-        await m.alterTable(
-          TableMigration(
-            invoicesRecords,
-            columnTransformer: {
-              invoicesRecords.type: const Constant<String>('exit'),
-            },
-          ),
-        );
       }
     },
   );
@@ -165,14 +149,10 @@ class AppDatabase extends _$AppDatabase {
             state: row.data['state'] as String? ?? '',
           ),
           registrationDate: (row.data['registration_date'] as int) != 0
-              ? DateTime.fromMillisecondsSinceEpoch(
-                  (row.data['registration_date'] as int) * 1000,
-                )
+              ? DateTime.fromMillisecondsSinceEpoch((row.data['registration_date'] as int) * 1000)
               : DateTime.now(),
           lastUpdatedDate: (row.data['last_updated_date'] as int?) != null
-              ? DateTime.fromMillisecondsSinceEpoch(
-                  (row.data['last_updated_date'] as int) * 1000,
-                )
+              ? DateTime.fromMillisecondsSinceEpoch((row.data['last_updated_date'] as int) * 1000)
               : null,
         );
 
@@ -186,15 +166,10 @@ class AppDatabase extends _$AppDatabase {
     }
   }
 
-  static QueryExecutor _openConnection(
-    Future<Object> Function()? applicationSupportDirectory,
-  ) {
+  static QueryExecutor _openConnection(Future<Object> Function()? applicationSupportDirectory) {
     return driftDatabase(
       name: _nameBd,
-      web: DriftWebOptions(
-        sqlite3Wasm: Uri.parse('sqlite3.wasm'),
-        driftWorker: Uri.parse('drift_worker.js'),
-      ),
+      web: DriftWebOptions(sqlite3Wasm: Uri.parse('sqlite3.wasm'), driftWorker: Uri.parse('drift_worker.js')),
       native: DriftNativeOptions(
         // By default, `driftDatabase` from `package:drift_flutter` stores the
         // database files in `getApplicationDocumentsDirectory()`.
@@ -202,7 +177,6 @@ class AppDatabase extends _$AppDatabase {
       ),
     );
   }
- 
 }
 
 extension on Address {

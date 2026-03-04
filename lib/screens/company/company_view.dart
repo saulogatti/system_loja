@@ -194,7 +194,7 @@ class _CompanyViewState extends State<CompanyView> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(company.corporateName),
+        title: Text(company.name),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

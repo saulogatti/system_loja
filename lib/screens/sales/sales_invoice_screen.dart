@@ -60,10 +60,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final valorTotal = _itensSelecionados.product.values.fold<double>(0.0, (
-      previousValue,
-      item,
-    ) {
+    final valorTotal = _itensSelecionados.product.values.fold<double>(0.0, (previousValue, item) {
       final productItem = item.product;
       final quantidade = item.quantity;
       return previousValue + (productItem.price * quantidade);
@@ -93,17 +90,14 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.numbers),
                       ),
-                      validator: (value) =>
-                          validateRequired(value, 'Número da nota'),
+                      validator: (value) => validateRequired(value, 'Número da nota'),
                     ),
                   ),
                   IconButton(
                     onPressed: () {
                       setState(() {
                         _enableCodeGeneration = !_enableCodeGeneration;
-                        _numeroNotaController.text = _enableCodeGeneration
-                            ? kStringGenerate
-                            : '';
+                        _numeroNotaController.text = _enableCodeGeneration ? kStringGenerate : '';
                       });
                     },
                     icon: const Icon(Icons.generating_tokens_outlined),
@@ -144,10 +138,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                     prefixIcon: Icon(Icons.person),
                   ),
                   items: widget.customers.values.map((cliente) {
-                    return DropdownMenuItem(
-                      value: cliente,
-                      child: Text('${cliente.name} (${cliente.cpf})'),
-                    );
+                    return DropdownMenuItem(value: cliente, child: Text('${cliente.name} (${cliente.cpf})'));
                   }).toList(),
                   onChanged: (value) {
                     setState(() {
@@ -170,10 +161,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                     prefixIcon: Icon(Icons.business),
                   ),
                   items: widget.companies.values.map((empresa) {
-                    return DropdownMenuItem(
-                      value: empresa,
-                      child: Text('${empresa.corporateName} (${empresa.cnpj})'),
-                    );
+                    return DropdownMenuItem(value: empresa, child: Text('${empresa.name} (${empresa.cnpj})'));
                   }).toList(),
                   onChanged: (value) {
                     setState(() {
@@ -197,10 +185,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                   helperText: 'Ex: Dinheiro, Cartão, Pix',
                 ),
                 items: widget.paymentMethods.map((paymentMethod) {
-                  return DropdownMenuItem(
-                    value: paymentMethod,
-                    child: Text(paymentMethod.name),
-                  );
+                  return DropdownMenuItem(value: paymentMethod, child: Text(paymentMethod.name));
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
@@ -218,10 +203,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Itens',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
+                  const Text('Itens', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   ElevatedButton.icon(
                     onPressed: _addItem,
                     icon: const Icon(Icons.add),
@@ -234,10 +216,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                 const Center(
                   child: Padding(
                     padding: EdgeInsets.all(32.0),
-                    child: Text(
-                      'Nenhum item adicionado',
-                      style: TextStyle(color: Colors.grey),
-                    ),
+                    child: Text('Nenhum item adicionado', style: TextStyle(color: Colors.grey)),
                   ),
                 )
               else
@@ -276,13 +255,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Valor Total:',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    const Text('Valor Total:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                     Text(
                       'R\$ ${valorTotal.toStringAsFixed(2)}',
                       style: TextStyle(
@@ -297,13 +270,8 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _salvarNotaFiscal,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                ),
-                child: const Text(
-                  'Salvar Nota Fiscal',
-                  style: TextStyle(fontSize: 16),
-                ),
+                style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
+                child: const Text('Salvar Nota Fiscal', style: TextStyle(fontSize: 16)),
               ),
             ],
           ),
@@ -332,16 +300,13 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
       int? quantidade = await _solicitarQuantidade(product);
       if (quantidade != null && quantidade > 0) {
         if (_itensSelecionados.product.containsKey(product.id)) {
-          quantidade =
-              _itensSelecionados.product[product.id]!.quantity + quantidade;
+          quantidade = _itensSelecionados.product[product.id]!.quantity + quantidade;
         }
         if (quantidade > product.stockQuantity) {
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                'Estoque insuficiente! Disponível: ${product.stockQuantity}',
-              ),
+              content: Text('Estoque insuficiente! Disponível: ${product.stockQuantity}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -349,10 +314,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
         }
 
         setState(() {
-          _itensSelecionados.product[product.id] = _ProductSelection(
-            product: product,
-            quantity: quantidade!,
-          );
+          _itensSelecionados.product[product.id] = _ProductSelection(product: product, quantity: quantidade!);
         });
       }
     }
@@ -364,30 +326,21 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
 
       if (isExit && _clienteSelecionado == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Erro: Selecione um cliente!'),
-            backgroundColor: Colors.red,
-          ),
+          const SnackBar(content: Text('Erro: Selecione um cliente!'), backgroundColor: Colors.red),
         );
         return;
       }
 
       if (!isExit && _empresaSelecionada == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Erro: Selecione uma empresa!'),
-            backgroundColor: Colors.red,
-          ),
+          const SnackBar(content: Text('Erro: Selecione uma empresa!'), backgroundColor: Colors.red),
         );
         return;
       }
 
       if (_itensSelecionados.product.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Erro: Adicione pelo menos um item!'),
-            backgroundColor: Colors.red,
-          ),
+          const SnackBar(content: Text('Erro: Adicione pelo menos um item!'), backgroundColor: Colors.red),
         );
         return;
       }
@@ -454,10 +407,7 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
           ElevatedButton(
             onPressed: () {
               if (formKey.currentState!.validate()) {
@@ -493,20 +443,13 @@ class _SelecionarProdutoDialog extends StatelessWidget {
             final product = products[index];
             return ListTile(
               title: Text(product.name),
-              subtitle: Text(
-                'R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}',
-              ),
+              subtitle: Text('R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}'),
               onTap: () => Navigator.pop(context, product),
             );
           },
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancelar'),
-        ),
-      ],
+      actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar'))],
     );
   }
 }

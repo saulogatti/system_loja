@@ -151,46 +151,50 @@ class _CustomerViewState extends State<CustomerView> {
 
   /// Constrói a view de adição de cliente com lista e busca
   Widget _buildAddView(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Formulário de cadastro
-                CustomerForm(
-                  formKey: _formKey,
-                  nomeController: _nomeController,
-                  cpfController: _cpfController,
-                  emailController: _emailController,
-                  telefoneController: _telefoneController,
-                  streetController: _streetController,
-                  zipCodeController: _zipCodeController,
-                  neighborhoodController: _neighborhoodController,
-                  cityController: _cityController,
-                  stateController: _stateController,
-                  onSubmit: _adicionarCliente,
-                ),
-                const SizedBox(height: 32),
-                const Divider(),
-                const SizedBox(height: 32),
-                // Seção de busca por CPF
-                CustomerSearchSection(
-                  searchCpfController: _searchCpfController,
-                  onSearch: _buscarClientePorCpf,
-                ),
-                const SizedBox(height: 32),
-                const Divider(),
-                const SizedBox(height: 32),
-                // Lista de clientes
-                CustomerList(onCustomerTap: _mostrarDetalhesCliente),
-              ],
+    return Material(
+      color: Theme.of(context).colorScheme.surface,
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Formulário de cadastro
+                  CustomerForm(
+                    formKey: _formKey,
+                    nomeController: _nomeController,
+                    cpfController: _cpfController,
+                    emailController: _emailController,
+                    telefoneController: _telefoneController,
+                    streetController: _streetController,
+                    zipCodeController: _zipCodeController,
+                    neighborhoodController: _neighborhoodController,
+                    cityController: _cityController,
+                    stateController: _stateController,
+                    onSubmit: _adicionarCliente,
+                  ),
+                  const SizedBox(height: 32),
+                  const Divider(),
+                  const SizedBox(height: 32),
+                  // Seção de busca por CPF
+                  CustomerSearchSection(
+                    searchCpfController: _searchCpfController,
+                    onSearch: _buscarClientePorCpf,
+                  ),
+                  const SizedBox(height: 32),
+                  const Divider(),
+                  const SizedBox(height: 32),
+                  // Lista de clientes
+                  CustomerList(onCustomerTap: _mostrarDetalhesCliente),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

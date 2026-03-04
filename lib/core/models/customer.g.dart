@@ -43,7 +43,7 @@ Map<String, dynamic> _$CustomerToJson(Customer instance) => <String, dynamic>{
   'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
   'name': instance.name,
   'email': instance.email,
-  'cpf': instance.cpf,
   'phone': instance.phone,
+  'cpf': instance.cpf,
   'address': instance.address.toJson(),
 };
