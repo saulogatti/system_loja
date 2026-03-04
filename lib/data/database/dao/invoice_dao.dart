@@ -164,8 +164,12 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
       for (final item in invoice.data.items) {
         await invoiceItemDao.insertInvoiceItem(item, invoiceId: invoiceId);
 
-        // Atualiza o estoque do produto (remove a quantidade vendida)
-        await productDao.updateStockQuantity(item.productId, -item.quantity);
+        // Atualiza o estoque: soma para nota de entrada, subtrai para nota de saída
+        final quantityChange =
+            invoice.data.type == InvoiceType.entry
+                ? item.quantity
+                : -item.quantity;
+        await productDao.updateStockQuantity(item.productId, quantityChange);
       }
 
       return invoiceId;
