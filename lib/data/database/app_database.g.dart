@@ -401,10 +401,6 @@ class $CompanyRecordsTable extends CompanyRecords
   Company map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Company(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
       name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}name'],
@@ -412,6 +408,10 @@ class $CompanyRecordsTable extends CompanyRecords
       cnpj: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}cnpj'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
       )!,
       email: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -728,22 +728,22 @@ class $CustomerRecordsTable extends CustomerRecords
   Customer map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Customer(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
       name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}name'],
+      )!,
+      cpf: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cpf'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
       )!,
       email: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}email'],
       ),
-      cpf: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}cpf'],
-      )!,
       phone: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}phone'],
@@ -1128,6 +1128,10 @@ class $ProductsRecordsTable extends ProductsRecords
         DriftSqlType.int,
         data['${effectivePrefix}stock_quantity'],
       )!,
+      code: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}code'],
+      )!,
       lastUpdatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_updated_date'],
@@ -1136,10 +1140,6 @@ class $ProductsRecordsTable extends ProductsRecords
         DriftSqlType.int,
         data['${effectivePrefix}category_id'],
       ),
-      code: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}code'],
-      )!,
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -1618,16 +1618,16 @@ class $InvoicesRecordsTable extends InvoicesRecords
 }
 
 class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
-  /// CPF do cliente (desnormalizado; null para notas de entrada).
+  /// CPF do cliente (desnormalizado; null quando vínculo for empresa).
   final String? customerCpf;
 
-  /// ID do cliente (null para notas de entrada).
+  /// ID do cliente (null quando vínculo for empresa).
   final int? customerId;
 
-  /// Nome do cliente (desnormalizado; null para notas de entrada).
+  /// Nome do cliente (desnormalizado; null quando vínculo for empresa).
   final String? customerName;
 
-  /// ID da empresa fornecedora (null para notas de saída).
+  /// ID da empresa vinculada (null quando vínculo for cliente).
   final int? companyId;
   final int id;
 

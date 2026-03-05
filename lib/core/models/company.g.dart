@@ -11,9 +11,9 @@ Company _$CompanyFromJson(Map<String, dynamic> json) => $checkedCreate(
   json,
   ($checkedConvert) {
     final val = Company(
-      id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
       name: $checkedConvert('name', (v) => v as String),
       cnpj: $checkedConvert('cnpj', (v) => v as String),
+      id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
       phone: $checkedConvert('phone', (v) => v as String?),
       email: $checkedConvert('email', (v) => v as String?),
       address: $checkedConvert(

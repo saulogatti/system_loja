@@ -11,10 +11,10 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) => $checkedCreate(
   json,
   ($checkedConvert) {
     final val = Customer(
-      id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
       name: $checkedConvert('name', (v) => v as String),
-      email: $checkedConvert('email', (v) => v as String?),
       cpf: $checkedConvert('cpf', (v) => v as String),
+      id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
+      email: $checkedConvert('email', (v) => v as String?),
       phone: $checkedConvert('phone', (v) => v as String?),
       address: $checkedConvert(
         'address',
