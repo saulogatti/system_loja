@@ -4,19 +4,18 @@ import 'package:system_loja/core/models/invoice_type.dart';
 /// Tabela para armazenar notas fiscais no Drift.
 ///
 /// Regra exclusiva: exatamente um de [customerId] ou [companyId] deve ser
-/// preenchido. Para notas de saída ([InvoiceType.exit]) informe [customerId];
-/// para notas de entrada ([InvoiceType.entry]) informe [companyId].
+/// preenchido, independente do [type].
 class InvoicesRecords extends Table {
-  /// CPF do cliente (desnormalizado; null para notas de entrada).
+  /// CPF do cliente (desnormalizado; null quando vínculo for empresa).
   TextColumn get customerCpf => text().named('cliente_cpf').nullable()();
 
-  /// ID do cliente (null para notas de entrada).
+  /// ID do cliente (null quando vínculo for empresa).
   IntColumn get customerId => integer().named('cliente_id').nullable()();
 
-  /// Nome do cliente (desnormalizado; null para notas de entrada).
+  /// Nome do cliente (desnormalizado; null quando vínculo for empresa).
   TextColumn get customerName => text().named('cliente_nome').nullable()();
 
-  /// ID da empresa fornecedora (null para notas de saída).
+  /// ID da empresa vinculada (null quando vínculo for cliente).
   IntColumn get companyId => integer().named('empresa_id').nullable()();
 
   IntColumn get id => integer().autoIncrement()();

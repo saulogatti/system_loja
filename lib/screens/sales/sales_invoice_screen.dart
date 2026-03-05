@@ -129,52 +129,53 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              if (_invoiceType == InvoiceType.exit)
-                DropdownButtonFormField<Customer>(
-                  initialValue: _clienteSelecionado,
-                  decoration: const InputDecoration(
-                    labelText: 'Cliente *',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.person),
-                  ),
-                  items: widget.customers.values.map((cliente) {
-                    return DropdownMenuItem(value: cliente, child: Text('${cliente.name} (${cliente.cpf})'));
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _clienteSelecionado = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (_invoiceType == InvoiceType.exit && value == null) {
-                      return 'Selecione um cliente';
-                    }
-                    return null;
-                  },
-                )
-              else
-                DropdownButtonFormField<Company>(
-                  initialValue: _empresaSelecionada,
-                  decoration: const InputDecoration(
-                    labelText: 'Empresa *',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.business),
-                  ),
-                  items: widget.companies.values.map((empresa) {
-                    return DropdownMenuItem(value: empresa, child: Text('${empresa.name} (${empresa.cnpj})'));
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _empresaSelecionada = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (_invoiceType == InvoiceType.entry && value == null) {
-                      return 'Selecione uma empresa';
-                    }
-                    return null;
-                  },
+              DropdownButtonFormField<Customer>(
+                initialValue: _clienteSelecionado,
+                decoration: const InputDecoration(
+                  labelText: 'Cliente',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.person),
+                  helperText: 'Preencha cliente ou empresa *',
                 ),
+                items: widget.customers.values.map((cliente) {
+                  return DropdownMenuItem(
+                    value: cliente,
+                    child: Text('${cliente.name} (${cliente.cpf})'),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _clienteSelecionado = value;
+                    if (value != null) {
+                      _empresaSelecionada = null;
+                    }
+                  });
+                },
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<Company>(
+                initialValue: _empresaSelecionada,
+                decoration: const InputDecoration(
+                  labelText: 'Empresa',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.business),
+                  helperText: 'Preencha cliente ou empresa *',
+                ),
+                items: widget.companies.values.map((empresa) {
+                  return DropdownMenuItem(
+                    value: empresa,
+                    child: Text('${empresa.name} (${empresa.cnpj})'),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _empresaSelecionada = value;
+                    if (value != null) {
+                      _clienteSelecionado = null;
+                    }
+                  });
+                },
+              ),
               const SizedBox(height: 16),
               DropdownButtonFormField<PaymentMethodType>(
                 initialValue: _paymentType,
@@ -322,18 +323,22 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
 
   Future<void> _salvarNotaFiscal() async {
     if (_formKey.currentState!.validate()) {
-      final isExit = _invoiceType == InvoiceType.exit;
-
-      if (isExit && _clienteSelecionado == null) {
+      if (_clienteSelecionado == null && _empresaSelecionada == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erro: Selecione um cliente!'), backgroundColor: Colors.red),
+          const SnackBar(
+            content: Text('Erro: Selecione um cliente ou empresa!'),
+            backgroundColor: Colors.red,
+          ),
         );
         return;
       }
 
-      if (!isExit && _empresaSelecionada == null) {
+      if (_clienteSelecionado != null && _empresaSelecionada != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Erro: Selecione uma empresa!'), backgroundColor: Colors.red),
+          const SnackBar(
+            content: Text('Erro: Selecione apenas cliente ou empresa!'),
+            backgroundColor: Colors.red,
+          ),
         );
         return;
       }
@@ -362,10 +367,10 @@ class _SalesInvoiceScreenState extends State<SalesInvoiceScreen> {
       final notaFiscal = InvoiceData(
         invoiceNumber: numeroNota,
         type: _invoiceType,
-        customerId: isExit ? _clienteSelecionado!.id : null,
-        customerName: isExit ? _clienteSelecionado!.name : null,
-        customerCpf: isExit ? _clienteSelecionado!.cpf : null,
-        companyId: isExit ? null : _empresaSelecionada!.id,
+        customerId: _clienteSelecionado?.id,
+        customerName: _clienteSelecionado?.name,
+        customerCpf: _clienteSelecionado?.cpf,
+        companyId: _empresaSelecionada?.id,
         items: itens,
         paymentMethod: _paymentType?.name ?? '',
       );
