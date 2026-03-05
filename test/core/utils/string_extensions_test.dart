@@ -1,0 +1,120 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:system_loja/core/utils/string_extensions.dart';
+
+void main() {
+  group('FileNameStringExtensions', () {
+    test('isReservedFileName returns true for Windows reserved names', () {
+      expect('CON'.isReservedFileName(), isTrue);
+      expect('con'.isReservedFileName(), isTrue);
+      expect('CON.txt'.isReservedFileName(), isTrue);
+      expect('PRN'.isReservedFileName(), isTrue);
+      expect('AUX'.isReservedFileName(), isTrue);
+      expect('NUL'.isReservedFileName(), isTrue);
+      expect('COM1.txt'.isReservedFileName(), isTrue);
+      expect('COM9'.isReservedFileName(), isTrue);
+      expect('LPT1'.isReservedFileName(), isTrue);
+      expect('LPT9'.isReservedFileName(), isTrue);
+    });
+
+    test('isReservedFileName returns false for normal names', () {
+      expect('arquivo.txt'.isReservedFileName(), isFalse);
+      expect('CONTATO.txt'.isReservedFileName(), isFalse);
+      expect('COM10.txt'.isReservedFileName(), isFalse);
+      expect(''.isReservedFileName(), isFalse);
+    });
+
+    test('isValidFileName validates correctly', () {
+      expect('arquivo.txt'.isValidFileName(), isTrue);
+      expect(''.isValidFileName(), isFalse); // Empty
+      expect(('a' * 256).isValidFileName(), isFalse); // Exceeds maxLength
+      expect('CON.txt'.isValidFileName(), isFalse); // Reserved
+      expect('arquivo<teste>.txt'.isValidFileName(), isFalse); // Invalid chars
+    });
+
+    test('makeUniqueFileName appends timestamp', () {
+      final name = 'relatorio.pdf';
+      final uniqueName = name.makeUniqueFileName();
+      expect(uniqueName, startsWith('relatorio_'));
+      expect(uniqueName, endsWith('.pdf'));
+      // Extract timestamp part
+      final timestampStr = uniqueName.replaceAll('relatorio_', '').replaceAll('.pdf', '');
+      expect(int.tryParse(timestampStr), isNotNull);
+    });
+
+    test('normalizeFileName converts to lowercase', () {
+      expect('MinhaFoto.JPG'.normalizeFileName(), equals('minhafoto.jpg'));
+    });
+
+    test('sanitizeFileName removes invalid characters', () {
+      expect('Arquivo<teste>.txt'.sanitizeFileName(), equals('Arquivo_teste_.txt'));
+      expect('Nome  com   espaços'.sanitizeFileName(), equals('Nome_com_espaços'));
+      expect('file:*?"<>|.txt'.sanitizeFileName(), equals('file_____.txt'));
+      expect(' leading and trailing '.sanitizeFileName(), equals('leading_and_trailing'));
+    });
+
+    test('toAsciiFileName converts accented characters', () {
+      expect('relatório_ção.txt'.toAsciiFileName(), equals('relatorio_cao.txt'));
+      expect('José_García.pdf'.toAsciiFileName(), equals('Jose_Garcia.pdf'));
+      expect('ñ_ÿ.txt'.toAsciiFileName(), equals('n_y.txt'));
+      expect('ÀÁÂÃÄÅÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜ.txt'.toAsciiFileName(), equals('aaaaaaeeeeiiiiooooouuuu.txt'));
+    });
+
+    test('toSafeFileName applies all transformations', () {
+      expect('Relatório <Final>.txt'.toSafeFileName(), equals('relatorio_final_.txt'));
+      expect('CON.txt'.toSafeFileName(), equals('con_file.txt'));
+      final uniqueCon = 'CON.txt'.toSafeFileName(addTimestamp: true);
+      expect(uniqueCon, startsWith('con_'));
+      expect(uniqueCon, endsWith('.txt'));
+    });
+
+    test('truncateFileName shortens name preserving extension', () {
+      expect('nome_muito_longo.json'.truncateFileName(maxLength: 15), equals('nome_muito.json'));
+      expect('curto.txt'.truncateFileName(maxLength: 20), equals('curto.txt'));
+      // When extension is longer or equal to maxLength
+      expect('arquivo.extensaolongademais'.truncateFileName(maxLength: 10), equals('arquivo.ex'));
+    });
+  });
+
+  group('ValidateDataCustomer', () {
+    test('hashSenha generates sha256 hash', () {
+      // hash of "123456" is 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
+      expect('123456'.hashSenha(), equals('8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'));
+    });
+
+    test('isValidCPF correctly validates CPF', () {
+      // Valid CPF
+      expect('00000000000'.isValidCPF(), isFalse); // All same digits
+      expect('11111111111'.isValidCPF(), isFalse);
+      expect('123.456.789-09'.isValidCPF(), isFalse); // Fake but mathematically invalid usually
+
+      // Known valid CPF mathematically (we can use a generated one or just a math one like 01234567890 if valid, let's use a standard test valid CPF)
+      // 52998224725 is mathematically valid (common test CPF)
+      expect('52998224725'.isValidCPF(), isTrue);
+      expect('529.982.247-25'.isValidCPF(), isTrue);
+      expect('123'.isValidCPF(), isFalse); // Too short
+    });
+
+    test('isValidEmail correctly validates emails', () {
+      expect('example@example.com'.isValidEmail(), isTrue);
+      expect('user.name+tag@domain.co.uk'.isValidEmail(), isTrue);
+      expect('invalid-email'.isValidEmail(), isFalse);
+      expect('@domain.com'.isValidEmail(), isFalse);
+    });
+
+    test('isValidPhone correctly validates phones', () {
+      expect('(11) 91234-5678'.isValidPhone(), isTrue);
+      expect('11912345678'.isValidPhone(), isTrue);
+      expect('11 91234-5678'.isValidPhone(), isTrue);
+      expect('123'.isValidPhone(), isFalse); // Too short
+    });
+
+    test('validarSenha validates password strength', () {
+      expect(''.validarSenha(), equals('Senha é obrigatória'));
+      expect('curta'.validarSenha(), equals('Senha deve ter no mínimo 8 caracteres'));
+      expect('semmaiuscula1'.validarSenha(), equals('Senha deve conter pelo menos uma letra maiúscula'));
+      expect('SEM_MINUSCULA1'.validarSenha(), equals('Senha deve conter pelo menos uma letra minúscula'));
+      expect('SemNumeroSenha'.validarSenha(), equals('Senha deve conter pelo menos um número'));
+      expect('SenhaForte123'.validarSenha(), isNull); // Valid
+    });
+  });
+}
