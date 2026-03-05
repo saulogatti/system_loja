@@ -2,6 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'invoice_item.g.dart';
 
+const int kInvalidId = -1;
+
 @JsonSerializable()
 /// Modelo de dados para Item da Nota Fiscal
 class InvoiceItem {
@@ -19,11 +21,7 @@ class InvoiceItem {
   final double totalValue;
 
   InvoiceItem({
-    required this.productId,
-    required this.productName,
-    required this.productCode,
-    required this.quantity,
-    required this.unitPrice,
+    required this.productName, required this.productCode, required this.quantity, required this.unitPrice, this.productId = kInvalidId,
   }) : totalValue = quantity * unitPrice;
 
   /// Cria um objeto a partir de JSON

@@ -1,27 +1,40 @@
-import 'package:system_loja/core/models/produto.dart';
-import 'package:system_loja/core/repository/default/repository_manager.dart';
+import 'package:system_loja/core/interface/i_product_repository.dart';
+import 'package:system_loja/core/managers/system_error_manager.dart';
+import 'package:system_loja/core/models/product.dart';
+import 'package:system_loja/core/services/code_generator_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/data/storage/storage_data.dart';
+import 'package:system_loja/data/database/dao/product_dao.dart';
 
-class ProductRepository extends RepositoryManager {
+class ProductRepository implements IProductRepository {
   /// Mapa estático de locks por caminho de arquivo, para serializar I/O
+  final ProductDao _productDao;
+  final CodeGeneratorService _codeGeneratorService;
 
-  ProductRepository();
+  ProductRepository({
+    required ProductDao productDao,
+    required CodeGeneratorService codeGeneratorService,
+  }) : _productDao = productDao,
+       _codeGeneratorService = codeGeneratorService;
 
-  /// Retorna a lista de produtos em cache, carregando do disco se vazia.
-
-  Future<OperationResult<Produto, String>> findByCode(int codigo) async {
-    final result = await defaultDataStorage.fetchById(codigo);
-    switch (result) {
-      case OperationError<PersistentDataStore, String>():
-        return OperationError(
-          'Erro ao buscar produto com código $codigo'
-          'no armazenamento: ${result.error}',
-        );
-      case OperationSuccess<PersistentDataStore, String>():
-        final data = result.result;
-        final produto = Produto.fromJson(data.data);
-        return OperationSuccess(produto);
+  /// Remove um produto do armazenamento.
+  ///
+  /// [id] ID do produto a ser removido.
+  /// Retorna resultado da operação de exclusão.
+  @override
+  Future<ResultStatus<bool, String>> deleteProduct(int id) async {
+    try {
+      final result = await _productDao.remove(id);
+      switch (result) {
+        case true:
+          return ResultSuccess(result);
+        case false:
+          return ResultError(
+            'Falha ao deletar produto com ID: $id - não encontrado',
+          );
+      }
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Erro ao deletar produto com ID: $id ');
     }
   }
 
@@ -29,59 +42,89 @@ class ProductRepository extends RepositoryManager {
   ///
   /// A cópia protege o cache interno contra modificações acidentais
   /// feitas pelo chamador.
-  Future<OperationResult<List<Produto>, String>> getProdutos() async {
-    final result = await defaultDataStorage.loadAll();
-    switch (result) {
-      case OperationError<List<PersistentDataStore>, String>():
-        return OperationError(
-          'Erro ao carregar produtos do armazenamento: ${result.error}',
-        );
-      case OperationSuccess<List<PersistentDataStore>, String>():
-        final dataList = result.result;
-        final produtos = dataList
-            .map((data) => Produto.fromJson(data.data))
-            .toList(growable: false);
-        return OperationSuccess(produtos);
+  @override
+  Future<ResultStatus<List<Product>, String>> fetchProducts() async {
+    try {
+      final result = await _productDao.getAll();
+      return ResultSuccess(result);
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Erro ao carregar produtos');
     }
   }
 
-  /// Adiciona ou atualiza um produto na lista em memória e agenda persistência.
-  ///
-  /// Este método atualiza o cache interno e chama [salvarDadosSincronizado]
-  /// para persistir as alterações de forma segura. Não aguarda o término da
-  /// operação (fire-and-forget) — adaptar conforme necessidade do chamador.
-  Future<OperationResult<bool, String>> salvarProduto(Produto produto) async {
-    final result = await defaultDataStorage.save(
-      PersistentDataStore(id: produto.id, data: produto.toJson()),
-    );
-    if (!result) {
-      return OperationError('Falha ao salvar produto: ${produto.nome}');
+  /// Retorna a lista de produtos em cache, carregando do disco se vazia.
+
+  @override
+  Future<ResultStatus<Product, String>> findByCode(int codigo) async {
+    try {
+      final result = await _productDao.getById(codigo);
+      if (result != null) {
+        return ResultSuccess(result);
+      } else {
+        return ResultError('Produto com código $codigo não encontrado');
+      }
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Erro ao buscar produto com código $codigo ');
     }
-    return OperationSuccess(result);
+  }
+
+  /// Gera um código único para um novo produto.
+  ///
+  /// Retorna um código no formato PRD-YYYYMMDD-NNNN que não existe no banco.
+  @override
+  Future<String> generateProductCode() async {
+    return await _codeGeneratorService.generateProductCode();
+  }
+
+  /// Salva um produto no banco de dados.
+  ///
+  /// [product] Produto a ser salvo.
+  /// Retorna resultado da operação de salvamento.
+  @override
+  Future<ResultStatus<bool, String>> saveProduct(Product product) async {
+    try {
+      final result = await _productDao.insertProduct(product);
+      if (result <= 0) {
+        return ResultError('Falha ao salvar produto: ${product.name}');
+      }
+      return ResultSuccess(result > 0);
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Falha ao salvar produto: ${product.name}');
+    }
   }
 
   /// Atualiza um produto existente no armazenamento.
   ///
-  /// [produto] Produto com os dados atualizados.
+  /// [product] Produto com os dados atualizados.
   /// Retorna resultado da operação de atualização.
-  /// 
-  /// **Nota**: Este método utiliza internamente [salvarProduto], pois o storage
-  /// não diferencia entre inserção e atualização (upsert pattern).
-  Future<OperationResult<bool, String>> updateProduct(Produto produto) async {
-    return salvarProduto(produto);
+  @override
+  Future<ResultStatus<bool, String>> updateProduct(Product product) async {
+    try {
+      final result = await _productDao.updateProduct(product);
+      return ResultSuccess(result);
+    } catch (e, stackTrace) {
+      await reportError(e, stackTrace);
+      return ResultError('Falha ao atualizar produto: ${product.name}');
+    }
   }
 
-  /// Remove um produto do armazenamento.
+  /// Valida um código de produto fornecido pelo usuário.
   ///
-  /// [id] ID do produto a ser removido.
-  /// Retorna resultado da operação de exclusão.
-  Future<OperationResult<bool, String>> deleteProduct(int id) async {
-    final result = await defaultDataStorage.delete(id);
-    switch (result) {
-      case OperationSuccess():
-        return OperationSuccess(result.result);
-      case OperationError():
-        return OperationError('Falha ao deletar produto com ID: $id - ${result.error}');
+  /// [code] Código a ser validado.
+  /// Retorna resultado da validação com mensagem descritiva.
+  @override
+  Future<ResultStatus<bool, String>> validateProductCode(String code) async {
+    final validationResult = await _codeGeneratorService.validateProductCode(
+      code,
+    );
+
+    if (validationResult.isValid) {
+      return ResultSuccess(true);
+    } else {
+      return ResultError(validationResult.message);
     }
   }
 }

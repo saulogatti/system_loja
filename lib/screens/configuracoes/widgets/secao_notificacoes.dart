@@ -10,9 +10,7 @@ class SecaoNotificacoes extends StatelessWidget {
   final Function(AppSettings) onConfigChanged;
 
   const SecaoNotificacoes({
-    super.key,
-    required this.config,
-    required this.onConfigChanged,
+    required this.config, required this.onConfigChanged, super.key,
   });
 
   @override

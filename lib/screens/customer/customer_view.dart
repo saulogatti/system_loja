@@ -1,75 +1,90 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/utils/validators.dart';
-import 'package:system_loja/screens/widgets/card_list_item.dart';
-import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
-import 'package:system_loja/screens/widgets/text_form_field_email.dart';
-import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
+import 'package:system_loja/screens/utils/extension_date_time.dart';
 
+import '../../core/models/address.dart';
 import '../../core/models/customer.dart';
-import '../../core/utils/text_formatters.dart';
 import 'bloc/customer_bloc.dart';
-import 'customer_detail_screen.dart';
+import 'widgets/customer_form.dart';
+import 'widgets/customer_list.dart';
+import 'widgets/customer_overview_bottom_sheet.dart';
+import 'widgets/customer_search_section.dart';
 
-class CustomerView extends StatelessWidget {
-  const CustomerView({super.key});
+@RoutePage()
+class CustomerView extends StatefulWidget {
+  /// Cliente opcional para modo de edição
+  /// Se fornecido, o formulário será preenchido com os dados do cliente para edição
+  final Customer? customer;
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CustomerBloc()..add(const CustomerBlocEvent.loadCustomers()),
-      child: const _CustomerDetailView(),
-    );
-  }
-}
-
-class _CustomerDetailView extends StatefulWidget {
-  const _CustomerDetailView();
+  const CustomerView({super.key, this.customer});
 
   @override
-  State<_CustomerDetailView> createState() => _CustomerDetailViewState();
+  State<CustomerView> createState() => _CustomerViewState();
 }
 
-class _CustomerDetailViewState extends State<_CustomerDetailView> {
+class _CustomerViewState extends State<CustomerView> {
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _cpfController = TextEditingController();
   final _emailController = TextEditingController();
   final _telefoneController = TextEditingController();
-  final _enderecoController = TextEditingController();
+  final _streetController = TextEditingController();
+  final _zipCodeController = TextEditingController();
+  final _neighborhoodController = TextEditingController();
+  final _cityController = TextEditingController();
+  final _stateController = TextEditingController();
   final _searchCpfController = TextEditingController();
-  int _previousCustomerCount = 0;
-  bool _isAdding = false;
+
+  /// Indica se está em modo de edição
+  bool get _isEditMode => widget.customer != null;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<CustomerBloc, CustomerBlocState>(
       listener: (context, state) {
         state.whenOrNull(
-          customersLoaded: (customers) {
-            // Show success message if we just added a customer
-            if (_isAdding && customers.length > _previousCustomerCount) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Cliente cadastrado com sucesso!'),
-                  backgroundColor: Colors.green,
-                ),
-              );
-              _formKey.currentState!.reset();
-              _nomeController.clear();
-              _cpfController.clear();
-              _emailController.clear();
-              _telefoneController.clear();
-              _enderecoController.clear();
-              _isAdding = false;
+          customersLoaded: (customers, stateType) {
+            switch (stateType) {
+              case EnumStateCustomerLoaded.registerCustomer:
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Cliente cadastrado com sucesso!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+                _formKey.currentState!.reset();
+                _nomeController.clear();
+                _cpfController.clear();
+                _emailController.clear();
+                _telefoneController.clear();
+                _streetController.clear();
+                _zipCodeController.clear();
+                _neighborhoodController.clear();
+                _cityController.clear();
+              case EnumStateCustomerLoaded.updateCustomer:
+                if (_isEditMode) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Cliente atualizado com sucesso!'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+
+                  // Volta para a tela anterior após atualizar
+                  if (widget.customer != null) {
+                    AutoRouter.of(context).pop();
+                  }
+                }
+              case EnumStateCustomerLoaded.deleteCustomer:
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Cliente deletado com sucesso!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              case EnumStateCustomerLoaded.customersLoaded:
             }
-            _previousCustomerCount = customers.length;
-          },
-          customerError: (message) {
-            _isAdding = false;
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
           },
           customerFound: (customer) {
             // Navega para a tela de detalhes quando um cliente é encontrado
@@ -77,181 +92,7 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
           },
         );
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Cadastro de Cliente'),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Text('Novo Cliente', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _nomeController,
-                        decoration: const InputDecoration(
-                          labelText: 'Nome *',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.person),
-                        ),
-                        validator: (value) => combineValidators([
-                          (v) => validateRequired(v, 'Nome'),
-                          (v) => validateMinLength(v, 3, 'Nome'),
-                        ])(value),
-                      ),
-                      const SizedBox(height: 16),
-                      // Adicionar mascaras e a validacao esta no bloc para CPF
-                      TextFormFieldCpf(
-                        cpfController: _cpfController,
-                        enable: true,
-                        validatorOptions: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'CPF é obrigatório';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormFieldEmail(emailController: _emailController, isEditing: true),
-                      const SizedBox(height: 16),
-                      TextFormFieldPhone(telefoneController: _telefoneController, isEditing: true),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _enderecoController,
-                        decoration: const InputDecoration(
-                          labelText: 'Endereço',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.home),
-                        ),
-                        maxLines: 2,
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton.icon(
-                        onPressed: _adicionarCliente,
-                        icon: const Icon(Icons.add),
-                        label: const Text('Adicionar Cliente'),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(16),
-                          textStyle: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      const Divider(),
-                      const SizedBox(height: 32),
-                      const Text(
-                        'Buscar Cliente por CPF',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _searchCpfController,
-                              decoration: const InputDecoration(
-                                labelText: 'CPF',
-                                border: OutlineInputBorder(),
-                                prefixIcon: Icon(Icons.search),
-                                hintText: 'Digite o CPF para buscar',
-                              ),
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [CpfTextInputFormatter()],
-                              maxLength: 14, // Formato XXX.XXX.XXX-XX
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          ElevatedButton.icon(
-                            onPressed: _buscarClientePorCpf,
-                            icon: const Icon(Icons.search),
-                            label: const Text('Buscar'),
-                            style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 32),
-                      const Divider(),
-                      const SizedBox(height: 32),
-                      const Text(
-                        'Clientes Cadastrados',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 16),
-                      BlocBuilder<CustomerBloc, CustomerBlocState>(
-                        builder: (context, state) {
-                          return state.when(
-                            initial: () => const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(32.0),
-                                child: Text(
-                                  'Carregando clientes...',
-                                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                                ),
-                              ),
-                            ),
-                            loading: () => const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(32.0),
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                            customersLoaded: (customers) {
-                              if (customers.isEmpty) {
-                                return const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(32.0),
-                                    child: Text(
-                                      'Nenhum cliente cadastrado',
-                                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                                    ),
-                                  ),
-                                );
-                              }
-
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: customers.length,
-                                itemBuilder: (context, index) {
-                                  final cliente = customers.values.elementAt(index);
-                                  return CardListItem(
-                                    colorAvatar: Colors.blue,
-                                    title: cliente.name,
-                                    subTitle: 'CPF: ${cliente.cpf}\n${cliente.email}',
-                                    onTap: () {
-                                      _mostrarDetalhesCliente(cliente);
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                            customerError: (message) => Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(32.0),
-                                child: Text(
-                                  'Erro: $message',
-                                  style: const TextStyle(fontSize: 16, color: Colors.red),
-                                ),
-                              ),
-                            ),
-                            customerFound: (customer) => const SizedBox.shrink(),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      child: _isEditMode ? _buildEditView(context) : _buildAddView(context),
     );
   }
 
@@ -261,41 +102,160 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     _cpfController.dispose();
     _emailController.dispose();
     _telefoneController.dispose();
-    _enderecoController.dispose();
+    _streetController.dispose();
+    _zipCodeController.dispose();
+    _neighborhoodController.dispose();
+    _cityController.dispose();
     _searchCpfController.dispose();
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    // Se está em modo de edição, preenche os campos com os dados do cliente
+    if (_isEditMode) {
+      _nomeController.text = widget.customer!.name;
+      _cpfController.text = widget.customer!.cpf;
+      _emailController.text = widget.customer!.email ?? '';
+      _telefoneController.text = widget.customer!.phone ?? '';
+      _streetController.text = widget.customer!.address.street;
+      _zipCodeController.text = widget.customer!.address.zipCode;
+      _neighborhoodController.text = widget.customer!.address.neighborhood;
+      _cityController.text = widget.customer!.address.city;
+      _stateController.text = widget.customer!.address.state;
+    } else {
+      // Se não está em modo de edição, carrega a lista de clientes
+      context.read<CustomerBloc>().add(const CustomerBlocEvent.loadCustomers());
+    }
+  }
+
   void _adicionarCliente() {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isAdding = true;
-      });
-
       context.read<CustomerBloc>().add(
         CustomerBlocEvent.registerCustomer(
           name: _nomeController.text.trim(),
           cpf: _cpfController.text.trim(),
           email: _emailController.text.trim(),
           phone: _telefoneController.text.trim(),
-          address: _enderecoController.text.trim(),
+          street: _streetController.text.trim(),
+          zipCode: _zipCodeController.text.trim(),
+          neighborhood: _neighborhoodController.text.trim(),
+          city: _cityController.text.trim(),
+          state: _stateController.text.trim(),
         ),
       );
     }
   }
 
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+  /// Constrói a view de adição de cliente com lista e busca
+  Widget _buildAddView(BuildContext context) {
+    return Material(
+      color: Theme.of(context).colorScheme.surface,
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Formulário de cadastro
+                  CustomerForm(
+                    formKey: _formKey,
+                    nomeController: _nomeController,
+                    cpfController: _cpfController,
+                    emailController: _emailController,
+                    telefoneController: _telefoneController,
+                    streetController: _streetController,
+                    zipCodeController: _zipCodeController,
+                    neighborhoodController: _neighborhoodController,
+                    cityController: _cityController,
+                    stateController: _stateController,
+                    onSubmit: _adicionarCliente,
+                  ),
+                  const SizedBox(height: 32),
+                  const Divider(),
+                  const SizedBox(height: 32),
+                  // Seção de busca por CPF
+                  CustomerSearchSection(
+                    searchCpfController: _searchCpfController,
+                    onSearch: _buscarClientePorCpf,
+                  ),
+                  const SizedBox(height: 32),
+                  const Divider(),
+                  const SizedBox(height: 32),
+                  // Lista de clientes
+                  CustomerList(onCustomerTap: _mostrarDetalhesCliente),
+                ],
+              ),
+            ),
           ),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(fontSize: 16)),
+        ],
+      ),
+    );
+  }
+
+  /// Constrói a view de edição de cliente
+  Widget _buildEditView(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Editar Cliente: ${widget.customer!.name}'), leading: AutoLeadingButton()),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            CustomerForm(
+              formKey: _formKey,
+              nomeController: _nomeController,
+              cpfController: _cpfController,
+              emailController: _emailController,
+              telefoneController: _telefoneController,
+              streetController: _streetController,
+              zipCodeController: _zipCodeController,
+              neighborhoodController: _neighborhoodController,
+              cityController: _cityController,
+              stateController: _stateController,
+              onSubmit: _salvarAlteracoes,
+              isEditMode: true,
+              onCancel: _cancelarEdicao,
+            ),
+            const SizedBox(height: 24),
+            // Card com informações do sistema
+            Card(
+              elevation: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Informações do Sistema',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildInfoRow('ID', widget.customer!.id.toString()),
+                    _buildInfoRow('Data de Cadastro', widget.customer!.registrationDate.toFormattedDate()),
+                    _buildInfoRow('Última Atualização', widget.customer!.lastUpdatedDate.toFormattedDate()),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Text('$label: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(value),
         ],
       ),
     );
@@ -305,7 +265,10 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     final cpf = _searchCpfController.text.trim();
     if (cpf.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Digite um CPF para buscar'), backgroundColor: Colors.orange),
+        SnackBar(
+          content: Text('Digite um CPF para buscar'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
       );
       return;
     }
@@ -313,43 +276,48 @@ class _CustomerDetailViewState extends State<_CustomerDetailView> {
     context.read<CustomerBloc>().add(CustomerBlocEvent.findCustomerByCpf(cpf: cpf));
   }
 
+  void _cancelarEdicao() {
+    // Restaura os valores originais do cliente
+    if (_isEditMode) {
+      AutoRouter.of(context).pop();
+    }
+  }
+
+  /// Navega para a tela de detalhes do cliente
+  ///
+  /// Utilizado tanto para busca por CPF quanto para seleção da lista.
   void _mostrarDetalhesCliente(Customer cliente) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(cliente.name),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildDetailRow('ID', cliente.id.toString()),
-              _buildDetailRow('CPF', cliente.cpf),
-              _buildDetailRow('Email', cliente.email),
-              _buildDetailRow('Telefone', cliente.phone),
-              _buildDetailRow('Endereço', cliente.address),
-              _buildDetailRow('Data de Cadastro', cliente.registrationDate.toString().split('.')[0]),
-            ],
-          ),
-        ),
-        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
-      ),
-    );
+    _openCustomerDetails(cliente);
   }
 
   void _openCustomerDetails(Customer customer) {
     // Limpa o campo de busca
     _searchCpfController.clear();
 
-    // Navega para a tela de detalhes do cliente
-    Navigator.push(
-      context,
-      MaterialPageRoute<void>(
-        builder: (context) => BlocProvider.value(
-          value: CustomerBloc(),
-          child: CustomerDetailScreen(customer: customer),
+    // Exibe o bottom sheet de visão geral do cliente
+    CustomerOverviewBottomSheet.show(context, customer);
+  }
+
+  void _salvarAlteracoes() {
+    if (_formKey.currentState!.validate()) {
+      final updatedCustomer = Customer(
+        id: widget.customer!.id,
+        name: _nomeController.text.trim(),
+        cpf: _cpfController.text.trim(),
+        email: _emailController.text.trim(),
+        phone: _telefoneController.text.trim(),
+        address: Address(
+          street: _streetController.text.trim(),
+          zipCode: _zipCodeController.text.trim(),
+          neighborhood: _neighborhoodController.text.trim(),
+          city: _cityController.text.trim(),
+          state: _stateController.text.trim(),
         ),
-      ),
-    );
+        registrationDate: widget.customer!.registrationDate,
+        lastUpdatedDate: widget.customer!.lastUpdatedDate,
+      );
+
+      context.read<CustomerBloc>().add(CustomerBlocEvent.updateCustomer(customer: updatedCustomer));
+    }
   }
 }

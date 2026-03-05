@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:path/path.dart' as p;
+import 'package:synchronized/synchronized.dart';
 import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 import 'package:system_loja/data/cache/models/cacheable.dart';
 import 'package:system_loja/data/files_utility/file_storage_utility.dart';
@@ -42,6 +44,10 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// Organizado por tipo (nome da classe) e depois por chave do objeto.
   final Map<String, Map<String, Map<String, dynamic>>> _memoryCache = {};
 
+  final Lock _memoryLock = Lock();
+
+  final Map<String, Lock> _fileLocks = {};
+
   /// Construtor privado para implementar o padrão singleton.
   ///
   /// Inicializa o sistema de arquivos através do [FileStorageUtility]
@@ -65,7 +71,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// ```
   Future<void> clearAll() async {
     try {
-      _memoryCache.clear();
+      await _memoryLock.synchronized(_memoryCache.clear);
       await deleteDirectory();
     } catch (e) {
       if (e is CacheException) rethrow;
@@ -73,86 +79,22 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     }
   }
 
-  /// Limpa todos os objetos de um tipo específico do cache.
+  /// Realiza backup dos dados do sistema
   ///
-  /// Remove da memória e do arquivo todos os objetos do tipo [T].
-  /// O tipo é determinado automaticamente através do genérico.
-  ///
-  /// Lança [CacheWriteException] se ocorrer um erro ao deletar o arquivo.
-  ///
-  /// Exemplo:
-  /// ```dart
-  /// await cache.clearType<Cliente>();
-  /// ```
-  Future<void> clearType<T extends Cacheable>() async {
-    String type = _findType<T>();
-
+  /// Cria uma cópia dos arquivos JSON em um diretório de backup
+  /// com timestamp.
+  Future<bool> createBackup(String localBackup) async {
     try {
-      _memoryCache.remove(type);
+      final arquivosCopiados = await backup(localBackup);
+      // Lista de arquivos para backup
 
-      final file = File(_getCacheFilePath(type));
-      if (await file.exists()) {
-        await file.delete();
-      }
-    } catch (e) {
-      if (e is CacheException) rethrow;
-      throw CacheWriteException('Falha ao limpar cache do tipo: $type', e);
-    }
-  }
-
-  /// Verifica se uma chave existe no cache.
-  ///
-  /// [key] é a chave única do objeto.
-  ///
-  /// Carrega automaticamente os dados do arquivo se não estiverem em memória
-  /// (lazy loading). Retorna `true` se a chave existe no cache do tipo [T],
-  /// `false` caso contrário.
-  ///
-  /// Lança [CacheReadException] se ocorrer erro ao carregar do arquivo.
-  ///
-  /// Exemplo:
-  /// ```dart
-  /// if (await cache.containsKey<Cliente>('cliente_1')) {
-  ///   // Objeto existe no cache
-  /// }
-  /// ```
-  Future<bool> containsKey<T extends Cacheable>(String key) async {
-    assert(key.isNotEmpty, 'A chave de cache não pode ser vazia');
-
-    final type = _findType<T>();
-
-    try {
-      // Carrega do arquivo se necessário
-      await _loadTypeCache(type);
-
-      return _memoryCache.containsKey(type) &&
-          _memoryCache[type]!.containsKey(key);
-    } catch (e) {
-      if (e is CacheException) rethrow;
-      throw CacheReadException('Falha ao verificar chave no cache: $key', e);
-    }
-  }
-
-  /// Retorna o número de objetos de um tipo específico no cache.
-  ///
-  ///
-  /// Retorna o número de objetos, ou 0 se o tipo não existir.
-  ///
-  /// Lança [CacheNotInitializedException] se o cache não estiver inicializado.
-  ///
-  /// Exemplo:
-  /// ```dart
-  /// final count = await cache.count<Cliente>();
-  /// ```
-  Future<int> count<T extends Cacheable>() async {
-    final type = _findType<T>();
-
-    try {
-      await _loadTypeCache(type);
-      return _memoryCache[type]?.length ?? 0;
-    } catch (e) {
-      if (e is CacheException) rethrow;
-      throw CacheReadException('Falha ao contar itens do cache: $type', e);
+      logInfo(
+        'Backup realizado com sucesso: $arquivosCopiados arquivos copiados',
+      );
+      return true;
+    } catch (e, stackTrace) {
+      logError('Erro ao realizar backup: $e', stackTrace);
+      return false;
     }
   }
 
@@ -183,18 +125,18 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     final type = _findType<T>();
 
     try {
-      // Tenta buscar do cache em memória primeiro
-      if (_memoryCache.containsKey(type) &&
-          _memoryCache[type]!.containsKey(key)) {
-        return factory(_memoryCache[type]![key]!);
-      }
-
-      // Se não está em memória, tenta carregar do arquivo
       await _loadTypeCache(type);
 
-      if (_memoryCache.containsKey(type) &&
-          _memoryCache[type]!.containsKey(key)) {
-        return factory(_memoryCache[type]![key]!);
+      final cachedAfterLoad = await _memoryLock.synchronized(() {
+        final entries = _memoryCache[type];
+        if (entries != null && entries.containsKey(key)) {
+          return Map<String, dynamic>.from(entries[key]!);
+        }
+        return null;
+      });
+
+      if (cachedAfterLoad != null) {
+        return factory(cachedAfterLoad);
       }
 
       return null;
@@ -210,7 +152,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// Recupera todos os objetos de um tipo específico do cache.
   ///
   /// [factory] é a função que converte o JSON de volta para o objeto.
-  /// [typeName] é o nome do tipo (opcional).
+  /// [T] é o tipo de objeto a ser recuperado.
   ///
   /// Retorna uma lista com todos os objetos do tipo especificado.
   /// Retorna uma lista vazia se não houver objetos no cache.
@@ -231,11 +173,19 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
       // Carrega do arquivo se necessário
       await _loadTypeCache(type);
 
-      if (!_memoryCache.containsKey(type)) {
+      final entries = await _memoryLock.synchronized(() {
+        final stored = _memoryCache[type];
+        if (stored == null) return null;
+        return stored.map(
+          (key, value) => MapEntry(key, Map<String, dynamic>.from(value)),
+        );
+      });
+
+      if (entries == null) {
         return [];
       }
 
-      return _memoryCache[type]!.values.map((json) => factory(json)).toList();
+      return entries.values.map((json) => factory(json)).toList();
     } catch (e) {
       if (e is CacheException) rethrow;
       throw CacheSerializationException(
@@ -255,53 +205,17 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// cache.invalidateAllMemoryCache();
   /// ```
   void invalidateAllMemoryCache() {
-    _memoryCache.clear();
+    unawaited(_memoryLock.synchronized(_memoryCache.clear));
   }
 
-  /// Invalida o cache em memória para um tipo específico.
-  ///
-  /// Isso força o [CacheManager] a recarregar os dados do arquivo
-  /// na próxima leitura.
-  ///
-  /// [typeName] é o nome do tipo a ser invalidado.
-  ///
-  /// Exemplo:
-  /// ```dart
-  /// cache.invalidateMemoryCache<Cliente>();
-  /// ```
-  void invalidateMemoryCache<T extends Cacheable>() {
-    final type = _findType<T>();
-    _memoryCache.remove(type);
-  }
-
-  /// Retorna todas as chaves de um tipo específico no cache.
-  ///
-  /// [typeName] é o nome do tipo.
-  ///
-  /// Retorna um conjunto com todas as chaves.
-  ///
-  /// Lança [CacheNotInitializedException] se o cache não estiver inicializado.
-  ///
-  /// Exemplo:
-  /// ```dart
-  /// final keys = await cache.keys<Cliente>();
-  /// ```
-  Future<Set<String>> keys<T extends Cacheable>() async {
-    final type = _findType<T>();
-
-    try {
-      await _loadTypeCache(type);
-      return _memoryCache[type]?.keys.toSet() ?? {};
-    } catch (e) {
-      if (e is CacheException) rethrow;
-      throw CacheReadException('Falha ao obter chaves do cache: $type', e);
-    }
+  Map<String, dynamic> parseData(String dataString) {
+    return Map<String, dynamic>.from(jsonDecode(dataString));
   }
 
   /// Remove um objeto do cache pela sua chave.
   ///
   /// [key] é a chave única do objeto a ser removido.
-  /// [typeName] é o nome do tipo do objeto.
+  /// [T] é o      do tipo do objeto.
   ///
   /// Retorna `true` se o objeto foi removido, `false` se não existia.
   ///
@@ -319,18 +233,35 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
       // Carrega do arquivo se necessário
       await _loadTypeCache(type);
 
-      if (!_memoryCache.containsKey(type) ||
-          !_memoryCache[type]!.containsKey(key)) {
+      var removed = false;
+      await _memoryLock.synchronized(() {
+        if (_memoryCache.containsKey(type) &&
+            _memoryCache[type]!.containsKey(key)) {
+          _memoryCache[type]!.remove(key);
+          removed = true;
+        }
+      });
+
+      if (!removed) {
         return false;
       }
 
-      _memoryCache[type]!.remove(key);
       await _saveTypeCache(type);
 
       return true;
     } catch (e) {
       if (e is CacheException) rethrow;
       throw CacheWriteException('Falha ao remover item do cache: $key', e);
+    }
+  }
+
+  Future<void> restoreBackupFrom(String direBackup) async {
+    try {
+      await restoreBackup(direBackup);
+      logInfo('Restauração de backup realizada com sucesso');
+    } catch (e, stackTrace) {
+      logError('Erro ao restaurar backup: $e', stackTrace);
+      throw CacheReadException('Erro ao restaurar backup', e);
     }
   }
 
@@ -363,9 +294,10 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     final key = item.cacheKey;
     assert(key.isNotEmpty, 'A chave de cache não pode ser vazia');
     try {
-      // Atualiza cache em memória
-      _memoryCache[type] ??= {};
-      _memoryCache[type]![key] = item.toJson();
+      await _memoryLock.synchronized(() {
+        _memoryCache[type] ??= {};
+        _memoryCache[type]![key] = item.toJson();
+      });
 
       // Persiste no arquivo
       await _saveTypeCache(type);
@@ -398,11 +330,13 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     final type = items.first.runtimeType.toString();
 
     try {
-      _memoryCache[type] ??= {};
+      await _memoryLock.synchronized(() {
+        _memoryCache[type] ??= {};
 
-      for (final item in items) {
-        _memoryCache[type]![item.cacheKey] = item.toJson();
-      }
+        for (final item in items) {
+          _memoryCache[type]![item.cacheKey] = item.toJson();
+        }
+      });
 
       await _saveTypeCache(type);
     } catch (e) {
@@ -423,6 +357,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// Retorna o nome do tipo como uma string (ex: 'Cliente', 'Produto').
   String _findType<T extends Cacheable>() {
     final type = T.toString();
+    assert(type != 'Cacheable', 'O tipo genérico T deve ser específico');
     return type;
   }
 
@@ -436,6 +371,11 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     return p.setExtension(typeName.toLowerCase(), '.json');
   }
 
+  /// Obtém ou cria um lock para o arquivo específico
+  Lock _getLock(String dataFile) {
+    return _fileLocks.putIfAbsent(dataFile, Lock.new);
+  }
+
   /// Carrega os dados do cache de um tipo específico do arquivo para memória.
   ///
   /// [type] é o nome do tipo a ser carregado.
@@ -446,14 +386,40 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   ///
   /// Lança [CacheReadException] em caso de erro ao ler ou parsear o arquivo.
   Future<void> _loadTypeCache(String type) async {
-    // Se já está em memória, não precisa carregar
-    if (_memoryCache.containsKey(type)) return;
-    _memoryCache[type] ??= {};
+    await _memoryLock.synchronized(() {
+      if (_memoryCache.containsKey(type)) {
+        return;
+      }
+      _memoryCache[type] = {};
+    });
+
+    final filePath = _getCacheFilePath(type);
+    final lock = _getLock(filePath);
+
+    String? dataString;
+
+    await lock.synchronized(() async {
+      final result = await fetchDataFromFile(filePath);
+      if (result.isSuccessful) {
+        dataString = result.asSuccess;
+      }
+    });
+
+    if (dataString == null) {
+      return;
+    }
+
     try {
-      final Map<String, dynamic> jsonData = {};
-      _memoryCache[type] = jsonData.map(
-        (key, value) => MapEntry(key, Map<String, dynamic>.from(value as Map)),
+      final Map<String, dynamic> jsonData = parseData(dataString!);
+      final loadedData = jsonData.map(
+        (key, value) => MapEntry(
+          key,
+          Map<String, dynamic>.from(value as Map<String, dynamic>),
+        ),
       );
+      await _memoryLock.synchronized(() {
+        _memoryCache[type] = loadedData;
+      });
     } catch (e, stackTrace) {
       logError('Erro ao carregar cache do tipo $type: $e', stackTrace);
       throw CacheReadException('Erro ao carregar cache do tipo $type', e);
@@ -470,22 +436,37 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   ///
   /// Lança [CacheWriteException] em caso de erro ao escrever no arquivo.
   Future<void> _saveTypeCache(String type) async {
-    if (!_memoryCache.containsKey(type)) return;
+    String? snapshot;
 
-    try {
-      String filePath = _getCacheFilePath(type);
+    await _memoryLock.synchronized(() {
+      final entries = _memoryCache[type];
+      if (entries == null || entries.isEmpty) {
+        return;
+      }
+      snapshot = jsonEncode(entries);
+    });
 
-      final isSaveSuccessful = await saveData(
-        filePath,
-        _memoryCache[type]!.toString(),
-      );
-      if (!isSaveSuccessful) {
+    if (snapshot == null) {
+      return;
+    }
+
+    final filePath = _getCacheFilePath(type);
+    final lock = _getLock(filePath);
+
+    await lock.synchronized(() async {
+      try {
+        final isSaveSuccessful = await saveData(filePath, snapshot!);
+        if (!isSaveSuccessful) {
+          throw CacheWriteException(
+            'Falha ao salvar dados no arquivo de cache: $filePath',
+          );
+        }
+      } on FileSystemException catch (e) {
         throw CacheWriteException(
-          'Falha ao salvar dados no arquivo de cache: $filePath',
+          'Erro ao escrever arquivo de cache: $filePath',
+          e,
         );
       }
-    } on FileSystemException catch (e) {
-      throw CacheWriteException('Erro ao escrever arquivo de cache: $type', e);
-    }
+    });
   }
 }

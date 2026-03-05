@@ -1,0 +1,121 @@
+---
+description: Padrões de implementação - ResultStatus, Drift DAO, BLoC/Freezed, DI, rotas
+globs: "lib/**"
+---
+
+# Padrões de Implementação - System Loja
+
+Diretrizes para implementar features, correções e melhorias no código em `lib/`.
+
+## 1. Contexto arquitetural
+
+- **Framework**: Flutter (Windows, macOS, iOS, Android).
+- **Persistência**: SQLite via Drift em `lib/data/database/`; legado JSON em `lib/core/managers/` (não remover sem validar uso).
+- **State management**: BLoC com `flutter_bloc` e `freezed`.
+- **Estrutura**: Screen (Bloc/Cubit) → Interface (`lib/core/interface/`) → Repository (`lib/core/repository/`) → DAO Drift (`lib/data/database/dao/`) → SQLite.
+
+```
+lib/
+├── core/
+│   ├── managers/          # Managers JSON (legado)
+│   ├── models/            # Data classes com @JsonSerializable
+│   ├── interface/         # Contratos
+│   ├── repository/        # Implementações
+│   └── utils/             # command_result.dart, extensões
+├── data/database/         # AppDatabase, SystemDatabase, DAOs
+├── screens/               # UI e BLoCs por entidade
+└── main.dart
+```
+
+## 2. Tratamento de erros: ResultStatus
+
+Use **sempre** `ResultStatus<R, E>` para operações que podem falhar (`lib/core/utils/command_result.dart`). **Nunca** lance exceções através das camadas e **nunca** use `ExecutionResult`.
+
+```dart
+ResultStatus<Customer, Failure> resultado = await repository.buscar(id);
+
+resultado.when(
+  success: (customer) => /* handle success */,
+  error: (failure) => /* handle failure */,
+);
+
+// Ou: isSuccessful, hasError, asSuccess, asError
+```
+
+## 3. Drift DAO (dois bancos)
+
+Existem **dois bancos**: `AppDatabase` (`app_database.dart`, schemaVersion 10) e `SystemDatabase` (`system_database.dart`, schemaVersion 2).
+
+- Use `@UseRowClass(DomainClass)` nas tabelas para evitar mapeamento manual.
+- Convenção: tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`.
+
+```dart
+@UseRowClass(Customer)
+class CustomerRecords extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text()();
+  // ...
+}
+
+@DriftAccessor(tables: [CustomerRecords])
+class CustomerDao extends DatabaseAccessor<AppDatabase> with _$CustomerDaoMixin {
+  Future<List<Customer>> getAll() => select(customerRecords).get();
+}
+```
+
+Ao alterar schema Drift: atualizar `schemaVersion` e estratégia de migração no banco correto.
+
+## 4. Modelos com JSON
+
+Models em `lib/core/models/` devem usar `@JsonSerializable` e declarar a parte gerada:
+
+```dart
+part 'customer.g.dart';
+
+@JsonSerializable()
+class Customer {
+  final int? id;
+  final String name;
+  final String cpf;
+  const Customer({this.id, required this.name, required this.cpf});
+
+  factory Customer.fromJson(Map<String, dynamic> json) => _$CustomerFromJson(json);
+  Map<String, dynamic> toJson() => _$CustomerToJson(this);
+}
+```
+
+Após alterar models: rodar `dart run build_runner build --delete-conflicting-outputs`.
+
+## 5. BLoC com Freezed
+
+Eventos e estados imutáveis com `@freezed` em `lib/screens/[entidade]/bloc/`:
+
+```dart
+@freezed
+sealed class CustomerBlocState with _$CustomerBlocState {
+  const factory CustomerBlocState.initial() = _Initial;
+  const factory CustomerBlocState.loading() = _Loading;
+  const factory CustomerBlocState.success({required List<Customer> data}) = _Success;
+  const factory CustomerBlocState.error({required String message}) = _Error;
+}
+```
+
+Sempre rodar build_runner após alterar eventos/estados freezed.
+
+## 6. Navegação e DI
+
+- **Rotas**: `auto_route` com root em `lib/screens/route/route_app.dart`; gerado em `route_app.gr.dart`. Use `@RoutePage` nas telas.
+- **DI**: Registrar singletons/factories em `setupAppInjection()` (GetIt), chamado no `main()`.
+
+Ao alterar rotas ou registros de DI: conferir `setupAppInjection()` e o router em `MaterialApp.router`.
+
+## 7. Idioma e documentação
+
+- **Código**: nomes de classes, métodos e variáveis em **inglês**.
+- **Documentação**: comentários `///` em **português**, práticos e diretos.
+
+## 8. Restrições
+
+- Não usar o fluxo legado em `lib/core/managers/` a menos que exigido.
+- Não remover JSON/managers antigos sem confirmar impacto na UI.
+- Não migrar/remover legado sem confirmar uso em repositório/interface/UI.

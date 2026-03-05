@@ -16,11 +16,7 @@ class SecaoBackup extends StatelessWidget {
   final VoidCallback onSelecionarFrequencia;
 
   const SecaoBackup({
-    super.key,
-    required this.config,
-    required this.onConfigChanged,
-    required this.onRealizarBackup,
-    required this.onSelecionarFrequencia,
+    required this.config, required this.onConfigChanged, required this.onRealizarBackup, required this.onSelecionarFrequencia, super.key,
   });
 
   @override

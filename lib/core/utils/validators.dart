@@ -4,6 +4,8 @@
 /// no sistema de gerenciamento de loja.
 library;
 
+import 'package:system_loja/screens/utils/constants.dart';
+
 /// Combina múltiplos validadores em um único.
 ///
 /// Retorna a primeira mensagem de erro encontrada, ou `null` se todos
@@ -16,7 +18,9 @@ library;
 ///   (value) => validateMinLength(value, 3, 'Nome'),
 /// ]),
 /// ```
-String? Function(String? value) combineValidators(List<String? Function(String?)> validators) {
+String? Function(String? value) combineValidators(
+  List<String? Function(String?)> validators,
+) {
   return (String? value) {
     for (final validator in validators) {
       final error = validator(value);
@@ -122,8 +126,7 @@ String? validateProductCode(String? value) {
   }
 
   // Permite apenas letras, números e hífens
-  final validPattern = RegExp(r'^[a-zA-Z0-9\-]+$');
-  if (!validPattern.hasMatch(code)) {
+  if (!Constants.productCodeValidRegExp.hasMatch(code)) {
     return 'Código deve conter apenas letras, números e hífens';
   }
 

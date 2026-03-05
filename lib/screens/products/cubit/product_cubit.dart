@@ -1,114 +1,187 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/core/interface/i_product_repository.dart';
+import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/screens/products/cubit/produto_state.dart';
+import 'package:system_loja/screens/products/cubit/product_state.dart';
 
+/// Gerencia o estado da tela de produtos e operações com a base de dados.
+///
+/// Este Cubit é responsável por coordenar operações CRUD (criar, ler,
+/// atualizar, deletar) de produtos, mantendo o estado sincronizado com
+/// a [ProductRepository]. Emite estados que refletem o resultado de cada
+/// operação para a UI.
 class ProductCubit extends Cubit<ProductState> {
-  late ProductRepository _manager;
+  /// Repositório utilizado para acessar dados de produtos.
+  final IProductRepository _productRepository;
 
-  ProductCubit() : super(ProductState.loading()) {
-    _manager = ProductRepository();
+  /// Inicializa o Cubit com estado de carregamento.
+  ///
+  /// Cria uma nova instância do repositório e carrega todos os produtos
+  /// disponíveis na base de dados.
+  ProductCubit(this._productRepository) : super(ProductState.loading()) {
     loadAllProducts();
   }
 
-  void adicionarProduto(Produto produto) async {
-    await _manager.salvarProduto(produto);
-    final result = await _manager.getProdutos();
-    switch (result) {
-      case OperationSuccess(result: final produtos):
-        emit(ProductState.insertSuccess(produtos: produtos.toList()));
-      case OperationError(error: final errorMessage):
+  /// Adiciona um novo produto à base de dados.
+  ///
+  /// Cria um novo registro com os dados fornecidos, obtém o próximo ID
+  /// disponível e emite um estado de sucesso ao concluir.
+  ///
+  /// Parâmetros:
+  ///   - [nome]: Nome do produto.
+  ///   - [codigo]: Código único do produto.
+  ///   - [preco]: Preço unitário do produto.
+  ///   - [estoque]: Quantidade disponível em estoque.
+  ///   - [descricao]: Descrição detalhada do produto.
+  ///   - [categoryId]: ID da categoria à qual o produto pertence.
+  Future<void> adicionarProduto({
+    required String nome,
+    required String codigo,
+    required double preco,
+    required int estoque,
+    required String descricao,
+    required bool codeGenerate, int? categoryId,
+  }) async {
+    if (codeGenerate) {
+      codigo = await _productRepository.generateProductCode();
+    }
+    final produto = Product(
+      name: nome,
+      code: codigo,
+      price: preco,
+      stockQuantity: estoque,
+      description: descricao,
+      categoryId: categoryId,
+    );
+
+    final resultSave = await _productRepository.saveProduct(produto);
+    switch (resultSave) {
+      case ResultSuccess(result: final saved):
+        if (!saved) {
+          emit(
+            ProductState.error(
+              message: 'Erro ao adicionar produto: operação falhou',
+            ),
+          );
+          return;
+        }
+        final result = await _productRepository.fetchProducts();
+        switch (result) {
+          case ResultSuccess(result: final produtos):
+            emit(ProductState.insertSuccess(produtos: produtos.toList()));
+          case ResultError(resultError: final errorMessage):
+            emit(
+              ProductState.error(
+                message: 'Erro ao adicionar produto: $errorMessage',
+              ),
+            );
+        }
+      case ResultError(resultError: final errorMessage):
         emit(
-          ProductState.findByCodeFailure(
+          ProductState.error(
             message: 'Erro ao adicionar produto: $errorMessage',
           ),
         );
     }
   }
 
-  void findByCode(int codigo) async {
-    final result = await _manager.findByCode(codigo);
-    switch (result) {
-      case OperationSuccess(result: final produto):
-        emit(ProductState.findByCodeSuccess(produto: produto));
-        return;
-      case OperationError(error: final errorMessage):
+  /// Remove um produto da base de dados.
+  ///
+  /// Exclui o registro identificado por [id] e recarrega a lista de produtos.
+  /// Emite um estado de sucesso ao concluir a exclusão.
+  ///
+  /// Parâmetros:
+  ///   - [id]: Identificador único do produto a ser removido.
+  Future<void> deleteProduct(int id) async {
+    final deleteResult = await _productRepository.deleteProduct(id);
+    switch (deleteResult) {
+      case ResultSuccess():
+        final result = await _productRepository.fetchProducts();
+        switch (result) {
+          case ResultSuccess(result: final produtos):
+            emit(ProductState.deleteSuccess(produtos: produtos.toList()));
+          case ResultError(resultError: final errorMessage):
+            emit(
+              ProductState.error(
+                message:
+                    'Erro ao carregar produtos após exclusão: $errorMessage',
+              ),
+            );
+        }
+      case ResultError(resultError: final errorMessage):
         emit(
-          ProductState.findByCodeFailure(
-            message: 'Erro ao buscar produto: $errorMessage',
-          ),
+          ProductState.error(message: 'Erro ao deletar produto: $errorMessage'),
         );
-        return;
     }
   }
 
-  void loadAllProducts() async {
-    final result = await _manager.getProdutos();
+  /// Busca um produto pelo seu código.
+  ///
+  /// Realiza uma busca na base de dados pelo código do produto e emite
+  /// um estado contendo o resultado da busca.
+  ///
+  /// Parâmetros:
+  ///   - [codigo]: Código do produto a ser localizado.
+  Future<void> findByCode(int codigo) async {
+    final result = await _productRepository.findByCode(codigo);
     switch (result) {
-      case OperationSuccess(result: final produtos):
-        emit(ProductState.insertSuccess(produtos: produtos.toList()));
-      case OperationError(error: final errorMessage):
+      case ResultSuccess(result: final produto):
         emit(
-          ProductState.findByCodeFailure(
+          ProductState.error(
+            message: 'Funcionalidade não implementada: ${produto.name}',
+          ),
+        );
+
+      case ResultError(resultError: final errorMessage):
+        emit(
+          ProductState.error(message: 'Erro ao buscar produto: $errorMessage'),
+        );
+    }
+  }
+
+  Future<void> loadAllProducts() async {
+    final result = await _productRepository.fetchProducts();
+    switch (result) {
+      case ResultSuccess(result: final produtos):
+        emit(ProductState.loaded(produtos: produtos.toList()));
+      case ResultError(resultError: final errorMessage):
+        emit(
+          ProductState.error(
             message: 'Erro ao carregar produtos: $errorMessage',
           ),
         );
     }
   }
 
-  void newId() async {
-    final newId = await _manager.obtainNextId();
-    emit(ProductState.newIdGenerated(newId: newId));
-  }
-
-  /// Atualiza um produto existente
-  void updateProduct(Produto produto) async {
+  /// Atualiza um produto existente na base de dados.
+  ///
+  /// Modifica o registro do produto identificado pelo seu ID e recarrega
+  /// a lista de produtos após a atualização.
+  ///
+  /// Parâmetros:
+  ///   - [produto]: Objeto [Product] contendo os dados atualizados.
+  Future<void> updateProduct(Product produto) async {
     emit(ProductState.loading());
-    final updateResult = await _manager.updateProduct(produto);
+    final updateResult = await _productRepository.updateProduct(produto);
     switch (updateResult) {
-      case OperationSuccess():
-        final result = await _manager.getProdutos();
+      case ResultSuccess():
+        final result = await _productRepository.fetchProducts();
         switch (result) {
-          case OperationSuccess(result: final produtos):
+          case ResultSuccess(result: final produtos):
             emit(ProductState.updateSuccess(produtos: produtos.toList()));
-          case OperationError(error: final errorMessage):
+          case ResultError(resultError: final errorMessage):
             emit(
               ProductState.error(
-                message: 'Erro ao carregar produtos após atualização: $errorMessage',
+                message:
+                    'Erro ao carregar produtos após atualização: $errorMessage',
               ),
             );
         }
-      case OperationError(error: final errorMessage):
+      case ResultError(resultError: final errorMessage):
         emit(
           ProductState.error(
             message: 'Erro ao atualizar produto: $errorMessage',
-          ),
-        );
-    }
-  }
-
-  /// Remove um produto
-  void deleteProduct(int id) async {
-    emit(ProductState.loading());
-    final deleteResult = await _manager.deleteProduct(id);
-    switch (deleteResult) {
-      case OperationSuccess():
-        final result = await _manager.getProdutos();
-        switch (result) {
-          case OperationSuccess(result: final produtos):
-            emit(ProductState.deleteSuccess(produtos: produtos.toList()));
-          case OperationError(error: final errorMessage):
-            emit(
-              ProductState.error(
-                message: 'Erro ao carregar produtos após exclusão: $errorMessage',
-              ),
-            );
-        }
-      case OperationError(error: final errorMessage):
-        emit(
-          ProductState.error(
-            message: 'Erro ao deletar produto: $errorMessage',
           ),
         );
     }

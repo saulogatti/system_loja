@@ -1,51 +1,51 @@
-import '../log_atividade.dart';
+import '../activity_log.dart';
 
 /// Extensão para conversão entre TipoAcao e String
 ///
 /// Fornece métodos utilitários para converter tipos de ação
 /// para strings e vice-versa, mantendo consistência em todo o sistema.
-extension TipoAcaoExtension on TipoAcao {
-  /// Converte o tipo de ação para string
-  String toStringValue() {
-    switch (this) {
-      case TipoAcao.criar:
-        return 'CRIAR';
-      case TipoAcao.ler:
-        return 'LER';
-      case TipoAcao.atualizar:
-        return 'ATUALIZAR';
-      case TipoAcao.deletar:
-        return 'DELETAR';
-    }
-  }
-
+extension TipoAcaoExtension on ActionType {
   /// Converte o tipo de ação para texto legível
   String toDisplayName() {
     switch (this) {
-      case TipoAcao.criar:
+      case ActionType.criar:
         return 'Criação';
-      case TipoAcao.ler:
+      case ActionType.ler:
         return 'Leitura';
-      case TipoAcao.atualizar:
+      case ActionType.atualizar:
         return 'Atualização';
-      case TipoAcao.deletar:
+      case ActionType.deletar:
         return 'Exclusão';
     }
   }
 
+  /// Converte o tipo de ação para string
+  String toStringValue() {
+    switch (this) {
+      case ActionType.criar:
+        return 'CRIAR';
+      case ActionType.ler:
+        return 'LER';
+      case ActionType.atualizar:
+        return 'ATUALIZAR';
+      case ActionType.deletar:
+        return 'DELETAR';
+    }
+  }
+
   /// Converte uma string para TipoAcao
-  static TipoAcao fromString(String value) {
+  static ActionType fromString(String value) {
     switch (value.toUpperCase()) {
       case 'CRIAR':
-        return TipoAcao.criar;
+        return ActionType.criar;
       case 'LER':
-        return TipoAcao.ler;
+        return ActionType.ler;
       case 'ATUALIZAR':
-        return TipoAcao.atualizar;
+        return ActionType.atualizar;
       case 'DELETAR':
-        return TipoAcao.deletar;
+        return ActionType.deletar;
       default:
-        return TipoAcao.criar;
+        return ActionType.criar;
     }
   }
 }

@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="system_loja API docs, for the Dart programming language.">
+  <title>system_loja - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">system_loja package</li>
+  </ol>
+  <div class="self-name">system_loja</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="system-loja">System Loja</h1>
+<p>Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, vendas/notas, empresa, categorias e configuracoes), com persistencia principal em SQLite via Drift.</p>
+<h2 id="visao-geral">Visao Geral</h2>
+<ul>
+<li>UI em <code>lib/screens/</code> com <code>flutter_bloc</code> (BLoC/Cubit)</li>
+<li>Fluxo principal: Screen -&gt; Interface -&gt; Repository -&gt; DAO Drift -&gt; SQLite</li>
+<li>Navegacao com <code>auto_route</code></li>
+<li>Injecao de dependencia com <code>GetIt</code> em <code>setupAppInjection()</code></li>
+<li>Resultado de operacoes com <code>ResultStatus&lt;R, E&gt;</code> (<code>lib/core/utils/command_result.dart</code>)</li>
+</ul>
+<h2 id="requisitos">Requisitos</h2>
+<ul>
+<li>Flutter 3.41.2 ou superior</li>
+<li>Dart &gt;= 3.11.0 (<code>pubspec.yaml</code>)</li>
+</ul>
+<h2 id="setup-rapido">Setup Rapido</h2>
+<pre class="language-bash"><code class="language-bash">git clone https://github.com/saulogatti/system_loja.git
+cd system_loja
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+</code></pre>
+<h2 id="executar">Executar</h2>
+<pre class="language-bash"><code class="language-bash"># Windows
+flutter run -d windows
+
+# Linux
+flutter run -d linux
+
+# Web (chrome)
+flutter run -d chrome
+
+# Web (servidor local)
+flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0
+</code></pre>
+<h2 id="comandos-uteis">Comandos Uteis</h2>
+<pre class="language-bash"><code class="language-bash"># Gerar codigo (obrigatorio quando alterar Freezed/JsonSerializable/Drift/AutoRoute)
+dart run build_runner build --delete-conflicting-outputs
+
+# Analise estatica
+dart analyze
+
+# Formatacao
+dart format --set-exit-if-changed .
+
+# Testes
+flutter test
+flutter test test/&lt;arquivo&gt;_test.dart
+</code></pre>
+<h2 id="arquitetura">Arquitetura</h2>
+<h3 id="bancos-drift">Bancos Drift</h3>
+<ul>
+<li><code>AppDatabase</code> em <code>lib/data/database/app_database.dart</code> (schemaVersion <code>11</code>)</li>
+<li><code>SystemDatabase</code> em <code>lib/data/database/system_database.dart</code> (schemaVersion <code>2</code>)</li>
+</ul>
+<h3 id="persistencia-legacy">Persistencia Legacy</h3>
+<p>Parte do projeto ainda utiliza JSON e codigo legado em <code>lib/core/managers/</code> e <code>data/</code>. Nao remover esse fluxo sem validar impacto.</p>
+<h3 id="convencoes-importantes">Convencoes Importantes</h3>
+<ul>
+<li>Usar <code>ResultStatus&lt;R, E&gt;</code> para retorno de operacoes, sem propagar excecoes entre camadas.</li>
+<li>Em Drift, seguir convencao: tabela <code>XxxRecords</code>, linha <code>XxxRecord</code>, DAO <code>XxxDao</code>.</li>
+<li>Codigo em ingles; documentacao e comentarios (<code>///</code>) em portugues.</li>
+</ul>
+<h2 id="estrutura-resumo">Estrutura (Resumo)</h2>
+<pre class="language-text"><code class="language-text">lib/
+  app_injection.dart
+  core/
+    interface/
+    repository/
+    managers/           # legado ainda em uso pontual
+    models/
+    utils/
+  data/
+    database/
+      dao/
+      table/
+      extension/
+  screens/
+    route/
+    widgets/
+test/
+docs/
+</code></pre>
+<h2 id="observacoes-web">Observacoes Web</h2>
+<p>Para Drift no Web funcionar, os arquivos <code>web/sqlite3.wasm</code> e <code>web/drift_worker.js</code> devem estar presentes.</p>
+<h2 id="contribuicao">Contribuicao</h2>
+<ul>
+<li>Leia <code>CONTRIBUTING.md</code></li>
+<li>Para agentes/copilot, consulte <code>.github/copilot-instructions.md</code> e <code>AGENTS.md</code></li>
+<li>Sempre rode build_runner quando alterar anotacoes de geracao</li>
+</ul>
+<h2 id="documentacao">Documentacao</h2>
+<ul>
+<li><code>CONTRIBUTING.md</code></li>
+<li><code>.github/copilot-instructions.md</code></li>
+<li><code>.github/instructions/dartcode.instructions.md</code></li>
+<li><code>docs/DRIFT_ARCHITECTURE.md</code></li>
+<li><code>docs/DRIFT_MIGRATION.md</code></li>
+<li><code>docs/VALIDATION_SYSTEM.md</code></li>
+<li><code>docs/</code></li>
+</ul>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="app_injection">
+  <span class="name"><a href="app_injection/">app_injection</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_exception">
+  <span class="name"><a href="core_exceptions_product_exception/">core\exceptions\product_exception</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="validation_exception">
+  <span class="name"><a href="core_exceptions_validation_exception/">core\exceptions\validation_exception</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="i_category_repository">
+  <span class="name"><a href="core_interface_i_category_repository/">core\interface\i_category_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="i_company_repository">
+  <span class="name"><a href="core_interface_i_company_repository/">core\interface\i_company_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="i_configuration_repository">
+  <span class="name"><a href="core_interface_i_configuration_repository/">core\interface\i_configuration_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="i_customer_repository">
+  <span class="name"><a href="core_interface_i_customer_repository/">core\interface\i_customer_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="i_log_repository">
+  <span class="name"><a href="core_interface_i_log_repository/">core\interface\i_log_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="i_product_repository">
+  <span class="name"><a href="core_interface_i_product_repository/">core\interface\i_product_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="i_sales_repository">
+  <span class="name"><a href="core_interface_i_sales_repository/">core\interface\i_sales_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="i_settings_service">
+  <span class="name"><a href="core_interface_i_settings_service/">core\interface\i_settings_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="i_system_repository">
+  <span class="name"><a href="core_interface_i_system_repository/">core\interface\i_system_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="i_user_repository">
+  <span class="name"><a href="core_interface_i_user_repository/">core\interface\i_user_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="configuration_repository">
+  <span class="name"><a href="core_managers_configuration_repository/">core\managers\configuration_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="configuration_repository_cache">
+  <span class="name"><a href="core_managers_configuration_repository_cache/">core\managers\configuration_repository_cache</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_exception">
+  <span class="name"><a href="core_managers_exceptions_customer_exception/">core\managers\exceptions\customer_exception</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_error_manager">
+  <span class="name"><a href="core_managers_system_error_manager/">core\managers\system_error_manager</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="activity_log">
+  <span class="name"><a href="core_models_activity_log/">core\models\activity_log</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="address">
+  <span class="name"><a href="core_models_address/">core\models\address</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="category">
+  <span class="name"><a href="core_models_category/">core\models\category</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company">
+  <span class="name"><a href="core_models_company/">core\models\company</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer">
+  <span class="name"><a href="core_models_customer/">core\models\customer</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="default_object">
+  <span class="name"><a href="core_models_default_default_object/">core\models\default\default_object</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="people_data">
+  <span class="name"><a href="core_models_default_people_data/">core\models\default\people_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="nivel_permissao_extension">
+  <span class="name"><a href="core_models_extensions_nivel_permissao_extension/">core\models\extensions\nivel_permissao_extension</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="tipo_acao_extension">
+  <span class="name"><a href="core_models_extensions_tipo_acao_extension/">core\models\extensions\tipo_acao_extension</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice">
+  <span class="name"><a href="core_models_invoice/">core\models\invoice</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_item">
+  <span class="name"><a href="core_models_invoice_item/">core\models\invoice_item</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_type">
+  <span class="name"><a href="core_models_invoice_type/">core\models\invoice_type</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product">
+  <span class="name"><a href="core_models_product/">core\models\product</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="price_configuration">
+  <span class="name"><a href="core_models_system_config_price_configuration/">core\models\system_config\price_configuration</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="report_configuration">
+  <span class="name"><a href="core_models_system_config_report_configuration/">core\models\system_config\report_configuration</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_configuration">
+  <span class="name"><a href="core_models_system_config_system_configuration/">core\models\system_config\system_configuration</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_error">
+  <span class="name"><a href="core_models_system_errors_system_error/">core\models\system_errors\system_error</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="user">
+  <span class="name"><a href="core_models_user/">core\models\user</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="category_repository">
+  <span class="name"><a href="core_repository_category_repository/">core\repository\category_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_repository">
+  <span class="name"><a href="core_repository_company_repository/">core\repository\company_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_repository">
+  <span class="name"><a href="core_repository_customer_repository/">core\repository\customer_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_repository">
+  <span class="name"><a href="core_repository_product_repository/">core\repository\product_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_repository">
+  <span class="name"><a href="core_repository_sales_repository/">core\repository\sales_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="log_repository">
+  <span class="name"><a href="core_repository_system_log_repository/">core\repository\system\log_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_repository">
+  <span class="name"><a href="core_repository_system_system_repository/">core\repository\system\system_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="user_repository">
+  <span class="name"><a href="core_repository_system_user_repository/">core\repository\system\user_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="code_generator_service">
+  <span class="name"><a href="core_services_code_generator_service/">core\services\code_generator_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="app_settings">
+  <span class="name"><a href="core_settings_app_settings/">core\settings\app_settings</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="app_theme">
+  <span class="name"><a href="core_settings_app_theme/">core\settings\app_theme</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="app_theme_settings">
+  <span class="name"><a href="core_settings_app_theme_settings/">core\settings\app_theme_settings</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="command_result">
+  <span class="name"><a href="core_utils_command_result/">core\utils\command_result</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="documents">
+  <span class="name"><a href="core_utils_documents/">core\utils\documents</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="input_formatters">
+  <span class="name"><a href="core_utils_input_formatters/">core\utils\input_formatters</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="string_extensions">
+  <span class="name"><a href="core_utils_string_extensions/">core\utils\string_extensions</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="text_formatters">
+  <span class="name"><a href="core_utils_text_formatters/">core\utils\text_formatters</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="utils_extensions">
+  <span class="name"><a href="core_utils_utils_extensions/">core\utils\utils_extensions</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="validators">
+  <span class="name"><a href="core_utils_validators/">core\utils\validators</a></span> 
+
+</dt>
+<dd>Utilitários de validação para formulários.
+</dd>
+
+          <dt id="cache_manager">
+  <span class="name"><a href="data_cache_cache_manager/">data\cache\cache_manager</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cache_exception">
+  <span class="name"><a href="data_cache_exceptions_cache_exception/">data\cache\exceptions\cache_exception</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cacheable">
+  <span class="name"><a href="data_cache_models_cacheable/">data\cache\models\cacheable</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_error_model">
+  <span class="name"><a href="data_cache_models_system_model_system_error_model/">data\cache\models\system_model\system_error_model</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_cache_manager">
+  <span class="name"><a href="data_cache_system_cache_manager/">data\cache\system_cache_manager</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="app_database">
+  <span class="name"><a href="data_database_app_database/">data\database\app_database</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="address_dao">
+  <span class="name"><a href="data_database_dao_address_dao/">data\database\dao\address_dao</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="category_dao">
+  <span class="name"><a href="data_database_dao_category_dao/">data\database\dao\category_dao</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_dao">
+  <span class="name"><a href="data_database_dao_company_dao/">data\database\dao\company_dao</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_dao">
+  <span class="name"><a href="data_database_dao_customer_dao/">data\database\dao\customer_dao</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_dao">
+  <span class="name"><a href="data_database_dao_invoice_dao/">data\database\dao\invoice_dao</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_item_dao">
+  <span class="name"><a href="data_database_dao_invoice_item_dao/">data\database\dao\invoice_item_dao</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="log_dao">
+  <span class="name"><a href="data_database_dao_log_dao/">data\database\dao\log_dao</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_dao">
+  <span class="name"><a href="data_database_dao_product_dao/">data\database\dao\product_dao</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_dao">
+  <span class="name"><a href="data_database_dao_sales_dao/">data\database\dao\sales_dao</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_dao">
+  <span class="name"><a href="data_database_dao_system_dao/">data\database\dao\system_dao</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="users_dao">
+  <span class="name"><a href="data_database_dao_users_dao/">data\database\dao\users_dao</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_to_companion">
+  <span class="name"><a href="data_database_extension_company_to_companion/">data\database\extension\company_to_companion</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_to_companion">
+  <span class="name"><a href="data_database_extension_customer_to_companion/">data\database\extension\customer_to_companion</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_to_companion">
+  <span class="name"><a href="data_database_extension_invoice_to_companion/">data\database\extension\invoice_to_companion</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="log_to_companion">
+  <span class="name"><a href="data_database_extension_log_to_companion/">data\database\extension\log_to_companion</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_database">
+  <span class="name"><a href="data_database_system_database/">data\database\system_database</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="address_records">
+  <span class="name"><a href="data_database_table_address_records/">data\database\table\address_records</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="categories_records">
+  <span class="name"><a href="data_database_table_categories_records/">data\database\table\categories_records</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_records">
+  <span class="name"><a href="data_database_table_company_records/">data\database\table\company_records</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_records">
+  <span class="name"><a href="data_database_table_customer_records/">data\database\table\customer_records</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_items_records">
+  <span class="name"><a href="data_database_table_invoice_items_records/">data\database\table\invoice_items_records</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoices_records">
+  <span class="name"><a href="data_database_table_invoices_records/">data\database\table\invoices_records</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="nota_itens_table">
+  <span class="name"><a href="data_database_table_nota_itens_table/">data\database\table\nota_itens_table</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="notas_table">
+  <span class="name"><a href="data_database_table_notas_table/">data\database\table\notas_table</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="products_records">
+  <span class="name"><a href="data_database_table_products_records/">data\database\table\products_records</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="logs_records">
+  <span class="name"><a href="data_database_table_system_logs_records/">data\database\table\system\logs_records</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_records">
+  <span class="name"><a href="data_database_table_system_system_records/">data\database\table\system\system_records</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="users_records">
+  <span class="name"><a href="data_database_table_system_users_records/">data\database\table\system\users_records</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="file_storage_utility">
+  <span class="name"><a href="data_files_utility_file_storage_utility/">data\files_utility\file_storage_utility</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="main">
+  <span class="name"><a href="main/">main</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="category_management_screen">
+  <span class="name"><a href="screens_categories_category_management_screen/">screens\categories\category_management_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="category_cubit">
+  <span class="name"><a href="screens_categories_cubit_category_cubit/">screens\categories\cubit\category_cubit</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="category_state">
+  <span class="name"><a href="screens_categories_cubit_category_state/">screens\categories\cubit\category_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_bloc">
+  <span class="name"><a href="screens_company_bloc_company_bloc/">screens\company\bloc\company_bloc</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_edit_view">
+  <span class="name"><a href="screens_company_company_edit_view/">screens\company\company_edit_view</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_view">
+  <span class="name"><a href="screens_company_company_view/">screens\company\company_view</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_form">
+  <span class="name"><a href="screens_company_widgets_company_form/">screens\company\widgets\company_form</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_list">
+  <span class="name"><a href="screens_company_widgets_company_list/">screens\company\widgets\company_list</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_search_section">
+  <span class="name"><a href="screens_company_widgets_company_search_section/">screens\company\widgets\company_search_section</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="info_row">
+  <span class="name"><a href="screens_company_widgets_info_row/">screens\company\widgets\info_row</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="logs_cubit">
+  <span class="name"><a href="screens_configuracoes_bloc_logs_cubit/">screens\configuracoes\bloc\logs_cubit</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="logs_state_cubit">
+  <span class="name"><a href="screens_configuracoes_bloc_logs_state_cubit/">screens\configuracoes\bloc\logs_state_cubit</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="logs_system_cubit">
+  <span class="name"><a href="screens_configuracoes_bloc_logs_system_cubit/">screens\configuracoes\bloc\logs_system_cubit</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="logs_system_state">
+  <span class="name"><a href="screens_configuracoes_bloc_logs_system_state/">screens\configuracoes\bloc\logs_system_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="settings_bloc">
+  <span class="name"><a href="screens_configuracoes_bloc_settings_bloc/">screens\configuracoes\bloc\settings_bloc</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="settings_event">
+  <span class="name"><a href="screens_configuracoes_bloc_settings_event/">screens\configuracoes\bloc\settings_event</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="settings_state">
+  <span class="name"><a href="screens_configuracoes_bloc_settings_state/">screens\configuracoes\bloc\settings_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_config_cubit">
+  <span class="name"><a href="screens_configuracoes_bloc_system_config_cubit/">screens\configuracoes\bloc\system_config_cubit</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_config_state">
+  <span class="name"><a href="screens_configuracoes_bloc_system_config_state/">screens\configuracoes\bloc\system_config_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="user_cubit">
+  <span class="name"><a href="screens_configuracoes_bloc_user_cubit/">screens\configuracoes\bloc\user_cubit</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="usuario_state">
+  <span class="name"><a href="screens_configuracoes_bloc_usuario_state/">screens\configuracoes\bloc\usuario_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="issuer_config_screen">
+  <span class="name"><a href="screens_configuracoes_issuer_config_screen/">screens\configuracoes\issuer_config_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="log_system_screen">
+  <span class="name"><a href="screens_configuracoes_log_system_screen/">screens\configuracoes\log_system_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="logs_analytics_screen">
+  <span class="name"><a href="screens_configuracoes_logs_analytics_screen/">screens\configuracoes\logs_analytics_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="settings_screen">
+  <span class="name"><a href="screens_configuracoes_settings_screen/">screens\configuracoes\settings_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_config_screen">
+  <span class="name"><a href="screens_configuracoes_system_config_screen/">screens\configuracoes\system_config_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="usuario_screen">
+  <span class="name"><a href="screens_configuracoes_usuario_screen/">screens\configuracoes\usuario_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="maintenance_section">
+  <span class="name"><a href="screens_configuracoes_widgets_maintenance_section/">screens\configuracoes\widgets\maintenance_section</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="secao_backup">
+  <span class="name"><a href="screens_configuracoes_widgets_secao_backup/">screens\configuracoes\widgets\secao_backup</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="secao_banco_dados">
+  <span class="name"><a href="screens_configuracoes_widgets_secao_banco_dados/">screens\configuracoes\widgets\secao_banco_dados</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="secao_notificacoes">
+  <span class="name"><a href="screens_configuracoes_widgets_secao_notificacoes/">screens\configuracoes\widgets\secao_notificacoes</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="security_section">
+  <span class="name"><a href="screens_configuracoes_widgets_security_section/">screens\configuracoes\widgets\security_section</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="theme_settings">
+  <span class="name"><a href="screens_configuracoes_widgets_theme_settings/">screens\configuracoes\widgets\theme_settings</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="usuario_delete_confirm_dialog">
+  <span class="name"><a href="screens_configuracoes_widgets_usuario_delete_confirm_dialog/">screens\configuracoes\widgets\usuario_delete_confirm_dialog</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="usuario_details_dialog">
+  <span class="name"><a href="screens_configuracoes_widgets_usuario_details_dialog/">screens\configuracoes\widgets\usuario_details_dialog</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="usuario_form">
+  <span class="name"><a href="screens_configuracoes_widgets_usuario_form/">screens\configuracoes\widgets\usuario_form</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="usuario_list">
+  <span class="name"><a href="screens_configuracoes_widgets_usuario_list/">screens\configuracoes\widgets\usuario_list</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="usuario_list_item">
+  <span class="name"><a href="screens_configuracoes_widgets_usuario_list_item/">screens\configuracoes\widgets\usuario_list_item</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_bloc">
+  <span class="name"><a href="screens_customer_bloc_customer_bloc/">screens\customer\bloc\customer_bloc</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_view">
+  <span class="name"><a href="screens_customer_customer_view/">screens\customer\customer_view</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_form">
+  <span class="name"><a href="screens_customer_widgets_customer_form/">screens\customer\widgets\customer_form</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_info_row">
+  <span class="name"><a href="screens_customer_widgets_customer_info_row/">screens\customer\widgets\customer_info_row</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_list">
+  <span class="name"><a href="screens_customer_widgets_customer_list/">screens\customer\widgets\customer_list</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_overview_bottom_sheet">
+  <span class="name"><a href="screens_customer_widgets_customer_overview_bottom_sheet/">screens\customer\widgets\customer_overview_bottom_sheet</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_search_section">
+  <span class="name"><a href="screens_customer_widgets_customer_search_section/">screens\customer\widgets\customer_search_section</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="home_screen">
+  <span class="name"><a href="screens_home_home_screen/">screens\home\home_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cadastro_group_screen">
+  <span class="name"><a href="screens_host_cadastro_group_screen/">screens\host\cadastro_group_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="host_screen">
+  <span class="name"><a href="screens_host_host_screen/">screens\host\host_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="person_bloc">
+  <span class="name"><a href="screens_person_registration_bloc_person_bloc/">screens\person_registration\bloc\person_bloc</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="person_event">
+  <span class="name"><a href="screens_person_registration_bloc_person_event/">screens\person_registration\bloc\person_event</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="person_state">
+  <span class="name"><a href="screens_person_registration_bloc_person_state/">screens\person_registration\bloc\person_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="person_registration_form_data">
+  <span class="name"><a href="screens_person_registration_models_person_registration_form_data/">screens\person_registration\models\person_registration_form_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="person_registration_view">
+  <span class="name"><a href="screens_person_registration_person_registration_view/">screens\person_registration\person_registration_view</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="person_registration_form">
+  <span class="name"><a href="screens_person_registration_widgets_person_registration_form/">screens\person_registration\widgets\person_registration_form</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_cubit">
+  <span class="name"><a href="screens_products_cubit_product_cubit/">screens\products\cubit\product_cubit</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_state">
+  <span class="name"><a href="screens_products_cubit_product_state/">screens\products\cubit\product_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_detail_screen">
+  <span class="name"><a href="screens_products_product_detail_screen/">screens\products\product_detail_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_screen">
+  <span class="name"><a href="screens_products_product_screen/">screens\products\product_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="descricao_controller">
+  <span class="name"><a href="screens_products_widgets_editing_controller_descricao_controller/">screens\products\widgets\editing_controller\descricao_controller</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_category">
+  <span class="name"><a href="screens_products_widgets_product_category/">screens\products\widgets\product_category</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_form">
+  <span class="name"><a href="screens_products_widgets_product_form/">screens\products\widgets\product_form</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_list">
+  <span class="name"><a href="screens_products_widgets_product_list/">screens\products\widgets\product_list</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_overview_bottom_sheet">
+  <span class="name"><a href="screens_products_widgets_product_overview_bottom_sheet/">screens\products\widgets\product_overview_bottom_sheet</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="relatorio_cubit">
+  <span class="name"><a href="screens_relatorios_cubit_relatorio_cubit/">screens\relatorios\cubit\relatorio_cubit</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="relatorio_state">
+  <span class="name"><a href="screens_relatorios_cubit_relatorio_state/">screens\relatorios\cubit\relatorio_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="relatorio_screen">
+  <span class="name"><a href="screens_relatorios_relatorio_screen/">screens\relatorios\relatorio_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="route_app">
+  <span class="name"><a href="screens_route_route_app/">screens\route\route_app</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="route_app.gr">
+  <span class="name"><a href="screens_route_route_app.gr/">screens\route\route_app.gr</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_cubit">
+  <span class="name"><a href="screens_sales_cubit_sales_cubit/">screens\sales\cubit\sales_cubit</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_state">
+  <span class="name"><a href="screens_sales_cubit_sales_state/">screens\sales\cubit\sales_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="route_sales">
+  <span class="name"><a href="screens_sales_route_route_sales/">screens\sales\route\route_sales</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_invoice_screen">
+  <span class="name"><a href="screens_sales_sales_invoice_screen/">screens\sales\sales_invoice_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_screen">
+  <span class="name"><a href="screens_sales_sales_screen/">screens\sales\sales_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_card">
+  <span class="name"><a href="screens_sales_widgets_invoice_card/">screens\sales\widgets\invoice_card</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_overview_bottom_sheet">
+  <span class="name"><a href="screens_sales_widgets_invoice_overview_bottom_sheet/">screens\sales\widgets\invoice_overview_bottom_sheet</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="settings_service">
+  <span class="name"><a href="screens_settings_settings_service/">screens\settings\settings_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="constants">
+  <span class="name"><a href="screens_utils_constants/">screens\utils\constants</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="extension_date_time">
+  <span class="name"><a href="screens_utils_extension_date_time/">screens\utils\extension_date_time</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="address_form">
+  <span class="name"><a href="screens_widgets_address_form/">screens\widgets\address_form</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="card_list_item">
+  <span class="name"><a href="screens_widgets_card_list_item/">screens\widgets\card_list_item</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="loading_overlay">
+  <span class="name"><a href="screens_widgets_loading_overlay/">screens\widgets\loading_overlay</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="overlay_app_widget">
+  <span class="name"><a href="screens_widgets_overlay_app_widget/">screens\widgets\overlay_app_widget</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="text_form_field_cpf">
+  <span class="name"><a href="screens_widgets_text_form_field_cpf/">screens\widgets\text_form_field_cpf</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="text_form_field_email">
+  <span class="name"><a href="screens_widgets_text_form_field_email/">screens\widgets\text_form_field_email</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="text_form_field_phone">
+  <span class="name"><a href="screens_widgets_text_form_field_phone/">screens\widgets\text_form_field_phone</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">system_loja package</li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">system_loja</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="app_injection/">app_injection</a></li>
+      <li><a href="core_exceptions_product_exception/">core\exceptions\product_exception</a></li>
+      <li><a href="core_exceptions_validation_exception/">core\exceptions\validation_exception</a></li>
+      <li><a href="core_interface_i_category_repository/">core\interface\i_category_repository</a></li>
+      <li><a href="core_interface_i_company_repository/">core\interface\i_company_repository</a></li>
+      <li><a href="core_interface_i_configuration_repository/">core\interface\i_configuration_repository</a></li>
+      <li><a href="core_interface_i_customer_repository/">core\interface\i_customer_repository</a></li>
+      <li><a href="core_interface_i_log_repository/">core\interface\i_log_repository</a></li>
+      <li><a href="core_interface_i_product_repository/">core\interface\i_product_repository</a></li>
+      <li><a href="core_interface_i_sales_repository/">core\interface\i_sales_repository</a></li>
+      <li><a href="core_interface_i_settings_service/">core\interface\i_settings_service</a></li>
+      <li><a href="core_interface_i_system_repository/">core\interface\i_system_repository</a></li>
+      <li><a href="core_interface_i_user_repository/">core\interface\i_user_repository</a></li>
+      <li><a href="core_managers_configuration_repository/">core\managers\configuration_repository</a></li>
+      <li><a href="core_managers_configuration_repository_cache/">core\managers\configuration_repository_cache</a></li>
+      <li><a href="core_managers_exceptions_customer_exception/">core\managers\exceptions\customer_exception</a></li>
+      <li><a href="core_managers_system_error_manager/">core\managers\system_error_manager</a></li>
+      <li><a href="core_models_activity_log/">core\models\activity_log</a></li>
+      <li><a href="core_models_address/">core\models\address</a></li>
+      <li><a href="core_models_category/">core\models\category</a></li>
+      <li><a href="core_models_company/">core\models\company</a></li>
+      <li><a href="core_models_customer/">core\models\customer</a></li>
+      <li><a href="core_models_default_default_object/">core\models\default\default_object</a></li>
+      <li><a href="core_models_default_people_data/">core\models\default\people_data</a></li>
+      <li><a href="core_models_extensions_nivel_permissao_extension/">core\models\extensions\nivel_permissao_extension</a></li>
+      <li><a href="core_models_extensions_tipo_acao_extension/">core\models\extensions\tipo_acao_extension</a></li>
+      <li><a href="core_models_invoice/">core\models\invoice</a></li>
+      <li><a href="core_models_invoice_item/">core\models\invoice_item</a></li>
+      <li><a href="core_models_invoice_type/">core\models\invoice_type</a></li>
+      <li><a href="core_models_product/">core\models\product</a></li>
+      <li><a href="core_models_system_config_price_configuration/">core\models\system_config\price_configuration</a></li>
+      <li><a href="core_models_system_config_report_configuration/">core\models\system_config\report_configuration</a></li>
+      <li><a href="core_models_system_config_system_configuration/">core\models\system_config\system_configuration</a></li>
+      <li><a href="core_models_system_errors_system_error/">core\models\system_errors\system_error</a></li>
+      <li><a href="core_models_user/">core\models\user</a></li>
+      <li><a href="core_repository_category_repository/">core\repository\category_repository</a></li>
+      <li><a href="core_repository_company_repository/">core\repository\company_repository</a></li>
+      <li><a href="core_repository_customer_repository/">core\repository\customer_repository</a></li>
+      <li><a href="core_repository_product_repository/">core\repository\product_repository</a></li>
+      <li><a href="core_repository_sales_repository/">core\repository\sales_repository</a></li>
+      <li><a href="core_repository_system_log_repository/">core\repository\system\log_repository</a></li>
+      <li><a href="core_repository_system_system_repository/">core\repository\system\system_repository</a></li>
+      <li><a href="core_repository_system_user_repository/">core\repository\system\user_repository</a></li>
+      <li><a href="core_services_code_generator_service/">core\services\code_generator_service</a></li>
+      <li><a href="core_settings_app_settings/">core\settings\app_settings</a></li>
+      <li><a href="core_settings_app_theme/">core\settings\app_theme</a></li>
+      <li><a href="core_settings_app_theme_settings/">core\settings\app_theme_settings</a></li>
+      <li><a href="core_utils_command_result/">core\utils\command_result</a></li>
+      <li><a href="core_utils_documents/">core\utils\documents</a></li>
+      <li><a href="core_utils_input_formatters/">core\utils\input_formatters</a></li>
+      <li><a href="core_utils_string_extensions/">core\utils\string_extensions</a></li>
+      <li><a href="core_utils_text_formatters/">core\utils\text_formatters</a></li>
+      <li><a href="core_utils_utils_extensions/">core\utils\utils_extensions</a></li>
+      <li><a href="core_utils_validators/">core\utils\validators</a></li>
+      <li><a href="data_cache_cache_manager/">data\cache\cache_manager</a></li>
+      <li><a href="data_cache_exceptions_cache_exception/">data\cache\exceptions\cache_exception</a></li>
+      <li><a href="data_cache_models_cacheable/">data\cache\models\cacheable</a></li>
+      <li><a href="data_cache_models_system_model_system_error_model/">data\cache\models\system_model\system_error_model</a></li>
+      <li><a href="data_cache_system_cache_manager/">data\cache\system_cache_manager</a></li>
+      <li><a href="data_database_app_database/">data\database\app_database</a></li>
+      <li><a href="data_database_dao_address_dao/">data\database\dao\address_dao</a></li>
+      <li><a href="data_database_dao_category_dao/">data\database\dao\category_dao</a></li>
+      <li><a href="data_database_dao_company_dao/">data\database\dao\company_dao</a></li>
+      <li><a href="data_database_dao_customer_dao/">data\database\dao\customer_dao</a></li>
+      <li><a href="data_database_dao_invoice_dao/">data\database\dao\invoice_dao</a></li>
+      <li><a href="data_database_dao_invoice_item_dao/">data\database\dao\invoice_item_dao</a></li>
+      <li><a href="data_database_dao_log_dao/">data\database\dao\log_dao</a></li>
+      <li><a href="data_database_dao_product_dao/">data\database\dao\product_dao</a></li>
+      <li><a href="data_database_dao_sales_dao/">data\database\dao\sales_dao</a></li>
+      <li><a href="data_database_dao_system_dao/">data\database\dao\system_dao</a></li>
+      <li><a href="data_database_dao_users_dao/">data\database\dao\users_dao</a></li>
+      <li><a href="data_database_extension_company_to_companion/">data\database\extension\company_to_companion</a></li>
+      <li><a href="data_database_extension_customer_to_companion/">data\database\extension\customer_to_companion</a></li>
+      <li><a href="data_database_extension_invoice_to_companion/">data\database\extension\invoice_to_companion</a></li>
+      <li><a href="data_database_extension_log_to_companion/">data\database\extension\log_to_companion</a></li>
+      <li><a href="data_database_system_database/">data\database\system_database</a></li>
+      <li><a href="data_database_table_address_records/">data\database\table\address_records</a></li>
+      <li><a href="data_database_table_categories_records/">data\database\table\categories_records</a></li>
+      <li><a href="data_database_table_company_records/">data\database\table\company_records</a></li>
+      <li><a href="data_database_table_customer_records/">data\database\table\customer_records</a></li>
+      <li><a href="data_database_table_invoice_items_records/">data\database\table\invoice_items_records</a></li>
+      <li><a href="data_database_table_invoices_records/">data\database\table\invoices_records</a></li>
+      <li><a href="data_database_table_nota_itens_table/">data\database\table\nota_itens_table</a></li>
+      <li><a href="data_database_table_notas_table/">data\database\table\notas_table</a></li>
+      <li><a href="data_database_table_products_records/">data\database\table\products_records</a></li>
+      <li><a href="data_database_table_system_logs_records/">data\database\table\system\logs_records</a></li>
+      <li><a href="data_database_table_system_system_records/">data\database\table\system\system_records</a></li>
+      <li><a href="data_database_table_system_users_records/">data\database\table\system\users_records</a></li>
+      <li><a href="data_files_utility_file_storage_utility/">data\files_utility\file_storage_utility</a></li>
+      <li><a href="main/">main</a></li>
+      <li><a href="screens_categories_category_management_screen/">screens\categories\category_management_screen</a></li>
+      <li><a href="screens_categories_cubit_category_cubit/">screens\categories\cubit\category_cubit</a></li>
+      <li><a href="screens_categories_cubit_category_state/">screens\categories\cubit\category_state</a></li>
+      <li><a href="screens_company_bloc_company_bloc/">screens\company\bloc\company_bloc</a></li>
+      <li><a href="screens_company_company_edit_view/">screens\company\company_edit_view</a></li>
+      <li><a href="screens_company_company_view/">screens\company\company_view</a></li>
+      <li><a href="screens_company_widgets_company_form/">screens\company\widgets\company_form</a></li>
+      <li><a href="screens_company_widgets_company_list/">screens\company\widgets\company_list</a></li>
+      <li><a href="screens_company_widgets_company_search_section/">screens\company\widgets\company_search_section</a></li>
+      <li><a href="screens_company_widgets_info_row/">screens\company\widgets\info_row</a></li>
+      <li><a href="screens_configuracoes_bloc_logs_cubit/">screens\configuracoes\bloc\logs_cubit</a></li>
+      <li><a href="screens_configuracoes_bloc_logs_state_cubit/">screens\configuracoes\bloc\logs_state_cubit</a></li>
+      <li><a href="screens_configuracoes_bloc_logs_system_cubit/">screens\configuracoes\bloc\logs_system_cubit</a></li>
+      <li><a href="screens_configuracoes_bloc_logs_system_state/">screens\configuracoes\bloc\logs_system_state</a></li>
+      <li><a href="screens_configuracoes_bloc_settings_bloc/">screens\configuracoes\bloc\settings_bloc</a></li>
+      <li><a href="screens_configuracoes_bloc_settings_event/">screens\configuracoes\bloc\settings_event</a></li>
+      <li><a href="screens_configuracoes_bloc_settings_state/">screens\configuracoes\bloc\settings_state</a></li>
+      <li><a href="screens_configuracoes_bloc_system_config_cubit/">screens\configuracoes\bloc\system_config_cubit</a></li>
+      <li><a href="screens_configuracoes_bloc_system_config_state/">screens\configuracoes\bloc\system_config_state</a></li>
+      <li><a href="screens_configuracoes_bloc_user_cubit/">screens\configuracoes\bloc\user_cubit</a></li>
+      <li><a href="screens_configuracoes_bloc_usuario_state/">screens\configuracoes\bloc\usuario_state</a></li>
+      <li><a href="screens_configuracoes_issuer_config_screen/">screens\configuracoes\issuer_config_screen</a></li>
+      <li><a href="screens_configuracoes_log_system_screen/">screens\configuracoes\log_system_screen</a></li>
+      <li><a href="screens_configuracoes_logs_analytics_screen/">screens\configuracoes\logs_analytics_screen</a></li>
+      <li><a href="screens_configuracoes_settings_screen/">screens\configuracoes\settings_screen</a></li>
+      <li><a href="screens_configuracoes_system_config_screen/">screens\configuracoes\system_config_screen</a></li>
+      <li><a href="screens_configuracoes_usuario_screen/">screens\configuracoes\usuario_screen</a></li>
+      <li><a href="screens_configuracoes_widgets_maintenance_section/">screens\configuracoes\widgets\maintenance_section</a></li>
+      <li><a href="screens_configuracoes_widgets_secao_backup/">screens\configuracoes\widgets\secao_backup</a></li>
+      <li><a href="screens_configuracoes_widgets_secao_banco_dados/">screens\configuracoes\widgets\secao_banco_dados</a></li>
+      <li><a href="screens_configuracoes_widgets_secao_notificacoes/">screens\configuracoes\widgets\secao_notificacoes</a></li>
+      <li><a href="screens_configuracoes_widgets_security_section/">screens\configuracoes\widgets\security_section</a></li>
+      <li><a href="screens_configuracoes_widgets_theme_settings/">screens\configuracoes\widgets\theme_settings</a></li>
+      <li><a href="screens_configuracoes_widgets_usuario_delete_confirm_dialog/">screens\configuracoes\widgets\usuario_delete_confirm_dialog</a></li>
+      <li><a href="screens_configuracoes_widgets_usuario_details_dialog/">screens\configuracoes\widgets\usuario_details_dialog</a></li>
+      <li><a href="screens_configuracoes_widgets_usuario_form/">screens\configuracoes\widgets\usuario_form</a></li>
+      <li><a href="screens_configuracoes_widgets_usuario_list/">screens\configuracoes\widgets\usuario_list</a></li>
+      <li><a href="screens_configuracoes_widgets_usuario_list_item/">screens\configuracoes\widgets\usuario_list_item</a></li>
+      <li><a href="screens_customer_bloc_customer_bloc/">screens\customer\bloc\customer_bloc</a></li>
+      <li><a href="screens_customer_customer_view/">screens\customer\customer_view</a></li>
+      <li><a href="screens_customer_widgets_customer_form/">screens\customer\widgets\customer_form</a></li>
+      <li><a href="screens_customer_widgets_customer_info_row/">screens\customer\widgets\customer_info_row</a></li>
+      <li><a href="screens_customer_widgets_customer_list/">screens\customer\widgets\customer_list</a></li>
+      <li><a href="screens_customer_widgets_customer_overview_bottom_sheet/">screens\customer\widgets\customer_overview_bottom_sheet</a></li>
+      <li><a href="screens_customer_widgets_customer_search_section/">screens\customer\widgets\customer_search_section</a></li>
+      <li><a href="screens_home_home_screen/">screens\home\home_screen</a></li>
+      <li><a href="screens_host_cadastro_group_screen/">screens\host\cadastro_group_screen</a></li>
+      <li><a href="screens_host_host_screen/">screens\host\host_screen</a></li>
+      <li><a href="screens_person_registration_bloc_person_bloc/">screens\person_registration\bloc\person_bloc</a></li>
+      <li><a href="screens_person_registration_bloc_person_event/">screens\person_registration\bloc\person_event</a></li>
+      <li><a href="screens_person_registration_bloc_person_state/">screens\person_registration\bloc\person_state</a></li>
+      <li><a href="screens_person_registration_models_person_registration_form_data/">screens\person_registration\models\person_registration_form_data</a></li>
+      <li><a href="screens_person_registration_person_registration_view/">screens\person_registration\person_registration_view</a></li>
+      <li><a href="screens_person_registration_widgets_person_registration_form/">screens\person_registration\widgets\person_registration_form</a></li>
+      <li><a href="screens_products_cubit_product_cubit/">screens\products\cubit\product_cubit</a></li>
+      <li><a href="screens_products_cubit_product_state/">screens\products\cubit\product_state</a></li>
+      <li><a href="screens_products_product_detail_screen/">screens\products\product_detail_screen</a></li>
+      <li><a href="screens_products_product_screen/">screens\products\product_screen</a></li>
+      <li><a href="screens_products_widgets_editing_controller_descricao_controller/">screens\products\widgets\editing_controller\descricao_controller</a></li>
+      <li><a href="screens_products_widgets_product_category/">screens\products\widgets\product_category</a></li>
+      <li><a href="screens_products_widgets_product_form/">screens\products\widgets\product_form</a></li>
+      <li><a href="screens_products_widgets_product_list/">screens\products\widgets\product_list</a></li>
+      <li><a href="screens_products_widgets_product_overview_bottom_sheet/">screens\products\widgets\product_overview_bottom_sheet</a></li>
+      <li><a href="screens_relatorios_cubit_relatorio_cubit/">screens\relatorios\cubit\relatorio_cubit</a></li>
+      <li><a href="screens_relatorios_cubit_relatorio_state/">screens\relatorios\cubit\relatorio_state</a></li>
+      <li><a href="screens_relatorios_relatorio_screen/">screens\relatorios\relatorio_screen</a></li>
+      <li><a href="screens_route_route_app/">screens\route\route_app</a></li>
+      <li><a href="screens_route_route_app.gr/">screens\route\route_app.gr</a></li>
+      <li><a href="screens_sales_cubit_sales_cubit/">screens\sales\cubit\sales_cubit</a></li>
+      <li><a href="screens_sales_cubit_sales_state/">screens\sales\cubit\sales_state</a></li>
+      <li><a href="screens_sales_route_route_sales/">screens\sales\route\route_sales</a></li>
+      <li><a href="screens_sales_sales_invoice_screen/">screens\sales\sales_invoice_screen</a></li>
+      <li><a href="screens_sales_sales_screen/">screens\sales\sales_screen</a></li>
+      <li><a href="screens_sales_widgets_invoice_card/">screens\sales\widgets\invoice_card</a></li>
+      <li><a href="screens_sales_widgets_invoice_overview_bottom_sheet/">screens\sales\widgets\invoice_overview_bottom_sheet</a></li>
+      <li><a href="screens_settings_settings_service/">screens\settings\settings_service</a></li>
+      <li><a href="screens_utils_constants/">screens\utils\constants</a></li>
+      <li><a href="screens_utils_extension_date_time/">screens\utils\extension_date_time</a></li>
+      <li><a href="screens_widgets_address_form/">screens\widgets\address_form</a></li>
+      <li><a href="screens_widgets_card_list_item/">screens\widgets\card_list_item</a></li>
+      <li><a href="screens_widgets_loading_overlay/">screens\widgets\loading_overlay</a></li>
+      <li><a href="screens_widgets_overlay_app_widget/">screens\widgets\overlay_app_widget</a></li>
+      <li><a href="screens_widgets_text_form_field_cpf/">screens\widgets\text_form_field_cpf</a></li>
+      <li><a href="screens_widgets_text_form_field_email/">screens\widgets\text_form_field_email</a></li>
+      <li><a href="screens_widgets_text_form_field_phone/">screens\widgets\text_form_field_phone</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    system_loja
+      0.0.1
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

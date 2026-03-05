@@ -1,106 +1,132 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/app_injection.dart';
+import 'package:system_loja/core/interface/i_product_repository.dart';
+import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
-import 'package:system_loja/screens/products/cubit/produto_state.dart';
-import 'package:system_loja/screens/products/product_detail_screen.dart';
+import 'package:system_loja/screens/products/cubit/product_state.dart';
 import 'package:system_loja/screens/products/widgets/product_form.dart';
 import 'package:system_loja/screens/products/widgets/product_list.dart';
-
-import '../../core/models/produto.dart';
+import 'package:system_loja/screens/products/widgets/product_overview_bottom_sheet.dart';
 
 /// Tela de cadastro e listagem de produtos.
 ///
 /// Permite adicionar novos produtos, visualizar a lista de produtos
 /// cadastrados e ver detalhes de cada produto.
-class ProductViewScreen extends StatefulWidget {
-  const ProductViewScreen({super.key});
+@RoutePage()
+class ProductInfoScreen extends StatefulWidget implements AutoRouteWrapper {
+  const ProductInfoScreen({super.key});
 
   @override
-  State<ProductViewScreen> createState() => _ProductViewScreenState();
+  State<ProductInfoScreen> createState() => _ProductInfoScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<ProductCubit>(
+      create: (_) => ProductCubit(appInjection.get<IProductRepository>()),
+      child: this,
+    );
+  }
 }
 
-class _ProductViewScreenState extends State<ProductViewScreen> {
+class _ProductInfoScreenState extends State<ProductInfoScreen> {
   // Constantes
   static const String _tituloAppBar = 'Cadastro de Produto';
   static const String _mensagemSucesso = 'cadastrado com sucesso!';
 
-  late final ProductCubit _produtoCubit = ProductCubit();
   final _formKey = GlobalKey<FormState>();
   final _nomeController = TextEditingController();
   final _codigoController = TextEditingController();
   final _precoController = TextEditingController();
   final _estoqueController = TextEditingController();
   final _descricaoController = TextEditingController();
-  final _categoriaController = TextEditingController();
+  int? _selectedCategoryId;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _produtoCubit,
-      child: BlocListener<ProductCubit, ProductState>(
-        listener: (context, state) {
-          if (state is ProductStateUpdateSuccess || state is ProductStateDeleteSuccess) {
-            // Recarregar a lista após atualização ou exclusão
-            _produtoCubit.loadAllProducts();
+    return BlocListener<ProductCubit, ProductState>(
+      listener: (context, state) {
+        if (state is ProductStateUpdateSuccess ||
+            state is ProductStateDeleteSuccess) {
+          // Recarregar a lista após atualização ou exclusão
+          context.read<ProductCubit>().loadAllProducts();
+        } else if (state is ProductStateInsertSuccess) {
+          _mostrarSucesso('Produto $_mensagemSucesso');
+          _limparFormulario();
+        } else if (state is ProductStateError) {
+          _mostrarErro(state.message);
+        }
+      },
+      child: BlocBuilder<ProductCubit, ProductState>(
+        builder: (context, state) {
+          final List<Product> produtos = [];
+          if (state is ProductStateInsertSuccess) {
+            produtos.addAll(state.produtos);
+          } else if (state is ProductStateUpdateSuccess) {
+            produtos.addAll(state.produtos);
+          } else if (state is ProductStateDeleteSuccess) {
+            produtos.addAll(state.produtos);
+          } else if (state is ProductStateLoaded) {
+            produtos.addAll(state.produtos);
           }
-        },
-        child: BlocBuilder<ProductCubit, ProductState>(
-          builder: (context, state) {
-            List<Produto> produtos = [];
-            if (state is ProductStateInsertSuccess) {
-              produtos.addAll(state.produtos);
-            } else if (state is ProductStateUpdateSuccess) {
-              produtos.addAll(state.produtos);
-            } else if (state is ProductStateDeleteSuccess) {
-              produtos.addAll(state.produtos);
-            }
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text(_tituloAppBar),
-                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-              ),
-              body: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ProductForm(
-                            formKey: _formKey,
-                            nomeController: _nomeController,
-                            codigoController: _codigoController,
-                            precoController: _precoController,
-                            estoqueController: _estoqueController,
-                            descricaoController: _descricaoController,
-                            categoriaController: _categoriaController,
-                            onSubmit: _adicionarProduto,
-                          ),
-                          const SizedBox(height: 32),
-                          ProductList(produtos: produtos, onProductTap: _mostrarDetalhesProduto),
-                        ],
-                      ),
-                    ),
+          return Column(
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    _tituloAppBar,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                ],
+                ),
               ),
-            );
-          },
-        ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ProductForm(
+                        formKey: _formKey,
+                        nomeController: _nomeController,
+                        codigoController: _codigoController,
+                        precoController: _precoController,
+                        estoqueController: _estoqueController,
+                        descricaoController: _descricaoController,
+                        selectedCategoryId: _selectedCategoryId,
+                        onCategoryChanged: (categoryId) {
+                          setState(() {
+                            _selectedCategoryId = categoryId;
+                          });
+                        },
+                        onSubmit: _adicionarProduto,
+                      ),
+                      const SizedBox(height: 32),
+                      ProductList(
+                        products: produtos,
+                        onProductTap: (produto) =>
+                            _mostrarDetalhesProduto(produto, produtos),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
   @override
   void dispose() {
-    _produtoCubit.close();
+    // _produtoCubit.close();
     _nomeController.dispose();
     _codigoController.dispose();
     _precoController.dispose();
     _estoqueController.dispose();
     _descricaoController.dispose();
-    _categoriaController.dispose();
     super.dispose();
   }
 
@@ -111,41 +137,29 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
   }
 
   /// Adiciona um novo produto após validação.
-  void _adicionarProduto() {
+  void _adicionarProduto(bool generatedCode) {
     // Valida o formulário usando os validadores
     // Os validadores já exibem mensagens específicas para cada campo
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    try {
-      // Converte valores já validados pelos validators
-      // Os validators garantem que esses valores são parseáveis
-      final preco = double.parse(_precoController.text.trim());
-      final codigo = _codigoController.text.trim();
-      final estoque = int.parse(_estoqueController.text.trim());
+    // Converte valores já validados pelos validators
+    // Os validators garantem que esses valores são parseáveis
+    final preco = double.parse(_precoController.text.trim());
+    final codigo = _codigoController.text.trim();
+    final estoque = int.parse(_estoqueController.text.trim());
+    final nome = _nomeController.text.trim();
 
-      // Cria e adiciona produto
-      final produto = Produto(
-        id: 0, // ID será gerado automaticamente
-        nome: _nomeController.text.trim(),
-        codigo: codigo,
-        preco: preco,
-        estoque: estoque,
-        descricao: _descricaoController.text.trim(),
-        categoria: _categoriaController.text.trim(),
-      );
-
-      _produtoCubit.adicionarProduto(produto);
-      _mostrarSucesso('Produto "${produto.nome}" $_mensagemSucesso');
-      _limparFormulario();
-    } on FormatException catch (e) {
-      // Isto não deve acontecer devido aos validators, mas tratamos por segurança
-      _mostrarErro('Erro de formato ao processar dados numéricos: ${e.message}');
-    } catch (e) {
-      // Captura erros inesperados do repositório/banco de dados
-      _mostrarErro('Erro ao salvar produto: ${e.toString()}');
-    }
+    context.read<ProductCubit>().adicionarProduto(
+      nome: nome,
+      codigo: codigo,
+      preco: preco,
+      estoque: estoque,
+      descricao: _descricaoController.text.trim(),
+      categoryId: _selectedCategoryId,
+      codeGenerate: generatedCode,
+    );
   }
 
   /// Limpa todos os campos do formulário.
@@ -156,33 +170,27 @@ class _ProductViewScreenState extends State<ProductViewScreen> {
     _precoController.clear();
     _estoqueController.clear();
     _descricaoController.clear();
-    _categoriaController.clear();
+    setState(() {
+      _selectedCategoryId = null;
+    });
   }
 
-  /// Navega para a tela de detalhes do produto.
-  void _mostrarDetalhesProduto(Produto produto) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlocProvider.value(
-          value: _produtoCubit,
-          child: ProductDetailScreen(product: produto),
-        ),
-      ),
-    );
+  /// Exibe o bottom sheet de visão geral do produto.
+  void _mostrarDetalhesProduto(Product produto, List<Product> produtos) {
+    ProductOverviewBottomSheet.show(context, produto, produtos);
   }
 
   /// Exibe mensagem de erro em SnackBar.
   void _mostrarErro(String mensagem) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.red));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(mensagem), backgroundColor: Colors.red),
+    );
   }
 
   /// Exibe mensagem de sucesso em SnackBar.
   void _mostrarSucesso(String mensagem) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.green));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(mensagem), backgroundColor: Colors.green),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:system_loja/screens/utils/constants.dart';
 
 /// Formatador de entrada para campos de preço.
 ///
@@ -14,27 +15,38 @@ import 'package:flutter/services.dart';
 /// ```
 class PriceInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     // Permite apenas números, vírgula e ponto
-    final text = newValue.text.replaceAll(RegExp(r'[^0-9,.]'), '');
+    final text = newValue.text.replaceAll(Constants.priceAllowedRegExp, '');
 
     // Se estiver vazio, retorna vazio
     if (text.isEmpty) {
-      return const TextEditingValue(text: '', selection: TextSelection.collapsed(offset: 0));
+      return const TextEditingValue(
+        text: '',
+        selection: TextSelection.collapsed(offset: 0),
+      );
     }
 
     // Substitui vírgula por ponto
     String normalizedText = text.replaceAll(',', '.');
     // Permite apenas um ponto decimal
     if (normalizedText.indexOf('.') != normalizedText.lastIndexOf('.')) {
-      normalizedText = normalizedText.substring(0, normalizedText.lastIndexOf('.'));
+      normalizedText = normalizedText.substring(
+        0,
+        normalizedText.lastIndexOf('.'),
+      );
     }
 
     // Limita a 2 casas decimais
     final decimalParts = normalizedText.split('.');
     if (decimalParts.length > 1) {
       final integerPart = decimalParts[0];
-      final decimalPart = decimalParts[1].length > 2 ? decimalParts[1].substring(0, 2) : decimalParts[1];
+      final decimalPart = decimalParts[1].length > 2
+          ? decimalParts[1].substring(0, 2)
+          : decimalParts[1];
       normalizedText = '$integerPart.$decimalPart';
     }
 
@@ -58,9 +70,14 @@ class PriceInputFormatter extends TextInputFormatter {
 /// ```
 class ProductCodeInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     // Permite apenas letras, números e hífens
-    final text = newValue.text.replaceAll(RegExp(r'[^a-zA-Z0-9\-]'), '').toUpperCase();
+    final text = newValue.text
+        .replaceAll(Constants.productCodeReplaceRegExp, '')
+        .toUpperCase();
 
     return TextEditingValue(
       text: text,
@@ -82,9 +99,12 @@ class ProductCodeInputFormatter extends TextInputFormatter {
 /// ```
 class QuantityInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     // Permite apenas dígitos
-    final text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    final text = newValue.text.replaceAll(Constants.nonNumericRegExp, '');
 
     return TextEditingValue(
       text: text,

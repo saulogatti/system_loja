@@ -6,12 +6,32 @@ part of 'invoice_item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-InvoiceItem _$InvoiceItemFromJson(Map<String, dynamic> json) => InvoiceItem(
-  productId: (json['produto_id'] as num).toInt(),
-  productName: json['produto_nome'] as String,
-  productCode: json['produto_codigo'] as String,
-  quantity: (json['quantidade'] as num).toInt(),
-  unitPrice: (json['preco_unitario'] as num).toDouble(),
+InvoiceItem _$InvoiceItemFromJson(Map<String, dynamic> json) => $checkedCreate(
+  'InvoiceItem',
+  json,
+  ($checkedConvert) {
+    final val = InvoiceItem(
+      productId: $checkedConvert(
+        'produto_id',
+        (v) => (v as num?)?.toInt() ?? kInvalidId,
+      ),
+      productName: $checkedConvert('produto_nome', (v) => v as String),
+      productCode: $checkedConvert('produto_codigo', (v) => v as String),
+      quantity: $checkedConvert('quantidade', (v) => (v as num).toInt()),
+      unitPrice: $checkedConvert(
+        'preco_unitario',
+        (v) => (v as num).toDouble(),
+      ),
+    );
+    return val;
+  },
+  fieldKeyMap: const {
+    'productId': 'produto_id',
+    'productName': 'produto_nome',
+    'productCode': 'produto_codigo',
+    'quantity': 'quantidade',
+    'unitPrice': 'preco_unitario',
+  },
 );
 
 Map<String, dynamic> _$InvoiceItemToJson(InvoiceItem instance) =>

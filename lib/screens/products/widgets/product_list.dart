@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/models/produto.dart';
+import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/utils_extensions.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
 
@@ -10,13 +10,11 @@ class ProductList extends StatelessWidget {
   /// Espaçamento padrão entre título e lista
   static const double _defaultSpacing = 16.0;
 
-  final List<Produto> produtos;
-  final Function(Produto) onProductTap;
+  final List<Product> products;
+  final Function(Product) onProductTap;
 
   const ProductList({
-    super.key,
-    required this.produtos,
-    required this.onProductTap,
+    required this.products, required this.onProductTap, super.key,
   });
 
   @override
@@ -26,22 +24,16 @@ class ProductList extends StatelessWidget {
       children: [
         const Text(
           'Produtos Cadastrados',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: _defaultSpacing),
-        if (produtos.isEmpty)
+        if (products.isEmpty)
           const Center(
             child: Padding(
               padding: EdgeInsets.all(32.0),
               child: Text(
                 'Nenhum produto cadastrado',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
             ),
           )
@@ -49,15 +41,15 @@ class ProductList extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: produtos.length,
+            itemCount: products.length,
             itemBuilder: (context, index) {
-              final produto = produtos[index];
+              final product = products[index];
               return CardListItem(
                 colorAvatar: Colors.green,
-                title: produto.nome,
+                title: product.name,
                 subTitle:
-                    'Código: ${produto.codigo}\n${produto.preco.toFormattedPrice()} - Estoque: ${produto.estoque}',
-                onTap: () => onProductTap(produto),
+                    'Código: ${product.code}\n${product.price.toFormattedPrice()} - Estoque: ${product.stockQuantity}',
+                onTap: () => onProductTap(product),
               );
             },
           ),

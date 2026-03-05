@@ -8,20 +8,16 @@ class CardListItem extends StatelessWidget {
   final String subTitle;
 
   final GestureTapCallback onTap;
-
+  final GestureTapCallback? onDelete;
   const CardListItem({
-    super.key,
-    required this.colorAvatar,
-    required this.title,
-    required this.subTitle,
-    required this.onTap,
+    required this.colorAvatar, required this.title, required this.subTitle, required this.onTap, super.key,
+    this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      color: Colors.white,
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         minLeadingWidth: 0,
@@ -39,7 +35,17 @@ class CardListItem extends StatelessWidget {
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subTitle),
         isThreeLine: true,
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (onDelete != null)
+              IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red),
+                onPressed: onDelete,
+              ),
+            const Icon(Icons.arrow_forward_ios, size: 16),
+          ],
+        ),
         onTap: onTap,
       ),
     );

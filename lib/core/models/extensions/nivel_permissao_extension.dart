@@ -1,39 +1,39 @@
-import '../usuario.dart';
+import '../user.dart';
 
 /// Extensão para conversão entre NivelPermissao e String
 ///
 /// Fornece métodos utilitários para converter níveis de permissão
 /// para strings e vice-versa, mantendo consistência em todo o sistema.
-extension NivelPermissaoExtension on NivelPermissao {
-  /// Converte o nível de permissão para string
-  String toStringValue() {
-    switch (this) {
-      case NivelPermissao.administrador:
-        return 'ADMINISTRADOR';
-      case NivelPermissao.usuarioComum:
-        return 'USUARIO_COMUM';
-    }
-  }
-
+extension NivelPermissaoExtension on AuthorizationLevel {
   /// Converte o nível de permissão para texto legível
   String toDisplayName() {
     switch (this) {
-      case NivelPermissao.administrador:
+      case AuthorizationLevel.administrador:
         return 'Administrador';
-      case NivelPermissao.usuarioComum:
+      case AuthorizationLevel.usuarioComum:
         return 'Usuário Comum';
     }
   }
 
+  /// Converte o nível de permissão para string
+  String toStringValue() {
+    switch (this) {
+      case AuthorizationLevel.administrador:
+        return 'ADMINISTRADOR';
+      case AuthorizationLevel.usuarioComum:
+        return 'USUARIO_COMUM';
+    }
+  }
+
   /// Converte uma string para NivelPermissao
-  static NivelPermissao fromString(String value) {
+  static AuthorizationLevel fromString(String value) {
     switch (value.toUpperCase()) {
       case 'ADMINISTRADOR':
-        return NivelPermissao.administrador;
+        return AuthorizationLevel.administrador;
       case 'USUARIO_COMUM':
-        return NivelPermissao.usuarioComum;
+        return AuthorizationLevel.usuarioComum;
       default:
-        return NivelPermissao.usuarioComum;
+        return AuthorizationLevel.usuarioComum;
     }
   }
 }
