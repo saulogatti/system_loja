@@ -106,16 +106,20 @@ bool operator ==(Object other) {
   if (identical(this, other)) return true;
   if (other is! SalesInvoiceRouteArgs) return false;
   return key == other.key &amp;&amp;
-      const _i22.ListEquality&lt;_i23.PaymentMethodType&gt;().equals(
+      const _i24.ListEquality&lt;_i25.PaymentMethodType&gt;().equals(
         paymentMethods,
         other.paymentMethods,
       ) &amp;&amp;
-      const _i22.MapEquality&lt;int, _i20.Customer&gt;().equals(
+      const _i24.MapEquality&lt;int, _i22.Customer&gt;().equals(
         customers,
         other.customers,
       ) &amp;&amp;
+      const _i24.MapEquality&lt;int, _i21.Company&gt;().equals(
+        companies,
+        other.companies,
+      ) &amp;&amp;
       salesCubit == other.salesCubit &amp;&amp;
-      const _i22.ListEquality&lt;_i21.Product&gt;().equals(
+      const _i24.ListEquality&lt;_i23.Product&gt;().equals(
         products,
         other.products,
       );

@@ -64,8 +64,8 @@
     </section>
     
 <section class="desc markdown">
-  <p>Converte um modelo de domínio InvoiceItem para Companion usado em insert.</p>
-<p>Requer o invoiceId para estabelecer o relacionamento com a nota fiscal.</p>
+  <p>Converte um modelo de domínio <a href="../../core_models_invoice_item/InvoiceItem-class.html">InvoiceItem</a> para Companion usado em insert.</p>
+<p>Requer o <code>invoiceId</code> para estabelecer o relacionamento com a nota fiscal.</p>
 </section>
 
 
@@ -77,8 +77,6 @@
   bool forUpdate = false,
 }) {
   if (forUpdate) {
-    &#47;&#47; Para update, precisaríamos do ID do item, mas InvoiceItem não tem ID
-    &#47;&#47; Isso sugere que updates de itens devem ser feitos deletando e reinserindo
     throw UnimplementedError(
       &#39;Update de InvoiceItem não suportado. Delete e reinsira os itens.&#39;,
     );

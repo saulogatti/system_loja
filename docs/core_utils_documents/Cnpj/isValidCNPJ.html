@@ -82,16 +82,20 @@ descritiva quando o valor é inválido.</p>
   final digits = cleanedValue.split(&#39;&#39;).map(int.parse).toList();
 
   &#47;&#47; Validação do primeiro dígito verificador
-  final sum1 = List.generate(12, (i) =&gt; digits[i] * (5 - i % 8)).reduce((a, b) =&gt; a + b);
-  final checkDigit1 = (sum1 * 10 % 11) % 10;
+  final firstWeights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+  final sum1 = List.generate(12, (i) =&gt; digits[i] * firstWeights[i]).reduce((a, b) =&gt; a + b);
+  final remainder1 = sum1 % 11;
+  final checkDigit1 = remainder1 &lt; 2 ? 0 : 11 - remainder1;
 
   if (checkDigit1 != digits[12]) {
     return &#39;CNPJ inválido - primeiro dígito verificador incorreto&#39;;
   }
 
   &#47;&#47; Validação do segundo dígito verificador
-  final sum2 = List.generate(13, (i) =&gt; digits[i] * (6 - i % 8)).reduce((a, b) =&gt; a + b);
-  final checkDigit2 = (sum2 * 10 % 11) % 10;
+  final secondWeights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+  final sum2 = List.generate(13, (i) =&gt; digits[i] * secondWeights[i]).reduce((a, b) =&gt; a + b);
+  final remainder2 = sum2 % 11;
+  final checkDigit2 = remainder2 &lt; 2 ? 0 : 11 - remainder2;
 
   if (checkDigit2 != digits[13]) {
     return &#39;CNPJ inválido - segundo dígito verificador incorreto&#39;;

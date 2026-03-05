@@ -84,9 +84,9 @@ Company map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
       DriftSqlType.int,
       data[&#39;${effectivePrefix}id&#39;],
     )!,
-    corporateName: attachedDatabase.typeMapping.read(
+    name: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
-      data[&#39;${effectivePrefix}corporate_name&#39;],
+      data[&#39;${effectivePrefix}name&#39;],
     )!,
     cnpj: attachedDatabase.typeMapping.read(
       DriftSqlType.string,

@@ -82,9 +82,7 @@ Future&lt;ResultStatus&lt;bool, String&gt;&gt; saveCompany(Company company) asyn
     &#47;&#47; Verifica se já existe empresa com o mesmo CNPJ
     final existingCompany = await dao.getByCnpj(company.cnpj);
     if (existingCompany != null) {
-      return ResultStatus.error(
-        &#39;Já existe uma empresa cadastrada com o CNPJ ${company.cnpj}.&#39;,
-      );
+      return ResultStatus.error(&#39;Já existe uma empresa cadastrada com o CNPJ ${company.cnpj}.&#39;);
     }
 
     await dao.addCompany(company);
@@ -94,17 +92,14 @@ Future&lt;ResultStatus&lt;bool, String&gt;&gt; saveCompany(Company company) asyn
       entityName: runtimeType.toString(),
       userId: 0,
       username: &#39;system&#39;,
-      logDetails:
-          &#39;Empresa ${company.corporateName} (ID: ${company.id}) criada.&#39;,
+      logDetails: &#39;Empresa ${company.name} (ID: ${company.id}) criada.&#39;,
     );
 
     return ResultStatus.success(true);
   } catch (e, stackTrace) {
     await reportError(e, stackTrace);
     if (e is DriftRemoteException) {
-      return ResultStatus.error(
-        &#39;Erro ao salvar empresa: ${e.remoteCause.toString()}&#39;,
-      );
+      return ResultStatus.error(&#39;Erro ao salvar empresa: ${e.remoteCause.toString()}&#39;);
     }
     return ResultStatus.error(&#39;Erro ao salvar empresa.&#39;);
   }

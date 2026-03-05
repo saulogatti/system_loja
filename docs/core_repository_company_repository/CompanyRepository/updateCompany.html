@@ -81,17 +81,13 @@ Future&lt;ResultStatus&lt;bool, String&gt;&gt; updateCompany(Company company) as
   try {
     final exists = await dao.getById(company.id);
     if (exists == null) {
-      return ResultStatus.error(
-        &#39;Empresa com ID ${company.id} não encontrada.&#39;,
-      );
+      return ResultStatus.error(&#39;Empresa com ID ${company.id} não encontrada.&#39;);
     }
 
     &#47;&#47; Verifica se o CNPJ já existe em outra empresa
     final existingCompany = await dao.getByCnpj(company.cnpj);
     if (existingCompany != null &amp;&amp; existingCompany.id != company.id) {
-      return ResultStatus.error(
-        &#39;Já existe outra empresa cadastrada com o CNPJ ${company.cnpj}.&#39;,
-      );
+      return ResultStatus.error(&#39;Já existe outra empresa cadastrada com o CNPJ ${company.cnpj}.&#39;);
     }
 
     await dao.updateCompany(company);
@@ -101,17 +97,14 @@ Future&lt;ResultStatus&lt;bool, String&gt;&gt; updateCompany(Company company) as
       entityName: runtimeType.toString(),
       userId: 0,
       username: &#39;system&#39;,
-      logDetails:
-          &#39;Empresa ${company.corporateName} (ID: ${company.id}) atualizada.&#39;,
+      logDetails: &#39;Empresa ${company.name} (ID: ${company.id}) atualizada.&#39;,
     );
 
     return ResultStatus.success(true);
   } catch (e, stackTrace) {
     await reportError(e, stackTrace);
     if (e is DriftRemoteException) {
-      return ResultStatus.error(
-        &#39;Erro ao atualizar empresa: ${e.remoteCause.toString()}&#39;,
-      );
+      return ResultStatus.error(&#39;Erro ao atualizar empresa: ${e.remoteCause.toString()}&#39;);
     }
     return ResultStatus.error(&#39;Erro ao atualizar empresa.&#39;);
   }

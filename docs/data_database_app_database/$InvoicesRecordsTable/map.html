@@ -83,15 +83,19 @@ InvoicesRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
     customerCpf: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
       data[&#39;${effectivePrefix}cliente_cpf&#39;],
-    )!,
+    ),
     customerId: attachedDatabase.typeMapping.read(
       DriftSqlType.int,
       data[&#39;${effectivePrefix}cliente_id&#39;],
-    )!,
+    ),
     customerName: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
       data[&#39;${effectivePrefix}cliente_nome&#39;],
-    )!,
+    ),
+    companyId: attachedDatabase.typeMapping.read(
+      DriftSqlType.int,
+      data[&#39;${effectivePrefix}empresa_id&#39;],
+    ),
     id: attachedDatabase.typeMapping.read(
       DriftSqlType.int,
       data[&#39;${effectivePrefix}id&#39;],
@@ -120,6 +124,12 @@ InvoicesRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
       DriftSqlType.double,
       data[&#39;${effectivePrefix}valor_total&#39;],
     )!,
+    type: $InvoicesRecordsTable.$convertertype.fromSql(
+      attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data[&#39;${effectivePrefix}tipo&#39;],
+      )!,
+    ),
   );
 }</code></pre>
 </section>

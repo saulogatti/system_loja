@@ -59,7 +59,7 @@
         <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://pub.dev/documentation/drift/2.31.0/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span>&gt;</span></span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span>&gt;</span></span>&gt;</span></span>
 <span class="name ">toColumns</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="toColumns-param-nullToAbsent"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">nullToAbsent</span></span></li>
 </ol>)
 
@@ -72,7 +72,7 @@
 or update.</p>
 <p>Note that the keys in the map are the raw column names, they're not
 escaped.</p>
-<p>The <code>nullToAbsent</code> can be used on <a href="https://pub.dev/documentation/drift/2.31.0/drift/DataClass-class.html">DataClass</a>es to control whether null
+<p>The <code>nullToAbsent</code> can be used on <a href="https://pub.dev/documentation/drift/2.32.0/drift/DataClass-class.html">DataClass</a>es to control whether null
 fields should be set to a null constant in sql or absent from the map.
 Other implementations ignore that <code>nullToAbsent</code>, it mainly exists for
 legacy reasons.</p>
@@ -94,6 +94,9 @@ Map&lt;String, Expression&gt; toColumns(bool nullToAbsent) {
   if (customerName.present) {
     map[&#39;cliente_nome&#39;] = Variable&lt;String&gt;(customerName.value);
   }
+  if (companyId.present) {
+    map[&#39;empresa_id&#39;] = Variable&lt;int&gt;(companyId.value);
+  }
   if (id.present) {
     map[&#39;id&#39;] = Variable&lt;int&gt;(id.value);
   }
@@ -114,6 +117,11 @@ Map&lt;String, Expression&gt; toColumns(bool nullToAbsent) {
   }
   if (totalValue.present) {
     map[&#39;valor_total&#39;] = Variable&lt;double&gt;(totalValue.value);
+  }
+  if (type.present) {
+    map[&#39;tipo&#39;] = Variable&lt;String&gt;(
+      $InvoicesRecordsTable.$convertertype.toSql(type.value),
+    );
   }
   return map;
 }</code></pre>

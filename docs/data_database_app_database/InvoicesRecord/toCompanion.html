@@ -69,9 +69,18 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">InvoicesRecordsCompanion toCompanion(bool nullToAbsent) {
   return InvoicesRecordsCompanion(
-    customerCpf: Value(customerCpf),
-    customerId: Value(customerId),
-    customerName: Value(customerName),
+    customerCpf: customerCpf == null &amp;&amp; nullToAbsent
+        ? const Value.absent()
+        : Value(customerCpf),
+    customerId: customerId == null &amp;&amp; nullToAbsent
+        ? const Value.absent()
+        : Value(customerId),
+    customerName: customerName == null &amp;&amp; nullToAbsent
+        ? const Value.absent()
+        : Value(customerName),
+    companyId: companyId == null &amp;&amp; nullToAbsent
+        ? const Value.absent()
+        : Value(companyId),
     id: Value(id),
     invoiceNumber: Value(invoiceNumber),
     issueDate: Value(issueDate),
@@ -81,6 +90,7 @@
     paymentMethod: Value(paymentMethod),
     registrationDate: Value(registrationDate),
     totalValue: Value(totalValue),
+    type: Value(type),
   );
 }</code></pre>
 </section>

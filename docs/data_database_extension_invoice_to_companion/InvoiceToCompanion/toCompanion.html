@@ -63,8 +63,8 @@
     </section>
     
 <section class="desc markdown">
-  <p>Converte um modelo de domínio Invoice para Companion usado em insert/update.</p>
-<p>Para inserções, usa .insert(). Para atualizações, inclui o ID.</p>
+  <p>Converte um modelo de domínio <a href="../../core_models_invoice/Invoice-class.html">Invoice</a> para Companion usado em insert/update.</p>
+<p>Para inserções, usa <code>.insert()</code>. Para atualizações, inclui o ID.</p>
 </section>
 
 
@@ -79,6 +79,8 @@
       customerId: Value(data.customerId),
       customerName: Value(data.customerName),
       customerCpf: Value(data.customerCpf),
+      companyId: Value(data.companyId),
+      type: Value(data.type),
       totalValue: Value(data.totalValue),
       paymentMethod: Value(data.paymentMethod),
       issueDate: Value(data.issueDate),
@@ -88,9 +90,11 @@
   }
   return InvoicesRecordsCompanion.insert(
     invoiceNumber: data.invoiceNumber,
-    customerId: data.customerId,
-    customerName: data.customerName,
-    customerCpf: data.customerCpf,
+    customerId: Value(data.customerId),
+    customerName: Value(data.customerName),
+    customerCpf: Value(data.customerCpf),
+    companyId: Value(data.companyId),
+    type: Value(data.type),
     totalValue: data.totalValue,
     paymentMethod: data.paymentMethod,
     issueDate: data.issueDate,

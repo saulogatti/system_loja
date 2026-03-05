@@ -183,12 +183,12 @@ Widget build(BuildContext context) {
                   _InfoRow(
                     icon: Icons.person_outline,
                     label: &#39;Cliente&#39;,
-                    value: data.customerName,
+                    value: data.customerName ?? &#39;&#39;,
                   ),
                   _InfoRow(
                     icon: Icons.badge_outlined,
                     label: &#39;CPF&#39;,
-                    value: data.customerCpf,
+                    value: data.customerCpf ?? &#39;&#39;,
                   ),
                   _InfoRow(
                     icon: Icons.payment_outlined,

@@ -80,9 +80,7 @@ Future&lt;ResultStatus&lt;Map&lt;int, Company&gt;, String&gt;&gt; fetchMappedCom
   try {
     final data = await dao.getAll();
     final companies = data;
-    final mappedCompanies = {
-      for (var company in companies) company.id: company,
-    };
+    final mappedCompanies = {for (var company in companies) company.id: company};
     return ResultStatus.success(mappedCompanies);
   } catch (e, stackTrace) {
     await reportError(e, stackTrace);

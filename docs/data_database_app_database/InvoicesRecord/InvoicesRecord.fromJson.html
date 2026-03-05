@@ -55,7 +55,7 @@
     <section class="multi-line-signature">
       
       <span class="name ">InvoicesRecord.fromJson</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="fromJson-param-json"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">json</span>, {</span></li>
-<li><span class="parameter" id="fromJson-param-serializer"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.31.0/drift/ValueSerializer-class.html">ValueSerializer</a>?</span> <span class="parameter-name">serializer</span>, </span></li>
+<li><span class="parameter" id="fromJson-param-serializer"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/ValueSerializer-class.html">ValueSerializer</a>?</span> <span class="parameter-name">serializer</span>, </span></li>
 </ol>})
     </section>
     
@@ -70,9 +70,10 @@
 }) {
   serializer ??= driftRuntimeOptions.defaultSerializer;
   return InvoicesRecord(
-    customerCpf: serializer.fromJson&lt;String&gt;(json[&#39;customerCpf&#39;]),
-    customerId: serializer.fromJson&lt;int&gt;(json[&#39;customerId&#39;]),
-    customerName: serializer.fromJson&lt;String&gt;(json[&#39;customerName&#39;]),
+    customerCpf: serializer.fromJson&lt;String?&gt;(json[&#39;customerCpf&#39;]),
+    customerId: serializer.fromJson&lt;int?&gt;(json[&#39;customerId&#39;]),
+    customerName: serializer.fromJson&lt;String?&gt;(json[&#39;customerName&#39;]),
+    companyId: serializer.fromJson&lt;int?&gt;(json[&#39;companyId&#39;]),
     id: serializer.fromJson&lt;int&gt;(json[&#39;id&#39;]),
     invoiceNumber: serializer.fromJson&lt;String&gt;(json[&#39;invoiceNumber&#39;]),
     issueDate: serializer.fromJson&lt;DateTime&gt;(json[&#39;issueDate&#39;]),
@@ -80,6 +81,9 @@
     paymentMethod: serializer.fromJson&lt;String&gt;(json[&#39;paymentMethod&#39;]),
     registrationDate: serializer.fromJson&lt;DateTime&gt;(json[&#39;registrationDate&#39;]),
     totalValue: serializer.fromJson&lt;double&gt;(json[&#39;totalValue&#39;]),
+    type: $InvoicesRecordsTable.$convertertype.fromJson(
+      serializer.fromJson&lt;String&gt;(json[&#39;type&#39;]),
+    ),
   );
 }</code></pre>
 </section>

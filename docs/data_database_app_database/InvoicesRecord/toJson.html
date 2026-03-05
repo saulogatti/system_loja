@@ -60,7 +60,7 @@
     </ol>
   </div>
 <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
-<span class="name ">toJson</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="toJson-param-serializer"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.31.0/drift/ValueSerializer-class.html">ValueSerializer</a>?</span> <span class="parameter-name">serializer</span>, </span></li>
+<span class="name ">toJson</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="toJson-param-serializer"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/ValueSerializer-class.html">ValueSerializer</a>?</span> <span class="parameter-name">serializer</span>, </span></li>
 </ol>})
 
       <div class="features"><span class="feature">override</span></div>
@@ -70,8 +70,8 @@
 <section class="desc markdown">
   <p>Converts this object into a representation that can be encoded with
 <code>json</code>. The <code>serializer</code> can be used to configure how individual values
-will be encoded. By default, <a href="https://pub.dev/documentation/drift/2.31.0/drift/DriftRuntimeOptions/defaultSerializer.html">DriftRuntimeOptions.defaultSerializer</a> will
-be used. See <a href="https://pub.dev/documentation/drift/2.31.0/drift/ValueSerializer/ValueSerializer.defaults.html">ValueSerializer.defaults</a> for details.</p>
+will be encoded. By default, <a href="https://pub.dev/documentation/drift/2.32.0/drift/DriftRuntimeOptions/defaultSerializer.html">DriftRuntimeOptions.defaultSerializer</a> will
+be used. See <a href="https://pub.dev/documentation/drift/2.32.0/drift/ValueSerializer/ValueSerializer.defaults.html">ValueSerializer.defaults</a> for details.</p>
 </section>
 
 
@@ -82,9 +82,10 @@ be used. See <a href="https://pub.dev/documentation/drift/2.31.0/drift/ValueSeri
 Map&lt;String, dynamic&gt; toJson({ValueSerializer? serializer}) {
   serializer ??= driftRuntimeOptions.defaultSerializer;
   return &lt;String, dynamic&gt;{
-    &#39;customerCpf&#39;: serializer.toJson&lt;String&gt;(customerCpf),
-    &#39;customerId&#39;: serializer.toJson&lt;int&gt;(customerId),
-    &#39;customerName&#39;: serializer.toJson&lt;String&gt;(customerName),
+    &#39;customerCpf&#39;: serializer.toJson&lt;String?&gt;(customerCpf),
+    &#39;customerId&#39;: serializer.toJson&lt;int?&gt;(customerId),
+    &#39;customerName&#39;: serializer.toJson&lt;String?&gt;(customerName),
+    &#39;companyId&#39;: serializer.toJson&lt;int?&gt;(companyId),
     &#39;id&#39;: serializer.toJson&lt;int&gt;(id),
     &#39;invoiceNumber&#39;: serializer.toJson&lt;String&gt;(invoiceNumber),
     &#39;issueDate&#39;: serializer.toJson&lt;DateTime&gt;(issueDate),
@@ -92,6 +93,9 @@ Map&lt;String, dynamic&gt; toJson({ValueSerializer? serializer}) {
     &#39;paymentMethod&#39;: serializer.toJson&lt;String&gt;(paymentMethod),
     &#39;registrationDate&#39;: serializer.toJson&lt;DateTime&gt;(registrationDate),
     &#39;totalValue&#39;: serializer.toJson&lt;double&gt;(totalValue),
+    &#39;type&#39;: serializer.toJson&lt;String&gt;(
+      $InvoicesRecordsTable.$convertertype.toJson(type),
+    ),
   };
 }</code></pre>
 </section>

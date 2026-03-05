@@ -64,7 +64,7 @@
     </section>
     
 <section class="desc markdown">
-  <p>Registra uma nova venda</p>
+  <p>Registra uma nova venda.</p>
 <p>Cria um novo invoice com ID gerado automaticamente
 e salva no banco de dados.</p>
 </section>
@@ -79,7 +79,6 @@ e salva no banco de dados.</p>
 ) async {
   emit(SalesState.loading());
 
-  &#47;&#47; Gerar número da nota se necessário
   if (enableCodeGeneration) {
     final invoiceNumberResult = await _salesRepository
         .generateInvoiceNumber();
@@ -92,7 +91,6 @@ e salva no banco de dados.</p>
     }
   }
 
-  &#47;&#47; Obter próximo ID
   final nextIdResult = await _salesRepository.getNextSaleId();
   final int nextId;
   switch (nextIdResult) {
@@ -103,7 +101,6 @@ e salva no banco de dados.</p>
       return;
   }
 
-  &#47;&#47; Criar e salvar invoice
   final invoice = Invoice(id: nextId, data: invoiceData);
 
   final saveResult = await _salesRepository.saveSale(invoice);

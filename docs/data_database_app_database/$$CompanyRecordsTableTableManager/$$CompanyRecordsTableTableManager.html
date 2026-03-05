@@ -81,7 +81,7 @@
             ({
               Value&lt;Address?&gt; address = const Value.absent(),
               Value&lt;String&gt; cnpj = const Value.absent(),
-              Value&lt;String&gt; corporateName = const Value.absent(),
+              Value&lt;String&gt; name = const Value.absent(),
               Value&lt;String?&gt; email = const Value.absent(),
               Value&lt;int&gt; id = const Value.absent(),
               Value&lt;DateTime?&gt; lastUpdatedDate = const Value.absent(),
@@ -89,7 +89,7 @@
             }) =&gt; CompanyRecordsCompanion(
               address: address,
               cnpj: cnpj,
-              corporateName: corporateName,
+              name: name,
               email: email,
               id: id,
               lastUpdatedDate: lastUpdatedDate,
@@ -99,7 +99,7 @@
             ({
               Value&lt;Address?&gt; address = const Value.absent(),
               required String cnpj,
-              required String corporateName,
+              required String name,
               Value&lt;String?&gt; email = const Value.absent(),
               Value&lt;int&gt; id = const Value.absent(),
               Value&lt;DateTime?&gt; lastUpdatedDate = const Value.absent(),
@@ -107,7 +107,7 @@
             }) =&gt; CompanyRecordsCompanion.insert(
               address: address,
               cnpj: cnpj,
-              corporateName: corporateName,
+              name: name,
               email: email,
               id: id,
               lastUpdatedDate: lastUpdatedDate,

@@ -59,7 +59,7 @@
   <section id="getter">
     <section class="multi-line-signature">
       
-      <span class="returntype"><a href="https://pub.dev/documentation/drift/2.31.0/drift/IntColumn.html">IntColumn</a></span>
+      <span class="returntype"><a href="https://pub.dev/documentation/drift/2.32.0/drift/IntColumn.html">IntColumn</a></span>
       get
       <span class="name ">customerId</span>
       
@@ -67,13 +67,13 @@
     </section>
     
 <section class="desc markdown">
-  <p>ID do cliente</p>
+  <p>ID do cliente (null quando vínculo for empresa).</p>
 </section>
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">IntColumn get customerId =&gt; integer().named(&#39;cliente_id&#39;)();</code></pre>
+  <pre class="language-dart"><code class="language-dart">IntColumn get customerId =&gt; integer().named(&#39;cliente_id&#39;).nullable()();</code></pre>
 </section>
 
   </section>

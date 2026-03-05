@@ -78,6 +78,7 @@
     customerName: data.customerName.present
         ? data.customerName.value
         : this.customerName,
+    companyId: data.companyId.present ? data.companyId.value : this.companyId,
     id: data.id.present ? data.id.value : this.id,
     invoiceNumber: data.invoiceNumber.present
         ? data.invoiceNumber.value
@@ -95,6 +96,7 @@
     totalValue: data.totalValue.present
         ? data.totalValue.value
         : this.totalValue,
+    type: data.type.present ? data.type.value : this.type,
   );
 }</code></pre>
 </section>

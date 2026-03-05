@@ -79,9 +79,10 @@
             $$InvoicesRecordsTableAnnotationComposer($db: db, $table: table),
         updateCompanionCallback:
             ({
-              Value&lt;String&gt; customerCpf = const Value.absent(),
-              Value&lt;int&gt; customerId = const Value.absent(),
-              Value&lt;String&gt; customerName = const Value.absent(),
+              Value&lt;String?&gt; customerCpf = const Value.absent(),
+              Value&lt;int?&gt; customerId = const Value.absent(),
+              Value&lt;String?&gt; customerName = const Value.absent(),
+              Value&lt;int?&gt; companyId = const Value.absent(),
               Value&lt;int&gt; id = const Value.absent(),
               Value&lt;String&gt; invoiceNumber = const Value.absent(),
               Value&lt;DateTime&gt; issueDate = const Value.absent(),
@@ -89,10 +90,12 @@
               Value&lt;String&gt; paymentMethod = const Value.absent(),
               Value&lt;DateTime&gt; registrationDate = const Value.absent(),
               Value&lt;double&gt; totalValue = const Value.absent(),
+              Value&lt;InvoiceType&gt; type = const Value.absent(),
             }) =&gt; InvoicesRecordsCompanion(
               customerCpf: customerCpf,
               customerId: customerId,
               customerName: customerName,
+              companyId: companyId,
               id: id,
               invoiceNumber: invoiceNumber,
               issueDate: issueDate,
@@ -100,12 +103,14 @@
               paymentMethod: paymentMethod,
               registrationDate: registrationDate,
               totalValue: totalValue,
+              type: type,
             ),
         createCompanionCallback:
             ({
-              required String customerCpf,
-              required int customerId,
-              required String customerName,
+              Value&lt;String?&gt; customerCpf = const Value.absent(),
+              Value&lt;int?&gt; customerId = const Value.absent(),
+              Value&lt;String?&gt; customerName = const Value.absent(),
+              Value&lt;int?&gt; companyId = const Value.absent(),
               Value&lt;int&gt; id = const Value.absent(),
               required String invoiceNumber,
               required DateTime issueDate,
@@ -113,10 +118,12 @@
               required String paymentMethod,
               Value&lt;DateTime&gt; registrationDate = const Value.absent(),
               required double totalValue,
+              Value&lt;InvoiceType&gt; type = const Value.absent(),
             }) =&gt; InvoicesRecordsCompanion.insert(
               customerCpf: customerCpf,
               customerId: customerId,
               customerName: customerName,
+              companyId: companyId,
               id: id,
               invoiceNumber: invoiceNumber,
               issueDate: issueDate,
@@ -124,6 +131,7 @@
               paymentMethod: paymentMethod,
               registrationDate: registrationDate,
               totalValue: totalValue,
+              type: type,
             ),
         withReferenceMapper: (p0) =&gt; p0
             .map((e) =&gt; (e.readTable(table), BaseReferences(db, table, e)))

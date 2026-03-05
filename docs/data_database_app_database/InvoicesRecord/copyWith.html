@@ -55,16 +55,18 @@
     <section class="multi-line-signature">
       
 <span class="returntype"><a href="../../data_database_app_database/InvoicesRecord-class.html">InvoicesRecord</a></span>
-<span class="name ">copyWith</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="copyWith-param-customerCpf"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">customerCpf</span>, </span></li>
-<li><span class="parameter" id="copyWith-param-customerId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">customerId</span>, </span></li>
-<li><span class="parameter" id="copyWith-param-customerName"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">customerName</span>, </span></li>
+<span class="name ">copyWith</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="copyWith-param-customerCpf"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span>&gt;</span></span> <span class="parameter-name">customerCpf</span> = <span class="default-value">const Value.absent()</span>, </span></li>
+<li><span class="parameter" id="copyWith-param-customerId"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span>&gt;</span></span> <span class="parameter-name">customerId</span> = <span class="default-value">const Value.absent()</span>, </span></li>
+<li><span class="parameter" id="copyWith-param-customerName"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span>&gt;</span></span> <span class="parameter-name">customerName</span> = <span class="default-value">const Value.absent()</span>, </span></li>
+<li><span class="parameter" id="copyWith-param-companyId"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span>&gt;</span></span> <span class="parameter-name">companyId</span> = <span class="default-value">const Value.absent()</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-invoiceNumber"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">invoiceNumber</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-issueDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">issueDate</span>, </span></li>
-<li><span class="parameter" id="copyWith-param-lastUpdatedDate"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.31.0/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span>&gt;</span></span> <span class="parameter-name">lastUpdatedDate</span> = <span class="default-value">const Value.absent()</span>, </span></li>
+<li><span class="parameter" id="copyWith-param-lastUpdatedDate"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span>&gt;</span></span> <span class="parameter-name">lastUpdatedDate</span> = <span class="default-value">const Value.absent()</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-paymentMethod"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">paymentMethod</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-registrationDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">registrationDate</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-totalValue"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>?</span> <span class="parameter-name">totalValue</span>, </span></li>
+<li><span class="parameter" id="copyWith-param-type"><span class="type-annotation"><a href="../../core_models_invoice_type/InvoiceType.html">InvoiceType</a>?</span> <span class="parameter-name">type</span>, </span></li>
 </ol>})
 
       
@@ -77,9 +79,10 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">InvoicesRecord copyWith({
-  String? customerCpf,
-  int? customerId,
-  String? customerName,
+  Value&lt;String?&gt; customerCpf = const Value.absent(),
+  Value&lt;int?&gt; customerId = const Value.absent(),
+  Value&lt;String?&gt; customerName = const Value.absent(),
+  Value&lt;int?&gt; companyId = const Value.absent(),
   int? id,
   String? invoiceNumber,
   DateTime? issueDate,
@@ -87,10 +90,12 @@
   String? paymentMethod,
   DateTime? registrationDate,
   double? totalValue,
+  InvoiceType? type,
 }) =&gt; InvoicesRecord(
-  customerCpf: customerCpf ?? this.customerCpf,
-  customerId: customerId ?? this.customerId,
-  customerName: customerName ?? this.customerName,
+  customerCpf: customerCpf.present ? customerCpf.value : this.customerCpf,
+  customerId: customerId.present ? customerId.value : this.customerId,
+  customerName: customerName.present ? customerName.value : this.customerName,
+  companyId: companyId.present ? companyId.value : this.companyId,
   id: id ?? this.id,
   invoiceNumber: invoiceNumber ?? this.invoiceNumber,
   issueDate: issueDate ?? this.issueDate,
@@ -100,6 +105,7 @@
   paymentMethod: paymentMethod ?? this.paymentMethod,
   registrationDate: registrationDate ?? this.registrationDate,
   totalValue: totalValue ?? this.totalValue,
+  type: type ?? this.type,
 );</code></pre>
 </section>
 

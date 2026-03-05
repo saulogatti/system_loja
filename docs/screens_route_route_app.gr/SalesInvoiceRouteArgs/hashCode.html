@@ -106,10 +106,11 @@ like <a href="https://api.flutter.dev/flutter/dart-collection/HashSet-class.html
   <pre class="language-dart"><code class="language-dart">@override
 int get hashCode =&gt;
     key.hashCode ^
-    const _i22.ListEquality&lt;_i23.PaymentMethodType&gt;().hash(paymentMethods) ^
-    const _i22.MapEquality&lt;int, _i20.Customer&gt;().hash(customers) ^
+    const _i24.ListEquality&lt;_i25.PaymentMethodType&gt;().hash(paymentMethods) ^
+    const _i24.MapEquality&lt;int, _i22.Customer&gt;().hash(customers) ^
+    const _i24.MapEquality&lt;int, _i21.Company&gt;().hash(companies) ^
     salesCubit.hashCode ^
-    const _i22.ListEquality&lt;_i21.Product&gt;().hash(products);</code></pre>
+    const _i24.ListEquality&lt;_i23.Product&gt;().hash(products);</code></pre>
 </section>
 
   </section>

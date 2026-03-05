@@ -62,7 +62,7 @@
     </section>
     
 <section class="desc markdown">
-  <p>Carrega todos os produtos disponíveis</p>
+  <p>Carrega todos os produtos disponíveis, clientes, empresas e notas.</p>
 </section>
 
 
@@ -75,8 +75,10 @@
   final result = await _productRepository.fetchProducts();
   final resultMap = await _customerRepository.fetchMappedCustomers();
   final resultSystem = await _systemRepository.getSystemConfiguration();
+  final resultCompanies = await _companyRepository.fetchMappedCompanies();
   final customers = resultMap.asSuccess;
   final invoices = resultSales.asSuccess;
+  final companies = resultCompanies.asSuccess;
   final paymentMethods = resultSystem?.priceConfiguration.types ?? [];
   switch (result) {
     case ResultSuccess(result: final products):
@@ -85,6 +87,7 @@
           products: products,
           paymentMethods: paymentMethods,
           customers: customers,
+          companies: companies,
           invoices: invoices,
         ),
       );

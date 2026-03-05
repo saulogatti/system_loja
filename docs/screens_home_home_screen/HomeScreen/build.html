@@ -109,50 +109,6 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  final items = [
-    _buildMenuCard(
-      context,
-      title: &#39;Cadastro de Cliente&#39;,
-      icon: Icons.person,
-      color: Colors.blue,
-      onTap: () =&gt; _navigateToScreen(context,  CustomerRoute()),
-    ),
-    _buildMenuCard(
-      context,
-      title: &#39;Cadastro de Empresa&#39;,
-      icon: Icons.business,
-      color: Colors.indigo,
-      onTap: () =&gt; _navigateToScreen(context, const CompanyRoute()),
-    ),
-    _buildMenuCard(
-      context,
-      title: &#39;Cadastro de Produto&#39;,
-      icon: Icons.inventory,
-      color: Colors.green,
-      onTap: () =&gt; _navigateToScreen(context, const ProductInfoRoute()),
-    ),
-    _buildMenuCard(
-      context,
-      title: &#39;Cadastro de Nota Fiscal&#39;,
-      icon: Icons.receipt_long,
-      color: Colors.orange,
-      onTap: () =&gt; _navigateToScreen(context, const SalesRoute()),
-    ),
-    _buildMenuCard(
-      context,
-      title: &#39;Gestão de Usuários&#39;,
-      icon: Icons.people,
-      color: Colors.purple,
-      onTap: () =&gt; _navigateToScreen(context, const UsuarioRoute()),
-    ),
-    _buildMenuCard(
-      context,
-      title: &#39;Configurações do Sistema&#39;,
-      icon: Icons.settings,
-      color: Colors.teal,
-      onTap: () =&gt; _navigateToScreen(context, const SettingsRoute()),
-    ),
-  ];
   return Scaffold(
     body: SingleChildScrollView(
       child: Padding(
@@ -160,41 +116,20 @@ Widget build(BuildContext context) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Icon(
-              Icons.store,
-              size: 100,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            Icon(Icons.store, size: 100, color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 40),
             Text(
               &#39;Bem-vindo!&#39;,
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
             Text(
-              &#39;Selecione uma opção para continuar&#39;,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+              &#39;Use o menu inferior para acessar as funcionalidades&#39;,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
               textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent:
-                    300, &#47;&#47; cada card no máximo  300 pixels de largura
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 1.5,
-              ),
-              itemCount: items.length,
-              itemBuilder: (context, index) =&gt; items[index],
             ),
           ],
         ),

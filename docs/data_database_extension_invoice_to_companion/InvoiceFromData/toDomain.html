@@ -63,9 +63,9 @@
     </section>
     
 <section class="desc markdown">
-  <p>Converte um registro do banco de dados para o modelo de domínio Invoice.</p>
-<p>Nota: Os itens da nota fiscal devem ser carregados separadamente
-usando InvoiceItemDao.getByInvoiceId().</p>
+  <p>Converte um registro do banco de dados para o modelo de domínio <a href="../../core_models_invoice/Invoice-class.html">Invoice</a>.</p>
+<p>Nota: os itens da nota fiscal devem ser carregados separadamente
+usando <code>InvoiceItemDao.getByInvoiceId()</code>.</p>
 </section>
 
 
@@ -80,6 +80,8 @@ usando InvoiceItemDao.getByInvoiceId().</p>
       customerId: customerId,
       customerName: customerName,
       customerCpf: customerCpf,
+      companyId: companyId,
+      type: type,
       items: items,
       paymentMethod: paymentMethod,
       issueDate: issueDate,

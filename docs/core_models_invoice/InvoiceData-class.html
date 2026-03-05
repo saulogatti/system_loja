@@ -53,6 +53,11 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Dados de uma nota fiscal.</p>
+<p>Regra exclusiva: exatamente um de <a href="../core_models_invoice/InvoiceData/customerId.html">customerId</a> ou <a href="../core_models_invoice/InvoiceData/companyId.html">companyId</a> deve ser
+informado, independente do <a href="../core_models_invoice/InvoiceData/type.html">type</a>.</p>
+</section>
 
 
     <section>
@@ -81,7 +86,7 @@
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="InvoiceData.new" class="callable">
-          <span class="name"><a href="../core_models_invoice/InvoiceData/InvoiceData.html">InvoiceData</a></span><span class="signature">({<span class="parameter" id="-param-invoiceNumber"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">invoiceNumber</span>, </span><span class="parameter" id="-param-customerId"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">customerId</span>, </span><span class="parameter" id="-param-customerName"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">customerName</span>, </span><span class="parameter" id="-param-customerCpf"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">customerCpf</span>, </span><span class="parameter" id="-param-items"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_invoice_item/InvoiceItem-class.html">InvoiceItem</a></span>&gt;</span></span> <span class="parameter-name">items</span>, </span><span class="parameter" id="-param-paymentMethod"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">paymentMethod</span>, </span><span class="parameter" id="-param-issueDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">issueDate</span></span>})</span>
+          <span class="name"><a href="../core_models_invoice/InvoiceData/InvoiceData.html">InvoiceData</a></span><span class="signature">({<span class="parameter" id="-param-invoiceNumber"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">invoiceNumber</span>, </span><span class="parameter" id="-param-customerId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">customerId</span>, </span><span class="parameter" id="-param-customerName"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">customerName</span>, </span><span class="parameter" id="-param-customerCpf"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">customerCpf</span>, </span><span class="parameter" id="-param-companyId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">companyId</span>, </span><span class="parameter" id="-param-items"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_invoice_item/InvoiceItem-class.html">InvoiceItem</a></span>&gt;</span></span> <span class="parameter-name">items</span>, </span><span class="parameter" id="-param-paymentMethod"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">paymentMethod</span>, </span><span class="parameter" id="-param-issueDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">issueDate</span>, </span><span class="parameter" id="-param-type"><span class="type-annotation"><a href="../core_models_invoice_type/InvoiceType.html">InvoiceType</a></span> <span class="parameter-name">type</span> = <span class="default-value">InvoiceType.exit</span></span>})</span>
         </dt>
         <dd>
           
@@ -101,38 +106,50 @@
       id="instance-properties">
     <h2>Properties</h2>
     <dl class="properties">
-        <dt id="customerCpf" class="property">
-  <span class="name"><a href="../core_models_invoice/InvoiceData/customerCpf.html">customerCpf</a></span>
-  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+        <dt id="companyId" class="property">
+  <span class="name"><a href="../core_models_invoice/InvoiceData/companyId.html">companyId</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span>
   
 
 </dt>
 <dd>
+  ID da empresa vinculada à nota.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="customerCpf" class="property">
+  <span class="name"><a href="../core_models_invoice/InvoiceData/customerCpf.html">customerCpf</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span>
   
+
+</dt>
+<dd>
+  CPF do cliente (desnormalizado).
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
         <dt id="customerId" class="property">
   <span class="name"><a href="../core_models_invoice/InvoiceData/customerId.html">customerId</a></span>
-  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span>
   
 
 </dt>
 <dd>
-  
+  ID do cliente quando a nota estiver vinculada a um cliente.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
         <dt id="customerName" class="property">
   <span class="name"><a href="../core_models_invoice/InvoiceData/customerName.html">customerName</a></span>
-  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span>
   
 
 </dt>
 <dd>
-  
+  Nome do cliente (desnormalizado).
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -217,6 +234,18 @@
 </dt>
 <dd>
   
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="type" class="property">
+  <span class="name"><a href="../core_models_invoice/InvoiceData/type.html">type</a></span>
+  <span class="signature">&#8594; <a href="../core_models_invoice_type/InvoiceType.html">InvoiceType</a></span>
+  
+
+</dt>
+<dd>
+  Tipo da nota fiscal. Padrão: saída (<a href="../core_models_invoice_type/InvoiceType.html">InvoiceType.exit</a>).
   <div class="features"><span class="feature">final</span></div>
 
 </dd>

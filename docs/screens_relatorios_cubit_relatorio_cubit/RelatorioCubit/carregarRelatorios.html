@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the carregarRelatorios method from the RelatorioCubit class, for the Dart programming language.">
+  <title>carregarRelatorios method - RelatorioCubit class - relatorio_cubit library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">system_loja</a></li>
+    <li><a href="../../screens_relatorios_cubit_relatorio_cubit/">screens\relatorios\cubit\relatorio_cubit.dart</a></li>
+    <li><a href="../../screens_relatorios_cubit_relatorio_cubit/RelatorioCubit-class.html">RelatorioCubit</a></li>
+    <li class="self-crumb">carregarRelatorios method</li>
+  </ol>
+  <div class="self-name">carregarRelatorios</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="screens_relatorios_cubit_relatorio_cubit&#47;RelatorioCubit-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">carregarRelatorios</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">carregarRelatorios</span>(<wbr>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Carrega todos os dados necessários para os relatórios.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; carregarRelatorios() async {
+  emit(RelatorioState.loading());
+
+  final entryResult = await _salesRepository.loadEntryInvoices();
+  final exitResult = await _salesRepository.loadExitInvoices();
+  final productsResult = await _productRepository.fetchProducts();
+
+  Map&lt;int, Invoice&gt; entryInvoices = {};
+  Map&lt;int, Invoice&gt; exitInvoices = {};
+  List&lt;Product&gt; products = [];
+
+  switch (entryResult) {
+    case ResultSuccess(result: final data):
+      entryInvoices = data;
+    case ResultError(resultError: final error):
+      emit(
+        RelatorioState.error(
+          message: &#39;Erro ao carregar notas de entrada: $error&#39;,
+        ),
+      );
+      return;
+  }
+
+  switch (exitResult) {
+    case ResultSuccess(result: final data):
+      exitInvoices = data;
+    case ResultError(resultError: final error):
+      emit(
+        RelatorioState.error(
+          message: &#39;Erro ao carregar notas de saída: $error&#39;,
+        ),
+      );
+      return;
+  }
+
+  switch (productsResult) {
+    case ResultSuccess(result: final data):
+      products = data;
+    case ResultError(resultError: final error):
+      emit(RelatorioState.error(message: &#39;Erro ao carregar produtos: $error&#39;));
+      return;
+  }
+
+  emit(
+    RelatorioState.loaded(
+      entryInvoices: entryInvoices,
+      exitInvoices: exitInvoices,
+      products: products,
+    ),
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">system_loja</a></li>
+    <li><a href="../../screens_relatorios_cubit_relatorio_cubit/">relatorio_cubit</a></li>
+    <li><a href="../../screens_relatorios_cubit_relatorio_cubit/RelatorioCubit-class.html">RelatorioCubit</a></li>
+    <li class="self-crumb">carregarRelatorios method</li>
+</ol>
+
+    <h5>RelatorioCubit class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    system_loja
+      0.0.1
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

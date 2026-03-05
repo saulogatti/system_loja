@@ -75,7 +75,7 @@
   if (forUpdate) {
     return CompanyRecordsCompanion(
       id: Value(id),
-      corporateName: Value(corporateName),
+      name: Value(name),
       cnpj: Value(cnpj),
       email: Value(email),
       address: Value(address),
@@ -84,7 +84,7 @@
     );
   }
   return CompanyRecordsCompanion.insert(
-    corporateName: corporateName,
+    name: name,
     cnpj: cnpj,
     email: Value(email),
     address: Value(address),

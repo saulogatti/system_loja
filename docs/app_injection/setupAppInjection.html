@@ -72,7 +72,7 @@ Para acessar as dependências, use o <code>appInjection.get&lt;T&gt;()</code> on
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void setupAppInjection() {
-  registerLogPrinterColor(config: ConfigLog(enableLog: kDebugMode));
+  printerLog = registerLogPrinterColor(config: ConfigLog(enableLog: kDebugMode));
   appInjection.registerSingleton&lt;RouteApp&gt;(RouteApp());
   appInjection.registerSingleton&lt;AppDatabase&gt;(AppDatabase());
   appInjection.registerSingleton&lt;SystemDatabase&gt;(SystemDatabase());

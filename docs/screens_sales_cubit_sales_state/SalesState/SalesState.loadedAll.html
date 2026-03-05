@@ -57,6 +57,7 @@
       <span class="name ">SalesState.loadedAll</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="loadedAll-param-products"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_product/Product-class.html">Product</a></span>&gt;</span></span> <span class="parameter-name">products</span>, </span></li>
 <li><span class="parameter" id="loadedAll-param-paymentMethods"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_system_config_price_configuration/PaymentMethodType.html">PaymentMethodType</a></span>&gt;</span></span> <span class="parameter-name">paymentMethods</span>, </span></li>
 <li><span class="parameter" id="loadedAll-param-customers"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>, <span class="type-parameter"><a href="../../core_models_customer/Customer-class.html">Customer</a></span>&gt;</span></span> <span class="parameter-name">customers</span>, </span></li>
+<li><span class="parameter" id="loadedAll-param-companies"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>, <span class="type-parameter"><a href="../../core_models_company/Company-class.html">Company</a></span>&gt;</span></span> <span class="parameter-name">companies</span>, </span></li>
 <li><span class="parameter" id="loadedAll-param-invoices"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>, <span class="type-parameter"><a href="../../core_models_invoice/Invoice-class.html">Invoice</a></span>&gt;</span></span> <span class="parameter-name">invoices</span>, </span></li>
 </ol>})
     </section>
@@ -70,6 +71,7 @@
   required List&lt;Product&gt; products,
   required List&lt;PaymentMethodType&gt; paymentMethods,
   required Map&lt;int, Customer&gt; customers,
+  required Map&lt;int, Company&gt; companies,
   required Map&lt;int, Invoice&gt; invoices,
 }) = SalesLoadedAll;</code></pre>
 </section>
