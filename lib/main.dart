@@ -13,6 +13,7 @@ import 'package:system_loja/screens/company/bloc/company_bloc.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/user_cubit.dart';
 import 'package:system_loja/screens/customer/bloc/customer_bloc.dart';
+import 'package:system_loja/screens/home/bloc/home_bloc.dart';
 import 'package:system_loja/screens/person_registration/bloc/person_bloc.dart';
 import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
@@ -51,6 +52,7 @@ class SystemLojaApp extends StatelessWidget {
           create: (context) =>
               PersonBloc(appInjection.get<ICustomerRepository>(), appInjection.get<ICompanyRepository>()),
         ),
+        BlocProvider<HomeBloc>(create: (context) => HomeBloc(appInjection.get<ISystemRepository>())),
       ],
       child: ValueListenableBuilder(
         valueListenable: appInjection.get<SettingsService>().currentThemeNotifier,

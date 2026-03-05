@@ -23,6 +23,7 @@ class SystemDao extends DatabaseAccessor<SystemDatabase> with _$SystemDaoMixin {
             priceConfiguration: data.priceConfiguration,
             registrationDate: data.registrationDate,
             lastUpdatedDate: data.lastUpdatedDate,
+            systemUserData: data.systemUserData,
           ),
         );
         return;
