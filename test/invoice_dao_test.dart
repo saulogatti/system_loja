@@ -26,7 +26,7 @@ void main() {
     await database.close();
   });
 
-  Future<int> insertProduct({int stockQuantity = 10}) async {
+  Future<int> insertProduct({int stockQuantity = 10})  {
     return productDao.insertProduct(
       Product(
         name: 'Produto Teste',
