@@ -23,6 +23,9 @@
 - Drift: usar convenção tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`.
 - Reutilizar `@UseRowClass(...)` nas tabelas Drift quando aplicável para reduzir conversões manuais.
 - Código em inglês; documentação e comentários com `///` em português.
+- Formato de commit: `<tipo>: <descrição concisa>`.
+- Tipos de commit: `feat`, `fix`, `docs`, `style`, `refactor`, `test`.
+- Mensagem de commit em português; incluir nome da classe alterada quando fizer sentido.
 
 ## Pitfalls
 - Há código legado em `lib/core/managers/` e configuração em JSON ainda em uso pontual. Não remover sem validar impacto.
