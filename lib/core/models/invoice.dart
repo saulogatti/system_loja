@@ -59,26 +59,25 @@ class Invoice extends DefaultObject {
 /// Dados de uma nota fiscal.
 ///
 /// Regra exclusiva: exatamente um de [customerId] ou [companyId] deve ser
-/// informado. Para notas de saída ([InvoiceType.exit]) use [customerId];
-/// para notas de entrada ([InvoiceType.entry]) use [companyId].
+/// informado, independente do [type].
 @JsonSerializable()
 class InvoiceData {
   @JsonKey(name: 'numero_nota')
   String invoiceNumber;
 
-  /// ID do cliente (apenas para notas de saída).
+  /// ID do cliente quando a nota estiver vinculada a um cliente.
   @JsonKey(name: 'cliente_id')
   final int? customerId;
 
-  /// Nome do cliente (desnormalizado; apenas para notas de saída).
+  /// Nome do cliente (desnormalizado).
   @JsonKey(name: 'cliente_nome')
   final String? customerName;
 
-  /// CPF do cliente (desnormalizado; apenas para notas de saída).
+  /// CPF do cliente (desnormalizado).
   @JsonKey(name: 'cliente_cpf')
   final String? customerCpf;
 
-  /// ID da empresa fornecedora (apenas para notas de entrada).
+  /// ID da empresa vinculada à nota.
   @JsonKey(name: 'empresa_id')
   final int? companyId;
 
@@ -104,7 +103,15 @@ class InvoiceData {
     DateTime? issueDate,
     this.type = InvoiceType.exit,
   }) : totalValue = items.fold(0.0, (sum, item) => sum + item.totalValue),
-       issueDate = issueDate ?? DateTime.now();
+       issueDate = issueDate ?? DateTime.now() {
+    final withoutLink = customerId == null && companyId == null;
+    final withBothLinks = customerId != null && companyId != null;
+    if (withoutLink || withBothLinks) {
+      throw ArgumentError(
+        'Informe exatamente um vínculo: customerId ou companyId.',
+      );
+    }
+  }
 
   factory InvoiceData.fromJson(Map<String, dynamic> json) =>
       _$InvoiceDataFromJson(json);
