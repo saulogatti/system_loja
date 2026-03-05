@@ -12,7 +12,7 @@ class CustomerOverviewBottomSheet extends StatelessWidget {
   final Customer customer;
 
   /// Cria uma instância de [CustomerOverviewBottomSheet].
-  const CustomerOverviewBottomSheet({super.key, required this.customer});
+  const CustomerOverviewBottomSheet({required this.customer, super.key});
 
   /// Exibe o bottom sheet de visão geral do cliente.
   static Future<void> show(BuildContext context, Customer customer) {

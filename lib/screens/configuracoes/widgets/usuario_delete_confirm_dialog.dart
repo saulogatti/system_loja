@@ -9,9 +9,7 @@ class UsuarioDeleteConfirmDialog extends StatelessWidget {
   final VoidCallback onConfirm;
 
   const UsuarioDeleteConfirmDialog({
-    super.key,
-    required this.usuario,
-    required this.onConfirm,
+    required this.usuario, required this.onConfirm, super.key,
   });
 
   @override

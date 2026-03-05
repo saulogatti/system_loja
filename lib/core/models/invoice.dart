@@ -11,8 +11,7 @@ class Invoice extends DefaultObject {
   final InvoiceData data;
 
   Invoice({
-    super.id,
-    required this.data,
+    required this.data, super.id,
     super.registrationDate,
     super.lastUpdatedDate,
   });
@@ -94,12 +93,10 @@ class InvoiceData {
 
   InvoiceData({
     required this.invoiceNumber,
-    this.customerId,
+    required this.items, required this.paymentMethod, this.customerId,
     this.customerName,
     this.customerCpf,
     this.companyId,
-    required this.items,
-    required this.paymentMethod,
     DateTime? issueDate,
     this.type = InvoiceType.exit,
   }) : totalValue = items.fold(0.0, (sum, item) => sum + item.totalValue),

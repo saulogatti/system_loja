@@ -18,15 +18,7 @@ class UsuarioForm extends StatefulWidget {
   final ValueChanged<AuthorizationLevel> onPermissaoChanged;
 
   const UsuarioForm({
-    super.key,
-    required this.formKey,
-    required this.nomeController,
-    required this.emailController,
-    required this.senhaController,
-    required this.nivelPermissaoSelecionado,
-    required this.usuarioEditando,
-    required this.onSubmit,
-    required this.onPermissaoChanged,
+    required this.formKey, required this.nomeController, required this.emailController, required this.senhaController, required this.nivelPermissaoSelecionado, required this.usuarioEditando, required this.onSubmit, required this.onPermissaoChanged, super.key,
     this.onCancel,
   });
 

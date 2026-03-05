@@ -9,10 +9,7 @@ class CustomerInfoRow extends StatelessWidget {
   final IconData icon;
   final String value;
   const CustomerInfoRow({
-    super.key,
-    required this.label,
-    required this.icon,
-    required this.value,
+    required this.label, required this.icon, required this.value, super.key,
   });
 
   @override

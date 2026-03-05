@@ -27,18 +27,7 @@ class CustomerForm extends StatelessWidget {
   final VoidCallback? onCancel;
 
   const CustomerForm({
-    super.key,
-    required this.formKey,
-    required this.nomeController,
-    required this.cpfController,
-    required this.emailController,
-    required this.telefoneController,
-    required this.streetController,
-    required this.onSubmit,
-    required this.zipCodeController,
-    required this.neighborhoodController,
-    required this.cityController,
-    required this.stateController,
+    required this.formKey, required this.nomeController, required this.cpfController, required this.emailController, required this.telefoneController, required this.streetController, required this.onSubmit, required this.zipCodeController, required this.neighborhoodController, required this.cityController, required this.stateController, super.key,
     this.isEditMode = false,
     this.onCancel,
   });

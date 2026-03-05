@@ -14,7 +14,7 @@ class CustomerList extends StatefulWidget {
 
   final Function(Customer) onCustomerTap;
 
-  const CustomerList({super.key, required this.onCustomerTap});
+  const CustomerList({required this.onCustomerTap, super.key});
 
   @override
   State<CustomerList> createState() => _CustomerListState();

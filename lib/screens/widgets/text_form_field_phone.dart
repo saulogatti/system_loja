@@ -3,9 +3,7 @@ import 'package:system_loja/core/utils/text_formatters.dart';
 
 class TextFormFieldPhone extends StatelessWidget {
   const TextFormFieldPhone({
-    super.key,
-    required this.telefoneController,
-    required this.isEditing,
+    required this.telefoneController, required this.isEditing, super.key,
   });
 
   final TextEditingController telefoneController;

@@ -12,11 +12,7 @@ class UsuarioList extends StatelessWidget {
   final Function(User) onTap;
 
   const UsuarioList({
-    super.key,
-    required this.usuarios,
-    required this.onEdit,
-    required this.onDelete,
-    required this.onTap,
+    required this.usuarios, required this.onEdit, required this.onDelete, required this.onTap, super.key,
   });
 
   @override

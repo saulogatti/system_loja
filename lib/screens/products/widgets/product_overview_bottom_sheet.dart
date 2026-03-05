@@ -18,8 +18,7 @@ class ProductOverviewBottomSheet extends StatelessWidget {
 
   /// Cria uma instância de [ProductOverviewBottomSheet].
   const ProductOverviewBottomSheet({
-    super.key,
-    required this.product,
+    required this.product, super.key,
     this.productList = const [],
   });
 

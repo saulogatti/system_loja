@@ -7,9 +7,7 @@ class TextFormFieldEmail extends StatelessWidget {
 
   final bool isEditing;
   const TextFormFieldEmail({
-    super.key,
-    required this.emailController,
-    required this.isEditing,
+    required this.emailController, required this.isEditing, super.key,
   });
 
   @override

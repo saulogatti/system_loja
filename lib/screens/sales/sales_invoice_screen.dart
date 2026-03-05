@@ -21,12 +21,7 @@ class SalesInvoiceScreen extends StatefulWidget {
   final List<Product> products;
 
   const SalesInvoiceScreen({
-    super.key,
-    required this.paymentMethods,
-    required this.customers,
-    required this.companies,
-    required this.salesCubit,
-    required this.products,
+    required this.paymentMethods, required this.customers, required this.companies, required this.salesCubit, required this.products, super.key,
   });
 
   @override

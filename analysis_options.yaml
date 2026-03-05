@@ -38,6 +38,7 @@ linter:
     unnecessary_async: true
     await_only_futures: true
     avoid_void_async: true
+    always_put_required_named_parameters_first: true
 
 analyzer:
   exclude:

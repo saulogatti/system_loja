@@ -10,11 +10,7 @@ class CardListItem extends StatelessWidget {
   final GestureTapCallback onTap;
   final GestureTapCallback? onDelete;
   const CardListItem({
-    super.key,
-    required this.colorAvatar,
-    required this.title,
-    required this.subTitle,
-    required this.onTap,
+    required this.colorAvatar, required this.title, required this.subTitle, required this.onTap, super.key,
     this.onDelete,
   });
 

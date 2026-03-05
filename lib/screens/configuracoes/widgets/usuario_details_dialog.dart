@@ -9,7 +9,7 @@ import 'package:system_loja/core/models/user.dart';
 class UsuarioDetailsDialog extends StatelessWidget {
   final User usuario;
 
-  const UsuarioDetailsDialog({super.key, required this.usuario});
+  const UsuarioDetailsDialog({required this.usuario, super.key});
 
   @override
   Widget build(BuildContext context) {

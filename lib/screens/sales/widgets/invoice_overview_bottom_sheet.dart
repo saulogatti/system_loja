@@ -11,7 +11,7 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
   final Invoice invoice;
 
   /// Cria uma instância de [InvoiceOverviewBottomSheet].
-  const InvoiceOverviewBottomSheet({super.key, required this.invoice});
+  const InvoiceOverviewBottomSheet({required this.invoice, super.key});
 
   /// Exibe o bottom sheet de visão geral da nota fiscal.
   static Future<void> show(BuildContext context, Invoice invoice) {

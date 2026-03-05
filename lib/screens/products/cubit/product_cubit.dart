@@ -41,8 +41,7 @@ class ProductCubit extends Cubit<ProductState> {
     required double preco,
     required int estoque,
     required String descricao,
-    int? categoryId,
-    required bool codeGenerate,
+    required bool codeGenerate, int? categoryId,
   }) async {
     if (codeGenerate) {
       codigo = await _productRepository.generateProductCode();

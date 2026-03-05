@@ -18,7 +18,7 @@ import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 class CompanyEditView extends StatefulWidget {
   final Company company;
 
-  const CompanyEditView({super.key, required this.company});
+  const CompanyEditView({required this.company, super.key});
 
   @override
   State<CompanyEditView> createState() => _CompanyEditViewState();

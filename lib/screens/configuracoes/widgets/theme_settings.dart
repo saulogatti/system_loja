@@ -13,10 +13,7 @@ class ThemeSettings extends StatelessWidget {
   final VoidCallback onMostrarSeletorCor;
 
   const ThemeSettings({
-    super.key,
-    required this.config,
-    required this.onConfigChanged,
-    required this.onMostrarSeletorCor,
+    required this.config, required this.onConfigChanged, required this.onMostrarSeletorCor, super.key,
   });
 
   @override

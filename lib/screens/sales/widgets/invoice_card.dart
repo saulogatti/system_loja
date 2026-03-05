@@ -6,7 +6,7 @@ class InvoiceCard extends StatelessWidget {
   final Invoice invoice;
   final VoidCallback onTap;
 
-  const InvoiceCard({super.key, required this.invoice, required this.onTap});
+  const InvoiceCard({required this.invoice, required this.onTap, super.key});
 
   @override
   Widget build(BuildContext context) {

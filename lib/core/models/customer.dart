@@ -11,10 +11,10 @@ class Customer extends PeopleData {
 
   final Address address;
   Customer({
-    super.id,
     required super.name,
-    super.email,
     required this.cpf,
+    super.id,
+    super.email,
     super.phone,
     Address? address,
 

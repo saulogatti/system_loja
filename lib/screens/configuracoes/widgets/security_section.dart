@@ -10,9 +10,7 @@ class SecuritySection extends StatelessWidget {
   final Function(AppSettings) onConfigChanged;
 
   const SecuritySection({
-    super.key,
-    required this.config,
-    required this.onConfigChanged,
+    required this.config, required this.onConfigChanged, super.key,
   });
 
   @override

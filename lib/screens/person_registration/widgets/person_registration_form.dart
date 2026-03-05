@@ -24,20 +24,7 @@ class PersonRegistrationForm extends StatelessWidget {
   final VoidCallback onSubmit;
 
   const PersonRegistrationForm({
-    super.key,
-    required this.formKey,
-    required this.selectedPersonType,
-    required this.onPersonTypeChanged,
-    required this.nameController,
-    required this.documentController,
-    required this.emailController,
-    required this.phoneController,
-    required this.streetController,
-    required this.zipCodeController,
-    required this.neighborhoodController,
-    required this.cityController,
-    required this.stateController,
-    required this.onSubmit,
+    required this.formKey, required this.selectedPersonType, required this.onPersonTypeChanged, required this.nameController, required this.documentController, required this.emailController, required this.phoneController, required this.streetController, required this.zipCodeController, required this.neighborhoodController, required this.cityController, required this.stateController, required this.onSubmit, super.key,
   });
 
   @override

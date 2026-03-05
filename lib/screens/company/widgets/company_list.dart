@@ -14,7 +14,7 @@ class CompanyList extends StatefulWidget {
 
   final Function(Company) onCompanyTap;
 
-  const CompanyList({super.key, required this.onCompanyTap});
+  const CompanyList({required this.onCompanyTap, super.key});
 
   @override
   State<CompanyList> createState() => _CompanyListState();

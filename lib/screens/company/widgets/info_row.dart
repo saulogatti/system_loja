@@ -7,9 +7,7 @@ class InfoRow extends StatelessWidget {
   final TextStyle? valueStyle;
 
   const InfoRow({
-    super.key,
-    required this.label,
-    required this.value,
+    required this.label, required this.value, super.key,
     this.labelStyle,
     this.valueStyle,
   });

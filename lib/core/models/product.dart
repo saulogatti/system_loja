@@ -20,9 +20,8 @@ class Product extends DefaultObject {
     required this.description,
     required this.price,
     required this.stockQuantity,
-    super.lastUpdatedDate,
+    required this.code, super.lastUpdatedDate,
     this.categoryId,
-    required this.code,
     int? id,
   }) : super(id: id ?? -1);
   factory Product.fromJson(Map<String, dynamic> json) =>

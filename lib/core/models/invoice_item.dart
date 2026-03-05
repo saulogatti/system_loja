@@ -21,11 +21,7 @@ class InvoiceItem {
   final double totalValue;
 
   InvoiceItem({
-    this.productId = kInvalidId,
-    required this.productName,
-    required this.productCode,
-    required this.quantity,
-    required this.unitPrice,
+    required this.productName, required this.productCode, required this.quantity, required this.unitPrice, this.productId = kInvalidId,
   }) : totalValue = quantity * unitPrice;
 
   /// Cria um objeto a partir de JSON

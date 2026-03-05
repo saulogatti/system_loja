@@ -13,9 +13,7 @@ class Company extends PeopleData {
   final Address address;
 
   Company({
-    super.id,
-    required super.name,
-    required this.cnpj,
+    required super.name, required this.cnpj, super.id,
     super.phone,
     super.email,
     Address? address,

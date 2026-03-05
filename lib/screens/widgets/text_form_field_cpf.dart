@@ -6,8 +6,7 @@ class TextFormFieldCpf extends StatelessWidget {
   final TextEditingController cpfController;
   final String? Function(String?)? validatorOptions;  
   const TextFormFieldCpf({
-    super.key,
-    required this.cpfController,
+    required this.cpfController, super.key,
     this.enable = false,
     this.validatorOptions,
   });

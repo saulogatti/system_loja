@@ -6,7 +6,7 @@ import 'package:system_loja/core/models/default/default_object.dart';
 abstract class PeopleData extends DefaultObject {
   final String name;
   final String? email;
- final String? phone;
+  final String? phone;
   PeopleData({
     required super.id,
     required this.name,
