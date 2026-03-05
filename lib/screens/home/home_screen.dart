@@ -54,12 +54,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    'Use o menu inferior para acessar as funcionalidades',
+                                    systemUserData.name,
                                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
+                                  const SizedBox(height: 16),
+                                  if (systemUserData.email.isNotEmpty)
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.email_outlined,
+                                          size: 18,
+                                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          systemUserData.email,
+                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
                                 ],
                               ),
                             ),
