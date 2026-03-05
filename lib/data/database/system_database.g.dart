@@ -714,18 +714,6 @@ class $SystemRecordsTable extends SystemRecords
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _registrationDateMeta = const VerificationMeta(
-    'registrationDate',
-  );
-  @override
-  late final GeneratedColumn<DateTime> registrationDate =
-      GeneratedColumn<DateTime>(
-        'registration_date',
-        aliasedName,
-        false,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: true,
-      );
   static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
     'lastUpdatedDate',
   );
@@ -750,12 +738,34 @@ class $SystemRecordsTable extends SystemRecords
       ).withConverter<PriceConfiguration>(
         $SystemRecordsTable.$converterpriceConfiguration,
       );
+  static const VerificationMeta _registrationDateMeta = const VerificationMeta(
+    'registrationDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> registrationDate =
+      GeneratedColumn<DateTime>(
+        'registration_date',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      );
+  @override
+  late final GeneratedColumnWithTypeConverter<SystemUserData, String>
+  systemUserData = GeneratedColumn<String>(
+    'system_user_data',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  ).withConverter<SystemUserData>($SystemRecordsTable.$convertersystemUserData);
   @override
   List<GeneratedColumn> get $columns => [
     id,
-    registrationDate,
     lastUpdatedDate,
     priceConfiguration,
+    registrationDate,
+    systemUserData,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -772,17 +782,6 @@ class $SystemRecordsTable extends SystemRecords
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('registration_date')) {
-      context.handle(
-        _registrationDateMeta,
-        registrationDate.isAcceptableOrUnknown(
-          data['registration_date']!,
-          _registrationDateMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_registrationDateMeta);
-    }
     if (data.containsKey('last_updated_date')) {
       context.handle(
         _lastUpdatedDateMeta,
@@ -793,6 +792,17 @@ class $SystemRecordsTable extends SystemRecords
       );
     } else if (isInserting) {
       context.missing(_lastUpdatedDateMeta);
+    }
+    if (data.containsKey('registration_date')) {
+      context.handle(
+        _registrationDateMeta,
+        registrationDate.isAcceptableOrUnknown(
+          data['registration_date']!,
+          _registrationDateMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_registrationDateMeta);
     }
     return context;
   }
@@ -822,6 +832,12 @@ class $SystemRecordsTable extends SystemRecords
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
+      systemUserData: $SystemRecordsTable.$convertersystemUserData.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}system_user_data'],
+        )!,
+      ),
     );
   }
 
@@ -832,52 +848,62 @@ class $SystemRecordsTable extends SystemRecords
 
   static JsonTypeConverter2<PriceConfiguration, String, Object?>
   $converterpriceConfiguration = PriceConfiguration.converter;
+  static JsonTypeConverter2<SystemUserData, String, Object?>
+  $convertersystemUserData = SystemUserData.converter;
 }
 
 class SystemRecordsCompanion extends UpdateCompanion<SystemConfiguration> {
   final Value<int> id;
-  final Value<DateTime> registrationDate;
   final Value<DateTime> lastUpdatedDate;
   final Value<PriceConfiguration> priceConfiguration;
+  final Value<DateTime> registrationDate;
+  final Value<SystemUserData> systemUserData;
   const SystemRecordsCompanion({
     this.id = const Value.absent(),
-    this.registrationDate = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
     this.priceConfiguration = const Value.absent(),
+    this.registrationDate = const Value.absent(),
+    this.systemUserData = const Value.absent(),
   });
   SystemRecordsCompanion.insert({
     this.id = const Value.absent(),
-    required DateTime registrationDate,
     required DateTime lastUpdatedDate,
     required PriceConfiguration priceConfiguration,
-  }) : registrationDate = Value(registrationDate),
-       lastUpdatedDate = Value(lastUpdatedDate),
-       priceConfiguration = Value(priceConfiguration);
+    required DateTime registrationDate,
+    required SystemUserData systemUserData,
+  }) : lastUpdatedDate = Value(lastUpdatedDate),
+       priceConfiguration = Value(priceConfiguration),
+       registrationDate = Value(registrationDate),
+       systemUserData = Value(systemUserData);
   static Insertable<SystemConfiguration> custom({
     Expression<int>? id,
-    Expression<DateTime>? registrationDate,
     Expression<DateTime>? lastUpdatedDate,
     Expression<String>? priceConfiguration,
+    Expression<DateTime>? registrationDate,
+    Expression<String>? systemUserData,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (registrationDate != null) 'registration_date': registrationDate,
       if (lastUpdatedDate != null) 'last_updated_date': lastUpdatedDate,
       if (priceConfiguration != null) 'price_configuration': priceConfiguration,
+      if (registrationDate != null) 'registration_date': registrationDate,
+      if (systemUserData != null) 'system_user_data': systemUserData,
     });
   }
 
   SystemRecordsCompanion copyWith({
     Value<int>? id,
-    Value<DateTime>? registrationDate,
     Value<DateTime>? lastUpdatedDate,
     Value<PriceConfiguration>? priceConfiguration,
+    Value<DateTime>? registrationDate,
+    Value<SystemUserData>? systemUserData,
   }) {
     return SystemRecordsCompanion(
       id: id ?? this.id,
-      registrationDate: registrationDate ?? this.registrationDate,
       lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
       priceConfiguration: priceConfiguration ?? this.priceConfiguration,
+      registrationDate: registrationDate ?? this.registrationDate,
+      systemUserData: systemUserData ?? this.systemUserData,
     );
   }
 
@@ -886,9 +912,6 @@ class SystemRecordsCompanion extends UpdateCompanion<SystemConfiguration> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
-    }
-    if (registrationDate.present) {
-      map['registration_date'] = Variable<DateTime>(registrationDate.value);
     }
     if (lastUpdatedDate.present) {
       map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate.value);
@@ -900,6 +923,16 @@ class SystemRecordsCompanion extends UpdateCompanion<SystemConfiguration> {
         ),
       );
     }
+    if (registrationDate.present) {
+      map['registration_date'] = Variable<DateTime>(registrationDate.value);
+    }
+    if (systemUserData.present) {
+      map['system_user_data'] = Variable<String>(
+        $SystemRecordsTable.$convertersystemUserData.toSql(
+          systemUserData.value,
+        ),
+      );
+    }
     return map;
   }
 
@@ -907,9 +940,10 @@ class SystemRecordsCompanion extends UpdateCompanion<SystemConfiguration> {
   String toString() {
     return (StringBuffer('SystemRecordsCompanion(')
           ..write('id: $id, ')
-          ..write('registrationDate: $registrationDate, ')
           ..write('lastUpdatedDate: $lastUpdatedDate, ')
-          ..write('priceConfiguration: $priceConfiguration')
+          ..write('priceConfiguration: $priceConfiguration, ')
+          ..write('registrationDate: $registrationDate, ')
+          ..write('systemUserData: $systemUserData')
           ..write(')'))
         .toString();
   }
@@ -1450,16 +1484,18 @@ typedef $$LogsRecordsTableProcessedTableManager =
 typedef $$SystemRecordsTableCreateCompanionBuilder =
     SystemRecordsCompanion Function({
       Value<int> id,
-      required DateTime registrationDate,
       required DateTime lastUpdatedDate,
       required PriceConfiguration priceConfiguration,
+      required DateTime registrationDate,
+      required SystemUserData systemUserData,
     });
 typedef $$SystemRecordsTableUpdateCompanionBuilder =
     SystemRecordsCompanion Function({
       Value<int> id,
-      Value<DateTime> registrationDate,
       Value<DateTime> lastUpdatedDate,
       Value<PriceConfiguration> priceConfiguration,
+      Value<DateTime> registrationDate,
+      Value<SystemUserData> systemUserData,
     });
 
 class $$SystemRecordsTableFilterComposer
@@ -1476,11 +1512,6 @@ class $$SystemRecordsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
     column: $table.lastUpdatedDate,
     builder: (column) => ColumnFilters(column),
@@ -1489,6 +1520,17 @@ class $$SystemRecordsTableFilterComposer
   ColumnWithTypeConverterFilters<PriceConfiguration, PriceConfiguration, String>
   get priceConfiguration => $composableBuilder(
     column: $table.priceConfiguration,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<SystemUserData, SystemUserData, String>
+  get systemUserData => $composableBuilder(
+    column: $table.systemUserData,
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 }
@@ -1507,11 +1549,6 @@ class $$SystemRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
     column: $table.lastUpdatedDate,
     builder: (column) => ColumnOrderings(column),
@@ -1519,6 +1556,16 @@ class $$SystemRecordsTableOrderingComposer
 
   ColumnOrderings<String> get priceConfiguration => $composableBuilder(
     column: $table.priceConfiguration,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get systemUserData => $composableBuilder(
+    column: $table.systemUserData,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -1535,11 +1582,6 @@ class $$SystemRecordsTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => column,
-  );
-
   GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
     column: $table.lastUpdatedDate,
     builder: (column) => column,
@@ -1550,6 +1592,17 @@ class $$SystemRecordsTableAnnotationComposer
     column: $table.priceConfiguration,
     builder: (column) => column,
   );
+
+  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<SystemUserData, String> get systemUserData =>
+      $composableBuilder(
+        column: $table.systemUserData,
+        builder: (column) => column,
+      );
 }
 
 class $$SystemRecordsTableTableManager
@@ -1590,27 +1643,31 @@ class $$SystemRecordsTableTableManager
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<DateTime> registrationDate = const Value.absent(),
                 Value<DateTime> lastUpdatedDate = const Value.absent(),
                 Value<PriceConfiguration> priceConfiguration =
                     const Value.absent(),
+                Value<DateTime> registrationDate = const Value.absent(),
+                Value<SystemUserData> systemUserData = const Value.absent(),
               }) => SystemRecordsCompanion(
                 id: id,
-                registrationDate: registrationDate,
                 lastUpdatedDate: lastUpdatedDate,
                 priceConfiguration: priceConfiguration,
+                registrationDate: registrationDate,
+                systemUserData: systemUserData,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required DateTime registrationDate,
                 required DateTime lastUpdatedDate,
                 required PriceConfiguration priceConfiguration,
+                required DateTime registrationDate,
+                required SystemUserData systemUserData,
               }) => SystemRecordsCompanion.insert(
                 id: id,
-                registrationDate: registrationDate,
                 lastUpdatedDate: lastUpdatedDate,
                 priceConfiguration: priceConfiguration,
+                registrationDate: registrationDate,
+                systemUserData: systemUserData,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

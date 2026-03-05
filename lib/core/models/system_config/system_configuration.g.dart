@@ -31,6 +31,12 @@ SystemConfiguration _$SystemConfigurationFromJson(Map<String, dynamic> json) =>
             (v) => v == null ? null : DateTime.parse(v as String),
           ),
           id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
+          systemUserData: $checkedConvert(
+            'systemUserData',
+            (v) => v == null
+                ? null
+                : SystemUserData.fromJson(v as Map<String, dynamic>),
+          ),
         );
         return val;
       },
@@ -47,5 +53,6 @@ Map<String, dynamic> _$SystemConfigurationToJson(
   'registration_date': instance.registrationDate.toIso8601String(),
   'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
   'priceConfiguration': instance.priceConfiguration.toJson(),
+  'systemUserData': instance.systemUserData.toJson(),
   'productCategories': instance.productCategories,
 };
