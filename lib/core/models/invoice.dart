@@ -10,18 +10,12 @@ part 'invoice.g.dart';
 class Invoice extends DefaultObject {
   final InvoiceData data;
 
-  Invoice({
-    required this.data, super.id,
-    super.registrationDate,
-    super.lastUpdatedDate,
-  });
+  Invoice({required this.data, super.id, super.registrationDate, super.lastUpdatedDate});
 
   /// Cria um objeto a partir de JSON.
-  factory Invoice.fromJson(Map<String, dynamic> json) =>
-      _$InvoiceFromJson(json);
+  factory Invoice.fromJson(Map<String, dynamic> json) => _$InvoiceFromJson(json);
 
   /// Converte o objeto para JSON.
-  @override
   Map<String, dynamic> toJson() => _$InvoiceToJson(this);
 
   @override
@@ -31,9 +25,7 @@ class Invoice extends DefaultObject {
     buffer.writeln('Invoice Number: ${data.invoiceNumber}');
     buffer.writeln('Type: ${data.type.name}');
     if (data.customerId != null) {
-      buffer.writeln(
-        'Customer: ${data.customerName} (CPF: ${data.customerCpf})',
-      );
+      buffer.writeln('Customer: ${data.customerName} (CPF: ${data.customerCpf})');
     }
     if (data.companyId != null) {
       buffer.writeln('Company ID: ${data.companyId}');
@@ -45,12 +37,8 @@ class Invoice extends DefaultObject {
     for (var item in data.items) {
       buffer.writeln(item.toString());
     }
-    buffer.writeln(
-      'Data de Cadastro: ${registrationDate.toString().split('.')[0]}',
-    );
-    buffer.writeln(
-      'Data de Atualização: ${lastUpdatedDate.toString().split('.')[0]}',
-    );
+    buffer.writeln('Data de Cadastro: ${registrationDate.toString().split('.')[0]}');
+    buffer.writeln('Data de Atualização: ${lastUpdatedDate.toString().split('.')[0]}');
     return buffer.toString();
   }
 }
@@ -93,7 +81,9 @@ class InvoiceData {
 
   InvoiceData({
     required this.invoiceNumber,
-    required this.items, required this.paymentMethod, this.customerId,
+    required this.items,
+    required this.paymentMethod,
+    this.customerId,
     this.customerName,
     this.customerCpf,
     this.companyId,
@@ -104,13 +94,10 @@ class InvoiceData {
     final withoutLink = customerId == null && companyId == null;
     final withBothLinks = customerId != null && companyId != null;
     if (withoutLink || withBothLinks) {
-      throw ArgumentError(
-        'Informe exatamente um vínculo: customerId ou companyId.',
-      );
+      throw ArgumentError('Informe exatamente um vínculo: customerId ou companyId.');
     }
   }
 
-  factory InvoiceData.fromJson(Map<String, dynamic> json) =>
-      _$InvoiceDataFromJson(json);
+  factory InvoiceData.fromJson(Map<String, dynamic> json) => _$InvoiceDataFromJson(json);
   Map<String, dynamic> toJson() => _$InvoiceDataToJson(this);
 }

@@ -35,10 +35,7 @@ class PriceConfiguration extends DefaultObject {
 
   factory PriceConfiguration.fromJson(Map<String, dynamic> json) => _$PriceConfigurationFromJson(json);
 
-  @override
-  Map<String, dynamic> toJson() {
-    return _$PriceConfigurationToJson(this);
-  }
+  Map<String, dynamic> toJson() => _$PriceConfigurationToJson(this);
 
   static ReportConfiguration _reportFromJson(Map<String, dynamic>? json) {
     if (json == null) {

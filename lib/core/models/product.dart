@@ -4,7 +4,6 @@ import 'package:system_loja/core/models/default/default_object.dart';
 
 part 'product.g.dart';
 
-
 @JsonSerializable()
 class Product extends DefaultObject {
   final String name;
@@ -20,14 +19,11 @@ class Product extends DefaultObject {
     required this.description,
     required this.price,
     required this.stockQuantity,
-    required this.code, super.lastUpdatedDate,
+    required this.code,
+    super.lastUpdatedDate,
     this.categoryId,
     int? id,
   }) : super(id: id ?? -1);
-  factory Product.fromJson(Map<String, dynamic> json) =>
-      _$ProductFromJson(json);
-  @override
-  Map<String, dynamic> toJson() {
-    return _$ProductToJson(this);
-  }
+  factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
+  Map<String, dynamic> toJson() => _$ProductToJson(this);
 }

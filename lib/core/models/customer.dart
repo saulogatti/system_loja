@@ -26,7 +26,6 @@ class Customer extends PersonDefault {
   factory Customer.fromJson(Map<String, dynamic> json) => _$CustomerFromJson(json);
 
   /// Converte o objeto para JSON
-  @override
   Map<String, dynamic> toJson() => _$CustomerToJson(this);
 
   @override

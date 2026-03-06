@@ -58,18 +58,13 @@ class ActivityLog extends DefaultObject {
     super.registrationDate,
     String? action,
   }) : timestamp = timestamp ?? DateTime.now(),
-       actionType = ActionType.values.firstWhere(
-         (e) => e.name == action,
-         orElse: () => ActionType.ler,
-       );
+       actionType = ActionType.values.firstWhere((e) => e.name == action, orElse: () => ActionType.ler);
 
   /// Cria um objeto a partir de JSON
-  factory ActivityLog.fromJson(Map<String, dynamic> json) =>
-      _$ActivityLogFromJson(json);
+  factory ActivityLog.fromJson(Map<String, dynamic> json) => _$ActivityLogFromJson(json);
   String get action => actionType.name;
 
   /// Converte o objeto para JSON
-  @override
   Map<String, dynamic> toJson() => _$ActivityLogToJson(this);
 
   @override
