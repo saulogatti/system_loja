@@ -6,46 +6,23 @@ part of 'activity_log.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ActivityLog _$ActivityLogFromJson(Map<String, dynamic> json) => $checkedCreate(
-  'ActivityLog',
-  json,
-  ($checkedConvert) {
-    final val = ActivityLog(
-      id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
-      entity: $checkedConvert('entidade', (v) => v as String),
-      userId: $checkedConvert('usuario_id', (v) => (v as num).toInt()),
-      userName: $checkedConvert('usuario_nome', (v) => v as String),
-      timestamp: $checkedConvert(
-        'data_hora',
-        (v) => v == null ? null : DateTime.parse(v as String),
-      ),
-      details: $checkedConvert('details', (v) => v as String? ?? ''),
-      lastUpdatedDate: $checkedConvert(
-        'last_updated_date',
-        (v) => v == null ? null : DateTime.parse(v as String),
-      ),
-      registrationDate: $checkedConvert(
-        'registration_date',
-        (v) => v == null ? null : DateTime.parse(v as String),
-      ),
-      action: $checkedConvert('action', (v) => v as String?),
-    );
-    $checkedConvert(
-      'tipo_acao',
-      (v) => val.actionType = $enumDecode(_$ActionTypeEnumMap, v),
-    );
-    return val;
-  },
-  fieldKeyMap: const {
-    'entity': 'entidade',
-    'userId': 'usuario_id',
-    'userName': 'usuario_nome',
-    'timestamp': 'data_hora',
-    'lastUpdatedDate': 'last_updated_date',
-    'registrationDate': 'registration_date',
-    'actionType': 'tipo_acao',
-  },
-);
+ActivityLog _$ActivityLogFromJson(Map<String, dynamic> json) => ActivityLog(
+  id: (json['id'] as num?)?.toInt(),
+  entity: json['entidade'] as String,
+  userId: (json['usuario_id'] as num).toInt(),
+  userName: json['usuario_nome'] as String,
+  timestamp: json['data_hora'] == null
+      ? null
+      : DateTime.parse(json['data_hora'] as String),
+  details: json['details'] as String? ?? '',
+  lastUpdatedDate: json['last_updated_date'] == null
+      ? null
+      : DateTime.parse(json['last_updated_date'] as String),
+  registrationDate: json['registration_date'] == null
+      ? null
+      : DateTime.parse(json['registration_date'] as String),
+  action: json['action'] as String?,
+)..actionType = $enumDecode(_$ActionTypeEnumMap, json['tipo_acao']);
 
 Map<String, dynamic> _$ActivityLogToJson(ActivityLog instance) =>
     <String, dynamic>{

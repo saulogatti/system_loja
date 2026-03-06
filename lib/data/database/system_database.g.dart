@@ -848,8 +848,8 @@ class $SystemRecordsTable extends SystemRecords
 
   static JsonTypeConverter2<PriceConfiguration, String, Object?>
   $converterpriceConfiguration = PriceConfiguration.converter;
-  static JsonTypeConverter2<SystemUserData, String, Object?>
-  $convertersystemUserData = SystemUserData.converter;
+  static TypeConverter<SystemUserData, String> $convertersystemUserData =
+      SystemUserDataConverter();
 }
 
 class SystemRecordsCompanion extends UpdateCompanion<SystemConfiguration> {

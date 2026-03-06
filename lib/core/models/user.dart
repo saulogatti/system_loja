@@ -23,7 +23,7 @@ enum AuthorizationLevel {
 /// Representa um usuário do sistema com informações de autenticação
 /// e nível de permissão para controle de acesso.
 @JsonSerializable(explicitToJson: true)
-class User extends PeopleData {
+class User extends PersonDefault {
   @JsonKey(name: 'senha_hash')
   final String passwordHash;
 
@@ -47,12 +47,7 @@ class User extends PeopleData {
   ///
   /// Atualiza automaticamente a data de última atualização para o momento atual,
   /// a menos que uma data específica seja fornecida.
-  User copyWith({
-    String? name,
-    String? email,
-    String? passwordHash,
-    int? permission,
-  }) {
+  User copyWith({String? name, String? email, String? passwordHash, int? permission}) {
     return User(
       id: id,
       name: name ?? this.name,

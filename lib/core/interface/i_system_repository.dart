@@ -11,7 +11,7 @@ import 'package:system_loja/core/models/system_config/system_configuration.dart'
 /// Exemplo de uso:
 /// ```dart
 /// final repository = appInjection.get<SystemRepository>();
-/// 
+///
 /// final config = await repository.getSystemConfiguration();
 /// if (config != null) {
 ///   print('Versão: ${config.version}');
@@ -28,7 +28,7 @@ abstract interface class ISystemRepository {
   ///
   /// Retorna:
   /// - [SystemConfiguration] com as configurações ou null se não existir
-  Future<SystemConfiguration?> getSystemConfiguration();
+  Future<SystemConfiguration> getSystemConfiguration();
 
   /// Salva as configurações do sistema.
   ///
@@ -37,4 +37,6 @@ abstract interface class ISystemRepository {
   /// Parâmetros:
   /// - [data]: Objeto SystemConfiguration com as configurações a serem salvas
   Future<void> saveSystemConfiguration(SystemConfiguration data);
+
+  Future<SystemConfiguration> resetToDefaultConfiguration();
 }

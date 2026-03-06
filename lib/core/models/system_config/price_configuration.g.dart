@@ -7,45 +7,27 @@ part of 'price_configuration.dart';
 // **************************************************************************
 
 PriceConfiguration _$PriceConfigurationFromJson(Map<String, dynamic> json) =>
-    $checkedCreate(
-      'PriceConfiguration',
-      json,
-      ($checkedConvert) {
-        final val = PriceConfiguration(
-          types: $checkedConvert(
-            'types',
-            (v) =>
-                (v as List<dynamic>?)
-                    ?.map((e) => $enumDecode(_$PaymentMethodTypeEnumMap, e))
-                    .toList() ??
-                [],
-          ),
-          measurementUnits: $checkedConvert(
-            'measurementUnits',
-            (v) =>
-                (v as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
-          ),
-          reportConfiguration: $checkedConvert(
-            'reportConfiguration',
-            (v) =>
-                PriceConfiguration._reportFromJson(v as Map<String, dynamic>?),
-          ),
-          lastUpdatedDate: $checkedConvert(
-            'last_updated_date',
-            (v) => v == null ? null : DateTime.parse(v as String),
-          ),
-          registrationDate: $checkedConvert(
-            'registration_date',
-            (v) => v == null ? null : DateTime.parse(v as String),
-          ),
-          id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
-        );
-        return val;
-      },
-      fieldKeyMap: const {
-        'lastUpdatedDate': 'last_updated_date',
-        'registrationDate': 'registration_date',
-      },
+    PriceConfiguration(
+      types:
+          (json['types'] as List<dynamic>?)
+              ?.map((e) => $enumDecode(_$PaymentMethodTypeEnumMap, e))
+              .toList() ??
+          [],
+      measurementUnits:
+          (json['measurementUnits'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      reportConfiguration: PriceConfiguration._reportFromJson(
+        json['reportConfiguration'] as Map<String, dynamic>?,
+      ),
+      lastUpdatedDate: json['last_updated_date'] == null
+          ? null
+          : DateTime.parse(json['last_updated_date'] as String),
+      registrationDate: json['registration_date'] == null
+          ? null
+          : DateTime.parse(json['registration_date'] as String),
+      id: (json['id'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$PriceConfigurationToJson(

@@ -6,19 +6,14 @@ part of 'category.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Category _$CategoryFromJson(Map<String, dynamic> json) =>
-    $checkedCreate('Category', json, ($checkedConvert) {
-      final val = Category(
-        name: $checkedConvert('name', (v) => v as String),
-        description: $checkedConvert('description', (v) => v as String?),
-        lastUpdatedDate: $checkedConvert(
-          'last_updated_date',
-          (v) => v == null ? null : DateTime.parse(v as String),
-        ),
-        id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
-      );
-      return val;
-    }, fieldKeyMap: const {'lastUpdatedDate': 'last_updated_date'});
+Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
+  name: json['name'] as String,
+  description: json['description'] as String?,
+  lastUpdatedDate: json['last_updated_date'] == null
+      ? null
+      : DateTime.parse(json['last_updated_date'] as String),
+  id: (json['id'] as num?)?.toInt(),
+);
 
 Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
   'id': instance.id,

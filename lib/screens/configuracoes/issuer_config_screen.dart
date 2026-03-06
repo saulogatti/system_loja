@@ -1,5 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/models/document/cnpj.dart';
+import 'package:system_loja/core/models/person/person.dart';
+import 'package:system_loja/core/models/system_config/system_user_data.dart';
+import 'package:system_loja/core/utils/text_formatters.dart';
+import 'package:system_loja/screens/home/bloc/home_bloc.dart';
 
 /// Tela de configuração da empresa emitente.
 ///
@@ -24,13 +30,14 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
   final _descriptionController = TextEditingController();
   final _accessKeyController = TextEditingController();
 
+  final TextEditingController _cnpjController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Empresa Emitente'),
-        leading: const AutoLeadingButton(),
-      ),
+      appBar: AppBar(title: const Text('Empresa Emitente'), leading: const AutoLeadingButton()),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -72,19 +79,13 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
               children: [
                 Icon(Icons.vpn_key, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
-                const Text(
-                  'Acesso ao Sistema',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const Text('Acesso ao Sistema', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 4),
             Text(
               'Reservado para futura validação de chave de acesso',
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -96,10 +97,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
                 hintText: 'Disponível em breve',
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.lock_outline),
-                suffixIcon: const IconButton(
-                  icon: Icon(Icons.visibility_off),
-                  onPressed: null,
-                ),
+                suffixIcon: const IconButton(icon: Icon(Icons.visibility_off), onPressed: null),
                 helperText: 'Este campo será habilitado em uma versão futura.',
               ),
             ),
@@ -121,10 +119,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
               children: [
                 Icon(Icons.business, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
-                const Text(
-                  'Dados da Empresa',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const Text('Dados da Empresa', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 16),
@@ -146,6 +141,65 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
                 }
                 return null;
               },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                hintText: 'Ex.: contato@minhaloja.com',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.email),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Informe o Email';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _phoneController,
+              decoration: const InputDecoration(
+                labelText: 'Telefone',
+                hintText: 'Ex.: (11) 99999-9999',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.phone),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Informe o Telefone';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _cnpjController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [CnpjTextInputFormatter()],
+              decoration: const InputDecoration(
+                labelText: 'CNPJ',
+                hintText: 'Ex.: 12.345.678/0001-90',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.business),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Informe o CNPJ';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.email),
+              ),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -179,10 +233,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
               children: [
                 Icon(Icons.image, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
-                const Text(
-                  'Logotipo',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const Text('Logotipo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 16),
@@ -195,10 +246,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.outline,
-                        width: 1,
-                      ),
+                      border: Border.all(color: Theme.of(context).colorScheme.outline, width: 1),
                     ),
                     child: Icon(
                       Icons.add_photo_alternate_outlined,
@@ -215,10 +263,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
                   const SizedBox(height: 4),
                   Text(
                     'Formatos suportados: PNG, JPG. Tamanho máximo: 2 MB.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -243,9 +288,28 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
     );
   }
 
-  /// Abre o seletor de imagem para o logotipo.
-  ///
-  /// Funcionalidade reservada para futura implementação com seleção real de arquivo.
+  /// Salva as configurações da empresa emitente.
+  void _salvarConfiguracoes() {
+    if (_formKey.currentState?.validate() ?? false) {
+      // O que é melhor? Enviar o SystemUserData completo ou apenas os campos que foram alterados?
+      // Vamos enviar o SystemUserData completo para simplificar o código.
+      context.read<HomeBloc>().add(
+        HomeEvent.saveSystemUserData(
+          SystemUserData(
+            person: Person.legalEntity(
+              name: _fantasyNameController.text,
+              document: Cnpj(_cnpjController.text),
+              email: _emailController.text,
+              phone: _phoneController.text,
+            ),
+            systemKey: _accessKeyController.text,
+            description: _descriptionController.text,
+          ),
+        ),
+      );
+    }
+  }
+
   void _selecionarLogo() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -253,17 +317,5 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
         backgroundColor: Colors.orange,
       ),
     );
-  }
-
-  /// Salva as configurações da empresa emitente.
-  void _salvarConfiguracoes() {
-    if (_formKey.currentState?.validate() ?? false) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Configurações salvas com sucesso!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    }
   }
 }

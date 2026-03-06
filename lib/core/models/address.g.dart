@@ -6,19 +6,12 @@ part of 'address.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Address _$AddressFromJson(Map<String, dynamic> json) => $checkedCreate(
-  'Address',
-  json,
-  ($checkedConvert) {
-    final val = Address(
-      street: $checkedConvert('street', (v) => v as String? ?? ''),
-      zipCode: $checkedConvert('zipCode', (v) => v as String? ?? ''),
-      neighborhood: $checkedConvert('neighborhood', (v) => v as String? ?? ''),
-      city: $checkedConvert('city', (v) => v as String? ?? ''),
-      state: $checkedConvert('state', (v) => v as String? ?? ''),
-    );
-    return val;
-  },
+Address _$AddressFromJson(Map<String, dynamic> json) => Address(
+  street: json['street'] as String? ?? '',
+  zipCode: json['zipCode'] as String? ?? '',
+  neighborhood: json['neighborhood'] as String? ?? '',
+  city: json['city'] as String? ?? '',
+  state: json['state'] as String? ?? '',
 );
 
 Map<String, dynamic> _$AddressToJson(Address instance) => <String, dynamic>{
