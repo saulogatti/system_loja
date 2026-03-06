@@ -4,7 +4,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
-import 'package:system_loja/core/models/system_config/system_user_data.dart';
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/data/database/dao/log_dao.dart';
 import 'package:system_loja/data/database/dao/system_dao.dart';

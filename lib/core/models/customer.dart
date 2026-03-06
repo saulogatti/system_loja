@@ -6,7 +6,7 @@ part 'customer.g.dart';
 
 /// Modelo de dados para Cliente
 @JsonSerializable(explicitToJson: true)
-class Customer extends PeopleData {
+class Customer extends PersonDefault {
   final String cpf;
 
   final Address address;

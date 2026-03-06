@@ -6,14 +6,16 @@ part 'company.g.dart';
 
 /// Modelo de dados para Empresa
 @JsonSerializable(explicitToJson: true)
-class Company extends PeopleData {
+class Company extends PersonDefault {
   /// CNPJ da empresa (chave única)
   final String cnpj;
 
   final Address address;
 
   Company({
-    required super.name, required this.cnpj, super.id,
+    required super.name,
+    required this.cnpj,
+    super.id,
     super.phone,
     super.email,
     Address? address,

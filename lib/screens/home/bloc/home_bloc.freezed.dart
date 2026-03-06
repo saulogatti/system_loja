@@ -55,11 +55,12 @@ extension HomeEventPatterns on HomeEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadSystemUserData value)?  loadSystemUserData,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadSystemUserData value)?  loadSystemUserData,TResult Function( SaveSystemUserData value)?  saveSystemUserData,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case LoadSystemUserData() when loadSystemUserData != null:
-return loadSystemUserData(_that);case _:
+return loadSystemUserData(_that);case SaveSystemUserData() when saveSystemUserData != null:
+return saveSystemUserData(_that);case _:
   return orElse();
 
 }
@@ -77,11 +78,12 @@ return loadSystemUserData(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadSystemUserData value)  loadSystemUserData,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadSystemUserData value)  loadSystemUserData,required TResult Function( SaveSystemUserData value)  saveSystemUserData,}){
 final _that = this;
 switch (_that) {
 case LoadSystemUserData():
-return loadSystemUserData(_that);}
+return loadSystemUserData(_that);case SaveSystemUserData():
+return saveSystemUserData(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -95,11 +97,12 @@ return loadSystemUserData(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadSystemUserData value)?  loadSystemUserData,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadSystemUserData value)?  loadSystemUserData,TResult? Function( SaveSystemUserData value)?  saveSystemUserData,}){
 final _that = this;
 switch (_that) {
 case LoadSystemUserData() when loadSystemUserData != null:
-return loadSystemUserData(_that);case _:
+return loadSystemUserData(_that);case SaveSystemUserData() when saveSystemUserData != null:
+return saveSystemUserData(_that);case _:
   return null;
 
 }
@@ -116,10 +119,11 @@ return loadSystemUserData(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadSystemUserData,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadSystemUserData,TResult Function( SystemUserData systemUserData)?  saveSystemUserData,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case LoadSystemUserData() when loadSystemUserData != null:
-return loadSystemUserData();case _:
+return loadSystemUserData();case SaveSystemUserData() when saveSystemUserData != null:
+return saveSystemUserData(_that.systemUserData);case _:
   return orElse();
 
 }
@@ -137,10 +141,11 @@ return loadSystemUserData();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadSystemUserData,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadSystemUserData,required TResult Function( SystemUserData systemUserData)  saveSystemUserData,}) {final _that = this;
 switch (_that) {
 case LoadSystemUserData():
-return loadSystemUserData();}
+return loadSystemUserData();case SaveSystemUserData():
+return saveSystemUserData(_that.systemUserData);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -154,10 +159,11 @@ return loadSystemUserData();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadSystemUserData,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadSystemUserData,TResult? Function( SystemUserData systemUserData)?  saveSystemUserData,}) {final _that = this;
 switch (_that) {
 case LoadSystemUserData() when loadSystemUserData != null:
-return loadSystemUserData();case _:
+return loadSystemUserData();case SaveSystemUserData() when saveSystemUserData != null:
+return saveSystemUserData(_that.systemUserData);case _:
   return null;
 
 }
@@ -196,6 +202,72 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class SaveSystemUserData implements HomeEvent {
+  const SaveSystemUserData(this.systemUserData);
+  
+
+ final  SystemUserData systemUserData;
+
+/// Create a copy of HomeEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SaveSystemUserDataCopyWith<SaveSystemUserData> get copyWith => _$SaveSystemUserDataCopyWithImpl<SaveSystemUserData>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SaveSystemUserData&&(identical(other.systemUserData, systemUserData) || other.systemUserData == systemUserData));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,systemUserData);
+
+@override
+String toString() {
+  return 'HomeEvent.saveSystemUserData(systemUserData: $systemUserData)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SaveSystemUserDataCopyWith<$Res> implements $HomeEventCopyWith<$Res> {
+  factory $SaveSystemUserDataCopyWith(SaveSystemUserData value, $Res Function(SaveSystemUserData) _then) = _$SaveSystemUserDataCopyWithImpl;
+@useResult
+$Res call({
+ SystemUserData systemUserData
+});
+
+
+
+
+}
+/// @nodoc
+class _$SaveSystemUserDataCopyWithImpl<$Res>
+    implements $SaveSystemUserDataCopyWith<$Res> {
+  _$SaveSystemUserDataCopyWithImpl(this._self, this._then);
+
+  final SaveSystemUserData _self;
+  final $Res Function(SaveSystemUserData) _then;
+
+/// Create a copy of HomeEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? systemUserData = null,}) {
+  return _then(SaveSystemUserData(
+null == systemUserData ? _self.systemUserData : systemUserData // ignore: cast_nullable_to_non_nullable
+as SystemUserData,
+  ));
+}
+
+
+}
 
 /// @nodoc
 mixin _$HomeState {
@@ -241,14 +313,15 @@ extension HomeStatePatterns on HomeState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( HomeError value)?  error,TResult Function( HomeInitial value)?  initial,TResult Function( HomeLoaded value)?  loaded,TResult Function( HomeLoading value)?  loading,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( HomeError value)?  error,TResult Function( HomeInitial value)?  initial,TResult Function( HomeLoaded value)?  loaded,TResult Function( HomeLoading value)?  loading,TResult Function( HomeSaved value)?  saved,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case HomeError() when error != null:
 return error(_that);case HomeInitial() when initial != null:
 return initial(_that);case HomeLoaded() when loaded != null:
 return loaded(_that);case HomeLoading() when loading != null:
-return loading(_that);case _:
+return loading(_that);case HomeSaved() when saved != null:
+return saved(_that);case _:
   return orElse();
 
 }
@@ -266,14 +339,15 @@ return loading(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( HomeError value)  error,required TResult Function( HomeInitial value)  initial,required TResult Function( HomeLoaded value)  loaded,required TResult Function( HomeLoading value)  loading,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( HomeError value)  error,required TResult Function( HomeInitial value)  initial,required TResult Function( HomeLoaded value)  loaded,required TResult Function( HomeLoading value)  loading,required TResult Function( HomeSaved value)  saved,}){
 final _that = this;
 switch (_that) {
 case HomeError():
 return error(_that);case HomeInitial():
 return initial(_that);case HomeLoaded():
 return loaded(_that);case HomeLoading():
-return loading(_that);}
+return loading(_that);case HomeSaved():
+return saved(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -287,14 +361,15 @@ return loading(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( HomeError value)?  error,TResult? Function( HomeInitial value)?  initial,TResult? Function( HomeLoaded value)?  loaded,TResult? Function( HomeLoading value)?  loading,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( HomeError value)?  error,TResult? Function( HomeInitial value)?  initial,TResult? Function( HomeLoaded value)?  loaded,TResult? Function( HomeLoading value)?  loading,TResult? Function( HomeSaved value)?  saved,}){
 final _that = this;
 switch (_that) {
 case HomeError() when error != null:
 return error(_that);case HomeInitial() when initial != null:
 return initial(_that);case HomeLoaded() when loaded != null:
 return loaded(_that);case HomeLoading() when loading != null:
-return loading(_that);case _:
+return loading(_that);case HomeSaved() when saved != null:
+return saved(_that);case _:
   return null;
 
 }
@@ -311,13 +386,14 @@ return loading(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  error,TResult Function()?  initial,TResult Function( SystemUserData systemUserData)?  loaded,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  error,TResult Function()?  initial,TResult Function( SystemUserData systemUserData)?  loaded,TResult Function()?  loading,TResult Function( SystemUserData systemUserData)?  saved,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case HomeError() when error != null:
 return error(_that.message);case HomeInitial() when initial != null:
 return initial();case HomeLoaded() when loaded != null:
 return loaded(_that.systemUserData);case HomeLoading() when loading != null:
-return loading();case _:
+return loading();case HomeSaved() when saved != null:
+return saved(_that.systemUserData);case _:
   return orElse();
 
 }
@@ -335,13 +411,14 @@ return loading();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( SystemUserData systemUserData)  loaded,required TResult Function()  loading,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( SystemUserData systemUserData)  loaded,required TResult Function()  loading,required TResult Function( SystemUserData systemUserData)  saved,}) {final _that = this;
 switch (_that) {
 case HomeError():
 return error(_that.message);case HomeInitial():
 return initial();case HomeLoaded():
 return loaded(_that.systemUserData);case HomeLoading():
-return loading();}
+return loading();case HomeSaved():
+return saved(_that.systemUserData);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -355,13 +432,14 @@ return loading();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  error,TResult? Function()?  initial,TResult? Function( SystemUserData systemUserData)?  loaded,TResult? Function()?  loading,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  error,TResult? Function()?  initial,TResult? Function( SystemUserData systemUserData)?  loaded,TResult? Function()?  loading,TResult? Function( SystemUserData systemUserData)?  saved,}) {final _that = this;
 switch (_that) {
 case HomeError() when error != null:
 return error(_that.message);case HomeInitial() when initial != null:
 return initial();case HomeLoaded() when loaded != null:
 return loaded(_that.systemUserData);case HomeLoading() when loading != null:
-return loading();case _:
+return loading();case HomeSaved() when saved != null:
+return saved(_that.systemUserData);case _:
   return null;
 
 }
@@ -564,5 +642,71 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class HomeSaved implements HomeState {
+  const HomeSaved(this.systemUserData);
+  
+
+ final  SystemUserData systemUserData;
+
+/// Create a copy of HomeState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$HomeSavedCopyWith<HomeSaved> get copyWith => _$HomeSavedCopyWithImpl<HomeSaved>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeSaved&&(identical(other.systemUserData, systemUserData) || other.systemUserData == systemUserData));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,systemUserData);
+
+@override
+String toString() {
+  return 'HomeState.saved(systemUserData: $systemUserData)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $HomeSavedCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
+  factory $HomeSavedCopyWith(HomeSaved value, $Res Function(HomeSaved) _then) = _$HomeSavedCopyWithImpl;
+@useResult
+$Res call({
+ SystemUserData systemUserData
+});
+
+
+
+
+}
+/// @nodoc
+class _$HomeSavedCopyWithImpl<$Res>
+    implements $HomeSavedCopyWith<$Res> {
+  _$HomeSavedCopyWithImpl(this._self, this._then);
+
+  final HomeSaved _self;
+  final $Res Function(HomeSaved) _then;
+
+/// Create a copy of HomeState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? systemUserData = null,}) {
+  return _then(HomeSaved(
+null == systemUserData ? _self.systemUserData : systemUserData // ignore: cast_nullable_to_non_nullable
+as SystemUserData,
+  ));
+}
+
+
+}
 
 // dart format on

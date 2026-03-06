@@ -6,36 +6,18 @@ part of 'user.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-User _$UserFromJson(Map<String, dynamic> json) => $checkedCreate(
-  'User',
-  json,
-  ($checkedConvert) {
-    final val = User(
-      id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
-      name: $checkedConvert('name', (v) => v as String),
-      email: $checkedConvert('email', (v) => v as String?),
-      passwordHash: $checkedConvert('senha_hash', (v) => v as String),
-      permission: $checkedConvert(
-        'nivel_permissao',
-        (v) => (v as num?)?.toInt() ?? 0,
-      ),
-      registrationDate: $checkedConvert(
-        'registration_date',
-        (v) => v == null ? null : DateTime.parse(v as String),
-      ),
-      lastUpdatedDate: $checkedConvert(
-        'last_updated_date',
-        (v) => v == null ? null : DateTime.parse(v as String),
-      ),
-    );
-    return val;
-  },
-  fieldKeyMap: const {
-    'passwordHash': 'senha_hash',
-    'permission': 'nivel_permissao',
-    'registrationDate': 'registration_date',
-    'lastUpdatedDate': 'last_updated_date',
-  },
+User _$UserFromJson(Map<String, dynamic> json) => User(
+  id: (json['id'] as num?)?.toInt(),
+  name: json['name'] as String,
+  email: json['email'] as String?,
+  passwordHash: json['senha_hash'] as String,
+  permission: (json['nivel_permissao'] as num?)?.toInt() ?? 0,
+  registrationDate: json['registration_date'] == null
+      ? null
+      : DateTime.parse(json['registration_date'] as String),
+  lastUpdatedDate: json['last_updated_date'] == null
+      ? null
+      : DateTime.parse(json['last_updated_date'] as String),
 );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{

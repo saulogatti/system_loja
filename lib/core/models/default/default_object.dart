@@ -8,13 +8,8 @@ abstract class DefaultObject {
 
   @JsonKey(name: 'last_updated_date')
   DateTime lastUpdatedDate;
-  DefaultObject({
-    int? id,
-    DateTime? registrationDate,
-    DateTime? lastUpdatedDate,
-  }) : id = id ?? -1,
-       registrationDate = registrationDate ?? DateTime.now(),
-       lastUpdatedDate = lastUpdatedDate ?? DateTime.now();
-
-  Map<String, dynamic> toJson();
+  DefaultObject({int? id, DateTime? registrationDate, DateTime? lastUpdatedDate})
+    : id = id ?? -1,
+      registrationDate = registrationDate ?? DateTime.now(),
+      lastUpdatedDate = lastUpdatedDate ?? DateTime.now();
 }

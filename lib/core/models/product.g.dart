@@ -6,26 +6,18 @@ part of 'product.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Product _$ProductFromJson(Map<String, dynamic> json) =>
-    $checkedCreate('Product', json, ($checkedConvert) {
-      final val = Product(
-        name: $checkedConvert('name', (v) => v as String),
-        description: $checkedConvert('description', (v) => v as String),
-        price: $checkedConvert('price', (v) => (v as num).toDouble()),
-        stockQuantity: $checkedConvert(
-          'stockQuantity',
-          (v) => (v as num).toInt(),
-        ),
-        lastUpdatedDate: $checkedConvert(
-          'last_updated_date',
-          (v) => v == null ? null : DateTime.parse(v as String),
-        ),
-        categoryId: $checkedConvert('categoryId', (v) => (v as num?)?.toInt()),
-        code: $checkedConvert('code', (v) => v as String),
-        id: $checkedConvert('id', (v) => (v as num?)?.toInt()),
-      );
-      return val;
-    }, fieldKeyMap: const {'lastUpdatedDate': 'last_updated_date'});
+Product _$ProductFromJson(Map<String, dynamic> json) => Product(
+  name: json['name'] as String,
+  description: json['description'] as String,
+  price: (json['price'] as num).toDouble(),
+  stockQuantity: (json['stockQuantity'] as num).toInt(),
+  code: json['code'] as String,
+  lastUpdatedDate: json['last_updated_date'] == null
+      ? null
+      : DateTime.parse(json['last_updated_date'] as String),
+  categoryId: (json['categoryId'] as num?)?.toInt(),
+  id: (json['id'] as num?)?.toInt(),
+);
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
   'id': instance.id,
