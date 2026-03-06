@@ -46,11 +46,10 @@ class _PersonRegistrationViewState extends State<PersonRegistrationView> {
             builder: (_) => const Center(child: CircularProgressIndicator()),
           ),
           success: () {
-            Navigator.of(context).pop(); // Fecha o dialog de loading
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(const SnackBar(content: Text('Cadastro realizado com sucesso!')));
-            context.router.pop(); // Volta para a tela anterior
+            context.router.pop(); // Volta para a tela anteriorF
           },
           failure: (error) {
             Navigator.of(context).pop(); // Fecha o dialog de loading

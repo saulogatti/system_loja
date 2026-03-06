@@ -11,18 +11,24 @@ class DefaultObjectPerson extends Person<Cpf> {
 class Individual extends Person<Cpf> {
   Individual({
     required super.name,
-    required super.document,
+    @CpfConverter() required super.document,
     super.email,
     super.phone,
+    super.registrationDate,
+    super.lastUpdatedDate,
+    super.id,
   });
 }
 
 class LegalEntity extends Person<Cnpj> {
   LegalEntity({
     required super.name,
-    required super.document,
+    @CnpjConverter() required super.document,
     super.email,
     super.phone,
+    super.registrationDate,
+    super.lastUpdatedDate,
+    super.id,
   });
 }
 
@@ -33,14 +39,14 @@ abstract class Person<D extends Document> extends DefaultObject {
   final D? document;
   Person({
     required this.name,
-    this.document,
+    @DocumentConverter() this.document,
     super.registrationDate,
     super.lastUpdatedDate,
     super.id,
     this.email,
     this.phone,
   });
-  static DefaultObjectPerson defaultObject() => DefaultObjectPerson();
+  static Person<Cpf> defaultObject() => DefaultObjectPerson();
 
   static Individual individual({
     required String name,
