@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/default/people_data.dart';
 
@@ -60,7 +59,6 @@ class User extends PersonDefault {
   }
 
   /// Converte o objeto para JSON
-  @override
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
   @override

@@ -27,7 +27,6 @@ class Company extends PersonDefault {
   factory Company.fromJson(Map<String, dynamic> json) => _$CompanyFromJson(json);
 
   /// Converte o objeto para JSON
-  @override
   Map<String, dynamic> toJson() => _$CompanyToJson(this);
   @override
   String toString() => 'Company(name: $name, cnpj: $cnpj, email: $email, phone: $phone, address: $address)';
