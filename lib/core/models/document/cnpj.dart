@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/exceptions/validation_exception.dart';
 import 'package:system_loja/core/models/document/document.dart';
@@ -27,6 +29,10 @@ class Cnpj extends Document {
   String get formatted {
     final d = value.replaceAll(RegExp(r'\D'), '');
     return '${d.substring(0, 2)}.${d.substring(2, 5)}.${d.substring(5, 8)}/${d.substring(8, 12)}-${d.substring(12)}';
+  }
+
+  String generateCnpj() {
+    return Random().nextInt(100000000000000).toString().padLeft(14, '0');
   }
 
   @override

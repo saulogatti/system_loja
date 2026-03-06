@@ -1,8 +1,9 @@
 import 'package:system_loja/core/models/default/default_object.dart';
+import 'package:system_loja/core/models/document/cpf.dart';
 import 'package:system_loja/core/models/person/person.dart';
 
 class SystemUserData extends DefaultObject {
-  final Person person;
+  final Individual person;
   final String systemKey;
   final String description;
   SystemUserData({
@@ -13,7 +14,11 @@ class SystemUserData extends DefaultObject {
     super.registrationDate,
     super.lastUpdatedDate,
   });
-  factory SystemUserData.defaultObject() {
-    return SystemUserData(person: Person.defaultObject(), systemKey: '', description: '');
+  static SystemUserData defaultObject() {
+    return SystemUserData(
+      person: Individual(name: 'Default User', document: Cpf.defaultObject()),
+      systemKey: '',
+      description: '',
+    );
   }
 }

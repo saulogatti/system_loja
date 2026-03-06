@@ -696,7 +696,7 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
 }
 
 class $SystemRecordsTable extends SystemRecords
-    with TableInfo<$SystemRecordsTable, SystemConfiguration> {
+    with TableInfo<$SystemRecordsTable, SystemConfigurationEntry> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -751,14 +751,17 @@ class $SystemRecordsTable extends SystemRecords
         requiredDuringInsert: true,
       );
   @override
-  late final GeneratedColumnWithTypeConverter<SystemUserData, String>
-  systemUserData = GeneratedColumn<String>(
-    'system_user_data',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  ).withConverter<SystemUserData>($SystemRecordsTable.$convertersystemUserData);
+  late final GeneratedColumnWithTypeConverter<SystemUserDataEntry, String>
+  systemUserData =
+      GeneratedColumn<String>(
+        'system_user_data',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<SystemUserDataEntry>(
+        $SystemRecordsTable.$convertersystemUserData,
+      );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -774,7 +777,7 @@ class $SystemRecordsTable extends SystemRecords
   static const String $name = 'system_records';
   @override
   VerificationContext validateIntegrity(
-    Insertable<SystemConfiguration> instance, {
+    Insertable<SystemConfigurationEntry> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -810,9 +813,16 @@ class $SystemRecordsTable extends SystemRecords
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  SystemConfiguration map(Map<String, dynamic> data, {String? tablePrefix}) {
+  SystemConfigurationEntry map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return SystemConfiguration(
+    return SystemConfigurationEntry(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
       priceConfiguration: $SystemRecordsTable.$converterpriceConfiguration
           .fromSql(
             attachedDatabase.typeMapping.read(
@@ -820,24 +830,20 @@ class $SystemRecordsTable extends SystemRecords
               data['${effectivePrefix}price_configuration'],
             )!,
           ),
-      lastUpdatedDate: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}last_updated_date'],
-      )!,
-      registrationDate: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}registration_date'],
-      )!,
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
       systemUserData: $SystemRecordsTable.$convertersystemUserData.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
           data['${effectivePrefix}system_user_data'],
         )!,
       ),
+      registrationDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}registration_date'],
+      )!,
+      lastUpdatedDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_updated_date'],
+      )!,
     );
   }
 
@@ -848,16 +854,16 @@ class $SystemRecordsTable extends SystemRecords
 
   static JsonTypeConverter2<PriceConfiguration, String, Object?>
   $converterpriceConfiguration = PriceConfiguration.converter;
-  static TypeConverter<SystemUserData, String> $convertersystemUserData =
+  static TypeConverter<SystemUserDataEntry, String> $convertersystemUserData =
       SystemUserDataConverter();
 }
 
-class SystemRecordsCompanion extends UpdateCompanion<SystemConfiguration> {
+class SystemRecordsCompanion extends UpdateCompanion<SystemConfigurationEntry> {
   final Value<int> id;
   final Value<DateTime> lastUpdatedDate;
   final Value<PriceConfiguration> priceConfiguration;
   final Value<DateTime> registrationDate;
-  final Value<SystemUserData> systemUserData;
+  final Value<SystemUserDataEntry> systemUserData;
   const SystemRecordsCompanion({
     this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
@@ -870,12 +876,12 @@ class SystemRecordsCompanion extends UpdateCompanion<SystemConfiguration> {
     required DateTime lastUpdatedDate,
     required PriceConfiguration priceConfiguration,
     required DateTime registrationDate,
-    required SystemUserData systemUserData,
+    required SystemUserDataEntry systemUserData,
   }) : lastUpdatedDate = Value(lastUpdatedDate),
        priceConfiguration = Value(priceConfiguration),
        registrationDate = Value(registrationDate),
        systemUserData = Value(systemUserData);
-  static Insertable<SystemConfiguration> custom({
+  static Insertable<SystemConfigurationEntry> custom({
     Expression<int>? id,
     Expression<DateTime>? lastUpdatedDate,
     Expression<String>? priceConfiguration,
@@ -896,7 +902,7 @@ class SystemRecordsCompanion extends UpdateCompanion<SystemConfiguration> {
     Value<DateTime>? lastUpdatedDate,
     Value<PriceConfiguration>? priceConfiguration,
     Value<DateTime>? registrationDate,
-    Value<SystemUserData>? systemUserData,
+    Value<SystemUserDataEntry>? systemUserData,
   }) {
     return SystemRecordsCompanion(
       id: id ?? this.id,
@@ -1487,7 +1493,7 @@ typedef $$SystemRecordsTableCreateCompanionBuilder =
       required DateTime lastUpdatedDate,
       required PriceConfiguration priceConfiguration,
       required DateTime registrationDate,
-      required SystemUserData systemUserData,
+      required SystemUserDataEntry systemUserData,
     });
 typedef $$SystemRecordsTableUpdateCompanionBuilder =
     SystemRecordsCompanion Function({
@@ -1495,7 +1501,7 @@ typedef $$SystemRecordsTableUpdateCompanionBuilder =
       Value<DateTime> lastUpdatedDate,
       Value<PriceConfiguration> priceConfiguration,
       Value<DateTime> registrationDate,
-      Value<SystemUserData> systemUserData,
+      Value<SystemUserDataEntry> systemUserData,
     });
 
 class $$SystemRecordsTableFilterComposer
@@ -1528,7 +1534,11 @@ class $$SystemRecordsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<SystemUserData, SystemUserData, String>
+  ColumnWithTypeConverterFilters<
+    SystemUserDataEntry,
+    SystemUserDataEntry,
+    String
+  >
   get systemUserData => $composableBuilder(
     column: $table.systemUserData,
     builder: (column) => ColumnWithTypeConverterFilters(column),
@@ -1598,11 +1608,11 @@ class $$SystemRecordsTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumnWithTypeConverter<SystemUserData, String> get systemUserData =>
-      $composableBuilder(
-        column: $table.systemUserData,
-        builder: (column) => column,
-      );
+  GeneratedColumnWithTypeConverter<SystemUserDataEntry, String>
+  get systemUserData => $composableBuilder(
+    column: $table.systemUserData,
+    builder: (column) => column,
+  );
 }
 
 class $$SystemRecordsTableTableManager
@@ -1610,21 +1620,21 @@ class $$SystemRecordsTableTableManager
         RootTableManager<
           _$SystemDatabase,
           $SystemRecordsTable,
-          SystemConfiguration,
+          SystemConfigurationEntry,
           $$SystemRecordsTableFilterComposer,
           $$SystemRecordsTableOrderingComposer,
           $$SystemRecordsTableAnnotationComposer,
           $$SystemRecordsTableCreateCompanionBuilder,
           $$SystemRecordsTableUpdateCompanionBuilder,
           (
-            SystemConfiguration,
+            SystemConfigurationEntry,
             BaseReferences<
               _$SystemDatabase,
               $SystemRecordsTable,
-              SystemConfiguration
+              SystemConfigurationEntry
             >,
           ),
-          SystemConfiguration,
+          SystemConfigurationEntry,
           PrefetchHooks Function()
         > {
   $$SystemRecordsTableTableManager(
@@ -1647,7 +1657,8 @@ class $$SystemRecordsTableTableManager
                 Value<PriceConfiguration> priceConfiguration =
                     const Value.absent(),
                 Value<DateTime> registrationDate = const Value.absent(),
-                Value<SystemUserData> systemUserData = const Value.absent(),
+                Value<SystemUserDataEntry> systemUserData =
+                    const Value.absent(),
               }) => SystemRecordsCompanion(
                 id: id,
                 lastUpdatedDate: lastUpdatedDate,
@@ -1661,7 +1672,7 @@ class $$SystemRecordsTableTableManager
                 required DateTime lastUpdatedDate,
                 required PriceConfiguration priceConfiguration,
                 required DateTime registrationDate,
-                required SystemUserData systemUserData,
+                required SystemUserDataEntry systemUserData,
               }) => SystemRecordsCompanion.insert(
                 id: id,
                 lastUpdatedDate: lastUpdatedDate,
@@ -1681,21 +1692,21 @@ typedef $$SystemRecordsTableProcessedTableManager =
     ProcessedTableManager<
       _$SystemDatabase,
       $SystemRecordsTable,
-      SystemConfiguration,
+      SystemConfigurationEntry,
       $$SystemRecordsTableFilterComposer,
       $$SystemRecordsTableOrderingComposer,
       $$SystemRecordsTableAnnotationComposer,
       $$SystemRecordsTableCreateCompanionBuilder,
       $$SystemRecordsTableUpdateCompanionBuilder,
       (
-        SystemConfiguration,
+        SystemConfigurationEntry,
         BaseReferences<
           _$SystemDatabase,
           $SystemRecordsTable,
-          SystemConfiguration
+          SystemConfigurationEntry
         >,
       ),
-      SystemConfiguration,
+      SystemConfigurationEntry,
       PrefetchHooks Function()
     >;
 

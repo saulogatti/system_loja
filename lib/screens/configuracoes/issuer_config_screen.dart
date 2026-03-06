@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/models/document/cnpj.dart';
+import 'package:system_loja/core/models/document/cpf.dart';
 import 'package:system_loja/core/models/person/person.dart';
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
 import 'package:system_loja/core/utils/text_formatters.dart';
@@ -296,9 +296,9 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
       context.read<HomeBloc>().add(
         HomeEvent.saveSystemUserData(
           SystemUserData(
-            person: Person.legalEntity(
+            person: Individual(
               name: _fantasyNameController.text,
-              document: Cnpj(_cnpjController.text),
+              document: Cpf(_cnpjController.text),
               email: _emailController.text,
               phone: _phoneController.text,
             ),
