@@ -30,6 +30,14 @@ abstract interface class ISystemRepository {
   /// - [SystemConfiguration] com as configurações ou null se não existir
   Future<SystemConfiguration> getSystemConfiguration();
 
+  /// Importa configuração a partir de JSON e persiste.
+  ///
+  /// Faz parse, valida, normaliza e salva. Lança exceção com mensagem
+  /// apropriada em caso de JSON inválido ou dados inválidos.
+  Future<SystemConfiguration> importConfigurationFromJson(String jsonContent);
+
+  Future<SystemConfiguration> resetToDefaultConfiguration();
+
   /// Salva as configurações do sistema.
   ///
   /// Persiste as configurações técnicas do sistema para uso futuro.
@@ -37,6 +45,4 @@ abstract interface class ISystemRepository {
   /// Parâmetros:
   /// - [data]: Objeto SystemConfiguration com as configurações a serem salvas
   Future<void> saveSystemConfiguration(SystemConfiguration data);
-
-  Future<SystemConfiguration> resetToDefaultConfiguration();
 }

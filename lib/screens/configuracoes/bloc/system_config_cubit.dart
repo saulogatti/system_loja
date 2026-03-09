@@ -12,8 +12,7 @@ import 'package:system_loja/screens/configuracoes/bloc/system_config_state.dart'
 class SystemConfigCubit extends Cubit<SystemConfigState> {
   final ISystemRepository _systemRepository;
 
-  SystemConfigCubit(this._systemRepository)
-    : super(SystemConfigState.initial()) {
+  SystemConfigCubit(this._systemRepository) : super(SystemConfigState.initial()) {
     loadConfigurationData();
   }
 
@@ -56,7 +55,6 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
     }
   }
 
-  //FIXME: migrar para o repository
   Future<void> importConfiguration() async {
     try {
       const acceptedTypes = <XTypeGroup>[
@@ -69,38 +67,8 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
       }
 
       final content = await file.readAsString();
-      final Map<String, dynamic> dataMap = Map.from(jsonDecode(content));
-      final importedData = SystemConfiguration();
+      final normalizedData = await _systemRepository.importConfigurationFromJson(content);
 
-      final validationError = _validateConfigurationData(
-        paymentMethods: importedData.priceConfiguration.types,
-        measurementUnits: importedData.priceConfiguration.measurementUnits,
-        reportConfiguration:
-            importedData.priceConfiguration.reportConfiguration,
-      );
-
-      if (validationError != null) {
-        emit(SystemConfigState.error(validationError));
-        return;
-      }
-
-      final normalizedData = SystemConfiguration(
-        id: importedData.id,
-        registrationDate: importedData.registrationDate,
-        lastUpdatedDate: DateTime.now(),
-        productCategories: importedData.productCategories,
-        priceConfiguration: PriceConfiguration(
-          types: importedData.priceConfiguration.types.toSet().toList(),
-          measurementUnits: _normalizeUnits(
-            importedData.priceConfiguration.measurementUnits,
-          ),
-          reportConfiguration:
-              importedData.priceConfiguration.reportConfiguration,
-        ),
-        systemUserData: importedData.systemUserData,
-      );
-
-      await _systemRepository.saveSystemConfiguration(normalizedData);
       emit(
         SystemConfigState.loaded(
           normalizedData,
@@ -127,13 +95,11 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
     emit(SystemConfigState.loading());
 
     try {
-      final defaultConfiguration = await _systemRepository
-          .resetToDefaultConfiguration();
+      final defaultConfiguration = await _systemRepository.resetToDefaultConfiguration();
       emit(
         SystemConfigState.loaded(
           defaultConfiguration,
-          feedbackMessage:
-              'Configurações restauradas para os valores padrão do sistema.',
+          feedbackMessage: 'Configurações restauradas para os valores padrão do sistema.',
           feedbackType: SystemConfigFeedbackType.reset,
         ),
       );
@@ -165,9 +131,7 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
       id: systemConfiguration.id,
       registrationDate: systemConfiguration.registrationDate,
       lastUpdatedDate: DateTime.now(),
-      productCategories: List<String>.from(
-        systemConfiguration.productCategories,
-      ),
+      productCategories: List<String>.from(systemConfiguration.productCategories),
       priceConfiguration: PriceConfiguration(
         types: paymentMethods.toSet().toList(),
         measurementUnits: normalizedUnits,
