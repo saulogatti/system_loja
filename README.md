@@ -1,21 +1,21 @@
 # System Loja
 
-Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, vendas/notas, empresa, categorias e configuracoes), com persistencia principal em SQLite via Drift.
+Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, categorias, empresa e notas/vendas), com persistencia local em SQLite via Drift e fluxo legado em JSON ainda ativo em partes especificas.
 
-## Visao Geral
+## Visao geral
 
-- UI em `lib/screens/` com `flutter_bloc` (BLoC/Cubit)
-- Fluxo principal: Screen -> Interface -> Repository -> DAO Drift -> SQLite
-- Navegacao com `auto_route`
-- Injecao de dependencia com `GetIt` em `setupAppInjection()`
-- Resultado de operacoes com `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`)
+- UI em `lib/screens/`, com BLoC/Cubit (`flutter_bloc`).
+- Fluxo principal: Screen -> Interface -> Repository -> DAO Drift -> SQLite.
+- DI com `GetIt` via `setupAppInjection()`.
+- Navegacao com `auto_route` em `lib/screens/route/route_app.dart`.
+- Padrao de retorno entre camadas: `ResultStatus<R, E>`.
 
 ## Requisitos
 
-- Flutter 3.41.2 ou superior
-- Dart >= 3.11.0 (`pubspec.yaml`)
+- Flutter 3.41.2 ou superior.
+- Dart SDK `>=3.11.0`.
 
-## Setup Rapido
+## Setup rapido
 
 ```bash
 git clone https://github.com/saulogatti/system_loja.git
@@ -24,7 +24,7 @@ flutter pub get
 dart run build_runner build --delete-conflicting-outputs
 ```
 
-## Executar
+## Executar o app
 
 ```bash
 # Windows
@@ -33,17 +33,17 @@ flutter run -d windows
 # Linux
 flutter run -d linux
 
-# Web (chrome)
+# Web (Chrome)
 flutter run -d chrome
 
 # Web (servidor local)
 flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0
 ```
 
-## Comandos Uteis
+## Comandos de qualidade
 
 ```bash
-# Gerar codigo (obrigatorio quando alterar Freezed/JsonSerializable/Drift/AutoRoute)
+# Codegen (obrigatorio apos alterar Freezed/JsonSerializable/Drift/AutoRoute)
 dart run build_runner build --delete-conflicting-outputs
 
 # Analise estatica
@@ -61,20 +61,20 @@ flutter test test/<arquivo>_test.dart
 
 ### Bancos Drift
 
-- `AppDatabase` em `lib/data/database/app_database.dart` (schemaVersion `11`)
-- `SystemDatabase` em `lib/data/database/system_database.dart` (schemaVersion `2`)
+- `AppDatabase` (`lib/data/database/app_database.dart`) com `schemaVersion => 11`.
+- `SystemDatabase` (`lib/data/database/system_database.dart`) com `schemaVersion => 1`.
 
-### Persistencia Legacy
+### Legado JSON
 
-Parte do projeto ainda utiliza JSON e codigo legado em `lib/core/managers/` e `data/`. Nao remover esse fluxo sem validar impacto.
+Ha codigo legado em `lib/core/managers/` e no diretorio `data/` ainda utilizado em cenarios pontuais. Nao remover esse fluxo sem validar impacto funcional.
 
-### Convencoes Importantes
+### Convencoes importantes
 
-- Usar `ResultStatus<R, E>` para retorno de operacoes, sem propagar excecoes entre camadas.
-- Em Drift, seguir convencao: tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`.
+- Nao propagar excecoes entre Interface/Repository; retornar `ResultStatus`.
+- Drift segue padrao: tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`.
 - Codigo em ingles; documentacao e comentarios (`///`) em portugues.
 
-## Estrutura (Resumo)
+## Estrutura resumida
 
 ```text
 lib/
@@ -82,7 +82,7 @@ lib/
   core/
     interface/
     repository/
-    managers/           # legado ainda em uso pontual
+    managers/           # legado em uso pontual
     models/
     utils/
   data/
@@ -92,27 +92,21 @@ lib/
       extension/
   screens/
     route/
-    widgets/
 test/
 docs/
 ```
 
-## Observacoes Web
+## Observacoes importantes
 
-Para Drift no Web funcionar, os arquivos `web/sqlite3.wasm` e `web/drift_worker.js` devem estar presentes.
+- No Web, Drift depende de `web/sqlite3.wasm` e `web/drift_worker.js`.
+- Existem testes com falhas pre-existentes no repositorio; valide primeiro o escopo alterado antes de tratar falhas fora da tarefa.
 
-## Contribuicao
-
-- Leia `CONTRIBUTING.md`
-- Para agentes/copilot, consulte `.github/copilot-instructions.md` e `AGENTS.md`
-- Sempre rode build_runner quando alterar anotacoes de geracao
-
-## Documentacao
+## Documentacao principal
 
 - `CONTRIBUTING.md`
 - `.github/copilot-instructions.md`
 - `.github/instructions/dartcode.instructions.md`
+- `AGENTS.md`
 - `docs/DRIFT_ARCHITECTURE.md`
 - `docs/DRIFT_MIGRATION.md`
 - `docs/VALIDATION_SYSTEM.md`
-- `docs/`

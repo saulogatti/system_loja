@@ -7,7 +7,7 @@ environment:
   sdk: ">=3.11.0"
 
 dependencies:
-  log_custom_printer: 2.0.0
+  log_custom_printer: ^2.1.0
   flutter:
     sdk: flutter
 

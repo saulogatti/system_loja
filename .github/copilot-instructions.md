@@ -15,7 +15,7 @@
 - Navegação com `auto_route` em `lib/screens/route/route_app.dart` (gerado em `route_app.gr.dart`).
 - Existem dois bancos Drift:
   - `AppDatabase` (`lib/data/database/app_database.dart`) com `schemaVersion => 11`.
-  - `SystemDatabase` (`lib/data/database/system_database.dart`) com `schemaVersion => 2`.
+  - `SystemDatabase` (`lib/data/database/system_database.dart`) com `schemaVersion => 1`.
 
 ## Conventions
 - Retorno de operações usa `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`) com `isSuccessful`, `hasError`, `asSuccess`, `asError` e `when(...)`.
