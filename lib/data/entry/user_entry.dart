@@ -1,11 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/models/user.dart';
 
-part 'user_model.g.dart';
+part 'user_entry.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class UserModel extends User {
-  UserModel({
+class UserEntry extends User {
+  UserEntry({
     required super.name,
     required super.email,
     required super.passwordHash,
@@ -14,10 +14,10 @@ class UserModel extends User {
     super.id,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
-  factory UserModel.fromUser(User user) {
-    return UserModel(
+  factory UserEntry.fromJson(Map<String, dynamic> json) =>
+      _$UserEntryFromJson(json);
+  factory UserEntry.fromUser(User user) {
+    return UserEntry(
       name: user.name,
       email: user.email,
       passwordHash: user.passwordHash,
@@ -26,5 +26,5 @@ class UserModel extends User {
       id: user.id,
     );
   }
-  Map<String, dynamic> toJson() => _$UserModelToJson(this);
+  Map<String, dynamic> toJson() => _$UserEntryToJson(this);
 }

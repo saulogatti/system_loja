@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'price_configuration_data.dart';
+part of 'price_configuration_entry.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PriceConfigurationData _$PriceConfigurationDataFromJson(
+PriceConfigurationEntry _$PriceConfigurationEntryFromJson(
   Map<String, dynamic> json,
-) => PriceConfigurationData(
+) => PriceConfigurationEntry(
   types: (json['types'] as List<dynamic>)
       .map((e) => $enumDecode(_$PaymentMethodTypeEnumMap, e))
       .toList(),
@@ -27,15 +27,15 @@ PriceConfigurationData _$PriceConfigurationDataFromJson(
       : DateTime.parse(json['lastUpdatedDate'] as String),
 );
 
-Map<String, dynamic> _$PriceConfigurationDataToJson(
-  PriceConfigurationData instance,
+Map<String, dynamic> _$PriceConfigurationEntryToJson(
+  PriceConfigurationEntry instance,
 ) => <String, dynamic>{
   'id': instance.id,
   'registrationDate': instance.registrationDate.toIso8601String(),
   'lastUpdatedDate': instance.lastUpdatedDate.toIso8601String(),
   'types': instance.types.map((e) => _$PaymentMethodTypeEnumMap[e]!).toList(),
   'measurementUnits': instance.measurementUnits,
-  'reportConfiguration': PriceConfigurationData.toJsonStatic(
+  'reportConfiguration': PriceConfigurationEntry.toJsonStatic(
     instance.reportConfiguration,
   ),
 };

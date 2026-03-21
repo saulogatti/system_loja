@@ -14,9 +14,11 @@ Invoice _$InvoiceFromJson(Map<String, dynamic> json) => Invoice(
   lastUpdatedDate: json['lastUpdatedDate'] == null
       ? null
       : DateTime.parse(json['lastUpdatedDate'] as String),
+  id: (json['id'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$InvoiceToJson(Invoice instance) => <String, dynamic>{
+  'id': instance.id,
   'registrationDate': instance.registrationDate.toIso8601String(),
   'lastUpdatedDate': instance.lastUpdatedDate.toIso8601String(),
   'data': instance.data.toJson(),

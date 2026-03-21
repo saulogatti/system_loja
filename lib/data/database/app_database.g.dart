@@ -409,6 +409,10 @@ class $CompanyRecordsTable extends CompanyRecords
         DriftSqlType.string,
         data['${effectivePrefix}cnpj'],
       )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
       email: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}email'],
@@ -731,6 +735,10 @@ class $CustomerRecordsTable extends CustomerRecords
       cpf: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}cpf'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
       )!,
       email: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
