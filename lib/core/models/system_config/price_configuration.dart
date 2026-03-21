@@ -1,25 +1,16 @@
-import 'package:drift/drift.dart' as drift;
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/models/default/default_object.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
 
-part 'price_configuration.g.dart';
-
+/// Formas de pagamento aceitas na configuração de preços.
 enum PaymentMethodType { cash, card, pix, other }
 
-@JsonSerializable()
+/// Entidade de domínio para regras de preço, unidades de medida e relatórios.
+///
+/// A serialização (JSON, Drift) fica na camada de dados; o core permanece
+/// independente de `json_annotation` e de geradores de código.
 class PriceConfiguration extends DefaultObject {
-  static drift.JsonTypeConverter2<PriceConfiguration, String, Object?> converter = drift.TypeConverter.json2(
-    fromJson: (json) => PriceConfiguration.fromJson(json as Map<String, Object?>),
-    toJson: (address) => address.toJson(),
-  );
-  @JsonKey(defaultValue: <PaymentMethodType>[])
   List<PaymentMethodType> types = [];
-
-  @JsonKey(defaultValue: <String>[])
   List<String> measurementUnits = [];
-
-  @JsonKey(fromJson: _reportFromJson, toJson: _reportToJson)
   ReportConfiguration reportConfiguration;
 
   PriceConfiguration({
@@ -30,21 +21,5 @@ class PriceConfiguration extends DefaultObject {
     super.registrationDate,
     int? id,
   }) : measurementUnits = measurementUnits ?? [],
-       reportConfiguration = reportConfiguration ?? ReportConfiguration(),
-       super(id: id ?? -1);
-
-  factory PriceConfiguration.fromJson(Map<String, dynamic> json) => _$PriceConfigurationFromJson(json);
-
-  Map<String, dynamic> toJson() => _$PriceConfigurationToJson(this);
-
-  static ReportConfiguration _reportFromJson(Map<String, dynamic>? json) {
-    if (json == null) {
-      return ReportConfiguration();
-    }
-    return ReportConfiguration.fromJson(json);
-  }
-
-  static Map<String, dynamic> _reportToJson(ReportConfiguration value) {
-    return value.toJson();
-  }
+       reportConfiguration = reportConfiguration ?? ReportConfiguration();
 }

@@ -29,6 +29,8 @@ O projeto System Loja está totalmente configurado para trabalhar com GitHub Cop
 **Aplica-se a:** Todo o repositório  
 **Conteúdo:**
 - Visão geral da arquitetura (Drift ORM, BLoC, Material 3)
+- **Arquitetura limpa** (obrigatória): domínio em `lib/core/`, dados em `lib/data/`, repositórios em `lib/domain/`
+- **Sem obrigação de compatibilidade retroativa** enquanto o app está em desenvolvimento
 - Padrões críticos (Drift DAO, ExecutionResult, Code Generation)
 - Workflows de desenvolvimento
 - Code style requirements
