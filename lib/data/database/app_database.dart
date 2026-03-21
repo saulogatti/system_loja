@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/category.dart';
+import 'package:system_loja/data/converter/address_codec.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/models/invoice_type.dart';

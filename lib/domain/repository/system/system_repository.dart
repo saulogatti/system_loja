@@ -5,6 +5,7 @@ import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
+import 'package:system_loja/data/converter/system_configuration_codec.dart';
 import 'package:system_loja/data/database/dao/system_dao.dart';
 
 class SystemRepository implements ISystemRepository {
@@ -26,7 +27,7 @@ class SystemRepository implements ISystemRepository {
     String jsonContent,
   ) async {
     final dataMap = jsonDecode(jsonContent) as Map<String, dynamic>;
-    final importedData = SystemConfiguration.fromJson(dataMap);
+    final importedData = SystemConfigurationCodec.fromJson(dataMap);
 
     final validationError = _validateConfigurationData(
       paymentMethods: importedData.priceConfiguration.types,

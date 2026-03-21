@@ -4,7 +4,7 @@ part of 'system_database.dart';
 
 // ignore_for_file: type=lint
 class $UsersRecordsTable extends UsersRecords
-    with TableInfo<$UsersRecordsTable, User> {
+    with TableInfo<$UsersRecordsTable, UserEntry> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -104,7 +104,7 @@ class $UsersRecordsTable extends UsersRecords
   static const String $name = 'users_records';
   @override
   VerificationContext validateIntegrity(
-    Insertable<User> instance, {
+    Insertable<UserEntry> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -169,9 +169,9 @@ class $UsersRecordsTable extends UsersRecords
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  User map(Map<String, dynamic> data, {String? tablePrefix}) {
+  UserEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return User(
+    return UserEntry(
       name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}name'],
@@ -183,10 +183,6 @@ class $UsersRecordsTable extends UsersRecords
       passwordHash: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}password_hash'],
-      )!,
-      permission: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}permission'],
       )!,
       registrationDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -209,7 +205,7 @@ class $UsersRecordsTable extends UsersRecords
   }
 }
 
-class UsersRecordsCompanion extends UpdateCompanion<User> {
+class UsersRecordsCompanion extends UpdateCompanion<UserEntry> {
   final Value<String?> email;
   final Value<int> id;
   final Value<DateTime?> lastUpdatedDate;
@@ -237,7 +233,7 @@ class UsersRecordsCompanion extends UpdateCompanion<User> {
   }) : name = Value(name),
        passwordHash = Value(passwordHash),
        permission = Value(permission);
-  static Insertable<User> custom({
+  static Insertable<UserEntry> custom({
     Expression<String>? email,
     Expression<int>? id,
     Expression<DateTime>? lastUpdatedDate,
@@ -516,6 +512,12 @@ class $LogsRecordsTable extends LogsRecords
   ActivityLog map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ActivityLog(
+      actionType: $LogsRecordsTable.$converteractionType.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}action_type'],
+        )!,
+      ),
       entity: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}entity'],
@@ -543,6 +545,10 @@ class $LogsRecordsTable extends LogsRecords
       registrationDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}registration_date'],
+      )!,
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
       )!,
     );
   }
@@ -1126,14 +1132,17 @@ class $$UsersRecordsTableTableManager
         RootTableManager<
           _$SystemDatabase,
           $UsersRecordsTable,
-          User,
+          UserEntry,
           $$UsersRecordsTableFilterComposer,
           $$UsersRecordsTableOrderingComposer,
           $$UsersRecordsTableAnnotationComposer,
           $$UsersRecordsTableCreateCompanionBuilder,
           $$UsersRecordsTableUpdateCompanionBuilder,
-          (User, BaseReferences<_$SystemDatabase, $UsersRecordsTable, User>),
-          User,
+          (
+            UserEntry,
+            BaseReferences<_$SystemDatabase, $UsersRecordsTable, UserEntry>,
+          ),
+          UserEntry,
           PrefetchHooks Function()
         > {
   $$UsersRecordsTableTableManager(_$SystemDatabase db, $UsersRecordsTable table)
@@ -1195,14 +1204,17 @@ typedef $$UsersRecordsTableProcessedTableManager =
     ProcessedTableManager<
       _$SystemDatabase,
       $UsersRecordsTable,
-      User,
+      UserEntry,
       $$UsersRecordsTableFilterComposer,
       $$UsersRecordsTableOrderingComposer,
       $$UsersRecordsTableAnnotationComposer,
       $$UsersRecordsTableCreateCompanionBuilder,
       $$UsersRecordsTableUpdateCompanionBuilder,
-      (User, BaseReferences<_$SystemDatabase, $UsersRecordsTable, User>),
-      User,
+      (
+        UserEntry,
+        BaseReferences<_$SystemDatabase, $UsersRecordsTable, UserEntry>,
+      ),
+      UserEntry,
       PrefetchHooks Function()
     >;
 typedef $$LogsRecordsTableCreateCompanionBuilder =
