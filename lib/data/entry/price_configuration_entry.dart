@@ -34,9 +34,16 @@ class PriceConfigurationEntry extends PriceConfiguration {
   ) => PriceConfigurationEntry(
     types: priceConfiguration.types,
     measurementUnits: priceConfiguration.measurementUnits,
-    reportConfiguration: ReportConfigurationEntry.fromReportConfiguration(
-      priceConfiguration.reportConfiguration!,
-    ),
+    reportConfiguration: priceConfiguration.reportConfiguration != null
+        ? ReportConfigurationEntry.fromReportConfiguration(
+            priceConfiguration.reportConfiguration!,
+          )
+        : ReportConfigurationEntry.fromReportConfiguration(
+            ReportConfiguration(),
+          ),
+    id: priceConfiguration.id,
+    registrationDate: priceConfiguration.registrationDate,
+    lastUpdatedDate: priceConfiguration.lastUpdatedDate,
   );
   Map<String, dynamic> toJson() => _$PriceConfigurationEntryToJson(this);
   static ReportConfiguration? fromJsonStatic(Object? object) => object != null

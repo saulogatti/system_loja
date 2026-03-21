@@ -28,6 +28,9 @@ class PriceConfigurationCodec {
       types: priceConfigurationData.types,
       measurementUnits: priceConfigurationData.measurementUnits,
       reportConfiguration: priceConfigurationData.reportConfiguration,
+      id: priceConfigurationData.id,
+      registrationDate: priceConfigurationData.registrationDate,
+      lastUpdatedDate: priceConfigurationData.lastUpdatedDate,
     );
   }
 

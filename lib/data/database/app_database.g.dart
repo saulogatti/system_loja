@@ -143,6 +143,10 @@ class $CategoriesRecordsTable extends CategoriesRecords
         DriftSqlType.string,
         data['${effectivePrefix}description'],
       ),
+      registrationDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}registration_date'],
+      )!,
       lastUpdatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_updated_date'],
@@ -440,7 +444,7 @@ class $CompanyRecordsTable extends CompanyRecords
   }
 
   static JsonTypeConverter2<Address, String, Object?> $converteraddress =
-      Address.converter;
+      AddressCodec.driftConverter;
   static JsonTypeConverter2<Address?, String?, Object?> $converteraddressn =
       JsonTypeConverter2.asNullable($converteraddress);
 }
@@ -771,7 +775,7 @@ class $CustomerRecordsTable extends CustomerRecords
   }
 
   static JsonTypeConverter2<Address, String, Object?> $converteraddress =
-      Address.converter;
+      AddressCodec.driftConverter;
   static JsonTypeConverter2<Address?, String?, Object?> $converteraddressn =
       JsonTypeConverter2.asNullable($converteraddress);
 }
@@ -1131,6 +1135,10 @@ class $ProductsRecordsTable extends ProductsRecords
       code: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}code'],
+      )!,
+      registrationDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}registration_date'],
       )!,
       lastUpdatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,

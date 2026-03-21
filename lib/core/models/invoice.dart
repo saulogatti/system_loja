@@ -1,12 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/default/default_object.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 
-part 'invoice.g.dart';
-
-/// Modelo de dados para Nota Fiscal.
-@JsonSerializable(explicitToJson: true)
+/// Nota fiscal (domínio). Serialização em `lib/data/models/invoice_export_data.dart`.
 class Invoice extends DefaultObject {
   final InvoiceData data;
 
@@ -16,13 +12,6 @@ class Invoice extends DefaultObject {
     super.lastUpdatedDate,
     super.id,
   });
-
-  /// Cria um objeto a partir de JSON.
-  factory Invoice.fromJson(Map<String, dynamic> json) =>
-      _$InvoiceFromJson(json);
-
-  /// Converte o objeto para JSON.
-  Map<String, dynamic> toJson() => _$InvoiceToJson(this);
 
   @override
   String toString() {
@@ -55,40 +44,19 @@ class Invoice extends DefaultObject {
   }
 }
 
-/// Dados de uma nota fiscal.
+/// Dados da nota fiscal.
 ///
-/// Regra exclusiva: exatamente um de [customerId] ou [companyId] deve ser
-/// informado, independente do [type].
-@JsonSerializable()
+/// Exatamente um de [customerId] ou [companyId] deve ser informado.
 class InvoiceData {
-  @JsonKey(name: 'numero_nota')
   String invoiceNumber;
-
-  /// ID do cliente quando a nota estiver vinculada a um cliente.
-  @JsonKey(name: 'cliente_id')
   final int? customerId;
-
-  /// Nome do cliente (desnormalizado).
-  @JsonKey(name: 'cliente_nome')
   final String? customerName;
-
-  /// CPF do cliente (desnormalizado).
-  @JsonKey(name: 'cliente_cpf')
   final String? customerCpf;
-
-  /// ID da empresa vinculada à nota.
-  @JsonKey(name: 'empresa_id')
   final int? companyId;
-
   final List<InvoiceItem> items;
-  @JsonKey(name: 'valor_total')
   final double totalValue;
-  @JsonKey(name: 'forma_pagamento')
   final String paymentMethod;
-  @JsonKey(name: 'data_emissao')
   final DateTime issueDate;
-
-  /// Tipo da nota fiscal. Padrão: saída ([InvoiceType.exit]).
   final InvoiceType type;
 
   InvoiceData({
@@ -111,8 +79,4 @@ class InvoiceData {
       );
     }
   }
-
-  factory InvoiceData.fromJson(Map<String, dynamic> json) =>
-      _$InvoiceDataFromJson(json);
-  Map<String, dynamic> toJson() => _$InvoiceDataToJson(this);
 }

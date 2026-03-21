@@ -33,7 +33,7 @@ class LogRepository with LoggerClassMixin implements ILogRepository {
   }) async {
     try {
       final log = ActivityLog(
-        action: logActionType.name,
+        actionType: logActionType,
         entity: entityName,
         userId: userId,
         userName: username,
