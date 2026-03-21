@@ -8,20 +8,18 @@ part of 'system_configuration.dart';
 
 SystemConfiguration _$SystemConfigurationFromJson(Map<String, dynamic> json) =>
     SystemConfiguration(
-      priceConfiguration: json['priceConfiguration'] == null
-          ? null
-          : PriceConfiguration.fromJson(
-              json['priceConfiguration'] as Map<String, dynamic>,
-            ),
+      priceConfiguration: PriceConfigurationCodec.fromJson(
+        json['priceConfiguration'],
+      ),
       productCategories: (json['productCategories'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      lastUpdatedDate: json['last_updated_date'] == null
+      lastUpdatedDate: json['lastUpdatedDate'] == null
           ? null
-          : DateTime.parse(json['last_updated_date'] as String),
-      registrationDate: json['registration_date'] == null
+          : DateTime.parse(json['lastUpdatedDate'] as String),
+      registrationDate: json['registrationDate'] == null
           ? null
-          : DateTime.parse(json['registration_date'] as String),
+          : DateTime.parse(json['registrationDate'] as String),
       id: (json['id'] as num?)?.toInt(),
       systemUserData: SystemConfiguration._systemUserDataFromJson(
         json['systemUserData'],
@@ -32,9 +30,11 @@ Map<String, dynamic> _$SystemConfigurationToJson(
   SystemConfiguration instance,
 ) => <String, dynamic>{
   'id': instance.id,
-  'registration_date': instance.registrationDate.toIso8601String(),
-  'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
-  'priceConfiguration': instance.priceConfiguration.toJson(),
+  'registrationDate': instance.registrationDate.toIso8601String(),
+  'lastUpdatedDate': instance.lastUpdatedDate.toIso8601String(),
+  'priceConfiguration': PriceConfigurationCodec.toJson(
+    instance.priceConfiguration,
+  ),
   'systemUserData': SystemConfiguration._systemUserDataToJson(
     instance.systemUserData,
   ),

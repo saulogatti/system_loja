@@ -8,29 +8,32 @@ import 'package:system_loja/data/models/price_configuration_data.dart';
 ///
 /// O contrato JSON é [PriceConfigurationData] (`json_serializable`).
 class PriceConfigurationCodec {
-  PriceConfigurationCodec._();
-
   /// Conversor Drift (coluna texto ↔ objeto de domínio).
   static drift.JsonTypeConverter2<PriceConfiguration, String, Object?>
-  get driftConverter => drift.TypeConverter.json2(
-        fromJson: fromJson,
-        toJson: toJson,
-      );
+  get driftConverter =>
+      drift.TypeConverter.json2(fromJson: fromJson, toJson: toJson);
+
+  PriceConfigurationCodec._();
 
   /// [json] pode ser `null` quando o mapa pai omite `priceConfiguration`
   /// (ex.: [SystemConfiguration]).
   static PriceConfiguration fromJson(Object? json) {
     if (json == null) {
-      return PriceConfiguration(types: []);
+      return PriceConfiguration.defaultConfiguration();
     }
-    return PriceConfigurationData.fromJson(
+    final priceConfigurationData = PriceConfigurationData.fromJson(
       json as Map<String, dynamic>,
-    ).toDomain();
+    );
+    return PriceConfiguration(
+      types: priceConfigurationData.types,
+      measurementUnits: priceConfigurationData.measurementUnits,
+      reportConfiguration: priceConfigurationData.reportConfiguration,
+    );
   }
-
-  static Map<String, dynamic> toJson(PriceConfiguration instance) =>
-      PriceConfigurationData.fromDomain(instance).toJson();
 
   static PriceConfiguration fromJsonString(String raw) =>
       fromJson(jsonDecode(raw) as Map<String, dynamic>);
+
+  static Map<String, dynamic> toJson(PriceConfiguration instance) =>
+      PriceConfigurationData.fromPriceConfiguration(instance).toJson();
 }

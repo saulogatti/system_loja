@@ -7,7 +7,6 @@ part of 'activity_log.dart';
 // **************************************************************************
 
 ActivityLog _$ActivityLogFromJson(Map<String, dynamic> json) => ActivityLog(
-  id: (json['id'] as num?)?.toInt(),
   entity: json['entidade'] as String,
   userId: (json['usuario_id'] as num).toInt(),
   userName: json['usuario_nome'] as String,
@@ -15,20 +14,19 @@ ActivityLog _$ActivityLogFromJson(Map<String, dynamic> json) => ActivityLog(
       ? null
       : DateTime.parse(json['data_hora'] as String),
   details: json['details'] as String? ?? '',
-  lastUpdatedDate: json['last_updated_date'] == null
+  lastUpdatedDate: json['lastUpdatedDate'] == null
       ? null
-      : DateTime.parse(json['last_updated_date'] as String),
-  registrationDate: json['registration_date'] == null
+      : DateTime.parse(json['lastUpdatedDate'] as String),
+  registrationDate: json['registrationDate'] == null
       ? null
-      : DateTime.parse(json['registration_date'] as String),
+      : DateTime.parse(json['registrationDate'] as String),
   action: json['action'] as String?,
 )..actionType = $enumDecode(_$ActionTypeEnumMap, json['tipo_acao']);
 
 Map<String, dynamic> _$ActivityLogToJson(ActivityLog instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'registration_date': instance.registrationDate.toIso8601String(),
-      'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
+      'registrationDate': instance.registrationDate.toIso8601String(),
+      'lastUpdatedDate': instance.lastUpdatedDate.toIso8601String(),
       'tipo_acao': _$ActionTypeEnumMap[instance.actionType]!,
       'entidade': instance.entity,
       'usuario_id': instance.userId,

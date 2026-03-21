@@ -15,6 +15,12 @@ class UsersDao extends DatabaseAccessor<SystemDatabase> with _$UsersDaoMixin {
     return (delete(usersRecords)..where((tbl) => tbl.id.equals(id))).go();
   }
 
+  Future<User?> findByEmail(String email) {
+    return (select(
+      usersRecords,
+    )..where((tbl) => tbl.email.equals(email))).getSingleOrNull();
+  }
+
   Future<List<User>> getAll() {
     return select(usersRecords).get();
   }
@@ -25,30 +31,29 @@ class UsersDao extends DatabaseAccessor<SystemDatabase> with _$UsersDaoMixin {
     )..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
   }
 
-  Future<int> insertUser(User user) {
-    return into(usersRecords).insert(UsersRecordsCompanion(
-      email: Value(user.email),
-      name: Value(user.name),
-      passwordHash: Value(user.passwordHash),
-      permission: Value(user.permission),
-      registrationDate: Value(user.registrationDate),
-      lastUpdatedDate: Value(user.lastUpdatedDate),
-    ));
+  Future<User?> insertUser(User user) async {
+    return into(usersRecords).insertReturning(
+      UsersRecordsCompanion(
+        email: Value(user.email),
+        name: Value(user.name),
+        passwordHash: Value(user.passwordHash),
+        permission: Value(user.permission),
+        registrationDate: Value(user.registrationDate),
+        lastUpdatedDate: Value(user.lastUpdatedDate),
+      ),
+    );
   }
 
-  Future<bool> updateUser(User user) {
-    return update(usersRecords).replace(UsersRecordsCompanion(
-      id: Value(user.id),
-      email: Value(user.email),
-      name: Value(user.name),
-      passwordHash: Value(user.passwordHash),
-      permission: Value(user.permission),
-      lastUpdatedDate: Value(DateTime.now()),
-    ));
-  }
-
-  Future<User?> findByEmail(String email) {
-    return (select(usersRecords)..where((tbl) => tbl.email.equals(email)))
-        .getSingleOrNull();
+  Future<bool> updateUser(User user) async {
+    return update(usersRecords).replace(
+      UsersRecordsCompanion(
+        id: Value(user.id),
+        email: Value(user.email),
+        name: Value(user.name),
+        passwordHash: Value(user.passwordHash),
+        permission: Value(user.permission),
+        lastUpdatedDate: Value(DateTime.now()),
+      ),
+    );
   }
 }

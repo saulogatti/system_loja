@@ -8,19 +8,17 @@ part of 'invoice.dart';
 
 Invoice _$InvoiceFromJson(Map<String, dynamic> json) => Invoice(
   data: InvoiceData.fromJson(json['data'] as Map<String, dynamic>),
-  id: (json['id'] as num?)?.toInt(),
-  registrationDate: json['registration_date'] == null
+  registrationDate: json['registrationDate'] == null
       ? null
-      : DateTime.parse(json['registration_date'] as String),
-  lastUpdatedDate: json['last_updated_date'] == null
+      : DateTime.parse(json['registrationDate'] as String),
+  lastUpdatedDate: json['lastUpdatedDate'] == null
       ? null
-      : DateTime.parse(json['last_updated_date'] as String),
+      : DateTime.parse(json['lastUpdatedDate'] as String),
 );
 
 Map<String, dynamic> _$InvoiceToJson(Invoice instance) => <String, dynamic>{
-  'id': instance.id,
-  'registration_date': instance.registrationDate.toIso8601String(),
-  'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
+  'registrationDate': instance.registrationDate.toIso8601String(),
+  'lastUpdatedDate': instance.lastUpdatedDate.toIso8601String(),
   'data': instance.data.toJson(),
 };
 

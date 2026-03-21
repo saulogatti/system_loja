@@ -33,7 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: state.when(
                     initial: () => const Center(child: Text('Carregando...')),
-                    loading: () => const Center(child: CircularProgressIndicator()),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     error: (message) => Center(child: Text(message)),
 
                     loaded: _makeBody,
@@ -63,9 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void _activateKey() {
     final key = _keyController.text.trim();
     if (key.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Por favor, insira uma chave válida.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor, insira uma chave válida.')),
+      );
       return;
     }
 
@@ -75,7 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
       _expirationDate = '31/12/2025'; // Data simulada
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Chave ativada com sucesso!')));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Chave ativada com sucesso!')));
   }
 
   Widget _makeBody(SystemUserData systemUserData) {
@@ -88,23 +91,30 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Icon(Icons.store, size: 100, color: Theme.of(context).colorScheme.primary),
+                  Icon(
+                    Icons.store,
+                    size: 100,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   const SizedBox(height: 40),
                   Text(
                     'Bem-vindo!',
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    systemUserData.person.name,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    systemUserData.name,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
-                  if (systemUserData.person.email != null && systemUserData.person.email!.isNotEmpty)
+                  if (systemUserData.email != null &&
+                      systemUserData.email!.isNotEmpty)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -115,10 +125,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          systemUserData.person.email ?? 'Não informado',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          systemUserData.email ?? 'Não informado',
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -132,7 +145,9 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
+              ),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -160,7 +175,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ElevatedButton(
                       onPressed: _activateKey,
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 14,
+                        ),
                       ),
                       child: const Text('Ativar'),
                     ),

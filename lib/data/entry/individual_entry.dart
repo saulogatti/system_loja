@@ -4,26 +4,22 @@ import 'package:system_loja/core/models/person/person.dart';
 
 part 'individual_entry.g.dart';
 
-@JsonSerializable()
-class IndividualEntry extends Individual {
-  @override
-  @CpfConverter()
-  // ignore: overridden_fields
-  Cpf? document;
-
+@JsonSerializable(converters: [CpfConverter()])
+class IndividualEntry extends Person<Cpf> {
   IndividualEntry({
     required super.name,
+    required super.document,
     required super.registrationDate,
     required super.lastUpdatedDate,
-    super.id = -1,
-    this.document,
+    super.id,
     super.email,
     super.phone,
-  }) : super(document: document);
+  });
 
-  factory IndividualEntry.fromJson(Map<String, dynamic> json) => _$IndividualEntryFromJson(json);
+  factory IndividualEntry.fromJson(Map<String, dynamic> json) =>
+      _$IndividualEntryFromJson(json);
 
-  factory IndividualEntry.fromPerson(Individual person) {
+  factory IndividualEntry.fromPerson(Person<Cpf> person) {
     return IndividualEntry(
       name: person.name,
       document: person.document,

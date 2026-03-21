@@ -12,9 +12,10 @@ class SystemRepository implements ISystemRepository {
   SystemRepository({required SystemDao systemDao}) : _systemDao = systemDao;
   @override
   Future<SystemConfiguration> getSystemConfiguration() async {
-    SystemConfiguration? systemConfiguration = await _systemDao.getSystemConfiguration();
+    SystemConfiguration? systemConfiguration = await _systemDao
+        .getSystemConfiguration();
     if (systemConfiguration == null) {
-      systemConfiguration = _createDefaultConfiguration(1);
+      systemConfiguration = _createDefaultConfiguration();
       await _systemDao.saveSystemConfiguration(systemConfiguration);
     }
     return systemConfiguration;
@@ -37,7 +38,6 @@ class SystemRepository implements ISystemRepository {
     }
 
     final normalizedData = SystemConfiguration(
-      id: importedData.id,
       registrationDate: importedData.registrationDate,
       lastUpdatedDate: DateTime.now(),
       productCategories: List<String>.from(importedData.productCategories),
@@ -46,7 +46,8 @@ class SystemRepository implements ISystemRepository {
         measurementUnits: _normalizeUnits(
           importedData.priceConfiguration.measurementUnits,
         ),
-        reportConfiguration: importedData.priceConfiguration.reportConfiguration,
+        reportConfiguration:
+            importedData.priceConfiguration.reportConfiguration,
       ),
       systemUserData: importedData.systemUserData,
     );
@@ -57,8 +58,7 @@ class SystemRepository implements ISystemRepository {
 
   @override
   Future<SystemConfiguration> resetToDefaultConfiguration() async {
-    final systemConfiguration = await getSystemConfiguration();
-    final defaultConfiguration = _createDefaultConfiguration(systemConfiguration.id);
+    final defaultConfiguration = _createDefaultConfiguration();
     await _systemDao.saveSystemConfiguration(defaultConfiguration);
     return defaultConfiguration;
   }
@@ -68,9 +68,8 @@ class SystemRepository implements ISystemRepository {
     return _systemDao.saveSystemConfiguration(data);
   }
 
-  SystemConfiguration _createDefaultConfiguration(int id) {
+  SystemConfiguration _createDefaultConfiguration() {
     return SystemConfiguration(
-      id: id,
       priceConfiguration: PriceConfiguration(
         types: const [PaymentMethodType.cash, PaymentMethodType.pix],
         measurementUnits: const ['UN', 'KG'],
@@ -93,7 +92,7 @@ class SystemRepository implements ISystemRepository {
   String? _validateConfigurationData({
     required List<PaymentMethodType> paymentMethods,
     required List<String> measurementUnits,
-    required ReportConfiguration reportConfiguration,
+    required ReportConfiguration? reportConfiguration,
   }) {
     if (paymentMethods.isEmpty) {
       return 'Selecione pelo menos um tipo de pagamento.';
@@ -105,7 +104,8 @@ class SystemRepository implements ISystemRepository {
     if (normalizedUnits.isEmpty) {
       return 'Adicione pelo menos uma unidade de medida.';
     }
-    if (reportConfiguration.defaultPeriodInDays <= 0) {
+    if (reportConfiguration != null &&
+        reportConfiguration.defaultPeriodInDays <= 0) {
       return 'O período padrão de relatório deve ser maior que zero.';
     }
     return null;

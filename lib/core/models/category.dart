@@ -16,9 +16,15 @@ class Category extends DefaultObject {
   /// Descrição opcional da categoria
   final String? description;
 
-  Category({required this.name, this.description, super.lastUpdatedDate, int? id}) : super(id: id ?? -1);
+  Category({
+    required this.name,
+    this.description,
+    super.lastUpdatedDate,
+    int? id,
+  });
 
-  factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
+  factory Category.fromJson(Map<String, dynamic> json) =>
+      _$CategoryFromJson(json);
 
   Map<String, dynamic> toJson() {
     return _$CategoryToJson(this);

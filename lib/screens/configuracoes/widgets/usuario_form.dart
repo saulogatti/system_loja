@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/models/default/authorization_level.dart';
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/utils/validators.dart';

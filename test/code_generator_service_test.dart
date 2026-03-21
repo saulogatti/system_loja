@@ -189,7 +189,6 @@ void main() {
 
         // Insere a primeira nota fiscal para ocupar o número
         final invoice1 = Invoice(
-          id: -1,
           data: InvoiceData(
             invoiceNumber: invoiceNumber1,
             customerId: 1,
@@ -233,7 +232,6 @@ void main() {
       () async {
         final invoiceNumber = 'NF-TEST-0001';
         final invoice = Invoice(
-          id: kInvalidId,
           data: InvoiceData(
             invoiceNumber: invoiceNumber,
             customerId: 1,
@@ -296,7 +294,6 @@ void main() {
     test('validateInvoiceNumber deve rejeitar número já existente', () async {
       final invoiceNumber = 'NF-EXISTING-0001';
       final invoice = Invoice(
-        id: kInvalidId,
         data: InvoiceData(
           invoiceNumber: invoiceNumber,
           customerId: 1,

@@ -1,13 +1,12 @@
-import 'package:system_loja/core/models/default/default_object.dart';
-import 'package:system_loja/core/models/document/cpf.dart';
-import 'package:system_loja/core/models/person/person.dart';
+import 'package:system_loja/core/models/default/people_data.dart';
 
-class SystemUserData extends DefaultObject {
-  final Individual person;
+class SystemUserData extends PersonDefault {
   final String systemKey;
   final String description;
   SystemUserData({
-    required this.person,
+    required super.name,
+    required super.email,
+    required super.phone,
     required this.systemKey,
     required this.description,
     super.id,
@@ -16,7 +15,9 @@ class SystemUserData extends DefaultObject {
   });
   static SystemUserData defaultObject() {
     return SystemUserData(
-      person: Individual(name: 'Default User', document: Cpf.defaultObject()),
+      name: 'Default User',
+      email: 'default@user.com',
+      phone: '1234567890',
       systemKey: '',
       description: '',
     );
