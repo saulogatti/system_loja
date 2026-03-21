@@ -27,6 +27,8 @@ Este arquivo existe apenas para complementar o ambiente Cursor Cloud.
 
 ### Non-obvious caveats
 
+- **Clean Architecture** is required: keep domain/core free of data-layer concerns where possible; DTOs, JSON codecs, and Drift stay in `lib/data/`. Large refactors for layering are acceptable (see `.github/copilot-instructions.md`).
+- **No backward-compatibility requirement** while the app is in pre-production development—JSON formats, models, and DB schemas may change for clean structure; update codegen and tests accordingly.
 - **Code generation is mandatory** after modifying models, BLoC events/states, Drift tables, or AutoRoute definitions.
 - **Some tests have pre-existing failures** in the repository. Validate failures in the changed scope first before fixing unrelated suites.
 - **Web platform** requires `web/sqlite3.wasm` and `web/drift_worker.js` for Drift ORM to work.

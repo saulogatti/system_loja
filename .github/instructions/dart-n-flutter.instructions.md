@@ -7,6 +7,10 @@ applyTo: '**/*.dart'
 
 Best practices recommended by the Dart and Flutter teams. These instructions were taken from [Effective Dart](https://dart.dev/effective-dart) and [Architecture Recommendations](https://docs.flutter.dev/app-architecture/recommendations).
 
+## Regras do repositório System Loja
+
+Consulte `.github/copilot-instructions.md`: o código deve seguir **arquitetura limpa** (domínio em `lib/core/`, dados em `lib/data/`, repositórios em `lib/domain/`). **Não é obrigatório** manter compatibilidade com JSON/modelos/schemas antigos — o app ainda está em desenvolvimento; refactors maiores são aceitáveis para manter as fronteiras de camada corretas.
+
 ## Effective Dart
 
 Over the past several years, we've written a ton of Dart code and learned a lot about what works well and what doesn't. We're sharing this with you so you can write consistent, robust, fast code too. There are two overarching themes:

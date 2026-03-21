@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:drift/drift.dart';
-import 'package:system_loja/core/models/system_config/price_configuration.dart';
+import 'package:system_loja/data/converter/price_configuration_codec.dart';
 import 'package:system_loja/data/entry/system_configuration_entry.dart';
 import 'package:system_loja/data/entry/system_user_data_entry.dart';
 
@@ -9,7 +9,7 @@ import 'package:system_loja/data/entry/system_user_data_entry.dart';
 class SystemRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get lastUpdatedDate => dateTime()();
-  TextColumn get priceConfiguration => text().map(PriceConfiguration.converter)();
+  TextColumn get priceConfiguration => text().map(PriceConfigurationCodec.driftConverter)();
   DateTimeColumn get registrationDate => dateTime()();
   TextColumn get systemUserData => text().map(SystemUserDataConverter())();
 }

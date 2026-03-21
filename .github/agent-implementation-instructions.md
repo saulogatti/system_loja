@@ -10,19 +10,20 @@ Este arquivo define o comportamento esperado para implementacoes, correcoes e re
 ## 1) Arquitetura e fluxo
 
 - UI em `lib/screens/`.
-- Fluxo principal: Screen (Bloc/Cubit) -> Interface (`lib/core/interface/`) -> Repository (`lib/core/repository/`) -> DAO Drift (`lib/data/database/dao/`) -> SQLite.
+- Fluxo principal: Screen (Bloc/Cubit) -> Interface (`lib/core/interface/`) -> Repository (`lib/domain/repository/`) -> DAO Drift (`lib/data/database/dao/`) -> SQLite.
+- **Arquitetura limpa e obrigatoria**: manter dominio (`lib/core/`) sem dependencias desnecessarias da camada de dados; DTOs, JSON e Drift em `lib/data/`; implementacoes de repositorio em `lib/domain/`. Refactors grandes sao aceitaveis para preservar essas fronteiras (detalhes em `.github/copilot-instructions.md`).
 - DI com `GetIt` via `setupAppInjection()`.
 - Navegacao com `auto_route` em `lib/screens/route/route_app.dart`.
 
-## 2) Persistencia
+## 2) Persistencia e compatibilidade
 
 - Banco principal: `AppDatabase` com `schemaVersion => 11`.
 - Banco de sistema: `SystemDatabase` com `schemaVersion => 1`.
-- Existe legado JSON em `lib/core/managers/` e em `data/` ainda usado em partes do sistema.
+- Existe codigo legado em `lib/core/managers/` e JSON em partes do sistema; a direcao preferida e refatorar em direcao a arquitetura limpa, nao congelar formato antigo.
 
 Regras:
 
-- Nao remover fluxo legado sem validar impacto.
+- **Compatibilidade retroativa nao e requisito** enquanto o app esta em desenvolvimento: pode-se alterar contratos JSON, modelos e schemas quando a arquitetura exigir; atualizar `build_runner`, Drift e testes do escopo.
 - Em mudanca de schema Drift, atualizar `schemaVersion` e estrategia de migracao no banco correto.
 
 ## 3) Tratamento de erros e contratos

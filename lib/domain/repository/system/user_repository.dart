@@ -34,11 +34,12 @@ class UserRepository with LoggerClassMixin implements IUserRepository {
     await _logRepository.createAndLogEntry(
       logActionType: ActionType.criar,
       entityName: runtimeType.toString(),
-      logDetails: 'Usuário ${usuario.name} (ID: ${usuario.id}) criado.',
-      userId: usuario.id,
+      userId: result?.id ?? usuario.id,
+      logDetails:
+          'Usuário ${usuario.name} (ID: ${result?.id ?? usuario.id}) criado.',
       username: usuario.name,
     );
-    return ResultStatus.success(result > 0);
+    return ResultStatus.success(result != null);
   }
 
   /// Atualiza um usuário existente
