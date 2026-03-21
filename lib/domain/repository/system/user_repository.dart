@@ -6,7 +6,7 @@ import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/data/database/dao/users_dao.dart';
 
-import '../../models/user.dart';
+import '../../../core/models/user.dart';
 
 /// Gerenciador de Usuários
 ///
