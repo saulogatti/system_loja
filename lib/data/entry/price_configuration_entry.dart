@@ -4,18 +4,18 @@ import 'package:system_loja/core/models/system_config/report_configuration.dart'
 import 'package:system_loja/data/entry/report_configuration_entry.dart'
     show ReportConfigurationEntry;
 
-part 'price_configuration_data.g.dart';
+part 'price_configuration_entry.g.dart';
 
 /// Representação JSON de [PriceConfiguration] na camada de dados.
 ///
 /// Gerada com `json_serializable`. Após alterar campos, rode `build_runner`.
 @JsonSerializable()
-class PriceConfigurationData extends PriceConfiguration {
+class PriceConfigurationEntry extends PriceConfiguration {
   @override
   @JsonKey(fromJson: ReportConfigurationEntry.fromJson, toJson: toJsonStatic)
   // ignore: overridden_fields
   ReportConfiguration? reportConfiguration;
-  PriceConfigurationData({
+  PriceConfigurationEntry({
     required super.types,
     required super.measurementUnits,
     @JsonKey(
@@ -27,18 +27,18 @@ class PriceConfigurationData extends PriceConfiguration {
     super.registrationDate,
     super.lastUpdatedDate,
   });
-  factory PriceConfigurationData.fromJson(Map<String, dynamic> json) =>
-      _$PriceConfigurationDataFromJson(json);
-  factory PriceConfigurationData.fromPriceConfiguration(
+  factory PriceConfigurationEntry.fromJson(Map<String, dynamic> json) =>
+      _$PriceConfigurationEntryFromJson(json);
+  factory PriceConfigurationEntry.fromPriceConfiguration(
     PriceConfiguration priceConfiguration,
-  ) => PriceConfigurationData(
+  ) => PriceConfigurationEntry(
     types: priceConfiguration.types,
     measurementUnits: priceConfiguration.measurementUnits,
     reportConfiguration: ReportConfigurationEntry.fromReportConfiguration(
       priceConfiguration.reportConfiguration!,
     ),
   );
-  Map<String, dynamic> toJson() => _$PriceConfigurationDataToJson(this);
+  Map<String, dynamic> toJson() => _$PriceConfigurationEntryToJson(this);
   static ReportConfiguration? fromJsonStatic(Object? object) => object != null
       ? ReportConfigurationEntry.fromReportConfiguration(
           object as ReportConfiguration,

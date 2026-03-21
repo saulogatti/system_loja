@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart' as drift;
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
-import 'package:system_loja/data/models/price_configuration_data.dart';
+import 'package:system_loja/data/entry/price_configuration_entry.dart';
 
 /// Ponte entre [PriceConfiguration] (domínio) e JSON/Drift.
 ///
-/// O contrato JSON é [PriceConfigurationData] (`json_serializable`).
+/// O contrato JSON é [PriceConfigurationEntry] (`json_serializable`).
 class PriceConfigurationCodec {
   /// Conversor Drift (coluna texto ↔ objeto de domínio).
   static drift.JsonTypeConverter2<PriceConfiguration, String, Object?>
@@ -21,7 +21,7 @@ class PriceConfigurationCodec {
     if (json == null) {
       return PriceConfiguration.defaultConfiguration();
     }
-    final priceConfigurationData = PriceConfigurationData.fromJson(
+    final priceConfigurationData = PriceConfigurationEntry.fromJson(
       json as Map<String, dynamic>,
     );
     return PriceConfiguration(
@@ -35,5 +35,5 @@ class PriceConfigurationCodec {
       fromJson(jsonDecode(raw) as Map<String, dynamic>);
 
   static Map<String, dynamic> toJson(PriceConfiguration instance) =>
-      PriceConfigurationData.fromPriceConfiguration(instance).toJson();
+      PriceConfigurationEntry.fromPriceConfiguration(instance).toJson();
 }
