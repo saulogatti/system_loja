@@ -6,7 +6,7 @@ import 'package:system_loja/screens/person_registration/bloc/person_event.dart';
 import 'package:system_loja/screens/person_registration/bloc/person_state.dart';
 import 'package:system_loja/screens/person_registration/models/person_registration_form_data.dart';
 import 'package:system_loja/screens/person_registration/widgets/person_registration_form.dart';
-import 'package:system_loja/screens/utils/constants.dart';
+import 'package:system_loja/aplication/utils/constants.dart';
 
 /// Exibe a tela de cadastro unificado para pessoa física e jurídica.
 ///

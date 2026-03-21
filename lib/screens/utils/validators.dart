@@ -1,10 +1,4 @@
-/// Utilitários de validação para formulários.
-///
-/// Contém validadores reutilizáveis para campos de entrada comuns
-/// no sistema de gerenciamento de loja.
-library;
-
-import 'package:system_loja/screens/utils/constants.dart';
+import 'package:system_loja/aplication/utils/constants.dart';
 
 /// Combina múltiplos validadores em um único.
 ///

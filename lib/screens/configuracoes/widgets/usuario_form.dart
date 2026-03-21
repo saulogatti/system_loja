@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
-import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/utils/validators.dart';
 
 /// Widget do formulário de cadastro e edição de usuário
 ///
