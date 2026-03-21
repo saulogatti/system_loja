@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:system_loja/core/utils/text_formatters.dart';
-import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/utils/text_formatters.dart';
+import 'package:system_loja/screens/utils/validators.dart';
 import 'package:system_loja/screens/person_registration/models/person_registration_form_data.dart';
 import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';

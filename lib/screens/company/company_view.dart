@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/models/company.dart';
 import '../route/route_app.gr.dart';
-import '../utils/constants.dart';
+import '../../aplication/utils/constants.dart';
 import 'bloc/company_bloc.dart';
 import 'widgets/company_form.dart';
 import 'widgets/company_list.dart';

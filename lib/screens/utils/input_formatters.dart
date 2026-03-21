@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:system_loja/screens/utils/constants.dart';
+import 'package:system_loja/aplication/utils/constants.dart';
 
 /// Formatador de entrada para campos de preço.
 ///

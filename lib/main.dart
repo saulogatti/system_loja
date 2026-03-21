@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/app_injection.dart';
+import 'package:system_loja/aplication/app_injection.dart';
 import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/utils/text_formatters.dart';
+import 'package:system_loja/screens/utils/text_formatters.dart';
 
 /// Widget da seção de busca de cliente por CPF
 ///

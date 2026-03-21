@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/document/cpf.dart';
 import 'package:system_loja/core/models/person/person.dart';
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
-import 'package:system_loja/core/utils/text_formatters.dart';
+import 'package:system_loja/screens/utils/text_formatters.dart';
 import 'package:system_loja/screens/home/bloc/home_bloc.dart';
 
 /// Tela de configuração da empresa emitente.

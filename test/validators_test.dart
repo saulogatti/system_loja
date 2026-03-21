@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/utils/validators.dart';
 
 /// Testes para os validadores de campos.
 ///

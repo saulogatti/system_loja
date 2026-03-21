@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/app_injection.dart';
+import 'package:system_loja/aplication/app_injection.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/app_theme_settings.dart';
