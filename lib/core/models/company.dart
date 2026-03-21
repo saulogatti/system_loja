@@ -24,10 +24,12 @@ class Company extends PersonDefault {
   }) : address = address ?? Address();
 
   /// Cria um objeto a partir de JSON
-  factory Company.fromJson(Map<String, dynamic> json) => _$CompanyFromJson(json);
+  factory Company.fromJson(Map<String, dynamic> json) =>
+      _$CompanyFromJson(json);
 
   /// Converte o objeto para JSON
   Map<String, dynamic> toJson() => _$CompanyToJson(this);
   @override
-  String toString() => 'Company(name: $name, cnpj: $cnpj, email: $email, phone: $phone, address: $address)';
+  String toString() =>
+      'Company(name: $name, cnpj: $cnpj, email: $email, phone: $phone, address: $address)';
 }

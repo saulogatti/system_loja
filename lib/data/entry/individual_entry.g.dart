@@ -9,17 +9,14 @@ part of 'individual_entry.dart';
 IndividualEntry _$IndividualEntryFromJson(Map<String, dynamic> json) =>
     IndividualEntry(
       name: json['name'] as String,
-      registrationDate: json['registration_date'] == null
+      document: const CpfConverter().fromJson(json['document'] as String),
+      registrationDate: json['registrationDate'] == null
           ? null
-          : DateTime.parse(json['registration_date'] as String),
-      lastUpdatedDate: json['last_updated_date'] == null
+          : DateTime.parse(json['registrationDate'] as String),
+      lastUpdatedDate: json['lastUpdatedDate'] == null
           ? null
-          : DateTime.parse(json['last_updated_date'] as String),
-      id: (json['id'] as num?)?.toInt() ?? -1,
-      document: _$JsonConverterFromJson<String, Cpf>(
-        json['document'],
-        const CpfConverter().fromJson,
-      ),
+          : DateTime.parse(json['lastUpdatedDate'] as String),
+      id: (json['id'] as num?)?.toInt(),
       email: json['email'] as String?,
       phone: json['phone'] as String?,
     );
@@ -27,23 +24,10 @@ IndividualEntry _$IndividualEntryFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$IndividualEntryToJson(IndividualEntry instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'registration_date': instance.registrationDate.toIso8601String(),
-      'last_updated_date': instance.lastUpdatedDate.toIso8601String(),
+      'registrationDate': instance.registrationDate.toIso8601String(),
+      'lastUpdatedDate': instance.lastUpdatedDate.toIso8601String(),
       'name': instance.name,
       'email': instance.email,
       'phone': instance.phone,
-      'document': _$JsonConverterToJson<String, Cpf>(
-        instance.document,
-        const CpfConverter().toJson,
-      ),
+      'document': const CpfConverter().toJson(instance.document),
     };
-
-Value? _$JsonConverterFromJson<Json, Value>(
-  Object? json,
-  Value? Function(Json json) fromJson,
-) => json == null ? null : fromJson(json as Json);
-
-Json? _$JsonConverterToJson<Json, Value>(
-  Value? value,
-  Json? Function(Value value) toJson,
-) => value == null ? null : toJson(value);

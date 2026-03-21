@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/models/default/authorization_level.dart';
 import 'package:system_loja/core/models/extensions/nivel_permissao_extension.dart';
 import 'package:system_loja/core/models/user.dart';
 

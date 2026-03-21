@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
+import 'package:system_loja/core/models/default/authorization_level.dart';
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
@@ -20,7 +21,6 @@ class UserCubit extends Cubit<UsuarioState> {
     try {
       // Exemplo de ID
       final usuario = User(
-        id: 0,
         name: nome,
         email: email,
         passwordHash: senha.hashSenha(),

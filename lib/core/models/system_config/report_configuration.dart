@@ -1,21 +1,16 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:system_loja/core/models/default/default_object.dart';
 
-part 'report_configuration.g.dart';
-
-/// Define os parâmetros técnicos dos relatórios gerenciais.
-@JsonSerializable()
-class ReportConfiguration {
+class ReportConfiguration extends DefaultObject {
   bool enableSalesByPeriod;
   bool enableTopProducts;
   int defaultPeriodInDays;
 
   ReportConfiguration({
+    this.defaultPeriodInDays = 30,
     this.enableSalesByPeriod = true,
     this.enableTopProducts = true,
-    this.defaultPeriodInDays = 30,
+    super.id,
+    super.registrationDate,
+    super.lastUpdatedDate,
   });
-
-  factory ReportConfiguration.fromJson(Map<String, dynamic> json) => _$ReportConfigurationFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ReportConfigurationToJson(this);
 }

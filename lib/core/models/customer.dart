@@ -23,11 +23,13 @@ class Customer extends PersonDefault {
   }) : address = address ?? Address();
 
   /// Cria um objeto a partir de JSON
-  factory Customer.fromJson(Map<String, dynamic> json) => _$CustomerFromJson(json);
+  factory Customer.fromJson(Map<String, dynamic> json) =>
+      _$CustomerFromJson(json);
 
   /// Converte o objeto para JSON
   Map<String, dynamic> toJson() => _$CustomerToJson(this);
 
   @override
-  String toString() => 'Customer(name: $name, cpf: $cpf, email: $email, phone: $phone, address: $address)';
+  String toString() =>
+      'Customer(name: $name, cpf: $cpf, email: $email, phone: $phone, address: $address)';
 }

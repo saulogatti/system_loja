@@ -1,4 +1,4 @@
-import '../user.dart';
+import 'package:system_loja/core/models/default/authorization_level.dart';
 
 /// Extensão para conversão entre NivelPermissao e String
 ///

@@ -8,12 +8,11 @@ abstract class PersonDefault extends DefaultObject {
   final String? email;
   final String? phone;
   PersonDefault({
-    required super.id,
     required this.name,
     this.email,
     this.phone,
     super.registrationDate,
     super.lastUpdatedDate,
+    super.id,
   });
 }
-  

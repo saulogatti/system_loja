@@ -23,7 +23,8 @@ class Product extends DefaultObject {
     super.lastUpdatedDate,
     this.categoryId,
     int? id,
-  }) : super(id: id ?? -1);
-  factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
+  });
+  factory Product.fromJson(Map<String, dynamic> json) =>
+      _$ProductFromJson(json);
   Map<String, dynamic> toJson() => _$ProductToJson(this);
 }

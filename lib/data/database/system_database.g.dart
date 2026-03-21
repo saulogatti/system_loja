@@ -172,10 +172,6 @@ class $UsersRecordsTable extends UsersRecords
   User map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return User(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
       name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}name'],
@@ -200,6 +196,10 @@ class $UsersRecordsTable extends UsersRecords
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_updated_date'],
       ),
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
     );
   }
 
@@ -516,10 +516,6 @@ class $LogsRecordsTable extends LogsRecords
   ActivityLog map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ActivityLog(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
       entity: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}entity'],
@@ -853,7 +849,7 @@ class $SystemRecordsTable extends SystemRecords
   }
 
   static JsonTypeConverter2<PriceConfiguration, String, Object?>
-  $converterpriceConfiguration = PriceConfiguration.converter;
+  $converterpriceConfiguration = PriceConfigurationCodec.driftConverter;
   static TypeConverter<SystemUserDataEntry, String> $convertersystemUserData =
       SystemUserDataConverter();
 }
