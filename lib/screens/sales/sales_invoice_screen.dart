@@ -75,7 +75,7 @@ class _SalesInvoiceBody extends StatefulWidget {
 class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
   final _formKey = GlobalKey<FormState>();
 
-  List<PersonSelection> get _personOptions => [
+  late final List<PersonSelection> _personOptions = [
     ...widget.customers.values.map(CustomerSelection.new),
     ...widget.companies.values.map(CompanySelection.new),
   ];
@@ -140,7 +140,6 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                         selector: (state) => state.form.person,
                         builder: (context, person) {
                           return DropdownButtonFormField<PersonSelection>(
-                            initialValue: person,
                             decoration: InputDecoration(
                               labelText: 'Cliente ou Empresa *',
                               border: const OutlineInputBorder(),
@@ -149,15 +148,9 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                             items: _personOptions.map((p) {
                               return DropdownMenuItem(
                                 value: p,
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        '${p.displayName} (${p.document})',
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
+                                child: Text(
+                                  '${p.displayName} (${p.document})',
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               );
                             }).toList(),
@@ -178,8 +171,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                         selector: (state) => state.form.paymentMethod,
                         builder: (context, paymentMethod) {
                           return DropdownButtonFormField<PaymentMethodType>(
-                            // ignore: deprecated_member_use
-                            value: paymentMethod,
+                            initialValue: paymentMethod,
                             decoration: const InputDecoration(
                               labelText: 'Forma de Pagamento *',
                               border: OutlineInputBorder(),
