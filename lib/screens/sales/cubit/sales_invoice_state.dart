@@ -17,6 +17,7 @@ abstract class SalesInvoiceFormData with _$SalesInvoiceFormData {
     @Default([]) List<int> orderedProductIds,
     @Default(false) bool enableCodeGeneration,
     @Default('') String invoiceNumber,
+    @Default(false) bool isSubmitting,
   }) = _SalesInvoiceFormData;
 }
 

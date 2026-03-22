@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SalesInvoiceFormData {
 
- InvoiceType get invoiceType; PaymentMethodType? get paymentMethod; PersonSelection? get person; Map<int, InvoiceLineEntry> get linesByProductId; List<int> get orderedProductIds; bool get enableCodeGeneration; String get invoiceNumber;
+ InvoiceType get invoiceType; PaymentMethodType? get paymentMethod; PersonSelection? get person; Map<int, InvoiceLineEntry> get linesByProductId; List<int> get orderedProductIds; bool get enableCodeGeneration; String get invoiceNumber; bool get isSubmitting;
 /// Create a copy of SalesInvoiceFormData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SalesInvoiceFormDataCopyWith<SalesInvoiceFormData> get copyWith => _$SalesInvoi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInvoiceFormData&&(identical(other.invoiceType, invoiceType) || other.invoiceType == invoiceType)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.person, person) || other.person == person)&&const DeepCollectionEquality().equals(other.linesByProductId, linesByProductId)&&const DeepCollectionEquality().equals(other.orderedProductIds, orderedProductIds)&&(identical(other.enableCodeGeneration, enableCodeGeneration) || other.enableCodeGeneration == enableCodeGeneration)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInvoiceFormData&&(identical(other.invoiceType, invoiceType) || other.invoiceType == invoiceType)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.person, person) || other.person == person)&&const DeepCollectionEquality().equals(other.linesByProductId, linesByProductId)&&const DeepCollectionEquality().equals(other.orderedProductIds, orderedProductIds)&&(identical(other.enableCodeGeneration, enableCodeGeneration) || other.enableCodeGeneration == enableCodeGeneration)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,invoiceType,paymentMethod,person,const DeepCollectionEquality().hash(linesByProductId),const DeepCollectionEquality().hash(orderedProductIds),enableCodeGeneration,invoiceNumber);
+int get hashCode => Object.hash(runtimeType,invoiceType,paymentMethod,person,const DeepCollectionEquality().hash(linesByProductId),const DeepCollectionEquality().hash(orderedProductIds),enableCodeGeneration,invoiceNumber,isSubmitting);
 
 @override
 String toString() {
-  return 'SalesInvoiceFormData(invoiceType: $invoiceType, paymentMethod: $paymentMethod, person: $person, linesByProductId: $linesByProductId, orderedProductIds: $orderedProductIds, enableCodeGeneration: $enableCodeGeneration, invoiceNumber: $invoiceNumber)';
+  return 'SalesInvoiceFormData(invoiceType: $invoiceType, paymentMethod: $paymentMethod, person: $person, linesByProductId: $linesByProductId, orderedProductIds: $orderedProductIds, enableCodeGeneration: $enableCodeGeneration, invoiceNumber: $invoiceNumber, isSubmitting: $isSubmitting)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SalesInvoiceFormDataCopyWith<$Res>  {
   factory $SalesInvoiceFormDataCopyWith(SalesInvoiceFormData value, $Res Function(SalesInvoiceFormData) _then) = _$SalesInvoiceFormDataCopyWithImpl;
 @useResult
 $Res call({
- InvoiceType invoiceType, PaymentMethodType? paymentMethod, PersonSelection? person, Map<int, InvoiceLineEntry> linesByProductId, List<int> orderedProductIds, bool enableCodeGeneration, String invoiceNumber
+ InvoiceType invoiceType, PaymentMethodType? paymentMethod, PersonSelection? person, Map<int, InvoiceLineEntry> linesByProductId, List<int> orderedProductIds, bool enableCodeGeneration, String invoiceNumber, bool isSubmitting
 });
 
 
@@ -62,7 +62,7 @@ class _$SalesInvoiceFormDataCopyWithImpl<$Res>
 
 /// Create a copy of SalesInvoiceFormData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? invoiceType = null,Object? paymentMethod = freezed,Object? person = freezed,Object? linesByProductId = null,Object? orderedProductIds = null,Object? enableCodeGeneration = null,Object? invoiceNumber = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? invoiceType = null,Object? paymentMethod = freezed,Object? person = freezed,Object? linesByProductId = null,Object? orderedProductIds = null,Object? enableCodeGeneration = null,Object? invoiceNumber = null,Object? isSubmitting = null,}) {
   return _then(_self.copyWith(
 invoiceType: null == invoiceType ? _self.invoiceType : invoiceType // ignore: cast_nullable_to_non_nullable
 as InvoiceType,paymentMethod: freezed == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
@@ -71,7 +71,8 @@ as PersonSelection?,linesByProductId: null == linesByProductId ? _self.linesByPr
 as Map<int, InvoiceLineEntry>,orderedProductIds: null == orderedProductIds ? _self.orderedProductIds : orderedProductIds // ignore: cast_nullable_to_non_nullable
 as List<int>,enableCodeGeneration: null == enableCodeGeneration ? _self.enableCodeGeneration : enableCodeGeneration // ignore: cast_nullable_to_non_nullable
 as bool,invoiceNumber: null == invoiceNumber ? _self.invoiceNumber : invoiceNumber // ignore: cast_nullable_to_non_nullable
-as String,
+as String,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -156,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InvoiceType invoiceType,  PaymentMethodType? paymentMethod,  PersonSelection? person,  Map<int, InvoiceLineEntry> linesByProductId,  List<int> orderedProductIds,  bool enableCodeGeneration,  String invoiceNumber)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( InvoiceType invoiceType,  PaymentMethodType? paymentMethod,  PersonSelection? person,  Map<int, InvoiceLineEntry> linesByProductId,  List<int> orderedProductIds,  bool enableCodeGeneration,  String invoiceNumber,  bool isSubmitting)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SalesInvoiceFormData() when $default != null:
-return $default(_that.invoiceType,_that.paymentMethod,_that.person,_that.linesByProductId,_that.orderedProductIds,_that.enableCodeGeneration,_that.invoiceNumber);case _:
+return $default(_that.invoiceType,_that.paymentMethod,_that.person,_that.linesByProductId,_that.orderedProductIds,_that.enableCodeGeneration,_that.invoiceNumber,_that.isSubmitting);case _:
   return orElse();
 
 }
@@ -177,10 +178,10 @@ return $default(_that.invoiceType,_that.paymentMethod,_that.person,_that.linesBy
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InvoiceType invoiceType,  PaymentMethodType? paymentMethod,  PersonSelection? person,  Map<int, InvoiceLineEntry> linesByProductId,  List<int> orderedProductIds,  bool enableCodeGeneration,  String invoiceNumber)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( InvoiceType invoiceType,  PaymentMethodType? paymentMethod,  PersonSelection? person,  Map<int, InvoiceLineEntry> linesByProductId,  List<int> orderedProductIds,  bool enableCodeGeneration,  String invoiceNumber,  bool isSubmitting)  $default,) {final _that = this;
 switch (_that) {
 case _SalesInvoiceFormData():
-return $default(_that.invoiceType,_that.paymentMethod,_that.person,_that.linesByProductId,_that.orderedProductIds,_that.enableCodeGeneration,_that.invoiceNumber);case _:
+return $default(_that.invoiceType,_that.paymentMethod,_that.person,_that.linesByProductId,_that.orderedProductIds,_that.enableCodeGeneration,_that.invoiceNumber,_that.isSubmitting);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +198,10 @@ return $default(_that.invoiceType,_that.paymentMethod,_that.person,_that.linesBy
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InvoiceType invoiceType,  PaymentMethodType? paymentMethod,  PersonSelection? person,  Map<int, InvoiceLineEntry> linesByProductId,  List<int> orderedProductIds,  bool enableCodeGeneration,  String invoiceNumber)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( InvoiceType invoiceType,  PaymentMethodType? paymentMethod,  PersonSelection? person,  Map<int, InvoiceLineEntry> linesByProductId,  List<int> orderedProductIds,  bool enableCodeGeneration,  String invoiceNumber,  bool isSubmitting)?  $default,) {final _that = this;
 switch (_that) {
 case _SalesInvoiceFormData() when $default != null:
-return $default(_that.invoiceType,_that.paymentMethod,_that.person,_that.linesByProductId,_that.orderedProductIds,_that.enableCodeGeneration,_that.invoiceNumber);case _:
+return $default(_that.invoiceType,_that.paymentMethod,_that.person,_that.linesByProductId,_that.orderedProductIds,_that.enableCodeGeneration,_that.invoiceNumber,_that.isSubmitting);case _:
   return null;
 
 }
@@ -212,7 +213,7 @@ return $default(_that.invoiceType,_that.paymentMethod,_that.person,_that.linesBy
 
 
 class _SalesInvoiceFormData implements SalesInvoiceFormData {
-  const _SalesInvoiceFormData({this.invoiceType = InvoiceType.exit, this.paymentMethod, this.person, final  Map<int, InvoiceLineEntry> linesByProductId = const {}, final  List<int> orderedProductIds = const [], this.enableCodeGeneration = false, this.invoiceNumber = ''}): _linesByProductId = linesByProductId,_orderedProductIds = orderedProductIds;
+  const _SalesInvoiceFormData({this.invoiceType = InvoiceType.exit, this.paymentMethod, this.person, final  Map<int, InvoiceLineEntry> linesByProductId = const {}, final  List<int> orderedProductIds = const [], this.enableCodeGeneration = false, this.invoiceNumber = '', this.isSubmitting = false}): _linesByProductId = linesByProductId,_orderedProductIds = orderedProductIds;
   
 
 @override@JsonKey() final  InvoiceType invoiceType;
@@ -234,6 +235,7 @@ class _SalesInvoiceFormData implements SalesInvoiceFormData {
 
 @override@JsonKey() final  bool enableCodeGeneration;
 @override@JsonKey() final  String invoiceNumber;
+@override@JsonKey() final  bool isSubmitting;
 
 /// Create a copy of SalesInvoiceFormData
 /// with the given fields replaced by the non-null parameter values.
@@ -245,16 +247,16 @@ _$SalesInvoiceFormDataCopyWith<_SalesInvoiceFormData> get copyWith => __$SalesIn
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SalesInvoiceFormData&&(identical(other.invoiceType, invoiceType) || other.invoiceType == invoiceType)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.person, person) || other.person == person)&&const DeepCollectionEquality().equals(other._linesByProductId, _linesByProductId)&&const DeepCollectionEquality().equals(other._orderedProductIds, _orderedProductIds)&&(identical(other.enableCodeGeneration, enableCodeGeneration) || other.enableCodeGeneration == enableCodeGeneration)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SalesInvoiceFormData&&(identical(other.invoiceType, invoiceType) || other.invoiceType == invoiceType)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.person, person) || other.person == person)&&const DeepCollectionEquality().equals(other._linesByProductId, _linesByProductId)&&const DeepCollectionEquality().equals(other._orderedProductIds, _orderedProductIds)&&(identical(other.enableCodeGeneration, enableCodeGeneration) || other.enableCodeGeneration == enableCodeGeneration)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,invoiceType,paymentMethod,person,const DeepCollectionEquality().hash(_linesByProductId),const DeepCollectionEquality().hash(_orderedProductIds),enableCodeGeneration,invoiceNumber);
+int get hashCode => Object.hash(runtimeType,invoiceType,paymentMethod,person,const DeepCollectionEquality().hash(_linesByProductId),const DeepCollectionEquality().hash(_orderedProductIds),enableCodeGeneration,invoiceNumber,isSubmitting);
 
 @override
 String toString() {
-  return 'SalesInvoiceFormData(invoiceType: $invoiceType, paymentMethod: $paymentMethod, person: $person, linesByProductId: $linesByProductId, orderedProductIds: $orderedProductIds, enableCodeGeneration: $enableCodeGeneration, invoiceNumber: $invoiceNumber)';
+  return 'SalesInvoiceFormData(invoiceType: $invoiceType, paymentMethod: $paymentMethod, person: $person, linesByProductId: $linesByProductId, orderedProductIds: $orderedProductIds, enableCodeGeneration: $enableCodeGeneration, invoiceNumber: $invoiceNumber, isSubmitting: $isSubmitting)';
 }
 
 
@@ -265,7 +267,7 @@ abstract mixin class _$SalesInvoiceFormDataCopyWith<$Res> implements $SalesInvoi
   factory _$SalesInvoiceFormDataCopyWith(_SalesInvoiceFormData value, $Res Function(_SalesInvoiceFormData) _then) = __$SalesInvoiceFormDataCopyWithImpl;
 @override @useResult
 $Res call({
- InvoiceType invoiceType, PaymentMethodType? paymentMethod, PersonSelection? person, Map<int, InvoiceLineEntry> linesByProductId, List<int> orderedProductIds, bool enableCodeGeneration, String invoiceNumber
+ InvoiceType invoiceType, PaymentMethodType? paymentMethod, PersonSelection? person, Map<int, InvoiceLineEntry> linesByProductId, List<int> orderedProductIds, bool enableCodeGeneration, String invoiceNumber, bool isSubmitting
 });
 
 
@@ -282,7 +284,7 @@ class __$SalesInvoiceFormDataCopyWithImpl<$Res>
 
 /// Create a copy of SalesInvoiceFormData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? invoiceType = null,Object? paymentMethod = freezed,Object? person = freezed,Object? linesByProductId = null,Object? orderedProductIds = null,Object? enableCodeGeneration = null,Object? invoiceNumber = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? invoiceType = null,Object? paymentMethod = freezed,Object? person = freezed,Object? linesByProductId = null,Object? orderedProductIds = null,Object? enableCodeGeneration = null,Object? invoiceNumber = null,Object? isSubmitting = null,}) {
   return _then(_SalesInvoiceFormData(
 invoiceType: null == invoiceType ? _self.invoiceType : invoiceType // ignore: cast_nullable_to_non_nullable
 as InvoiceType,paymentMethod: freezed == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
@@ -291,7 +293,8 @@ as PersonSelection?,linesByProductId: null == linesByProductId ? _self._linesByP
 as Map<int, InvoiceLineEntry>,orderedProductIds: null == orderedProductIds ? _self._orderedProductIds : orderedProductIds // ignore: cast_nullable_to_non_nullable
 as List<int>,enableCodeGeneration: null == enableCodeGeneration ? _self.enableCodeGeneration : enableCodeGeneration // ignore: cast_nullable_to_non_nullable
 as bool,invoiceNumber: null == invoiceNumber ? _self.invoiceNumber : invoiceNumber // ignore: cast_nullable_to_non_nullable
-as String,
+as String,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

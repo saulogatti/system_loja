@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 
 /// Um único [SegmentedButton] para tipo de nota (entrada / saída).
+/// [invoiceType] - Tipo de nota atual.
+/// [onChanged] - Callback para quando o tipo de nota mudar.
 class InvoiceTypeSegmented extends StatelessWidget {
-  const InvoiceTypeSegmented({required this.invoiceType, required this.onChanged, super.key});
-
   final InvoiceType invoiceType;
   final ValueChanged<InvoiceType> onChanged;
+
+  const InvoiceTypeSegmented({required this.invoiceType, required this.onChanged, super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/product.dart';
 
 /// Diálogo para escolher um produto na nota fiscal.
+/// [products] - Lista de produtos disponíveis.
 class SelectProductDialog extends StatelessWidget {
-  const SelectProductDialog({required this.products, super.key});
-
   final List<Product> products;
+
+  const SelectProductDialog({required this.products, super.key});
 
   @override
   Widget build(BuildContext context) {
