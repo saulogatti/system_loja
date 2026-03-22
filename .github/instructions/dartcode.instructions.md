@@ -16,17 +16,18 @@ applyTo: '**/*.dart'
 
 - Codigo em ingles.
 - Comentarios e documentacao `///` em portugues.
-- Fluxo de camadas: Screen -> Interface -> Repository -> DAO Drift.
+- Fluxo de camadas: Screen -> Interface (`lib/core/interface/`) -> Repository (`lib/domain/repository/`) -> DAO Drift (`lib/data/database/dao/`).
+- `lib/data/` nao deve importar `lib/domain/` nem `lib/aplication/`.
 - Nao propagar excecoes entre Interface e Repository.
 - Retornar `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`).
 
 ## Drift
 
 - Tabela: `XxxRecords`
-- Linha: `XxxRecord`
+- Linha: `XxxRecord` (gerada)
 - DAO: `XxxDao`
-- Preferir `@UseRowClass(...)` quando aplicavel.
-- Em alteracao de schema, atualizar migracao e `schemaVersion` no banco correto.
+- Nao acoplar tabelas a modelos de `lib/core/` via `@UseRowClass`; mapear registro -> dominio em mapper/DAO/repository.
+- Em alteracao de schema, atualizar `schemaVersion` / migracao no banco correto (pre-producao: breaking changes aceitos).
 
 ## Geracao de codigo
 

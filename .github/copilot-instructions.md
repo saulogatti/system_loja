@@ -10,8 +10,8 @@
 
 ## Architecture
 - App Flutter multiplataforma com UI em `lib/screens/`.
-- Fluxo principal: **Screen (Bloc/Cubit)** -> **Interface** (`lib/core/interface/`) -> **Repository** (`lib/domain/repository/`) -> **DAO Drift** (`lib/data/database/dao/`) -> SQLite.
-- DI com `GetIt` via `setupAppInjection()` no `main()`.
+- Fluxo principal: **Screen (Bloc/Cubit)** → **Interface** (`lib/core/interface/`) → **Repository** (`lib/domain/repository/`) → **DAO Drift** (`lib/data/database/dao/`) → SQLite.
+- DI com `GetIt` via `setupAppInjection()` em `lib/aplication/app_injection.dart` (chamado no `main()`).
 - Navegação com `auto_route` em `lib/screens/route/route_app.dart` (gerado em `route_app.gr.dart`).
 - Existem dois bancos Drift:
   - `AppDatabase` (`lib/data/database/app_database.dart`) com `schemaVersion => 11`.
@@ -21,7 +21,7 @@
 O código deve seguir **Clean Architecture** de forma consistente. Isso explica refactors maiores quando se desacoplam camadas (por exemplo: entidades de domínio em `lib/core/` sem serialização; DTOs, codecs e Drift em `lib/data/`; contratos em `lib/core/interface/`).
 
 - **Domínio / core** (`lib/core/`): modelos de negócio, regras e interfaces de repositório. Evitar dependências da camada de dados (pacote `data`, `json_serializable` em entidades puras, Drift) quando o objetivo for manter o núcleo independente.
-- **Dados** (`lib/data/`): persistência (Drift), DAOs, conversores, DTOs com `json_serializable`/`build_runner`, mapeamento para o domínio.
+- **Dados** (`lib/data/`): persistência (Drift), DAOs, conversores, DTOs/entries com `json_serializable`/`build_runner`, cache e mapeamento para o domínio. **Não importar** `lib/domain/` nem `lib/aplication/` a partir de `lib/data/`.
 - **Apresentação** (`lib/screens/`): UI, BLoC/Cubit, roteamento. Depende de interfaces e casos de uso, não de implementações concretas de banco.
 - **Domínio / aplicação** (`lib/domain/`): implementações de repositórios que orquestram DAOs e regras.
 
@@ -33,8 +33,8 @@ O projeto **ainda está em desenvolvimento**. **Não é necessário** preservar 
 ## Conventions
 - Retorno de operações usa `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`) com `isSuccessful`, `hasError`, `asSuccess`, `asError` e `when(...)`.
 - Não propagar exceções entre camadas de interface/repositório; retornar `ResultStatus`.
-- Drift: usar convenção tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`.
-- Reutilizar `@UseRowClass(...)` nas tabelas Drift quando aplicável para reduzir conversões manuais.
+- Drift: convenção tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`.
+- **Não** usar `@UseRowClass` apontando para entidades de `lib/core/models/`; manter linhas Drift como dados de persistência e mapear para domínio em `lib/data/database/mapper/` (ou política equivalente nos DAOs/repositórios).
 - Código em inglês; documentação e comentários com `///` em português.
 - Formato de commit: `<tipo>: <descrição concisa>`.
 - Tipos de commit: `feat`, `fix`, `docs`, `style`, `refactor`, `test`.

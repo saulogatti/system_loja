@@ -5,10 +5,11 @@ Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produto
 ## Visao geral
 
 - UI em `lib/screens/`, com BLoC/Cubit (`flutter_bloc`).
-- Fluxo principal: Screen -> Interface -> Repository -> DAO Drift -> SQLite.
-- DI com `GetIt` via `setupAppInjection()`.
+- Fluxo principal: **Screen** → **Interface** (`lib/core/interface/`) → **Repository** (`lib/domain/repository/`) → **DAO Drift** (`lib/data/database/dao/`) → SQLite.
+- DI com `GetIt` via `setupAppInjection()` em `lib/aplication/app_injection.dart`.
 - Navegacao com `auto_route` em `lib/screens/route/route_app.dart`.
 - Padrao de retorno entre camadas: `ResultStatus<R, E>`.
+- Camada **data** (`lib/data/`): Drift, DTOs/entries JSON, conversores, cache e mapeamento para modelos de `lib/core/models/` — **sem** depender de `lib/domain/` ou `lib/aplication/` (constantes compartilhadas ficam em `lib/core/` quando necessario).
 
 ## Requisitos
 
@@ -66,33 +67,45 @@ flutter test test/<arquivo>_test.dart
 
 ### Legado JSON
 
-Ha codigo legado em `lib/core/managers/` e no diretorio `data/` ainda utilizado em cenarios pontuais. Nao remover esse fluxo sem validar impacto funcional.
+Ha codigo legado em `lib/core/managers/` e fluxos em arquivo/JSON ainda usados em cenarios pontuais. Nao remover sem validar impacto; o fluxo principal da loja e **SQLite via Drift**.
 
 ### Convencoes importantes
 
 - Nao propagar excecoes entre Interface/Repository; retornar `ResultStatus`.
-- Drift segue padrao: tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`.
+- Drift: tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`. Linhas Drift **nao** usam `@UseRowClass` com entidades de `lib/core/`; o mapeamento para dominio fica em extensoes/helpers (ex.: `lib/data/database/mapper/`) ou nos DAOs/repositorios, conforme o padrao do projeto.
+- DTOs serializaveis (JSON) em `lib/data/entry/` e afins; modelos de negocio em `lib/core/models/`.
 - Codigo em ingles; documentacao e comentarios (`///`) em portugues.
 
 ## Estrutura resumida
 
 ```text
 lib/
-  app_injection.dart
+  main.dart
+  aplication/
+    app_injection.dart   # GetIt / setupAppInjection()
   core/
-    interface/
-    repository/
-    managers/           # legado em uso pontual
-    models/
-    utils/
+    interface/           # contratos (ex.: I*Repository)
+    constants/
+    managers/            # legado em uso pontual
+    models/              # entidades de dominio
+    utils/               # ResultStatus, extensoes
+  domain/
+    repository/          # implementacoes dos repositorios
+    *.dart               # servicos de dominio (ex.: geracao de codigo)
   data/
     database/
       dao/
       table/
       extension/
+      mapper/            # XxxRecord -> modelo de dominio
+    entry/               # DTOs JSON (json_serializable)
+    cache/
+    converter/
+    models/              # modelos de persistencia auxiliares
   screens/
     route/
 test/
+  support/               # helpers (ex.: AppDatabase em teste sem path_provider)
 docs/
 ```
 
@@ -100,6 +113,7 @@ docs/
 
 - No Web, Drift depende de `web/sqlite3.wasm` e `web/drift_worker.js`.
 - Existem testes com falhas pre-existentes no repositorio; valide primeiro o escopo alterado antes de tratar falhas fora da tarefa.
+- Testes que instanciam `AppDatabase` na VM podem usar `applicationSupportDirectory` e `tempDirectoryPath` (ver `test/support/test_app_database.dart`) para evitar `path_provider` / `MissingPluginException`.
 
 ## Documentacao principal
 
