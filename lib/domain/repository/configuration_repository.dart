@@ -10,10 +10,16 @@ import 'package:system_loja/data/entry/configuration_cache_entry.dart';
 
 import '../../core/settings/app_settings.dart';
 
-/// Gerenciador de Configurações do Sistema
+/// Repositório para gerenciamento de configurações da aplicação.
 ///
-/// Responsável por carregar, salvar e gerenciar as configurações
-/// do sistema usando persistência em arquivo JSON.
+/// Persiste e recupera [AppSettings] via [CacheManager] e aplica o tema
+/// (cor primária e modo escuro) em tempo real via [ISettingsService].
+/// Todos os erros são capturados internamente e devolvidos como
+/// [ResultStatus.error] com mensagem amigável.
+///
+/// Veja também:
+/// - [IConfigurationRepository] - contrato da interface
+/// - [AppSettings] - modelo de configurações
 class ConfigurationRepository
     with LoggerClassMixin
     implements IConfigurationRepository {
@@ -29,6 +35,10 @@ class ConfigurationRepository
        _cache = cache,
        _settingsService = settingsService;
 
+  /// Limpa todos os dados do sistema armazenados em cache.
+  ///
+  /// Após a limpeza, salva as configurações padrão.
+  /// Retorna [ResultStatus] com [AppSettings] atualizado após limpeza.
   @override
   Future<ResultStatus<AppSettings, String>> clearAllData() async {
     try {
@@ -42,6 +52,11 @@ class ConfigurationRepository
     }
   }
 
+  /// Remove logs anteriores ao período de retenção definido nas configurações.
+  ///
+  /// Usa [AppSettings.diasManterLogs] para calcular a data de corte.
+  /// Se o valor for 0, nenhum log é removido.
+  /// Retorna [ResultStatus] com [AppSettings] atualizado.
   @override
   Future<ResultStatus<AppSettings, String>> clearOldLogs() async {
     try {
@@ -87,6 +102,10 @@ class ConfigurationRepository
     }
   }
 
+  /// Carrega as configurações salvas do cache.
+  ///
+  /// Se nenhuma configuração existir, retorna [AppSettings.createDefaultSettings].
+  /// Também aplica tema (cor e modo escuro) via [ISettingsService].
   @override
   Future<ResultStatus<AppSettings, String>> loadConfiguration() async {
     try {
@@ -98,6 +117,9 @@ class ConfigurationRepository
     }
   }
 
+  /// Restaura as configurações para os valores padrão ([AppSettings.createDefaultSettings]).
+  ///
+  /// Persiste as configurações padrão e retorna o objeto atualizado.
   @override
   Future<ResultStatus<AppSettings, String>> resetToDefaults() async {
     try {
@@ -131,6 +153,10 @@ class ConfigurationRepository
     }
   }
 
+  /// Atualiza as configurações da aplicação e aplica o tema imediatamente.
+  ///
+  /// Persiste [novaConfiguracao] no cache e notifica [ISettingsService]
+  /// para atualizar cor primária e modo escuro em toda a UI.
   @override
   Future<ResultStatus<AppSettings, String>> updateAppSettings(
     AppSettings novaConfiguracao,

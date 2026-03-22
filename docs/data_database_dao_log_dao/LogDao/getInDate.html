@@ -63,6 +63,9 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Retorna logs cujo timestamp está entre <code>dataInicio</code> e <code>dataFim</code> (inclusivo).</p>
+</section>
 
 
     
@@ -72,9 +75,12 @@
   DateTime dataInicio,
   DateTime dataFim,
 ) async {
-  return await (select(logsRecords)
-        ..where((tbl) =&gt; tbl.timestamp.isBetweenValues(dataInicio, dataFim)))
-      .get();
+  final rows =
+      await (select(logsRecords)..where(
+            (tbl) =&gt; tbl.timestamp.isBetweenValues(dataInicio, dataFim),
+          ))
+          .get();
+  return rows.map((e) =&gt; e.toDomain()).toList();
 }</code></pre>
 </section>
 

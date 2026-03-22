@@ -54,11 +54,11 @@
 
     <section class="multi-line-signature">
       const
-      <span class="name ">CardListItem</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
-<li><span class="parameter" id="-param-colorAvatar"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Color-class.html">Color</a></span> <span class="parameter-name">colorAvatar</span>, </span></li>
+      <span class="name ">CardListItem</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-colorAvatar"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Color-class.html">Color</a></span> <span class="parameter-name">colorAvatar</span>, </span></li>
 <li><span class="parameter" id="-param-title"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">title</span>, </span></li>
 <li><span class="parameter" id="-param-subTitle"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">subTitle</span>, </span></li>
 <li><span class="parameter" id="-param-onTap"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/gestures/GestureTapCallback.html">GestureTapCallback</a></span> <span class="parameter-name">onTap</span>, </span></li>
+<li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
 <li><span class="parameter" id="-param-onDelete"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/gestures/GestureTapCallback.html">GestureTapCallback</a>?</span> <span class="parameter-name">onDelete</span>, </span></li>
 </ol>})
     </section>
@@ -69,11 +69,11 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">const CardListItem({
-  super.key,
   required this.colorAvatar,
   required this.title,
   required this.subTitle,
   required this.onTap,
+  super.key,
   this.onDelete,
 });</code></pre>
 </section>

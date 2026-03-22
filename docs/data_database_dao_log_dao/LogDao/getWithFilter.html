@@ -62,15 +62,19 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Retorna logs filtrados pelo nome da entidade <code>entity</code>.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;ActivityLog&gt;&gt; getWithFilter(String entity) async {
-  return await (select(
+  final rows = await (select(
     logsRecords,
   )..where((tbl) =&gt; tbl.entity.equals(entity))).get();
+  return rows.map((e) =&gt; e.toDomain()).toList();
 }</code></pre>
 </section>
 

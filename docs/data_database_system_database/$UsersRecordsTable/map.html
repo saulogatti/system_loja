@@ -59,7 +59,7 @@
         <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-<span class="returntype"><a href="../../core_models_user/User-class.html">User</a></span>
+<span class="returntype"><a href="../../data_entry_user_entry/UserEntry-class.html">UserEntry</a></span>
 <span class="name ">map</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="map-param-data"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">data</span>, {</span></li>
 <li><span class="parameter" id="map-param-tablePrefix"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">tablePrefix</span>, </span></li>
 </ol>})
@@ -77,9 +77,9 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-User map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
+UserEntry map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
   final effectivePrefix = tablePrefix != null ? &#39;$tablePrefix.&#39; : &#39;&#39;;
-  return User(
+  return UserEntry(
     id: attachedDatabase.typeMapping.read(
       DriftSqlType.int,
       data[&#39;${effectivePrefix}id&#39;],
@@ -88,21 +88,21 @@ User map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
       DriftSqlType.string,
       data[&#39;${effectivePrefix}name&#39;],
     )!,
-    email: attachedDatabase.typeMapping.read(
-      DriftSqlType.string,
-      data[&#39;${effectivePrefix}email&#39;],
-    ),
     passwordHash: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
       data[&#39;${effectivePrefix}password_hash&#39;],
     )!,
-    permission: attachedDatabase.typeMapping.read(
-      DriftSqlType.int,
-      data[&#39;${effectivePrefix}permission&#39;],
-    )!,
     registrationDate: attachedDatabase.typeMapping.read(
       DriftSqlType.dateTime,
       data[&#39;${effectivePrefix}registration_date&#39;],
+    )!,
+    email: attachedDatabase.typeMapping.read(
+      DriftSqlType.string,
+      data[&#39;${effectivePrefix}email&#39;],
+    ),
+    permission: attachedDatabase.typeMapping.read(
+      DriftSqlType.int,
+      data[&#39;${effectivePrefix}permission&#39;],
     )!,
     lastUpdatedDate: attachedDatabase.typeMapping.read(
       DriftSqlType.dateTime,

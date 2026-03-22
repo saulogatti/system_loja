@@ -67,9 +67,8 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; exportConfiguration() async {
-  final data = _currentConfiguration;
-  if (data == null) {
-    emit(SystemConfigState.error(&#39;Nenhuma configuração carregada para exportar.&#39;));
+  final systemConfiguration = await _obterConfiguracaoAtual();
+  if (systemConfiguration == null) {
     return;
   }
 
@@ -87,17 +86,24 @@
     }
 
     final file = File(location.path);
-    await file.writeAsString(jsonEncode(data.toJson()), flush: true);
+    await file.writeAsString(
+      jsonEncode(systemConfiguration),
+      flush: true,
+    );
 
     emit(
       SystemConfigState.loaded(
-        data,
+        systemConfiguration,
         feedbackMessage: &#39;Configuração exportada com sucesso.&#39;,
         feedbackType: SystemConfigFeedbackType.exported,
       ),
     );
-  } catch (e) {
-    emit(SystemConfigState.error(&#39;Erro ao exportar configuração: $e&#39;));
+  } catch (_) {
+    emit(
+      SystemConfigState.error(
+        &#39;Erro ao exportar configuração para o arquivo selecionado.&#39;,
+      ),
+    );
   }
 }</code></pre>
 </section>

@@ -81,9 +81,19 @@ abstract interface class ISalesRepository {
   Future<ResultStatus<Map<int, Invoice>, String>> loadAllSales();
 
   /// Retorna todas as notas de entrada mapeadas por ID.
+  ///
+  /// Notas de entrada são vinculadas a empresas ([InvoiceType.entry]).
+  ///
+  /// Retorna:
+  /// - [ResultStatus] com `Map<int, Invoice>` ou mensagem de erro
   Future<ResultStatus<Map<int, Invoice>, String>> loadEntryInvoices();
 
   /// Retorna todas as notas de saída mapeadas por ID.
+  ///
+  /// Notas de saída são vinculadas a clientes ([InvoiceType.exit]).
+  ///
+  /// Retorna:
+  /// - [ResultStatus] com `Map<int, Invoice>` ou mensagem de erro
   Future<ResultStatus<Map<int, Invoice>, String>> loadExitInvoices();
 
   /// Salva uma nova venda no sistema.

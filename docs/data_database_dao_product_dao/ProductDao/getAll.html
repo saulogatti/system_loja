@@ -61,13 +61,17 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Retorna todos os produtos cadastrados como objetos de domínio <a href="../../core_models_product/Product-class.html">Product</a>.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;Product&gt;&gt; getAll() {
-  return select(productsRecords).get();
+  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;Product&gt;&gt; getAll() async {
+  final rows = await select(productsRecords).get();
+  return rows.map((e) =&gt; e.toDomain()).toList();
 }</code></pre>
 </section>
 

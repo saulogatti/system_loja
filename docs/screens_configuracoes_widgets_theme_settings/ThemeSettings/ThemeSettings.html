@@ -54,11 +54,11 @@
 
     <section class="multi-line-signature">
       const
-      <span class="name ">ThemeSettings</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
-<li><span class="parameter" id="-param-config"><span>required</span> <span class="type-annotation"><a href="../../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span> <span class="parameter-name">config</span>, </span></li>
+      <span class="name ">ThemeSettings</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-config"><span>required</span> <span class="type-annotation"><a href="../../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span> <span class="parameter-name">config</span>, </span></li>
 <li><span class="parameter" id="-param-onConfigChanged"><span>required</span> <span class="type-annotation">void</span> <span class="parameter-name">onConfigChanged</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-"><span class="type-annotation"><a href="../../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span></span></li>
 </ol>), </span></li>
 <li><span class="parameter" id="-param-onMostrarSeletorCor"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/VoidCallback.html">VoidCallback</a></span> <span class="parameter-name">onMostrarSeletorCor</span>, </span></li>
+<li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
 </ol>})
     </section>
     
@@ -68,10 +68,10 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">const ThemeSettings({
-  super.key,
   required this.config,
   required this.onConfigChanged,
   required this.onMostrarSeletorCor,
+  super.key,
 });</code></pre>
 </section>
 

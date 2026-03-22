@@ -54,8 +54,7 @@
 
     <section class="multi-line-signature">
       const
-      <span class="name ">CompanyForm</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
-<li><span class="parameter" id="-param-formKey"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/GlobalKey-class.html">GlobalKey</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/widgets/FormState-class.html">FormState</a></span>&gt;</span></span> <span class="parameter-name">formKey</span>, </span></li>
+      <span class="name ">CompanyForm</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-formKey"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/GlobalKey-class.html">GlobalKey</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/widgets/FormState-class.html">FormState</a></span>&gt;</span></span> <span class="parameter-name">formKey</span>, </span></li>
 <li><span class="parameter" id="-param-corporateNameController"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/TextEditingController-class.html">TextEditingController</a></span> <span class="parameter-name">corporateNameController</span>, </span></li>
 <li><span class="parameter" id="-param-cnpjController"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/TextEditingController-class.html">TextEditingController</a></span> <span class="parameter-name">cnpjController</span>, </span></li>
 <li><span class="parameter" id="-param-emailController"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/TextEditingController-class.html">TextEditingController</a></span> <span class="parameter-name">emailController</span>, </span></li>
@@ -65,6 +64,7 @@
 <li><span class="parameter" id="-param-cityController"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/TextEditingController-class.html">TextEditingController</a></span> <span class="parameter-name">cityController</span>, </span></li>
 <li><span class="parameter" id="-param-onSubmit"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/VoidCallback.html">VoidCallback</a></span> <span class="parameter-name">onSubmit</span>, </span></li>
 <li><span class="parameter" id="-param-stateController"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/TextEditingController-class.html">TextEditingController</a></span> <span class="parameter-name">stateController</span>, </span></li>
+<li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
 </ol>})
     </section>
     
@@ -74,7 +74,6 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">const CompanyForm({
-  super.key,
   required this.formKey,
   required this.corporateNameController,
   required this.cnpjController,
@@ -85,6 +84,7 @@
   required this.cityController,
   required this.onSubmit,
   required this.stateController,
+  super.key,
 });</code></pre>
 </section>
 

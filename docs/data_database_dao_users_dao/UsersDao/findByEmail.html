@@ -67,9 +67,11 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;User?&gt; findByEmail(String email) {
-  return (select(usersRecords)..where((tbl) =&gt; tbl.email.equals(email)))
-      .getSingleOrNull();
+  <pre class="language-dart"><code class="language-dart">Future&lt;User?&gt; findByEmail(String email) async {
+  final row = await (select(
+    usersRecords,
+  )..where((tbl) =&gt; tbl.email.equals(email))).getSingleOrNull();
+  return row?.toUser();
 }</code></pre>
 </section>
 

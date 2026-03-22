@@ -108,7 +108,9 @@
     case ResultSuccess(result: final data):
       products = data;
     case ResultError(resultError: final error):
-      emit(RelatorioState.error(message: &#39;Erro ao carregar produtos: $error&#39;));
+      emit(
+        RelatorioState.error(message: &#39;Erro ao carregar produtos: $error&#39;),
+      );
       return;
   }
 

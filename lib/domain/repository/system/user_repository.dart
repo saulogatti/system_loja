@@ -8,11 +8,15 @@ import 'package:system_loja/data/database/dao/users_dao.dart';
 
 import '../../../core/models/user.dart';
 
-/// Gerenciador de Usuários
+/// Repositório para gerenciamento de usuários usando Drift.
 ///
-/// Utiliza um mecanismo de sincronização para evitar condições de corrida
-/// e recarrega dados antes de salvar para prevenir perda de dados.
-/// Implementa funcionalidades de hash de senha para segurança.
+/// Coordena operações CRUD sobre [User] via [UsersDao] e registra eventos
+/// de auditoria via [ILogRepository]. Todos os erros são capturados
+/// internamente e devolvidos como [ResultStatus.error] com mensagem amigável.
+///
+/// Veja também:
+/// - [IUserRepository] - contrato da interface
+/// - [UsersDao] - DAO do Drift
 class UserRepository with LoggerClassMixin implements IUserRepository {
   final ILogRepository _logRepository;
   final UsersDao _usersDao;

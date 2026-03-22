@@ -85,12 +85,7 @@ the new tables or change the columns.</p>
   <pre class="language-dart"><code class="language-dart">@override
 MigrationStrategy get migration =&gt; MigrationStrategy(
   onCreate: (Migrator m) =&gt; m.createAll(),
-  onUpgrade: (Migrator m, int from, int to) async {
-    if (from &lt; 2) {
-      await m.createAll();
-      await _migrateSystemConfiguration();
-    }
-  },
+  onUpgrade: (Migrator m, int from, int to) async {},
 );</code></pre>
 </section>
 

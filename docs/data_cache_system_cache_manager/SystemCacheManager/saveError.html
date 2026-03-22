@@ -68,21 +68,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; saveError(SystemError error) async {
-  try {
-    final errorModel = SystemErrorModel(
-      message: error.message,
-      code: error.code,
-      stackTrace: error.stackTrace,
-    );
-    final String keyCode = &#39;${error.code}_error&#39;;
-    errorModel.cacheKey = &#39;$keyCode.json&#39;;
-    _fileStorageOptions[keyCode] = errorModel.cacheKey;
-    final jsonData = jsonEncode(errorModel.toJson());
-    await saveData(errorModel.cacheKey, jsonData);
-    logInfo(&#39;Error saved to cache: ${errorModel.cacheKey}&#39;);
-  } catch (e, stackTrace) {
-    logError(&#39;Failed to save error to cache: $e&#39;, stackTrace);
-  }
+  await saveErrorModel(SystemErrorModel.fromDomain(error));
 }</code></pre>
 </section>
 

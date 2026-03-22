@@ -1,13 +1,14 @@
 import 'package:system_loja/core/models/default/people_data.dart';
 
-/// Modelo de dados para Usuario
+/// Usuário do sistema com credenciais e nível de permissão.
 ///
-/// Representa um usuário do sistema com informações de autenticação
-/// e nível de permissão para controle de acesso.
-
+/// Herda dados comuns de [PersonDefault] (nome, e-mail).
+/// A senha é armazenada apenas como hash — nunca em texto plano.
 class User extends PersonDefault {
+  /// Hash da senha do usuário.
   final String passwordHash;
 
+  /// Nível de permissão do usuário. Padrão 0 (sem privilégios especiais).
   final int permission;
 
   User({
@@ -20,10 +21,10 @@ class User extends PersonDefault {
     super.id,
   });
 
-  /// Cria uma cópia do usuário com campos atualizados
+  /// Cria uma cópia do usuário com campos atualizados.
   ///
-  /// Atualiza automaticamente a data de última atualização para o momento atual,
-  /// a menos que uma data específica seja fornecida.
+  /// Preserva [registrationDate] original. A [lastUpdatedDate] **não** é
+  /// alterada automaticamente — atualize-a explicitamente se necessário.
   User copyWith({
     String? name,
     String? email,
