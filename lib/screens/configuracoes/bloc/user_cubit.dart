@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/models/default/authorization_level.dart';
 import 'package:system_loja/core/models/user.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 
@@ -23,10 +24,19 @@ class UserCubit extends Cubit<UsuarioState> {
       permission: nivelPermissao.value,
     );
 
-    final executionResult = await _userRepository.adicionarUsuario(usuario);
+    final ResultStatus<bool, String> executionResult = await _userRepository
+        .adicionarUsuario(usuario);
     executionResult.when(
-      onSuccess: (sucess) {
-        emit(UsuarioState.usuarioAdicionado(usuario, true));
+      onSuccess: (sucesso) {
+        if (sucesso) {
+          emit(UsuarioState.usuarioAdicionado(usuario, true));
+        } else {
+          emit(
+            UsuarioState.loadFailure(
+              errorMessage: 'Não foi possível adicionar o usuário.',
+            ),
+          );
+        }
       },
       onError: (resultError) {
         emit(UsuarioState.loadFailure(errorMessage: resultError));
@@ -35,7 +45,8 @@ class UserCubit extends Cubit<UsuarioState> {
   }
 
   Future<void> atualizarUsuario({required User usuarioAtualizado}) async {
-    final resultAdd = await _userRepository.atualizarUsuario(usuarioAtualizado);
+    final ResultStatus<bool, String> resultAdd = await _userRepository
+        .atualizarUsuario(usuarioAtualizado);
     resultAdd.when(
       onSuccess: (sucesso) {
         if (sucesso) {
@@ -66,9 +77,7 @@ class UserCubit extends Cubit<UsuarioState> {
       },
       onError: (message) {
         emit(
-          UsuarioState.loadFailure(
-            errorMessage: 'Erro ao carregar usuários: $message',
-          ),
+          UsuarioState.loadFailure(errorMessage: message),
         );
       },
     );
@@ -87,11 +96,7 @@ class UserCubit extends Cubit<UsuarioState> {
         }
       },
       onError: (message) {
-        emit(
-          UsuarioState.loadFailure(
-            errorMessage: 'Erro ao remover usuário: $message',
-          ),
-        );
+        emit(UsuarioState.loadFailure(errorMessage: message));
       },
     );
   }

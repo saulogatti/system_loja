@@ -9,17 +9,33 @@ import 'package:system_loja/core/utils/command_result.dart';
 /// Diferente de [IConfigurationRepository] que gerencia preferências do
 /// usuário, esta interface lida com configurações do próprio sistema.
 ///
-/// Todas as operações retornam [ResultStatus] com mensagem de erro em texto
-/// para a camada de apresentação — sem propagar exceções.
+/// Exemplo de uso:
+/// ```dart
+/// final repository = appInjection.get<SystemRepository>();
+///
+/// final resultado = await repository.getSystemConfiguration();
+/// resultado.when(
+///   onSuccess: (config) => print('Configuração carregada: ${config.id}'),
+///   onError: (erro) => print('Falha: $erro'),
+/// );
+/// ```
 ///
 /// Veja também:
 /// - [SystemConfiguration] - modelo de configuração do sistema
 /// - [IConfigurationRepository] - para configurações de usuário
 abstract interface class ISystemRepository {
-  /// Retorna as configurações atuais do sistema (cria padrão se necessário).
+  /// Retorna as configurações atuais do sistema.
+  ///
+  /// Retorna null se nenhuma configuração foi inicializada ainda.
+  ///
+  /// Retorna:
+  /// - [ResultStatus] com [SystemConfiguration]
   Future<ResultStatus<SystemConfiguration, String>> getSystemConfiguration();
 
   /// Importa configuração a partir de JSON e persiste.
+  ///
+  /// Faz parse, valida, normaliza e salva.
+  /// Em caso de falha, retorna [ResultStatus.error] com mensagem amigável.
   Future<ResultStatus<SystemConfiguration, String>> importConfigurationFromJson(
     String jsonContent,
   );
@@ -28,7 +44,12 @@ abstract interface class ISystemRepository {
   resetToDefaultConfiguration();
 
   /// Salva as configurações do sistema.
-  Future<ResultStatus<void, String>> saveSystemConfiguration(
+  ///
+  /// Persiste as configurações técnicas do sistema para uso futuro.
+  ///
+  /// Parâmetros:
+  /// - [data]: Objeto SystemConfiguration com as configurações a serem salvas
+  Future<ResultStatus<bool, String>> saveSystemConfiguration(
     SystemConfiguration data,
   );
 }

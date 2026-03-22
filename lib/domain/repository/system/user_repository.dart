@@ -83,25 +83,43 @@ class UserRepository with LoggerClassMixin implements IUserRepository {
   }
 
   @override
-  Future<User?> obterUsuarioPorEmail(String email) {
-    return _usersDao.findByEmail(email);
+  Future<ResultStatus<User?, String>> obterUsuarioPorEmail(String email) async {
+    try {
+      final user = await _usersDao.findByEmail(email);
+      return ResultStatus.success(user);
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(
+          e,
+          contexto: 'Falha ao buscar usuário por email',
+        ),
+      );
+    }
   }
 
   @override
-  Future<User?> obterUsuarioPorId(int id) async {
-    final dados = await _usersDao.getById(id);
-    if (dados != null) {
-      final user = dados;
-      await _logRepository.createAndLogEntry(
-        logActionType: ActionType.ler,
-        entityName: runtimeType.toString(),
-        userId: id,
-        username: user.name,
-        logDetails: 'Usuário ${user.name} (ID: ${user.id}) carregado.',
+  Future<ResultStatus<User?, String>> obterUsuarioPorId(int id) async {
+    try {
+      final dados = await _usersDao.getById(id);
+      if (dados != null) {
+        await _logRepository.createAndLogEntry(
+          logActionType: ActionType.ler,
+          entityName: runtimeType.toString(),
+          userId: id,
+          username: dados.name,
+          logDetails: 'Usuário ${dados.name} (ID: ${dados.id}) carregado.',
+        );
+        return ResultStatus.success(dados);
+      }
+      return ResultStatus.success(null);
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(
+          e,
+          contexto: 'Falha ao buscar usuário por id',
+        ),
       );
-      return user;
     }
-    return null;
   }
 
   @override

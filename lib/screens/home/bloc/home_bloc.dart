@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
-import 'package:system_loja/core/utils/command_result.dart';
 
 part 'home_bloc.freezed.dart';
 part 'home_event.dart';
@@ -23,12 +22,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     emit(const HomeLoading());
     final result = await _systemRepository.getSystemConfiguration();
-    switch (result) {
-      case ResultSuccess(:final result):
-        emit(HomeLoaded(result.systemUserData));
-      case ResultError(:final resultError):
-        emit(HomeError(resultError));
-    }
+    result.when(
+      onSuccess: (systemConfiguration) {
+        emit(HomeLoaded(systemConfiguration.systemUserData));
+      },
+      onError: (message) {
+        emit(HomeState.error(message));
+      },
+    );
   }
 
   FutureOr<void> _onSaveSystemUserData(
@@ -37,21 +38,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     emit(const HomeLoading());
     final loadResult = await _systemRepository.getSystemConfiguration();
-    switch (loadResult) {
-      case ResultSuccess(:final result):
-        final systemConfiguration = result;
-        systemConfiguration.systemUserData = event.systemUserData;
-        final saveResult = await _systemRepository.saveSystemConfiguration(
-          systemConfiguration,
-        );
-        switch (saveResult) {
-          case ResultSuccess():
-            emit(HomeSaved(systemConfiguration.systemUserData));
-          case ResultError(:final resultError):
-            emit(HomeError(resultError));
-        }
-      case ResultError(:final resultError):
-        emit(HomeError(resultError));
+    if (loadResult.hasError) {
+      emit(HomeState.error(loadResult.asError));
+      return;
     }
+    final systemConfiguration = loadResult.asSuccess;
+    systemConfiguration.systemUserData = event.systemUserData;
+    final saveResult = await _systemRepository.saveSystemConfiguration(
+      systemConfiguration,
+    );
+    saveResult.when(
+      onSuccess: (_) {
+        emit(HomeSaved(systemConfiguration.systemUserData));
+      },
+      onError: (message) {
+        emit(HomeState.error(message));
+      },
+    );
   }
 }

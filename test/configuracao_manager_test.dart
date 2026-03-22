@@ -101,6 +101,7 @@ void main() {
     });
 
     test('Deve restaurar configurações padrão', () async {
+      // Primeiro altera as configurações
       final currentConfig = await _obterSucesso(manager.loadConfiguration());
       final novaConfig = currentConfig.copyWith(
         temaEscuro: true,
@@ -108,6 +109,7 @@ void main() {
       );
       await _executarSucesso(manager.updateAppSettings(novaConfig));
 
+      // Depois restaura padrão
       await _executarSucesso(manager.resetToDefaults());
 
       final restoredConfig = await _obterSucesso(manager.loadConfiguration());
@@ -135,6 +137,7 @@ void main() {
     test('Deve lidar com backup sem arquivos existentes', () async {
       final resultado = await manager.createBackup('data/backups');
 
+      // Deve retornar sucesso mesmo sem arquivos para backup
       expect(resultado.isSuccessful, isTrue);
     });
   });

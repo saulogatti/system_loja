@@ -7,7 +7,6 @@ import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
-import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/configuracoes/bloc/system_config_state.dart';
 
 class SystemConfigCubit extends Cubit<SystemConfigState> {
@@ -18,28 +17,26 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
     loadConfigurationData();
   }
 
-  /// Configuração atual: estado em memória ou repositório.
-  Future<ResultStatus<SystemConfiguration, String>>
-  _resolveConfiguration() async {
+  /// Configuração atual a partir do estado carregado ou do repositório.
+  Future<SystemConfiguration?> _obterConfiguracaoAtual() async {
     final currentState = state;
     if (currentState is SystemConfigStateLoaded) {
-      return ResultStatus.success(currentState.data);
+      return currentState.data;
     }
-    return _systemRepository.getSystemConfiguration();
+    final result = await _systemRepository.getSystemConfiguration();
+    if (result.isSuccessful) {
+      return result.asSuccess;
+    }
+    emit(SystemConfigState.error(result.asError));
+    return null;
   }
 
   Future<void> exportConfiguration() async {
-    final configResult = await _resolveConfiguration();
-    late final SystemConfiguration systemConfiguration;
-    switch (configResult) {
-      case ResultError(:final resultError):
-        emit(SystemConfigState.error(resultError));
-        return;
-      case ResultSuccess(:final result):
-        systemConfiguration = result;
+    final systemConfiguration = await _obterConfiguracaoAtual();
+    if (systemConfiguration == null) {
+      return;
     }
 
-    // Operações locais (seletor de arquivo / I/O): exceções tratadas aqui.
     try {
       const acceptedTypes = <XTypeGroup>[
         XTypeGroup(label: 'json', extensions: ['json']),
@@ -54,7 +51,10 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
       }
 
       final file = File(location.path);
-      await file.writeAsString(jsonEncode(systemConfiguration), flush: true);
+      await file.writeAsString(
+        jsonEncode(systemConfiguration),
+        flush: true,
+      );
 
       emit(
         SystemConfigState.loaded(
@@ -63,8 +63,12 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
           feedbackType: SystemConfigFeedbackType.exported,
         ),
       );
-    } catch (e) {
-      emit(SystemConfigState.error('Erro ao exportar configuração: $e'));
+    } catch (_) {
+      emit(
+        SystemConfigState.error(
+          'Erro ao exportar configuração para o arquivo selecionado.',
+        ),
+      );
     }
   }
 
@@ -80,10 +84,11 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
       }
 
       final content = await file.readAsString();
-      final normalizedResult = await _systemRepository
-          .importConfigurationFromJson(content);
+      final result = await _systemRepository.importConfigurationFromJson(
+        content,
+      );
 
-      normalizedResult.when(
+      result.when(
         onSuccess: (normalizedData) {
           emit(
             SystemConfigState.loaded(
@@ -106,8 +111,12 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
     emit(SystemConfigState.loading());
     final result = await _systemRepository.getSystemConfiguration();
     result.when(
-      onSuccess: (configData) => emit(SystemConfigState.loaded(configData)),
-      onError: (message) => emit(SystemConfigState.error(message)),
+      onSuccess: (configData) {
+        emit(SystemConfigState.loaded(configData));
+      },
+      onError: (message) {
+        emit(SystemConfigState.error(message));
+      },
     );
   }
 
@@ -126,7 +135,9 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
           ),
         );
       },
-      onError: (message) => emit(SystemConfigState.error(message)),
+      onError: (message) {
+        emit(SystemConfigState.error(message));
+      },
     );
   }
 
@@ -147,14 +158,9 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
 
     emit(SystemConfigState.loading());
     final normalizedUnits = _normalizeUnits(measurementUnits);
-    final configResult = await _resolveConfiguration();
-    late final SystemConfiguration systemConfiguration;
-    switch (configResult) {
-      case ResultError(:final resultError):
-        emit(SystemConfigState.error(resultError));
-        return;
-      case ResultSuccess(:final result):
-        systemConfiguration = result;
+    final systemConfiguration = await _obterConfiguracaoAtual();
+    if (systemConfiguration == null) {
+      return;
     }
 
     final data = SystemConfiguration(
@@ -183,7 +189,9 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
           ),
         );
       },
-      onError: (message) => emit(SystemConfigState.error(message)),
+      onError: (message) {
+        emit(SystemConfigState.error(message));
+      },
     );
   }
 

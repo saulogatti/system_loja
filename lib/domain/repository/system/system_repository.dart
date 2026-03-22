@@ -95,12 +95,12 @@ class SystemRepository implements ISystemRepository {
   }
 
   @override
-  Future<ResultStatus<void, String>> saveSystemConfiguration(
+  Future<ResultStatus<bool, String>> saveSystemConfiguration(
     SystemConfiguration data,
   ) async {
     try {
       await _systemDao.saveSystemConfiguration(data);
-      return ResultStatus.success(null);
+      return ResultStatus.success(true);
     } catch (e) {
       return ResultStatus.error(
         mensagemErroRepositorio(e, contexto: 'Falha ao salvar configuração'),

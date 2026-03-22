@@ -4,7 +4,6 @@ import 'package:system_loja/core/interface/i_configuration_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_settings_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/core/utils/repository_error_mapper.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
 import 'package:system_loja/data/entry/configuration_repository_cache.dart';
 
@@ -37,9 +36,7 @@ class ConfigurationRepository
       return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
       logError('Erro ao limpar dados: $e', stackTrace);
-      return ResultStatus.error(
-        mensagemErroRepositorio(e, contexto: 'Falha ao limpar dados'),
-      );
+      return ResultStatus.error('Erro ao limpar todos os dados do sistema.');
     }
   }
 
@@ -52,43 +49,51 @@ class ConfigurationRepository
           Duration(days: diasManterLogs),
         );
         final logResult = await _logRepository.clearOldLogs(dataLimite);
-        switch (logResult) {
-          case ResultError(:final resultError):
-            return ResultStatus.error(resultError);
-          case ResultSuccess():
-            break;
+        if (logResult.hasError) {
+          return ResultStatus.error(logResult.asError);
         }
       }
       await _salvarDados();
       return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
       logError('Erro ao limpar logs antigos: $e', stackTrace);
-      return ResultStatus.error(
-        mensagemErroRepositorio(e, contexto: 'Falha ao limpar logs antigos'),
-      );
+      return ResultStatus.error('Erro ao limpar logs antigos.');
     }
   }
 
+  /// Realiza backup dos dados do sistema
+  ///
+  /// Cria uma cópia dos arquivos JSON em um diretório de backup
+  /// com timestamp.
   @override
   Future<ResultStatus<AppSettings, String>> createBackup(
     String directoryPath,
   ) async {
     try {
       final backupFiles = await _cache.createBackup(directoryPath);
-      logInfo('Backup realizado com sucesso: $backupFiles arquivos copiados');
+      if (!backupFiles) {
+        return ResultStatus.error(
+          'Não foi possível concluir o backup no diretório selecionado.',
+        );
+      }
+
+      logInfo('Backup realizado com sucesso: diretório $directoryPath');
       return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
       logError('Erro ao realizar backup: $e', stackTrace);
-      return ResultStatus.error(
-        mensagemErroRepositorio(e, contexto: 'Falha ao realizar backup'),
-      );
+      return ResultStatus.error('Erro ao realizar backup.');
     }
   }
 
   @override
   Future<ResultStatus<AppSettings, String>> loadConfiguration() async {
-    await _carregarDados();
-    return ResultStatus.success(_configuracao);
+    try {
+      await _carregarDados();
+      return ResultStatus.success(_configuracao);
+    } catch (e, stackTrace) {
+      logError('Erro ao carregar configurações: $e', stackTrace);
+      return ResultStatus.error('Erro ao carregar configurações do sistema.');
+    }
   }
 
   @override
@@ -99,16 +104,16 @@ class ConfigurationRepository
       logInfo('Configurações restauradas para padrão');
       return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
-      logError('Erro ao restaurar padrões: $e', stackTrace);
-      return ResultStatus.error(
-        mensagemErroRepositorio(
-          e,
-          contexto: 'Falha ao restaurar configurações padrão',
-        ),
-      );
+      logError('Erro ao restaurar configurações padrão: $e', stackTrace);
+      return ResultStatus.error('Erro ao restaurar configurações padrão.');
     }
   }
 
+  /// Restaura um backup das configurações e dados do sistema.
+  ///
+  /// Após restaurar, recarrega as configurações para refletir o conteúdo
+  /// do backup restaurado. Em caso de falha, retorna erro para a
+  /// camada de apresentação tratar de forma padronizada.
   @override
   Future<ResultStatus<AppSettings, String>> restoreBackup(
     String direBackup,
@@ -120,9 +125,7 @@ class ConfigurationRepository
       return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
       logError('Erro ao restaurar backup: $e', stackTrace);
-      return ResultStatus.error(
-        mensagemErroRepositorio(e, contexto: 'Falha ao restaurar backup'),
-      );
+      return ResultStatus.error('Erro ao restaurar backup.');
     }
   }
 
@@ -140,33 +143,27 @@ class ConfigurationRepository
       logInfo('Configuração atualizada com sucesso');
       return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
-      logError('Erro ao salvar configurações: $e', stackTrace);
-      return ResultStatus.error(
-        mensagemErroRepositorio(e, contexto: 'Falha ao salvar configurações'),
-      );
+      logError('Erro ao atualizar configurações: $e', stackTrace);
+      return ResultStatus.error('Erro ao salvar configurações.');
     }
   }
 
+  /// Carrega dados do arquivo JSON
   Future<void> _carregarDados() async {
-    try {
-      final file = await _cache.get<ConfigurationRepositoryCache>(
-        keyConfigurationRepositoryCache,
-        ConfigurationRepositoryCache.fromJson,
-      );
-      if (file != null) {
-        _configuracao = file.configuracao.toAppSettings();
-        logInfo('Configurações carregadas com sucesso');
-      } else {
-        _configuracao = AppSettings.createDefaultSettings();
-      }
-      _settingsService.updateSettings(
-        _configuracao.corPrimaria,
-        _configuracao.temaEscuro,
-      );
-    } catch (e, stackTrace) {
-      logError('Erro ao carregar configurações: $e', stackTrace);
+    final file = await _cache.get<ConfigurationRepositoryCache>(
+      keyConfigurationRepositoryCache,
+      ConfigurationRepositoryCache.fromJson,
+    );
+    if (file != null) {
+      _configuracao = file.configuracao.toAppSettings();
+      logInfo('Configurações carregadas com sucesso');
+    } else {
       _configuracao = AppSettings.createDefaultSettings();
     }
+    _settingsService.updateSettings(
+      _configuracao.corPrimaria,
+      _configuracao.temaEscuro,
+    );
   }
 
   // ignore: unused_element

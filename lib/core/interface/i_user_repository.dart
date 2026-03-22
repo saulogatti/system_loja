@@ -56,6 +56,9 @@ abstract interface class IUserRepository {
   Future<ResultStatus<bool, String>> atualizarUsuario(User usuario);
 
   /// Retorna todos os usuários cadastrados no sistema.
+  ///
+  /// Retorna:
+  /// - [ResultStatus] com lista de usuários (vazia se não houver usuários)
   Future<ResultStatus<List<User>, String>> obterTodosUsuarios();
 
   /// Busca um usuário pelo endereço de email.
@@ -66,8 +69,8 @@ abstract interface class IUserRepository {
   /// - [email]: Email do usuário a ser buscado
   ///
   /// Retorna:
-  /// - Objeto [User] se encontrado ou null se não existir
-  Future<User?> obterUsuarioPorEmail(String email);
+  /// - [ResultStatus] com [User] encontrado ou null se não existir
+  Future<ResultStatus<User?, String>> obterUsuarioPorEmail(String email);
 
   /// Busca um usuário específico pelo ID.
   ///
@@ -75,8 +78,8 @@ abstract interface class IUserRepository {
   /// - [id]: ID único do usuário
   ///
   /// Retorna:
-  /// - Objeto [User] se encontrado ou null se não existir
-  Future<User?> obterUsuarioPorId(int id);
+  /// - [ResultStatus] com [User] encontrado ou null se não existir
+  Future<ResultStatus<User?, String>> obterUsuarioPorId(int id);
 
   /// Remove um usuário do sistema pelo ID.
   ///
@@ -85,5 +88,7 @@ abstract interface class IUserRepository {
   /// Parâmetros:
   /// - [id]: ID único do usuário a ser removido
   ///
+  /// Retorna:
+  /// - [ResultStatus] com true se removido com sucesso
   Future<ResultStatus<bool, String>> removerUsuario(int id);
 }
