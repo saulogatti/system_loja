@@ -6,7 +6,7 @@ import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/core/utils/string_extensions.dart';
+import 'package:system_loja/screens/utils/string_extensions.dart';
 
 part 'customer_bloc.freezed.dart';
 part 'customer_bloc_event.dart';

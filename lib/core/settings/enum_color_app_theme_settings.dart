@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-
- 
 enum EnumColorAppThemeSettings {
   azul,
   verde,
@@ -11,26 +8,6 @@ enum EnumColorAppThemeSettings {
   ciano,
   indigo;
 
-  Color get color {
-    switch (this) {
-      case EnumColorAppThemeSettings.azul:
-        return Colors.blue;
-      case EnumColorAppThemeSettings.verde:
-        return Colors.green;
-      case EnumColorAppThemeSettings.laranka:
-        return Colors.orange;
-      case EnumColorAppThemeSettings.roxo:
-        return Colors.purple;
-      case EnumColorAppThemeSettings.vermelho:
-        return Colors.red;
-      case EnumColorAppThemeSettings.rosa:
-        return Colors.pink;
-      case EnumColorAppThemeSettings.ciano:
-        return Colors.cyan;
-      case EnumColorAppThemeSettings.indigo:
-        return Colors.indigo;
-    }
-  }
   String get name {
     switch (this) {
       case EnumColorAppThemeSettings.azul:

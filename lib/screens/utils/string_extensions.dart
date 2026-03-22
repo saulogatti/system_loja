@@ -222,7 +222,7 @@ extension ValidateDataCustomer on String {
   static const int senhaMinLength = 8;
 
   /// Gera hash SHA-256 da senha
-  String hashSenha() {
+  String hashPassword() {
     // TODO(security): Vulnerabilidade de hash fraco (SHA-256 sem salt).
     // Usar um algoritmo moderno como Argon2 ou bcrypt com salt único
     // durante a próxima migração do banco de dados.
@@ -241,7 +241,7 @@ extension ValidateDataCustomer on String {
   /// ```dart
   /// '123.456.789-09'.isValidCPF(); // true ou false
   /// ```
-  bool isValidCPF() {
+  bool isValidCpf() {
     final String cpf = replaceAll(Constants.nonNumericRegExp, '');
 
     if (cpf.length != 11 || Constants.cpfSameDigitRegExp.hasMatch(cpf)) {
@@ -291,7 +291,7 @@ extension ValidateDataCustomer on String {
   /// Retorna uma mensagem de erro se a senha for inválida, ou null se for válida.
   /// Regras: mínimo [senhaMinLength] caracteres, pelo menos uma letra maiúscula,
   /// uma letra minúscula e um número.
-  String? validarSenha() {
+  String? validatePassword() {
     final String senha = this;
     if (senha.isEmpty) {
       return 'Senha é obrigatória';

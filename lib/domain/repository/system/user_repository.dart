@@ -1,9 +1,8 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/models/activity_log.dart';
-import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/data/database/dao/users_dao.dart';
 
 import '../../../core/models/user.dart';
@@ -118,11 +117,5 @@ class UserRepository with LoggerClassMixin implements IUserRepository {
       return success;
     }
     return false;
-  }
-
-  /// Valida o formato do email
-  @override
-  bool validarEmail(String email) {
-    return email.isValidEmail();
   }
 }

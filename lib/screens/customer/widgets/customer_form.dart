@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/utils/string_extensions.dart';
+import 'package:system_loja/screens/utils/string_extensions.dart';
 import 'package:system_loja/screens/utils/validators.dart';
 import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
@@ -63,7 +63,7 @@ class CustomerForm extends StatelessWidget {
             validatorOptions: (value) {
               if (value == null || value.trim().isEmpty) {
                 return 'CPF é obrigatório';
-              } else if (!value.isValidCPF()) {
+              } else if (!value.isValidCpf()) {
                 return 'CPF inválido';
               }
               return null;

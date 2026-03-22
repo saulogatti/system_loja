@@ -14,6 +14,7 @@ Future<void> reportError(Object error, StackTrace stackTrace) async {
   );
   await SystemErrorManager.instance.saveErrorToCache(systemError);
 }
+// TODO: Avaliar a necessidade de usar o SystemErrorManager
 
 class SystemErrorManager {
   static final SystemErrorManager instance = SystemErrorManager._();
