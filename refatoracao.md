@@ -2,52 +2,49 @@
 
 ## Diagnóstico atual
 
-A base já tem uma boa estrutura por camadas, mas ainda está em um modelo híbrido entre arquitetura em camadas tradicional e Clean Architecture.
+A base já tem uma boa estrutura por camadas, mas ainda há pontos em evolução em direção a uma Clean Architecture mais estrita.
 
-1. Apresentação está bem definida em `lib/screens/`, com BLoC/Cubit e UI Flutter.
-2. Contratos de repositório estão em `lib/core/interface/`; implementações em `lib/domain/repository/` (não em `core`).
-3. Infra de persistência está organizada em Drift/DAO em `lib/data/database/`.
+1. Apresentação está em `lib/screens/`, com BLoC/Cubit e UI Flutter.
+2. Contratos de repositório estão em `lib/core/interface/`; implementações em `lib/domain/repository/`.
+3. Infra de persistência está em Drift/DAO em `lib/data/database/`.
 4. DI centralizada (por exemplo `setupAppInjection` / GetIt); parte da UI ainda resolve dependências via service locator no composition root.
 
 ## O que já foi feito (evolução da arquitetura)
 
-- **Repositórios concretos** já estão em `lib/domain/repository/`, não dentro de `core`.
-- **Serialização JSON de configuração** com codecs na camada de dados (`lib/data/converter/`, por exemplo `system_configuration_codec.dart`, `address_codec.dart`, `price_configuration_codec.dart`); modelos de domínio em `core` permanecem sem `@JsonSerializable` nesses fluxos.
+- **Repositórios concretos** em `lib/domain/repository/`, não dentro de `core`.
+- **Serialização JSON de configuração** com codecs na camada de dados (`lib/data/converter/`: por exemplo `system_configuration_codec.dart`, `address_codec.dart`, `price_configuration_codec.dart`); modelos de domínio em `core` permanecem sem `@JsonSerializable` nesses fluxos.
 - **Modelos de domínio** `address.dart`, `price_configuration.dart` e `system_configuration.dart` em `core` **não** importam Drift; comentários no código apontam para codecs em `data` quando há import/export JSON.
-- **Conversores CPF/CNPJ** (`JsonConverter`): removidos de `lib/core/models/document/`; implementação em `lib/data/converter/cpf_cnpj_json_converters.dart` (entrada `IndividualEntry` e demais usos via camada `data`).
-- **`DocumentConverter`** (CPF/CNPJ genérico por tamanho) já reside em `lib/data/converter/document_converter.dart`.
+- **Conversores CPF/CNPJ** (`JsonConverter`): removidos de `lib/core/models/document/`; implementação em `lib/data/converter/cpf_cnpj_json_converters.dart` (por exemplo `IndividualEntry` e demais usos pela camada `data`).
+- **`DocumentConverter`** (documento genérico por tamanho) em `lib/data/converter/document_converter.dart`.
 - **`ProductCubit`** depende de `IProductRepository` (contrato), não de implementação concreta de repositório.
-1. **Core depende de Flutter** em tema: `app_theme.dart`, `app_theme_settings.dart` (ideal: abstrações no domínio e implementação Material na apresentação ou infraestrutura).
-4. **`AppSettings`** (`lib/core/settings/app_settings.dart` + `.g.dart`) usa `@JsonSerializable` em `core`; pela convenção do projeto, DTO/codec deveriam estar em `data`.
-2. **`system_error_manager.dart`** em `lib/aplication/` (não em `core`, mas o fluxo de erro ainda pode ser alinhado a `ResultStatus` e contratos).
+- **`SystemError`** (`lib/core/models/system_errors/system_error.dart`): entidade pura, **sem** import de `lib/data/` e **sem** anotações de serialização; `StackTrace` é campo normal.
+- **`AppSettings`** (`lib/core/settings/app_settings.dart`): modelo Dart **sem** `@JsonSerializable` e **sem** `app_settings.g.dart` em `core`; preferências de cor usam `EnumColorAppThemeSettings` em `lib/core/settings/enum_color_app_theme_settings.dart` (enum **sem** `Color` do Flutter).
+- **Tema Material**: `AppTheme` está em `lib/screens/settings/app_theme.dart`; a camada **`lib/core/` não importa `package:flutter`** (verificado com busca por `flutter/material`).
+- **`string_extensions`** (por exemplo `hashPassword`) foi movido para `lib/screens/utils/string_extensions.dart`; **não há mais** dependência `core` → `aplication` por esse arquivo.
+- **`CodeGeneratorService`** **saiu de `lib/core/`** e está em **`lib/domain/code_generator_service.dart`** (ainda depende de DAOs; ver pendências abaixo).
+
 ## Principais desalinhamentos com Clean Architecture (pendentes)
 
-
-3. **Core ainda importa `data` em pontos específicos:**
-   - `lib/core/services/code_generator_service.dart` importa DAOs (`ProductDao`, `InvoiceDao`).
-5. **`lib/core/utils/string_extensions.dart`** importa `lib/aplication/utils/constants.dart` (fronteira `core` → `aplication` invertida em relação ao ideal).
-6. **Tratamento de erro e repositório de configuração:** revisar `configuration_repository.dart` e convenção de não propagar exceções entre camadas (usar `ResultStatus` de forma consistente).
-7. **Use cases / orquestração:** BLoCs/Cubits ainda podem depender diretamente de repositórios; introdução gradual de casos de uso é opcional mas alinha melhor à Clean Architecture.
-8. **Service locator na UI:** reduzir onde fizer sentido em favor de injeção por construtor dos blocs/widgets.
+1. **`CodeGeneratorService`** (em `lib/domain/`): continua importando **`ProductDao`** e **`InvoiceDao`** (`lib/data/`). O ideal é substituir por **portas** (interfaces no domínio ou aplicação) implementadas na camada de dados, para `domain` não depender de Drift.
+2. **`system_error_manager.dart`** em `lib/aplication/`: o fluxo de erro ainda pode ser alinhado a `ResultStatus` e aos contratos de repositório de forma uniforme.
+3. **Tratamento de erro e repositório de configuração:** revisar `configuration_repository.dart` e a convenção de não propagar exceções entre camadas (usar `ResultStatus` de forma consistente).
+4. **Use cases / orquestração:** BLoCs/Cubits ainda podem depender diretamente de repositórios; introdução gradual de casos de uso é opcional, mas alinha melhor à Clean Architecture.
+5. **Service locator na UI:** reduzir onde fizer sentido em favor de injeção por construtor dos blocos/widgets.
+6. **Interfaces** após futuras mudanças de DTO: garantir que `i_configuration_repository` e serviços relacionados continuem expondo tipos de domínio estáveis se novos DTOs forem introduzidos para persistência.
 
 ## Lista do que ainda precisa ser alterado (prioridade sugerida)
 
 Ordem por impacto e dependência.
 
-1. Separar camadas de forma explícita onde ainda houver mistura (domínio puro, dados, apresentação).
-2. **Tornar `core` mais puro:** eliminar imports `core` → `data` e `core` → `aplication` onde listados acima.
-3. Mover ou duplicar **Theme/Settings** (tipos Flutter) para fora do núcleo de domínio, mantendo contratos enxutos em `core` se necessário.
-4. **Refatorar `CodeGeneratorService`:** substituir DAOs por interfaces (portas) definidas no domínio ou na aplicação, implementadas na camada de dados.
-5. **Desacoplar `SystemError`:** deixar entidade de domínio sem anotação de serialização; conversor/DTO em `data`.
-6. **Migrar `AppSettings` serializável** para DTO + mapper em `data` (ou equivalente), mantendo em `core` apenas o que for regra/conceito estável.
-7. Corrigir **interfaces** que hoje expõem tipos acoplados a JSON/Flutter (`i_configuration_repository`, `i_settings_service`) após os itens 5 e 6.
-8. **Padronizar erros** com `ResultStatus` nas fronteiras de repositório.
-9. Reduzir acoplamento do **GetIt** na UI; **testes de arquitetura** (regras de import) quando fizer sentido.
+1. **Refatorar `CodeGeneratorService`:** eliminar dependência direta de DAOs; definir interfaces de leitura de unicidade de código (ou equivalente) e implementá-las em `lib/data/`.
+2. **Padronizar erros** com `ResultStatus` nas fronteiras de repositório e revisar fluxo em `configuration_repository` / `system_error_manager`.
+3. **Tornar camadas mais explícitas** onde ainda houver mistura (domínio puro, dados, apresentação).
+4. **Opcional:** use cases entre BLoC e repositório; reduzir GetIt na UI; **testes de arquitetura** (regras de import, por exemplo `domain`/`core` sem `data`).
 
 ## Plano de execução prático (referência)
 
-- **Sprint 1 (foco em core limpo):** itens 2, 4, 5, 6, 7 (ajustes em `SystemError`, `CodeGeneratorService`, `AppSettings`, extensões e interfaces).
-- **Sprint 2:** itens 3, 8 (tema/settings e erros).
-- **Sprint 3:** itens 1, 9 (use cases opcionais, DI na UI, testes de arquitetura).
+- **Sprint 1 (foco em dependências):** item 1 (`CodeGeneratorService` e portas) e item 2 (erros / `ResultStatus`).
+- **Sprint 2:** item 3 (clareza de camadas) e revisão de interfaces/DTOs conforme necessidade.
+- **Sprint 3:** item 4 (use cases, DI na UI, testes de arquitetura).
 
-O primeiro ganho de alto impacto continua sendo **eliminar dependências indevidas da camada `core`** (`data`, Flutter onde não for necessário, e serialização em entidades de domínio).
+O **próximo ganho de alto impacto** é **`CodeGeneratorService` sem DAOs**; a camada **`core` já está mais alinhada** (sem Flutter, sem `data`, sem JSON gerado em settings, `SystemError` e CPF/CNPJ desacoplados como descrito acima).
