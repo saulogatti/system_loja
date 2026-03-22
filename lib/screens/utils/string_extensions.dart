@@ -123,7 +123,8 @@ extension FileNameStringExtensions on String {
   /// 'Nome  com   espaços'.sanitizeFileName(); // 'Nome_com_espaços'
   /// ```
   String sanitizeFileName() {
-    return replaceAll(Constants.invalidFileNameCharsRegExp, '_')
+    return toLowerCase()
+        .replaceAll(Constants.invalidFileNameCharsRegExp, '_')
         .replaceAll(Constants.oneOrMoreWhitespaceRegExp, '_')
         .replaceAll(Constants.oneOrMoreUnderscoreRegExp, '_')
         .trim();

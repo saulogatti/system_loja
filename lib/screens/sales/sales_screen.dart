@@ -47,9 +47,7 @@ class _SalesViewState extends State<SalesView> {
             case SalesError():
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                    'Erro ao carregar notas fiscais! ${state.message}',
-                  ),
+                  content: Text('Erro ao carregar notas fiscais! ${state.message}'),
                   backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
@@ -100,10 +98,7 @@ class _SalesViewState extends State<SalesView> {
         },
         builder: (context, state) {
           final invoices = _mapToNotaFiscal.values.toList(growable: false);
-          final totalValue = invoices.fold<double>(
-            0.0,
-            (sum, invoice) => sum + invoice.data.totalValue,
-          );
+          final totalValue = invoices.fold<double>(0.0, (sum, invoice) => sum + invoice.data.totalValue);
 
           return Stack(
             children: [
@@ -124,9 +119,7 @@ class _SalesViewState extends State<SalesView> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Theme.of(
-                              context,
-                            ).shadowColor.withValues(alpha: 0.1),
+                            color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -148,9 +141,7 @@ class _SalesViewState extends State<SalesView> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                 ),
                               ),
                             ],
@@ -169,9 +160,7 @@ class _SalesViewState extends State<SalesView> {
                             '${invoices.length} ${invoices.length == 1 ? 'nota fiscal' : 'notas fiscais'}',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onPrimary.withValues(alpha: 0.9),
+                              color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.9),
                             ),
                           ),
                         ],
@@ -193,9 +182,7 @@ class _SalesViewState extends State<SalesView> {
                                   'Nenhuma nota fiscal cadastrada',
                                   style: TextStyle(
                                     fontSize: 18,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               ],
@@ -203,20 +190,16 @@ class _SalesViewState extends State<SalesView> {
                           )
                         : GridView.builder(
                             padding: const EdgeInsets.all(10),
-                            gridDelegate:
-                                const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 350,
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 10,
-                                  childAspectRatio: 1.3,
-                                ),
+                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 350,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              childAspectRatio: 1.3,
+                            ),
                             itemCount: invoices.length,
                             itemBuilder: (context, index) {
                               final nf = invoices[index];
-                              return InvoiceCard(
-                                invoice: nf,
-                                onTap: () => _mostrarDetalhesNota(nf),
-                              );
+                              return InvoiceCard(invoice: nf, onTap: () => _mostrarDetalhesNota(nf));
                             },
                           ),
                   ),

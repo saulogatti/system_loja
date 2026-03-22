@@ -61,13 +61,10 @@ class ClienteRepository {
   /// Busca um cliente pelo ID.
   ///
   /// Retorna [ResultStatus] com o cliente encontrado
-  /// ou erro se não encontrado/houver falha.
+  /// ou mensagem de erro em texto se não encontrado/houver falha.
   ///
   /// Parâmetros:
   /// - [id]: ID único do cliente
-  ///
-  /// Lança:
-  /// - [DatabaseException] se houver erro de comunicação com o banco
   Future<ResultStatus<Customer, String>> buscar({
     required int id,
   }) async {
@@ -83,9 +80,9 @@ class ClienteRepository {
 - **Seções especiais**:
   - `Exemplo de uso:` com código em \`\`\`dart
   - `Parâmetros:` lista parâmetros complexos
-  - `Retorna:` descreve retorno
-  - `Lança:` lista exceções possíveis
+  - `Retorna:` descreve retorno (ex.: `[ResultStatus] com [Customer] ou mensagem de erro`)
   - `Veja também:` links para classes/métodos relacionados
+- **Não** documentar `Lança:` em métodos de repositório/interface, pois repositórios capturam exceções internamente e devolvem `ResultStatus.error(...)` — a UI não recebe exceções.
 
 ### Documentos Técnicos (Markdown)
 

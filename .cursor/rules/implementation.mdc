@@ -37,17 +37,33 @@ lib/
 
 ## 2. Tratamento de erros: ResultStatus
 
-Use **sempre** `ResultStatus<R, E>` para operações que podem falhar (`lib/core/utils/command_result.dart`). **Nunca** lance exceções através das camadas e **nunca** use `ExecutionResult`.
+Use **sempre** `ResultStatus<R, E>` para operações que podem falhar (`lib/core/utils/command_result.dart`, usa `package:meta`). **Nunca** lance exceções através das camadas e **nunca** use `ExecutionResult`.
+
+### Repositório (camada `lib/domain/repository/`)
+Repositórios usam `try/catch` internamente e devolvem `ResultStatus.error(...)` com mensagens amigáveis via `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`). **Nunca** relançam exceções para BLoC/Cubit.
 
 ```dart
-ResultStatus<Customer, Failure> resultado = await repository.buscar(id);
+Future<ResultStatus<Customer, String>> buscar(int id) async {
+  try {
+    final row = await _dao.getById(id);
+    return ResultStatus.success(row!.toCustomer());
+  } catch (e) {
+    return ResultStatus.error(
+      mensagemErroRepositorio(e, contexto: 'Falha ao buscar cliente'),
+    );
+  }
+}
+```
 
+### Apresentação (camada `lib/screens/`)
+A camada de apresentação **não** envolve chamadas ao repositório em `try/catch`; usa `when` ou `switch` no `ResultStatus` e emite estado de erro com a mensagem já tratada. `try/catch` na UI fica reservado a operações locais (seletor de arquivo, escrita em `File`) que não passam pelo contrato do repositório.
+
+```dart
+final resultado = await repository.buscar(id);
 resultado.when(
-  success: (customer) => /* handle success */,
-  error: (failure) => /* handle failure */,
+  onSuccess: (customer) => emit(State.success(customer)),
+  onError: (mensagem) => emit(State.error(mensagem)),
 );
-
-// Ou: isSuccessful, hasError, asSuccess, asError
 ```
 
 ## 3. Drift DAO (dois bancos)
@@ -56,6 +72,8 @@ Existem **dois bancos**: `AppDatabase` (`app_database.dart`, `schemaVersion => 1
 
 - **Não** acoplar tabelas a classes de `lib/core/models/` com `@UseRowClass`; usar `XxxRecord` gerado e mapear para domínio em `lib/data/database/mapper/` ou no DAO/repositório.
 - Convenção: tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`.
+- `SystemDatabase` aceita `QueryExecutor` opcional no construtor para testes com banco em memória.
+- `CacheManager` é registrado via `GetIt` (DI); **não** usar `CacheManager.instance`. Repositórios o recebem por injeção de construtor.
 
 ```dart
 class CustomerRecords extends Table {

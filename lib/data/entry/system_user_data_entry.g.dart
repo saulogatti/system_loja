@@ -9,13 +9,13 @@ part of 'system_user_data_entry.dart';
 SystemUserDataEntry _$SystemUserDataEntryFromJson(Map<String, dynamic> json) =>
     SystemUserDataEntry(
       name: json['name'] as String,
-      email: json['email'] as String?,
-      phone: json['phone'] as String?,
       systemKey: json['systemKey'] as String,
       description: json['description'] as String,
-      id: (json['id'] as num?)?.toInt() ?? -1,
       registrationDate: DateTime.parse(json['registrationDate'] as String),
       lastUpdatedDate: DateTime.parse(json['lastUpdatedDate'] as String),
+      email: json['email'] as String?,
+      phone: json['phone'] as String?,
+      id: (json['id'] as num?)?.toInt() ?? -1,
     );
 
 Map<String, dynamic> _$SystemUserDataEntryToJson(

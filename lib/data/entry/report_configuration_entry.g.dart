@@ -9,12 +9,12 @@ part of 'report_configuration_entry.dart';
 ReportConfigurationEntry _$ReportConfigurationEntryFromJson(
   Map<String, dynamic> json,
 ) => ReportConfigurationEntry(
+  registrationDate: DateTime.parse(json['registrationDate'] as String),
+  lastUpdatedDate: DateTime.parse(json['lastUpdatedDate'] as String),
   enableSalesByPeriod: json['enableSalesByPeriod'] as bool? ?? true,
   enableTopProducts: json['enableTopProducts'] as bool? ?? true,
   defaultPeriodInDays: (json['defaultPeriodInDays'] as num?)?.toInt() ?? 30,
   id: (json['id'] as num?)?.toInt() ?? -1,
-  registrationDate: DateTime.parse(json['registrationDate'] as String),
-  lastUpdatedDate: DateTime.parse(json['lastUpdatedDate'] as String),
 );
 
 Map<String, dynamic> _$ReportConfigurationEntryToJson(

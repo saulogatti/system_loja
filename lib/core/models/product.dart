@@ -20,6 +20,6 @@ class Product extends DefaultObject {
     super.registrationDate,
     super.lastUpdatedDate,
     this.categoryId,
-    int? id,
+    super.id,
   });
 }

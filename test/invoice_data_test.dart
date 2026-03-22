@@ -35,6 +35,8 @@ void main() {
         invoiceNumber: 'NF-0002',
         type: InvoiceType.exit,
         companyId: 2,
+        companyName: 'Empresa Teste',
+        companyCnpj: '00.000.000/0001-00',
         items: [
           InvoiceItem(
             productId: 1,
@@ -49,8 +51,54 @@ void main() {
 
       expect(invoiceData.type, InvoiceType.exit);
       expect(invoiceData.companyId, 2);
+      expect(invoiceData.companyName, 'Empresa Teste');
+      expect(invoiceData.companyCnpj, '00.000.000/0001-00');
       expect(invoiceData.customerId, isNull);
       expect(invoiceData.totalValue, 20);
+    });
+
+    test('personDisplayName retorna nome do cliente quando vinculado', () {
+      final invoiceData = InvoiceData(
+        invoiceNumber: 'NF-0010',
+        customerId: 1,
+        customerName: 'Maria',
+        customerCpf: '111.111.111-11',
+        items: [
+          InvoiceItem(
+            productId: 1,
+            productName: 'P',
+            productCode: 'C1',
+            quantity: 1,
+            unitPrice: 10,
+          ),
+        ],
+        paymentMethod: 'pix',
+      );
+
+      expect(invoiceData.personDisplayName, 'Maria');
+      expect(invoiceData.personDocument, '111.111.111-11');
+    });
+
+    test('personDisplayName retorna nome da empresa quando vinculado', () {
+      final invoiceData = InvoiceData(
+        invoiceNumber: 'NF-0011',
+        companyId: 1,
+        companyName: 'Empresa X',
+        companyCnpj: '22.222.222/0001-22',
+        items: [
+          InvoiceItem(
+            productId: 1,
+            productName: 'P',
+            productCode: 'C1',
+            quantity: 1,
+            unitPrice: 10,
+          ),
+        ],
+        paymentMethod: 'cash',
+      );
+
+      expect(invoiceData.personDisplayName, 'Empresa X');
+      expect(invoiceData.personDocument, '22.222.222/0001-22');
     });
 
     test('deve lançar erro quando cliente e empresa não são informados', () {

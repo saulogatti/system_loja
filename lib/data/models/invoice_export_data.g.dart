@@ -34,6 +34,8 @@ InvoiceDataExport _$InvoiceDataExportFromJson(Map<String, dynamic> json) =>
       customerName: json['cliente_nome'] as String?,
       customerCpf: json['cliente_cpf'] as String?,
       companyId: (json['empresa_id'] as num?)?.toInt(),
+      companyName: json['empresa_nome'] as String?,
+      companyCnpj: json['empresa_cnpj'] as String?,
       type: json['type'] == null
           ? InvoiceType.exit
           : InvoiceDataExport._invoiceTypeFromJson(json['type']),
@@ -46,6 +48,8 @@ Map<String, dynamic> _$InvoiceDataExportToJson(InvoiceDataExport instance) =>
       'cliente_nome': instance.customerName,
       'cliente_cpf': instance.customerCpf,
       'empresa_id': instance.companyId,
+      'empresa_nome': instance.companyName,
+      'empresa_cnpj': instance.companyCnpj,
       'items': instance.items.map((e) => e.toJson()).toList(),
       'forma_pagamento': instance.paymentMethod,
       'data_emissao': instance.issueDate.toIso8601String(),

@@ -1,10 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:system_loja/core/constants/cache_keys.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
-import 'package:system_loja/data/cache/models/cacheable.dart';
 
-part 'configuration_repository_cache.g.dart';
+part 'app_settings_entry.g.dart';
 
 /// DTO JSON para persistência de [AppSettings] (sem herdar modelo de domínio).
 @JsonSerializable()
@@ -33,35 +31,13 @@ class AppSettingsEntry {
     this.temaEscuro = false,
     this.backupAutomatico = false,
     this.frequenciaBackup = 'semanal',
-    this.localBackup = 'data/backups',
+    this.localBackup = '',
     this.limpezaAutomatica = false,
     this.diasManterLogs = 90,
     this.exigirSenha = false,
     this.tempoBloqueioMinutos = 15,
     this.permitirMultiplosUsuarios = false,
   });
-
-  factory AppSettingsEntry.fromJson(Map<String, dynamic> json) =>
-      _$AppSettingsEntryFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AppSettingsEntryToJson(this);
-
-  AppSettings toAppSettings() => AppSettings(
-    notificacoesAtivadas: notificacoesAtivadas,
-    notificarVendas: notificarVendas,
-    notificarEstoqueBaixo: notificarEstoqueBaixo,
-    limiteEstoqueBaixo: limiteEstoqueBaixo,
-    corPrimaria: corPrimaria,
-    temaEscuro: temaEscuro,
-    backupAutomatico: backupAutomatico,
-    frequenciaBackup: frequenciaBackup,
-    localBackup: localBackup,
-    limpezaAutomatica: limpezaAutomatica,
-    diasManterLogs: diasManterLogs,
-    exigirSenha: exigirSenha,
-    tempoBloqueioMinutos: tempoBloqueioMinutos,
-    permitirMultiplosUsuarios: permitirMultiplosUsuarios,
-  );
 
   factory AppSettingsEntry.fromAppSettings(AppSettings configuracao) =>
       AppSettingsEntry(
@@ -80,16 +56,26 @@ class AppSettingsEntry {
         tempoBloqueioMinutos: configuracao.tempoBloqueioMinutos,
         permitirMultiplosUsuarios: configuracao.permitirMultiplosUsuarios,
       );
-}
 
-@JsonSerializable()
-class ConfigurationRepositoryCache extends Cacheable {
-  final AppSettingsEntry configuracao;
-  ConfigurationRepositoryCache({required this.configuracao});
-  factory ConfigurationRepositoryCache.fromJson(Map<String, dynamic> json) =>
-      _$ConfigurationRepositoryCacheFromJson(json);
-  @override
-  String get cacheKey => keyConfigurationRepositoryCache;
-  @override
-  Map<String, dynamic> toJson() => _$ConfigurationRepositoryCacheToJson(this);
+  factory AppSettingsEntry.fromJson(Map<String, dynamic> json) =>
+      _$AppSettingsEntryFromJson(json);
+
+  AppSettings toAppSettings() => AppSettings(
+    notificacoesAtivadas: notificacoesAtivadas,
+    notificarVendas: notificarVendas,
+    notificarEstoqueBaixo: notificarEstoqueBaixo,
+    limiteEstoqueBaixo: limiteEstoqueBaixo,
+    corPrimaria: corPrimaria,
+    temaEscuro: temaEscuro,
+    backupAutomatico: backupAutomatico,
+    frequenciaBackup: frequenciaBackup,
+    localBackup: localBackup,
+    limpezaAutomatica: limpezaAutomatica,
+    diasManterLogs: diasManterLogs,
+    exigirSenha: exigirSenha,
+    tempoBloqueioMinutos: tempoBloqueioMinutos,
+    permitirMultiplosUsuarios: permitirMultiplosUsuarios,
+  );
+
+  Map<String, dynamic> toJson() => _$AppSettingsEntryToJson(this);
 }

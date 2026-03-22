@@ -5,68 +5,107 @@ import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
+import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/repository_error_mapper.dart';
 import 'package:system_loja/data/converter/system_configuration_codec.dart';
 import 'package:system_loja/data/database/dao/system_dao.dart';
 
 class SystemRepository implements ISystemRepository {
   final SystemDao _systemDao;
   SystemRepository({required SystemDao systemDao}) : _systemDao = systemDao;
+
   @override
-  Future<SystemConfiguration> getSystemConfiguration() async {
-    SystemConfiguration? systemConfiguration = await _systemDao
-        .getSystemConfiguration();
-    if (systemConfiguration == null) {
-      systemConfiguration = _createDefaultConfiguration();
-      await _systemDao.saveSystemConfiguration(systemConfiguration);
+  Future<ResultStatus<SystemConfiguration, String>>
+  getSystemConfiguration() async {
+    try {
+      SystemConfiguration? systemConfiguration = await _systemDao
+          .getSystemConfiguration();
+      if (systemConfiguration == null) {
+        systemConfiguration = _createDefaultConfiguration();
+        await _systemDao.saveSystemConfiguration(systemConfiguration);
+      }
+      return ResultStatus.success(systemConfiguration);
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(
+          e,
+          contexto: 'Falha ao obter configuração do sistema',
+        ),
+      );
     }
-    return systemConfiguration;
   }
 
   @override
-  Future<SystemConfiguration> importConfigurationFromJson(
+  Future<ResultStatus<SystemConfiguration, String>> importConfigurationFromJson(
     String jsonContent,
   ) async {
-    final dataMap = jsonDecode(jsonContent) as Map<String, dynamic>;
-    final importedData = SystemConfigurationCodec.fromJson(dataMap);
+    try {
+      final dataMap = jsonDecode(jsonContent) as Map<String, dynamic>;
+      final importedData = SystemConfigurationCodec.fromJson(dataMap);
 
-    final validationError = _validateConfigurationData(
-      paymentMethods: importedData.priceConfiguration.types,
-      measurementUnits: importedData.priceConfiguration.measurementUnits,
-      reportConfiguration: importedData.priceConfiguration.reportConfiguration,
-    );
-    if (validationError != null) {
-      throw FormatException(validationError);
-    }
-
-    final normalizedData = SystemConfiguration(
-      registrationDate: importedData.registrationDate,
-      lastUpdatedDate: DateTime.now(),
-      productCategories: List<String>.from(importedData.productCategories),
-      priceConfiguration: PriceConfiguration(
-        types: importedData.priceConfiguration.types.toSet().toList(),
-        measurementUnits: _normalizeUnits(
-          importedData.priceConfiguration.measurementUnits,
-        ),
+      final validationError = _validateConfigurationData(
+        paymentMethods: importedData.priceConfiguration.types,
+        measurementUnits: importedData.priceConfiguration.measurementUnits,
         reportConfiguration:
             importedData.priceConfiguration.reportConfiguration,
-      ),
-      systemUserData: importedData.systemUserData,
-    );
+      );
+      if (validationError != null) {
+        return ResultStatus.error(validationError);
+      }
 
-    await _systemDao.saveSystemConfiguration(normalizedData);
-    return normalizedData;
+      final normalizedData = SystemConfiguration(
+        registrationDate: importedData.registrationDate,
+        lastUpdatedDate: DateTime.now(),
+        productCategories: List<String>.from(importedData.productCategories),
+        priceConfiguration: PriceConfiguration(
+          types: importedData.priceConfiguration.types.toSet().toList(),
+          measurementUnits: _normalizeUnits(
+            importedData.priceConfiguration.measurementUnits,
+          ),
+          reportConfiguration:
+              importedData.priceConfiguration.reportConfiguration,
+        ),
+        systemUserData: importedData.systemUserData,
+      );
+
+      await _systemDao.saveSystemConfiguration(normalizedData);
+      return ResultStatus.success(normalizedData);
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(e, contexto: 'Falha ao importar configuração'),
+      );
+    }
   }
 
   @override
-  Future<SystemConfiguration> resetToDefaultConfiguration() async {
-    final defaultConfiguration = _createDefaultConfiguration();
-    await _systemDao.saveSystemConfiguration(defaultConfiguration);
-    return defaultConfiguration;
+  Future<ResultStatus<SystemConfiguration, String>>
+  resetToDefaultConfiguration() async {
+    try {
+      final defaultConfiguration = _createDefaultConfiguration();
+      await _systemDao.saveSystemConfiguration(defaultConfiguration);
+      return ResultStatus.success(defaultConfiguration);
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(
+          e,
+          contexto: 'Falha ao restaurar configuração padrão',
+        ),
+      );
+    }
   }
 
   @override
-  Future<void> saveSystemConfiguration(SystemConfiguration data) {
-    return _systemDao.saveSystemConfiguration(data);
+  Future<ResultStatus<bool, String>> saveSystemConfiguration(
+    SystemConfiguration data,
+  ) async {
+    try {
+      await _systemDao.saveSystemConfiguration(data);
+      return ResultStatus.success(true);
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(e, contexto: 'Falha ao salvar configuração'),
+      );
+    }
   }
 
   SystemConfiguration _createDefaultConfiguration() {

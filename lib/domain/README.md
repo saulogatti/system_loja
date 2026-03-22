@@ -186,26 +186,27 @@ Crie um novo serviço quando:
 
 ### Tratamento de Erros
 
-Serviços devem:
-1. Capturar exceções específicas quando possível
-2. Retornar tipos de resultado explícitos (evite lançar exceções para controle de fluxo)
-3. Logar erros quando apropriado
+Repositórios e serviços devem:
+1. Usar `try/catch` internamente — **nunca** relançar exceções para BLoC/Cubit
+2. Retornar `ResultStatus<R, String>` com mensagens amigáveis via `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`)
+3. Logar erros quando apropriado (via `LoggerClassMixin` ou similar)
 4. Fornecer mensagens de erro claras em português
 
-Exemplo:
+Exemplo (repositório):
 ```dart
-Future<ServiceResult> metodo() async {
+Future<ResultStatus<Customer, String>> buscar(int id) async {
   try {
-    // Operação
-    return ServiceResult(isSuccess: true, message: 'Sucesso');
+    final row = await _dao.getById(id);
+    return ResultStatus.success(row!.toCustomer());
   } catch (e) {
-    return ServiceResult(
-      isSuccess: false, 
-      message: 'Erro ao processar: ${e.toString()}'
+    return ResultStatus.error(
+      mensagemErroRepositorio(e, contexto: 'Falha ao buscar cliente'),
     );
   }
 }
 ```
+
+A camada de apresentação **não** envolve chamadas ao repositório em `try/catch`; usa `when` ou `switch` no `ResultStatus`.
 
 ## Contribuindo
 

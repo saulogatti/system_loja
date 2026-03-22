@@ -3,8 +3,10 @@ import 'package:system_loja/core/constants/cache_keys.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_settings_service.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
-import 'package:system_loja/data/entry/configuration_repository_cache.dart';
+import 'package:system_loja/data/entry/app_settings_entry.dart';
+import 'package:system_loja/data/entry/configuration_cache_entry.dart';
 
 import '../../core/settings/app_settings.dart';
 
@@ -15,42 +17,50 @@ import '../../core/settings/app_settings.dart';
 class ConfigurationRepository
     with LoggerClassMixin
     implements IConfigurationRepository {
-  /// Configuração atual do sistema
   AppSettings _configuracao = AppSettings.createDefaultSettings();
   final ILogRepository _logRepository;
   final ISettingsService _settingsService;
+  final CacheManager _cache;
   ConfigurationRepository({
     required ILogRepository logRepository,
     required ISettingsService settingsService,
+    required CacheManager cache,
   }) : _logRepository = logRepository,
+       _cache = cache,
        _settingsService = settingsService;
 
-  CacheManager get _cache => CacheManager.instance;
-
-  /// Limpa todos os dados do sistema
-  ///
-  /// Remove todos os clientes, produtos, notas fiscais e logs.
-  /// Mantém as configurações atuais.
   @override
-  Future<AppSettings> clearAllData() async {
-    await _cache.clearAll();
-
-    logInfo('Todos os dados foram limpos com sucesso');
-    await _salvarDados();
-    return _configuracao;
+  Future<ResultStatus<AppSettings, String>> clearAllData() async {
+    try {
+      await _cache.clearAll();
+      logInfo('Todos os dados foram limpos com sucesso');
+      await _salvarDados();
+      return ResultStatus.success(_configuracao);
+    } catch (e, stackTrace) {
+      logError('Erro ao limpar dados: $e', stackTrace);
+      return ResultStatus.error('Erro ao limpar todos os dados do sistema.');
+    }
   }
 
   @override
-  Future<AppSettings> clearOldLogs() async {
-    final int diasManterLogs = _configuracao.diasManterLogs;
-    if (diasManterLogs > 0) {
-      final DateTime dataLimite = DateTime.now().subtract(
-        Duration(days: diasManterLogs),
-      );
-      await _logRepository.clearOldLogs(dataLimite);
+  Future<ResultStatus<AppSettings, String>> clearOldLogs() async {
+    try {
+      final int diasManterLogs = _configuracao.diasManterLogs;
+      if (diasManterLogs > 0) {
+        final DateTime dataLimite = DateTime.now().subtract(
+          Duration(days: diasManterLogs),
+        );
+        final logResult = await _logRepository.clearOldLogs(dataLimite);
+        if (logResult.hasError) {
+          return ResultStatus.error(logResult.asError);
+        }
+      }
+      await _salvarDados();
+      return ResultStatus.success(_configuracao);
+    } catch (e, stackTrace) {
+      logError('Erro ao limpar logs antigos: $e', stackTrace);
+      return ResultStatus.error('Erro ao limpar logs antigos.');
     }
-    await _salvarDados();
-    return _configuracao;
   }
 
   /// Realiza backup dos dados do sistema
@@ -58,95 +68,106 @@ class ConfigurationRepository
   /// Cria uma cópia dos arquivos JSON em um diretório de backup
   /// com timestamp.
   @override
-  Future<AppSettings> createBackup(String directoryPath) async {
+  Future<ResultStatus<AppSettings, String>> createBackup(
+    String directoryPath,
+  ) async {
     try {
       final backupFiles = await _cache.createBackup(directoryPath);
+      if (!backupFiles) {
+        return ResultStatus.error(
+          'Não foi possível concluir o backup no diretório selecionado.',
+        );
+      }
 
-      logInfo('Backup realizado com sucesso: $backupFiles arquivos copiados');
-      return _configuracao;
+      logInfo('Backup realizado com sucesso: diretório $directoryPath');
+      return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
       logError('Erro ao realizar backup: $e', stackTrace);
-      return _configuracao;
+      return ResultStatus.error('Erro ao realizar backup.');
     }
   }
 
-  /// Carrega a configuração atual do sistema
   @override
-  Future<AppSettings> loadConfiguration() async {
-    await _carregarDados();
-    return _configuracao;
+  Future<ResultStatus<AppSettings, String>> loadConfiguration() async {
+    try {
+      await _carregarDados();
+      return ResultStatus.success(_configuracao);
+    } catch (e, stackTrace) {
+      logError('Erro ao carregar configurações: $e', stackTrace);
+      return ResultStatus.error('Erro ao carregar configurações do sistema.');
+    }
   }
 
-  /// Restaura configurações para valores padrão
   @override
-  Future<AppSettings> resetToDefaults() async {
-    _configuracao = AppSettings.createDefaultSettings();
-    await _salvarDados();
-    logInfo('Configurações restauradas para padrão');
-    return _configuracao;
+  Future<ResultStatus<AppSettings, String>> resetToDefaults() async {
+    try {
+      _configuracao = AppSettings.createDefaultSettings();
+      await _salvarDados();
+      logInfo('Configurações restauradas para padrão');
+      return ResultStatus.success(_configuracao);
+    } catch (e, stackTrace) {
+      logError('Erro ao restaurar configurações padrão: $e', stackTrace);
+      return ResultStatus.error('Erro ao restaurar configurações padrão.');
+    }
   }
 
   /// Restaura um backup das configurações e dados do sistema.
   ///
   /// Após restaurar, recarrega as configurações para refletir o conteúdo
-  /// do backup restaurado. Em caso de falha, a exceção é relançada para
-  /// que a camada de apresentação possa tratá-la adequadamente.
+  /// do backup restaurado. Em caso de falha, retorna erro para a
+  /// camada de apresentação tratar de forma padronizada.
   @override
-  Future<AppSettings> restoreBackup(String direBackup) async {
+  Future<ResultStatus<AppSettings, String>> restoreBackup(
+    String direBackup,
+  ) async {
     try {
       await _cache.restoreBackupFrom(direBackup);
       await _carregarDados();
-
       logInfo('Restauração de backup realizada com sucesso');
-      return _configuracao;
+      return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
       logError('Erro ao restaurar backup: $e', stackTrace);
-      rethrow;
+      return ResultStatus.error('Erro ao restaurar backup.');
     }
   }
 
-  /// Atualiza a configuração do sistema
-  ///
-  /// Salva automaticamente após atualizar.
   @override
-  Future<AppSettings> updateAppSettings(AppSettings novaConfiguracao) async {
-    _configuracao = novaConfiguracao;
-    await _salvarDados();
-    _settingsService.updateSettings(
-      novaConfiguracao.corPrimaria,
-      novaConfiguracao.temaEscuro,
-    );
-    logInfo('Configuração atualizada com sucesso');
-    return _configuracao;
+  Future<ResultStatus<AppSettings, String>> updateAppSettings(
+    AppSettings novaConfiguracao,
+  ) async {
+    try {
+      _configuracao = novaConfiguracao;
+      await _salvarDados();
+      _settingsService.updateSettings(
+        novaConfiguracao.corPrimaria,
+        novaConfiguracao.temaEscuro,
+      );
+      logInfo('Configuração atualizada com sucesso');
+      return ResultStatus.success(_configuracao);
+    } catch (e, stackTrace) {
+      logError('Erro ao atualizar configurações: $e', stackTrace);
+      return ResultStatus.error('Erro ao salvar configurações.');
+    }
   }
 
   /// Carrega dados do arquivo JSON
   Future<void> _carregarDados() async {
-    try {
-      final file = await _cache.get<ConfigurationRepositoryCache>(
-        keyConfigurationRepositoryCache,
-        ConfigurationRepositoryCache.fromJson,
-      );
-      if (file != null) {
-        _configuracao = file.configuracao.toAppSettings();
-        logInfo('Configurações carregadas com sucesso');
-      } else {
-        _configuracao = AppSettings.createDefaultSettings();
-      }
-      _settingsService.updateSettings(
-        _configuracao.corPrimaria,
-        _configuracao.temaEscuro,
-      );
-    } catch (e, stackTrace) {
-      logError('Erro ao carregar configurações: $e', stackTrace);
+    final file = await _cache.get<ConfigurationCacheEntry>(
+      keyConfigurationRepositoryCache,
+      ConfigurationCacheEntry.fromJson,
+    );
+    if (file != null) {
+      _configuracao = file.configuracao.toAppSettings();
+      logInfo('Configurações carregadas com sucesso');
+    } else {
       _configuracao = AppSettings.createDefaultSettings();
     }
+    _settingsService.updateSettings(
+      _configuracao.corPrimaria,
+      _configuracao.temaEscuro,
+    );
   }
 
-  /// Verifica se um log é recente baseado na data limite
-  ///
-  /// Retorna true se o log deve ser mantido, false se deve ser removido.
-  /// Mantém logs com formato inválido por segurança.
   // ignore: unused_element
   bool _isLogRecent(Object log, DateTime dataLimite) {
     try {
@@ -154,15 +175,14 @@ class ConfigurationRepository
         final dataLog = DateTime.parse(log['data_hora'] as String);
         return dataLog.isAfter(dataLimite);
       }
-      return true; // Mantém logs com formato inválido
+      return true;
     } catch (e) {
-      return true; // Mantém logs com data inválida
+      return true;
     }
   }
 
-  /// Salva dados no arquivo JSON
   Future<void> _salvarDados() async {
-    final file = ConfigurationRepositoryCache(
+    final file = ConfigurationCacheEntry(
       configuracao: AppSettingsEntry.fromAppSettings(_configuracao),
     );
     await _cache.set(file);

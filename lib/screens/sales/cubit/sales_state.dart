@@ -20,14 +20,12 @@ sealed class SalesState with _$SalesState {
     required Map<int, Company> companies,
     required Map<int, Invoice> invoices,
   }) = SalesLoadedAll;
-  factory SalesState.loadedCustomers({required Map<int, Customer> customers}) =
-      SalesLoadedCustomers;
+  factory SalesState.loadedCustomers({required Map<int, Customer> customers}) = SalesLoadedCustomers;
   factory SalesState.loading() = SalesLoading;
 
   factory SalesState.loadingProducts() = SalesLoadingProducts;
 
-  factory SalesState.loadProductsFailure({required String message}) =
-      SalesLoadProductsFailure;
+  factory SalesState.loadProductsFailure({required String message}) = SalesLoadProductsFailure;
 
   factory SalesState.saved({required Map<int, Invoice> items}) = SalesSaved;
 }

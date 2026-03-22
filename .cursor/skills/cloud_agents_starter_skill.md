@@ -85,7 +85,7 @@ Fluxo:
 Critério de pronto:
 - Testes de DAO passam e operações CRUD/consulta principais continuam consistentes.
 
-### 3) `lib/core/repository` e interfaces
+### 3) `lib/domain/repository` e interfaces (`lib/core/interface`)
 
 Use quando alterar regras de negócio, retornos `ResultStatus`, integração entre
 camadas e contratos.
@@ -95,6 +95,8 @@ Fluxo:
    - `flutter test test/sql_data_storage_test.dart`
    - `flutter test test/product_exception_test.dart`
 2. Validar que erros retornam por `ResultStatus` (não exceções entre camadas).
+   Repositórios usam `try/catch` internamente e devolvem
+   `ResultStatus.error(mensagemErroRepositorio(...))` — nunca relançam.
 
 Critério de pronto:
 - Sem regressão de regra de negócio e sem quebra de contrato entre repository/DAO.

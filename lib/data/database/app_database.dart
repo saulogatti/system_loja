@@ -103,7 +103,7 @@ class AppDatabase extends _$AppDatabase {
     },
   );
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
   // Dentro da sua classe de banco (Database)
   /// Cria um backup manual do banco de dados usando o comando `VACUUM INTO`.
   ///

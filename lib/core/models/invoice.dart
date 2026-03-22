@@ -25,7 +25,9 @@ class Invoice extends DefaultObject {
       );
     }
     if (data.companyId != null) {
-      buffer.writeln('Company ID: ${data.companyId}');
+      buffer.writeln(
+        'Company: ${data.companyName} (CNPJ: ${data.companyCnpj})',
+      );
     }
     buffer.writeln('Total Value: R\$ ${data.totalValue.toStringAsFixed(2)}');
     buffer.writeln('Payment Method: ${data.paymentMethod}');
@@ -53,11 +55,21 @@ class InvoiceData {
   final String? customerName;
   final String? customerCpf;
   final int? companyId;
+  final String? companyName;
+  final String? companyCnpj;
   final List<InvoiceItem> items;
   final double totalValue;
   final String paymentMethod;
   final DateTime issueDate;
   final InvoiceType type;
+
+  /// Nome de exibição unificado (cliente ou empresa).
+  String get personDisplayName =>
+      customerName ?? companyName ?? '';
+
+  /// Documento de exibição unificado (CPF ou CNPJ).
+  String get personDocument =>
+      customerCpf ?? companyCnpj ?? '';
 
   InvoiceData({
     required this.invoiceNumber,
@@ -67,6 +79,8 @@ class InvoiceData {
     this.customerName,
     this.customerCpf,
     this.companyId,
+    this.companyName,
+    this.companyCnpj,
     DateTime? issueDate,
     this.type = InvoiceType.exit,
   }) : totalValue = items.fold(0.0, (sum, item) => sum + item.totalValue),
