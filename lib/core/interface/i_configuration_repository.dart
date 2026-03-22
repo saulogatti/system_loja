@@ -1,4 +1,5 @@
 import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 
 /// Interface que define o contrato para operações de configuração do sistema.
 ///
@@ -11,8 +12,11 @@ import 'package:system_loja/core/settings/app_settings.dart';
 /// Exemplo de uso:
 /// ```dart
 /// final repository = appInjection.get<ConfigurationRepository>();
-/// final novasConfigs = await repository.loadConfiguration();
-/// print('Tema escuro: ${novasConfigs.darkMode}');
+/// final resultado = await repository.loadConfiguration();
+/// resultado.when(
+///   onSuccess: (configs) => print('Tema escuro: ${configs.temaEscuro}'),
+///   onError: (erro) => print('Falha: $erro'),
+/// );
 /// ```
 ///
 /// Veja também:
@@ -24,16 +28,16 @@ abstract interface class IConfigurationRepository {
   /// antes usando [createBackup].
   ///
   /// Retorna:
-  /// - [AppSettings] atualizado após limpeza
-  Future<AppSettings> clearAllData();
+  /// - [ResultStatus] com [AppSettings] atualizado após limpeza
+  Future<ResultStatus<AppSettings, String>> clearAllData();
 
   /// Remove logs antigos do sistema baseado na configuração de retenção.
   ///
   /// A data de corte é determinada pelas configurações da aplicação.
   ///
   /// Retorna:
-  /// - [AppSettings] atualizado após limpeza
-  Future<AppSettings> clearOldLogs();
+  /// - [ResultStatus] com [AppSettings] atualizado após limpeza
+  Future<ResultStatus<AppSettings, String>> clearOldLogs();
 
   /// Cria um backup completo do sistema no diretório especificado.
   ///
@@ -43,19 +47,16 @@ abstract interface class IConfigurationRepository {
   /// - [directoryPath]: Caminho do diretório onde o backup será salvo
   ///
   /// Retorna:
-  /// - [AppSettings] atualizado após criação do backup
-  ///
-  /// Lança:
-  /// - Exception se o diretório não existir ou não tiver permissão de escrita
-  Future<AppSettings> createBackup(String directoryPath);
+  /// - [ResultStatus] com [AppSettings] após criação do backup
+  Future<ResultStatus<AppSettings, String>> createBackup(String directoryPath);
 
   /// Carrega as configurações salvas da aplicação.
   ///
   /// Se nenhuma configuração existir, retorna configurações padrão.
   ///
   /// Retorna:
-  /// - [AppSettings] com as configurações carregadas
-  Future<AppSettings> loadConfiguration();
+  /// - [ResultStatus] com [AppSettings] carregado
+  Future<ResultStatus<AppSettings, String>> loadConfiguration();
 
   /// Restaura todas as configurações para os valores padrão.
   ///
@@ -63,8 +64,8 @@ abstract interface class IConfigurationRepository {
   /// reseta preferências de tema, idioma, etc.
   ///
   /// Retorna:
-  /// - [AppSettings] com valores padrão
-  Future<AppSettings> resetToDefaults();
+  /// - [ResultStatus] com [AppSettings] com valores padrão
+  Future<ResultStatus<AppSettings, String>> resetToDefaults();
 
   /// Restaura um backup previamente criado.
   ///
@@ -74,11 +75,8 @@ abstract interface class IConfigurationRepository {
   /// - [direBackup]: Caminho do diretório contendo o backup
   ///
   /// Retorna:
-  /// - [AppSettings] atualizado após restauração
-  ///
-  /// Lança:
-  /// - Exception se o backup for inválido ou corrompido
-  Future<AppSettings> restoreBackup(String direBackup);
+  /// - [ResultStatus] com [AppSettings] atualizado após restauração
+  Future<ResultStatus<AppSettings, String>> restoreBackup(String direBackup);
 
   /// Atualiza as configurações da aplicação.
   ///
@@ -88,6 +86,8 @@ abstract interface class IConfigurationRepository {
   /// - [novaConfiguracao]: Objeto AppSettings com novas configurações
   ///
   /// Retorna:
-  /// - [AppSettings] após persistência
-  Future<AppSettings> updateAppSettings(AppSettings novaConfiguracao);
+  /// - [ResultStatus] com [AppSettings] após persistência
+  Future<ResultStatus<AppSettings, String>> updateAppSettings(
+    AppSettings novaConfiguracao,
+  );
 }

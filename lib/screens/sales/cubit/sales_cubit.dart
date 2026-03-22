@@ -64,12 +64,43 @@ class SalesCubit extends Cubit<SalesState> {
     final resultSales = await _salesRepository.loadAllSales();
     final result = await _productRepository.fetchProducts();
     final resultMap = await _customerRepository.fetchMappedCustomers();
-    final resultSystem = await _systemRepository.getSystemConfiguration();
     final resultCompanies = await _companyRepository.fetchMappedCompanies();
+    final resultSystem = await _systemRepository.getSystemConfiguration();
+
+    if (resultSales.hasError) {
+      emit(SalesState.error(message: resultSales.asError));
+      return;
+    }
+    if (resultMap.hasError) {
+      emit(
+        SalesState.error(
+          message: 'Erro ao carregar clientes: ${resultMap.asError}',
+        ),
+      );
+      return;
+    }
+    if (resultCompanies.hasError) {
+      emit(
+        SalesState.error(
+          message: 'Erro ao carregar empresas: ${resultCompanies.asError}',
+        ),
+      );
+      return;
+    }
+    if (resultSystem.hasError) {
+      emit(
+        SalesState.error(
+          message:
+              'Erro ao carregar configuração de pagamentos: ${resultSystem.asError}',
+        ),
+      );
+      return;
+    }
+
     final customers = resultMap.asSuccess;
     final invoices = resultSales.asSuccess;
     final companies = resultCompanies.asSuccess;
-    final paymentMethods = resultSystem.priceConfiguration.types;
+    final paymentMethods = resultSystem.asSuccess.priceConfiguration.types;
     switch (result) {
       case ResultSuccess(result: final products):
         emit(

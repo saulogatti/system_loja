@@ -3,12 +3,24 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/domain/repository/configuration_repository.dart';
 import 'package:system_loja/domain/repository/system/log_repository.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  AppSettings expectSuccess(ResultStatus<AppSettings, String> result) {
+    expect(
+      result.isSuccessful,
+      isTrue,
+      reason: result.hasError ? result.asError : null,
+    );
+    return result.asSuccess;
+  }
+
   late ConfigurationRepository manager;
   late String testDataFile;
   late SystemDatabase systemDatabase;
@@ -44,7 +56,7 @@ void main() {
 
   group('ConfiguracaoManager - Operações Básicas', () {
     test('Deve carregar configurações padrão na primeira execução', () async {
-      final config = await manager.loadConfiguration();
+      final config = expectSuccess(await manager.loadConfiguration());
 
       expect(config.notificacoesAtivadas, isTrue);
       expect(config.temaEscuro, isFalse);
@@ -52,16 +64,19 @@ void main() {
     });
 
     test('Deve atualizar configurações com sucesso', () async {
-      final currentConfig = await manager.loadConfiguration();
+      final currentConfig = expectSuccess(await manager.loadConfiguration());
       final novaConfig = currentConfig.copyWith(
         temaEscuro: true,
 
         notificarVendas: false,
       );
 
-      await manager.updateAppSettings(novaConfig);
+      expect(
+        (await manager.updateAppSettings(novaConfig)).isSuccessful,
+        isTrue,
+      );
 
-      final updatedConfig = await manager.loadConfiguration();
+      final updatedConfig = expectSuccess(await manager.loadConfiguration());
 
       expect(updatedConfig.temaEscuro, isTrue);
 
@@ -69,13 +84,16 @@ void main() {
     });
 
     test('Deve persistir configurações após salvar', () async {
-      final currentConfig = await manager.loadConfiguration();
+      final currentConfig = expectSuccess(await manager.loadConfiguration());
       final novaConfig = currentConfig.copyWith(
         limiteEstoqueBaixo: 25,
         frequenciaBackup: 'mensal',
       );
 
-      await manager.updateAppSettings(novaConfig);
+      expect(
+        (await manager.updateAppSettings(novaConfig)).isSuccessful,
+        isTrue,
+      );
 
       // Cria novo manager para verificar persistência
       final manager2 = ConfigurationRepository(
@@ -83,7 +101,7 @@ void main() {
         settingsService: SettingsService.injection(),
       );
 
-      final updatedConfig2 = await manager2.loadConfiguration();
+      final updatedConfig2 = expectSuccess(await manager2.loadConfiguration());
 
       expect(updatedConfig2.limiteEstoqueBaixo, equals(25));
       expect(updatedConfig2.frequenciaBackup, equals('mensal'));
@@ -91,17 +109,20 @@ void main() {
 
     test('Deve restaurar configurações padrão', () async {
       // Primeiro altera as configurações
-      final currentConfig = await manager.loadConfiguration();
+      final currentConfig = expectSuccess(await manager.loadConfiguration());
       final novaConfig = currentConfig.copyWith(
         temaEscuro: true,
         limiteEstoqueBaixo: 50,
       );
-      await manager.updateAppSettings(novaConfig);
+      expect(
+        (await manager.updateAppSettings(novaConfig)).isSuccessful,
+        isTrue,
+      );
 
       // Depois restaura padrão
-      await manager.resetToDefaults();
+      expect((await manager.resetToDefaults()).isSuccessful, isTrue);
 
-      final restoredConfig = await manager.loadConfiguration();
+      final restoredConfig = expectSuccess(await manager.loadConfiguration());
 
       expect(restoredConfig.temaEscuro, isFalse);
       expect(restoredConfig.limiteEstoqueBaixo, equals(10));
@@ -115,9 +136,13 @@ void main() {
       File('data/clientes.json').writeAsStringSync('[]');
       File('data/produtos.json').writeAsStringSync('[]');
 
-      final sucesso = await manager.createBackup('data/backups');
+      final resultado = await manager.createBackup('data/backups');
 
-      expect(sucesso, isTrue);
+      expect(
+        resultado.isSuccessful,
+        isTrue,
+        reason: resultado.hasError ? resultado.asError : null,
+      );
       expect(Directory('data/backups').existsSync(), isTrue);
 
       // Limpa arquivos criados
@@ -126,10 +151,14 @@ void main() {
     });
 
     test('Deve lidar com backup sem arquivos existentes', () async {
-      final sucesso = await manager.createBackup('data/backups');
+      final resultado = await manager.createBackup('data/backups');
 
       // Deve retornar true mesmo sem arquivos para backup
-      expect(sucesso, isTrue);
+      expect(
+        resultado.isSuccessful,
+        isTrue,
+        reason: resultado.hasError ? resultado.asError : null,
+      );
     });
   });
 
@@ -162,9 +191,13 @@ void main() {
           .join(',');
       File('data/logs_atividade.json').writeAsStringSync('[$jsonContent]');
 
-      final sucesso = await manager.clearOldLogs();
+      final resultado = await manager.clearOldLogs();
 
-      expect(sucesso, isTrue);
+      expect(
+        resultado.isSuccessful,
+        isTrue,
+        reason: resultado.hasError ? resultado.asError : null,
+      );
 
       // Limpa arquivo criado
       File('data/logs_atividade.json').deleteSync();
@@ -177,9 +210,13 @@ void main() {
       File('data/produtos.json').writeAsStringSync('[{"id":1}]');
       File('data/usuarios.json').writeAsStringSync('[{"id":1}]');
 
-      final sucesso = await manager.clearAllData();
+      final resultado = await manager.clearAllData();
 
-      expect(sucesso, isTrue);
+      expect(
+        resultado.isSuccessful,
+        isTrue,
+        reason: resultado.hasError ? resultado.asError : null,
+      );
 
       // Verifica que os arquivos foram limpos
       expect(File('data/clientes.json').readAsStringSync(), equals('[]'));
@@ -198,21 +235,21 @@ void main() {
       final frequencias = ['diario', 'semanal', 'mensal'];
 
       for (final freq in frequencias) {
-        final currentConfig = await manager.loadConfiguration();
+        final currentConfig = expectSuccess(await manager.loadConfiguration());
         final config = currentConfig.copyWith(frequenciaBackup: freq);
-        await manager.updateAppSettings(config);
-        final updatedConfig = await manager.loadConfiguration();
+        expect((await manager.updateAppSettings(config)).isSuccessful, isTrue);
+        final updatedConfig = expectSuccess(await manager.loadConfiguration());
         expect(updatedConfig.frequenciaBackup, equals(freq));
       }
     });
 
     test('Deve aceitar limites de estoque baixo válidos', () async {
       final limites = [1, 10, 25, 50];
-      final currentConfig = await manager.loadConfiguration();
+      final currentConfig = expectSuccess(await manager.loadConfiguration());
       for (final limite in limites) {
         final config = currentConfig.copyWith(limiteEstoqueBaixo: limite);
-        await manager.updateAppSettings(config);
-        final updatedConfig = await manager.loadConfiguration();
+        expect((await manager.updateAppSettings(config)).isSuccessful, isTrue);
+        final updatedConfig = expectSuccess(await manager.loadConfiguration());
         expect(updatedConfig.limiteEstoqueBaixo, equals(limite));
       }
     });
@@ -221,10 +258,10 @@ void main() {
       final tempos = [1, 5, 15, 30, 60];
 
       for (final tempo in tempos) {
-        final currentConfig = await manager.loadConfiguration();
+        final currentConfig = expectSuccess(await manager.loadConfiguration());
         final config = currentConfig.copyWith(tempoBloqueioMinutos: tempo);
-        await manager.updateAppSettings(config);
-        final updatedConfig = await manager.loadConfiguration();
+        expect((await manager.updateAppSettings(config)).isSuccessful, isTrue);
+        final updatedConfig = expectSuccess(await manager.loadConfiguration());
         expect(updatedConfig.tempoBloqueioMinutos, equals(tempo));
       }
     });
@@ -251,14 +288,17 @@ void main() {
           permitirMultiplosUsuarios: true,
         );
 
-        await manager.updateAppSettings(configOriginal);
+        expect(
+          (await manager.updateAppSettings(configOriginal)).isSuccessful,
+          isTrue,
+        );
 
         // Cria novo manager para verificar serialização
         final manager2 = ConfigurationRepository(
           logRepository: LogRepository(logDao: systemDatabase.logDao),
           settingsService: SettingsService.injection(),
         );
-        final configuracao = await manager2.loadConfiguration();
+        final configuracao = expectSuccess(await manager2.loadConfiguration());
         expect(
           configuracao.notificacoesAtivadas,
           equals(configOriginal.notificacoesAtivadas),

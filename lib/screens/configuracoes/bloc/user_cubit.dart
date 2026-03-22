@@ -17,82 +17,79 @@ class UserCubit extends Cubit<UsuarioState> {
     required String senha,
     required AuthorizationLevel nivelPermissao,
   }) async {
-    // Lógica para adicionar usuário
-    try {
-      // Exemplo de ID
-      final usuario = User(
-        name: nome,
-        email: email,
-        passwordHash: senha.hashPassword(),
+    final usuario = User(
+      name: nome,
+      email: email,
+      passwordHash: senha.hashPassword(),
+      permission: nivelPermissao.value,
+    );
 
-        permission: nivelPermissao.value,
-      );
-
-      final ResultStatus<bool, String> executionResult = await _userRepository
-          .adicionarUsuario(usuario);
-      executionResult.when(
-        onSuccess: (sucess) {
-          emit(UsuarioState.usuarioAdicionado(usuario, true));
-        },
-        onError: (resultError) {
-          emit(UsuarioState.loadFailure(errorMessage: resultError));
-        },
-      );
-    } catch (e) {
-      emit(
-        UsuarioState.loadFailure(errorMessage: 'Erro ao adicionar usuário: $e'),
-      );
-    }
+    final ResultStatus<bool, String> executionResult = await _userRepository
+        .adicionarUsuario(usuario);
+    executionResult.when(
+      onSuccess: (sucess) {
+        if (!sucess) {
+          emit(
+            UsuarioState.loadFailure(
+              errorMessage: 'Não foi possível adicionar o usuário.',
+            ),
+          );
+          return;
+        }
+        emit(UsuarioState.usuarioAdicionado(usuario, true));
+      },
+      onError: (resultError) {
+        emit(UsuarioState.loadFailure(errorMessage: resultError));
+      },
+    );
   }
 
   Future<void> atualizarUsuario({required User usuarioAtualizado}) async {
-    try {
-      final ResultStatus<bool, String> resultAdd = await _userRepository
-          .atualizarUsuario(usuarioAtualizado);
-      switch (resultAdd) {
-        case ResultSuccess(result: final sucesso):
-          if (sucesso) {
-            emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
-          }
-        case ResultError(:final resultError):
+    final ResultStatus<bool, String> resultAdd = await _userRepository
+        .atualizarUsuario(usuarioAtualizado);
+    switch (resultAdd) {
+      case ResultSuccess(result: final sucesso):
+        if (sucesso) {
+          emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
+        } else {
           emit(
             UsuarioState.loadFailure(
-              errorMessage: 'Falha ao atualizar usuário: $resultError',
+              errorMessage: 'Não foi possível atualizar o usuário.',
             ),
           );
-      }
-    } catch (e) {
-      emit(
-        UsuarioState.loadFailure(errorMessage: 'Erro ao atualizar usuário: $e'),
-      );
+        }
+      case ResultError(:final resultError):
+        emit(
+          UsuarioState.loadFailure(
+            errorMessage: 'Falha ao atualizar usuário: $resultError',
+          ),
+        );
     }
   }
 
   Future<void> loadUsuarios() async {
-    try {
-      final usuarios = await _userRepository.obterTodosUsuarios();
-      emit(UsuarioState.loadSuccess(usuarios: usuarios));
-    } catch (e) {
-      emit(
-        UsuarioState.loadFailure(errorMessage: 'Erro ao carregar usuários: $e'),
-      );
+    final usuariosResult = await _userRepository.obterTodosUsuarios();
+    switch (usuariosResult) {
+      case ResultSuccess(result: final usuarios):
+        emit(UsuarioState.loadSuccess(usuarios: usuarios));
+      case ResultError(:final resultError):
+        emit(UsuarioState.loadFailure(errorMessage: resultError));
     }
   }
 
   Future<void> removerUsuario(int id) async {
-    try {
-      final bool sucesso = await _userRepository.removerUsuario(id);
-      if (sucesso) {
-        emit(UsuarioState.usuarioRemovido(id));
-      } else {
-        emit(
-          UsuarioState.loadFailure(errorMessage: 'Falha ao remover usuário.'),
-        );
-      }
-    } catch (e) {
-      emit(
-        UsuarioState.loadFailure(errorMessage: 'Erro ao remover usuário: $e'),
-      );
+    final result = await _userRepository.removerUsuario(id);
+    switch (result) {
+      case ResultSuccess(result: final sucesso):
+        if (sucesso) {
+          emit(UsuarioState.usuarioRemovido(id));
+        } else {
+          emit(
+            UsuarioState.loadFailure(errorMessage: 'Falha ao remover usuário.'),
+          );
+        }
+      case ResultError(:final resultError):
+        emit(UsuarioState.loadFailure(errorMessage: resultError));
     }
   }
 }
