@@ -1,93 +1,37 @@
 import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 
 /// Interface que define o contrato para operações de configuração do sistema.
 ///
 /// Esta interface gerencia as configurações globais da aplicação,
 /// incluindo backup/restore, limpeza de dados e reset de configurações.
 ///
-/// Todas as operações retornam [AppSettings] atualizado após a execução,
-/// permitindo atualização imediata da UI.
-///
-/// Exemplo de uso:
-/// ```dart
-/// final repository = appInjection.get<ConfigurationRepository>();
-/// final novasConfigs = await repository.loadConfiguration();
-/// print('Tema escuro: ${novasConfigs.darkMode}');
-/// ```
+/// Todas as operações retornam [ResultStatus] com [AppSettings] em sucesso
+/// e mensagem de erro em texto — sem propagar exceções para a UI.
 ///
 /// Veja também:
 /// - [AppSettings] - modelo de configurações da aplicação
 abstract interface class IConfigurationRepository {
   /// Limpa todos os dados do sistema (clientes, produtos, vendas, etc.).
-  ///
-  /// **ATENÇÃO**: Esta operação é irreversível. Considere criar um backup
-  /// antes usando [createBackup].
-  ///
-  /// Retorna:
-  /// - [AppSettings] atualizado após limpeza
-  Future<AppSettings> clearAllData();
+  Future<ResultStatus<AppSettings, String>> clearAllData();
 
-  /// Remove logs antigos do sistema baseado na configuração de retenção.
-  ///
-  /// A data de corte é determinada pelas configurações da aplicação.
-  ///
-  /// Retorna:
-  /// - [AppSettings] atualizado após limpeza
-  Future<AppSettings> clearOldLogs();
+  /// Remove logs antigos conforme retenção configurada.
+  Future<ResultStatus<AppSettings, String>> clearOldLogs();
 
-  /// Cria um backup completo do sistema no diretório especificado.
-  ///
-  /// O backup inclui banco de dados, configurações e logs.
-  ///
-  /// Parâmetros:
-  /// - [directoryPath]: Caminho do diretório onde o backup será salvo
-  ///
-  /// Retorna:
-  /// - [AppSettings] atualizado após criação do backup
-  ///
-  /// Lança:
-  /// - Exception se o diretório não existir ou não tiver permissão de escrita
-  Future<AppSettings> createBackup(String directoryPath);
+  /// Cria backup completo no diretório informado.
+  Future<ResultStatus<AppSettings, String>> createBackup(String directoryPath);
 
-  /// Carrega as configurações salvas da aplicação.
-  ///
-  /// Se nenhuma configuração existir, retorna configurações padrão.
-  ///
-  /// Retorna:
-  /// - [AppSettings] com as configurações carregadas
-  Future<AppSettings> loadConfiguration();
+  /// Carrega configurações salvas (ou padrão se não houver / em caso recuperável).
+  Future<ResultStatus<AppSettings, String>> loadConfiguration();
 
-  /// Restaura todas as configurações para os valores padrão.
-  ///
-  /// Mantém os dados do sistema (clientes, produtos, vendas), mas
-  /// reseta preferências de tema, idioma, etc.
-  ///
-  /// Retorna:
-  /// - [AppSettings] com valores padrão
-  Future<AppSettings> resetToDefaults();
+  /// Restaura preferências para valores padrão (mantém dados de negócio).
+  Future<ResultStatus<AppSettings, String>> resetToDefaults();
 
-  /// Restaura um backup previamente criado.
-  ///
-  /// **ATENÇÃO**: Esta operação substitui todos os dados atuais.
-  ///
-  /// Parâmetros:
-  /// - [direBackup]: Caminho do diretório contendo o backup
-  ///
-  /// Retorna:
-  /// - [AppSettings] atualizado após restauração
-  ///
-  /// Lança:
-  /// - Exception se o backup for inválido ou corrompido
-  Future<AppSettings> restoreBackup(String direBackup);
+  /// Restaura dados a partir de um backup existente.
+  Future<ResultStatus<AppSettings, String>> restoreBackup(String direBackup);
 
-  /// Atualiza as configurações da aplicação.
-  ///
-  /// Persiste as novas configurações e retorna o objeto atualizado.
-  ///
-  /// Parâmetros:
-  /// - [novaConfiguracao]: Objeto AppSettings com novas configurações
-  ///
-  /// Retorna:
-  /// - [AppSettings] após persistência
-  Future<AppSettings> updateAppSettings(AppSettings novaConfiguracao);
+  /// Persiste e aplica novas configurações.
+  Future<ResultStatus<AppSettings, String>> updateAppSettings(
+    AppSettings novaConfiguracao,
+  );
 }

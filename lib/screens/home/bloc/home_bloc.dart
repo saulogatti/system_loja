@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 
 part 'home_bloc.freezed.dart';
 part 'home_event.dart';
@@ -21,9 +22,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     emit(const HomeLoading());
-    final systemConfiguration = await _systemRepository
-        .getSystemConfiguration();
-    emit(HomeLoaded(systemConfiguration.systemUserData));
+    final result = await _systemRepository.getSystemConfiguration();
+    switch (result) {
+      case ResultSuccess(:final result):
+        emit(HomeLoaded(result.systemUserData));
+      case ResultError(:final resultError):
+        emit(HomeError(resultError));
+    }
   }
 
   FutureOr<void> _onSaveSystemUserData(
@@ -31,10 +36,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     emit(const HomeLoading());
-    final systemConfiguration = await _systemRepository
-        .getSystemConfiguration();
-    systemConfiguration.systemUserData = event.systemUserData;
-    await _systemRepository.saveSystemConfiguration(systemConfiguration);
-    emit(HomeSaved(systemConfiguration.systemUserData));
+    final loadResult = await _systemRepository.getSystemConfiguration();
+    switch (loadResult) {
+      case ResultSuccess(:final result):
+        final systemConfiguration = result;
+        systemConfiguration.systemUserData = event.systemUserData;
+        final saveResult = await _systemRepository.saveSystemConfiguration(
+          systemConfiguration,
+        );
+        switch (saveResult) {
+          case ResultSuccess():
+            emit(HomeSaved(systemConfiguration.systemUserData));
+          case ResultError(:final resultError):
+            emit(HomeError(resultError));
+        }
+      case ResultError(:final resultError):
+        emit(HomeError(resultError));
+    }
   }
 }
