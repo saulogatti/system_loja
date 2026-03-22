@@ -66,10 +66,37 @@ class SalesCubit extends Cubit<SalesState> {
     final resultMap = await _customerRepository.fetchMappedCustomers();
     final resultSystem = await _systemRepository.getSystemConfiguration();
     final resultCompanies = await _companyRepository.fetchMappedCompanies();
+
+    String? primeiroErro;
+    switch (resultSales) {
+      case ResultError(:final resultError):
+        primeiroErro = resultError;
+      case ResultSuccess():
+        break;
+    }
+    primeiroErro ??= switch (resultMap) {
+      ResultError(:final resultError) => resultError,
+      ResultSuccess() => null,
+    };
+    primeiroErro ??= switch (resultSystem) {
+      ResultError(:final resultError) => resultError,
+      ResultSuccess() => null,
+    };
+    primeiroErro ??= switch (resultCompanies) {
+      ResultError(:final resultError) => resultError,
+      ResultSuccess() => null,
+    };
+
+    if (primeiroErro != null) {
+      emit(SalesState.loadProductsFailure(message: primeiroErro));
+      return;
+    }
+
     final customers = resultMap.asSuccess;
     final invoices = resultSales.asSuccess;
     final companies = resultCompanies.asSuccess;
-    final paymentMethods = resultSystem.priceConfiguration.types;
+    final paymentMethods = resultSystem.asSuccess.priceConfiguration.types;
+
     switch (result) {
       case ResultSuccess(result: final products):
         emit(

@@ -1,4 +1,5 @@
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 
 /// Interface que define o contrato para operações de configuração do sistema.
 ///
@@ -8,41 +9,26 @@ import 'package:system_loja/core/models/system_config/system_configuration.dart'
 /// Diferente de [IConfigurationRepository] que gerencia preferências do
 /// usuário, esta interface lida com configurações do próprio sistema.
 ///
-/// Exemplo de uso:
-/// ```dart
-/// final repository = appInjection.get<SystemRepository>();
-///
-/// final config = await repository.getSystemConfiguration();
-/// if (config != null) {
-///   print('Versão: ${config.version}');
-/// }
-/// ```
+/// Todas as operações retornam [ResultStatus] com mensagem de erro em texto
+/// para a camada de apresentação — sem propagar exceções.
 ///
 /// Veja também:
 /// - [SystemConfiguration] - modelo de configuração do sistema
 /// - [IConfigurationRepository] - para configurações de usuário
 abstract interface class ISystemRepository {
-  /// Retorna as configurações atuais do sistema.
-  ///
-  /// Retorna null se nenhuma configuração foi inicializada ainda.
-  ///
-  /// Retorna:
-  /// - [SystemConfiguration] com as configurações ou null se não existir
-  Future<SystemConfiguration> getSystemConfiguration();
+  /// Retorna as configurações atuais do sistema (cria padrão se necessário).
+  Future<ResultStatus<SystemConfiguration, String>> getSystemConfiguration();
 
   /// Importa configuração a partir de JSON e persiste.
-  ///
-  /// Faz parse, valida, normaliza e salva. Lança exceção com mensagem
-  /// apropriada em caso de JSON inválido ou dados inválidos.
-  Future<SystemConfiguration> importConfigurationFromJson(String jsonContent);
+  Future<ResultStatus<SystemConfiguration, String>> importConfigurationFromJson(
+    String jsonContent,
+  );
 
-  Future<SystemConfiguration> resetToDefaultConfiguration();
+  Future<ResultStatus<SystemConfiguration, String>>
+  resetToDefaultConfiguration();
 
   /// Salva as configurações do sistema.
-  ///
-  /// Persiste as configurações técnicas do sistema para uso futuro.
-  ///
-  /// Parâmetros:
-  /// - [data]: Objeto SystemConfiguration com as configurações a serem salvas
-  Future<void> saveSystemConfiguration(SystemConfiguration data);
+  Future<ResultStatus<void, String>> saveSystemConfiguration(
+    SystemConfiguration data,
+  );
 }
