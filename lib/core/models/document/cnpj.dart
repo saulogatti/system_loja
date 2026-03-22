@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/exceptions/validation_exception.dart';
 import 'package:system_loja/core/models/document/document.dart';
 
@@ -67,14 +66,4 @@ class Cnpj extends Document {
 
     return null;
   }
-}
-
-class CnpjConverter extends JsonConverter<Cnpj, String> {
-  const CnpjConverter();
-
-  @override
-  Cnpj fromJson(String json) => Cnpj(json);
-
-  @override
-  String toJson(Cnpj value) => value.value;
 }
