@@ -55,7 +55,9 @@
 
     
 <section class="desc markdown">
-  <p>Objeto padrão com ID único.</p>
+  <p>Objeto base para entidades de domínio com ID, data de cadastro e data de atualização.</p>
+<p>Todas as entidades do sistema herdam desta classe para garantir
+rastreabilidade de criação e atualização.</p>
 </section>
 
 
@@ -71,9 +73,11 @@
               <li><a href="../core_models_activity_log/ActivityLog-class.html">ActivityLog</a></li>
               <li><a href="../core_models_category/Category-class.html">Category</a></li>
               <li><a href="../core_models_invoice/Invoice-class.html">Invoice</a></li>
-              <li><a href="../core_models_default_people_data/PeopleData-class.html">PeopleData</a></li>
+              <li><a href="../core_models_person_person/Person-class.html">Person</a></li>
+              <li><a href="../core_models_default_people_data/PersonDefault-class.html">PersonDefault</a></li>
               <li><a href="../core_models_system_config_price_configuration/PriceConfiguration-class.html">PriceConfiguration</a></li>
               <li><a href="../core_models_product/Product-class.html">Product</a></li>
+              <li><a href="../core_models_system_config_report_configuration/ReportConfiguration-class.html">ReportConfiguration</a></li>
               <li><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></li>
           </ul></dd>
 
@@ -89,7 +93,7 @@
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="DefaultObject.new" class="callable">
-          <span class="name"><a href="../core_models_default_default_object/DefaultObject/DefaultObject.html">DefaultObject</a></span><span class="signature">({<span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span><span class="parameter" id="-param-registrationDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">registrationDate</span>, </span><span class="parameter" id="-param-lastUpdatedDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">lastUpdatedDate</span></span>})</span>
+          <span class="name"><a href="../core_models_default_default_object/DefaultObject/DefaultObject.html">DefaultObject</a></span><span class="signature">({<span class="parameter" id="-param-registrationDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">registrationDate</span>, </span><span class="parameter" id="-param-lastUpdatedDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">lastUpdatedDate</span>, </span><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span></span>})</span>
         </dt>
         <dd>
           
@@ -121,20 +125,20 @@
 
 </dt>
 <dd>
-  
+  Identificador único da entidade. Valor padrão -1 indica objeto não persistido.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
         <dt id="lastUpdatedDate" class="property">
   <span class="name"><a href="../core_models_default_default_object/DefaultObject/lastUpdatedDate.html">lastUpdatedDate</a></span>
-  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>
   
 
 </dt>
 <dd>
-  
-  <div class="features"><span class="feature">getter/setter pair</span></div>
+  Data e hora da última atualização do registro.
+  <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
@@ -145,7 +149,7 @@
 
 </dt>
 <dd>
-  
+  Data e hora em que o registro foi criado.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -167,7 +171,7 @@
 
     
   <section
-      class="summary offset-anchor"
+      class="summary offset-anchor inherited"
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
@@ -181,19 +185,6 @@
 <dd class="inherited">
   Invoked when a nonexistent method or property is accessed.
   <div class="features"><span class="feature">inherited</span></div>
-
-</dd>
-
-        <dt id="toJson" class="callable">
-  <span class="name"><a href="../core_models_default_default_object/DefaultObject/toJson.html">toJson</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
-  </span>
-  
-
-</dt>
-<dd>
-  
-  
 
 </dd>
 

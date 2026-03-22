@@ -68,23 +68,15 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; loadConfigurationData() async {
   emit(SystemConfigState.loading());
-  try {
-    final configData = await _systemRepository.getSystemConfiguration();
-    if (configData != null) {
+  final result = await _systemRepository.getSystemConfiguration();
+  result.when(
+    onSuccess: (configData) {
       emit(SystemConfigState.loaded(configData));
-    } else {
-      final defaultConfig = _createDefaultConfiguration();
-      await _systemRepository.saveSystemConfiguration(defaultConfig);
-      emit(
-        SystemConfigState.loaded(
-          defaultConfig,
-          feedbackMessage: &#39;Configuração padrão criada. Você já pode personalizá-la.&#39;,
-        ),
-      );
-    }
-  } catch (e) {
-    emit(SystemConfigState.error(e.toString()));
-  }
+    },
+    onError: (message) {
+      emit(SystemConfigState.error(message));
+    },
+  );
 }</code></pre>
 </section>
 

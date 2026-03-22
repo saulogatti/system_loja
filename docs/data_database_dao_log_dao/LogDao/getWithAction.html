@@ -62,15 +62,19 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Retorna logs filtrados pelo tipo de ação <code>tipoAcao</code>.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;ActivityLog&gt;&gt; getWithAction(ActionType tipoAcao) async {
-  return await (select(
+  final rows = await (select(
     logsRecords,
   )..where((tbl) =&gt; tbl.actionType.isValue(tipoAcao.index))).get();
+  return rows.map((e) =&gt; e.toDomain()).toList();
 }</code></pre>
 </section>
 

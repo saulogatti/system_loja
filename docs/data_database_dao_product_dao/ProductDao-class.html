@@ -53,6 +53,11 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>DAO para gerenciar operações CRUD de produtos no banco de dados Drift.</p>
+<p>Utiliza o padrão Repository e conversões entre <a href="../core_models_product/Product-class.html">Product</a> (domínio) e
+<code>ProductsRecord</code> (Drift) via extensões de mapeamento.</p>
+</section>
 
 
     <section>
@@ -495,7 +500,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Retorna todos os produtos cadastrados como objetos de domínio <a href="../core_models_product/Product-class.html">Product</a>.
   
 
 </dd>
@@ -521,7 +526,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Busca um produto pelo ID.
   
 
 </dd>
@@ -534,7 +539,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Insere um novo produto no banco de dados.
   
 
 </dd>
@@ -600,7 +605,7 @@ to write data into the <code>table</code> by using <a href="https://pub.dev/docu
 
 </dt>
 <dd>
-  
+  Remove um produto pelo ID.
   
 
 </dd>
@@ -739,7 +744,7 @@ clause on that table and then use <a href="https://pub.dev/documentation/drift/2
 
 </dt>
 <dd>
-  
+  Atualiza os dados de um produto existente.
   
 
 </dd>

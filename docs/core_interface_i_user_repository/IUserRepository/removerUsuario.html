@@ -54,7 +54,7 @@
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
 <span class="name ">removerUsuario</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="removerUsuario-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span></span></li>
 </ol>)
 
@@ -71,7 +71,7 @@
 </ul>
 <p>Retorna:</p>
 <ul>
-<li>true se removido com sucesso, false em caso de erro</li>
+<li><a href="../../core_utils_command_result/ResultStatus-class.html">ResultStatus</a> com true se removido com sucesso</li>
 </ul>
 </section>
 
@@ -79,7 +79,7 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; removerUsuario(int id);</code></pre>
+  <pre class="language-dart"><code class="language-dart">Future&lt;ResultStatus&lt;bool, String&gt;&gt; removerUsuario(int id);</code></pre>
 </section>
 
 

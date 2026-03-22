@@ -78,11 +78,8 @@
   <pre class="language-dart"><code class="language-dart">@override
 Widget wrappedRoute(BuildContext context) {
   return BlocProvider&lt;RelatorioCubit&gt;(
-    create:
-        (_) =&gt; RelatorioCubit(
-          appInjection.get&lt;ISalesRepository&gt;(),
-          appInjection.get&lt;IProductRepository&gt;(),
-        ),
+    create: (_) =&gt;
+        RelatorioCubit(appInjection.get&lt;ISalesRepository&gt;(), appInjection.get&lt;IProductRepository&gt;()),
     child: this,
   );
 }</code></pre>

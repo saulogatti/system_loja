@@ -59,7 +59,7 @@
         <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-<span class="returntype"><a href="../../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>
+<span class="returntype"><a href="../../data_entry_system_configuration_entry/SystemConfigurationEntry-class.html">SystemConfigurationEntry</a></span>
 <span class="name ">map</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="map-param-data"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">data</span>, {</span></li>
 <li><span class="parameter" id="map-param-tablePrefix"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">tablePrefix</span>, </span></li>
 </ol>})
@@ -77,9 +77,16 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-SystemConfiguration map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
+SystemConfigurationEntry map(
+  Map&lt;String, dynamic&gt; data, {
+  String? tablePrefix,
+}) {
   final effectivePrefix = tablePrefix != null ? &#39;$tablePrefix.&#39; : &#39;&#39;;
-  return SystemConfiguration(
+  return SystemConfigurationEntry(
+    id: attachedDatabase.typeMapping.read(
+      DriftSqlType.int,
+      data[&#39;${effectivePrefix}id&#39;],
+    )!,
     priceConfiguration: $SystemRecordsTable.$converterpriceConfiguration
         .fromSql(
           attachedDatabase.typeMapping.read(
@@ -87,17 +94,19 @@ SystemConfiguration map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) 
             data[&#39;${effectivePrefix}price_configuration&#39;],
           )!,
         ),
-    lastUpdatedDate: attachedDatabase.typeMapping.read(
-      DriftSqlType.dateTime,
-      data[&#39;${effectivePrefix}last_updated_date&#39;],
-    )!,
+    systemUserData: $SystemRecordsTable.$convertersystemUserData.fromSql(
+      attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data[&#39;${effectivePrefix}system_user_data&#39;],
+      )!,
+    ),
     registrationDate: attachedDatabase.typeMapping.read(
       DriftSqlType.dateTime,
       data[&#39;${effectivePrefix}registration_date&#39;],
     )!,
-    id: attachedDatabase.typeMapping.read(
-      DriftSqlType.int,
-      data[&#39;${effectivePrefix}id&#39;],
+    lastUpdatedDate: attachedDatabase.typeMapping.read(
+      DriftSqlType.dateTime,
+      data[&#39;${effectivePrefix}last_updated_date&#39;],
     )!,
   );
 }</code></pre>

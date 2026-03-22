@@ -66,8 +66,9 @@
 <section class="desc markdown">
   <p>Atualiza a quantidade em estoque de um produto.</p>
 <p><code>productId</code> ID do produto a ser atualizado.
-<code>quantityChange</code> Quantidade a ser adicionada (positivo) ou removida (negativo).
-Retorna true se a atualização foi bem-sucedida, false caso contrário.</p>
+<code>quantityChange</code> Variação de estoque: positivo para entrada, negativo para saída.</p>
+<p>Retorna true se a atualização foi bem-sucedida, false se o produto não existir.
+A validação de estoque negativo fica na camada de domínio (<a href="../../domain_repository_sales_repository/SalesRepository-class.html">SalesRepository</a>).</p>
 </section>
 
 
@@ -79,7 +80,6 @@ Retorna true se a atualização foi bem-sucedida, false caso contrário.</p>
   if (product == null) return false;
 
   final newQuantity = product.stockQuantity + quantityChange;
-  if (newQuantity &lt; 0) return false;
 
   return await update(productsRecords).replace(
     ProductsRecordsCompanion(

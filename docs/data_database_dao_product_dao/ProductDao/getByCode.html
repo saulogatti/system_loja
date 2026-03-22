@@ -64,18 +64,18 @@
     
 <section class="desc markdown">
   <p>Busca um produto pelo código.</p>
-<p><code>code</code> Código do produto a ser buscado.
-Retorna o produto encontrado ou null se não existir.</p>
+<p>Retorna o produto encontrado ou null se não existir.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;Product?&gt; getByCode(String code) {
-  return (select(
+  <pre class="language-dart"><code class="language-dart">Future&lt;Product?&gt; getByCode(String code) async {
+  final row = await (select(
     productsRecords,
   )..where((t) =&gt; t.code.equals(code))).getSingleOrNull();
+  return row?.toDomain();
 }</code></pre>
 </section>
 

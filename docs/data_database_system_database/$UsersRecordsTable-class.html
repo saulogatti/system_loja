@@ -74,7 +74,7 @@
   <dt>Mixed-in types</dt>
   <dd>
     <ul class="comma-separated clazz-relationships">
-        <li><a href="https://pub.dev/documentation/drift/2.32.0/drift/TableInfo-mixin.html">TableInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_database_system_database/$UsersRecordsTable-class.html">$UsersRecordsTable</a></span>, <span class="type-parameter"><a href="../core_models_user/User-class.html">User</a></span>&gt;</span></li>
+        <li><a href="https://pub.dev/documentation/drift/2.32.0/drift/TableInfo-mixin.html">TableInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_database_system_database/$UsersRecordsTable-class.html">$UsersRecordsTable</a></span>, <span class="type-parameter"><a href="../data_entry_user_entry/UserEntry-class.html">UserEntry</a></span>&gt;</span></li>
     </ul>
   </dd>
 
@@ -528,7 +528,7 @@ integer as a <a href="https://api.flutter.dev/flutter/dart-core/BigInt-class.htm
 
         <dt id="map" class="callable">
   <span class="name"><a href="../data_database_system_database/$UsersRecordsTable/map.html">map</a></span><span class="signature">(<wbr><span class="parameter" id="map-param-data"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">data</span>, {</span><span class="parameter" id="map-param-tablePrefix"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">tablePrefix</span></span>})
-    <span class="returntype parameter">&#8594; <a href="../core_models_user/User-class.html">User</a></span>
+    <span class="returntype parameter">&#8594; <a href="../data_entry_user_entry/UserEntry-class.html">UserEntry</a></span>
   </span>
   
 
@@ -540,8 +540,8 @@ integer as a <a href="https://api.flutter.dev/flutter/dart-core/BigInt-class.htm
 </dd>
 
         <dt id="mapFromCompanion" class="callable inherited">
-  <span class="name"><a href="https://pub.dev/documentation/drift/2.32.0/drift/TableInfo/mapFromCompanion.html">mapFromCompanion</a></span><span class="signature">(<wbr><span class="parameter" id="mapFromCompanion-param-companion"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Insertable-class.html">Insertable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a></span>&gt;</span></span> <span class="parameter-name">companion</span>, </span><span class="parameter" id="mapFromCompanion-param-database"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/DatabaseConnectionUser-class.html">DatabaseConnectionUser</a></span> <span class="parameter-name">database</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a></span>&gt;</span></span>
+  <span class="name"><a href="https://pub.dev/documentation/drift/2.32.0/drift/TableInfo/mapFromCompanion.html">mapFromCompanion</a></span><span class="signature">(<wbr><span class="parameter" id="mapFromCompanion-param-companion"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Insertable-class.html">Insertable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_entry_user_entry/UserEntry-class.html">UserEntry</a></span>&gt;</span></span> <span class="parameter-name">companion</span>, </span><span class="parameter" id="mapFromCompanion-param-database"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/DatabaseConnectionUser-class.html">DatabaseConnectionUser</a></span> <span class="parameter-name">database</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_entry_user_entry/UserEntry-class.html">UserEntry</a></span>&gt;</span></span>
   </span>
   
 
@@ -634,7 +634,7 @@ Example (inside the body of a table class):
 </dd>
 
         <dt id="validateIntegrity" class="callable">
-  <span class="name"><a href="../data_database_system_database/$UsersRecordsTable/validateIntegrity.html">validateIntegrity</a></span><span class="signature">(<wbr><span class="parameter" id="validateIntegrity-param-instance"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Insertable-class.html">Insertable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a></span>&gt;</span></span> <span class="parameter-name">instance</span>, {</span><span class="parameter" id="validateIntegrity-param-isInserting"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isInserting</span> = <span class="default-value">false</span></span>})
+  <span class="name"><a href="../data_database_system_database/$UsersRecordsTable/validateIntegrity.html">validateIntegrity</a></span><span class="signature">(<wbr><span class="parameter" id="validateIntegrity-param-instance"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Insertable-class.html">Insertable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_entry_user_entry/UserEntry-class.html">UserEntry</a></span>&gt;</span></span> <span class="parameter-name">instance</span>, {</span><span class="parameter" id="validateIntegrity-param-isInserting"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isInserting</span> = <span class="default-value">false</span></span>})
     <span class="returntype parameter">&#8594; <a href="https://pub.dev/documentation/drift/2.32.0/drift/VerificationContext-class.html">VerificationContext</a></span>
   </span>
   

@@ -74,10 +74,9 @@ Lança exceção se o CNPJ já existir (constraint UNIQUE).</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; addCompany(Company company) {
-  return into(companyRecords).insert(
-    company.toCompanion(),
-    mode: InsertMode.insertOrAbort,
-  );
+  return into(
+    companyRecords,
+  ).insert(company.toCompanion(), mode: InsertMode.insertOrAbort);
 }</code></pre>
 </section>
 

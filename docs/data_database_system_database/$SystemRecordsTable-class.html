@@ -74,7 +74,7 @@
   <dt>Mixed-in types</dt>
   <dd>
     <ul class="comma-separated clazz-relationships">
-        <li><a href="https://pub.dev/documentation/drift/2.32.0/drift/TableInfo-mixin.html">TableInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_database_system_database/$SystemRecordsTable-class.html">$SystemRecordsTable</a></span>, <span class="type-parameter"><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>&gt;</span></li>
+        <li><a href="https://pub.dev/documentation/drift/2.32.0/drift/TableInfo-mixin.html">TableInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_database_system_database/$SystemRecordsTable-class.html">$SystemRecordsTable</a></span>, <span class="type-parameter"><a href="../data_entry_system_configuration_entry/SystemConfigurationEntry-class.html">SystemConfigurationEntry</a></span>&gt;</span></li>
     </ul>
   </dd>
 
@@ -326,6 +326,18 @@ This is intended to be used by generated code only.
 
 </dd>
 
+        <dt id="systemUserData" class="property">
+  <span class="name"><a href="../data_database_system_database/$SystemRecordsTable/systemUserData.html">systemUserData</a></span>
+  <span class="signature">&#8594; <a href="https://pub.dev/documentation/drift/2.32.0/drift/GeneratedColumnWithTypeConverter-class.html">GeneratedColumnWithTypeConverter</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_entry_system_user_data_entry/SystemUserDataEntry-class.html">SystemUserDataEntry</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
         <dt id="tableName" class="property inherited">
   <span class="name"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Table/tableName.html">tableName</a></span>
   <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span>
@@ -492,7 +504,7 @@ integer as a <a href="https://api.flutter.dev/flutter/dart-core/BigInt-class.htm
 
         <dt id="map" class="callable">
   <span class="name"><a href="../data_database_system_database/$SystemRecordsTable/map.html">map</a></span><span class="signature">(<wbr><span class="parameter" id="map-param-data"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">data</span>, {</span><span class="parameter" id="map-param-tablePrefix"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">tablePrefix</span></span>})
-    <span class="returntype parameter">&#8594; <a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>
+    <span class="returntype parameter">&#8594; <a href="../data_entry_system_configuration_entry/SystemConfigurationEntry-class.html">SystemConfigurationEntry</a></span>
   </span>
   
 
@@ -504,8 +516,8 @@ integer as a <a href="https://api.flutter.dev/flutter/dart-core/BigInt-class.htm
 </dd>
 
         <dt id="mapFromCompanion" class="callable inherited">
-  <span class="name"><a href="https://pub.dev/documentation/drift/2.32.0/drift/TableInfo/mapFromCompanion.html">mapFromCompanion</a></span><span class="signature">(<wbr><span class="parameter" id="mapFromCompanion-param-companion"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Insertable-class.html">Insertable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>&gt;</span></span> <span class="parameter-name">companion</span>, </span><span class="parameter" id="mapFromCompanion-param-database"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/DatabaseConnectionUser-class.html">DatabaseConnectionUser</a></span> <span class="parameter-name">database</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>&gt;</span></span>
+  <span class="name"><a href="https://pub.dev/documentation/drift/2.32.0/drift/TableInfo/mapFromCompanion.html">mapFromCompanion</a></span><span class="signature">(<wbr><span class="parameter" id="mapFromCompanion-param-companion"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Insertable-class.html">Insertable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_entry_system_configuration_entry/SystemConfigurationEntry-class.html">SystemConfigurationEntry</a></span>&gt;</span></span> <span class="parameter-name">companion</span>, </span><span class="parameter" id="mapFromCompanion-param-database"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/DatabaseConnectionUser-class.html">DatabaseConnectionUser</a></span> <span class="parameter-name">database</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_entry_system_configuration_entry/SystemConfigurationEntry-class.html">SystemConfigurationEntry</a></span>&gt;</span></span>
   </span>
   
 
@@ -598,7 +610,7 @@ Example (inside the body of a table class):
 </dd>
 
         <dt id="validateIntegrity" class="callable">
-  <span class="name"><a href="../data_database_system_database/$SystemRecordsTable/validateIntegrity.html">validateIntegrity</a></span><span class="signature">(<wbr><span class="parameter" id="validateIntegrity-param-instance"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Insertable-class.html">Insertable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>&gt;</span></span> <span class="parameter-name">instance</span>, {</span><span class="parameter" id="validateIntegrity-param-isInserting"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isInserting</span> = <span class="default-value">false</span></span>})
+  <span class="name"><a href="../data_database_system_database/$SystemRecordsTable/validateIntegrity.html">validateIntegrity</a></span><span class="signature">(<wbr><span class="parameter" id="validateIntegrity-param-instance"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Insertable-class.html">Insertable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_entry_system_configuration_entry/SystemConfigurationEntry-class.html">SystemConfigurationEntry</a></span>&gt;</span></span> <span class="parameter-name">instance</span>, {</span><span class="parameter" id="validateIntegrity-param-isInserting"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isInserting</span> = <span class="default-value">false</span></span>})
     <span class="returntype parameter">&#8594; <a href="https://pub.dev/documentation/drift/2.32.0/drift/VerificationContext-class.html">VerificationContext</a></span>
   </span>
   
@@ -641,6 +653,18 @@ that it respects all constraints (nullability, text length, etc.).
         <dt id="$converterpriceConfiguration" class="property">
   <span class="name"><a href="../data_database_system_database/$SystemRecordsTable/$converterpriceConfiguration.html">$converterpriceConfiguration</a></span>
   <span class="signature">&#8596; <a href="https://pub.dev/documentation/drift/2.32.0/drift/JsonTypeConverter2-mixin.html">JsonTypeConverter2</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_system_config_price_configuration/PriceConfiguration-class.html">PriceConfiguration</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="$convertersystemUserData" class="property">
+  <span class="name"><a href="../data_database_system_database/$SystemRecordsTable/$convertersystemUserData.html">$convertersystemUserData</a></span>
+  <span class="signature">&#8596; <a href="https://pub.dev/documentation/drift/2.32.0/drift/TypeConverter-class.html">TypeConverter</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../data_entry_system_user_data_entry/SystemUserDataEntry-class.html">SystemUserDataEntry</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>
   
 
 </dt>
