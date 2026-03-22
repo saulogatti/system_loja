@@ -2,10 +2,10 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_settings_service.dart';
-import 'package:system_loja/core/managers/configuration_repository_cache.dart';
+import 'package:system_loja/data/entry/configuration_repository_cache.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
-
-import '../settings/app_settings.dart';
+ 
+import '../../core/settings/app_settings.dart';
 
 const String keyConfigurationRepositoryCache = 'configuration_repository_cache';
 

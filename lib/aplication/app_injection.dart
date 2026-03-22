@@ -10,7 +10,7 @@ import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
-import 'package:system_loja/core/managers/configuration_repository.dart';
+import 'package:system_loja/domain/repository/configuration_repository.dart';
 import 'package:system_loja/domain/repository/category_repository.dart';
 import 'package:system_loja/domain/repository/company_repository.dart';
 import 'package:system_loja/domain/repository/customer_repository.dart';

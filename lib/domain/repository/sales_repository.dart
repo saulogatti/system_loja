@@ -1,5 +1,5 @@
 import 'package:system_loja/core/interface/i_sales_repository.dart';
-import 'package:system_loja/core/managers/system_error_manager.dart';
+import 'package:system_loja/aplication/system_error_manager.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/services/code_generator_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
