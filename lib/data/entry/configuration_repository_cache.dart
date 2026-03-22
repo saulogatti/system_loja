@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:system_loja/core/managers/configuration_repository.dart';
+import 'package:system_loja/domain/repository/configuration_repository.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/data/cache/models/cacheable.dart';
 import 'package:json_annotation/json_annotation.dart';

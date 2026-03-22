@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/core/managers/system_error_manager.dart';
+import 'package:system_loja/aplication/system_error_manager.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_system_state.dart';
 
 class LogsSystemCubit extends Cubit<LogsSystemState> {

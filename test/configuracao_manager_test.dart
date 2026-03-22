@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:system_loja/core/managers/configuration_repository.dart';
+import 'package:system_loja/domain/repository/configuration_repository.dart';
 import 'package:system_loja/domain/repository/system/log_repository.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/app_theme_settings.dart';

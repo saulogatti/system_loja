@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:system_loja/core/managers/system_error_manager.dart';
+import 'package:system_loja/aplication/system_error_manager.dart';
 import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/category.dart';
 import 'package:system_loja/data/converter/address_codec.dart';
