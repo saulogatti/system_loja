@@ -94,7 +94,7 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
   }
 
   /// Valida regras de negócio e delega ao [SalesCubit.registerSale].
-  void submit() {
+  Future<void> submit() async {
     final form = state.form;
     if (form.linesByProductId.isEmpty) {
       _emitFeedback('Erro: Adicione pelo menos um item!');
@@ -128,6 +128,13 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
       paymentMethod: form.paymentMethod!.name,
     );
 
-    _salesCubit.registerSale(notaFiscal, form.enableCodeGeneration);
+    _emitEditing(form.copyWith(isSubmitting: true));
+    try {
+      await _salesCubit.registerSale(notaFiscal, form.enableCodeGeneration);
+    } finally {
+      if (!isClosed) {
+        _emitEditing(state.form.copyWith(isSubmitting: false));
+      }
+    }
   }
 }
