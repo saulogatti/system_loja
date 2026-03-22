@@ -21,7 +21,8 @@ class ProductDetailScreen extends StatefulWidget implements AutoRouteWrapper {
   final List<Product> productList;
 
   const ProductDetailScreen({
-    required this.product, super.key,
+    required this.product,
+    super.key,
     this.productList = const [],
   });
 

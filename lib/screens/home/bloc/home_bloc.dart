@@ -16,15 +16,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<SaveSystemUserData>(_onSaveSystemUserData);
   }
 
-  Future<void> _onLoadSystemUserData(LoadSystemUserData event, Emitter<HomeState> emit) async {
+  Future<void> _onLoadSystemUserData(
+    LoadSystemUserData event,
+    Emitter<HomeState> emit,
+  ) async {
     emit(const HomeLoading());
-    final systemConfiguration = await _systemRepository.getSystemConfiguration();
+    final systemConfiguration = await _systemRepository
+        .getSystemConfiguration();
     emit(HomeLoaded(systemConfiguration.systemUserData));
   }
 
-  FutureOr<void> _onSaveSystemUserData(SaveSystemUserData event, Emitter<HomeState> emit) async {
+  FutureOr<void> _onSaveSystemUserData(
+    SaveSystemUserData event,
+    Emitter<HomeState> emit,
+  ) async {
     emit(const HomeLoading());
-    final systemConfiguration = await _systemRepository.getSystemConfiguration();
+    final systemConfiguration = await _systemRepository
+        .getSystemConfiguration();
     systemConfiguration.systemUserData = event.systemUserData;
     await _systemRepository.saveSystemConfiguration(systemConfiguration);
     emit(HomeSaved(systemConfiguration.systemUserData));

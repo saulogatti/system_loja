@@ -62,8 +62,7 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
                     child: Icon(
                       Icons.receipt_long,
                       size: 28,
-                      color:
-                          Theme.of(context).colorScheme.onSecondaryContainer,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -73,20 +72,17 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
                       children: [
                         Text(
                           'NF ${data.invoiceNumber}',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         Text(
                           'ID: ${invoice.id}',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodySmall?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                         ),
                       ],
                     ),
@@ -146,11 +142,8 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
                             ),
                             Text(
                               'R\$ ${item.totalValue.toStringAsFixed(2)}',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),

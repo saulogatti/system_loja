@@ -22,7 +22,17 @@ class CompanyForm extends StatelessWidget {
   final TextEditingController stateController;
 
   const CompanyForm({
-    required this.formKey, required this.corporateNameController, required this.cnpjController, required this.emailController, required this.streetController, required this.zipCodeController, required this.neighborhoodController, required this.cityController, required this.onSubmit, required this.stateController, super.key,
+    required this.formKey,
+    required this.corporateNameController,
+    required this.cnpjController,
+    required this.emailController,
+    required this.streetController,
+    required this.zipCodeController,
+    required this.neighborhoodController,
+    required this.cityController,
+    required this.onSubmit,
+    required this.stateController,
+    super.key,
   });
 
   @override

@@ -9,16 +9,19 @@ import 'package:system_loja/data/entry/system_user_data_entry.dart';
 class SystemRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
   DateTimeColumn get lastUpdatedDate => dateTime()();
-  TextColumn get priceConfiguration => text().map(PriceConfigurationCodec.driftConverter)();
+  TextColumn get priceConfiguration =>
+      text().map(PriceConfigurationCodec.driftConverter)();
   DateTimeColumn get registrationDate => dateTime()();
   TextColumn get systemUserData => text().map(SystemUserDataConverter())();
 }
 
-class SystemUserDataConverter extends TypeConverter<SystemUserDataEntry, String> {
+class SystemUserDataConverter
+    extends TypeConverter<SystemUserDataEntry, String> {
   const SystemUserDataConverter();
 
   @override
-  SystemUserDataEntry fromSql(String fromDb) => SystemUserDataEntry.fromJson(jsonDecode(fromDb));
+  SystemUserDataEntry fromSql(String fromDb) =>
+      SystemUserDataEntry.fromJson(jsonDecode(fromDb));
 
   @override
   String toSql(SystemUserDataEntry value) => jsonEncode(value.toJson());

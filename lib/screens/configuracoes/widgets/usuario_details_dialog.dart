@@ -25,7 +25,7 @@ class UsuarioDetailsDialog extends StatelessWidget {
             _buildDetailRow('Email', usuario.email ?? 'N/A'),
             _buildDetailRow(
               'Nível de Permissão',
-            AuthorizationLevel.values
+              AuthorizationLevel.values
                   .firstWhere((level) => level.value == usuario.permission)
                   .toDisplayName(),
             ),

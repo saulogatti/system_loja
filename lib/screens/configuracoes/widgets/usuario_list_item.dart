@@ -13,7 +13,11 @@ class UsuarioListItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const UsuarioListItem({
-    required this.usuario, required this.onEdit, required this.onDelete, required this.onTap, super.key,
+    required this.usuario,
+    required this.onEdit,
+    required this.onDelete,
+    required this.onTap,
+    super.key,
   });
 
   @override

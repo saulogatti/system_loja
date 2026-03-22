@@ -23,7 +23,8 @@ class CategoryManagementScreen extends StatefulWidget
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<CategoryCubit>(
-      create: (_) => CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
+      create: (_) =>
+          CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
       child: this,
     );
   }

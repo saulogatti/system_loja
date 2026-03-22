@@ -60,7 +60,9 @@ class RelatorioCubit extends Cubit<RelatorioState> {
       case ResultSuccess(result: final data):
         products = data;
       case ResultError(resultError: final error):
-        emit(RelatorioState.error(message: 'Erro ao carregar produtos: $error'));
+        emit(
+          RelatorioState.error(message: 'Erro ao carregar produtos: $error'),
+        );
         return;
     }
 

@@ -82,7 +82,11 @@ class SalesCubit extends Cubit<SalesState> {
           ),
         );
       case ResultError(resultError: final resultError):
-        emit(SalesState.loadProductsFailure(message: 'Erro ao carregar produtos: $resultError'));
+        emit(
+          SalesState.loadProductsFailure(
+            message: 'Erro ao carregar produtos: $resultError',
+          ),
+        );
     }
   }
 
@@ -103,11 +107,15 @@ class SalesCubit extends Cubit<SalesState> {
   ///
   /// Cria um novo invoice com ID gerado automaticamente
   /// e salva no banco de dados.
-  Future<void> registerSale(InvoiceData invoiceData, bool enableCodeGeneration) async {
+  Future<void> registerSale(
+    InvoiceData invoiceData,
+    bool enableCodeGeneration,
+  ) async {
     emit(SalesState.loading());
 
     if (enableCodeGeneration) {
-      final invoiceNumberResult = await _salesRepository.generateInvoiceNumber();
+      final invoiceNumberResult = await _salesRepository
+          .generateInvoiceNumber();
       switch (invoiceNumberResult) {
         case ResultSuccess(result: final invoiceNumber):
           invoiceData.invoiceNumber = invoiceNumber;

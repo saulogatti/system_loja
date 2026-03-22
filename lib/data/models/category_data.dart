@@ -15,7 +15,8 @@ class CategoryData {
   const CategoryData({
     required this.id,
     required this.name,
-    required this.registrationDate, this.description,
+    required this.registrationDate,
+    this.description,
     this.lastUpdatedDate,
   });
 
@@ -25,18 +26,18 @@ class CategoryData {
   Map<String, dynamic> toJson() => _$CategoryDataToJson(this);
 
   factory CategoryData.fromDomain(Category value) => CategoryData(
-        id: value.id,
-        name: value.name,
-        description: value.description,
-        registrationDate: value.registrationDate,
-        lastUpdatedDate: value.lastUpdatedDate,
-      );
+    id: value.id,
+    name: value.name,
+    description: value.description,
+    registrationDate: value.registrationDate,
+    lastUpdatedDate: value.lastUpdatedDate,
+  );
 
   Category toDomain() => Category(
-        id: id,
-        name: name,
-        description: description,
-        registrationDate: registrationDate,
-        lastUpdatedDate: lastUpdatedDate,
-      );
+    id: id,
+    name: name,
+    description: description,
+    registrationDate: registrationDate,
+    lastUpdatedDate: lastUpdatedDate,
+  );
 }

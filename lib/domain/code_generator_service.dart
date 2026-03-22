@@ -8,13 +8,13 @@ import 'package:system_loja/data/database/dao/product_dao.dart';
 class CodeGeneratorService {
   final ProductDao _productDao;
   final InvoiceDao _invoiceDao;
-// Utils? Services? Repositories? Domain? Aplication? Data?
-// TODO: Avaliar a necessidade de usar o CodeGeneratorService
+  // Utils? Services? Repositories? Domain? Aplication? Data?
+  // TODO: Avaliar a necessidade de usar o CodeGeneratorService
   CodeGeneratorService({
     required ProductDao productDao,
     required InvoiceDao invoiceDao,
-  })  : _productDao = productDao,
-        _invoiceDao = invoiceDao;
+  }) : _productDao = productDao,
+       _invoiceDao = invoiceDao;
 
   /// Gera um código único para produto baseado no timestamp e contador.
   ///
@@ -25,11 +25,12 @@ class CodeGeneratorService {
   /// Se existir, incrementa o contador até encontrar um código disponível.
   Future<String> generateProductCode() async {
     final now = DateTime.now();
-    final datePrefix = 'PRD-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
-    
+    final datePrefix =
+        'PRD-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
+
     int counter = 1;
     String code;
-    
+
     do {
       code = '$datePrefix-${_padLeft(counter, 4)}';
       final exists = await checkProductCodeExists(code);
@@ -38,7 +39,7 @@ class CodeGeneratorService {
       }
       counter++;
     } while (counter < 10000); // Limite de segurança
-    
+
     // Se atingir o limite, adiciona timestamp em milissegundos
     return '$datePrefix-${now.millisecondsSinceEpoch % 10000}';
   }
@@ -52,11 +53,12 @@ class CodeGeneratorService {
   /// Se existir, incrementa o contador até encontrar um número disponível.
   Future<String> generateInvoiceNumber() async {
     final now = DateTime.now();
-    final datePrefix = 'NF-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
-    
+    final datePrefix =
+        'NF-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
+
     int counter = 1;
     String invoiceNumber;
-    
+
     do {
       invoiceNumber = '$datePrefix-${_padLeft(counter, 4)}';
       final exists = await checkInvoiceNumberExists(invoiceNumber);
@@ -65,7 +67,7 @@ class CodeGeneratorService {
       }
       counter++;
     } while (counter < 10000); // Limite de segurança
-    
+
     // Se atingir o limite, adiciona timestamp em milissegundos
     return '$datePrefix-${now.millisecondsSinceEpoch % 10000}';
   }
@@ -130,10 +132,7 @@ class CodeGeneratorService {
       );
     }
 
-    return CodeValidationResult(
-      isValid: true,
-      message: 'Código válido',
-    );
+    return CodeValidationResult(isValid: true, message: 'Código válido');
   }
 
   /// Valida um número de nota fiscal fornecido pelo usuário.
@@ -196,12 +195,9 @@ class CodeGeneratorService {
 class CodeValidationResult {
   /// Indica se o código é válido.
   final bool isValid;
-  
+
   /// Mensagem descritiva do resultado da validação.
   final String message;
 
-  CodeValidationResult({
-    required this.isValid,
-    required this.message,
-  });
+  CodeValidationResult({required this.isValid, required this.message});
 }

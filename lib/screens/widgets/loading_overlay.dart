@@ -29,11 +29,17 @@ class LoadingOverlay extends StatelessWidget {
   /// Cor do indicador de progresso. Se não especificado, usa a cor primária do tema.
   final Color? progressIndicatorColor;
 
-  const LoadingOverlay({super.key, this.message, this.backgroundColor, this.progressIndicatorColor});
+  const LoadingOverlay({
+    super.key,
+    this.message,
+    this.backgroundColor,
+    this.progressIndicatorColor,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final indicatorColor = progressIndicatorColor ?? Theme.of(context).colorScheme.primary;
+    final indicatorColor =
+        progressIndicatorColor ?? Theme.of(context).colorScheme.primary;
     final colorAnimation = AlwaysStoppedAnimation<Color>(indicatorColor);
 
     return Stack(

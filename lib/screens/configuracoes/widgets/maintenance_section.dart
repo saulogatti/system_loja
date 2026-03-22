@@ -18,7 +18,11 @@ class MaintenanceSection extends StatelessWidget {
   final VoidCallback onLimparTodosDados;
 
   const MaintenanceSection({
-    required this.config, required this.onConfigChanged, required this.onLimparLogsAntigos, required this.onLimparTodosDados, super.key,
+    required this.config,
+    required this.onConfigChanged,
+    required this.onLimparLogsAntigos,
+    required this.onLimparTodosDados,
+    super.key,
   });
 
   @override

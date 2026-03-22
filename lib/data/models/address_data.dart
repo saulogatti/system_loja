@@ -31,18 +31,18 @@ class AddressData {
   Map<String, dynamic> toJson() => _$AddressDataToJson(this);
 
   factory AddressData.fromDomain(Address value) => AddressData(
-        street: value.street,
-        zipCode: value.zipCode,
-        neighborhood: value.neighborhood,
-        city: value.city,
-        state: value.state,
-      );
+    street: value.street,
+    zipCode: value.zipCode,
+    neighborhood: value.neighborhood,
+    city: value.city,
+    state: value.state,
+  );
 
   Address toDomain() => Address(
-        street: street,
-        zipCode: zipCode,
-        neighborhood: neighborhood,
-        city: city,
-        state: state,
-      );
+    street: street,
+    zipCode: zipCode,
+    neighborhood: neighborhood,
+    city: city,
+    state: state,
+  );
 }
