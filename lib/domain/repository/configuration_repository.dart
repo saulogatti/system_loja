@@ -19,13 +19,14 @@ class ConfigurationRepository
   AppSettings _configuracao = AppSettings.createDefaultSettings();
   final ILogRepository _logRepository;
   final ISettingsService _settingsService;
+  final CacheManager _cache;
   ConfigurationRepository({
     required ILogRepository logRepository,
     required ISettingsService settingsService,
+    required CacheManager cache,
   }) : _logRepository = logRepository,
+       _cache = cache,
        _settingsService = settingsService;
-
-  CacheManager get _cache => CacheManager.instance;
 
   @override
   Future<ResultStatus<AppSettings, String>> clearAllData() async {

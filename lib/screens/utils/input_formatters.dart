@@ -1,6 +1,19 @@
 import 'package:flutter/services.dart';
 import 'package:system_loja/aplication/utils/constants.dart';
 
+String formatarParaReal(String valorString) {
+  // Limpa a sujeira que o usuário digitar (remove tudo que não for dígito)
+  final apenasNumeros = valorString.replaceAll(RegExp(r'[^\d]'), '');
+
+  if (apenasNumeros.isEmpty) return '0,00';
+
+  // Converte para double (considerando os últimos 2 dígitos como centavos)
+  final valorDouble = double.parse(apenasNumeros) / 100;
+
+  // O "pulo do gato" para localizar em PT-BR
+  return valorDouble.toStringAsFixed(2);
+}
+
 /// Formatador de entrada para campos de preço.
 ///
 /// Permite apenas números e um separador decimal (ponto ou vírgula).
@@ -19,55 +32,38 @@ class PriceInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    // Permite apenas números, vírgula e ponto
-    final text = newValue.text.replaceAll(Constants.priceAllowedRegExp, '');
-
-    // Se estiver vazio, retorna vazio
-    if (text.isEmpty) {
-      return const TextEditingValue(
+    if (oldValue.text.length > newValue.text.length || newValue.text.isEmpty) {
+      //Se o usuário está apagando e o campo está vazio, retorna vazio
+      return TextEditingValue(
         text: '',
         selection: TextSelection.collapsed(offset: 0),
       );
     }
-
-    // Substitui vírgula por ponto
-    String normalizedText = text.replaceAll(',', '.');
-    // Permite apenas um ponto decimal
-    if (normalizedText.indexOf('.') != normalizedText.lastIndexOf('.')) {
-      normalizedText = normalizedText.substring(
-        0,
-        normalizedText.lastIndexOf('.'),
+    if (oldValue.text.length < newValue.text.length &&
+        newValue.text.contains(',')) {
+      //Se o usuário está digitando uma vírgula, remove a vírgula e adiciona um ponto
+      return TextEditingValue(
+        text: newValue.text.replaceAll(',', '.'),
+        selection: TextSelection.collapsed(offset: newValue.text.length),
+      );
+    } else if (oldValue.text.length < newValue.text.length &&
+        !newValue.text.contains('.')) {
+      //Se o usuário está digitando um ponto, remove o ponto e adiciona uma vírgula
+      return TextEditingValue(
+        text: newValue.text,
+        selection: TextSelection.collapsed(offset: newValue.text.length),
       );
     }
-
-    // Limita a 2 casas decimais
-    final decimalParts = normalizedText.split('.');
-    if (decimalParts.length > 1) {
-      final integerPart = decimalParts[0];
-      final decimalPart = decimalParts[1].length > 2
-          ? decimalParts[1].substring(0, 2)
-          : decimalParts[1];
-      normalizedText = '$integerPart.$decimalPart';
-    }
+    final text = newValue.text.replaceAll(Constants.priceAllowedRegExp, '');
+    // Se o valor contém um ponto, limita a 2 casas decimais e remove o ponto extra
 
     return TextEditingValue(
-      text: normalizedText,
-      selection: TextSelection.collapsed(offset: normalizedText.length),
+      text: formatarParaReal(text),
+      selection: TextSelection.collapsed(offset: formatarParaReal(text).length),
     );
   }
 }
 
-/// Formatador de entrada para códigos de produto.
-///
-/// Permite apenas letras, números e hífens.
-/// Converte para maiúsculas automaticamente.
-///
-/// Exemplo:
-/// ```dart
-/// TextFormField(
-///   inputFormatters: [ProductCodeInputFormatter()],
-/// )
-/// ```
 class ProductCodeInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

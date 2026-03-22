@@ -22,7 +22,8 @@ part 'system_database.g.dart';
 )
 class SystemDatabase extends _$SystemDatabase {
   static final _nameBd = 'system_database';
-  SystemDatabase() : super(_openConnection());
+  SystemDatabase({QueryExecutor? executor})
+    : super(executor ?? _openConnection());
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (Migrator m) => m.createAll(),

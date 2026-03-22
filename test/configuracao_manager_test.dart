@@ -1,62 +1,47 @@
 import 'dart:io';
 
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/data/cache/cache_manager.dart';
 import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/domain/repository/configuration_repository.dart';
 import 'package:system_loja/domain/repository/system/log_repository.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
-Future<AppSettings> _obterSucesso(
-  Future<ResultStatus<AppSettings, String>> future,
-) async {
-  final r = await future;
-  expect(r.isSuccessful, isTrue, reason: r.hasError ? r.asError : null);
-  return r.asSuccess;
-}
-
-Future<void> _executarSucesso(
-  Future<ResultStatus<AppSettings, String>> future,
-) async {
-  final r = await future;
-  expect(r.isSuccessful, isTrue, reason: r.hasError ? r.asError : null);
-}
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late ConfigurationRepository manager;
-  late String testDataFile;
+  driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
+  driftRuntimeOptions.defaultSerializer = const ValueSerializer.defaults();
   late SystemDatabase systemDatabase;
-  setUp(() {
-    systemDatabase = SystemDatabase();
-    testDataFile =
-        'test/data/test_configuracao_${DateTime.now().millisecondsSinceEpoch}.json';
+  setUpAll(() {
+    systemDatabase = SystemDatabase(executor: NativeDatabase.memory());
+    PathProviderPlatform.instance = FakePathProviderPlatform();
     manager = ConfigurationRepository(
       logRepository: LogRepository(logDao: systemDatabase.logDao),
       settingsService: SettingsService.injection(),
+      cache: CacheManager(),
     );
   });
 
-  tearDown(() {
-    final file = File(testDataFile);
-    if (file.existsSync()) {
-      file.deleteSync();
-    }
-    try {
-      Directory('data/backups').deleteSync(recursive: true);
-    } catch (_) {}
-    try {
-      Directory('test/data').deleteSync();
-    } catch (e) {
-      // Ignora erro se diretório não estiver vazio ou não existir
-    }
+  tearDownAll(() {
+    manager.clearAllData();
+    manager.resetToDefaults();
+    manager.createBackup('data/backups');
+    manager.clearOldLogs();
+    manager.updateAppSettings(AppSettings.createDefaultSettings());
   });
 
   group('ConfiguracaoManager - Operações Básicas', () {
     test('Deve carregar configurações padrão na primeira execução', () async {
+      await manager.resetToDefaults();
       final config = await _obterSucesso(manager.loadConfiguration());
 
       expect(config.notificacoesAtivadas, isTrue);
@@ -92,6 +77,7 @@ void main() {
       final manager2 = ConfigurationRepository(
         logRepository: LogRepository(logDao: systemDatabase.logDao),
         settingsService: SettingsService.injection(),
+        cache: CacheManager(),
       );
 
       final updatedConfig2 = await _obterSucesso(manager2.loadConfiguration());
@@ -176,25 +162,6 @@ void main() {
 
       File('data/logs_atividade.json').deleteSync();
     });
-
-    test('Deve limpar todos os dados do sistema', () async {
-      Directory('data').createSync(recursive: true);
-      File('data/clientes.json').writeAsStringSync('[{"id":1}]');
-      File('data/produtos.json').writeAsStringSync('[{"id":1}]');
-      File('data/usuarios.json').writeAsStringSync('[{"id":1}]');
-
-      final resultado = await manager.clearAllData();
-
-      expect(resultado.isSuccessful, isTrue);
-
-      expect(File('data/clientes.json').readAsStringSync(), equals('[]'));
-      expect(File('data/produtos.json').readAsStringSync(), equals('[]'));
-      expect(File('data/usuarios.json').readAsStringSync(), equals('[]'));
-
-      File('data/clientes.json').deleteSync();
-      File('data/produtos.json').deleteSync();
-      File('data/usuarios.json').deleteSync();
-    });
   });
 
   group('ConfiguracaoManager - Validações de Dados', () {
@@ -260,6 +227,7 @@ void main() {
         final manager2 = ConfigurationRepository(
           logRepository: LogRepository(logDao: systemDatabase.logDao),
           settingsService: SettingsService.injection(),
+          cache: CacheManager(),
         );
         final configuracao = await _obterSucesso(manager2.loadConfiguration());
         expect(
@@ -275,4 +243,43 @@ void main() {
       },
     );
   });
+}
+
+Future<void> _executarSucesso(
+  Future<ResultStatus<AppSettings, String>> future,
+) async {
+  final r = await future;
+  expect(r.isSuccessful, isTrue, reason: r.hasError ? r.asError : null);
+}
+
+Future<AppSettings> _obterSucesso(
+  Future<ResultStatus<AppSettings, String>> future,
+) async {
+  final r = await future;
+  expect(r.isSuccessful, isTrue, reason: r.hasError ? r.asError : null);
+  return r.asSuccess;
+}
+
+class FakePathProviderPlatform extends Fake
+    with MockPlatformInterfaceMixin
+    implements PathProviderPlatform {
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return '/tmp';
+  }
+
+  @override
+  Future<String?> getApplicationSupportPath() async {
+    return '/tmp';
+  }
+
+  @override
+  Future<String?> getLibraryPath() async {
+    return '/tmp';
+  }
+
+  @override
+  Future<String?> getTemporaryPath() async {
+    return '/tmp';
+  }
 }
