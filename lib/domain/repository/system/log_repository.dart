@@ -4,6 +4,15 @@ import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/log_dao.dart';
 
+/// Repositório para gerenciamento de logs de auditoria usando Drift.
+///
+/// Persiste e recupera registros [ActivityLog] via [LogDao]. Todos os erros
+/// são capturados internamente e devolvidos como [ResultStatus.error] com
+/// mensagem amigável.
+///
+/// Veja também:
+/// - [ILogRepository] - contrato da interface
+/// - [LogDao] - DAO do Drift
 class LogRepository with LoggerClassMixin implements ILogRepository {
   final LogDao _logDao;
   LogRepository({required LogDao logDao}) : _logDao = logDao;

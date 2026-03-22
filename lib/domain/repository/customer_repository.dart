@@ -9,6 +9,15 @@ import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/customer_dao.dart';
 
+/// Repositório para gerenciamento de clientes usando Drift.
+///
+/// Coordena operações CRUD sobre [Customer] via [CustomerDao] e registra
+/// eventos de auditoria via [ILogRepository]. Todos os erros são capturados
+/// internamente e devolvidos como [ResultStatus.error] com mensagem amigável.
+///
+/// Veja também:
+/// - [ICustomerRepository] - contrato da interface
+/// - [CustomerDao] - DAO do Drift
 class CustomerRepository implements ICustomerRepository {
   final ILogRepository _logRepository;
   final CustomerDao _customerDao;

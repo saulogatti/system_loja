@@ -5,8 +5,17 @@ import 'package:system_loja/domain/code_generator_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
 
+/// Repositório para gerenciamento de produtos usando Drift.
+///
+/// Coordena operações CRUD sobre [Product] via [ProductDao] e geração de
+/// códigos únicos via [CodeGeneratorService]. Todos os erros são capturados
+/// internamente e devolvidos como [ResultStatus.error] com mensagem amigável.
+///
+/// Veja também:
+/// - [IProductRepository] - contrato da interface
+/// - [ProductDao] - DAO do Drift
+/// - [CodeGeneratorService] - geração e validação de códigos
 class ProductRepository implements IProductRepository {
-  /// Mapa estático de locks por caminho de arquivo, para serializar I/O
   final ProductDao _productDao;
   final CodeGeneratorService _codeGeneratorService;
 
@@ -53,8 +62,10 @@ class ProductRepository implements IProductRepository {
     }
   }
 
-  /// Retorna a lista de produtos em cache, carregando do disco se vazia.
-
+  /// Busca um produto pelo código.
+  ///
+  /// Retorna [ResultStatus] com o produto encontrado ou mensagem de erro
+  /// se o código não existir.
   @override
   Future<ResultStatus<Product, String>> findByCode(int codigo) async {
     try {

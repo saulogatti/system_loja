@@ -1,6 +1,6 @@
-# Serviços Core do System Loja
+# Serviços de Domínio do System Loja
 
-Este diretório contém serviços de nível core que fornecem funcionalidades transversais para toda a aplicação.
+Este diretório contém serviços de domínio e implementações de repositórios que orquestram DAOs e regras de negócio.
 
 ## Serviços Disponíveis
 
@@ -212,7 +212,7 @@ A camada de apresentação **não** envolve chamadas ao repositório em `try/cat
 
 Ao adicionar um novo serviço:
 
-1. ✅ Crie o arquivo em `lib/core/services/nome_servico_service.dart`
+1. ✅ Crie o arquivo em `lib/domain/nome_servico_service.dart`
 2. ✅ Documente todos os métodos públicos em português
 3. ✅ Registre no `AppInjection`
 4. ✅ Crie testes em `test/nome_servico_service_test.dart`
