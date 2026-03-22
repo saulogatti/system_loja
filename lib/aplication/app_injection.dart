@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
@@ -96,5 +98,17 @@ void setupAppInjection() {
       categoryDao: appInjection.get<AppDatabase>().categoryDao,
     ),
   );
-  appInjection.get<IConfigurationRepository>().loadConfiguration();
+  unawaited(_carregarConfiguracaoInicial());
+}
+
+/// Carrega preferências da aplicação após o registro do repositório.
+Future<void> _carregarConfiguracaoInicial() async {
+  final resultado = await appInjection
+      .get<IConfigurationRepository>()
+      .loadConfiguration();
+  resultado.when(
+    onSuccess: (_) {},
+    onError: (mensagem) =>
+        debugPrint('Falha ao carregar configurações iniciais: $mensagem'),
+  );
 }

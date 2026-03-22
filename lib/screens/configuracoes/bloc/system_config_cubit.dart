@@ -7,7 +7,6 @@ import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
-import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/configuracoes/bloc/system_config_state.dart';
 
 class SystemConfigCubit extends Cubit<SystemConfigState> {
@@ -18,55 +17,58 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
     loadConfigurationData();
   }
 
-  Future<ResultStatus<SystemConfiguration, String>>
-  get _currentConfiguration async {
+  /// Configuração atual a partir do estado carregado ou do repositório.
+  Future<SystemConfiguration?> _obterConfiguracaoAtual() async {
     final currentState = state;
     if (currentState is SystemConfigStateLoaded) {
-      return ResultStatus.success(currentState.data);
+      return currentState.data;
     }
-    return await _systemRepository.getSystemConfiguration();
+    final result = await _systemRepository.getSystemConfiguration();
+    if (result.isSuccessful) {
+      return result.asSuccess;
+    }
+    emit(SystemConfigState.error(result.asError));
+    return null;
   }
 
   Future<void> exportConfiguration() async {
-    final configResult = await _currentConfiguration;
-    switch (configResult) {
-      case ResultSuccess(result: final systemConfiguration):
-        // TODO migrar para o repository
-        try {
-          const acceptedTypes = <XTypeGroup>[
-            XTypeGroup(label: 'json', extensions: ['json']),
-          ];
-          final location = await getSaveLocation(
-            suggestedName: 'system_configuration.json',
-            acceptedTypeGroups: acceptedTypes,
-          );
+    final systemConfiguration = await _obterConfiguracaoAtual();
+    if (systemConfiguration == null) {
+      return;
+    }
 
-          if (location == null) {
-            return;
-          }
+    try {
+      const acceptedTypes = <XTypeGroup>[
+        XTypeGroup(label: 'json', extensions: ['json']),
+      ];
+      final location = await getSaveLocation(
+        suggestedName: 'system_configuration.json',
+        acceptedTypeGroups: acceptedTypes,
+      );
 
-          final file = File(location.path);
-          await file.writeAsString(
-            jsonEncode(systemConfiguration),
-            flush: true,
-          );
+      if (location == null) {
+        return;
+      }
 
-          emit(
-            SystemConfigState.loaded(
-              systemConfiguration,
-              feedbackMessage: 'Configuração exportada com sucesso.',
-              feedbackType: SystemConfigFeedbackType.exported,
-            ),
-          );
-        } catch (_) {
-          emit(
-            SystemConfigState.error(
-              'Erro ao exportar configuração para o arquivo selecionado.',
-            ),
-          );
-        }
-      case ResultError(resultError: final errorMessage):
-        emit(SystemConfigState.error(errorMessage));
+      final file = File(location.path);
+      await file.writeAsString(
+        jsonEncode(systemConfiguration),
+        flush: true,
+      );
+
+      emit(
+        SystemConfigState.loaded(
+          systemConfiguration,
+          feedbackMessage: 'Configuração exportada com sucesso.',
+          feedbackType: SystemConfigFeedbackType.exported,
+        ),
+      );
+    } catch (_) {
+      emit(
+        SystemConfigState.error(
+          'Erro ao exportar configuração para o arquivo selecionado.',
+        ),
+      );
     }
   }
 
@@ -85,8 +87,9 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
       final result = await _systemRepository.importConfigurationFromJson(
         content,
       );
-      switch (result) {
-        case ResultSuccess(result: final normalizedData):
+
+      result.when(
+        onSuccess: (normalizedData) {
           emit(
             SystemConfigState.loaded(
               normalizedData,
@@ -94,32 +97,35 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
               feedbackType: SystemConfigFeedbackType.imported,
             ),
           );
-        case ResultError(resultError: final errorMessage):
-          emit(SystemConfigState.error(errorMessage));
-      }
-    } catch (_) {
-      emit(
-        SystemConfigState.error('Erro ao importar arquivo de configuração.'),
+        },
+        onError: (message) {
+          emit(SystemConfigState.error(message));
+        },
       );
+    } catch (e) {
+      emit(SystemConfigState.error('Erro ao importar configuração: $e'));
     }
   }
 
   Future<void> loadConfigurationData() async {
     emit(SystemConfigState.loading());
     final result = await _systemRepository.getSystemConfiguration();
-    switch (result) {
-      case ResultSuccess(result: final configData):
+    result.when(
+      onSuccess: (configData) {
         emit(SystemConfigState.loaded(configData));
-      case ResultError(resultError: final errorMessage):
-        emit(SystemConfigState.error(errorMessage));
-    }
+      },
+      onError: (message) {
+        emit(SystemConfigState.error(message));
+      },
+    );
   }
 
   Future<void> resetToDefaultConfiguration() async {
     emit(SystemConfigState.loading());
+
     final result = await _systemRepository.resetToDefaultConfiguration();
-    switch (result) {
-      case ResultSuccess(result: final defaultConfiguration):
+    result.when(
+      onSuccess: (defaultConfiguration) {
         emit(
           SystemConfigState.loaded(
             defaultConfiguration,
@@ -128,9 +134,11 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
             feedbackType: SystemConfigFeedbackType.reset,
           ),
         );
-      case ResultError(resultError: final errorMessage):
-        emit(SystemConfigState.error(errorMessage));
-    }
+      },
+      onError: (message) {
+        emit(SystemConfigState.error(message));
+      },
+    );
   }
 
   Future<void> saveConfigurationData({
@@ -150,12 +158,10 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
 
     emit(SystemConfigState.loading());
     final normalizedUnits = _normalizeUnits(measurementUnits);
-    final currentConfigurationResult = await _currentConfiguration;
-    if (currentConfigurationResult.hasError) {
-      emit(SystemConfigState.error(currentConfigurationResult.asError));
+    final systemConfiguration = await _obterConfiguracaoAtual();
+    if (systemConfiguration == null) {
       return;
     }
-    final systemConfiguration = currentConfigurationResult.asSuccess;
 
     final data = SystemConfiguration(
       id: systemConfiguration.id,
@@ -173,8 +179,8 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
     );
 
     final saveResult = await _systemRepository.saveSystemConfiguration(data);
-    switch (saveResult) {
-      case ResultSuccess():
+    saveResult.when(
+      onSuccess: (_) {
         emit(
           SystemConfigState.loaded(
             data,
@@ -182,9 +188,11 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
             feedbackType: SystemConfigFeedbackType.saved,
           ),
         );
-      case ResultError(resultError: final errorMessage):
-        emit(SystemConfigState.error(errorMessage));
-    }
+      },
+      onError: (message) {
+        emit(SystemConfigState.error(message));
+      },
+    );
   }
 
   List<String> _normalizeUnits(List<String> measurementUnits) {

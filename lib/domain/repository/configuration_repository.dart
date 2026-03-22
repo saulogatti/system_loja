@@ -16,7 +16,6 @@ import '../../core/settings/app_settings.dart';
 class ConfigurationRepository
     with LoggerClassMixin
     implements IConfigurationRepository {
-  /// Configuração atual do sistema
   AppSettings _configuracao = AppSettings.createDefaultSettings();
   final ILogRepository _logRepository;
   final ISettingsService _settingsService;
@@ -28,10 +27,6 @@ class ConfigurationRepository
 
   CacheManager get _cache => CacheManager.instance;
 
-  /// Limpa todos os dados do sistema
-  ///
-  /// Remove todos os clientes, produtos, notas fiscais e logs.
-  /// Mantém as configurações atuais.
   @override
   Future<ResultStatus<AppSettings, String>> clearAllData() async {
     try {
@@ -90,7 +85,6 @@ class ConfigurationRepository
     }
   }
 
-  /// Carrega a configuração atual do sistema
   @override
   Future<ResultStatus<AppSettings, String>> loadConfiguration() async {
     try {
@@ -102,7 +96,6 @@ class ConfigurationRepository
     }
   }
 
-  /// Restaura configurações para valores padrão
   @override
   Future<ResultStatus<AppSettings, String>> resetToDefaults() async {
     try {
@@ -128,7 +121,6 @@ class ConfigurationRepository
     try {
       await _cache.restoreBackupFrom(direBackup);
       await _carregarDados();
-
       logInfo('Restauração de backup realizada com sucesso');
       return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
@@ -137,9 +129,6 @@ class ConfigurationRepository
     }
   }
 
-  /// Atualiza a configuração do sistema
-  ///
-  /// Salva automaticamente após atualizar.
   @override
   Future<ResultStatus<AppSettings, String>> updateAppSettings(
     AppSettings novaConfiguracao,
@@ -177,10 +166,6 @@ class ConfigurationRepository
     );
   }
 
-  /// Verifica se um log é recente baseado na data limite
-  ///
-  /// Retorna true se o log deve ser mantido, false se deve ser removido.
-  /// Mantém logs com formato inválido por segurança.
   // ignore: unused_element
   bool _isLogRecent(Object log, DateTime dataLimite) {
     try {
@@ -188,13 +173,12 @@ class ConfigurationRepository
         final dataLog = DateTime.parse(log['data_hora'] as String);
         return dataLog.isAfter(dataLimite);
       }
-      return true; // Mantém logs com formato inválido
+      return true;
     } catch (e) {
-      return true; // Mantém logs com data inválida
+      return true;
     }
   }
 
-  /// Salva dados no arquivo JSON
   Future<void> _salvarDados() async {
     final file = ConfigurationRepositoryCache(
       configuracao: AppSettingsEntry.fromAppSettings(_configuracao),

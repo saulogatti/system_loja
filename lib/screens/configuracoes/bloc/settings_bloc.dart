@@ -9,10 +9,11 @@ import 'package:system_loja/core/utils/command_result.dart';
 import 'settings_event.dart';
 import 'settings_state.dart';
 
-/// BLoC para gerenciar o estado das configurações do sistema
+/// BLoC para gerenciar o estado das configurações do sistema.
 ///
-/// Utiliza o ConfiguracaoManager para persistência de dados
-/// e gerencia os estados da tela de configurações.
+/// Erros vindos do repositório já chegam como [ResultStatus.error]; este BLoC
+/// apenas mapeia para [SettingsState]. `try/catch` fica limitado a fluxo de
+/// seleção de diretório quando a plataforma lança exceção.
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final IConfigurationRepository _configurationRepository;
 
@@ -28,7 +29,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<RestoreBackupEvent>(_onRestoreBackup);
   }
 
-  /// Limpa todos os dados do sistema
   Future<void> _onClearAllData(
     ClearAllDataEvent event,
     Emitter<SettingsState> emit,
@@ -42,7 +42,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     );
   }
 
-  /// Limpa logs antigos baseado na configuração
   Future<void> _onClearOldLogs(
     ClearOldLogsEvent event,
     Emitter<SettingsState> emit,
@@ -56,7 +55,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     );
   }
 
-  /// Realiza backup dos dados do sistema
   Future<void> _onCreateBackup(
     BackupSettingsEvent event,
     Emitter<SettingsState> emit,
@@ -75,7 +73,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     );
   }
 
-  /// Carrega as configurações iniciais
   Future<void> _onLoadSettings(
     LoadSettingsEvent event,
     Emitter<SettingsState> emit,
@@ -89,7 +86,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     );
   }
 
-  /// Restaura as configurações para valores padrão
   Future<void> _onResetToDefault(
     ResetDefaultSettingsEvent event,
     Emitter<SettingsState> emit,
@@ -107,7 +103,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     RestoreBackupEvent event,
     Emitter<SettingsState> emit,
   ) async {
-    final direBackup = await getDirectoryPath();
+    String? direBackup;
+    try {
+      direBackup = await getDirectoryPath();
+    } catch (e) {
+      emit(SettingsError('Erro ao selecionar diretório de backup: $e'));
+      return;
+    }
     if (direBackup == null) {
       emit(
         SettingsError('Nenhum diretório selecionado para restaurar o backup.'),
@@ -123,7 +125,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     );
   }
 
-  /// Atualiza as configurações do sistema
   Future<void> _onUpdateSettings(
     UpdateSettingsEvent event,
     Emitter<SettingsState> emit,

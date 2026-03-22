@@ -6,18 +6,8 @@ import 'package:system_loja/core/utils/command_result.dart';
 /// Esta interface gerencia as configurações globais da aplicação,
 /// incluindo backup/restore, limpeza de dados e reset de configurações.
 ///
-/// Todas as operações retornam [AppSettings] atualizado após a execução,
-/// permitindo atualização imediata da UI.
-///
-/// Exemplo de uso:
-/// ```dart
-/// final repository = appInjection.get<ConfigurationRepository>();
-/// final resultado = await repository.loadConfiguration();
-/// resultado.when(
-///   onSuccess: (configs) => print('Tema escuro: ${configs.temaEscuro}'),
-///   onError: (erro) => print('Falha: $erro'),
-/// );
-/// ```
+/// Todas as operações retornam [ResultStatus] com [AppSettings] em sucesso
+/// e mensagem de erro em texto — sem propagar exceções para a UI.
 ///
 /// Veja também:
 /// - [AppSettings] - modelo de configurações da aplicação

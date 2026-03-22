@@ -6,13 +6,14 @@ import 'package:system_loja/core/models/system_config/report_configuration.dart'
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/aplication/system_error_manager.dart';
+import 'package:system_loja/core/utils/repository_error_mapper.dart';
 import 'package:system_loja/data/converter/system_configuration_codec.dart';
 import 'package:system_loja/data/database/dao/system_dao.dart';
 
 class SystemRepository implements ISystemRepository {
   final SystemDao _systemDao;
   SystemRepository({required SystemDao systemDao}) : _systemDao = systemDao;
+
   @override
   Future<ResultStatus<SystemConfiguration, String>>
   getSystemConfiguration() async {
@@ -24,9 +25,13 @@ class SystemRepository implements ISystemRepository {
         await _systemDao.saveSystemConfiguration(systemConfiguration);
       }
       return ResultStatus.success(systemConfiguration);
-    } catch (e, stackTrace) {
-      await reportError(e, stackTrace);
-      return ResultStatus.error('Erro ao carregar configurações do sistema.');
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(
+          e,
+          contexto: 'Falha ao obter configuração do sistema',
+        ),
+      );
     }
   }
 
@@ -65,15 +70,10 @@ class SystemRepository implements ISystemRepository {
 
       await _systemDao.saveSystemConfiguration(normalizedData);
       return ResultStatus.success(normalizedData);
-    } on FormatException catch (e, stackTrace) {
-      await reportError(e, stackTrace);
-      return ResultStatus.error('JSON inválido: ${e.message}.');
-    } on TypeError catch (e, stackTrace) {
-      await reportError(e, stackTrace);
-      return ResultStatus.error('Estrutura de configuração inválida.');
-    } catch (e, stackTrace) {
-      await reportError(e, stackTrace);
-      return ResultStatus.error('Erro ao importar configuração.');
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(e, contexto: 'Falha ao importar configuração'),
+      );
     }
   }
 
@@ -84,9 +84,13 @@ class SystemRepository implements ISystemRepository {
       final defaultConfiguration = _createDefaultConfiguration();
       await _systemDao.saveSystemConfiguration(defaultConfiguration);
       return ResultStatus.success(defaultConfiguration);
-    } catch (e, stackTrace) {
-      await reportError(e, stackTrace);
-      return ResultStatus.error('Erro ao restaurar configuração padrão.');
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(
+          e,
+          contexto: 'Falha ao restaurar configuração padrão',
+        ),
+      );
     }
   }
 
@@ -97,9 +101,10 @@ class SystemRepository implements ISystemRepository {
     try {
       await _systemDao.saveSystemConfiguration(data);
       return ResultStatus.success(true);
-    } catch (e, stackTrace) {
-      await reportError(e, stackTrace);
-      return ResultStatus.error('Erro ao salvar configuração do sistema.');
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(e, contexto: 'Falha ao salvar configuração'),
+      );
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 
@@ -67,40 +68,22 @@ class SalesCubit extends Cubit<SalesState> {
     final resultCompanies = await _companyRepository.fetchMappedCompanies();
     final resultSystem = await _systemRepository.getSystemConfiguration();
 
-    if (resultSales.hasError) {
-      emit(SalesState.error(message: resultSales.asError));
-      return;
-    }
-    if (resultMap.hasError) {
-      emit(
-        SalesState.error(
-          message: 'Erro ao carregar clientes: ${resultMap.asError}',
-        ),
-      );
-      return;
-    }
-    if (resultCompanies.hasError) {
-      emit(
-        SalesState.error(
-          message: 'Erro ao carregar empresas: ${resultCompanies.asError}',
-        ),
-      );
-      return;
-    }
-    if (resultSystem.hasError) {
-      emit(
-        SalesState.error(
-          message:
-              'Erro ao carregar configuração de pagamentos: ${resultSystem.asError}',
-        ),
-      );
-      return;
+    late final List<PaymentMethodType> paymentMethods;
+    switch (resultSystem) {
+      case ResultSuccess(result: final config):
+        paymentMethods = config.priceConfiguration.types;
+      case ResultError(resultError: final error):
+        emit(
+          SalesState.loadProductsFailure(
+            message: error,
+          ),
+        );
+        return;
     }
 
     final customers = resultMap.asSuccess;
     final invoices = resultSales.asSuccess;
     final companies = resultCompanies.asSuccess;
-    final paymentMethods = resultSystem.asSuccess.priceConfiguration.types;
     switch (result) {
       case ResultSuccess(result: final products):
         emit(
