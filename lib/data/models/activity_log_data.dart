@@ -43,26 +43,26 @@ class ActivityLogData {
   Map<String, dynamic> toJson() => _$ActivityLogDataToJson(this);
 
   factory ActivityLogData.fromDomain(ActivityLog value) => ActivityLogData(
-        actionType: value.actionType,
-        entity: value.entity,
-        userId: value.userId,
-        userName: value.userName,
-        timestamp: value.timestamp,
-        details: value.details,
-        registrationDate: value.registrationDate,
-        lastUpdatedDate: value.lastUpdatedDate,
-      );
+    actionType: value.actionType,
+    entity: value.entity,
+    userId: value.userId,
+    userName: value.userName,
+    timestamp: value.timestamp,
+    details: value.details,
+    registrationDate: value.registrationDate,
+    lastUpdatedDate: value.lastUpdatedDate,
+  );
 
   ActivityLog toDomain() => ActivityLog(
-        actionType: actionType,
-        entity: entity,
-        userId: userId,
-        userName: userName,
-        timestamp: timestamp,
-        details: details,
-        registrationDate: registrationDate,
-        lastUpdatedDate: lastUpdatedDate,
-      );
+    actionType: actionType,
+    entity: entity,
+    userId: userId,
+    userName: userName,
+    timestamp: timestamp,
+    details: details,
+    registrationDate: registrationDate,
+    lastUpdatedDate: lastUpdatedDate,
+  );
 
   static ActionType _actionFromJson(Object? json) {
     final s = json as String;
@@ -85,9 +85,9 @@ class ActivityLogData {
   }
 
   static String _actionToJson(ActionType action) => switch (action) {
-        ActionType.criar => 'CRIAR',
-        ActionType.ler => 'LER',
-        ActionType.atualizar => 'ATUALIZAR',
-        ActionType.deletar => 'DELETAR',
-      };
+    ActionType.criar => 'CRIAR',
+    ActionType.ler => 'LER',
+    ActionType.atualizar => 'ATUALIZAR',
+    ActionType.deletar => 'DELETAR',
+  };
 }

@@ -40,12 +40,18 @@ class InvoiceCard extends StatelessWidget {
                     children: [
                       Text(
                         'NF ${invoice.data.invoiceNumber}',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         'ID: ${invoice.id}',
-                        style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -67,7 +73,10 @@ class InvoiceCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         invoice.data.customerName ?? '',
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
@@ -76,7 +85,10 @@ class InvoiceCard extends StatelessWidget {
                 ),
                 Text(
                   invoice.registrationDate.toFormattedDate(),
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
@@ -96,7 +108,9 @@ class InvoiceCard extends StatelessWidget {
                           '${invoice.data.items.length} ${invoice.data.items.length == 1 ? 'item' : 'itens'}',
                           style: TextStyle(
                             fontSize: 13,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
@@ -115,7 +129,9 @@ class InvoiceCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onPrimaryContainer,
                         ),
                       ),
                     ),

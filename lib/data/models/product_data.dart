@@ -22,7 +22,9 @@ class ProductData {
     required this.description,
     required this.price,
     required this.stockQuantity,
-    required this.code, required this.registrationDate, this.categoryId,
+    required this.code,
+    required this.registrationDate,
+    this.categoryId,
     this.lastUpdatedDate,
   });
 
@@ -32,26 +34,26 @@ class ProductData {
   Map<String, dynamic> toJson() => _$ProductDataToJson(this);
 
   factory ProductData.fromDomain(Product value) => ProductData(
-        id: value.id,
-        name: value.name,
-        description: value.description,
-        price: value.price,
-        stockQuantity: value.stockQuantity,
-        categoryId: value.categoryId,
-        code: value.code,
-        registrationDate: value.registrationDate,
-        lastUpdatedDate: value.lastUpdatedDate,
-      );
+    id: value.id,
+    name: value.name,
+    description: value.description,
+    price: value.price,
+    stockQuantity: value.stockQuantity,
+    categoryId: value.categoryId,
+    code: value.code,
+    registrationDate: value.registrationDate,
+    lastUpdatedDate: value.lastUpdatedDate,
+  );
 
   Product toDomain() => Product(
-        id: id,
-        name: name,
-        description: description,
-        price: price,
-        stockQuantity: stockQuantity,
-        categoryId: categoryId,
-        code: code,
-        registrationDate: registrationDate,
-        lastUpdatedDate: lastUpdatedDate,
-      );
+    id: id,
+    name: name,
+    description: description,
+    price: price,
+    stockQuantity: stockQuantity,
+    categoryId: categoryId,
+    code: code,
+    registrationDate: registrationDate,
+    lastUpdatedDate: lastUpdatedDate,
+  );
 }

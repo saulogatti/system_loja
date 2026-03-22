@@ -44,7 +44,8 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
-  AuthorizationLevel _nivelPermissaoSelecionado = AuthorizationLevel.usuarioComum;
+  AuthorizationLevel _nivelPermissaoSelecionado =
+      AuthorizationLevel.usuarioComum;
   User? _usuarioEditando;
   final OverlayApp _overlayLoader = OverlayApp();
   List<User> _usuarios = List.empty(growable: true);
@@ -87,15 +88,19 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
               // Estado inicial, nada a fazer
             },
             senhaInvalida: (mensagem) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.red));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(mensagem), backgroundColor: Colors.red),
+              );
             },
             usuarioRemovido: (id) {
-              final usuario = _usuarios.firstWhere((usuario) => usuario.id == id);
+              final usuario = _usuarios.firstWhere(
+                (usuario) => usuario.id == id,
+              );
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Usuário "${usuario.name}" excluído com sucesso!'),
+                  content: Text(
+                    'Usuário "${usuario.name}" excluído com sucesso!',
+                  ),
                   backgroundColor: Colors.orange,
                 ),
               );
@@ -138,7 +143,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                physics: AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -197,7 +204,11 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   }
 
   void _confirmarExclusao(User usuario) {
-    UsuarioDeleteConfirmDialog.show(context, usuario, () => _excluirUsuario(usuario));
+    UsuarioDeleteConfirmDialog.show(
+      context,
+      usuario,
+      () => _excluirUsuario(usuario),
+    );
   }
 
   void _editarUsuario(User usuario) {
@@ -214,7 +225,11 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     // Scroll para o topo
     final context = _formKey.currentContext;
     if (context != null) {
-      Scrollable.ensureVisible(context, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
     }
   }
 
@@ -262,7 +277,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
 
           permission: _nivelPermissaoSelecionado.value,
         );
-        await context.read<UserCubit>().atualizarUsuario(usuarioAtualizado: user);
+        await context.read<UserCubit>().atualizarUsuario(
+          usuarioAtualizado: user,
+        );
       }
     }
   }

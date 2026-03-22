@@ -208,10 +208,7 @@ class _CompanyViewState extends State<CompanyView> {
               if (company.address.zipCode.isNotEmpty)
                 InfoRow(label: 'CEP', value: company.address.zipCode),
               if (company.address.neighborhood.isNotEmpty)
-                InfoRow(
-                  label: 'Bairro',
-                  value: company.address.neighborhood,
-                ),
+                InfoRow(label: 'Bairro', value: company.address.neighborhood),
               if (company.address.city.isNotEmpty)
                 InfoRow(label: 'Cidade', value: company.address.city),
             ],

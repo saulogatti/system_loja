@@ -7,7 +7,9 @@ class Cnpj extends Document {
   /// Expressões regulares para validar o formato do CNPJ
   /// - _cnpjRegExp: Valida o formato XX.XXX.XXX/XXXX-XX
   /// - _cnpjCleanRegExp: Valida apenas os 14 dígitos numéricos
-  static final RegExp _cnpjRegExp = RegExp(r'^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$');
+  static final RegExp _cnpjRegExp = RegExp(
+    r'^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$',
+  );
   static final RegExp _cnpjCleanRegExp = RegExp(r'^\d{14}$');
 
   /// Cria uma instância de [Cnpj] com o valor informado.
@@ -15,11 +17,13 @@ class Cnpj extends Document {
   /// Lança [ValidationException] se o formato for inválido.
   Cnpj(super.value) {
     final valueCheck = super.value.trim();
-    if (!_cnpjRegExp.hasMatch(valueCheck) && !_cnpjCleanRegExp.hasMatch(valueCheck)) {
+    if (!_cnpjRegExp.hasMatch(valueCheck) &&
+        !_cnpjCleanRegExp.hasMatch(valueCheck)) {
       throw ValidationException(
         'CNPJ deve estar no formato XX.XXX.XXX/XXXX-XX ou conter apenas 14 dígitos',
         field: 'CNPJ',
-        suggestion: 'Use o formato XX.XXX.XXX/XXXX-XX ou apenas os 14 dígitos numéricos',
+        suggestion:
+            'Use o formato XX.XXX.XXX/XXXX-XX ou apenas os 14 dígitos numéricos',
         invalidValue: valueCheck,
       );
     }
@@ -38,7 +42,8 @@ class Cnpj extends Document {
   String? validateDocument() {
     final cleanedValue = value.replaceAll(RegExp(r'\D'), '');
 
-    if (cleanedValue.length != 14 || RegExp(r'^(\d)\1{13}$').hasMatch(cleanedValue)) {
+    if (cleanedValue.length != 14 ||
+        RegExp(r'^(\d)\1{13}$').hasMatch(cleanedValue)) {
       return 'CNPJ inválido - deve conter 14 dígitos e não pode ser uma sequência de números repetidos';
     }
 
@@ -46,7 +51,10 @@ class Cnpj extends Document {
 
     // Validação do primeiro dígito verificador
     final firstWeights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-    final sum1 = List.generate(12, (i) => digits[i] * firstWeights[i]).reduce((a, b) => a + b);
+    final sum1 = List.generate(
+      12,
+      (i) => digits[i] * firstWeights[i],
+    ).reduce((a, b) => a + b);
     final remainder1 = sum1 % 11;
     final checkDigit1 = remainder1 < 2 ? 0 : 11 - remainder1;
 
@@ -56,7 +64,10 @@ class Cnpj extends Document {
 
     // Validação do segundo dígito verificador
     final secondWeights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-    final sum2 = List.generate(13, (i) => digits[i] * secondWeights[i]).reduce((a, b) => a + b);
+    final sum2 = List.generate(
+      13,
+      (i) => digits[i] * secondWeights[i],
+    ).reduce((a, b) => a + b);
     final remainder2 = sum2 % 11;
     final checkDigit2 = remainder2 < 2 ? 0 : 11 - remainder2;
 

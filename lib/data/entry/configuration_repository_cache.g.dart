@@ -23,6 +23,12 @@ AppSettingsEntry _$AppSettingsEntryFromJson(Map<String, dynamic> json) =>
       frequenciaBackup: json['frequenciaBackup'] as String? ?? 'semanal',
       localBackup: json['localBackup'] as String? ?? 'data/backups',
       limpezaAutomatica: json['limpezaAutomatica'] as bool? ?? false,
+      diasManterLogs: (json['diasManterLogs'] as num?)?.toInt() ?? 90,
+      exigirSenha: json['exigirSenha'] as bool? ?? false,
+      tempoBloqueioMinutos:
+          (json['tempoBloqueioMinutos'] as num?)?.toInt() ?? 15,
+      permitirMultiplosUsuarios:
+          json['permitirMultiplosUsuarios'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$AppSettingsEntryToJson(AppSettingsEntry instance) =>
@@ -37,6 +43,10 @@ Map<String, dynamic> _$AppSettingsEntryToJson(AppSettingsEntry instance) =>
       'frequenciaBackup': instance.frequenciaBackup,
       'localBackup': instance.localBackup,
       'limpezaAutomatica': instance.limpezaAutomatica,
+      'diasManterLogs': instance.diasManterLogs,
+      'exigirSenha': instance.exigirSenha,
+      'tempoBloqueioMinutos': instance.tempoBloqueioMinutos,
+      'permitirMultiplosUsuarios': instance.permitirMultiplosUsuarios,
     };
 
 const _$EnumColorAppThemeSettingsEnumMap = {

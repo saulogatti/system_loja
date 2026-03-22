@@ -11,7 +11,12 @@ class AddressForm extends StatelessWidget {
   final TextEditingController stateController;
 
   const AddressForm({
-    required this.streetController, required this.zipCodeController, required this.neighborhoodController, required this.cityController, required this.stateController, super.key,
+    required this.streetController,
+    required this.zipCodeController,
+    required this.neighborhoodController,
+    required this.cityController,
+    required this.stateController,
+    super.key,
   });
 
   @override

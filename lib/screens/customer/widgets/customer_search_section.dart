@@ -9,7 +9,9 @@ class CustomerSearchSection extends StatelessWidget {
   final VoidCallback onSearch;
 
   const CustomerSearchSection({
-    required this.searchCpfController, required this.onSearch, super.key,
+    required this.searchCpfController,
+    required this.onSearch,
+    super.key,
   });
 
   @override

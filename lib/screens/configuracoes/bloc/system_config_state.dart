@@ -7,7 +7,8 @@ enum SystemConfigFeedbackType { saved, reset, imported, exported }
 
 @freezed
 sealed class SystemConfigState with _$SystemConfigState {
-  const factory SystemConfigState.error(String message) = SystemConfigStateError;
+  const factory SystemConfigState.error(String message) =
+      SystemConfigStateError;
   const factory SystemConfigState.initial() = SystemConfigStateInitial;
   const factory SystemConfigState.loaded(
     SystemConfiguration data, {

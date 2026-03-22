@@ -18,7 +18,11 @@ class InvoiceItemData {
   final double unitPrice;
 
   const InvoiceItemData({
-    required this.productName, required this.productCode, required this.quantity, required this.unitPrice, this.productId,
+    required this.productName,
+    required this.productCode,
+    required this.quantity,
+    required this.unitPrice,
+    this.productId,
   });
 
   factory InvoiceItemData.fromJson(Map<String, dynamic> json) =>
@@ -27,18 +31,18 @@ class InvoiceItemData {
   Map<String, dynamic> toJson() => _$InvoiceItemDataToJson(this);
 
   factory InvoiceItemData.fromDomain(InvoiceItem value) => InvoiceItemData(
-        productId: value.productId == kInvalidId ? null : value.productId,
-        productName: value.productName,
-        productCode: value.productCode,
-        quantity: value.quantity,
-        unitPrice: value.unitPrice,
-      );
+    productId: value.productId == kInvalidId ? null : value.productId,
+    productName: value.productName,
+    productCode: value.productCode,
+    quantity: value.quantity,
+    unitPrice: value.unitPrice,
+  );
 
   InvoiceItem toDomain() => InvoiceItem(
-        productId: productId ?? kInvalidId,
-        productName: productName,
-        productCode: productCode,
-        quantity: quantity,
-        unitPrice: unitPrice,
-      );
+    productId: productId ?? kInvalidId,
+    productName: productName,
+    productCode: productCode,
+    quantity: quantity,
+    unitPrice: unitPrice,
+  );
 }

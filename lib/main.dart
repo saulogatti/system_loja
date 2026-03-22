@@ -34,9 +34,13 @@ class SystemLojaApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<CustomerBloc>(
-          create: (context) => CustomerBloc(appInjection.get<ICustomerRepository>()),
+          create: (context) =>
+              CustomerBloc(appInjection.get<ICustomerRepository>()),
         ),
-        BlocProvider<CompanyBloc>(create: (context) => CompanyBloc(appInjection.get<ICompanyRepository>())),
+        BlocProvider<CompanyBloc>(
+          create: (context) =>
+              CompanyBloc(appInjection.get<ICompanyRepository>()),
+        ),
         BlocProvider<SalesCubit>(
           create: (context) => SalesCubit(
             appInjection.get<ISalesRepository>(),
@@ -46,21 +50,33 @@ class SystemLojaApp extends StatelessWidget {
             appInjection.get<ICompanyRepository>(),
           ),
         ),
-        BlocProvider<UserCubit>(create: (context) => UserCubit(appInjection.get<IUserRepository>())),
-        BlocProvider<LogsCubit>(create: (context) => LogsCubit(appInjection.get<ILogRepository>())),
-        BlocProvider<PersonBloc>(
-          create: (context) =>
-              PersonBloc(appInjection.get<ICustomerRepository>(), appInjection.get<ICompanyRepository>()),
+        BlocProvider<UserCubit>(
+          create: (context) => UserCubit(appInjection.get<IUserRepository>()),
         ),
-        BlocProvider<HomeBloc>(create: (context) => HomeBloc(appInjection.get<ISystemRepository>())),
+        BlocProvider<LogsCubit>(
+          create: (context) => LogsCubit(appInjection.get<ILogRepository>()),
+        ),
+        BlocProvider<PersonBloc>(
+          create: (context) => PersonBloc(
+            appInjection.get<ICustomerRepository>(),
+            appInjection.get<ICompanyRepository>(),
+          ),
+        ),
+        BlocProvider<HomeBloc>(
+          create: (context) => HomeBloc(appInjection.get<ISystemRepository>()),
+        ),
       ],
       child: ValueListenableBuilder(
-        valueListenable: appInjection.get<SettingsService>().currentThemeNotifier,
+        valueListenable: appInjection
+            .get<SettingsService>()
+            .currentThemeNotifier,
         builder: (context, value, child) {
           return MaterialApp.router(
             title: 'Sistema de Gerenciamento de Loja',
             theme: value,
-            themeMode: appInjection.get<SettingsService>().temaEscuro ? ThemeMode.dark : ThemeMode.light,
+            themeMode: appInjection.get<SettingsService>().temaEscuro
+                ? ThemeMode.dark
+                : ThemeMode.light,
             routerConfig: appInjection.get<RouteApp>().config(),
             debugShowCheckedModeBanner: kDebugMode,
           );

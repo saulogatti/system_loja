@@ -20,7 +20,9 @@ class CustomerData {
     required this.id,
     required this.name,
     required this.cpf,
-    required this.address, required this.registrationDate, this.phone,
+    required this.address,
+    required this.registrationDate,
+    this.phone,
     this.email,
     this.lastUpdatedDate,
   });
@@ -31,24 +33,24 @@ class CustomerData {
   Map<String, dynamic> toJson() => _$CustomerDataToJson(this);
 
   factory CustomerData.fromDomain(Customer value) => CustomerData(
-        id: value.id,
-        name: value.name,
-        cpf: value.cpf,
-        phone: value.phone,
-        email: value.email,
-        address: AddressData.fromDomain(value.address),
-        registrationDate: value.registrationDate,
-        lastUpdatedDate: value.lastUpdatedDate,
-      );
+    id: value.id,
+    name: value.name,
+    cpf: value.cpf,
+    phone: value.phone,
+    email: value.email,
+    address: AddressData.fromDomain(value.address),
+    registrationDate: value.registrationDate,
+    lastUpdatedDate: value.lastUpdatedDate,
+  );
 
   Customer toDomain() => Customer(
-        id: id,
-        name: name,
-        cpf: cpf,
-        phone: phone,
-        email: email,
-        address: address.toDomain(),
-        registrationDate: registrationDate,
-        lastUpdatedDate: lastUpdatedDate,
-      );
+    id: id,
+    name: name,
+    cpf: cpf,
+    phone: phone,
+    email: email,
+    address: address.toDomain(),
+    registrationDate: registrationDate,
+    lastUpdatedDate: lastUpdatedDate,
+  );
 }

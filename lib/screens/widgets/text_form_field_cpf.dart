@@ -4,9 +4,10 @@ import 'package:system_loja/screens/utils/text_formatters.dart';
 class TextFormFieldCpf extends StatelessWidget {
   final bool enable;
   final TextEditingController cpfController;
-  final String? Function(String?)? validatorOptions;  
+  final String? Function(String?)? validatorOptions;
   const TextFormFieldCpf({
-    required this.cpfController, super.key,
+    required this.cpfController,
+    super.key,
     this.enable = false,
     this.validatorOptions,
   });

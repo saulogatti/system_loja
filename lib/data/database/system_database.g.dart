@@ -184,6 +184,10 @@ class $UsersRecordsTable extends UsersRecords
         DriftSqlType.string,
         data['${effectivePrefix}password_hash'],
       )!,
+      permission: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}permission'],
+      )!,
       registrationDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}registration_date'],
@@ -316,7 +320,7 @@ class UsersRecordsCompanion extends UpdateCompanion<UserEntry> {
 }
 
 class $LogsRecordsTable extends LogsRecords
-    with TableInfo<$LogsRecordsTable, ActivityLog> {
+    with TableInfo<$LogsRecordsTable, LogsRecord> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -441,7 +445,7 @@ class $LogsRecordsTable extends LogsRecords
   static const String $name = 'logs_records';
   @override
   VerificationContext validateIntegrity(
-    Insertable<ActivityLog> instance, {
+    Insertable<LogsRecord> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -509,34 +513,26 @@ class $LogsRecordsTable extends LogsRecords
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ActivityLog map(Map<String, dynamic> data, {String? tablePrefix}) {
+  LogsRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ActivityLog(
+    return LogsRecord(
       actionType: $LogsRecordsTable.$converteractionType.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.int,
           data['${effectivePrefix}action_type'],
         )!,
       ),
+      details: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}details'],
+      )!,
       entity: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}entity'],
       )!,
-      userId: attachedDatabase.typeMapping.read(
+      id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}user_id'],
-      )!,
-      userName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}user_name'],
-      )!,
-      timestamp: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}timestamp'],
-      )!,
-      details: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}details'],
+        data['${effectivePrefix}id'],
       )!,
       lastUpdatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -546,9 +542,17 @@ class $LogsRecordsTable extends LogsRecords
         DriftSqlType.dateTime,
         data['${effectivePrefix}registration_date'],
       )!,
-      id: attachedDatabase.typeMapping.read(
+      timestamp: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}timestamp'],
+      )!,
+      userId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
-        data['${effectivePrefix}id'],
+        data['${effectivePrefix}user_id'],
+      )!,
+      userName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_name'],
       )!,
     );
   }
@@ -562,7 +566,182 @@ class $LogsRecordsTable extends LogsRecords
       const EnumIndexConverter<ActionType>(ActionType.values);
 }
 
-class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
+class LogsRecord extends DataClass implements Insertable<LogsRecord> {
+  final ActionType actionType;
+  final String details;
+  final String entity;
+  final int id;
+  final DateTime lastUpdatedDate;
+  final DateTime registrationDate;
+  final DateTime timestamp;
+  final int userId;
+  final String userName;
+  const LogsRecord({
+    required this.actionType,
+    required this.details,
+    required this.entity,
+    required this.id,
+    required this.lastUpdatedDate,
+    required this.registrationDate,
+    required this.timestamp,
+    required this.userId,
+    required this.userName,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    {
+      map['action_type'] = Variable<int>(
+        $LogsRecordsTable.$converteractionType.toSql(actionType),
+      );
+    }
+    map['details'] = Variable<String>(details);
+    map['entity'] = Variable<String>(entity);
+    map['id'] = Variable<int>(id);
+    map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate);
+    map['registration_date'] = Variable<DateTime>(registrationDate);
+    map['timestamp'] = Variable<DateTime>(timestamp);
+    map['user_id'] = Variable<int>(userId);
+    map['user_name'] = Variable<String>(userName);
+    return map;
+  }
+
+  LogsRecordsCompanion toCompanion(bool nullToAbsent) {
+    return LogsRecordsCompanion(
+      actionType: Value(actionType),
+      details: Value(details),
+      entity: Value(entity),
+      id: Value(id),
+      lastUpdatedDate: Value(lastUpdatedDate),
+      registrationDate: Value(registrationDate),
+      timestamp: Value(timestamp),
+      userId: Value(userId),
+      userName: Value(userName),
+    );
+  }
+
+  factory LogsRecord.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LogsRecord(
+      actionType: $LogsRecordsTable.$converteractionType.fromJson(
+        serializer.fromJson<int>(json['actionType']),
+      ),
+      details: serializer.fromJson<String>(json['details']),
+      entity: serializer.fromJson<String>(json['entity']),
+      id: serializer.fromJson<int>(json['id']),
+      lastUpdatedDate: serializer.fromJson<DateTime>(json['lastUpdatedDate']),
+      registrationDate: serializer.fromJson<DateTime>(json['registrationDate']),
+      timestamp: serializer.fromJson<DateTime>(json['timestamp']),
+      userId: serializer.fromJson<int>(json['userId']),
+      userName: serializer.fromJson<String>(json['userName']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'actionType': serializer.toJson<int>(
+        $LogsRecordsTable.$converteractionType.toJson(actionType),
+      ),
+      'details': serializer.toJson<String>(details),
+      'entity': serializer.toJson<String>(entity),
+      'id': serializer.toJson<int>(id),
+      'lastUpdatedDate': serializer.toJson<DateTime>(lastUpdatedDate),
+      'registrationDate': serializer.toJson<DateTime>(registrationDate),
+      'timestamp': serializer.toJson<DateTime>(timestamp),
+      'userId': serializer.toJson<int>(userId),
+      'userName': serializer.toJson<String>(userName),
+    };
+  }
+
+  LogsRecord copyWith({
+    ActionType? actionType,
+    String? details,
+    String? entity,
+    int? id,
+    DateTime? lastUpdatedDate,
+    DateTime? registrationDate,
+    DateTime? timestamp,
+    int? userId,
+    String? userName,
+  }) => LogsRecord(
+    actionType: actionType ?? this.actionType,
+    details: details ?? this.details,
+    entity: entity ?? this.entity,
+    id: id ?? this.id,
+    lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
+    registrationDate: registrationDate ?? this.registrationDate,
+    timestamp: timestamp ?? this.timestamp,
+    userId: userId ?? this.userId,
+    userName: userName ?? this.userName,
+  );
+  LogsRecord copyWithCompanion(LogsRecordsCompanion data) {
+    return LogsRecord(
+      actionType: data.actionType.present
+          ? data.actionType.value
+          : this.actionType,
+      details: data.details.present ? data.details.value : this.details,
+      entity: data.entity.present ? data.entity.value : this.entity,
+      id: data.id.present ? data.id.value : this.id,
+      lastUpdatedDate: data.lastUpdatedDate.present
+          ? data.lastUpdatedDate.value
+          : this.lastUpdatedDate,
+      registrationDate: data.registrationDate.present
+          ? data.registrationDate.value
+          : this.registrationDate,
+      timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      userName: data.userName.present ? data.userName.value : this.userName,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LogsRecord(')
+          ..write('actionType: $actionType, ')
+          ..write('details: $details, ')
+          ..write('entity: $entity, ')
+          ..write('id: $id, ')
+          ..write('lastUpdatedDate: $lastUpdatedDate, ')
+          ..write('registrationDate: $registrationDate, ')
+          ..write('timestamp: $timestamp, ')
+          ..write('userId: $userId, ')
+          ..write('userName: $userName')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    actionType,
+    details,
+    entity,
+    id,
+    lastUpdatedDate,
+    registrationDate,
+    timestamp,
+    userId,
+    userName,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LogsRecord &&
+          other.actionType == this.actionType &&
+          other.details == this.details &&
+          other.entity == this.entity &&
+          other.id == this.id &&
+          other.lastUpdatedDate == this.lastUpdatedDate &&
+          other.registrationDate == this.registrationDate &&
+          other.timestamp == this.timestamp &&
+          other.userId == this.userId &&
+          other.userName == this.userName);
+}
+
+class LogsRecordsCompanion extends UpdateCompanion<LogsRecord> {
   final Value<ActionType> actionType;
   final Value<String> details;
   final Value<String> entity;
@@ -597,7 +776,7 @@ class LogsRecordsCompanion extends UpdateCompanion<ActivityLog> {
        entity = Value(entity),
        userId = Value(userId),
        userName = Value(userName);
-  static Insertable<ActivityLog> custom({
+  static Insertable<LogsRecord> custom({
     Expression<int>? actionType,
     Expression<String>? details,
     Expression<String>? entity,
@@ -1402,17 +1581,17 @@ class $$LogsRecordsTableTableManager
         RootTableManager<
           _$SystemDatabase,
           $LogsRecordsTable,
-          ActivityLog,
+          LogsRecord,
           $$LogsRecordsTableFilterComposer,
           $$LogsRecordsTableOrderingComposer,
           $$LogsRecordsTableAnnotationComposer,
           $$LogsRecordsTableCreateCompanionBuilder,
           $$LogsRecordsTableUpdateCompanionBuilder,
           (
-            ActivityLog,
-            BaseReferences<_$SystemDatabase, $LogsRecordsTable, ActivityLog>,
+            LogsRecord,
+            BaseReferences<_$SystemDatabase, $LogsRecordsTable, LogsRecord>,
           ),
-          ActivityLog,
+          LogsRecord,
           PrefetchHooks Function()
         > {
   $$LogsRecordsTableTableManager(_$SystemDatabase db, $LogsRecordsTable table)
@@ -1482,17 +1661,17 @@ typedef $$LogsRecordsTableProcessedTableManager =
     ProcessedTableManager<
       _$SystemDatabase,
       $LogsRecordsTable,
-      ActivityLog,
+      LogsRecord,
       $$LogsRecordsTableFilterComposer,
       $$LogsRecordsTableOrderingComposer,
       $$LogsRecordsTableAnnotationComposer,
       $$LogsRecordsTableCreateCompanionBuilder,
       $$LogsRecordsTableUpdateCompanionBuilder,
       (
-        ActivityLog,
-        BaseReferences<_$SystemDatabase, $LogsRecordsTable, ActivityLog>,
+        LogsRecord,
+        BaseReferences<_$SystemDatabase, $LogsRecordsTable, LogsRecord>,
       ),
-      ActivityLog,
+      LogsRecord,
       PrefetchHooks Function()
     >;
 typedef $$SystemRecordsTableCreateCompanionBuilder =

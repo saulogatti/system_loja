@@ -19,7 +19,15 @@ class ProductForm extends StatefulWidget {
   final ValueChanged<int?> onCategoryChanged;
 
   const ProductForm({
-    required this.formKey, required this.nomeController, required this.codigoController, required this.precoController, required this.estoqueController, required this.descricaoController, required this.onSubmit, required this.onCategoryChanged, super.key,
+    required this.formKey,
+    required this.nomeController,
+    required this.codigoController,
+    required this.precoController,
+    required this.estoqueController,
+    required this.descricaoController,
+    required this.onSubmit,
+    required this.onCategoryChanged,
+    super.key,
     this.selectedCategoryId,
   });
 

@@ -26,18 +26,18 @@ class InvoiceExportData {
   Map<String, dynamic> toJson() => _$InvoiceExportDataToJson(this);
 
   factory InvoiceExportData.fromDomain(Invoice value) => InvoiceExportData(
-        id: value.id,
-        registrationDate: value.registrationDate,
-        lastUpdatedDate: value.lastUpdatedDate,
-        data: InvoiceDataExport.fromDomain(value.data),
-      );
+    id: value.id,
+    registrationDate: value.registrationDate,
+    lastUpdatedDate: value.lastUpdatedDate,
+    data: InvoiceDataExport.fromDomain(value.data),
+  );
 
   Invoice toDomain() => Invoice(
-        id: id,
-        registrationDate: registrationDate,
-        lastUpdatedDate: lastUpdatedDate,
-        data: data.toDomain(),
-      );
+    id: id,
+    registrationDate: registrationDate,
+    lastUpdatedDate: lastUpdatedDate,
+    data: data.toDomain(),
+  );
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -65,7 +65,8 @@ class InvoiceDataExport {
     required this.invoiceNumber,
     required this.items,
     required this.paymentMethod,
-    required this.issueDate, this.customerId,
+    required this.issueDate,
+    this.customerId,
     this.customerName,
     this.customerCpf,
     this.companyId,
@@ -78,28 +79,28 @@ class InvoiceDataExport {
   Map<String, dynamic> toJson() => _$InvoiceDataExportToJson(this);
 
   factory InvoiceDataExport.fromDomain(InvoiceData value) => InvoiceDataExport(
-        invoiceNumber: value.invoiceNumber,
-        customerId: value.customerId,
-        customerName: value.customerName,
-        customerCpf: value.customerCpf,
-        companyId: value.companyId,
-        items: value.items.map(InvoiceItemData.fromDomain).toList(),
-        paymentMethod: value.paymentMethod,
-        issueDate: value.issueDate,
-        type: value.type,
-      );
+    invoiceNumber: value.invoiceNumber,
+    customerId: value.customerId,
+    customerName: value.customerName,
+    customerCpf: value.customerCpf,
+    companyId: value.companyId,
+    items: value.items.map(InvoiceItemData.fromDomain).toList(),
+    paymentMethod: value.paymentMethod,
+    issueDate: value.issueDate,
+    type: value.type,
+  );
 
   InvoiceData toDomain() => InvoiceData(
-        invoiceNumber: invoiceNumber,
-        customerId: customerId,
-        customerName: customerName,
-        customerCpf: customerCpf,
-        companyId: companyId,
-        items: items.map((e) => e.toDomain()).toList(),
-        paymentMethod: paymentMethod,
-        issueDate: issueDate,
-        type: type,
-      );
+    invoiceNumber: invoiceNumber,
+    customerId: customerId,
+    customerName: customerName,
+    customerCpf: customerCpf,
+    companyId: companyId,
+    items: items.map((e) => e.toDomain()).toList(),
+    paymentMethod: paymentMethod,
+    issueDate: issueDate,
+    type: type,
+  );
 
   static InvoiceType _invoiceTypeFromJson(Object? json) =>
       InvoiceType.values.byName(json as String);
