@@ -1,75 +1,53 @@
+# Análise arquitetural e plano de migração para Clean Architecture
 
-# Análise Arquitetural e Plano de Migração para Clean Architecture
-
-**Diagnóstico atual**
+## Diagnóstico atual
 
 A base já tem uma boa estrutura por camadas, mas ainda está em um modelo híbrido entre arquitetura em camadas tradicional e Clean Architecture.
 
-1. Apresentação está bem definida em screens, com BLoC/Cubit e UI Flutter.
-2. Existem contratos de repositório em interface, o que é um ponto forte para inversão de dependência.
-3. Implementações concretas de repositório estão em repository, mas essa pasta está dentro de core, o que mistura regra de negócio com infraestrutura.
-4. Infra de persistência está organizada em Drift/DAO em database.
-5. DI centralizada em app_injection.dart, porém a apresentação ainda resolve dependências direto via service locator em main.dart.
+1. Apresentação está bem definida em `lib/screens/`, com BLoC/Cubit e UI Flutter.
+2. Contratos de repositório estão em `lib/core/interface/`; implementações em `lib/domain/repository/` (não em `core`).
+3. Infra de persistência está organizada em Drift/DAO em `lib/data/database/`.
+4. DI centralizada (por exemplo `setupAppInjection` / GetIt); parte da UI ainda resolve dependências via service locator no composition root.
 
-**Principais desalinhamentos com Clean Architecture**
+## O que já foi feito (evolução da arquitetura)
 
-1. Core depende de Flutter:
-app_theme.dart,
-app_theme_settings.dart,
-system_error_manager.dart.
+- **Repositórios concretos** já estão em `lib/domain/repository/`, não dentro de `core`.
+- **Serialização JSON de configuração** com codecs na camada de dados (`lib/data/converter/`, por exemplo `system_configuration_codec.dart`, `address_codec.dart`, `price_configuration_codec.dart`); modelos de domínio em `core` permanecem sem `@JsonSerializable` nesses fluxos.
+- **Modelos de domínio** `address.dart`, `price_configuration.dart` e `system_configuration.dart` em `core` **não** importam Drift; comentários no código apontam para codecs em `data` quando há import/export JSON.
+- **Conversores CPF/CNPJ** (`JsonConverter`): removidos de `lib/core/models/document/`; implementação em `lib/data/converter/cpf_cnpj_json_converters.dart` (entrada `IndividualEntry` e demais usos via camada `data`).
+- **`DocumentConverter`** (CPF/CNPJ genérico por tamanho) já reside em `lib/data/converter/document_converter.dart`.
+- **`ProductCubit`** depende de `IProductRepository` (contrato), não de implementação concreta de repositório.
+1. **Core depende de Flutter** em tema: `app_theme.dart`, `app_theme_settings.dart` (ideal: abstrações no domínio e implementação Material na apresentação ou infraestrutura).
+4. **`AppSettings`** (`lib/core/settings/app_settings.dart` + `.g.dart`) usa `@JsonSerializable` em `core`; pela convenção do projeto, DTO/codec deveriam estar em `data`.
+2. **`system_error_manager.dart`** em `lib/aplication/` (não em `core`, mas o fluxo de erro ainda pode ser alinhado a `ResultStatus` e contratos).
+## Principais desalinhamentos com Clean Architecture (pendentes)
 
-2. Core depende de Drift em modelos de domínio:
-address.dart,
-price_configuration.dart.
 
-3. Core depende de data layer:
-system_error.dart,
-system_configuration.dart,
-code_generator_service.dart.
+3. **Core ainda importa `data` em pontos específicos:**
+   - `lib/core/services/code_generator_service.dart` importa DAOs (`ProductDao`, `InvoiceDao`).
+5. **`lib/core/utils/string_extensions.dart`** importa `lib/aplication/utils/constants.dart` (fronteira `core` → `aplication` invertida em relação ao ideal).
+6. **Tratamento de erro e repositório de configuração:** revisar `configuration_repository.dart` e convenção de não propagar exceções entre camadas (usar `ResultStatus` de forma consistente).
+7. **Use cases / orquestração:** BLoCs/Cubits ainda podem depender diretamente de repositórios; introdução gradual de casos de uso é opcional mas alinha melhor à Clean Architecture.
+8. **Service locator na UI:** reduzir onde fizer sentido em favor de injeção por construtor dos blocs/widgets.
 
-4. Camada de apresentação importando concreto de repositório:
-product_cubit.dart.
+## Lista do que ainda precisa ser alterado (prioridade sugerida)
 
-5. Código legado em managers com papel de repositório/infra:
-configuration_repository.dart.
+Ordem por impacto e dependência.
 
-6. Violação da convenção do próprio projeto sobre não propagar exceção entre camadas:
-configuration_repository.dart.
+1. Separar camadas de forma explícita onde ainda houver mistura (domínio puro, dados, apresentação).
+2. **Tornar `core` mais puro:** eliminar imports `core` → `data` e `core` → `aplication` onde listados acima.
+3. Mover ou duplicar **Theme/Settings** (tipos Flutter) para fora do núcleo de domínio, mantendo contratos enxutos em `core` se necessário.
+4. **Refatorar `CodeGeneratorService`:** substituir DAOs por interfaces (portas) definidas no domínio ou na aplicação, implementadas na camada de dados.
+5. **Desacoplar `SystemError`:** deixar entidade de domínio sem anotação de serialização; conversor/DTO em `data`.
+6. **Migrar `AppSettings` serializável** para DTO + mapper em `data` (ou equivalente), mantendo em `core` apenas o que for regra/conceito estável.
+7. Corrigir **interfaces** que hoje expõem tipos acoplados a JSON/Flutter (`i_configuration_repository`, `i_settings_service`) após os itens 5 e 6.
+8. **Padronizar erros** com `ResultStatus` nas fronteiras de repositório.
+9. Reduzir acoplamento do **GetIt** na UI; **testes de arquitetura** (regras de import) quando fizer sentido.
 
-**Lista do que precisa ser alterado para ficar em Clean Architecture**
+## Plano de execução prático (referência)
 
-Ordem sugerida por prioridade e impacto.
+- **Sprint 1 (foco em core limpo):** itens 2, 4, 5, 6, 7 (ajustes em `SystemError`, `CodeGeneratorService`, `AppSettings`, extensões e interfaces).
+- **Sprint 2:** itens 3, 8 (tema/settings e erros).
+- **Sprint 3:** itens 1, 9 (use cases opcionais, DI na UI, testes de arquitetura).
 
-1. Separar camadas de forma explícita:
-criar estrutura alvo Domain, Application, Infrastructure, Presentation e migrar classes para cada camada.
-
-2. Tornar core puro:
-remover qualquer import de Flutter e Drift da camada core.
-3. Mover Theme e Settings para fora do core:
-deixar abstrações no domínio/aplicação e implementação Flutter na apresentação ou infraestrutura.
-4. Mover conversores Drift dos modelos:
-tirar JsonTypeConverter dos modelos em core e levar para mappers/converters em infraestrutura.
-5. Eliminar dependências core -> data:
-core não deve importar nada de data.
-6. Refatorar CodeGeneratorService por portas:
-substituir dependência de DAO por interfaces de aplicação/domínio.
-7. Corrigir ProductCubit:
-remover import concreto e usar só contrato.
-8. Tratar managers legados:
-migrar configuration_repository.dart para camada adequada ou quebrar em use cases e adapters.
-9. Introduzir Use Cases:
-BLoCs/Cubits devem depender de casos de uso, não de repositórios diretamente.
-10. Padronizar tratamento de erro por ResultStatus:
-evitar rethrow na fronteira de aplicação e devolver erros tipados.
-11. Reduzir acoplamento do service locator na UI:
-manter GetIt no composition root e preferir injeção por construtor dos widgets/blocs.
-12. Criar testes de arquitetura:
-regras automáticas para bloquear imports proibidos, por exemplo core não pode importar flutter, drift ou data.
-
-**Plano de execução prático**
-1. Sprint 1: itens 2, 3, 4, 7.
-2. Sprint 2: itens 5, 6, 8.
-3. Sprint 3: itens 9, 10, 11, 12.
-
-Isso te leva para uma Clean Architecture real, sem quebrar tudo de uma vez e com risco controlado. Primeiro ganho de alto impacto é limpar dependências indevidas da camada core.Análise arquitetural concluída com verificação direta dos arquivos, identificação dos desalinhamentos com Clean Architecture e entrega da lista priorizada de mudanças necessárias (incluindo dependências indevidas entre camadas, pontos de alto impacto e sequência de migração). Também registrei em memória de repositório a versão de schema Drift validada no branch atual para evitar decisões futuras com dado divergente.Resumo breve: finalizei a análise da arquitetura atual, validei os achados com evidências no código, listei as alterações necessárias para aderir à Clean Architecture e priorizei por impacto/esforço. Agora vou marcar formalmente a tarefa como concluída.
-
+O primeiro ganho de alto impacto continua sendo **eliminar dependências indevidas da camada `core`** (`data`, Flutter onde não for necessário, e serialização em entidades de domínio).

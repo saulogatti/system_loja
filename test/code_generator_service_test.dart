@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/product.dart';
-import 'package:system_loja/core/services/code_generator_service.dart';
+import 'package:system_loja/domain/code_generator_service.dart';
 import 'package:system_loja/data/database/app_database.dart';
 
 void main() {

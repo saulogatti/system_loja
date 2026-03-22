@@ -8,7 +8,8 @@ import 'package:system_loja/data/database/dao/product_dao.dart';
 class CodeGeneratorService {
   final ProductDao _productDao;
   final InvoiceDao _invoiceDao;
-
+// Utils? Services? Repositories? Domain? Aplication? Data?
+// TODO: Avaliar a necessidade de usar o CodeGeneratorService
   CodeGeneratorService({
     required ProductDao productDao,
     required InvoiceDao invoiceDao,

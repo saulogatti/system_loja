@@ -163,7 +163,7 @@ class ConfigurationRepository
 
   /// Salva dados no arquivo JSON
   Future<void> _salvarDados() async {
-    final file = ConfigurationRepositoryCache(configuracao: _configuracao);
+    final file = ConfigurationRepositoryCache(configuracao: AppSettingsEntry.fromAppSettings(_configuracao));
     await _cache.set(file);
   }
 }
