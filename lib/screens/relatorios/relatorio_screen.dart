@@ -8,7 +8,7 @@ import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_cubit.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_state.dart';
-import 'package:system_loja/screens/relatorios/sales_purchase_analytics/sales_purchase_analytics_screen.dart';
+import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
 
@@ -33,9 +33,7 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
                   const SizedBox(height: 12),
                   FilledButton.icon(
                     onPressed: () {
-                      Navigator.of(
-                        context,
-                      ).push(MaterialPageRoute<void>(builder: (_) => const SalesPurchaseAnalyticsScreen()));
+                      context.router.push(const SalesPurchaseAnalyticsRoute());
                     },
                     icon: const Icon(Icons.bar_chart),
                     label: const Text('Abrir gráficos de vendas e compras'),

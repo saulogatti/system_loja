@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,6 +7,7 @@ import 'bloc/sales_purchase_analytics_event.dart';
 import 'bloc/sales_purchase_analytics_state.dart';
 
 /// Tela de analytics com comparativo de vendas e compras usando dados mockados.
+@RoutePage()
 class SalesPurchaseAnalyticsScreen extends StatelessWidget {
   const SalesPurchaseAnalyticsScreen({super.key});
 
