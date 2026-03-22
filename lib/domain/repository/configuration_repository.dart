@@ -5,7 +5,8 @@ import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_settings_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
-import 'package:system_loja/data/entry/configuration_repository_cache.dart';
+import 'package:system_loja/data/entry/app_settings_entry.dart';
+import 'package:system_loja/data/entry/configuration_cache_entry.dart';
 
 import '../../core/settings/app_settings.dart';
 
@@ -151,9 +152,9 @@ class ConfigurationRepository
 
   /// Carrega dados do arquivo JSON
   Future<void> _carregarDados() async {
-    final file = await _cache.get<ConfigurationRepositoryCache>(
+    final file = await _cache.get<ConfigurationCacheEntry>(
       keyConfigurationRepositoryCache,
-      ConfigurationRepositoryCache.fromJson,
+      ConfigurationCacheEntry.fromJson,
     );
     if (file != null) {
       _configuracao = file.configuracao.toAppSettings();
@@ -181,7 +182,7 @@ class ConfigurationRepository
   }
 
   Future<void> _salvarDados() async {
-    final file = ConfigurationRepositoryCache(
+    final file = ConfigurationCacheEntry(
       configuracao: AppSettingsEntry.fromAppSettings(_configuracao),
     );
     await _cache.set(file);

@@ -22,12 +22,12 @@ A base já tem uma boa estrutura por camadas, mas ainda há pontos em evolução
 - **Tema Material**: `AppTheme` está em `lib/screens/settings/app_theme.dart`; a camada **`lib/core/` não importa `package:flutter`** (verificado com busca por `flutter/material`).
 - **`string_extensions`** (por exemplo `hashPassword`) foi movido para `lib/screens/utils/string_extensions.dart`; **não há mais** dependência `core` → `aplication` por esse arquivo.
 - **`CodeGeneratorService`** **saiu de `lib/core/`** e está em **`lib/domain/code_generator_service.dart`** (ainda depende de DAOs; ver pendências abaixo).
-
+3. ~~**Tratamento de erro e repositório de configuração:** revisar `configuration_repository.dart` e a convenção de não propagar exceções entre camadas (usar `ResultStatus` de forma consistente).~~ **Concluído**: `ConfigurationRepository`, `SystemRepository` e `UserRepository` agora retornam `ResultStatus` em todos os métodos; `CacheManager` é injetado via DI; `mensagemErroRepositorio()` padroniza mensagens.
 ## Principais desalinhamentos com Clean Architecture (pendentes)
 
 1. **`CodeGeneratorService`** (em `lib/domain/`): continua importando **`ProductDao`** e **`InvoiceDao`** (`lib/data/`). O ideal é substituir por **portas** (interfaces no domínio ou aplicação) implementadas na camada de dados, para `domain` não depender de Drift.
 2. ~~**`system_error_manager.dart`** em `lib/aplication/`: o fluxo de erro ainda pode ser alinhado a `ResultStatus` e aos contratos de repositório de forma uniforme.~~ **Concluído parcialmente**: repositórios agora usam `try/catch` + `mensagemErroRepositorio()` e retornam `ResultStatus.error(...)` de forma consistente. Resta alinhar `system_error_manager`.
-3. ~~**Tratamento de erro e repositório de configuração:** revisar `configuration_repository.dart` e a convenção de não propagar exceções entre camadas (usar `ResultStatus` de forma consistente).~~ **Concluído**: `ConfigurationRepository`, `SystemRepository` e `UserRepository` agora retornam `ResultStatus` em todos os métodos; `CacheManager` é injetado via DI; `mensagemErroRepositorio()` padroniza mensagens.
+
 4. **Use cases / orquestração:** BLoCs/Cubits ainda podem depender diretamente de repositórios; introdução gradual de casos de uso é opcional, mas alinha melhor à Clean Architecture.
 5. **Service locator na UI:** reduzir onde fizer sentido em favor de injeção por construtor dos blocos/widgets.
 6. **Interfaces** após futuras mudanças de DTO: garantir que `i_configuration_repository` e serviços relacionados continuem expondo tipos de domínio estáveis se novos DTOs forem introduzidos para persistência.

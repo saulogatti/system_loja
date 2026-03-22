@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'configuration_repository_cache.dart';
+part of 'app_settings_entry.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -21,7 +21,7 @@ AppSettingsEntry _$AppSettingsEntryFromJson(Map<String, dynamic> json) =>
       temaEscuro: json['temaEscuro'] as bool? ?? false,
       backupAutomatico: json['backupAutomatico'] as bool? ?? false,
       frequenciaBackup: json['frequenciaBackup'] as String? ?? 'semanal',
-      localBackup: json['localBackup'] as String? ?? 'data/backups',
+      localBackup: json['localBackup'] as String? ?? '',
       limpezaAutomatica: json['limpezaAutomatica'] as bool? ?? false,
       diasManterLogs: (json['diasManterLogs'] as num?)?.toInt() ?? 90,
       exigirSenha: json['exigirSenha'] as bool? ?? false,
@@ -59,15 +59,3 @@ const _$EnumColorAppThemeSettingsEnumMap = {
   EnumColorAppThemeSettings.ciano: 'ciano',
   EnumColorAppThemeSettings.indigo: 'indigo',
 };
-
-ConfigurationRepositoryCache _$ConfigurationRepositoryCacheFromJson(
-  Map<String, dynamic> json,
-) => ConfigurationRepositoryCache(
-  configuracao: AppSettingsEntry.fromJson(
-    json['configuracao'] as Map<String, dynamic>,
-  ),
-);
-
-Map<String, dynamic> _$ConfigurationRepositoryCacheToJson(
-  ConfigurationRepositoryCache instance,
-) => <String, dynamic>{'configuracao': instance.configuracao};

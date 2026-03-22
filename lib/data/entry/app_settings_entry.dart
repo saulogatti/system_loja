@@ -1,10 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:system_loja/core/constants/cache_keys.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
-import 'package:system_loja/data/cache/models/cacheable.dart';
 
-part 'configuration_repository_cache.g.dart';
+part 'app_settings_entry.g.dart';
 
 /// DTO JSON para persistência de [AppSettings] (sem herdar modelo de domínio).
 @JsonSerializable()
@@ -80,16 +78,4 @@ class AppSettingsEntry {
   );
 
   Map<String, dynamic> toJson() => _$AppSettingsEntryToJson(this);
-}
-
-@JsonSerializable()
-class ConfigurationRepositoryCache extends Cacheable {
-  final AppSettingsEntry configuracao;
-  ConfigurationRepositoryCache({required this.configuracao});
-  factory ConfigurationRepositoryCache.fromJson(Map<String, dynamic> json) =>
-      _$ConfigurationRepositoryCacheFromJson(json);
-  @override
-  String get cacheKey => keyConfigurationRepositoryCache;
-  @override
-  Map<String, dynamic> toJson() => _$ConfigurationRepositoryCacheToJson(this);
 }
