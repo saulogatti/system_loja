@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
@@ -10,18 +12,19 @@ import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
-import 'package:system_loja/domain/repository/configuration_repository.dart';
+import 'package:system_loja/data/cache/cache_manager.dart';
+import 'package:system_loja/data/database/app_database.dart';
+import 'package:system_loja/data/database/system_database.dart';
+import 'package:system_loja/domain/code_generator_service.dart';
 import 'package:system_loja/domain/repository/category_repository.dart';
 import 'package:system_loja/domain/repository/company_repository.dart';
+import 'package:system_loja/domain/repository/configuration_repository.dart';
 import 'package:system_loja/domain/repository/customer_repository.dart';
 import 'package:system_loja/domain/repository/product_repository.dart';
 import 'package:system_loja/domain/repository/sales_repository.dart';
 import 'package:system_loja/domain/repository/system/log_repository.dart';
 import 'package:system_loja/domain/repository/system/system_repository.dart';
 import 'package:system_loja/domain/repository/system/user_repository.dart';
-import 'package:system_loja/domain/code_generator_service.dart';
-import 'package:system_loja/data/database/app_database.dart';
-import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
@@ -38,6 +41,7 @@ void setupAppInjection() {
   appInjection.registerSingleton<RouteApp>(RouteApp());
   appInjection.registerSingleton<AppDatabase>(AppDatabase());
   appInjection.registerSingleton<SystemDatabase>(SystemDatabase());
+  appInjection.registerSingleton<CacheManager>(CacheManager());
   appInjection.registerSingleton<CodeGeneratorService>(
     CodeGeneratorService(
       productDao: appInjection.get<AppDatabase>().productDao,
@@ -65,6 +69,7 @@ void setupAppInjection() {
     ConfigurationRepository(
       logRepository: appInjection.get<ILogRepository>(),
       settingsService: appInjection.get<SettingsService>(),
+      cache: appInjection.get<CacheManager>(),
     ),
   );
   appInjection.registerSingleton<ICompanyRepository>(
@@ -96,5 +101,17 @@ void setupAppInjection() {
       categoryDao: appInjection.get<AppDatabase>().categoryDao,
     ),
   );
-  appInjection.get<IConfigurationRepository>().loadConfiguration();
+  unawaited(_carregarConfiguracaoInicial());
+}
+
+/// Carrega preferências da aplicação após o registro do repositório.
+Future<void> _carregarConfiguracaoInicial() async {
+  final resultado = await appInjection
+      .get<IConfigurationRepository>()
+      .loadConfiguration();
+  resultado.when(
+    onSuccess: (_) {},
+    onError: (mensagem) =>
+        debugPrint('Falha ao carregar configurações iniciais: $mensagem'),
+  );
 }

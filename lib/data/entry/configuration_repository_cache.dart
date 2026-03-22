@@ -33,35 +33,13 @@ class AppSettingsEntry {
     this.temaEscuro = false,
     this.backupAutomatico = false,
     this.frequenciaBackup = 'semanal',
-    this.localBackup = 'data/backups',
+    this.localBackup = '',
     this.limpezaAutomatica = false,
     this.diasManterLogs = 90,
     this.exigirSenha = false,
     this.tempoBloqueioMinutos = 15,
     this.permitirMultiplosUsuarios = false,
   });
-
-  factory AppSettingsEntry.fromJson(Map<String, dynamic> json) =>
-      _$AppSettingsEntryFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AppSettingsEntryToJson(this);
-
-  AppSettings toAppSettings() => AppSettings(
-    notificacoesAtivadas: notificacoesAtivadas,
-    notificarVendas: notificarVendas,
-    notificarEstoqueBaixo: notificarEstoqueBaixo,
-    limiteEstoqueBaixo: limiteEstoqueBaixo,
-    corPrimaria: corPrimaria,
-    temaEscuro: temaEscuro,
-    backupAutomatico: backupAutomatico,
-    frequenciaBackup: frequenciaBackup,
-    localBackup: localBackup,
-    limpezaAutomatica: limpezaAutomatica,
-    diasManterLogs: diasManterLogs,
-    exigirSenha: exigirSenha,
-    tempoBloqueioMinutos: tempoBloqueioMinutos,
-    permitirMultiplosUsuarios: permitirMultiplosUsuarios,
-  );
 
   factory AppSettingsEntry.fromAppSettings(AppSettings configuracao) =>
       AppSettingsEntry(
@@ -80,6 +58,28 @@ class AppSettingsEntry {
         tempoBloqueioMinutos: configuracao.tempoBloqueioMinutos,
         permitirMultiplosUsuarios: configuracao.permitirMultiplosUsuarios,
       );
+
+  factory AppSettingsEntry.fromJson(Map<String, dynamic> json) =>
+      _$AppSettingsEntryFromJson(json);
+
+  AppSettings toAppSettings() => AppSettings(
+    notificacoesAtivadas: notificacoesAtivadas,
+    notificarVendas: notificarVendas,
+    notificarEstoqueBaixo: notificarEstoqueBaixo,
+    limiteEstoqueBaixo: limiteEstoqueBaixo,
+    corPrimaria: corPrimaria,
+    temaEscuro: temaEscuro,
+    backupAutomatico: backupAutomatico,
+    frequenciaBackup: frequenciaBackup,
+    localBackup: localBackup,
+    limpezaAutomatica: limpezaAutomatica,
+    diasManterLogs: diasManterLogs,
+    exigirSenha: exigirSenha,
+    tempoBloqueioMinutos: tempoBloqueioMinutos,
+    permitirMultiplosUsuarios: permitirMultiplosUsuarios,
+  );
+
+  Map<String, dynamic> toJson() => _$AppSettingsEntryToJson(this);
 }
 
 @JsonSerializable()

@@ -3,14 +3,17 @@ import 'dart:async';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/core/utils/command_result.dart';
 
 import 'settings_event.dart';
 import 'settings_state.dart';
 
-/// BLoC para gerenciar o estado das configurações do sistema
+/// BLoC para gerenciar o estado das configurações do sistema.
 ///
-/// Utiliza o ConfiguracaoManager para persistência de dados
-/// e gerencia os estados da tela de configurações.
+/// Erros vindos do repositório já chegam como [ResultStatus.error]; este BLoC
+/// apenas mapeia para [SettingsState]. `try/catch` fica limitado a fluxo de
+/// seleção de diretório quando a plataforma lança exceção.
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final IConfigurationRepository _configurationRepository;
 
@@ -26,97 +29,87 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<RestoreBackupEvent>(_onRestoreBackup);
   }
 
-  /// Limpa todos os dados do sistema
   Future<void> _onClearAllData(
     ClearAllDataEvent event,
     Emitter<SettingsState> emit,
   ) async {
     emit(const SettingsLoadingState());
-    try {
-      final sucesso = await _configurationRepository.clearAllData();
-
-      emit(SettingsLoadedState(sucesso, SettingsSuccessStatus.cleared));
-    } catch (e) {
-      emit(SettingsError('Erro ao limpar dados: $e'));
-    }
+    final result = await _configurationRepository.clearAllData();
+    _emitResult(
+      emit: emit,
+      result: result,
+      successStatus: SettingsSuccessStatus.cleared,
+    );
   }
 
-  /// Limpa logs antigos baseado na configuração
   Future<void> _onClearOldLogs(
     ClearOldLogsEvent event,
     Emitter<SettingsState> emit,
   ) async {
     emit(const SettingsLoadingState());
-    try {
-      final sucesso = await _configurationRepository.clearOldLogs();
-
-      emit(SettingsLoadedState(sucesso, SettingsSuccessStatus.clearedOldLogs));
-    } catch (e) {
-      emit(SettingsError('Erro ao limpar logs: $e'));
-    }
+    final result = await _configurationRepository.clearOldLogs();
+    _emitResult(
+      emit: emit,
+      result: result,
+      successStatus: SettingsSuccessStatus.clearedOldLogs,
+    );
   }
 
-  /// Realiza backup dos dados do sistema
   Future<void> _onCreateBackup(
     BackupSettingsEvent event,
     Emitter<SettingsState> emit,
   ) async {
     emit(const SettingsLoadingState());
-    try {
-      final file = await getDirectoryPath(canCreateDirectories: true);
-      if (file == null) {
-        emit(SettingsError('Nenhum diretório selecionado para backup.'));
-        return;
-      }
-
-      final sucesso = await _configurationRepository.createBackup(file);
-
-      emit(SettingsLoadedState(sucesso, SettingsSuccessStatus.backupDone));
-    } catch (e) {
-      emit(SettingsError('Erro ao realizar backup: $e'));
+    final file = await getDirectoryPath(canCreateDirectories: true);
+    if (file == null) {
+      emit(SettingsError('Nenhum diretório selecionado para backup.'));
+      return;
     }
+    final result = await _configurationRepository.createBackup(file);
+    _emitResult(
+      emit: emit,
+      result: result,
+      successStatus: SettingsSuccessStatus.backupDone,
+    );
   }
 
-  /// Carrega as configurações iniciais
   Future<void> _onLoadSettings(
     LoadSettingsEvent event,
     Emitter<SettingsState> emit,
   ) async {
     emit(const SettingsLoadingState());
-    try {
-      final configuracao = await _configurationRepository.loadConfiguration();
-      emit(SettingsLoadedState(configuracao, SettingsSuccessStatus.loaded));
-    } catch (e) {
-      emit(SettingsError('Erro ao carregar configurações: $e'));
-    }
+    final result = await _configurationRepository.loadConfiguration();
+    _emitResult(
+      emit: emit,
+      result: result,
+      successStatus: SettingsSuccessStatus.loaded,
+    );
   }
 
-  /// Restaura as configurações para valores padrão
   Future<void> _onResetToDefault(
     ResetDefaultSettingsEvent event,
     Emitter<SettingsState> emit,
   ) async {
     emit(const SettingsLoadingState());
-    try {
-      await _configurationRepository.resetToDefaults();
-      final configuracao = await _configurationRepository.loadConfiguration();
-
-      emit(
-        SettingsLoadedState(
-          configuracao,
-          SettingsSuccessStatus.restoredToDefault,
-        ),
-      );
-    } catch (e) {
-      emit(SettingsError('Erro ao restaurar configurações: $e'));
-    }
+    final result = await _configurationRepository.resetToDefaults();
+    _emitResult(
+      emit: emit,
+      result: result,
+      successStatus: SettingsSuccessStatus.restoredToDefault,
+    );
   }
 
   FutureOr<void> _onRestoreBackup(
     RestoreBackupEvent event,
     Emitter<SettingsState> emit,
   ) async {
-    final direBackup = await getDirectoryPath();
+    String? direBackup;
+    try {
+      direBackup = await getDirectoryPath();
+    } catch (e) {
+      emit(SettingsError('Erro ao selecionar diretório de backup: $e'));
+      return;
+    }
     if (direBackup == null) {
       emit(
         SettingsError('Nenhum diretório selecionado para restaurar o backup.'),
@@ -124,28 +117,41 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       return;
     }
     emit(const SettingsLoadingState());
-    try {
-      final sucesso = await _configurationRepository.restoreBackup(direBackup);
-
-      emit(SettingsLoadedState(sucesso, SettingsSuccessStatus.backupRestored));
-    } catch (e) {
-      emit(SettingsError('Erro ao restaurar backup: $e'));
-    }
+    final result = await _configurationRepository.restoreBackup(direBackup);
+    _emitResult(
+      emit: emit,
+      result: result,
+      successStatus: SettingsSuccessStatus.backupRestored,
+    );
   }
 
-  /// Atualiza as configurações do sistema
   Future<void> _onUpdateSettings(
     UpdateSettingsEvent event,
     Emitter<SettingsState> emit,
   ) async {
     emit(const SettingsLoadingState());
-    try {
-      final updatedSettings = await _configurationRepository.updateAppSettings(
-        event.appSettings,
-      );
-      emit(SettingsLoadedState(updatedSettings, SettingsSuccessStatus.updated));
-    } catch (e) {
-      emit(SettingsError('Erro ao salvar configurações: $e'));
-    }
+    final result = await _configurationRepository.updateAppSettings(
+      event.appSettings,
+    );
+    _emitResult(
+      emit: emit,
+      result: result,
+      successStatus: SettingsSuccessStatus.updated,
+    );
+  }
+
+  void _emitResult({
+    required Emitter<SettingsState> emit,
+    required ResultStatus<AppSettings, String> result,
+    required SettingsSuccessStatus successStatus,
+  }) {
+    result.when(
+      onSuccess: (settings) {
+        emit(SettingsLoadedState(settings, successStatus));
+      },
+      onError: (errorMessage) {
+        emit(SettingsError(errorMessage));
+      },
+    );
   }
 }

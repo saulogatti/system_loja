@@ -5,6 +5,7 @@ import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 
@@ -64,12 +65,25 @@ class SalesCubit extends Cubit<SalesState> {
     final resultSales = await _salesRepository.loadAllSales();
     final result = await _productRepository.fetchProducts();
     final resultMap = await _customerRepository.fetchMappedCustomers();
-    final resultSystem = await _systemRepository.getSystemConfiguration();
     final resultCompanies = await _companyRepository.fetchMappedCompanies();
+    final resultSystem = await _systemRepository.getSystemConfiguration();
+
+    late final List<PaymentMethodType> paymentMethods;
+    switch (resultSystem) {
+      case ResultSuccess(result: final config):
+        paymentMethods = config.priceConfiguration.types;
+      case ResultError(resultError: final error):
+        emit(
+          SalesState.loadProductsFailure(
+            message: error,
+          ),
+        );
+        return;
+    }
+
     final customers = resultMap.asSuccess;
     final invoices = resultSales.asSuccess;
     final companies = resultCompanies.asSuccess;
-    final paymentMethods = resultSystem.priceConfiguration.types;
     switch (result) {
       case ResultSuccess(result: final products):
         emit(
