@@ -91,7 +91,7 @@ class _CompanyListState extends State<CompanyList> {
                     final company = _companies.values.elementAt(index);
                     return CardListItem(
                       colorAvatar: Colors.teal,
-                      title: company. name,
+                      title: company.name,
                       subTitle:
                           'CNPJ: ${company.cnpj}\n${company.email ?? "Sem email"}\n${company.address.city}',
                       onTap: () => widget.onCompanyTap(company),

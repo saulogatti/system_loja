@@ -147,35 +147,6 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
     ).insert(invoice.toCompanion(), mode: InsertMode.insertOrAbort);
   }
 
-  /// Insere uma nova nota fiscal com seus itens em uma transação.
-  ///
-  /// Garante que tanto a nota quanto seus itens sejam salvos atomicamente.
-  /// Também atualiza o estoque dos produtos vendidos.
-  /// Retorna o ID da nota fiscal criada.
-  Future<int> insertInvoiceWithItems(Invoice invoice) async {
-    return await transaction(() async {
-      // Insere a nota fiscal
-      final invoiceId = await insertInvoice(invoice);
-
-      // Insere os itens e atualiza estoque
-      final invoiceItemDao = db.invoiceItemDao;
-      final productDao = db.productDao;
-
-      for (final item in invoice.data.items) {
-        await invoiceItemDao.insertInvoiceItem(item, invoiceId: invoiceId);
-
-        // Atualiza o estoque: soma para nota de entrada, subtrai para nota de saída
-        final quantityChange =
-            invoice.data.type == InvoiceType.entry
-                ? item.quantity
-                : -item.quantity;
-        await productDao.updateStockQuantity(item.productId, quantityChange);
-      }
-
-      return invoiceId;
-    });
-  }
-
   /// Verifica se um número de nota fiscal já existe no banco de dados.
   ///
   /// [invoiceNumber] Número da nota fiscal a ser verificado.
@@ -194,29 +165,5 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
     return await update(
       invoicesRecords,
     ).replace(invoice.toCompanion(forUpdate: true));
-  }
-
-  /// Atualiza uma nota fiscal e seus itens em uma transação.
-  ///
-  /// Remove todos os itens existentes e insere os novos.
-  /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
-  Future<bool> updateInvoiceWithItems(Invoice invoice) async {
-    return await transaction(() async {
-      // Atualiza a nota fiscal
-      final result = await updateInvoice(invoice);
-
-      if (result) {
-        // Remove os itens antigos
-        final invoiceItemDao = db.invoiceItemDao;
-        await invoiceItemDao.deleteByInvoiceId(invoice.id);
-
-        // Insere os novos itens
-        for (final item in invoice.data.items) {
-          await invoiceItemDao.insertInvoiceItem(item, invoiceId: invoice.id);
-        }
-      }
-
-      return result;
-    });
   }
 }

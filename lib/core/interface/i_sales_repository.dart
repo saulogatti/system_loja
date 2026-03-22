@@ -13,17 +13,17 @@ import 'package:system_loja/core/utils/command_result.dart';
 /// Exemplo de uso:
 /// ```dart
 /// final repository = appInjection.get<SalesRepository>();
-/// 
+///
 /// // Gerar número de nota fiscal
 /// final numeroNota = await repository.generateInvoiceNumber();
-/// 
+///
 /// // Criar venda
 /// final invoice = Invoice(
 ///   invoiceNumber: numeroNota.asSuccess,
 ///   customerId: 1,
 ///   items: [...],
 /// );
-/// 
+///
 /// final resultado = await repository.saveSale(invoice);
 /// if (resultado.isSuccessful) {
 ///   print('Venda registrada com sucesso');
@@ -118,5 +118,7 @@ abstract interface class ISalesRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com true se o número é válido (não existe) ou mensagem de erro
-  Future<ResultStatus<bool, String>> validateInvoiceNumber(String invoiceNumber);
+  Future<ResultStatus<bool, String>> validateInvoiceNumber(
+    String invoiceNumber,
+  );
 }

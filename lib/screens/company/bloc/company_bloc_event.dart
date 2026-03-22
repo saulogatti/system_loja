@@ -18,17 +18,14 @@ sealed class CompanyBlocEvent with _$CompanyBlocEvent {
   }) = _RegisterCompany;
 
   /// Evento para deletar uma empresa
-  const factory CompanyBlocEvent.deleteCompany({
-    required int id,
-  }) = _DeleteCompany;
+  const factory CompanyBlocEvent.deleteCompany({required int id}) =
+      _DeleteCompany;
 
   /// Evento para buscar uma empresa pelo CNPJ
-  const factory CompanyBlocEvent.findCompanyByCnpj({
-    required String cnpj,
-  }) = _FindCompanyByCnpj;
+  const factory CompanyBlocEvent.findCompanyByCnpj({required String cnpj}) =
+      _FindCompanyByCnpj;
 
   /// Evento para atualizar uma empresa existente
-  const factory CompanyBlocEvent.updateCompany({
-    required Company company,
-  }) = _UpdateCompany;
+  const factory CompanyBlocEvent.updateCompany({required Company company}) =
+      _UpdateCompany;
 }

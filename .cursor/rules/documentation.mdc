@@ -1,6 +1,7 @@
 ---
 description: Documentação em docs/ e doc comments /// em português
-globs: "docs/**"
+globs: "docs/*.md"
+alwaysApply: false
 ---
 
 # Padrões de Documentação - System Loja

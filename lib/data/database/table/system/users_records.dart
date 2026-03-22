@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
-import 'package:system_loja/core/models/user.dart';
+import 'package:system_loja/data/entry/user_entry.dart';
 
-@UseRowClass(User)
+@UseRowClass(UserEntry)
 class UsersRecords extends Table {
   TextColumn get email => text().nullable()();
   IntColumn get id => integer().autoIncrement()();

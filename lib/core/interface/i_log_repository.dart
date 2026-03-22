@@ -12,7 +12,7 @@ import 'package:system_loja/core/utils/command_result.dart';
 /// Exemplo de uso:
 /// ```dart
 /// final repository = appInjection.get<LogRepository>();
-/// 
+///
 /// // Registrar uma ação
 /// await repository.createAndLogEntry(
 ///   logActionType: ActionType.create,
@@ -21,7 +21,7 @@ import 'package:system_loja/core/utils/command_result.dart';
 ///   username: 'admin',
 ///   logDetails: 'Cliente João Silva cadastrado',
 /// );
-/// 
+///
 /// // Consultar logs de um período
 /// final resultado = await repository.fetchLogsByPeriod(
 ///   DateTime(2024, 1, 1),

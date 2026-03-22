@@ -35,13 +35,18 @@ void main() {
 
 ### Testes de DAO (Drift)
 
-Usar banco em memória: `NativeDatabase.memory()`. Fechar no `tearDown`.
+`AppDatabase` usa `drift_flutter`, que no primeiro open configura `sqlite3.tempDirectory` via `path_provider` — em `flutter test` na VM isso falha sem plugin. **Padrão do projeto**: injetar diretório de dados e temp com os helpers em `test/support/test_app_database.dart`:
 
 ```dart
+import 'support/test_app_database.dart';
+
 late AppDatabase database;
 
 setUp(() {
-  database = AppDatabase(NativeDatabase.memory());
+  database = AppDatabase(
+    applicationSupportDirectory: testApplicationSupportDirectory,
+    tempDirectoryPath: testSqliteTempDirectoryPath,
+  );
 });
 
 tearDown(() async {

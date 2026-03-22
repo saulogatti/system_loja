@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/utils/string_extensions.dart';
-import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/utils/string_extensions.dart';
+import 'package:system_loja/screens/utils/validators.dart';
 import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
@@ -10,7 +10,9 @@ import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 ///
 /// Encapsula os campos de entrada e validações para criação e edição de clientes.
 /// Quando em modo de edição, o campo CPF fica desabilitado.
-@Deprecated.instantiate('Use PersonRegistrationForm para um formulário unificado de pessoa física e jurídica')
+@Deprecated.instantiate(
+  'Use PersonRegistrationForm para um formulário unificado de pessoa física e jurídica',
+)
 class CustomerForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nomeController;
@@ -27,7 +29,18 @@ class CustomerForm extends StatelessWidget {
   final VoidCallback? onCancel;
 
   const CustomerForm({
-    required this.formKey, required this.nomeController, required this.cpfController, required this.emailController, required this.telefoneController, required this.streetController, required this.onSubmit, required this.zipCodeController, required this.neighborhoodController, required this.cityController, required this.stateController, super.key,
+    required this.formKey,
+    required this.nomeController,
+    required this.cpfController,
+    required this.emailController,
+    required this.telefoneController,
+    required this.streetController,
+    required this.onSubmit,
+    required this.zipCodeController,
+    required this.neighborhoodController,
+    required this.cityController,
+    required this.stateController,
+    super.key,
     this.isEditMode = false,
     this.onCancel,
   });
@@ -63,7 +76,7 @@ class CustomerForm extends StatelessWidget {
             validatorOptions: (value) {
               if (value == null || value.trim().isEmpty) {
                 return 'CPF é obrigatório';
-              } else if (!value.isValidCPF()) {
+              } else if (!value.isValidCpf()) {
                 return 'CPF inválido';
               }
               return null;
@@ -72,7 +85,10 @@ class CustomerForm extends StatelessWidget {
           const SizedBox(height: 16),
           TextFormFieldEmail(emailController: emailController, isEditing: true),
           const SizedBox(height: 16),
-          TextFormFieldPhone(telefoneController: telefoneController, isEditing: true),
+          TextFormFieldPhone(
+            telefoneController: telefoneController,
+            isEditing: true,
+          ),
           const SizedBox(height: 16),
           AddressForm(
             streetController: streetController,
@@ -102,7 +118,9 @@ class CustomerForm extends StatelessWidget {
                 child: ElevatedButton.icon(
                   onPressed: onSubmit,
                   icon: Icon(isEditMode ? Icons.save : Icons.add),
-                  label: Text(isEditMode ? 'Salvar Alterações' : 'Adicionar Cliente'),
+                  label: Text(
+                    isEditMode ? 'Salvar Alterações' : 'Adicionar Cliente',
+                  ),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(16),
                     textStyle: const TextStyle(fontSize: 16),

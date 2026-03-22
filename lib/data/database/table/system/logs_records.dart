@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 
-@UseRowClass(ActivityLog)
 class LogsRecords extends Table {
   IntColumn get actionType => intEnum<ActionType>()();
   TextColumn get details => text().withDefault(const Constant(''))();

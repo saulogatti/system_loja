@@ -23,12 +23,10 @@ sealed class CompanyBlocState with _$CompanyBlocState {
   }) = _CompaniesLoaded;
 
   /// Estado quando uma empresa específica é encontrada
-  const factory CompanyBlocState.companyFound({
-    required Company company,
-  }) = _CompanyFound;
+  const factory CompanyBlocState.companyFound({required Company company}) =
+      _CompanyFound;
 
   /// Estado de erro
-  const factory CompanyBlocState.companyError({
-    required String message,
-  }) = _CompanyError;
+  const factory CompanyBlocState.companyError({required String message}) =
+      _CompanyError;
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:system_loja/core/utils/input_formatters.dart';
-import 'package:system_loja/core/utils/text_formatters.dart';
+import 'package:system_loja/screens/utils/input_formatters.dart';
+import 'package:system_loja/screens/utils/text_formatters.dart';
 
 /// Testes para os formatadores de entrada.
 ///

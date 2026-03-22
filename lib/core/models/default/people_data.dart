@@ -2,17 +2,17 @@
 
 import 'package:system_loja/core/models/default/default_object.dart';
 
-/// Dados de pessoa (usuario, cliente, fornecedor)
-abstract class PeopleData extends DefaultObject {
+/// Dados de pessoa (usuario, cliente, fornecedor) PersonDefault ou DefaultPerson? Usar o nome PersonDefault
+abstract class PersonDefault extends DefaultObject {
   final String name;
   final String? email;
   final String? phone;
-  PeopleData({
-    required super.id,
+  PersonDefault({
     required this.name,
     this.email,
     this.phone,
     super.registrationDate,
     super.lastUpdatedDate,
+    super.id,
   });
 }

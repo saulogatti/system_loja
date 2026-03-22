@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:system_loja/core/managers/configuration_repository.dart';
-import 'package:system_loja/core/repository/system/log_repository.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
-import 'package:system_loja/core/settings/app_theme_settings.dart';
+import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 import 'package:system_loja/data/database/system_database.dart';
+import 'package:system_loja/domain/repository/configuration_repository.dart';
+import 'package:system_loja/domain/repository/system/log_repository.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
 void main() {

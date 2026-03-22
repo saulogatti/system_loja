@@ -4,8 +4,10 @@ import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/data/database/app_database.dart';
-import 'package:system_loja/data/database/dao/invoice_dao.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
+
+import 'support/invoice_transaction_test_support.dart';
+import 'support/test_app_database.dart';
 
 /// Testes para o InvoiceDao.
 ///
@@ -13,12 +15,13 @@ import 'package:system_loja/data/database/dao/product_dao.dart';
 /// fiscais de entrada e de saída.
 void main() {
   late AppDatabase database;
-  late InvoiceDao invoiceDao;
   late ProductDao productDao;
 
   setUp(() {
-    database = AppDatabase();
-    invoiceDao = database.invoiceDao;
+    database = AppDatabase(
+      applicationSupportDirectory: testApplicationSupportDirectory,
+      tempDirectoryPath: testSqliteTempDirectoryPath,
+    );
     productDao = database.productDao;
   });
 
@@ -26,7 +29,7 @@ void main() {
     await database.close();
   });
 
-  Future<int> insertProduct({int stockQuantity = 10})  {
+  Future<int> insertProduct({int stockQuantity = 10}) {
     return productDao.insertProduct(
       Product(
         name: 'Produto Teste',
@@ -63,93 +66,83 @@ void main() {
     );
   }
 
-  group('InvoiceDao.insertInvoiceWithItems', () {
+  group('Orquestração nota + itens + estoque (espelho do SalesRepository)', () {
     group('nota de entrada', () {
-      test(
-        'deve somar a quantidade do item ao estoque do produto',
-        () async {
-          // Arrange
-          const initialStock = 10;
-          const invoiceQuantity = 1;
-          final productId = await insertProduct(stockQuantity: initialStock);
+      test('deve somar a quantidade do item ao estoque do produto', () async {
+        // Arrange
+        const initialStock = 10;
+        const invoiceQuantity = 1;
+        final productId = await insertProduct(stockQuantity: initialStock);
 
-          final invoice = buildInvoice(
-            productId: productId,
-            quantity: invoiceQuantity,
-            type: InvoiceType.entry,
-          );
+        final invoice = buildInvoice(
+          productId: productId,
+          quantity: invoiceQuantity,
+          type: InvoiceType.entry,
+        );
 
-          // Act
-          await invoiceDao.insertInvoiceWithItems(invoice);
+        // Act
+        await insertInvoiceWithItemsLikeRepository(database, invoice);
 
-          // Assert
-          final product = await productDao.getById(productId);
-          expect(
-            product!.stockQuantity,
-            equals(initialStock + invoiceQuantity),
-            reason:
-                'Nota de entrada deve somar a quantidade ao estoque do produto',
-          );
-        },
-      );
+        // Assert
+        final product = await productDao.getById(productId);
+        expect(
+          product!.stockQuantity,
+          equals(initialStock + invoiceQuantity),
+          reason:
+              'Nota de entrada deve somar a quantidade ao estoque do produto',
+        );
+      });
 
-      test(
-        'deve somar múltiplas quantidades ao estoque',
-        () async {
-          // Arrange
-          const initialStock = 5;
-          const invoiceQuantity = 7;
-          final productId = await insertProduct(stockQuantity: initialStock);
+      test('deve somar múltiplas quantidades ao estoque', () async {
+        // Arrange
+        const initialStock = 5;
+        const invoiceQuantity = 7;
+        final productId = await insertProduct(stockQuantity: initialStock);
 
-          final invoice = buildInvoice(
-            productId: productId,
-            quantity: invoiceQuantity,
-            type: InvoiceType.entry,
-          );
+        final invoice = buildInvoice(
+          productId: productId,
+          quantity: invoiceQuantity,
+          type: InvoiceType.entry,
+        );
 
-          // Act
-          await invoiceDao.insertInvoiceWithItems(invoice);
+        // Act
+        await insertInvoiceWithItemsLikeRepository(database, invoice);
 
-          // Assert
-          final product = await productDao.getById(productId);
-          expect(product!.stockQuantity, equals(initialStock + invoiceQuantity));
-        },
-      );
+        // Assert
+        final product = await productDao.getById(productId);
+        expect(product!.stockQuantity, equals(initialStock + invoiceQuantity));
+      });
     });
 
     group('nota de saída', () {
-      test(
-        'deve subtrair a quantidade do item do estoque do produto',
-        () async {
-          // Arrange
-          const initialStock = 10;
-          const invoiceQuantity = 3;
-          final productId = await insertProduct(stockQuantity: initialStock);
+      test('deve subtrair a quantidade do item do estoque do produto', () async {
+        // Arrange
+        const initialStock = 10;
+        const invoiceQuantity = 3;
+        final productId = await insertProduct(stockQuantity: initialStock);
 
-          final invoice = buildInvoice(
-            productId: productId,
-            quantity: invoiceQuantity,
-            type: InvoiceType.exit,
-          );
+        final invoice = buildInvoice(
+          productId: productId,
+          quantity: invoiceQuantity,
+          type: InvoiceType.exit,
+        );
 
-          // Act
-          await invoiceDao.insertInvoiceWithItems(invoice);
+        // Act
+        await insertInvoiceWithItemsLikeRepository(database, invoice);
 
-          // Assert
-          final product = await productDao.getById(productId);
-          expect(
-            product!.stockQuantity,
-            equals(initialStock - invoiceQuantity),
-            reason:
-                'Nota de saída deve subtrair a quantidade do estoque do produto',
-          );
-        },
-      );
+        // Assert
+        final product = await productDao.getById(productId);
+        expect(
+          product!.stockQuantity,
+          equals(initialStock - invoiceQuantity),
+          reason:
+              'Nota de saída deve subtrair a quantidade do estoque do produto',
+        );
+      });
 
       test(
-        'não deve permitir estoque negativo ao salvar nota de saída',
+        'deve falhar antes de persistir quando estoque insuficiente (nota de saída)',
         () async {
-          // Arrange
           const initialStock = 2;
           const invoiceQuantity = 5;
           final productId = await insertProduct(stockQuantity: initialStock);
@@ -160,10 +153,10 @@ void main() {
             type: InvoiceType.exit,
           );
 
-          // Act
-          await invoiceDao.insertInvoiceWithItems(invoice);
-
-          // Assert: estoque não pode ficar negativo; deve permanecer inalterado
+          expect(
+            () => insertInvoiceWithItemsLikeRepository(database, invoice),
+            throwsStateError,
+          );
           final product = await productDao.getById(productId);
           expect(product!.stockQuantity, equals(initialStock));
         },

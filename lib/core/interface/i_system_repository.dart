@@ -11,7 +11,7 @@ import 'package:system_loja/core/models/system_config/system_configuration.dart'
 /// Exemplo de uso:
 /// ```dart
 /// final repository = appInjection.get<SystemRepository>();
-/// 
+///
 /// final config = await repository.getSystemConfiguration();
 /// if (config != null) {
 ///   print('Versão: ${config.version}');
@@ -28,7 +28,15 @@ abstract interface class ISystemRepository {
   ///
   /// Retorna:
   /// - [SystemConfiguration] com as configurações ou null se não existir
-  Future<SystemConfiguration?> getSystemConfiguration();
+  Future<SystemConfiguration> getSystemConfiguration();
+
+  /// Importa configuração a partir de JSON e persiste.
+  ///
+  /// Faz parse, valida, normaliza e salva. Lança exceção com mensagem
+  /// apropriada em caso de JSON inválido ou dados inválidos.
+  Future<SystemConfiguration> importConfigurationFromJson(String jsonContent);
+
+  Future<SystemConfiguration> resetToDefaultConfiguration();
 
   /// Salva as configurações do sistema.
   ///

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/utils/input_formatters.dart';
-import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/utils/input_formatters.dart';
+import 'package:system_loja/screens/utils/validators.dart';
 import 'package:system_loja/screens/products/widgets/product_category.dart';
-import 'package:system_loja/screens/utils/constants.dart';
+import 'package:system_loja/aplication/utils/constants.dart';
 
 /// Widget do formulário de cadastro de produto
 ///
@@ -19,7 +19,15 @@ class ProductForm extends StatefulWidget {
   final ValueChanged<int?> onCategoryChanged;
 
   const ProductForm({
-    required this.formKey, required this.nomeController, required this.codigoController, required this.precoController, required this.estoqueController, required this.descricaoController, required this.onSubmit, required this.onCategoryChanged, super.key,
+    required this.formKey,
+    required this.nomeController,
+    required this.codigoController,
+    required this.precoController,
+    required this.estoqueController,
+    required this.descricaoController,
+    required this.onSubmit,
+    required this.onCategoryChanged,
+    super.key,
     this.selectedCategoryId,
   });
 
