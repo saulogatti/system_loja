@@ -71,7 +71,8 @@
   return ProductException(
     type: ProductErrorType.invalidPrice,
     message: &#39;Preço inválido&#39;,
-    details: &#39;O preço R\$ ${price.toStringAsFixed(2)} não é válido. &#39;
+    details:
+        &#39;O preço R\$ ${price.toStringAsFixed(2)} não é válido. &#39;
         &#39;O preço deve ser maior ou igual a zero.&#39;,
     productCode: code,
   );

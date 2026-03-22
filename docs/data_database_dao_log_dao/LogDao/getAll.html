@@ -61,15 +61,19 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Retorna todos os logs ordenados do mais recente para o mais antigo.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;ActivityLog&gt;&gt; getAll() {
-  return (select(
+  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;ActivityLog&gt;&gt; getAll() async {
+  final rows = await (select(
     logsRecords,
   )..orderBy([(t) =&gt; OrderingTerm.desc(t.timestamp)])).get();
+  return rows.map((e) =&gt; e.toDomain()).toList();
 }</code></pre>
 </section>
 

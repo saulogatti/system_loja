@@ -16,6 +16,17 @@ import 'package:system_loja/data/entry/user_entry.dart';
 
 part 'system_database.g.dart';
 
+/// Banco de dados de sistema usando Drift.
+///
+/// Gerencia tabelas de usuários ([UsersRecords]), logs ([LogsRecords]) e
+/// configurações do sistema ([SystemRecords]).
+///
+/// Aceita um [QueryExecutor] opcional para facilitar testes com banco em memória.
+///
+/// Exemplo de uso em testes:
+/// ```dart
+/// final db = SystemDatabase(executor: NativeDatabase.memory());
+/// ```
 @DriftDatabase(
   tables: [UsersRecords, LogsRecords, SystemRecords],
   daos: [UsersDao, LogDao, SystemDao],

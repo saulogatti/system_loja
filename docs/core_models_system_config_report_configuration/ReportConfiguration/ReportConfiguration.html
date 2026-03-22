@@ -54,9 +54,12 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">ReportConfiguration</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-enableSalesByPeriod"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">enableSalesByPeriod</span> = <span class="default-value">true</span>, </span></li>
+      <span class="name ">ReportConfiguration</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-defaultPeriodInDays"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">defaultPeriodInDays</span> = <span class="default-value">30</span>, </span></li>
+<li><span class="parameter" id="-param-enableSalesByPeriod"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">enableSalesByPeriod</span> = <span class="default-value">true</span>, </span></li>
 <li><span class="parameter" id="-param-enableTopProducts"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">enableTopProducts</span> = <span class="default-value">true</span>, </span></li>
-<li><span class="parameter" id="-param-defaultPeriodInDays"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">defaultPeriodInDays</span> = <span class="default-value">30</span>, </span></li>
+<li><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span></li>
+<li><span class="parameter" id="-param-registrationDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">registrationDate</span>, </span></li>
+<li><span class="parameter" id="-param-lastUpdatedDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">lastUpdatedDate</span>, </span></li>
 </ol>})
     </section>
     
@@ -66,9 +69,12 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">ReportConfiguration({
+  this.defaultPeriodInDays = 30,
   this.enableSalesByPeriod = true,
   this.enableTopProducts = true,
-  this.defaultPeriodInDays = 30,
+  super.id,
+  super.registrationDate,
+  super.lastUpdatedDate,
 });</code></pre>
 </section>
 

@@ -7,15 +7,24 @@ import 'package:system_loja/data/database/table/system/logs_records.dart';
 
 part 'log_dao.g.dart';
 
+/// DAO para gerenciar operações CRUD de logs de atividade no [SystemDatabase].
+///
+/// Permite inserir, buscar e remover registros de auditoria ([ActivityLog])
+/// com filtros por data, tipo de ação, entidade e usuário.
 @DriftAccessor(tables: [LogsRecords])
 class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
   LogDao(super.db);
 
-  // Deletar todos os registros de log
+  /// Remove todos os registros de log da tabela.
+  ///
+  /// Retorna o número de linhas removidas.
   Future<int> deleteAll() {
     return delete(logsRecords).go();
   }
 
+  /// Remove todos os logs com timestamp anterior a [dataLimite].
+  ///
+  /// Retorna true se ao menos um log foi removido.
   Future<bool> deleteLogsBefore(DateTime dataLimite) async {
     return await (delete(logsRecords)
           ..where((tbl) => tbl.timestamp.isSmallerThanValue(dataLimite)))
@@ -23,7 +32,7 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
         .then((rowsAffected) => rowsAffected > 0);
   }
 
-  // Obter todos os registros de log
+  /// Retorna todos os logs ordenados do mais recente para o mais antigo.
   Future<List<ActivityLog>> getAll() async {
     final rows = await (select(
       logsRecords,
@@ -31,6 +40,7 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
     return rows.map((e) => e.toDomain()).toList();
   }
 
+  /// Retorna logs cujo timestamp está entre [dataInicio] e [dataFim] (inclusivo).
   Future<List<ActivityLog>> getInDate(
     DateTime dataInicio,
     DateTime dataFim,
@@ -43,6 +53,7 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
     return rows.map((e) => e.toDomain()).toList();
   }
 
+  /// Retorna logs filtrados pelo tipo de ação [tipoAcao].
   Future<List<ActivityLog>> getWithAction(ActionType tipoAcao) async {
     final rows = await (select(
       logsRecords,
@@ -50,6 +61,7 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
     return rows.map((e) => e.toDomain()).toList();
   }
 
+  /// Retorna logs filtrados pelo nome da entidade [entity].
   Future<List<ActivityLog>> getWithFilter(String entity) async {
     final rows = await (select(
       logsRecords,
@@ -57,6 +69,7 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
     return rows.map((e) => e.toDomain()).toList();
   }
 
+  /// Retorna logs filtrados pelo ID do usuário [userId].
   Future<List<ActivityLog>> getWithUserId(int userId) async {
     final rows = await (select(
       logsRecords,
@@ -64,7 +77,9 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
     return rows.map((e) => e.toDomain()).toList();
   }
 
-  // Carregar um registro de log por ID
+  /// Busca um log de atividade pelo [id].
+  ///
+  /// Retorna null se o registro não for encontrado.
   Future<ActivityLog?> load(int id) async {
     final row = await (select(
       logsRecords,
@@ -72,12 +87,17 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
     return row?.toDomain();
   }
 
-  // Deletar um registro de log por ID
+  /// Remove um log pelo [id].
+  ///
+  /// Retorna o número de linhas afetadas (normalmente 1 ou 0).
   Future<int> removeLog(int id) {
     return (delete(logsRecords)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  // Salvar um novo registro de log
+  /// Salva um novo log de atividade.
+  ///
+  /// Usa `insertOrIgnore` para evitar duplicatas silenciosas.
+  /// Retorna o ID do registro inserido.
   Future<int> save(ActivityLog log) {
     return into(
       logsRecords,

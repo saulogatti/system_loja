@@ -54,15 +54,15 @@
 
     <section class="multi-line-signature">
       const
-      <span class="name ">UsuarioForm</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
-<li><span class="parameter" id="-param-formKey"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/GlobalKey-class.html">GlobalKey</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/widgets/FormState-class.html">FormState</a></span>&gt;</span></span> <span class="parameter-name">formKey</span>, </span></li>
+      <span class="name ">UsuarioForm</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-formKey"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/GlobalKey-class.html">GlobalKey</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/widgets/FormState-class.html">FormState</a></span>&gt;</span></span> <span class="parameter-name">formKey</span>, </span></li>
 <li><span class="parameter" id="-param-nomeController"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/TextEditingController-class.html">TextEditingController</a></span> <span class="parameter-name">nomeController</span>, </span></li>
 <li><span class="parameter" id="-param-emailController"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/TextEditingController-class.html">TextEditingController</a></span> <span class="parameter-name">emailController</span>, </span></li>
 <li><span class="parameter" id="-param-senhaController"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/TextEditingController-class.html">TextEditingController</a></span> <span class="parameter-name">senhaController</span>, </span></li>
-<li><span class="parameter" id="-param-nivelPermissaoSelecionado"><span>required</span> <span class="type-annotation"><a href="../../core_models_user/AuthorizationLevel.html">AuthorizationLevel</a></span> <span class="parameter-name">nivelPermissaoSelecionado</span>, </span></li>
+<li><span class="parameter" id="-param-nivelPermissaoSelecionado"><span>required</span> <span class="type-annotation"><a href="../../core_models_default_authorization_level/AuthorizationLevel.html">AuthorizationLevel</a></span> <span class="parameter-name">nivelPermissaoSelecionado</span>, </span></li>
 <li><span class="parameter" id="-param-usuarioEditando"><span>required</span> <span class="type-annotation"><a href="../../core_models_user/User-class.html">User</a>?</span> <span class="parameter-name">usuarioEditando</span>, </span></li>
 <li><span class="parameter" id="-param-onSubmit"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/VoidCallback.html">VoidCallback</a></span> <span class="parameter-name">onSubmit</span>, </span></li>
-<li><span class="parameter" id="-param-onPermissaoChanged"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/ValueChanged.html">ValueChanged</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_user/AuthorizationLevel.html">AuthorizationLevel</a></span>&gt;</span></span> <span class="parameter-name">onPermissaoChanged</span>, </span></li>
+<li><span class="parameter" id="-param-onPermissaoChanged"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/ValueChanged.html">ValueChanged</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_default_authorization_level/AuthorizationLevel.html">AuthorizationLevel</a></span>&gt;</span></span> <span class="parameter-name">onPermissaoChanged</span>, </span></li>
+<li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
 <li><span class="parameter" id="-param-onCancel"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/VoidCallback.html">VoidCallback</a>?</span> <span class="parameter-name">onCancel</span>, </span></li>
 </ol>})
     </section>
@@ -73,7 +73,6 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">const UsuarioForm({
-  super.key,
   required this.formKey,
   required this.nomeController,
   required this.emailController,
@@ -82,6 +81,7 @@
   required this.usuarioEditando,
   required this.onSubmit,
   required this.onPermissaoChanged,
+  super.key,
   this.onCancel,
 });</code></pre>
 </section>

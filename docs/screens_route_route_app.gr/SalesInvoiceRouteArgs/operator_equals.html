@@ -105,12 +105,11 @@ the <a href="../../screens_route_route_app.gr/SalesInvoiceRouteArgs/hashCode.htm
 bool operator ==(Object other) {
   if (identical(this, other)) return true;
   if (other is! SalesInvoiceRouteArgs) return false;
-  return key == other.key &amp;&amp;
-      const _i24.ListEquality&lt;_i25.PaymentMethodType&gt;().equals(
+  return const _i24.ListEquality&lt;_i25.PaymentMethodType&gt;().equals(
         paymentMethods,
         other.paymentMethods,
       ) &amp;&amp;
-      const _i24.MapEquality&lt;int, _i22.Customer&gt;().equals(
+      const _i24.MapEquality&lt;int, _i26.Customer&gt;().equals(
         customers,
         other.customers,
       ) &amp;&amp;
@@ -122,7 +121,8 @@ bool operator ==(Object other) {
       const _i24.ListEquality&lt;_i23.Product&gt;().equals(
         products,
         other.products,
-      );
+      ) &amp;&amp;
+      key == other.key;
 }</code></pre>
 </section>
 

@@ -67,14 +67,17 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; loadUsuarios() async {
-  try {
-    final usuarios = await _userRepository.obterTodosUsuarios();
-    emit(UsuarioState.loadSuccess(usuarios: usuarios));
-  } catch (e) {
-    emit(
-      UsuarioState.loadFailure(errorMessage: &#39;Erro ao carregar usuários: $e&#39;),
-    );
-  }
+  final result = await _userRepository.obterTodosUsuarios();
+  result.when(
+    onSuccess: (usuarios) {
+      emit(UsuarioState.loadSuccess(usuarios: usuarios));
+    },
+    onError: (message) {
+      emit(
+        UsuarioState.loadFailure(errorMessage: message),
+      );
+    },
+  );
 }</code></pre>
 </section>
 

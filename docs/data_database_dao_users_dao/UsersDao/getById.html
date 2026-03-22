@@ -67,10 +67,11 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;User?&gt; getById(int id) {
-  return (select(
+  <pre class="language-dart"><code class="language-dart">Future&lt;User?&gt; getById(int id) async {
+  final row = await (select(
     usersRecords,
   )..where((tbl) =&gt; tbl.id.equals(id))).getSingleOrNull();
+  return row?.toUser();
 }</code></pre>
 </section>
 

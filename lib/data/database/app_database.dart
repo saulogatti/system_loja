@@ -27,7 +27,14 @@ part 'app_database.g.dart';
 
 /// Banco de dados principal da aplicação usando Drift.
 ///
-/// Gerencia todas as tabelas e DAOs do sistema de loja.
+/// Gerencia todas as tabelas e DAOs do sistema de loja:
+/// clientes, produtos, categorias, empresas, notas fiscais e endereços.
+///
+/// O [applicationSupportDirectory] permite injetar onde o SQLite é gravado
+/// (útil em testes sem plugin `path_provider`).
+///
+/// Veja também:
+/// - [SystemDatabase] - banco secundário para usuários, logs e configurações do sistema
 @DriftDatabase(
   tables: [
     CategoriesRecords,
@@ -51,6 +58,8 @@ part 'app_database.g.dart';
 class AppDatabase extends _$AppDatabase {
   static final _nameBd = 'system_loja';
 
+  /// Cria uma instância do banco de dados principal.
+  ///
   /// [applicationSupportDirectory] permite injetar onde o SQLite é gravado
   /// (útil em testes sem plugin `path_provider`).
   ///

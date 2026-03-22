@@ -64,7 +64,7 @@ flutter test test/<arquivo>_test.dart
 
 ### Bancos Drift
 
-- `AppDatabase` (`lib/data/database/app_database.dart`) com `schemaVersion => 11`.
+- `AppDatabase` (`lib/data/database/app_database.dart`) com `schemaVersion => 12`.
 - `SystemDatabase` (`lib/data/database/system_database.dart`) com `schemaVersion => 1`.
 
 ### Legado JSON
