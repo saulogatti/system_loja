@@ -1,13 +1,12 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:system_loja/core/constants/cache_keys.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_settings_service.dart';
-import 'package:system_loja/data/entry/configuration_repository_cache.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
- 
-import '../../core/settings/app_settings.dart';
+import 'package:system_loja/data/entry/configuration_repository_cache.dart';
 
-const String keyConfigurationRepositoryCache = 'configuration_repository_cache';
+import '../../core/settings/app_settings.dart';
 
 /// Gerenciador de Configurações do Sistema
 ///
@@ -129,7 +128,7 @@ class ConfigurationRepository
         ConfigurationRepositoryCache.fromJson,
       );
       if (file != null) {
-        _configuracao = file.configuracao;
+        _configuracao = file.configuracao.toAppSettings();
         logInfo('Configurações carregadas com sucesso');
       } else {
         _configuracao = AppSettings.createDefaultSettings();
@@ -163,7 +162,9 @@ class ConfigurationRepository
 
   /// Salva dados no arquivo JSON
   Future<void> _salvarDados() async {
-    final file = ConfigurationRepositoryCache(configuracao: AppSettingsEntry.fromAppSettings(_configuracao));
+    final file = ConfigurationRepositoryCache(
+      configuracao: AppSettingsEntry.fromAppSettings(_configuracao),
+    );
     await _cache.set(file);
   }
 }

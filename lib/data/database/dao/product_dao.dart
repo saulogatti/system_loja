@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/data/database/app_database.dart';
+import 'package:system_loja/data/database/mapper/drift_to_domain.dart';
 import 'package:system_loja/data/database/table/products_records.dart';
 
 part 'product_dao.g.dart';
@@ -9,14 +10,16 @@ part 'product_dao.g.dart';
 class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   ProductDao(super.db);
 
-  Future<List<Product>> getAll() {
-    return select(productsRecords).get();
+  Future<List<Product>> getAll() async {
+    final rows = await select(productsRecords).get();
+    return rows.map((e) => e.toDomain()).toList();
   }
 
-  Future<Product?> getById(int id) {
-    return (select(
+  Future<Product?> getById(int id) async {
+    final row = await (select(
       productsRecords,
     )..where((t) => t.id.equals(id))).getSingleOrNull();
+    return row?.toDomain();
   }
 
   Future<int> insertProduct(Product data) async {
@@ -58,10 +61,11 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   ///
   /// [code] Código do produto a ser buscado.
   /// Retorna o produto encontrado ou null se não existir.
-  Future<Product?> getByCode(String code) {
-    return (select(
+  Future<Product?> getByCode(String code) async {
+    final row = await (select(
       productsRecords,
     )..where((t) => t.code.equals(code))).getSingleOrNull();
+    return row?.toDomain();
   }
 
   /// Verifica se um código de produto já existe no banco de dados.
@@ -78,12 +82,12 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   /// [productId] ID do produto a ser atualizado.
   /// [quantityChange] Quantidade a ser adicionada (positivo) ou removida (negativo).
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
+  /// Aplica alteração de estoque. Validação de negativo fica na camada de domínio.
   Future<bool> updateStockQuantity(int productId, int quantityChange) async {
     final product = await getById(productId);
     if (product == null) return false;
 
     final newQuantity = product.stockQuantity + quantityChange;
-    if (newQuantity < 0) return false;
 
     return await update(productsRecords).replace(
       ProductsRecordsCompanion(

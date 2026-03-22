@@ -5,13 +5,18 @@ import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/domain/code_generator_service.dart';
 import 'package:system_loja/data/database/app_database.dart';
 
+import 'support/invoice_transaction_test_support.dart';
+import 'support/test_app_database.dart';
+
 void main() {
   late AppDatabase database;
   late CodeGeneratorService codeGeneratorService;
 
   setUp(() {
-    // Cria um banco de dados em memória para testes
-    database = AppDatabase();
+    database = AppDatabase(
+      applicationSupportDirectory: testApplicationSupportDirectory,
+      tempDirectoryPath: testSqliteTempDirectoryPath,
+    );
     codeGeneratorService = CodeGeneratorService(
       productDao: database.productDao,
       invoiceDao: database.invoiceDao,
@@ -206,7 +211,7 @@ void main() {
             paymentMethod: 'Dinheiro',
           ),
         );
-        await database.invoiceDao.insertInvoiceWithItems(invoice1);
+        await insertInvoiceAndItemsOnly(database, invoice1);
 
         final invoiceNumber2 = await codeGeneratorService
             .generateInvoiceNumber();
@@ -249,7 +254,7 @@ void main() {
             paymentMethod: 'Dinheiro',
           ),
         );
-        await database.invoiceDao.insertInvoiceWithItems(invoice);
+        await insertInvoiceAndItemsOnly(database, invoice);
 
         final exists = await codeGeneratorService.checkInvoiceNumberExists(
           invoiceNumber,
@@ -311,7 +316,7 @@ void main() {
           paymentMethod: 'Dinheiro',
         ),
       );
-      await database.invoiceDao.insertInvoiceWithItems(invoice);
+      await insertInvoiceAndItemsOnly(database, invoice);
 
       final result = await codeGeneratorService.validateInvoiceNumber(
         invoiceNumber,

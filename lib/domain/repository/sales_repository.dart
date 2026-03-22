@@ -1,9 +1,12 @@
-import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/aplication/system_error_manager.dart';
+import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/models/invoice.dart';
-import 'package:system_loja/domain/code_generator_service.dart';
+import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/database/dao/invoice_dao.dart';
+import 'package:system_loja/data/database/dao/invoice_item_dao.dart';
+import 'package:system_loja/data/database/dao/product_dao.dart';
+import 'package:system_loja/domain/code_generator_service.dart';
 
 /// Repositório para gerenciamento de vendas usando Drift
 ///
@@ -11,13 +14,19 @@ import 'package:system_loja/data/database/dao/invoice_dao.dart';
 /// utilizando os DAOs do Drift.
 class SalesRepository implements ISalesRepository {
   final InvoiceDao _invoiceDao;
+  final InvoiceItemDao _invoiceItemDao;
+  final ProductDao _productDao;
   final CodeGeneratorService _codeGeneratorService;
 
   SalesRepository({
     required InvoiceDao invoiceDao,
+    required InvoiceItemDao invoiceItemDao,
+    required ProductDao productDao,
     required CodeGeneratorService codeGeneratorService,
   }) : _codeGeneratorService = codeGeneratorService,
-       _invoiceDao = invoiceDao;
+       _invoiceDao = invoiceDao,
+       _invoiceItemDao = invoiceItemDao,
+       _productDao = productDao;
 
   /// Deleta uma venda pelo ID
   ///
@@ -134,12 +143,42 @@ class SalesRepository implements ISalesRepository {
 
   /// Salva uma nova venda no banco de dados
   ///
-  /// Salva tanto a nota fiscal quanto seus itens em uma transação.
-  /// Retorna sucesso ou erro.
+  /// Salva tanto a nota fiscal quanto seus itens em uma transação e aplica estoque.
   @override
   Future<ResultStatus<bool, String>> saveSale(Invoice invoice) async {
     try {
-      await _invoiceDao.insertInvoiceWithItems(invoice);
+      if (invoice.data.type == InvoiceType.exit) {
+        for (final item in invoice.data.items) {
+          final product = await _productDao.getById(item.productId);
+          if (product == null) {
+            return ResultError('Produto id ${item.productId} não encontrado.');
+          }
+          if (product.stockQuantity < item.quantity) {
+            return ResultError(
+              'Estoque insuficiente para o produto ${product.name}.',
+            );
+          }
+        }
+      }
+
+      await _invoiceDao.transaction(() async {
+        final invoiceId = await _invoiceDao.insertInvoice(invoice);
+        for (final item in invoice.data.items) {
+          await _invoiceItemDao.insertInvoiceItem(item, invoiceId: invoiceId);
+          final quantityChange = invoice.data.type == InvoiceType.entry
+              ? item.quantity
+              : -item.quantity;
+          final ok = await _productDao.updateStockQuantity(
+            item.productId,
+            quantityChange,
+          );
+          if (!ok) {
+            throw StateError(
+              'Falha ao atualizar estoque do produto ${item.productId}.',
+            );
+          }
+        }
+      });
       return ResultSuccess(true);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
@@ -149,13 +188,20 @@ class SalesRepository implements ISalesRepository {
 
   /// Atualiza uma venda existente
   ///
-  /// Atualiza a nota fiscal e seus itens.
-  /// Remove itens antigos e insere os novos dentro de uma transação.
-  /// Retorna sucesso ou erro.
+  /// Atualiza a nota fiscal e seus itens (sem recalcular estoque automaticamente).
   @override
   Future<ResultStatus<bool, String>> updateSale(Invoice invoice) async {
     try {
-      await _invoiceDao.updateInvoiceWithItems(invoice);
+      await _invoiceDao.transaction(() async {
+        final result = await _invoiceDao.updateInvoice(invoice);
+        if (!result) {
+          throw StateError('Falha ao atualizar cabeçalho da nota.');
+        }
+        await _invoiceItemDao.deleteByInvoiceId(invoice.id);
+        for (final item in invoice.data.items) {
+          await _invoiceItemDao.insertInvoiceItem(item, invoiceId: invoice.id);
+        }
+      });
       return ResultSuccess(true);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);

@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/extension/company_to_companion.dart';
+import 'package:system_loja/data/database/mapper/drift_to_domain.dart';
 import 'package:system_loja/data/database/table/company_records.dart';
 
 part 'company_dao.g.dart';
@@ -20,10 +21,9 @@ class CompanyDao extends DatabaseAccessor<AppDatabase> with _$CompanyDaoMixin {
   /// Retorna o ID gerado automaticamente.
   /// Lança exceção se o CNPJ já existir (constraint UNIQUE).
   Future<int> addCompany(Company company) {
-    return into(companyRecords).insert(
-      company.toCompanion(),
-      mode: InsertMode.insertOrAbort,
-    );
+    return into(
+      companyRecords,
+    ).insert(company.toCompanion(), mode: InsertMode.insertOrAbort);
   }
 
   /// Remove uma empresa do banco de dados pelo ID.
@@ -36,35 +36,33 @@ class CompanyDao extends DatabaseAccessor<AppDatabase> with _$CompanyDaoMixin {
   /// Retorna todas as empresas como objetos de domínio Company.
   Future<List<Company>> getAll() async {
     final records = await select(companyRecords).get();
-    return records;
+    return records.map((e) => e.toDomain()).toList();
   }
 
   /// Busca uma empresa pelo ID.
   ///
   /// Retorna null se a empresa não for encontrada.
   Future<Company?> getById(int id) async {
-    final record = await (select(companyRecords)
-          ..where((t) => t.id.equals(id)))
-        .getSingleOrNull();
-    return record;
+    final record = await (select(
+      companyRecords,
+    )..where((t) => t.id.equals(id))).getSingleOrNull();
+    return record?.toDomain();
   }
 
   /// Busca uma empresa pelo CNPJ.
   ///
   /// Retorna null se a empresa não for encontrada.
   Future<Company?> getByCnpj(String cnpj) async {
-    final record = await (select(companyRecords)
-          ..where((t) => t.cnpj.equals(cnpj)))
-        .getSingleOrNull();
-    return record;
+    final record = await (select(
+      companyRecords,
+    )..where((t) => t.cnpj.equals(cnpj))).getSingleOrNull();
+    return record?.toDomain();
   }
 
   /// Atualiza uma empresa existente no banco de dados.
   ///
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
   Future<bool> updateCompany(Company company) {
-    return update(companyRecords).replace(
-      company.toCompanion(forUpdate: true),
-    );
+    return update(companyRecords).replace(company.toCompanion(forUpdate: true));
   }
 }

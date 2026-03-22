@@ -1,12 +1,10 @@
 import 'package:drift/drift.dart';
-import 'package:system_loja/core/models/category.dart';
 
 /// Tabela de categorias de produtos no banco de dados Drift.
 ///
 /// Armazena categorias de forma independente para evitar perda de dados
 /// quando produtos são deletados. Produtos referenciam categorias através
 /// de chave estrangeira (categoryId).
-@UseRowClass(Category)
 class CategoriesRecords extends Table {
   /// Identificador único da categoria (auto-incrementado)
   IntColumn get id => integer().autoIncrement()();

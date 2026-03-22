@@ -16,20 +16,23 @@ class UsersDao extends DatabaseAccessor<SystemDatabase> with _$UsersDaoMixin {
     return (delete(usersRecords)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Future<User?> findByEmail(String email) {
-    return (select(
+  Future<User?> findByEmail(String email) async {
+    final row = await (select(
       usersRecords,
     )..where((tbl) => tbl.email.equals(email))).getSingleOrNull();
+    return row?.toUser();
   }
 
-  Future<List<User>> getAll() {
-    return select(usersRecords).get();
+  Future<List<User>> getAll() async {
+    final rows = await select(usersRecords).get();
+    return rows.map((e) => e.toUser()).toList();
   }
 
-  Future<User?> getById(int id) {
-    return (select(
+  Future<User?> getById(int id) async {
+    final row = await (select(
       usersRecords,
     )..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    return row?.toUser();
   }
 
   Future<User?> insertUser(User user) async {
@@ -44,7 +47,7 @@ class UsersDao extends DatabaseAccessor<SystemDatabase> with _$UsersDaoMixin {
         lastUpdatedDate: Value(userEntry.lastUpdatedDate),
       ),
     );
-    return UserEntry.fromUser(userEntryResult);
+    return userEntryResult.toUser();
   }
 
   Future<bool> updateUser(User user) async {
