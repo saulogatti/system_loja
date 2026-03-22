@@ -95,14 +95,18 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
                   controller: scrollController,
                   children: [
                     _InfoRow(
-                      icon: Icons.person_outline,
-                      label: 'Cliente',
-                      value: data.customerName ?? '',
+                      icon: data.customerId != null
+                          ? Icons.person_outline
+                          : Icons.business_outlined,
+                      label: data.customerId != null
+                          ? 'Cliente'
+                          : 'Empresa',
+                      value: data.personDisplayName,
                     ),
                     _InfoRow(
                       icon: Icons.badge_outlined,
-                      label: 'CPF',
-                      value: data.customerCpf ?? '',
+                      label: data.customerId != null ? 'CPF' : 'CNPJ',
+                      value: data.personDocument,
                     ),
                     _InfoRow(
                       icon: Icons.payment_outlined,

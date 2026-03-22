@@ -18,6 +18,12 @@ class InvoicesRecords extends Table {
   /// ID da empresa vinculada (null quando vínculo for cliente).
   IntColumn get companyId => integer().named('empresa_id').nullable()();
 
+  /// Nome da empresa (desnormalizado; null quando vínculo for cliente).
+  TextColumn get companyName => text().named('empresa_nome').nullable()();
+
+  /// CNPJ da empresa (desnormalizado; null quando vínculo for cliente).
+  TextColumn get companyCnpj => text().named('empresa_cnpj').nullable()();
+
   IntColumn get id => integer().autoIncrement()();
 
   /// Número da nota fiscal.

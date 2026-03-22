@@ -50,7 +50,11 @@ void main() {
       data: InvoiceData(
         invoiceNumber: 'NF-${DateTime.now().microsecondsSinceEpoch}',
         companyId: type == InvoiceType.entry ? 1 : null,
+        companyName: type == InvoiceType.entry ? 'Fornecedor Teste' : null,
+        companyCnpj: type == InvoiceType.entry ? '00.000.000/0001-00' : null,
         customerId: type == InvoiceType.exit ? 1 : null,
+        customerName: type == InvoiceType.exit ? 'Cliente Teste' : null,
+        customerCpf: type == InvoiceType.exit ? '000.000.000-00' : null,
         type: type,
         items: [
           InvoiceItem(

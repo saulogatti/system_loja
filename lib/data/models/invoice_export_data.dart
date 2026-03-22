@@ -52,6 +52,10 @@ class InvoiceDataExport {
   final String? customerCpf;
   @JsonKey(name: 'empresa_id')
   final int? companyId;
+  @JsonKey(name: 'empresa_nome')
+  final String? companyName;
+  @JsonKey(name: 'empresa_cnpj')
+  final String? companyCnpj;
   final List<InvoiceItemData> items;
   @JsonKey(name: 'forma_pagamento')
   final String paymentMethod;
@@ -70,6 +74,8 @@ class InvoiceDataExport {
     this.customerName,
     this.customerCpf,
     this.companyId,
+    this.companyName,
+    this.companyCnpj,
     this.type = InvoiceType.exit,
   });
 
@@ -84,6 +90,8 @@ class InvoiceDataExport {
     customerName: value.customerName,
     customerCpf: value.customerCpf,
     companyId: value.companyId,
+    companyName: value.companyName,
+    companyCnpj: value.companyCnpj,
     items: value.items.map(InvoiceItemData.fromDomain).toList(),
     paymentMethod: value.paymentMethod,
     issueDate: value.issueDate,
@@ -96,6 +104,8 @@ class InvoiceDataExport {
     customerName: customerName,
     customerCpf: customerCpf,
     companyId: companyId,
+    companyName: companyName,
+    companyCnpj: companyCnpj,
     items: items.map((e) => e.toDomain()).toList(),
     paymentMethod: paymentMethod,
     issueDate: issueDate,

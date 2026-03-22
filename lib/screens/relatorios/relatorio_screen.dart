@@ -334,8 +334,7 @@ class _InvoiceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = invoice.data;
-    final String destino =
-        data.customerName ?? 'Empresa ID: ${data.companyId ?? '-'}';
+    final String destino = data.personDisplayName;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),

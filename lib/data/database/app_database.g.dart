@@ -1994,6 +1994,28 @@ class $InvoicesRecordsTable extends InvoicesRecords
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _companyNameMeta = const VerificationMeta(
+    'companyName',
+  );
+  @override
+  late final GeneratedColumn<String> companyName = GeneratedColumn<String>(
+    'empresa_nome',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _companyCnpjMeta = const VerificationMeta(
+    'companyCnpj',
+  );
+  @override
+  late final GeneratedColumn<String> companyCnpj = GeneratedColumn<String>(
+    'empresa_cnpj',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -2093,6 +2115,8 @@ class $InvoicesRecordsTable extends InvoicesRecords
     customerId,
     customerName,
     companyId,
+    companyName,
+    companyCnpj,
     id,
     invoiceNumber,
     issueDate,
@@ -2142,6 +2166,24 @@ class $InvoicesRecordsTable extends InvoicesRecords
       context.handle(
         _companyIdMeta,
         companyId.isAcceptableOrUnknown(data['empresa_id']!, _companyIdMeta),
+      );
+    }
+    if (data.containsKey('empresa_nome')) {
+      context.handle(
+        _companyNameMeta,
+        companyName.isAcceptableOrUnknown(
+          data['empresa_nome']!,
+          _companyNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('empresa_cnpj')) {
+      context.handle(
+        _companyCnpjMeta,
+        companyCnpj.isAcceptableOrUnknown(
+          data['empresa_cnpj']!,
+          _companyCnpjMeta,
+        ),
       );
     }
     if (data.containsKey('id')) {
@@ -2228,6 +2270,14 @@ class $InvoicesRecordsTable extends InvoicesRecords
         DriftSqlType.int,
         data['${effectivePrefix}empresa_id'],
       ),
+      companyName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}empresa_nome'],
+      ),
+      companyCnpj: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}empresa_cnpj'],
+      ),
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -2286,6 +2336,12 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
 
   /// ID da empresa vinculada (null quando vínculo for cliente).
   final int? companyId;
+
+  /// Nome da empresa (desnormalizado; null quando vínculo for cliente).
+  final String? companyName;
+
+  /// CNPJ da empresa (desnormalizado; null quando vínculo for cliente).
+  final String? companyCnpj;
   final int id;
 
   /// Número da nota fiscal.
@@ -2313,6 +2369,8 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
     this.customerId,
     this.customerName,
     this.companyId,
+    this.companyName,
+    this.companyCnpj,
     required this.id,
     required this.invoiceNumber,
     required this.issueDate,
@@ -2336,6 +2394,12 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
     }
     if (!nullToAbsent || companyId != null) {
       map['empresa_id'] = Variable<int>(companyId);
+    }
+    if (!nullToAbsent || companyName != null) {
+      map['empresa_nome'] = Variable<String>(companyName);
+    }
+    if (!nullToAbsent || companyCnpj != null) {
+      map['empresa_cnpj'] = Variable<String>(companyCnpj);
     }
     map['id'] = Variable<int>(id);
     map['numero_nota'] = Variable<String>(invoiceNumber);
@@ -2368,6 +2432,12 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
       companyId: companyId == null && nullToAbsent
           ? const Value.absent()
           : Value(companyId),
+      companyName: companyName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(companyName),
+      companyCnpj: companyCnpj == null && nullToAbsent
+          ? const Value.absent()
+          : Value(companyCnpj),
       id: Value(id),
       invoiceNumber: Value(invoiceNumber),
       issueDate: Value(issueDate),
@@ -2391,6 +2461,8 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
       customerId: serializer.fromJson<int?>(json['customerId']),
       customerName: serializer.fromJson<String?>(json['customerName']),
       companyId: serializer.fromJson<int?>(json['companyId']),
+      companyName: serializer.fromJson<String?>(json['companyName']),
+      companyCnpj: serializer.fromJson<String?>(json['companyCnpj']),
       id: serializer.fromJson<int>(json['id']),
       invoiceNumber: serializer.fromJson<String>(json['invoiceNumber']),
       issueDate: serializer.fromJson<DateTime>(json['issueDate']),
@@ -2411,6 +2483,8 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
       'customerId': serializer.toJson<int?>(customerId),
       'customerName': serializer.toJson<String?>(customerName),
       'companyId': serializer.toJson<int?>(companyId),
+      'companyName': serializer.toJson<String?>(companyName),
+      'companyCnpj': serializer.toJson<String?>(companyCnpj),
       'id': serializer.toJson<int>(id),
       'invoiceNumber': serializer.toJson<String>(invoiceNumber),
       'issueDate': serializer.toJson<DateTime>(issueDate),
@@ -2429,6 +2503,8 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
     Value<int?> customerId = const Value.absent(),
     Value<String?> customerName = const Value.absent(),
     Value<int?> companyId = const Value.absent(),
+    Value<String?> companyName = const Value.absent(),
+    Value<String?> companyCnpj = const Value.absent(),
     int? id,
     String? invoiceNumber,
     DateTime? issueDate,
@@ -2442,6 +2518,8 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
     customerId: customerId.present ? customerId.value : this.customerId,
     customerName: customerName.present ? customerName.value : this.customerName,
     companyId: companyId.present ? companyId.value : this.companyId,
+    companyName: companyName.present ? companyName.value : this.companyName,
+    companyCnpj: companyCnpj.present ? companyCnpj.value : this.companyCnpj,
     id: id ?? this.id,
     invoiceNumber: invoiceNumber ?? this.invoiceNumber,
     issueDate: issueDate ?? this.issueDate,
@@ -2465,6 +2543,12 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
           ? data.customerName.value
           : this.customerName,
       companyId: data.companyId.present ? data.companyId.value : this.companyId,
+      companyName: data.companyName.present
+          ? data.companyName.value
+          : this.companyName,
+      companyCnpj: data.companyCnpj.present
+          ? data.companyCnpj.value
+          : this.companyCnpj,
       id: data.id.present ? data.id.value : this.id,
       invoiceNumber: data.invoiceNumber.present
           ? data.invoiceNumber.value
@@ -2493,6 +2577,8 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
           ..write('customerId: $customerId, ')
           ..write('customerName: $customerName, ')
           ..write('companyId: $companyId, ')
+          ..write('companyName: $companyName, ')
+          ..write('companyCnpj: $companyCnpj, ')
           ..write('id: $id, ')
           ..write('invoiceNumber: $invoiceNumber, ')
           ..write('issueDate: $issueDate, ')
@@ -2511,6 +2597,8 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
     customerId,
     customerName,
     companyId,
+    companyName,
+    companyCnpj,
     id,
     invoiceNumber,
     issueDate,
@@ -2528,6 +2616,8 @@ class InvoicesRecord extends DataClass implements Insertable<InvoicesRecord> {
           other.customerId == this.customerId &&
           other.customerName == this.customerName &&
           other.companyId == this.companyId &&
+          other.companyName == this.companyName &&
+          other.companyCnpj == this.companyCnpj &&
           other.id == this.id &&
           other.invoiceNumber == this.invoiceNumber &&
           other.issueDate == this.issueDate &&
@@ -2543,6 +2633,8 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
   final Value<int?> customerId;
   final Value<String?> customerName;
   final Value<int?> companyId;
+  final Value<String?> companyName;
+  final Value<String?> companyCnpj;
   final Value<int> id;
   final Value<String> invoiceNumber;
   final Value<DateTime> issueDate;
@@ -2556,6 +2648,8 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     this.customerId = const Value.absent(),
     this.customerName = const Value.absent(),
     this.companyId = const Value.absent(),
+    this.companyName = const Value.absent(),
+    this.companyCnpj = const Value.absent(),
     this.id = const Value.absent(),
     this.invoiceNumber = const Value.absent(),
     this.issueDate = const Value.absent(),
@@ -2570,6 +2664,8 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     this.customerId = const Value.absent(),
     this.customerName = const Value.absent(),
     this.companyId = const Value.absent(),
+    this.companyName = const Value.absent(),
+    this.companyCnpj = const Value.absent(),
     this.id = const Value.absent(),
     required String invoiceNumber,
     required DateTime issueDate,
@@ -2587,6 +2683,8 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     Expression<int>? customerId,
     Expression<String>? customerName,
     Expression<int>? companyId,
+    Expression<String>? companyName,
+    Expression<String>? companyCnpj,
     Expression<int>? id,
     Expression<String>? invoiceNumber,
     Expression<DateTime>? issueDate,
@@ -2601,6 +2699,8 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
       if (customerId != null) 'cliente_id': customerId,
       if (customerName != null) 'cliente_nome': customerName,
       if (companyId != null) 'empresa_id': companyId,
+      if (companyName != null) 'empresa_nome': companyName,
+      if (companyCnpj != null) 'empresa_cnpj': companyCnpj,
       if (id != null) 'id': id,
       if (invoiceNumber != null) 'numero_nota': invoiceNumber,
       if (issueDate != null) 'data_emissao': issueDate,
@@ -2617,6 +2717,8 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     Value<int?>? customerId,
     Value<String?>? customerName,
     Value<int?>? companyId,
+    Value<String?>? companyName,
+    Value<String?>? companyCnpj,
     Value<int>? id,
     Value<String>? invoiceNumber,
     Value<DateTime>? issueDate,
@@ -2631,6 +2733,8 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
       customerId: customerId ?? this.customerId,
       customerName: customerName ?? this.customerName,
       companyId: companyId ?? this.companyId,
+      companyName: companyName ?? this.companyName,
+      companyCnpj: companyCnpj ?? this.companyCnpj,
       id: id ?? this.id,
       invoiceNumber: invoiceNumber ?? this.invoiceNumber,
       issueDate: issueDate ?? this.issueDate,
@@ -2656,6 +2760,12 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
     }
     if (companyId.present) {
       map['empresa_id'] = Variable<int>(companyId.value);
+    }
+    if (companyName.present) {
+      map['empresa_nome'] = Variable<String>(companyName.value);
+    }
+    if (companyCnpj.present) {
+      map['empresa_cnpj'] = Variable<String>(companyCnpj.value);
     }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
@@ -2693,6 +2803,8 @@ class InvoicesRecordsCompanion extends UpdateCompanion<InvoicesRecord> {
           ..write('customerId: $customerId, ')
           ..write('customerName: $customerName, ')
           ..write('companyId: $companyId, ')
+          ..write('companyName: $companyName, ')
+          ..write('companyCnpj: $companyCnpj, ')
           ..write('id: $id, ')
           ..write('invoiceNumber: $invoiceNumber, ')
           ..write('issueDate: $issueDate, ')
@@ -4942,6 +5054,8 @@ typedef $$InvoicesRecordsTableCreateCompanionBuilder =
       Value<int?> customerId,
       Value<String?> customerName,
       Value<int?> companyId,
+      Value<String?> companyName,
+      Value<String?> companyCnpj,
       Value<int> id,
       required String invoiceNumber,
       required DateTime issueDate,
@@ -4957,6 +5071,8 @@ typedef $$InvoicesRecordsTableUpdateCompanionBuilder =
       Value<int?> customerId,
       Value<String?> customerName,
       Value<int?> companyId,
+      Value<String?> companyName,
+      Value<String?> companyCnpj,
       Value<int> id,
       Value<String> invoiceNumber,
       Value<DateTime> issueDate,
@@ -4993,6 +5109,16 @@ class $$InvoicesRecordsTableFilterComposer
 
   ColumnFilters<int> get companyId => $composableBuilder(
     column: $table.companyId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get companyName => $composableBuilder(
+    column: $table.companyName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get companyCnpj => $composableBuilder(
+    column: $table.companyCnpj,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5067,6 +5193,16 @@ class $$InvoicesRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get companyName => $composableBuilder(
+    column: $table.companyName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get companyCnpj => $composableBuilder(
+    column: $table.companyCnpj,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -5134,6 +5270,16 @@ class $$InvoicesRecordsTableAnnotationComposer
 
   GeneratedColumn<int> get companyId =>
       $composableBuilder(column: $table.companyId, builder: (column) => column);
+
+  GeneratedColumn<String> get companyName => $composableBuilder(
+    column: $table.companyName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get companyCnpj => $composableBuilder(
+    column: $table.companyCnpj,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
@@ -5211,6 +5357,8 @@ class $$InvoicesRecordsTableTableManager
                 Value<int?> customerId = const Value.absent(),
                 Value<String?> customerName = const Value.absent(),
                 Value<int?> companyId = const Value.absent(),
+                Value<String?> companyName = const Value.absent(),
+                Value<String?> companyCnpj = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 Value<String> invoiceNumber = const Value.absent(),
                 Value<DateTime> issueDate = const Value.absent(),
@@ -5224,6 +5372,8 @@ class $$InvoicesRecordsTableTableManager
                 customerId: customerId,
                 customerName: customerName,
                 companyId: companyId,
+                companyName: companyName,
+                companyCnpj: companyCnpj,
                 id: id,
                 invoiceNumber: invoiceNumber,
                 issueDate: issueDate,
@@ -5239,6 +5389,8 @@ class $$InvoicesRecordsTableTableManager
                 Value<int?> customerId = const Value.absent(),
                 Value<String?> customerName = const Value.absent(),
                 Value<int?> companyId = const Value.absent(),
+                Value<String?> companyName = const Value.absent(),
+                Value<String?> companyCnpj = const Value.absent(),
                 Value<int> id = const Value.absent(),
                 required String invoiceNumber,
                 required DateTime issueDate,
@@ -5252,6 +5404,8 @@ class $$InvoicesRecordsTableTableManager
                 customerId: customerId,
                 customerName: customerName,
                 companyId: companyId,
+                companyName: companyName,
+                companyCnpj: companyCnpj,
                 id: id,
                 invoiceNumber: invoiceNumber,
                 issueDate: issueDate,
