@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/app_injection.dart';
+import 'package:system_loja/aplication/app_injection.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/models/invoice.dart';
@@ -20,11 +20,10 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<RelatorioCubit>(
-      create:
-          (_) => RelatorioCubit(
-            appInjection.get<ISalesRepository>(),
-            appInjection.get<IProductRepository>(),
-          ),
+      create: (_) => RelatorioCubit(
+        appInjection.get<ISalesRepository>(),
+        appInjection.get<IProductRepository>(),
+      ),
       child: this,
     );
   }
@@ -76,11 +75,9 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton.icon(
-                          onPressed:
-                              () =>
-                                  context
-                                      .read<RelatorioCubit>()
-                                      .carregarRelatorios(),
+                          onPressed: () => context
+                              .read<RelatorioCubit>()
+                              .carregarRelatorios(),
                           icon: const Icon(Icons.refresh),
                           label: const Text('Tentar novamente'),
                         ),
@@ -388,8 +385,9 @@ class _EstoqueTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final semEstoque = products.where((p) => p.stockQuantity == 0).length;
-    final estoquesBaixo =
-        products.where((p) => p.stockQuantity > 0 && p.stockQuantity <= 5).length;
+    final estoquesBaixo = products
+        .where((p) => p.stockQuantity > 0 && p.stockQuantity <= 5)
+        .length;
     final sorted = List<Product>.from(products)
       ..sort((a, b) => a.stockQuantity.compareTo(b.stockQuantity));
 

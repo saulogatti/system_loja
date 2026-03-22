@@ -8,7 +8,9 @@ class CompanySearchSection extends StatelessWidget {
   final VoidCallback onSearch;
 
   const CompanySearchSection({
-    required this.searchCnpjController, required this.onSearch, super.key,
+    required this.searchCnpjController,
+    required this.onSearch,
+    super.key,
   });
 
   @override

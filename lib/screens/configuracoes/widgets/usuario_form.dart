@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/models/default/authorization_level.dart';
 import 'package:system_loja/core/models/user.dart';
-import 'package:system_loja/core/utils/string_extensions.dart';
-import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/utils/string_extensions.dart';
+import 'package:system_loja/screens/utils/validators.dart';
 
 /// Widget do formulário de cadastro e edição de usuário
 ///
@@ -18,7 +19,15 @@ class UsuarioForm extends StatefulWidget {
   final ValueChanged<AuthorizationLevel> onPermissaoChanged;
 
   const UsuarioForm({
-    required this.formKey, required this.nomeController, required this.emailController, required this.senhaController, required this.nivelPermissaoSelecionado, required this.usuarioEditando, required this.onSubmit, required this.onPermissaoChanged, super.key,
+    required this.formKey,
+    required this.nomeController,
+    required this.emailController,
+    required this.senhaController,
+    required this.nivelPermissaoSelecionado,
+    required this.usuarioEditando,
+    required this.onSubmit,
+    required this.onPermissaoChanged,
+    super.key,
     this.onCancel,
   });
 
@@ -110,8 +119,8 @@ class _UsuarioFormState extends State<UsuarioForm> {
               // Valida força da senha
               if (value != null &&
                   value.isNotEmpty &&
-                  value.validarSenha() != null) {
-                return value.validarSenha();
+                  value.validatePassword() != null) {
+                return value.validatePassword();
               }
               return null;
             },

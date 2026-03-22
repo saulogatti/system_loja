@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/app_injection.dart';
+import 'package:system_loja/aplication/app_injection.dart';
 import 'package:system_loja/core/interface/i_category_repository.dart';
 import 'package:system_loja/core/models/category.dart';
 import 'package:system_loja/screens/categories/cubit/category_cubit.dart';
@@ -23,7 +23,8 @@ class CategoryManagementScreen extends StatefulWidget
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<CategoryCubit>(
-      create: (_) => CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
+      create: (_) =>
+          CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
       child: this,
     );
   }

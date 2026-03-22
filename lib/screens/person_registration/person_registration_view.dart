@@ -6,7 +6,7 @@ import 'package:system_loja/screens/person_registration/bloc/person_event.dart';
 import 'package:system_loja/screens/person_registration/bloc/person_state.dart';
 import 'package:system_loja/screens/person_registration/models/person_registration_form_data.dart';
 import 'package:system_loja/screens/person_registration/widgets/person_registration_form.dart';
-import 'package:system_loja/screens/utils/constants.dart';
+import 'package:system_loja/aplication/utils/constants.dart';
 
 /// Exibe a tela de cadastro unificado para pessoa física e jurídica.
 ///
@@ -46,20 +46,24 @@ class _PersonRegistrationViewState extends State<PersonRegistrationView> {
             builder: (_) => const Center(child: CircularProgressIndicator()),
           ),
           success: () {
-            Navigator.of(context).pop(); // Fecha o dialog de loading
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('Cadastro realizado com sucesso!')));
-            context.router.pop(); // Volta para a tela anterior
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Cadastro realizado com sucesso!')),
+            );
+            context.router.pop(); // Volta para a tela anteriorF
           },
           failure: (error) {
             Navigator.of(context).pop(); // Fecha o dialog de loading
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro: $error')));
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Erro: $error')));
           },
         );
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Cadastro de Pessoa'), leading: const AutoLeadingButton()),
+        appBar: AppBar(
+          title: const Text('Cadastro de Pessoa'),
+          leading: const AutoLeadingButton(),
+        ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: PersonRegistrationForm(
@@ -117,7 +121,10 @@ class _PersonRegistrationViewState extends State<PersonRegistrationView> {
     final formData = PersonRegistrationFormData(
       personType: _selectedPersonType,
       name: _nameController.text.trim(),
-      document: _documentController.text.replaceAll(Constants.nonNumericRegExp, ''),
+      document: _documentController.text.replaceAll(
+        Constants.nonNumericRegExp,
+        '',
+      ),
       email: _emailController.text.trim(),
       phone: _phoneController.text.trim(),
       street: _streetController.text.trim(),

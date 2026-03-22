@@ -14,7 +14,9 @@ class ProductList extends StatelessWidget {
   final Function(Product) onProductTap;
 
   const ProductList({
-    required this.products, required this.onProductTap, super.key,
+    required this.products,
+    required this.onProductTap,
+    super.key,
   });
 
   @override

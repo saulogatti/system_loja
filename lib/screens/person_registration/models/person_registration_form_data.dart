@@ -1,7 +1,6 @@
 import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/utils/documents.dart';
 
 /// Representa os dados digitados no formulário de cadastro de pessoa.
 class PersonRegistrationFormData {
@@ -121,6 +120,6 @@ enum PersonType {
     if (value == null || value.trim().isEmpty) {
       return '$documentLabel é obrigatório';
     }
-    return Documents.validateDocument(value: value, selectedPersonType: this);
+    return null;
   }
 }

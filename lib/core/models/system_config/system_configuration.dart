@@ -1,26 +1,29 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/models/default/default_object.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
+import 'package:system_loja/core/models/system_config/report_configuration.dart';
+import 'package:system_loja/core/models/system_config/system_user_data.dart';
 
-part 'system_configuration.g.dart';
-
-@JsonSerializable()
+/// Configuração global do sistema (domínio).
+/// Importação/exportação JSON: `SystemConfigurationCodec` em `lib/data/`.
 class SystemConfiguration extends DefaultObject {
-  PriceConfiguration priceConfiguration = PriceConfiguration(types: []);
+  PriceConfiguration priceConfiguration;
+  SystemUserData systemUserData;
+  List<String> productCategories;
 
-  List<String> productCategories = [];
   SystemConfiguration({
     PriceConfiguration? priceConfiguration,
     List<String>? productCategories,
     super.lastUpdatedDate,
     super.registrationDate,
-    int? id,
-  }) : priceConfiguration = priceConfiguration ?? PriceConfiguration(types: []),
+    super.id,
+    SystemUserData? systemUserData,
+  }) : priceConfiguration =
+           priceConfiguration ??
+           PriceConfiguration(
+             types: [],
+             measurementUnits: [],
+             reportConfiguration: ReportConfiguration(),
+           ),
        productCategories = productCategories ?? [],
-       super(id: id ?? -1);
-  factory SystemConfiguration.fromJson(Map<String, dynamic> json) =>
-      _$SystemConfigurationFromJson(json);
-
-  @override
-  Map<String, dynamic> toJson() => _$SystemConfigurationToJson(this);
+       systemUserData = systemUserData ?? SystemUserData.defaultObject();
 }

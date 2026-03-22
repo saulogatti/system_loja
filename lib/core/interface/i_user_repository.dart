@@ -16,13 +16,13 @@ import 'package:system_loja/core/utils/command_result.dart';
 /// Exemplo de uso:
 /// ```dart
 /// final repository = appInjection.get<UserRepository>();
-/// 
+///
 /// // Buscar usuário por email
 /// final user = await repository.obterUsuarioPorEmail('admin@system.com');
 /// if (user != null) {
 ///   print('Usuário: ${user.name}');
 /// }
-/// 
+///
 /// // Validar email
 /// if (repository.validarEmail('teste@example.com')) {
 ///   print('Email válido');
@@ -91,15 +91,4 @@ abstract interface class IUserRepository {
   /// Retorna:
   /// - true se removido com sucesso, false em caso de erro
   Future<bool> removerUsuario(int id);
-
-  /// Valida se um endereço de email está no formato correto.
-  ///
-  /// Verifica formato básico e regras como ausência de acentos.
-  ///
-  /// Parâmetros:
-  /// - [email]: Email a ser validado
-  ///
-  /// Retorna:
-  /// - true se o email é válido, false caso contrário
-  bool validarEmail(String email);
 }

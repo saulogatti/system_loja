@@ -10,17 +10,19 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i19;
-import 'package:collection/collection.dart' as _i24;
-import 'package:flutter/material.dart' as _i20;
-import 'package:system_loja/core/models/company.dart' as _i21;
-import 'package:system_loja/core/models/customer.dart' as _i22;
-import 'package:system_loja/core/models/product.dart' as _i23;
+import 'package:collection/collection.dart' as _i23;
+import 'package:flutter/material.dart' as _i21;
+import 'package:system_loja/core/models/company.dart' as _i20;
+import 'package:system_loja/core/models/customer.dart' as _i25;
+import 'package:system_loja/core/models/product.dart' as _i22;
 import 'package:system_loja/core/models/system_config/price_configuration.dart'
-    as _i25;
+    as _i24;
 import 'package:system_loja/screens/categories/category_management_screen.dart'
     as _i2;
 import 'package:system_loja/screens/company/company_edit_view.dart' as _i3;
 import 'package:system_loja/screens/company/company_view.dart' as _i4;
+import 'package:system_loja/screens/configuracoes/issuer_config_screen.dart'
+    as _i7;
 import 'package:system_loja/screens/configuracoes/log_system_screen.dart'
     as _i8;
 import 'package:system_loja/screens/configuracoes/logs_analytics_screen.dart'
@@ -29,10 +31,9 @@ import 'package:system_loja/screens/configuracoes/settings_screen.dart' as _i16;
 import 'package:system_loja/screens/configuracoes/system_config_screen.dart'
     as _i17;
 import 'package:system_loja/screens/configuracoes/usuario_screen.dart' as _i18;
-import 'package:system_loja/screens/customer/customer_view.dart' as _i5;
-import 'package:system_loja/screens/home/home_screen.dart' as _i6;
+import 'package:system_loja/screens/home/home_screen.dart' as _i5;
 import 'package:system_loja/screens/host/cadastro_group_screen.dart' as _i1;
-import 'package:system_loja/screens/host/host_screen.dart' as _i7;
+import 'package:system_loja/screens/host/host_screen.dart' as _i6;
 import 'package:system_loja/screens/person_registration/person_registration_view.dart'
     as _i10;
 import 'package:system_loja/screens/products/product_detail_screen.dart'
@@ -41,8 +42,6 @@ import 'package:system_loja/screens/products/product_screen.dart' as _i12;
 import 'package:system_loja/screens/relatorios/relatorio_screen.dart' as _i13;
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart' as _i26;
 import 'package:system_loja/screens/sales/sales_invoice_screen.dart' as _i14;
-import 'package:system_loja/screens/configuracoes/issuer_config_screen.dart'
-    as _i27;
 import 'package:system_loja/screens/sales/sales_screen.dart' as _i15;
 
 /// generated route for
@@ -81,12 +80,12 @@ class CategoryManagementRoute extends _i19.PageRouteInfo<void> {
 /// [_i3.CompanyEditView]
 class CompanyEditRoute extends _i19.PageRouteInfo<CompanyEditRouteArgs> {
   CompanyEditRoute({
-    _i20.Key? key,
-    required _i21.Company company,
+    required _i20.Company company,
+    _i21.Key? key,
     List<_i19.PageRouteInfo>? children,
   }) : super(
          CompanyEditRoute.name,
-         args: CompanyEditRouteArgs(key: key, company: company),
+         args: CompanyEditRouteArgs(company: company, key: key),
          initialChildren: children,
        );
 
@@ -96,32 +95,32 @@ class CompanyEditRoute extends _i19.PageRouteInfo<CompanyEditRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<CompanyEditRouteArgs>();
-      return _i3.CompanyEditView(key: args.key, company: args.company);
+      return _i3.CompanyEditView(company: args.company, key: args.key);
     },
   );
 }
 
 class CompanyEditRouteArgs {
-  const CompanyEditRouteArgs({this.key, required this.company});
+  const CompanyEditRouteArgs({required this.company, this.key});
 
-  final _i20.Key? key;
+  final _i20.Company company;
 
-  final _i21.Company company;
+  final _i21.Key? key;
 
   @override
   String toString() {
-    return 'CompanyEditRouteArgs{key: $key, company: $company}';
+    return 'CompanyEditRouteArgs{company: $company, key: $key}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! CompanyEditRouteArgs) return false;
-    return key == other.key && company == other.company;
+    return company == other.company && key == other.key;
   }
 
   @override
-  int get hashCode => key.hashCode ^ company.hashCode;
+  int get hashCode => company.hashCode ^ key.hashCode;
 }
 
 /// generated route for
@@ -141,56 +140,7 @@ class CompanyRoute extends _i19.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i5.CustomerView]
-class CustomerRoute extends _i19.PageRouteInfo<CustomerRouteArgs> {
-  CustomerRoute({
-    _i20.Key? key,
-    _i22.Customer? customer,
-    List<_i19.PageRouteInfo>? children,
-  }) : super(
-         CustomerRoute.name,
-         args: CustomerRouteArgs(key: key, customer: customer),
-         initialChildren: children,
-       );
-
-  static const String name = 'CustomerRoute';
-
-  static _i19.PageInfo page = _i19.PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<CustomerRouteArgs>(
-        orElse: () => const CustomerRouteArgs(),
-      );
-      return _i5.CustomerView(key: args.key, customer: args.customer);
-    },
-  );
-}
-
-class CustomerRouteArgs {
-  const CustomerRouteArgs({this.key, this.customer});
-
-  final _i20.Key? key;
-
-  final _i22.Customer? customer;
-
-  @override
-  String toString() {
-    return 'CustomerRouteArgs{key: $key, customer: $customer}';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! CustomerRouteArgs) return false;
-    return key == other.key && customer == other.customer;
-  }
-
-  @override
-  int get hashCode => key.hashCode ^ customer.hashCode;
-}
-
-/// generated route for
-/// [_i6.HomeScreen]
+/// [_i5.HomeScreen]
 class HomeRoute extends _i19.PageRouteInfo<void> {
   const HomeRoute({List<_i19.PageRouteInfo>? children})
     : super(HomeRoute.name, initialChildren: children);
@@ -200,13 +150,13 @@ class HomeRoute extends _i19.PageRouteInfo<void> {
   static _i19.PageInfo page = _i19.PageInfo(
     name,
     builder: (data) {
-      return const _i6.HomeScreen();
+      return const _i5.HomeScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i7.HostScreen]
+/// [_i6.HostScreen]
 class HostRoute extends _i19.PageRouteInfo<void> {
   const HostRoute({List<_i19.PageRouteInfo>? children})
     : super(HostRoute.name, initialChildren: children);
@@ -216,7 +166,23 @@ class HostRoute extends _i19.PageRouteInfo<void> {
   static _i19.PageInfo page = _i19.PageInfo(
     name,
     builder: (data) {
-      return const _i7.HostScreen();
+      return const _i6.HostScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [_i7.IssuerConfigScreen]
+class IssuerConfigRoute extends _i19.PageRouteInfo<void> {
+  const IssuerConfigRoute({List<_i19.PageRouteInfo>? children})
+    : super(IssuerConfigRoute.name, initialChildren: children);
+
+  static const String name = 'IssuerConfigRoute';
+
+  static _i19.PageInfo page = _i19.PageInfo(
+    name,
+    builder: (data) {
+      return const _i7.IssuerConfigScreen();
     },
   );
 }
@@ -273,15 +239,15 @@ class PersonRegistrationRoute extends _i19.PageRouteInfo<void> {
 /// [_i11.ProductDetailScreen]
 class ProductDetailRoute extends _i19.PageRouteInfo<ProductDetailRouteArgs> {
   ProductDetailRoute({
-    _i20.Key? key,
-    required _i23.Product product,
-    List<_i23.Product> productList = const [],
+    required _i22.Product product,
+    _i21.Key? key,
+    List<_i22.Product> productList = const [],
     List<_i19.PageRouteInfo>? children,
   }) : super(
          ProductDetailRoute.name,
          args: ProductDetailRouteArgs(
-           key: key,
            product: product,
+           key: key,
            productList: productList,
          ),
          initialChildren: children,
@@ -295,8 +261,8 @@ class ProductDetailRoute extends _i19.PageRouteInfo<ProductDetailRouteArgs> {
       final args = data.argsAs<ProductDetailRouteArgs>();
       return _i19.WrappedRoute(
         child: _i11.ProductDetailScreen(
-          key: args.key,
           product: args.product,
+          key: args.key,
           productList: args.productList,
         ),
       );
@@ -306,29 +272,29 @@ class ProductDetailRoute extends _i19.PageRouteInfo<ProductDetailRouteArgs> {
 
 class ProductDetailRouteArgs {
   const ProductDetailRouteArgs({
-    this.key,
     required this.product,
+    this.key,
     this.productList = const [],
   });
 
-  final _i20.Key? key;
+  final _i22.Product product;
 
-  final _i23.Product product;
+  final _i21.Key? key;
 
-  final List<_i23.Product> productList;
+  final List<_i22.Product> productList;
 
   @override
   String toString() {
-    return 'ProductDetailRouteArgs{key: $key, product: $product, productList: $productList}';
+    return 'ProductDetailRouteArgs{product: $product, key: $key, productList: $productList}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! ProductDetailRouteArgs) return false;
-    return key == other.key &&
-        product == other.product &&
-        const _i24.ListEquality<_i23.Product>().equals(
+    return product == other.product &&
+        key == other.key &&
+        const _i23.ListEquality<_i22.Product>().equals(
           productList,
           other.productList,
         );
@@ -336,9 +302,9 @@ class ProductDetailRouteArgs {
 
   @override
   int get hashCode =>
-      key.hashCode ^
       product.hashCode ^
-      const _i24.ListEquality<_i23.Product>().hash(productList);
+      key.hashCode ^
+      const _i23.ListEquality<_i22.Product>().hash(productList);
 }
 
 /// generated route for
@@ -377,22 +343,22 @@ class RelatoriosRoute extends _i19.PageRouteInfo<void> {
 /// [_i14.SalesInvoiceScreen]
 class SalesInvoiceRoute extends _i19.PageRouteInfo<SalesInvoiceRouteArgs> {
   SalesInvoiceRoute({
-    _i20.Key? key,
-    required List<_i25.PaymentMethodType> paymentMethods,
-    required Map<int, _i22.Customer> customers,
-    required Map<int, _i21.Company> companies,
+    required List<_i24.PaymentMethodType> paymentMethods,
+    required Map<int, _i25.Customer> customers,
+    required Map<int, _i20.Company> companies,
     required _i26.SalesCubit salesCubit,
-    required List<_i23.Product> products,
+    required List<_i22.Product> products,
+    _i21.Key? key,
     List<_i19.PageRouteInfo>? children,
   }) : super(
          SalesInvoiceRoute.name,
          args: SalesInvoiceRouteArgs(
-           key: key,
            paymentMethods: paymentMethods,
            customers: customers,
            companies: companies,
            salesCubit: salesCubit,
            products: products,
+           key: key,
          ),
          initialChildren: children,
        );
@@ -404,12 +370,12 @@ class SalesInvoiceRoute extends _i19.PageRouteInfo<SalesInvoiceRouteArgs> {
     builder: (data) {
       final args = data.argsAs<SalesInvoiceRouteArgs>();
       return _i14.SalesInvoiceScreen(
-        key: args.key,
         paymentMethods: args.paymentMethods,
         customers: args.customers,
         companies: args.companies,
         salesCubit: args.salesCubit,
         products: args.products,
+        key: args.key,
       );
     },
   );
@@ -417,63 +383,63 @@ class SalesInvoiceRoute extends _i19.PageRouteInfo<SalesInvoiceRouteArgs> {
 
 class SalesInvoiceRouteArgs {
   const SalesInvoiceRouteArgs({
-    this.key,
     required this.paymentMethods,
     required this.customers,
     required this.companies,
     required this.salesCubit,
     required this.products,
+    this.key,
   });
 
-  final _i20.Key? key;
+  final List<_i24.PaymentMethodType> paymentMethods;
 
-  final List<_i25.PaymentMethodType> paymentMethods;
+  final Map<int, _i25.Customer> customers;
 
-  final Map<int, _i22.Customer> customers;
-
-  final Map<int, _i21.Company> companies;
+  final Map<int, _i20.Company> companies;
 
   final _i26.SalesCubit salesCubit;
 
-  final List<_i23.Product> products;
+  final List<_i22.Product> products;
+
+  final _i21.Key? key;
 
   @override
   String toString() {
-    return 'SalesInvoiceRouteArgs{key: $key, paymentMethods: $paymentMethods, customers: $customers, companies: $companies, salesCubit: $salesCubit, products: $products}';
+    return 'SalesInvoiceRouteArgs{paymentMethods: $paymentMethods, customers: $customers, companies: $companies, salesCubit: $salesCubit, products: $products, key: $key}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! SalesInvoiceRouteArgs) return false;
-    return key == other.key &&
-        const _i24.ListEquality<_i25.PaymentMethodType>().equals(
+    return const _i23.ListEquality<_i24.PaymentMethodType>().equals(
           paymentMethods,
           other.paymentMethods,
         ) &&
-        const _i24.MapEquality<int, _i22.Customer>().equals(
+        const _i23.MapEquality<int, _i25.Customer>().equals(
           customers,
           other.customers,
         ) &&
-        const _i24.MapEquality<int, _i21.Company>().equals(
+        const _i23.MapEquality<int, _i20.Company>().equals(
           companies,
           other.companies,
         ) &&
         salesCubit == other.salesCubit &&
-        const _i24.ListEquality<_i23.Product>().equals(
+        const _i23.ListEquality<_i22.Product>().equals(
           products,
           other.products,
-        );
+        ) &&
+        key == other.key;
   }
 
   @override
   int get hashCode =>
-      key.hashCode ^
-      const _i24.ListEquality<_i25.PaymentMethodType>().hash(paymentMethods) ^
-      const _i24.MapEquality<int, _i22.Customer>().hash(customers) ^
-      const _i24.MapEquality<int, _i21.Company>().hash(companies) ^
+      const _i23.ListEquality<_i24.PaymentMethodType>().hash(paymentMethods) ^
+      const _i23.MapEquality<int, _i25.Customer>().hash(customers) ^
+      const _i23.MapEquality<int, _i20.Company>().hash(companies) ^
       salesCubit.hashCode ^
-      const _i24.ListEquality<_i23.Product>().hash(products);
+      const _i23.ListEquality<_i22.Product>().hash(products) ^
+      key.hashCode;
 }
 
 /// generated route for
@@ -536,22 +502,6 @@ class UsuarioRoute extends _i19.PageRouteInfo<void> {
     name,
     builder: (data) {
       return _i19.WrappedRoute(child: const _i18.UsuarioScreen());
-    },
-  );
-}
-
-/// generated route for
-/// [_i27.IssuerConfigScreen]
-class IssuerConfigRoute extends _i19.PageRouteInfo<void> {
-  const IssuerConfigRoute({List<_i19.PageRouteInfo>? children})
-    : super(IssuerConfigRoute.name, initialChildren: children);
-
-  static const String name = 'IssuerConfigRoute';
-
-  static _i19.PageInfo page = _i19.PageInfo(
-    name,
-    builder: (data) {
-      return const _i27.IssuerConfigScreen();
     },
   );
 }

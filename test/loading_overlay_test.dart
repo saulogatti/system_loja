@@ -8,34 +8,28 @@ import 'package:system_loja/screens/widgets/loading_overlay.dart';
 /// indicador de progresso e mensagem opcional.
 void main() {
   group('LoadingOverlay Widget Tests', () {
-    testWidgets('deve exibir CircularProgressIndicator',
-        (WidgetTester tester) async {
+    testWidgets('deve exibir CircularProgressIndicator', (
+      WidgetTester tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: LoadingOverlay(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: LoadingOverlay())),
       );
 
       // Assert
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('deve exibir mensagem quando fornecida',
-        (WidgetTester tester) async {
+    testWidgets('deve exibir mensagem quando fornecida', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       const testMessage = 'Carregando dados...';
 
       // Act
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: LoadingOverlay(
-              message: testMessage,
-            ),
-          ),
+          home: Scaffold(body: LoadingOverlay(message: testMessage)),
         ),
       );
 
@@ -44,15 +38,12 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('não deve exibir mensagem quando não fornecida',
-        (WidgetTester tester) async {
+    testWidgets('não deve exibir mensagem quando não fornecida', (
+      WidgetTester tester,
+    ) async {
       // Arrange & Act
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: LoadingOverlay(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: LoadingOverlay())),
       );
 
       // Assert
@@ -67,8 +58,9 @@ void main() {
       );
     });
 
-    testWidgets('deve bloquear interações com ModalBarrier',
-        (WidgetTester tester) async {
+    testWidgets('deve bloquear interações com ModalBarrier', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       bool buttonPressed = false;
 
@@ -99,8 +91,7 @@ void main() {
       expect(find.byType(ModalBarrier), findsOneWidget);
     });
 
-    testWidgets('deve aceitar cores customizadas',
-        (WidgetTester tester) async {
+    testWidgets('deve aceitar cores customizadas', (WidgetTester tester) async {
       // Arrange
       const customProgressColor = Colors.green;
 
@@ -108,9 +99,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: LoadingOverlay(
-              progressIndicatorColor: customProgressColor,
-            ),
+            body: LoadingOverlay(progressIndicatorColor: customProgressColor),
           ),
         ),
       );

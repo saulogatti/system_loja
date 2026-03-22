@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/category.dart';
 import 'package:system_loja/data/database/app_database.dart';
+import 'package:system_loja/data/database/mapper/drift_to_domain.dart';
 import 'package:system_loja/data/database/table/categories_records.dart';
 
 part 'category_dao.g.dart';
@@ -17,30 +18,33 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
   /// Busca todas as categorias ordenadas por nome.
   ///
   /// Retorna lista de todas as categorias cadastradas.
-  Future<List<Category>> getAll() {
-    return (select(
+  Future<List<Category>> getAll() async {
+    final rows = await (select(
       categoriesRecords,
     )..orderBy([(t) => OrderingTerm.asc(t.name)])).get();
+    return rows.map((e) => e.toDomain()).toList();
   }
 
   /// Busca uma categoria por ID.
   ///
   /// [id] Identificador único da categoria.
   /// Retorna a categoria encontrada ou null se não existir.
-  Future<Category?> getById(int id) {
-    return (select(
+  Future<Category?> getById(int id) async {
+    final row = await (select(
       categoriesRecords,
     )..where((t) => t.id.equals(id))).getSingleOrNull();
+    return row?.toDomain();
   }
 
   /// Busca uma categoria por nome.
   ///
   /// [name] Nome da categoria a ser buscada.
   /// Retorna a categoria encontrada ou null se não existir.
-  Future<Category?> getByName(String name) {
-    return (select(
+  Future<Category?> getByName(String name) async {
+    final row = await (select(
       categoriesRecords,
     )..where((t) => t.name.equals(name))).getSingleOrNull();
+    return row?.toDomain();
   }
 
   /// Verifica se há produtos associados a uma categoria.

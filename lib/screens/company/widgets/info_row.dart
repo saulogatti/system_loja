@@ -7,14 +7,16 @@ class InfoRow extends StatelessWidget {
   final TextStyle? valueStyle;
 
   const InfoRow({
-    required this.label, required this.value, super.key,
+    required this.label,
+    required this.value,
+    super.key,
     this.labelStyle,
     this.valueStyle,
   });
 
   @override
   Widget build(BuildContext context) {
-      final theme = Theme.of(context);
+    final theme = Theme.of(context);
     final baseStyle = theme.textTheme.bodyMedium;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -24,7 +26,8 @@ class InfoRow extends StatelessWidget {
           children: [
             TextSpan(
               text: '$label: ',
-              style: labelStyle ??
+              style:
+                  labelStyle ??
                   TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.secondary,
@@ -32,10 +35,9 @@ class InfoRow extends StatelessWidget {
             ),
             TextSpan(
               text: value,
-              style: valueStyle ??
-                  TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+              style:
+                  valueStyle ??
+                  TextStyle(color: Theme.of(context).colorScheme.onSurface),
             ),
           ],
         ),

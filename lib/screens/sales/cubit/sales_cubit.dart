@@ -69,7 +69,7 @@ class SalesCubit extends Cubit<SalesState> {
     final customers = resultMap.asSuccess;
     final invoices = resultSales.asSuccess;
     final companies = resultCompanies.asSuccess;
-    final paymentMethods = resultSystem?.priceConfiguration.types ?? [];
+    final paymentMethods = resultSystem.priceConfiguration.types;
     switch (result) {
       case ResultSuccess(result: final products):
         emit(
