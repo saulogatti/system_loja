@@ -15,14 +15,14 @@ PriceConfigurationEntry _$PriceConfigurationEntryFromJson(
   measurementUnits: (json['measurementUnits'] as List<dynamic>)
       .map((e) => e as String)
       .toList(),
+  registrationDate: DateTime.parse(json['registrationDate'] as String),
+  lastUpdatedDate: DateTime.parse(json['lastUpdatedDate'] as String),
   reportConfiguration: json['reportConfiguration'] == null
       ? null
       : ReportConfigurationEntry.fromJson(
           json['reportConfiguration'] as Map<String, dynamic>,
         ),
   id: (json['id'] as num?)?.toInt() ?? -1,
-  registrationDate: DateTime.parse(json['registrationDate'] as String),
-  lastUpdatedDate: DateTime.parse(json['lastUpdatedDate'] as String),
 );
 
 Map<String, dynamic> _$PriceConfigurationEntryToJson(
