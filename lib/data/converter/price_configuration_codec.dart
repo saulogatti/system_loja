@@ -24,19 +24,12 @@ class PriceConfigurationCodec {
     final priceConfigurationData = PriceConfigurationEntry.fromJson(
       json as Map<String, dynamic>,
     );
-    return PriceConfiguration(
-      types: priceConfigurationData.types,
-      measurementUnits: priceConfigurationData.measurementUnits,
-      reportConfiguration: priceConfigurationData.reportConfiguration,
-      id: priceConfigurationData.id,
-      registrationDate: priceConfigurationData.registrationDate,
-      lastUpdatedDate: priceConfigurationData.lastUpdatedDate,
-    );
+    return priceConfigurationData.toDomain();
   }
 
   static PriceConfiguration fromJsonString(String raw) =>
       fromJson(jsonDecode(raw) as Map<String, dynamic>);
 
   static Map<String, dynamic> toJson(PriceConfiguration instance) =>
-      PriceConfigurationEntry.fromPriceConfiguration(instance).toJson();
+      PriceConfigurationEntry.fromDomain(instance).toJson();
 }

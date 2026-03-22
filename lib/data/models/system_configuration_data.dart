@@ -70,11 +70,9 @@ class SystemConfigurationData {
     if (json == null || json is! Map<String, dynamic>) {
       return SystemUserData.defaultObject();
     }
-    return SystemUserDataEntry.fromJson(json);
+    return SystemUserDataEntry.fromJson(json).toDomain();
   }
 
   static Map<String, dynamic> _systemUserDataToJson(SystemUserData value) =>
-      value is SystemUserDataEntry
-          ? value.toJson()
-          : SystemUserDataEntry.fromSystemUserData(value).toJson();
+      SystemUserDataEntry.fromSystemUserData(value).toJson();
 }

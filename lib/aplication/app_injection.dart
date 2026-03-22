@@ -32,7 +32,9 @@ late LoggerCacheRepository printerLog;
 /// Isso é usado no main.dart para configurar as dependências da aplicação.
 /// Para acessar as dependências, use o `appInjection.get<T>()` onde T é o tipo da dependência.
 void setupAppInjection() {
-  printerLog = registerLogPrinterColor(config: ConfigLog(enableLog: kDebugMode));
+  printerLog = registerLogPrinterColor(
+    config: ConfigLog(enableLog: kDebugMode),
+  );
   appInjection.registerSingleton<RouteApp>(RouteApp());
   appInjection.registerSingleton<AppDatabase>(AppDatabase());
   appInjection.registerSingleton<SystemDatabase>(SystemDatabase());
@@ -74,6 +76,8 @@ void setupAppInjection() {
   appInjection.registerSingleton<ISalesRepository>(
     SalesRepository(
       invoiceDao: appInjection.get<AppDatabase>().invoiceDao,
+      invoiceItemDao: appInjection.get<AppDatabase>().invoiceItemDao,
+      productDao: appInjection.get<AppDatabase>().productDao,
       codeGeneratorService: appInjection.get<CodeGeneratorService>(),
     ),
   );
@@ -88,7 +92,9 @@ void setupAppInjection() {
   );
 
   appInjection.registerSingleton<ICategoryRepository>(
-    CategoryRepository(categoryDao: appInjection.get<AppDatabase>().categoryDao),
+    CategoryRepository(
+      categoryDao: appInjection.get<AppDatabase>().categoryDao,
+    ),
   );
   appInjection.get<IConfigurationRepository>().loadConfiguration();
 }

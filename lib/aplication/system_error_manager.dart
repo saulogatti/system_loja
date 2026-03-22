@@ -34,15 +34,7 @@ class SystemErrorManager {
 
   Future<List<SystemError>> getAllErrors() async {
     final listLogs = await _cacheManager.retrieveAllErrors();
-    final list = listLogs
-        .map(
-          (logError) => SystemError(
-            message: logError.message,
-            code: logError.code,
-            stackTrace: logError.stackTrace,
-          ),
-        )
-        .toList();
+    final list = listLogs.map((logError) => logError.toDomain()).toList();
     return list;
   }
 
@@ -57,6 +49,6 @@ class SystemErrorManager {
       name: 'SystemErrorManager',
       stackTrace: error.stackTrace,
     );
-    await _cacheManager.saveError(error);
+    await _cacheManager.saveErrorModel(error);
   }
 }

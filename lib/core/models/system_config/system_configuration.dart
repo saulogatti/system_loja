@@ -15,7 +15,7 @@ class SystemConfiguration extends DefaultObject {
     List<String>? productCategories,
     super.lastUpdatedDate,
     super.registrationDate,
-    int? id,
+    super.id,
     SystemUserData? systemUserData,
   }) : priceConfiguration =
            priceConfiguration ??
