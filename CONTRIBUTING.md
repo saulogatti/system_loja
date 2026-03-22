@@ -135,9 +135,10 @@ class ClienteManager {
 
 #### Camadas (atual)
 
-- **Interface + ResultStatus**: operações expostas à UI retornam `ResultStatus<R, E>`; não propagar exceções através de repositório/interface.
-- **Repositórios** (`lib/domain/repository/`): orquestram DAOs e regras; dependem de interfaces e de tipos de `lib/core/models/`.
-- **Dados** (`lib/data/`): tabelas/DAOs Drift, DTOs em `entry/` etc., mapeamento registro → domínio; **sem** imports de `domain/` ou `aplication/`.
+- **Interface + ResultStatus**: operações expostas à UI retornam `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`, usa `package:meta`); não propagar exceções através de repositório/interface.
+- **Repositórios** (`lib/domain/repository/`): orquestram DAOs e regras; usam `try/catch` internamente e retornam `ResultStatus.error(mensagemErroRepositorio(...))` com mensagens amigáveis (`lib/core/utils/repository_error_mapper.dart`). Dependem de interfaces e de tipos de `lib/core/models/`.
+- **Apresentação** (`lib/screens/`): **não** envolve chamadas ao repositório em `try/catch`; usa `when`/`switch` no `ResultStatus` e emite estado de erro com a mensagem já tratada.
+- **Dados** (`lib/data/`): tabelas/DAOs Drift, DTOs em `entry/` etc., mapeamento registro → domínio; **sem** imports de `domain/` ou `aplication/`. `CacheManager` é registrado via `GetIt` (DI) — não usar `CacheManager.instance`.
 
 #### Legado: Manager + JSON
 
@@ -145,8 +146,8 @@ Onde ainda existir `lib/core/managers/`, o padrão histórico foi carregar/salva
 
 #### Persistência
 
-- **Principal**: Drift (`AppDatabase` / `SystemDatabase`); IDs auto-incrementais onde a tabela usar `autoIncrement()`.
-- **JSON legado**: apenas nos fluxos que ainda usam managers; arquivos em runtime conforme cada manager.
+- **Principal**: Drift (`AppDatabase` / `SystemDatabase`); IDs auto-incrementais onde a tabela usar `autoIncrement()`. `SystemDatabase` aceita `QueryExecutor` opcional no construtor para testes com banco em memória.
+- **JSON legado**: apenas nos fluxos que ainda usam managers (os arquivos de dados estáticos `data/*.json` foram removidos).
 
 ### Flutter UI
 

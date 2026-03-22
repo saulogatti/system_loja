@@ -31,7 +31,7 @@ O projeto System Loja está totalmente configurado para trabalhar com GitHub Cop
 - Visão geral da arquitetura (Drift ORM, BLoC, Material 3)
 - **Arquitetura limpa** (obrigatória): domínio em `lib/core/`, dados em `lib/data/`, repositórios em `lib/domain/`
 - **Sem obrigação de compatibilidade retroativa** enquanto o app está em desenvolvimento
-- Padrões críticos (Drift DAO, ExecutionResult, Code Generation)
+- Padrões críticos (Drift DAO, ResultStatus, Code Generation, repository_error_mapper)
 - Workflows de desenvolvimento
 - Code style requirements
 - Known gotchas
@@ -65,7 +65,7 @@ O projeto System Loja está totalmente configurado para trabalhar com GitHub Cop
 **Aplica-se a:** Todos os agentes (automáticos ou custom)  
 **Conteúdo:**
 - Contexto arquitetural detalhado
-- Padrões obrigatórios (OperationResult, Models, BLoC, Documentação)
+- Padrões obrigatórios (ResultStatus, Models, BLoC, Documentação, repository_error_mapper)
 - Workflow completo de desenvolvimento
 - Convenções de código
 - Estrutura de testes
@@ -304,5 +304,5 @@ Se você encontrar problemas com as instruções do Copilot ou tiver sugestões 
 
 ---
 
-**Última atualização:** Janeiro 2026  
+**Última atualização:** Março 2026  
 **Mantido por:** Time de desenvolvimento System Loja

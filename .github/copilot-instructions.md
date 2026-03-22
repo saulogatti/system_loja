@@ -31,17 +31,20 @@ Priorizar fronteiras claras mesmo que o diff seja grande; a manutenção e os te
 O projeto **ainda está em desenvolvimento**. **Não é necessário** preservar compatibilidade com formatos antigos de JSON, estruturas de modelo legadas ou schemas de banco anteriores só por compatibilidade retroativa. Pode-se alterar contratos e migrações quando a arquitetura limpa ou o modelo de domínio exigirem — desde que o código gerado (`build_runner`) e os testes do escopo alterado sejam atualizados.
 
 ## Conventions
-- Retorno de operações usa `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`) com `isSuccessful`, `hasError`, `asSuccess`, `asError` e `when(...)`.
-- Não propagar exceções entre camadas de interface/repositório; retornar `ResultStatus`.
+- Retorno de operações usa `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`, usa `package:meta`) com `isSuccessful`, `hasError`, `asSuccess`, `asError` e `when(...)`.
+- Não propagar exceções entre camadas de interface/repositório; retornar `ResultStatus`. Repositórios usam `try/catch` internamente e devolvem `ResultStatus.error(mensagemErroRepositorio(erro, contexto: '...'))` com mensagens de texto amigáveis (ver `lib/core/utils/repository_error_mapper.dart`).
+- A camada de apresentação (BLoC/Cubit/Screen) **não** envolve chamadas ao repositório em `try/catch`; usa `when` / `switch` no `ResultStatus` e emite estado de erro com a mensagem já tratada. `try/catch` na UI fica reservado a operações locais (seletor de arquivo, escrita em `File`) que não passam pelo contrato do repositório.
+- `CacheManager` é registrado via `GetIt` (DI); **não** usar `CacheManager.instance` — repositórios o recebem por injeção de construtor.
 - Drift: convenção tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`.
 - **Não** usar `@UseRowClass` apontando para entidades de `lib/core/models/`; manter linhas Drift como dados de persistência e mapear para domínio em `lib/data/database/mapper/` (ou política equivalente nos DAOs/repositórios).
+- `SystemDatabase` aceita `QueryExecutor` opcional no construtor para facilitar testes com banco em memória.
 - Código em inglês; documentação e comentários com `///` em português.
 - Formato de commit: `<tipo>: <descrição concisa>`.
 - Tipos de commit: `feat`, `fix`, `docs`, `style`, `refactor`, `test`.
 - Mensagem de commit em português; incluir nome da classe alterada quando fizer sentido.
 
 ## Pitfalls
-- Há código legado em `lib/core/managers/` e configuração em JSON ainda em uso pontual; refatorar em direção à arquitetura limpa tem prioridade sobre manter comportamento legado, salvo risco claro ao fluxo atual.
+- Há código legado em `lib/core/managers/` e configuração em JSON ainda em uso pontual; refatorar em direção à arquitetura limpa tem prioridade sobre manter comportamento legado, salvo risco claro ao fluxo atual. Os arquivos de dados estáticos anteriores (`data/*.json`) foram removidos.
 - Em mudanças de schema Drift, atualizar `schemaVersion` e estratégia de migração no banco correto (não é obrigatório manter dados antigos compatíveis — ver seção **Compatibilidade com versões anteriores**).
 - No Web, Drift depende de `web/sqlite3.wasm` e `web/drift_worker.js`.
 - Existem alguns testes com falhas pré-existentes no repositório; valide o escopo alterado antes de tratar falhas fora da tarefa.

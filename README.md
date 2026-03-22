@@ -8,8 +8,10 @@ Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produto
 - Fluxo principal: **Screen** → **Interface** (`lib/core/interface/`) → **Repository** (`lib/domain/repository/`) → **DAO Drift** (`lib/data/database/dao/`) → SQLite.
 - DI com `GetIt` via `setupAppInjection()` em `lib/aplication/app_injection.dart`.
 - Navegacao com `auto_route` em `lib/screens/route/route_app.dart`.
-- Padrao de retorno entre camadas: `ResultStatus<R, E>`.
+- Padrao de retorno entre camadas: `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`, usa `package:meta`).
+- Repositorios usam `try/catch` internamente e retornam `ResultStatus.error(...)` com mensagens amigaveis via `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`). A camada de apresentacao **nao** envolve chamadas ao repositorio em `try/catch`; usa `when` ou `switch` em `ResultStatus`.
 - Camada **data** (`lib/data/`): Drift, DTOs/entries JSON, conversores, cache e mapeamento para modelos de `lib/core/models/` — **sem** depender de `lib/domain/` ou `lib/aplication/` (constantes compartilhadas ficam em `lib/core/` quando necessario).
+- `CacheManager` registrado via `GetIt` (injecao de dependencia) — **nao** usar `CacheManager.instance`.
 
 ## Requisitos
 
@@ -67,14 +69,15 @@ flutter test test/<arquivo>_test.dart
 
 ### Legado JSON
 
-Ha codigo legado em `lib/core/managers/` e fluxos em arquivo/JSON ainda usados em cenarios pontuais. Nao remover sem validar impacto; o fluxo principal da loja e **SQLite via Drift**.
+Ha codigo legado em `lib/core/managers/` e fluxos em JSON ainda usados em cenarios pontuais. Nao remover sem validar impacto; o fluxo principal da loja e **SQLite via Drift**. Os arquivos de dados estaticos anteriores (`data/*.json`) foram removidos.
 
 ### Convencoes importantes
 
-- Nao propagar excecoes entre Interface/Repository; retornar `ResultStatus`.
+- Nao propagar excecoes entre Interface/Repository; retornar `ResultStatus`. Repositorios capturam excecoes internamente (`try/catch`) e devolvem `ResultStatus.error(mensagemErroRepositorio(...))`. A camada de apresentacao nao usa `try/catch` para chamadas ao repositorio.
 - Drift: tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`. Linhas Drift **nao** usam `@UseRowClass` com entidades de `lib/core/`; o mapeamento para dominio fica em extensoes/helpers (ex.: `lib/data/database/mapper/`) ou nos DAOs/repositorios, conforme o padrao do projeto.
 - DTOs serializaveis (JSON) em `lib/data/entry/` e afins; modelos de negocio em `lib/core/models/`.
 - Codigo em ingles; documentacao e comentarios (`///`) em portugues.
+- `SystemDatabase` aceita `QueryExecutor` opcional no construtor para facilitar testes com banco em memoria.
 
 ## Estrutura resumida
 
@@ -88,7 +91,7 @@ lib/
     constants/
     managers/            # legado em uso pontual
     models/              # entidades de dominio
-    utils/               # ResultStatus, extensoes
+    utils/               # ResultStatus, repository_error_mapper, extensoes
   domain/
     repository/          # implementacoes dos repositorios
     *.dart               # servicos de dominio (ex.: geracao de codigo)

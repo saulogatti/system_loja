@@ -28,9 +28,10 @@ Regras:
 
 ## 3) Tratamento de erros e contratos
 
-- O padrao oficial de retorno e `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`).
+- O padrao oficial de retorno e `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`, usa `package:meta`).
 - Nao introduzir `OperationResult`, `Either` ou contratos alternativos sem alinhamento previo.
-- Nao propagar excecoes entre Interface e Repository; retornar `ResultStatus`.
+- Nao propagar excecoes entre Interface e Repository; retornar `ResultStatus`. Repositorios usam `try/catch` internamente e retornam `ResultStatus.error(mensagemErroRepositorio(erro, contexto: '...'))` com mensagens amigaveis (ver `lib/core/utils/repository_error_mapper.dart`).
+- A camada de apresentacao (BLoC/Cubit/Screen) **nao** envolve chamadas ao repositorio em `try/catch`; usa `when` ou `switch` no `ResultStatus`. `try/catch` na UI fica reservado a operacoes locais (seletor de arquivo, escrita em `File`) que nao passam pelo contrato do repositorio.
 
 ## 4) Convencoes de codigo
 
@@ -38,7 +39,9 @@ Regras:
   - tabela: `XxxRecords`
   - linha: `XxxRecord`
   - DAO: `XxxDao`
-- Reutilizar `@UseRowClass(...)` quando aplicavel para reduzir mapeamento manual.
+- **Nao** usar `@UseRowClass` apontando para entidades de `lib/core/models/`; mapear `XxxRecord` -> dominio em `lib/data/database/mapper/` ou no DAO/repositorio.
+- `SystemDatabase` aceita `QueryExecutor` opcional no construtor para testes com banco em memoria.
+- `CacheManager` registrado via `GetIt` (DI); nao usar `CacheManager.instance`. Repositorios o recebem por injecao de construtor.
 - Codigo em ingles.
 - Documentacao e comentarios (`///`) em portugues.
 
