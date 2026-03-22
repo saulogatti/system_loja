@@ -29,61 +29,25 @@ class RouteApp extends RootStackRouter {
             ),
           ],
         ),
-        AutoRoute(
-          page: SalesRoute.page,
-          title: (context, data) => 'Vendas',
-          maintainState: false,
-        ),
-        AutoRoute(
-          page: RelatoriosRoute.page,
-          title: (context, data) => 'Relatórios',
-          maintainState: false,
-        ),
-        AutoRoute(
-          page: SettingsRoute.page,
-          title: (context, data) => 'Configurações',
-          maintainState: false,
-        ),
+        AutoRoute(page: SalesRoute.page, title: (context, data) => 'Vendas', maintainState: false),
+        AutoRoute(page: RelatoriosRoute.page, title: (context, data) => 'Relatórios', maintainState: false),
+        AutoRoute(page: SettingsRoute.page, title: (context, data) => 'Configurações', maintainState: false),
       ],
     ),
 
-    AutoRoute(
-      page: SalesInvoiceRoute.page,
-      title: (context, data) => 'Sales Invoice',
-    ),
-    AutoRoute(
-      page: ProductDetailRoute.page,
-      title: (context, data) => 'Product Detail',
-    ),
-    AutoRoute(
-      page: CategoryManagementRoute.page,
-      title: (context, data) => 'Category Management',
-    ),
-    AutoRoute(
-      page: LogSystemRoute.page,
-      title: (context, data) => 'System Logs',
-    ),
-    AutoRoute(
-      page: LogsAnalyticsRoute.page,
-      title: (context, data) => 'Logs Analytics',
-    ),
-    AutoRoute(
-      page: CompanyEditRoute.page,
-      title: (context, data) => 'Edit Company',
-    ),
+    AutoRoute(page: SalesInvoiceRoute.page, title: (context, data) => 'Sales Invoice'),
+    AutoRoute(page: ProductDetailRoute.page, title: (context, data) => 'Product Detail'),
+    AutoRoute(page: CategoryManagementRoute.page, title: (context, data) => 'Category Management'),
+    AutoRoute(page: LogSystemRoute.page, title: (context, data) => 'System Logs'),
+    AutoRoute(page: LogsAnalyticsRoute.page, title: (context, data) => 'Logs Analytics'),
+    AutoRoute(page: CompanyEditRoute.page, title: (context, data) => 'Edit Company'),
 
+    AutoRoute(page: SystemConfigRoute.page, title: (context, data) => 'System Config'),
+    AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuários', maintainState: false),
+    AutoRoute(page: IssuerConfigRoute.page, title: (context, data) => 'Empresa Emitente'),
     AutoRoute(
-      page: SystemConfigRoute.page,
-      title: (context, data) => 'System Config',
-    ),
-    AutoRoute(
-      page: UsuarioRoute.page,
-      title: (context, data) => 'Usuários',
-      maintainState: false,
-    ),
-    AutoRoute(
-      page: IssuerConfigRoute.page,
-      title: (context, data) => 'Empresa Emitente',
+      page: SalesPurchaseAnalyticsRoute.page,
+      title: (context, data) => 'Gráficos de Vendas e Compras',
     ),
   ];
 }
