@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/document/cpf.dart';
 import 'package:system_loja/core/models/person/person.dart';
+import 'package:system_loja/data/converter/cpf_cnpj_json_converters.dart';
 
 part 'individual_entry.g.dart';
 

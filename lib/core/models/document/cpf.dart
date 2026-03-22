@@ -1,4 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/exceptions/validation_exception.dart';
 import 'package:system_loja/core/models/document/document.dart';
 
@@ -62,14 +61,4 @@ class Cpf extends Document {
   }
 
   static Cpf defaultObject() => Cpf('123.456.789-09');
-}
-
-class CpfConverter extends JsonConverter<Cpf, String> {
-  const CpfConverter();
-
-  @override
-  Cpf fromJson(String json) => Cpf(json);
-
-  @override
-  String toJson(Cpf value) => value.value;
 }
