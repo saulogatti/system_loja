@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/utils/text_formatters.dart';
+import 'package:system_loja/screens/utils/text_formatters.dart';
 
 class AddressForm extends StatelessWidget {
   /// Lista de estados brasileiros (UF)
@@ -11,7 +11,12 @@ class AddressForm extends StatelessWidget {
   final TextEditingController stateController;
 
   const AddressForm({
-    required this.streetController, required this.zipCodeController, required this.neighborhoodController, required this.cityController, required this.stateController, super.key,
+    required this.streetController,
+    required this.zipCodeController,
+    required this.neighborhoodController,
+    required this.cityController,
+    required this.stateController,
+    super.key,
   });
 
   @override

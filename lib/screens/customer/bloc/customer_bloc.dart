@@ -6,14 +6,16 @@ import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/core/utils/string_extensions.dart';
+import 'package:system_loja/screens/utils/string_extensions.dart';
 
 part 'customer_bloc.freezed.dart';
 part 'customer_bloc_event.dart';
 part 'customer_bloc_state.dart';
 
-// Neste arquivo não pode ter try/cacth ele apeans retorna erro para a tela que ja vem tratados. Remover try/catch desnecessários e usar ResultStatus
-/// BLoC para gerenciamento de estado de clientes
+/// BLoC para gerenciamento de estado de clientes.
+///
+/// Não usa `try/catch` em chamadas ao repositório: erros chegam via
+/// [ResultStatus] e são mapeados para [CustomerBlocState.customerError].
 ///
 /// Utiliza o ClienteSqlManager para operações de banco de dados
 /// e implementa o padrão BLoC para separação de lógica de negócio da UI.

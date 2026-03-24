@@ -68,26 +68,28 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; atualizarUsuario({required User usuarioAtualizado}) async {
-  try {
-    final ResultStatus&lt;bool, String&gt; resultAdd = await _userRepository
-        .atualizarUsuario(usuarioAtualizado);
-    switch (resultAdd) {
-      case ResultSuccess(result: final sucesso):
-        if (sucesso) {
-          emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
-        }
-      case ResultError(:final resultError):
+  final ResultStatus&lt;bool, String&gt; resultAdd = await _userRepository
+      .atualizarUsuario(usuarioAtualizado);
+  resultAdd.when(
+    onSuccess: (sucesso) {
+      if (sucesso) {
+        emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
+      } else {
         emit(
           UsuarioState.loadFailure(
-            errorMessage: &#39;Falha ao atualizar usuário: $resultError&#39;,
+            errorMessage: &#39;Falha ao atualizar usuário.&#39;,
           ),
         );
-    }
-  } catch (e) {
-    emit(
-      UsuarioState.loadFailure(errorMessage: &#39;Erro ao atualizar usuário: $e&#39;),
-    );
-  }
+      }
+    },
+    onError: (resultError) {
+      emit(
+        UsuarioState.loadFailure(
+          errorMessage: &#39;Falha ao atualizar usuário: $resultError&#39;,
+        ),
+      );
+    },
+  );
 }</code></pre>
 </section>
 

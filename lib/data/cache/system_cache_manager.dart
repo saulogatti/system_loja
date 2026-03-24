@@ -83,13 +83,13 @@ class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
   }
 
   Future<void> saveError(SystemError error) async {
+    await saveErrorModel(SystemErrorModel.fromDomain(error));
+  }
+
+  /// Persiste um [SystemErrorModel] já montado (ex.: vindo de [reportError]).
+  Future<void> saveErrorModel(SystemErrorModel errorModel) async {
     try {
-      final errorModel = SystemErrorModel(
-        message: error.message,
-        code: error.code,
-        stackTrace: error.stackTrace,
-      );
-      final String keyCode = '${error.code}_error';
+      final String keyCode = '${errorModel.code}_error';
       errorModel.cacheKey = '$keyCode.json';
       _fileStorageOptions[keyCode] = errorModel.cacheKey;
       final jsonData = jsonEncode(errorModel.toJson());

@@ -53,28 +53,13 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Endereço (domínio). Serialização em <a href="../data_models_address_data/AddressData-class.html">AddressData</a> na camada <code>data</code>.</p>
+<p>Todos os campos são opcionais e têm valor padrão de string vazia,
+permitindo criação de endereços parciais.</p>
+</section>
 
 
-    <section>
-      <dl class="dl-horizontal">
-        
-
-        
-        
-
-
-        
-        
-  <dt>Annotations</dt>
-  <dd>
-    <ul class="annotation-list clazz-relationships">
-        <li>@<a href="https://pub.dev/documentation/json_annotation/4.11.0/json_annotation/JsonSerializable/JsonSerializable.html">JsonSerializable</a>(explicitToJson: true)</li>
-    </ul>
-  </dd>
-
-
-      </dl>
-    </section>
 
     
   <section class="summary offset-anchor" id="constructors">
@@ -85,13 +70,7 @@
         </dt>
         <dd>
           
-        </dd>
-        <dt id="Address.fromJson" class="callable">
-          <span class="name"><a href="../core_models_address/Address/Address.fromJson.html">Address.fromJson</a></span><span class="signature">(<span class="parameter" id="fromJson-param-json"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">json</span></span>)</span>
-        </dt>
-        <dd>
-          
-            <div class="constructor-modifier features">factory</div>
+            <div class="constructor-modifier features">const</div>
         </dd>
     </dl>
   </section>
@@ -108,7 +87,7 @@
 
 </dt>
 <dd>
-  
+  Cidade.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -132,7 +111,7 @@
 
 </dt>
 <dd>
-  
+  Bairro.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -156,7 +135,7 @@
 
 </dt>
 <dd>
-  
+  Estado (sigla de 2 letras, ex.: SP, RJ).
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -168,7 +147,7 @@
 
 </dt>
 <dd>
-  
+  Logradouro (nome da rua, avenida, etc.).
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -180,7 +159,7 @@
 
 </dt>
 <dd>
-  
+  CEP no formato com ou sem máscara.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -204,19 +183,6 @@
 <dd class="inherited">
   Invoked when a nonexistent method or property is accessed.
   <div class="features"><span class="feature">inherited</span></div>
-
-</dd>
-
-        <dt id="toJson" class="callable">
-  <span class="name"><a href="../core_models_address/Address/toJson.html">toJson</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
-  </span>
-  
-
-</dt>
-<dd>
-  
-  
 
 </dd>
 
@@ -257,23 +223,6 @@
     </dl>
   </section>
     
-  <section class="summary offset-anchor" id="static-properties">
-    <h2>Static Properties</h2>
-    <dl class="properties">
-        <dt id="converter" class="property">
-  <span class="name"><a href="../core_models_address/Address/converter.html">converter</a></span>
-  <span class="signature">&#8596; <a href="https://pub.dev/documentation/drift/2.32.0/drift/JsonTypeConverter2-mixin.html">JsonTypeConverter2</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_address/Address-class.html">Address</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span>
-  
-
-</dt>
-<dd>
-  
-  <div class="features"><span class="feature">getter/setter pair</span></div>
-
-</dd>
-
-    </dl>
-  </section>
     
     
 

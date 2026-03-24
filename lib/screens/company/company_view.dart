@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/models/company.dart';
 import '../route/route_app.gr.dart';
-import '../utils/constants.dart';
+import '../../aplication/utils/constants.dart';
 import 'bloc/company_bloc.dart';
 import 'widgets/company_form.dart';
 import 'widgets/company_list.dart';
@@ -208,10 +208,7 @@ class _CompanyViewState extends State<CompanyView> {
               if (company.address.zipCode.isNotEmpty)
                 InfoRow(label: 'CEP', value: company.address.zipCode),
               if (company.address.neighborhood.isNotEmpty)
-                InfoRow(
-                  label: 'Bairro',
-                  value: company.address.neighborhood,
-                ),
+                InfoRow(label: 'Bairro', value: company.address.neighborhood),
               if (company.address.city.isNotEmpty)
                 InfoRow(label: 'Cidade', value: company.address.city),
             ],

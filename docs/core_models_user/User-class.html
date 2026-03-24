@@ -54,9 +54,9 @@
 
     
 <section class="desc markdown">
-  <p>Modelo de dados para Usuario</p>
-<p>Representa um usuário do sistema com informações de autenticação
-e nível de permissão para controle de acesso.</p>
+  <p>Usuário do sistema com credenciais e nível de permissão.</p>
+<p>Herda dados comuns de <a href="../core_models_default_people_data/PersonDefault-class.html">PersonDefault</a> (nome, e-mail).
+A senha é armazenada apenas como hash — nunca em texto plano.</p>
 </section>
 
 
@@ -68,7 +68,7 @@ e nível de permissão para controle de acesso.</p>
     <ul class="gt-separated dark clazz-relationships">
       <li><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></li>
         <li><a href="../core_models_default_default_object/DefaultObject-class.html">DefaultObject</a></li>
-        <li><a href="../core_models_default_people_data/PeopleData-class.html">PeopleData</a></li>
+        <li><a href="../core_models_default_people_data/PersonDefault-class.html">PersonDefault</a></li>
       <li>User</li>
     </ul>
   </dd>
@@ -79,12 +79,6 @@ e nível de permissão para controle de acesso.</p>
 
         
         
-  <dt>Annotations</dt>
-  <dd>
-    <ul class="annotation-list clazz-relationships">
-        <li>@<a href="https://pub.dev/documentation/json_annotation/4.11.0/json_annotation/JsonSerializable/JsonSerializable.html">JsonSerializable</a>(explicitToJson: true)</li>
-    </ul>
-  </dd>
 
 
       </dl>
@@ -95,17 +89,10 @@ e nível de permissão para controle de acesso.</p>
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="User.new" class="callable">
-          <span class="name"><a href="../core_models_user/User/User.html">User</a></span><span class="signature">({<span class="parameter" id="-param-id"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span><span class="parameter" id="-param-name"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, </span><span class="parameter" id="-param-email"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">email</span>, </span><span class="parameter" id="-param-passwordHash"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">passwordHash</span>, </span><span class="parameter" id="-param-permission"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">permission</span> = <span class="default-value">0</span>, </span><span class="parameter" id="-param-registrationDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">registrationDate</span>, </span><span class="parameter" id="-param-lastUpdatedDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">lastUpdatedDate</span></span>})</span>
+          <span class="name"><a href="../core_models_user/User/User.html">User</a></span><span class="signature">({<span class="parameter" id="-param-name"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, </span><span class="parameter" id="-param-email"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">email</span>, </span><span class="parameter" id="-param-passwordHash"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">passwordHash</span>, </span><span class="parameter" id="-param-permission"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">permission</span> = <span class="default-value">0</span>, </span><span class="parameter" id="-param-registrationDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">registrationDate</span>, </span><span class="parameter" id="-param-lastUpdatedDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">lastUpdatedDate</span>, </span><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span></span>})</span>
         </dt>
         <dd>
           
-        </dd>
-        <dt id="User.fromJson" class="callable">
-          <span class="name"><a href="../core_models_user/User/User.fromJson.html">User.fromJson</a></span><span class="signature">(<span class="parameter" id="fromJson-param-json"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">json</span></span>)</span>
-        </dt>
-        <dd>
-          Cria um objeto a partir de JSON
-            <div class="constructor-modifier features">factory</div>
         </dd>
     </dl>
   </section>
@@ -116,13 +103,13 @@ e nível de permissão para controle de acesso.</p>
     <h2>Properties</h2>
     <dl class="properties">
         <dt id="email" class="property inherited">
-  <span class="name"><a href="../core_models_default_people_data/PeopleData/email.html">email</a></span>
+  <span class="name"><a href="../core_models_default_people_data/PersonDefault/email.html">email</a></span>
   <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span>
   
 
 </dt>
 <dd class="inherited">
-  
+  Endereço de e-mail (opcional).
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
@@ -146,31 +133,31 @@ e nível de permissão para controle de acesso.</p>
 
 </dt>
 <dd class="inherited">
-  
+  Identificador único da entidade. Valor padrão -1 indica objeto não persistido.
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
 
         <dt id="lastUpdatedDate" class="property inherited">
   <span class="name"><a href="../core_models_default_default_object/DefaultObject/lastUpdatedDate.html">lastUpdatedDate</a></span>
-  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>
   
 
 </dt>
 <dd class="inherited">
-  
-  <div class="features"><span class="feature">getter/setter pair</span><span class="feature">inherited</span></div>
+  Data e hora da última atualização do registro.
+  <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
 
         <dt id="name" class="property inherited">
-  <span class="name"><a href="../core_models_default_people_data/PeopleData/name.html">name</a></span>
+  <span class="name"><a href="../core_models_default_people_data/PersonDefault/name.html">name</a></span>
   <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
   
 
 </dt>
 <dd class="inherited">
-  
+  Nome completo da pessoa ou razão social da empresa.
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
@@ -182,7 +169,7 @@ e nível de permissão para controle de acesso.</p>
 
 </dt>
 <dd>
-  
+  Hash da senha do usuário.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -194,19 +181,19 @@ e nível de permissão para controle de acesso.</p>
 
 </dt>
 <dd>
-  
+  Nível de permissão do usuário. Padrão 0 (sem privilégios especiais).
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
         <dt id="phone" class="property inherited">
-  <span class="name"><a href="../core_models_default_people_data/PeopleData/phone.html">phone</a></span>
+  <span class="name"><a href="../core_models_default_people_data/PersonDefault/phone.html">phone</a></span>
   <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span>
   
 
 </dt>
 <dd class="inherited">
-  
+  Número de telefone (opcional).
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
@@ -218,7 +205,7 @@ e nível de permissão para controle de acesso.</p>
 
 </dt>
 <dd class="inherited">
-  
+  Data e hora em que o registro foi criado.
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
@@ -252,7 +239,7 @@ e nível de permissão para controle de acesso.</p>
 
 </dt>
 <dd>
-  Cria uma cópia do usuário com campos atualizados
+  Cria uma cópia do usuário com campos atualizados.
   
 
 </dd>
@@ -267,19 +254,6 @@ e nível de permissão para controle de acesso.</p>
 <dd class="inherited">
   Invoked when a nonexistent method or property is accessed.
   <div class="features"><span class="feature">inherited</span></div>
-
-</dd>
-
-        <dt id="toJson" class="callable">
-  <span class="name"><a href="../core_models_user/User/toJson.html">toJson</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Converte o objeto para JSON
-  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 

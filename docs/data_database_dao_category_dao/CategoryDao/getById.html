@@ -72,10 +72,11 @@ Retorna a categoria encontrada ou null se não existir.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;Category?&gt; getById(int id) {
-  return (select(
+  <pre class="language-dart"><code class="language-dart">Future&lt;Category?&gt; getById(int id) async {
+  final row = await (select(
     categoriesRecords,
   )..where((t) =&gt; t.id.equals(id))).getSingleOrNull();
+  return row?.toDomain();
 }</code></pre>
 </section>
 

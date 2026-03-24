@@ -127,9 +127,9 @@
               return [
                 if (productsRecordsRefs)
                   await $_getPrefetchedData&lt;
-                    Category,
+                    CategoriesRecord,
                     $CategoriesRecordsTable,
-                    Product
+                    ProductsRecord
                   &gt;(
                     currentTable: table,
                     referencedTable: $$CategoriesRecordsTableReferences

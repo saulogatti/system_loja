@@ -105,8 +105,8 @@ the <a href="../../screens_route_route_app.gr/ProductDetailRouteArgs/hashCode.ht
 bool operator ==(Object other) {
   if (identical(this, other)) return true;
   if (other is! ProductDetailRouteArgs) return false;
-  return key == other.key &amp;&amp;
-      product == other.product &amp;&amp;
+  return product == other.product &amp;&amp;
+      key == other.key &amp;&amp;
       const _i24.ListEquality&lt;_i23.Product&gt;().equals(
         productList,
         other.productList,

@@ -44,41 +44,44 @@
       
 <section class="desc markdown">
   <h1 id="system-loja">System Loja</h1>
-<p>Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, vendas/notas, empresa, categorias e configuracoes), com persistencia principal em SQLite via Drift.</p>
-<h2 id="visao-geral">Visao Geral</h2>
+<p>Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, categorias, empresa e notas/vendas), com persistencia local em SQLite via Drift e fluxo legado em JSON ainda ativo em partes especificas.</p>
+<h2 id="visao-geral">Visao geral</h2>
 <ul>
-<li>UI em <code>lib/screens/</code> com <code>flutter_bloc</code> (BLoC/Cubit)</li>
-<li>Fluxo principal: Screen -&gt; Interface -&gt; Repository -&gt; DAO Drift -&gt; SQLite</li>
-<li>Navegacao com <code>auto_route</code></li>
-<li>Injecao de dependencia com <code>GetIt</code> em <code>setupAppInjection()</code></li>
-<li>Resultado de operacoes com <code>ResultStatus&lt;R, E&gt;</code> (<code>lib/core/utils/command_result.dart</code>)</li>
+<li>UI em <code>lib/screens/</code>, com BLoC/Cubit (<code>flutter_bloc</code>).</li>
+<li>Fluxo principal: <strong>Screen</strong> → <strong>Interface</strong> (<code>lib/core/interface/</code>) → <strong>Repository</strong> (<code>lib/domain/repository/</code>) → <strong>DAO Drift</strong> (<code>lib/data/database/dao/</code>) → SQLite.</li>
+<li>DI com <code>GetIt</code> via <code>setupAppInjection()</code> em <code>lib/aplication/app_injection.dart</code>.</li>
+<li>Navegacao com <code>auto_route</code> em <code>lib/screens/route/route_app.dart</code>.</li>
+<li>Padrao de retorno entre camadas: <code>ResultStatus&lt;R, E&gt;</code> (<code>lib/core/utils/command_result.dart</code>, usa <code>package:meta</code>).</li>
+<li>Repositorios usam <code>try/catch</code> internamente e retornam <code>ResultStatus.error(...)</code> com mensagens amigaveis via <code>mensagemErroRepositorio()</code> (<code>lib/core/utils/repository_error_mapper.dart</code>). A camada de apresentacao <strong>nao</strong> envolve chamadas ao repositorio em <code>try/catch</code>; usa <code>when</code> ou <code>switch</code> em <code>ResultStatus</code>.</li>
+<li>Camada <strong>data</strong> (<code>lib/data/</code>): Drift, DTOs/entries JSON, conversores, cache e mapeamento para modelos de <code>lib/core/models/</code> — <strong>sem</strong> depender de <code>lib/domain/</code> ou <code>lib/aplication/</code> (constantes compartilhadas ficam em <code>lib/core/</code> quando necessario).</li>
+<li><code>CacheManager</code> registrado via <code>GetIt</code> (injecao de dependencia) — <strong>nao</strong> usar <code>CacheManager.instance</code>.</li>
 </ul>
 <h2 id="requisitos">Requisitos</h2>
 <ul>
-<li>Flutter 3.41.2 ou superior</li>
-<li>Dart &gt;= 3.11.0 (<code>pubspec.yaml</code>)</li>
+<li>Flutter 3.41.2 ou superior.</li>
+<li>Dart SDK <code>&gt;=3.11.0</code>.</li>
 </ul>
-<h2 id="setup-rapido">Setup Rapido</h2>
+<h2 id="setup-rapido">Setup rapido</h2>
 <pre class="language-bash"><code class="language-bash">git clone https://github.com/saulogatti/system_loja.git
 cd system_loja
 flutter pub get
 dart run build_runner build --delete-conflicting-outputs
 </code></pre>
-<h2 id="executar">Executar</h2>
+<h2 id="executar-o-app">Executar o app</h2>
 <pre class="language-bash"><code class="language-bash"># Windows
 flutter run -d windows
 
 # Linux
 flutter run -d linux
 
-# Web (chrome)
+# Web (Chrome)
 flutter run -d chrome
 
 # Web (servidor local)
 flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0
 </code></pre>
-<h2 id="comandos-uteis">Comandos Uteis</h2>
-<pre class="language-bash"><code class="language-bash"># Gerar codigo (obrigatorio quando alterar Freezed/JsonSerializable/Drift/AutoRoute)
+<h2 id="comandos-de-qualidade">Comandos de qualidade</h2>
+<pre class="language-bash"><code class="language-bash"># Codegen (obrigatorio apos alterar Freezed/JsonSerializable/Drift/AutoRoute)
 dart run build_runner build --delete-conflicting-outputs
 
 # Analise estatica
@@ -94,54 +97,64 @@ flutter test test/&lt;arquivo&gt;_test.dart
 <h2 id="arquitetura">Arquitetura</h2>
 <h3 id="bancos-drift">Bancos Drift</h3>
 <ul>
-<li><code>AppDatabase</code> em <code>lib/data/database/app_database.dart</code> (schemaVersion <code>11</code>)</li>
-<li><code>SystemDatabase</code> em <code>lib/data/database/system_database.dart</code> (schemaVersion <code>2</code>)</li>
+<li><code>AppDatabase</code> (<code>lib/data/database/app_database.dart</code>) com <code>schemaVersion =&gt; 12</code>.</li>
+<li><code>SystemDatabase</code> (<code>lib/data/database/system_database.dart</code>) com <code>schemaVersion =&gt; 1</code>.</li>
 </ul>
-<h3 id="persistencia-legacy">Persistencia Legacy</h3>
-<p>Parte do projeto ainda utiliza JSON e codigo legado em <code>lib/core/managers/</code> e <code>data/</code>. Nao remover esse fluxo sem validar impacto.</p>
-<h3 id="convencoes-importantes">Convencoes Importantes</h3>
+<h3 id="legado-json">Legado JSON</h3>
+<p>Ha codigo legado em <code>lib/core/managers/</code> e fluxos em JSON ainda usados em cenarios pontuais. Nao remover sem validar impacto; o fluxo principal da loja e <strong>SQLite via Drift</strong>. Os arquivos de dados estaticos anteriores (<code>data/*.json</code>) foram removidos.</p>
+<h3 id="convencoes-importantes">Convencoes importantes</h3>
 <ul>
-<li>Usar <code>ResultStatus&lt;R, E&gt;</code> para retorno de operacoes, sem propagar excecoes entre camadas.</li>
-<li>Em Drift, seguir convencao: tabela <code>XxxRecords</code>, linha <code>XxxRecord</code>, DAO <code>XxxDao</code>.</li>
+<li>Nao propagar excecoes entre Interface/Repository; retornar <code>ResultStatus</code>. Repositorios capturam excecoes internamente (<code>try/catch</code>) e devolvem <code>ResultStatus.error(mensagemErroRepositorio(...))</code>. A camada de apresentacao nao usa <code>try/catch</code> para chamadas ao repositorio.</li>
+<li>Drift: tabela <code>XxxRecords</code>, linha gerada <code>XxxRecord</code>, DAO <code>XxxDao</code>. Linhas Drift <strong>nao</strong> usam <code>@UseRowClass</code> com entidades de <code>lib/core/</code>; o mapeamento para dominio fica em extensoes/helpers (ex.: <code>lib/data/database/mapper/</code>) ou nos DAOs/repositorios, conforme o padrao do projeto.</li>
+<li>DTOs serializaveis (JSON) em <code>lib/data/entry/</code> e afins; modelos de negocio em <code>lib/core/models/</code>.</li>
 <li>Codigo em ingles; documentacao e comentarios (<code>///</code>) em portugues.</li>
+<li><code>SystemDatabase</code> aceita <code>QueryExecutor</code> opcional no construtor para facilitar testes com banco em memoria.</li>
 </ul>
-<h2 id="estrutura-resumo">Estrutura (Resumo)</h2>
+<h2 id="estrutura-resumida">Estrutura resumida</h2>
 <pre class="language-text"><code class="language-text">lib/
-  app_injection.dart
+  main.dart
+  aplication/
+    app_injection.dart   # GetIt / setupAppInjection()
   core/
-    interface/
-    repository/
-    managers/           # legado ainda em uso pontual
-    models/
-    utils/
+    interface/           # contratos (ex.: I*Repository)
+    constants/
+    managers/            # legado em uso pontual
+    models/              # entidades de dominio
+    utils/               # ResultStatus, repository_error_mapper, extensoes
+  domain/
+    repository/          # implementacoes dos repositorios
+    *.dart               # servicos de dominio (ex.: geracao de codigo)
   data/
     database/
       dao/
       table/
       extension/
+      mapper/            # XxxRecord -&gt; modelo de dominio
+    entry/               # DTOs JSON (json_serializable)
+    cache/
+    converter/
+    models/              # modelos de persistencia auxiliares
   screens/
     route/
-    widgets/
 test/
+  support/               # helpers (ex.: AppDatabase em teste sem path_provider)
 docs/
 </code></pre>
-<h2 id="observacoes-web">Observacoes Web</h2>
-<p>Para Drift no Web funcionar, os arquivos <code>web/sqlite3.wasm</code> e <code>web/drift_worker.js</code> devem estar presentes.</p>
-<h2 id="contribuicao">Contribuicao</h2>
+<h2 id="observacoes-importantes">Observacoes importantes</h2>
 <ul>
-<li>Leia <code>CONTRIBUTING.md</code></li>
-<li>Para agentes/copilot, consulte <code>.github/copilot-instructions.md</code> e <code>AGENTS.md</code></li>
-<li>Sempre rode build_runner quando alterar anotacoes de geracao</li>
+<li>No Web, Drift depende de <code>web/sqlite3.wasm</code> e <code>web/drift_worker.js</code>.</li>
+<li>Existem testes com falhas pre-existentes no repositorio; valide primeiro o escopo alterado antes de tratar falhas fora da tarefa.</li>
+<li>Testes que instanciam <code>AppDatabase</code> na VM podem usar <code>applicationSupportDirectory</code> e <code>tempDirectoryPath</code> (ver <code>test/support/test_app_database.dart</code>) para evitar <code>path_provider</code> / <code>MissingPluginException</code>.</li>
 </ul>
-<h2 id="documentacao">Documentacao</h2>
+<h2 id="documentacao-principal">Documentacao principal</h2>
 <ul>
 <li><code>CONTRIBUTING.md</code></li>
 <li><code>.github/copilot-instructions.md</code></li>
 <li><code>.github/instructions/dartcode.instructions.md</code></li>
+<li><code>AGENTS.md</code></li>
 <li><code>docs/DRIFT_ARCHITECTURE.md</code></li>
 <li><code>docs/DRIFT_MIGRATION.md</code></li>
 <li><code>docs/VALIDATION_SYSTEM.md</code></li>
-<li><code>docs/</code></li>
 </ul>
 </section>
 
@@ -150,7 +163,35 @@ docs/
           <h2>Libraries</h2>
         <dl>
           <dt id="app_injection">
-  <span class="name"><a href="app_injection/">app_injection</a></span> 
+  <span class="name"><a href="aplication_app_injection/">aplication\app_injection</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_error_manager">
+  <span class="name"><a href="aplication_system_error_manager/">aplication\system_error_manager</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="constants">
+  <span class="name"><a href="aplication_utils_constants/">aplication\utils\constants</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cache_keys">
+  <span class="name"><a href="core_constants_cache_keys/">core\constants\cache_keys</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="document_exception">
+  <span class="name"><a href="core_exceptions_document_exception/">core\exceptions\document_exception</a></span> 
 
 </dt>
 <dd>
@@ -240,34 +281,6 @@ docs/
 <dd>
 </dd>
 
-          <dt id="configuration_repository">
-  <span class="name"><a href="core_managers_configuration_repository/">core\managers\configuration_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="configuration_repository_cache">
-  <span class="name"><a href="core_managers_configuration_repository_cache/">core\managers\configuration_repository_cache</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="customer_exception">
-  <span class="name"><a href="core_managers_exceptions_customer_exception/">core\managers\exceptions\customer_exception</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="system_error_manager">
-  <span class="name"><a href="core_managers_system_error_manager/">core\managers\system_error_manager</a></span> 
-
-</dt>
-<dd>
-</dd>
-
           <dt id="activity_log">
   <span class="name"><a href="core_models_activity_log/">core\models\activity_log</a></span> 
 
@@ -303,6 +316,13 @@ docs/
 <dd>
 </dd>
 
+          <dt id="authorization_level">
+  <span class="name"><a href="core_models_default_authorization_level/">core\models\default\authorization_level</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="default_object">
   <span class="name"><a href="core_models_default_default_object/">core\models\default\default_object</a></span> 
 
@@ -312,6 +332,27 @@ docs/
 
           <dt id="people_data">
   <span class="name"><a href="core_models_default_people_data/">core\models\default\people_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cnpj">
+  <span class="name"><a href="core_models_document_cnpj/">core\models\document\cnpj</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cpf">
+  <span class="name"><a href="core_models_document_cpf/">core\models\document\cpf</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="document">
+  <span class="name"><a href="core_models_document_document/">core\models\document\document</a></span> 
 
 </dt>
 <dd>
@@ -352,6 +393,13 @@ docs/
 <dd>
 </dd>
 
+          <dt id="person">
+  <span class="name"><a href="core_models_person_person/">core\models\person\person</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="product">
   <span class="name"><a href="core_models_product/">core\models\product</a></span> 
 
@@ -380,6 +428,13 @@ docs/
 <dd>
 </dd>
 
+          <dt id="system_user_data">
+  <span class="name"><a href="core_models_system_config_system_user_data/">core\models\system_config\system_user_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="system_error">
   <span class="name"><a href="core_models_system_errors_system_error/">core\models\system_errors\system_error</a></span> 
 
@@ -394,69 +449,6 @@ docs/
 <dd>
 </dd>
 
-          <dt id="category_repository">
-  <span class="name"><a href="core_repository_category_repository/">core\repository\category_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="company_repository">
-  <span class="name"><a href="core_repository_company_repository/">core\repository\company_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="customer_repository">
-  <span class="name"><a href="core_repository_customer_repository/">core\repository\customer_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="product_repository">
-  <span class="name"><a href="core_repository_product_repository/">core\repository\product_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="sales_repository">
-  <span class="name"><a href="core_repository_sales_repository/">core\repository\sales_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="log_repository">
-  <span class="name"><a href="core_repository_system_log_repository/">core\repository\system\log_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="system_repository">
-  <span class="name"><a href="core_repository_system_system_repository/">core\repository\system\system_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="user_repository">
-  <span class="name"><a href="core_repository_system_user_repository/">core\repository\system\user_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="code_generator_service">
-  <span class="name"><a href="core_services_code_generator_service/">core\services\code_generator_service</a></span> 
-
-</dt>
-<dd>
-</dd>
-
           <dt id="app_settings">
   <span class="name"><a href="core_settings_app_settings/">core\settings\app_settings</a></span> 
 
@@ -464,15 +456,8 @@ docs/
 <dd>
 </dd>
 
-          <dt id="app_theme">
-  <span class="name"><a href="core_settings_app_theme/">core\settings\app_theme</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="app_theme_settings">
-  <span class="name"><a href="core_settings_app_theme_settings/">core\settings\app_theme_settings</a></span> 
+          <dt id="enum_color_app_theme_settings">
+  <span class="name"><a href="core_settings_enum_color_app_theme_settings/">core\settings\enum_color_app_theme_settings</a></span> 
 
 </dt>
 <dd>
@@ -485,29 +470,8 @@ docs/
 <dd>
 </dd>
 
-          <dt id="documents">
-  <span class="name"><a href="core_utils_documents/">core\utils\documents</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="input_formatters">
-  <span class="name"><a href="core_utils_input_formatters/">core\utils\input_formatters</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="string_extensions">
-  <span class="name"><a href="core_utils_string_extensions/">core\utils\string_extensions</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="text_formatters">
-  <span class="name"><a href="core_utils_text_formatters/">core\utils\text_formatters</a></span> 
+          <dt id="repository_error_mapper">
+  <span class="name"><a href="core_utils_repository_error_mapper/">core\utils\repository_error_mapper</a></span> 
 
 </dt>
 <dd>
@@ -518,13 +482,6 @@ docs/
 
 </dt>
 <dd>
-</dd>
-
-          <dt id="validators">
-  <span class="name"><a href="core_utils_validators/">core\utils\validators</a></span> 
-
-</dt>
-<dd>Utilitários de validação para formulários.
 </dd>
 
           <dt id="cache_manager">
@@ -557,6 +514,41 @@ docs/
 
           <dt id="system_cache_manager">
   <span class="name"><a href="data_cache_system_cache_manager/">data\cache\system_cache_manager</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="address_codec">
+  <span class="name"><a href="data_converter_address_codec/">data\converter\address_codec</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cpf_cnpj_json_converters">
+  <span class="name"><a href="data_converter_cpf_cnpj_json_converters/">data\converter\cpf_cnpj_json_converters</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="document_converter">
+  <span class="name"><a href="data_converter_document_converter/">data\converter\document_converter</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="price_configuration_codec">
+  <span class="name"><a href="data_converter_price_configuration_codec/">data\converter\price_configuration_codec</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_configuration_codec">
+  <span class="name"><a href="data_converter_system_configuration_codec/">data\converter\system_configuration_codec</a></span> 
 
 </dt>
 <dd>
@@ -674,6 +666,13 @@ docs/
 <dd>
 </dd>
 
+          <dt id="drift_to_domain">
+  <span class="name"><a href="data_database_mapper_drift_to_domain/">data\database\mapper\drift_to_domain</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="system_database">
   <span class="name"><a href="data_database_system_database/">data\database\system_database</a></span> 
 
@@ -723,20 +722,6 @@ docs/
 <dd>
 </dd>
 
-          <dt id="nota_itens_table">
-  <span class="name"><a href="data_database_table_nota_itens_table/">data\database\table\nota_itens_table</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="notas_table">
-  <span class="name"><a href="data_database_table_notas_table/">data\database\table\notas_table</a></span> 
-
-</dt>
-<dd>
-</dd>
-
           <dt id="products_records">
   <span class="name"><a href="data_database_table_products_records/">data\database\table\products_records</a></span> 
 
@@ -765,8 +750,204 @@ docs/
 <dd>
 </dd>
 
+          <dt id="app_settings_entry">
+  <span class="name"><a href="data_entry_app_settings_entry/">data\entry\app_settings_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="configuration_cache_entry">
+  <span class="name"><a href="data_entry_configuration_cache_entry/">data\entry\configuration_cache_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="individual_entry">
+  <span class="name"><a href="data_entry_individual_entry/">data\entry\individual_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="price_configuration_entry">
+  <span class="name"><a href="data_entry_price_configuration_entry/">data\entry\price_configuration_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="report_configuration_entry">
+  <span class="name"><a href="data_entry_report_configuration_entry/">data\entry\report_configuration_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_configuration_entry">
+  <span class="name"><a href="data_entry_system_configuration_entry/">data\entry\system_configuration_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_user_data_entry">
+  <span class="name"><a href="data_entry_system_user_data_entry/">data\entry\system_user_data_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="user_entry">
+  <span class="name"><a href="data_entry_user_entry/">data\entry\user_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="file_storage_utility">
   <span class="name"><a href="data_files_utility_file_storage_utility/">data\files_utility\file_storage_utility</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="activity_log_data">
+  <span class="name"><a href="data_models_activity_log_data/">data\models\activity_log_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="address_data">
+  <span class="name"><a href="data_models_address_data/">data\models\address_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="category_data">
+  <span class="name"><a href="data_models_category_data/">data\models\category_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_data">
+  <span class="name"><a href="data_models_company_data/">data\models\company_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_data">
+  <span class="name"><a href="data_models_customer_data/">data\models\customer_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_export_data">
+  <span class="name"><a href="data_models_invoice_export_data/">data\models\invoice_export_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_item_data">
+  <span class="name"><a href="data_models_invoice_item_data/">data\models\invoice_item_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_data">
+  <span class="name"><a href="data_models_product_data/">data\models\product_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_configuration_data">
+  <span class="name"><a href="data_models_system_configuration_data/">data\models\system_configuration_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="code_generator_service">
+  <span class="name"><a href="domain_code_generator_service/">domain\code_generator_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="category_repository">
+  <span class="name"><a href="domain_repository_category_repository/">domain\repository\category_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_repository">
+  <span class="name"><a href="domain_repository_company_repository/">domain\repository\company_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="configuration_repository">
+  <span class="name"><a href="domain_repository_configuration_repository/">domain\repository\configuration_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_repository">
+  <span class="name"><a href="domain_repository_customer_repository/">domain\repository\customer_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_exception">
+  <span class="name"><a href="domain_repository_exceptions_customer_exception/">domain\repository\exceptions\customer_exception</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_repository">
+  <span class="name"><a href="domain_repository_product_repository/">domain\repository\product_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_repository">
+  <span class="name"><a href="domain_repository_sales_repository/">domain\repository\sales_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="log_repository">
+  <span class="name"><a href="domain_repository_system_log_repository/">domain\repository\system\log_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_repository">
+  <span class="name"><a href="domain_repository_system_system_repository/">domain\repository\system\system_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="user_repository">
+  <span class="name"><a href="domain_repository_system_user_repository/">domain\repository\system\user_repository</a></span> 
 
 </dt>
 <dd>
@@ -1094,6 +1275,13 @@ docs/
 <dd>
 </dd>
 
+          <dt id="home_bloc">
+  <span class="name"><a href="screens_home_bloc_home_bloc/">screens\home\bloc\home_bloc</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="home_screen">
   <span class="name"><a href="screens_home_home_screen/">screens\home\home_screen</a></span> 
 
@@ -1241,6 +1429,41 @@ docs/
 <dd>
 </dd>
 
+          <dt id="sales_purchase_analytics_bloc">
+  <span class="name"><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_bloc/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_bloc</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_purchase_analytics_event">
+  <span class="name"><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_event/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_event</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_purchase_analytics_state">
+  <span class="name"><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_state/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_purchase_analytics_screen">
+  <span class="name"><a href="screens_relatorios_sales_purchase_analytics_sales_purchase_analytics_screen/">screens\relatorios\sales_purchase_analytics\sales_purchase_analytics_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="report_screen">
+  <span class="name"><a href="screens_report_report_screen/">screens\report\report_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="route_app">
   <span class="name"><a href="screens_route_route_app/">screens\route\route_app</a></span> 
 
@@ -1262,6 +1485,20 @@ docs/
 <dd>
 </dd>
 
+          <dt id="sales_invoice_cubit">
+  <span class="name"><a href="screens_sales_cubit_sales_invoice_cubit/">screens\sales\cubit\sales_invoice_cubit</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_invoice_state">
+  <span class="name"><a href="screens_sales_cubit_sales_invoice_state/">screens\sales\cubit\sales_invoice_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="sales_state">
   <span class="name"><a href="screens_sales_cubit_sales_state/">screens\sales\cubit\sales_state</a></span> 
 
@@ -1269,8 +1506,22 @@ docs/
 <dd>
 </dd>
 
-          <dt id="route_sales">
-  <span class="name"><a href="screens_sales_route_route_sales/">screens\sales\route\route_sales</a></span> 
+          <dt id="invoice_line_entry">
+  <span class="name"><a href="screens_sales_models_invoice_line_entry/">screens\sales\models\invoice_line_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="person_selection">
+  <span class="name"><a href="screens_sales_models_person_selection/">screens\sales\models\person_selection</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="person_selection_invoice_mapping">
+  <span class="name"><a href="screens_sales_models_person_selection_invoice_mapping/">screens\sales\models\person_selection_invoice_mapping</a></span> 
 
 </dt>
 <dd>
@@ -1304,6 +1555,55 @@ docs/
 <dd>
 </dd>
 
+          <dt id="invoice_line_tile">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_invoice_line_tile/">screens\sales\widgets\sales_invoice\invoice_line_tile</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_number_field">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_invoice_number_field/">screens\sales\widgets\sales_invoice\invoice_number_field</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_quantity_dialog">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_invoice_quantity_dialog/">screens\sales\widgets\sales_invoice\invoice_quantity_dialog</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_total_bar">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_invoice_total_bar/">screens\sales\widgets\sales_invoice\invoice_total_bar</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_type_segmented">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_invoice_type_segmented/">screens\sales\widgets\sales_invoice\invoice_type_segmented</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="select_product_dialog">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_select_product_dialog/">screens\sales\widgets\sales_invoice\select_product_dialog</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="app_theme">
+  <span class="name"><a href="screens_settings_app_theme/">screens\settings\app_theme</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="settings_service">
   <span class="name"><a href="screens_settings_settings_service/">screens\settings\settings_service</a></span> 
 
@@ -1311,15 +1611,36 @@ docs/
 <dd>
 </dd>
 
-          <dt id="constants">
-  <span class="name"><a href="screens_utils_constants/">screens\utils\constants</a></span> 
+          <dt id="extension_date_time">
+  <span class="name"><a href="screens_utils_extension_date_time/">screens\utils\extension_date_time</a></span> 
 
 </dt>
 <dd>
 </dd>
 
-          <dt id="extension_date_time">
-  <span class="name"><a href="screens_utils_extension_date_time/">screens\utils\extension_date_time</a></span> 
+          <dt id="input_formatters">
+  <span class="name"><a href="screens_utils_input_formatters/">screens\utils\input_formatters</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="string_extensions">
+  <span class="name"><a href="screens_utils_string_extensions/">screens\utils\string_extensions</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="text_formatters">
+  <span class="name"><a href="screens_utils_text_formatters/">screens\utils\text_formatters</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="validators">
+  <span class="name"><a href="screens_utils_validators/">screens\utils\validators</a></span> 
 
 </dt>
 <dd>
@@ -1348,6 +1669,13 @@ docs/
 
           <dt id="overlay_app_widget">
   <span class="name"><a href="screens_widgets_overlay_app_widget/">screens\widgets\overlay_app_widget</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="report_widget">
+  <span class="name"><a href="screens_widgets_report_widget/">screens\widgets\report_widget</a></span> 
 
 </dt>
 <dd>
@@ -1391,7 +1719,11 @@ docs/
     <h5 class="hidden-xs"><span class="package-name">system_loja</span> <span class="package-kind">package</span></h5>
     <ol>
       <li class="section-title">Libraries</li>
-      <li><a href="app_injection/">app_injection</a></li>
+      <li><a href="aplication_app_injection/">aplication\app_injection</a></li>
+      <li><a href="aplication_system_error_manager/">aplication\system_error_manager</a></li>
+      <li><a href="aplication_utils_constants/">aplication\utils\constants</a></li>
+      <li><a href="core_constants_cache_keys/">core\constants\cache_keys</a></li>
+      <li><a href="core_exceptions_document_exception/">core\exceptions\document_exception</a></li>
       <li><a href="core_exceptions_product_exception/">core\exceptions\product_exception</a></li>
       <li><a href="core_exceptions_validation_exception/">core\exceptions\validation_exception</a></li>
       <li><a href="core_interface_i_category_repository/">core\interface\i_category_repository</a></li>
@@ -1404,52 +1736,45 @@ docs/
       <li><a href="core_interface_i_settings_service/">core\interface\i_settings_service</a></li>
       <li><a href="core_interface_i_system_repository/">core\interface\i_system_repository</a></li>
       <li><a href="core_interface_i_user_repository/">core\interface\i_user_repository</a></li>
-      <li><a href="core_managers_configuration_repository/">core\managers\configuration_repository</a></li>
-      <li><a href="core_managers_configuration_repository_cache/">core\managers\configuration_repository_cache</a></li>
-      <li><a href="core_managers_exceptions_customer_exception/">core\managers\exceptions\customer_exception</a></li>
-      <li><a href="core_managers_system_error_manager/">core\managers\system_error_manager</a></li>
       <li><a href="core_models_activity_log/">core\models\activity_log</a></li>
       <li><a href="core_models_address/">core\models\address</a></li>
       <li><a href="core_models_category/">core\models\category</a></li>
       <li><a href="core_models_company/">core\models\company</a></li>
       <li><a href="core_models_customer/">core\models\customer</a></li>
+      <li><a href="core_models_default_authorization_level/">core\models\default\authorization_level</a></li>
       <li><a href="core_models_default_default_object/">core\models\default\default_object</a></li>
       <li><a href="core_models_default_people_data/">core\models\default\people_data</a></li>
+      <li><a href="core_models_document_cnpj/">core\models\document\cnpj</a></li>
+      <li><a href="core_models_document_cpf/">core\models\document\cpf</a></li>
+      <li><a href="core_models_document_document/">core\models\document\document</a></li>
       <li><a href="core_models_extensions_nivel_permissao_extension/">core\models\extensions\nivel_permissao_extension</a></li>
       <li><a href="core_models_extensions_tipo_acao_extension/">core\models\extensions\tipo_acao_extension</a></li>
       <li><a href="core_models_invoice/">core\models\invoice</a></li>
       <li><a href="core_models_invoice_item/">core\models\invoice_item</a></li>
       <li><a href="core_models_invoice_type/">core\models\invoice_type</a></li>
+      <li><a href="core_models_person_person/">core\models\person\person</a></li>
       <li><a href="core_models_product/">core\models\product</a></li>
       <li><a href="core_models_system_config_price_configuration/">core\models\system_config\price_configuration</a></li>
       <li><a href="core_models_system_config_report_configuration/">core\models\system_config\report_configuration</a></li>
       <li><a href="core_models_system_config_system_configuration/">core\models\system_config\system_configuration</a></li>
+      <li><a href="core_models_system_config_system_user_data/">core\models\system_config\system_user_data</a></li>
       <li><a href="core_models_system_errors_system_error/">core\models\system_errors\system_error</a></li>
       <li><a href="core_models_user/">core\models\user</a></li>
-      <li><a href="core_repository_category_repository/">core\repository\category_repository</a></li>
-      <li><a href="core_repository_company_repository/">core\repository\company_repository</a></li>
-      <li><a href="core_repository_customer_repository/">core\repository\customer_repository</a></li>
-      <li><a href="core_repository_product_repository/">core\repository\product_repository</a></li>
-      <li><a href="core_repository_sales_repository/">core\repository\sales_repository</a></li>
-      <li><a href="core_repository_system_log_repository/">core\repository\system\log_repository</a></li>
-      <li><a href="core_repository_system_system_repository/">core\repository\system\system_repository</a></li>
-      <li><a href="core_repository_system_user_repository/">core\repository\system\user_repository</a></li>
-      <li><a href="core_services_code_generator_service/">core\services\code_generator_service</a></li>
       <li><a href="core_settings_app_settings/">core\settings\app_settings</a></li>
-      <li><a href="core_settings_app_theme/">core\settings\app_theme</a></li>
-      <li><a href="core_settings_app_theme_settings/">core\settings\app_theme_settings</a></li>
+      <li><a href="core_settings_enum_color_app_theme_settings/">core\settings\enum_color_app_theme_settings</a></li>
       <li><a href="core_utils_command_result/">core\utils\command_result</a></li>
-      <li><a href="core_utils_documents/">core\utils\documents</a></li>
-      <li><a href="core_utils_input_formatters/">core\utils\input_formatters</a></li>
-      <li><a href="core_utils_string_extensions/">core\utils\string_extensions</a></li>
-      <li><a href="core_utils_text_formatters/">core\utils\text_formatters</a></li>
+      <li><a href="core_utils_repository_error_mapper/">core\utils\repository_error_mapper</a></li>
       <li><a href="core_utils_utils_extensions/">core\utils\utils_extensions</a></li>
-      <li><a href="core_utils_validators/">core\utils\validators</a></li>
       <li><a href="data_cache_cache_manager/">data\cache\cache_manager</a></li>
       <li><a href="data_cache_exceptions_cache_exception/">data\cache\exceptions\cache_exception</a></li>
       <li><a href="data_cache_models_cacheable/">data\cache\models\cacheable</a></li>
       <li><a href="data_cache_models_system_model_system_error_model/">data\cache\models\system_model\system_error_model</a></li>
       <li><a href="data_cache_system_cache_manager/">data\cache\system_cache_manager</a></li>
+      <li><a href="data_converter_address_codec/">data\converter\address_codec</a></li>
+      <li><a href="data_converter_cpf_cnpj_json_converters/">data\converter\cpf_cnpj_json_converters</a></li>
+      <li><a href="data_converter_document_converter/">data\converter\document_converter</a></li>
+      <li><a href="data_converter_price_configuration_codec/">data\converter\price_configuration_codec</a></li>
+      <li><a href="data_converter_system_configuration_codec/">data\converter\system_configuration_codec</a></li>
       <li><a href="data_database_app_database/">data\database\app_database</a></li>
       <li><a href="data_database_dao_address_dao/">data\database\dao\address_dao</a></li>
       <li><a href="data_database_dao_category_dao/">data\database\dao\category_dao</a></li>
@@ -1466,6 +1791,7 @@ docs/
       <li><a href="data_database_extension_customer_to_companion/">data\database\extension\customer_to_companion</a></li>
       <li><a href="data_database_extension_invoice_to_companion/">data\database\extension\invoice_to_companion</a></li>
       <li><a href="data_database_extension_log_to_companion/">data\database\extension\log_to_companion</a></li>
+      <li><a href="data_database_mapper_drift_to_domain/">data\database\mapper\drift_to_domain</a></li>
       <li><a href="data_database_system_database/">data\database\system_database</a></li>
       <li><a href="data_database_table_address_records/">data\database\table\address_records</a></li>
       <li><a href="data_database_table_categories_records/">data\database\table\categories_records</a></li>
@@ -1473,13 +1799,39 @@ docs/
       <li><a href="data_database_table_customer_records/">data\database\table\customer_records</a></li>
       <li><a href="data_database_table_invoice_items_records/">data\database\table\invoice_items_records</a></li>
       <li><a href="data_database_table_invoices_records/">data\database\table\invoices_records</a></li>
-      <li><a href="data_database_table_nota_itens_table/">data\database\table\nota_itens_table</a></li>
-      <li><a href="data_database_table_notas_table/">data\database\table\notas_table</a></li>
       <li><a href="data_database_table_products_records/">data\database\table\products_records</a></li>
       <li><a href="data_database_table_system_logs_records/">data\database\table\system\logs_records</a></li>
       <li><a href="data_database_table_system_system_records/">data\database\table\system\system_records</a></li>
       <li><a href="data_database_table_system_users_records/">data\database\table\system\users_records</a></li>
+      <li><a href="data_entry_app_settings_entry/">data\entry\app_settings_entry</a></li>
+      <li><a href="data_entry_configuration_cache_entry/">data\entry\configuration_cache_entry</a></li>
+      <li><a href="data_entry_individual_entry/">data\entry\individual_entry</a></li>
+      <li><a href="data_entry_price_configuration_entry/">data\entry\price_configuration_entry</a></li>
+      <li><a href="data_entry_report_configuration_entry/">data\entry\report_configuration_entry</a></li>
+      <li><a href="data_entry_system_configuration_entry/">data\entry\system_configuration_entry</a></li>
+      <li><a href="data_entry_system_user_data_entry/">data\entry\system_user_data_entry</a></li>
+      <li><a href="data_entry_user_entry/">data\entry\user_entry</a></li>
       <li><a href="data_files_utility_file_storage_utility/">data\files_utility\file_storage_utility</a></li>
+      <li><a href="data_models_activity_log_data/">data\models\activity_log_data</a></li>
+      <li><a href="data_models_address_data/">data\models\address_data</a></li>
+      <li><a href="data_models_category_data/">data\models\category_data</a></li>
+      <li><a href="data_models_company_data/">data\models\company_data</a></li>
+      <li><a href="data_models_customer_data/">data\models\customer_data</a></li>
+      <li><a href="data_models_invoice_export_data/">data\models\invoice_export_data</a></li>
+      <li><a href="data_models_invoice_item_data/">data\models\invoice_item_data</a></li>
+      <li><a href="data_models_product_data/">data\models\product_data</a></li>
+      <li><a href="data_models_system_configuration_data/">data\models\system_configuration_data</a></li>
+      <li><a href="domain_code_generator_service/">domain\code_generator_service</a></li>
+      <li><a href="domain_repository_category_repository/">domain\repository\category_repository</a></li>
+      <li><a href="domain_repository_company_repository/">domain\repository\company_repository</a></li>
+      <li><a href="domain_repository_configuration_repository/">domain\repository\configuration_repository</a></li>
+      <li><a href="domain_repository_customer_repository/">domain\repository\customer_repository</a></li>
+      <li><a href="domain_repository_exceptions_customer_exception/">domain\repository\exceptions\customer_exception</a></li>
+      <li><a href="domain_repository_product_repository/">domain\repository\product_repository</a></li>
+      <li><a href="domain_repository_sales_repository/">domain\repository\sales_repository</a></li>
+      <li><a href="domain_repository_system_log_repository/">domain\repository\system\log_repository</a></li>
+      <li><a href="domain_repository_system_system_repository/">domain\repository\system\system_repository</a></li>
+      <li><a href="domain_repository_system_user_repository/">domain\repository\system\user_repository</a></li>
       <li><a href="main/">main</a></li>
       <li><a href="screens_categories_category_management_screen/">screens\categories\category_management_screen</a></li>
       <li><a href="screens_categories_cubit_category_cubit/">screens\categories\cubit\category_cubit</a></li>
@@ -1526,6 +1878,7 @@ docs/
       <li><a href="screens_customer_widgets_customer_list/">screens\customer\widgets\customer_list</a></li>
       <li><a href="screens_customer_widgets_customer_overview_bottom_sheet/">screens\customer\widgets\customer_overview_bottom_sheet</a></li>
       <li><a href="screens_customer_widgets_customer_search_section/">screens\customer\widgets\customer_search_section</a></li>
+      <li><a href="screens_home_bloc_home_bloc/">screens\home\bloc\home_bloc</a></li>
       <li><a href="screens_home_home_screen/">screens\home\home_screen</a></li>
       <li><a href="screens_host_cadastro_group_screen/">screens\host\cadastro_group_screen</a></li>
       <li><a href="screens_host_host_screen/">screens\host\host_screen</a></li>
@@ -1547,22 +1900,42 @@ docs/
       <li><a href="screens_relatorios_cubit_relatorio_cubit/">screens\relatorios\cubit\relatorio_cubit</a></li>
       <li><a href="screens_relatorios_cubit_relatorio_state/">screens\relatorios\cubit\relatorio_state</a></li>
       <li><a href="screens_relatorios_relatorio_screen/">screens\relatorios\relatorio_screen</a></li>
+      <li><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_bloc/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_bloc</a></li>
+      <li><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_event/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_event</a></li>
+      <li><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_state/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_state</a></li>
+      <li><a href="screens_relatorios_sales_purchase_analytics_sales_purchase_analytics_screen/">screens\relatorios\sales_purchase_analytics\sales_purchase_analytics_screen</a></li>
+      <li><a href="screens_report_report_screen/">screens\report\report_screen</a></li>
       <li><a href="screens_route_route_app/">screens\route\route_app</a></li>
       <li><a href="screens_route_route_app.gr/">screens\route\route_app.gr</a></li>
       <li><a href="screens_sales_cubit_sales_cubit/">screens\sales\cubit\sales_cubit</a></li>
+      <li><a href="screens_sales_cubit_sales_invoice_cubit/">screens\sales\cubit\sales_invoice_cubit</a></li>
+      <li><a href="screens_sales_cubit_sales_invoice_state/">screens\sales\cubit\sales_invoice_state</a></li>
       <li><a href="screens_sales_cubit_sales_state/">screens\sales\cubit\sales_state</a></li>
-      <li><a href="screens_sales_route_route_sales/">screens\sales\route\route_sales</a></li>
+      <li><a href="screens_sales_models_invoice_line_entry/">screens\sales\models\invoice_line_entry</a></li>
+      <li><a href="screens_sales_models_person_selection/">screens\sales\models\person_selection</a></li>
+      <li><a href="screens_sales_models_person_selection_invoice_mapping/">screens\sales\models\person_selection_invoice_mapping</a></li>
       <li><a href="screens_sales_sales_invoice_screen/">screens\sales\sales_invoice_screen</a></li>
       <li><a href="screens_sales_sales_screen/">screens\sales\sales_screen</a></li>
       <li><a href="screens_sales_widgets_invoice_card/">screens\sales\widgets\invoice_card</a></li>
       <li><a href="screens_sales_widgets_invoice_overview_bottom_sheet/">screens\sales\widgets\invoice_overview_bottom_sheet</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_invoice_line_tile/">screens\sales\widgets\sales_invoice\invoice_line_tile</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_invoice_number_field/">screens\sales\widgets\sales_invoice\invoice_number_field</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_invoice_quantity_dialog/">screens\sales\widgets\sales_invoice\invoice_quantity_dialog</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_invoice_total_bar/">screens\sales\widgets\sales_invoice\invoice_total_bar</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_invoice_type_segmented/">screens\sales\widgets\sales_invoice\invoice_type_segmented</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_select_product_dialog/">screens\sales\widgets\sales_invoice\select_product_dialog</a></li>
+      <li><a href="screens_settings_app_theme/">screens\settings\app_theme</a></li>
       <li><a href="screens_settings_settings_service/">screens\settings\settings_service</a></li>
-      <li><a href="screens_utils_constants/">screens\utils\constants</a></li>
       <li><a href="screens_utils_extension_date_time/">screens\utils\extension_date_time</a></li>
+      <li><a href="screens_utils_input_formatters/">screens\utils\input_formatters</a></li>
+      <li><a href="screens_utils_string_extensions/">screens\utils\string_extensions</a></li>
+      <li><a href="screens_utils_text_formatters/">screens\utils\text_formatters</a></li>
+      <li><a href="screens_utils_validators/">screens\utils\validators</a></li>
       <li><a href="screens_widgets_address_form/">screens\widgets\address_form</a></li>
       <li><a href="screens_widgets_card_list_item/">screens\widgets\card_list_item</a></li>
       <li><a href="screens_widgets_loading_overlay/">screens\widgets\loading_overlay</a></li>
       <li><a href="screens_widgets_overlay_app_widget/">screens\widgets\overlay_app_widget</a></li>
+      <li><a href="screens_widgets_report_widget/">screens\widgets\report_widget</a></li>
       <li><a href="screens_widgets_text_form_field_cpf/">screens\widgets\text_form_field_cpf</a></li>
       <li><a href="screens_widgets_text_form_field_email/">screens\widgets\text_form_field_email</a></li>
       <li><a href="screens_widgets_text_form_field_phone/">screens\widgets\text_form_field_phone</a></li>

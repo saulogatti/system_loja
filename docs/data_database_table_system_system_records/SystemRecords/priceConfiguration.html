@@ -59,7 +59,7 @@
   <section id="getter">
     <section class="multi-line-signature">
       
-      <span class="returntype"><a href="https://pub.dev/documentation/drift/2.32.0/drift/TextColumn.html">TextColumn</a></span>
+      <span class="returntype"><a href="https://pub.dev/documentation/drift/2.32.1/drift/TextColumn.html">TextColumn</a></span>
       get
       <span class="name ">priceConfiguration</span>
       
@@ -71,7 +71,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">TextColumn get priceConfiguration =&gt;
-    text().map(PriceConfiguration.converter)();</code></pre>
+    text().map(PriceConfigurationCodec.driftConverter)();</code></pre>
 </section>
 
   </section>

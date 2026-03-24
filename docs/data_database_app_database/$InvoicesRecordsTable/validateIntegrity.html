@@ -59,8 +59,8 @@
         <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-<span class="returntype"><a href="https://pub.dev/documentation/drift/2.32.0/drift/VerificationContext-class.html">VerificationContext</a></span>
-<span class="name ">validateIntegrity</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="validateIntegrity-param-instance"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Insertable-class.html">Insertable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../data_database_app_database/InvoicesRecord-class.html">InvoicesRecord</a></span>&gt;</span></span> <span class="parameter-name">instance</span>, {</span></li>
+<span class="returntype"><a href="https://pub.dev/documentation/drift/2.32.1/drift/VerificationContext-class.html">VerificationContext</a></span>
+<span class="name ">validateIntegrity</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="validateIntegrity-param-instance"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Insertable-class.html">Insertable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../data_database_app_database/InvoicesRecord-class.html">InvoicesRecord</a></span>&gt;</span></span> <span class="parameter-name">instance</span>, {</span></li>
 <li><span class="parameter" id="validateIntegrity-param-isInserting"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isInserting</span> = <span class="default-value">false</span>, </span></li>
 </ol>})
 
@@ -112,6 +112,24 @@ VerificationContext validateIntegrity(
     context.handle(
       _companyIdMeta,
       companyId.isAcceptableOrUnknown(data[&#39;empresa_id&#39;]!, _companyIdMeta),
+    );
+  }
+  if (data.containsKey(&#39;empresa_nome&#39;)) {
+    context.handle(
+      _companyNameMeta,
+      companyName.isAcceptableOrUnknown(
+        data[&#39;empresa_nome&#39;]!,
+        _companyNameMeta,
+      ),
+    );
+  }
+  if (data.containsKey(&#39;empresa_cnpj&#39;)) {
+    context.handle(
+      _companyCnpjMeta,
+      companyCnpj.isAcceptableOrUnknown(
+        data[&#39;empresa_cnpj&#39;]!,
+        _companyCnpjMeta,
+      ),
     );
   }
   if (data.containsKey(&#39;id&#39;)) {

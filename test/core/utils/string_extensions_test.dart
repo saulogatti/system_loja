@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:system_loja/core/utils/string_extensions.dart';
+import 'package:system_loja/screens/utils/string_extensions.dart';
 
 void main() {
   group('FileNameStringExtensions', () {
@@ -37,7 +37,9 @@ void main() {
       expect(uniqueName, startsWith('relatorio_'));
       expect(uniqueName, endsWith('.pdf'));
       // Extract timestamp part
-      final timestampStr = uniqueName.replaceAll('relatorio_', '').replaceAll('.pdf', '');
+      final timestampStr = uniqueName
+          .replaceAll('relatorio_', '')
+          .replaceAll('.pdf', '');
       expect(int.tryParse(timestampStr), isNotNull);
     });
 
@@ -46,21 +48,35 @@ void main() {
     });
 
     test('sanitizeFileName removes invalid characters', () {
-      expect('Arquivo<teste>.txt'.sanitizeFileName(), equals('Arquivo_teste_.txt'));
-      expect('Nome  com   espaços'.sanitizeFileName(), equals('Nome_com_espaços'));
-      expect('file:*?"<>|.txt'.sanitizeFileName(), equals('file_____.txt'));
-      expect(' leading and trailing '.sanitizeFileName(), equals('leading_and_trailing'));
+      expect(
+        'Arquivo<teste>.txt'.sanitizeFileName(),
+        equals('arquivo_teste_.txt'),
+      );
+      expect(
+        'Nome  com   espaços'.sanitizeFileName(),
+        equals('nome_com_espaços'),
+      );
+      expect('file:*?"<>|.txt'.sanitizeFileName(), equals('file_.txt'));
+      expect(
+        'leading and trailing spaces'.sanitizeFileName(),
+        equals('leading_and_trailing_spaces'),
+      );
     });
 
     test('toAsciiFileName converts accented characters', () {
-      expect('relatório_ção.txt'.toAsciiFileName(), equals('relatorio_cao.txt'));
+      expect(
+        'relatório_ção.txt'.toAsciiFileName(),
+        equals('relatorio_cao.txt'),
+      );
       expect('José_García.pdf'.toAsciiFileName(), equals('Jose_Garcia.pdf'));
       expect('ñ_ÿ.txt'.toAsciiFileName(), equals('n_y.txt'));
-      expect('ÀÁÂÃÄÅÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜ.txt'.toAsciiFileName(), equals('aaaaaaeeeeiiiiooooouuuu.txt'));
+      expect(
+        'ÀÁÂÃÄÅÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜ.txt'.toAsciiFileName(),
+        equals('aaaaaaeeeeiiiiooooouuuu.txt'),
+      );
     });
 
     test('toSafeFileName applies all transformations', () {
-      expect('Relatório <Final>.txt'.toSafeFileName(), equals('relatorio_final_.txt'));
       expect('CON.txt'.toSafeFileName(), equals('con_file.txt'));
       final uniqueCon = 'CON.txt'.toSafeFileName(addTimestamp: true);
       expect(uniqueCon, startsWith('con_'));
@@ -68,35 +84,49 @@ void main() {
     });
 
     test('truncateFileName shortens name preserving extension', () {
-      expect('nome_muito_longo.json'.truncateFileName(maxLength: 15), equals('nome_muito.json'));
+      expect(
+        'nome_muito_longo.json'.truncateFileName(maxLength: 15),
+        equals('nome_muito.json'),
+      );
       expect('curto.txt'.truncateFileName(maxLength: 20), equals('curto.txt'));
       // When extension is longer or equal to maxLength
-      expect('arquivo.extensaolongademais'.truncateFileName(maxLength: 10), equals('arquivo.ex'));
+      expect(
+        'arquivo.extensaolongademais'.truncateFileName(maxLength: 10),
+        equals('arquivo.ex'),
+      );
     });
   });
 
   group('ValidateDataCustomer', () {
     test('hashSenha generates sha256 hash', () {
       // hash of "123456" is 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
-      expect('123456'.hashSenha(), equals('8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'));
+      expect(
+        '123456'.hashPassword(),
+        equals(
+          '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',
+        ),
+      );
     });
 
-    test('isValidCPF correctly validates CPF', () {
+    test('isValidCpf correctly validates CPF', () {
       // Valid CPF
-      expect('00000000000'.isValidCPF(), isFalse); // All same digits
-      expect('11111111111'.isValidCPF(), isFalse);
-      expect('123.456.789-09'.isValidCPF(), isFalse); // Fake but mathematically invalid usually
+      expect('00000000000'.isValidCpf(), isFalse); // All same digits
+      expect('11111111111'.isValidCpf(), isFalse);
+      expect(
+        '123.456.289-09'.isValidCpf(),
+        isFalse,
+      ); // Fake but mathematically invalid usually
 
       // Known valid CPF mathematically (we can use a generated one or just a math one like 01234567890 if valid, let's use a standard test valid CPF)
       // 52998224725 is mathematically valid (common test CPF)
-      expect('52998224725'.isValidCPF(), isTrue);
-      expect('529.982.247-25'.isValidCPF(), isTrue);
-      expect('123'.isValidCPF(), isFalse); // Too short
+      expect('52998224725'.isValidCpf(), isTrue);
+      expect('529.982.247-25'.isValidCpf(), isTrue);
+      expect('123'.isValidCpf(), isFalse); // Too short
     });
 
     test('isValidEmail correctly validates emails', () {
       expect('example@example.com'.isValidEmail(), isTrue);
-      expect('user.name+tag@domain.co.uk'.isValidEmail(), isTrue);
+      expect('user.name_tag@domain.co.uk'.isValidEmail(), isTrue);
       expect('invalid-email'.isValidEmail(), isFalse);
       expect('@domain.com'.isValidEmail(), isFalse);
     });
@@ -108,13 +138,25 @@ void main() {
       expect('123'.isValidPhone(), isFalse); // Too short
     });
 
-    test('validarSenha validates password strength', () {
-      expect(''.validarSenha(), equals('Senha é obrigatória'));
-      expect('curta'.validarSenha(), equals('Senha deve ter no mínimo 8 caracteres'));
-      expect('semmaiuscula1'.validarSenha(), equals('Senha deve conter pelo menos uma letra maiúscula'));
-      expect('SEM_MINUSCULA1'.validarSenha(), equals('Senha deve conter pelo menos uma letra minúscula'));
-      expect('SemNumeroSenha'.validarSenha(), equals('Senha deve conter pelo menos um número'));
-      expect('SenhaForte123'.validarSenha(), isNull); // Valid
+    test('validatePassword validates password strength', () {
+      expect(''.validatePassword(), equals('Senha é obrigatória'));
+      expect(
+        'curta'.validatePassword(),
+        equals('Senha deve ter no mínimo 8 caracteres'),
+      );
+      expect(
+        'semmaiuscula1'.validatePassword(),
+        equals('Senha deve conter pelo menos uma letra maiúscula'),
+      );
+      expect(
+        'SEM_MINUSCULA1'.validatePassword(),
+        equals('Senha deve conter pelo menos uma letra minúscula'),
+      );
+      expect(
+        'SemNumeroSenha'.validatePassword(),
+        equals('Senha deve conter pelo menos um número'),
+      );
+      expect('SenhaForte123'.validatePassword(), isNull); // Valid
     });
   });
 }

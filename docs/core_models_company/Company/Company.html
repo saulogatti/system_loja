@@ -71,13 +71,15 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Company({
-  required super.name, required this.cnpj, super.id,
+  required super.name,
+  required this.cnpj,
+  super.id,
   super.phone,
   super.email,
   Address? address,
   super.registrationDate,
   super.lastUpdatedDate,
-}) : address = address ?? Address();</code></pre>
+}) : address = address ?? const Address();</code></pre>
 </section>
 
 

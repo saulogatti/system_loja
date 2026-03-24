@@ -29,6 +29,7 @@ class ResetDefaultSettingsEvent extends SettingsEvent {
 class RestoreBackupEvent extends SettingsEvent {
   const RestoreBackupEvent();
 }
+
 /// Eventos do BLoC de Configurações
 abstract class SettingsEvent {
   const SettingsEvent();

@@ -106,7 +106,8 @@ class _CustomerListState extends State<CustomerList> {
       ],
     );
   }
-   void _confirmarExclusao(Customer customer) {
+
+  void _confirmarExclusao(Customer customer) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

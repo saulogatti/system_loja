@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/utils/text_formatters.dart';
-import 'package:system_loja/core/utils/validators.dart';
-import 'package:system_loja/screens/utils/constants.dart';
+import 'package:system_loja/screens/utils/text_formatters.dart';
+import 'package:system_loja/screens/utils/validators.dart';
+import 'package:system_loja/aplication/utils/constants.dart';
 import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 
@@ -22,7 +22,17 @@ class CompanyForm extends StatelessWidget {
   final TextEditingController stateController;
 
   const CompanyForm({
-    required this.formKey, required this.corporateNameController, required this.cnpjController, required this.emailController, required this.streetController, required this.zipCodeController, required this.neighborhoodController, required this.cityController, required this.onSubmit, required this.stateController, super.key,
+    required this.formKey,
+    required this.corporateNameController,
+    required this.cnpjController,
+    required this.emailController,
+    required this.streetController,
+    required this.zipCodeController,
+    required this.neighborhoodController,
+    required this.cityController,
+    required this.onSubmit,
+    required this.stateController,
+    super.key,
   });
 
   @override

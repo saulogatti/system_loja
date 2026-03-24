@@ -5,6 +5,7 @@ import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 
@@ -64,12 +65,21 @@ class SalesCubit extends Cubit<SalesState> {
     final resultSales = await _salesRepository.loadAllSales();
     final result = await _productRepository.fetchProducts();
     final resultMap = await _customerRepository.fetchMappedCustomers();
-    final resultSystem = await _systemRepository.getSystemConfiguration();
     final resultCompanies = await _companyRepository.fetchMappedCompanies();
+    final resultSystem = await _systemRepository.getSystemConfiguration();
+
+    late final List<PaymentMethodType> paymentMethods;
+    switch (resultSystem) {
+      case ResultSuccess(result: final config):
+        paymentMethods = config.priceConfiguration.types;
+      case ResultError(resultError: final error):
+        emit(SalesState.loadProductsFailure(message: error));
+        return;
+    }
+
     final customers = resultMap.asSuccess;
     final invoices = resultSales.asSuccess;
     final companies = resultCompanies.asSuccess;
-    final paymentMethods = resultSystem?.priceConfiguration.types ?? [];
     switch (result) {
       case ResultSuccess(result: final products):
         emit(
@@ -82,11 +92,7 @@ class SalesCubit extends Cubit<SalesState> {
           ),
         );
       case ResultError(resultError: final resultError):
-        emit(
-          SalesState.loadProductsFailure(
-            message: 'Erro ao carregar produtos: $resultError',
-          ),
-        );
+        emit(SalesState.loadProductsFailure(message: 'Erro ao carregar produtos: $resultError'));
     }
   }
 
@@ -107,15 +113,11 @@ class SalesCubit extends Cubit<SalesState> {
   ///
   /// Cria um novo invoice com ID gerado automaticamente
   /// e salva no banco de dados.
-  Future<void> registerSale(
-    InvoiceData invoiceData,
-    bool enableCodeGeneration,
-  ) async {
+  Future<void> registerSale(InvoiceData invoiceData, bool enableCodeGeneration) async {
     emit(SalesState.loading());
 
     if (enableCodeGeneration) {
-      final invoiceNumberResult = await _salesRepository
-          .generateInvoiceNumber();
+      final invoiceNumberResult = await _salesRepository.generateInvoiceNumber();
       switch (invoiceNumberResult) {
         case ResultSuccess(result: final invoiceNumber):
           invoiceData.invoiceNumber = invoiceNumber;

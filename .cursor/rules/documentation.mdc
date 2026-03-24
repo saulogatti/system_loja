@@ -1,6 +1,7 @@
 ---
 description: Documentação em docs/ e doc comments /// em português
-globs: "docs/**"
+globs: "docs/*.md"
+alwaysApply: false
 ---
 
 # Padrões de Documentação - System Loja
@@ -11,23 +12,26 @@ Regras para documentação em `docs/` e para doc comments no código. Para arqui
 
 - **Primeira linha**: resumo em uma frase.
 - **Parágrafo vazio**: separa resumo da descrição detalhada.
-- **Seções úteis**: `Parâmetros:`, `Retorna:`, `Lança:`, `Veja também:`, `Exemplo de uso:` com código em ```dart.
+- **Seções úteis**: `Parâmetros:`, `Retorna:`, `Veja também:`, `Exemplo de uso:` com código em ```dart. Repositórios **não** lançam exceções para a UI (retornam `ResultStatus.error`), portanto **não** documentar `Lança:` em métodos de repositório/interface.
 
 ```dart
 /// Gerencia operações CRUD para clientes no banco SQLite usando Drift ORM.
 ///
 /// Implementa o padrão Repository. Todos os métodos retornam [ResultStatus]
-/// para tratamento type-safe de erros.
+/// para tratamento type-safe de erros — sem propagar exceções para a UI.
 ///
 /// Exemplo de uso:
 /// ```dart
 /// final resultado = await repository.buscar(id: 1);
-/// resultado.when(success: (c) => ..., error: (e) => ...);
+/// resultado.when(
+///   onSuccess: (c) => print(c.name),
+///   onError: (msg) => print('Erro: $msg'),
+/// );
 /// ```
 class ClienteRepository {
   /// Busca um cliente pelo ID.
   ///
-  /// Retorna [ResultStatus] com o cliente ou erro se não encontrado.
+  /// Retorna [ResultStatus] com o cliente ou mensagem de erro em texto.
   Future<ResultStatus<Customer, String>> buscar({required int id}) async { ... }
 }
 ```

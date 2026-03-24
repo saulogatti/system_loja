@@ -67,9 +67,9 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">SystemErrorModel({
-  required super.message,
-  required super.code,
-  required super.stackTrace,
+  required this.message,
+  required this.code,
+  required this.stackTrace,
   String? cacheKeyConstraint,
 }) : cacheKey = cacheKeyConstraint ?? &#39;&#39;;</code></pre>
 </section>

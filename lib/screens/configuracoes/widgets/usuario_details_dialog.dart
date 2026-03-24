@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:system_loja/core/models/default/authorization_level.dart';
 import 'package:system_loja/core/models/extensions/nivel_permissao_extension.dart';
 import 'package:system_loja/core/models/user.dart';
 
@@ -24,7 +25,7 @@ class UsuarioDetailsDialog extends StatelessWidget {
             _buildDetailRow('Email', usuario.email ?? 'N/A'),
             _buildDetailRow(
               'Nível de Permissão',
-            AuthorizationLevel.values
+              AuthorizationLevel.values
                   .firstWhere((level) => level.value == usuario.permission)
                   .toDisplayName(),
             ),

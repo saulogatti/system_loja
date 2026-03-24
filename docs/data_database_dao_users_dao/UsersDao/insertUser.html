@@ -54,7 +54,7 @@
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_user/User-class.html">User</a>?</span>&gt;</span></span>
 <span class="name ">insertUser</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="insertUser-param-user"><span class="type-annotation"><a href="../../core_models_user/User-class.html">User</a></span> <span class="parameter-name">user</span></span></li>
 </ol>)
 
@@ -67,15 +67,19 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; insertUser(User user) {
-  return into(usersRecords).insert(UsersRecordsCompanion(
-    email: Value(user.email),
-    name: Value(user.name),
-    passwordHash: Value(user.passwordHash),
-    permission: Value(user.permission),
-    registrationDate: Value(user.registrationDate),
-    lastUpdatedDate: Value(user.lastUpdatedDate),
-  ));
+  <pre class="language-dart"><code class="language-dart">Future&lt;User?&gt; insertUser(User user) async {
+  final userEntry = UserEntry.fromUser(user);
+  final userEntryResult = await into(usersRecords).insertReturning(
+    UsersRecordsCompanion(
+      email: Value(userEntry.email),
+      name: Value(userEntry.name),
+      passwordHash: Value(userEntry.passwordHash),
+      permission: Value(userEntry.permission),
+      registrationDate: Value(userEntry.registrationDate),
+      lastUpdatedDate: Value(userEntry.lastUpdatedDate),
+    ),
+  );
+  return userEntryResult.toUser();
 }</code></pre>
 </section>
 

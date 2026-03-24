@@ -93,7 +93,8 @@ disponível e emite um estado de sucesso ao concluir.</p>
   required double preco,
   required int estoque,
   required String descricao,
-  required bool codeGenerate, int? categoryId,
+  required bool codeGenerate,
+  int? categoryId,
 }) async {
   if (codeGenerate) {
     codigo = await _productRepository.generateProductCode();

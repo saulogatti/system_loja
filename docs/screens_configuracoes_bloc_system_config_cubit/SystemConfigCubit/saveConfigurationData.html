@@ -86,32 +86,41 @@
 
   emit(SystemConfigState.loading());
   final normalizedUnits = _normalizeUnits(measurementUnits);
-  final baseConfig = _currentConfiguration ?? _createDefaultConfiguration();
+  final systemConfiguration = await _obterConfiguracaoAtual();
+  if (systemConfiguration == null) {
+    return;
+  }
 
   final data = SystemConfiguration(
-    id: baseConfig.id,
-    registrationDate: baseConfig.registrationDate,
+    id: systemConfiguration.id,
+    registrationDate: systemConfiguration.registrationDate,
     lastUpdatedDate: DateTime.now(),
-    productCategories: List&lt;String&gt;.from(baseConfig.productCategories),
+    productCategories: List&lt;String&gt;.from(
+      systemConfiguration.productCategories,
+    ),
     priceConfiguration: PriceConfiguration(
       types: paymentMethods.toSet().toList(),
       measurementUnits: normalizedUnits,
       reportConfiguration: reportConfiguration,
     ),
+    systemUserData: systemConfiguration.systemUserData,
   );
 
-  try {
-    await _systemRepository.saveSystemConfiguration(data);
-    emit(
-      SystemConfigState.loaded(
-        data,
-        feedbackMessage: &#39;Configurações salvas com sucesso.&#39;,
-        feedbackType: SystemConfigFeedbackType.saved,
-      ),
-    );
-  } catch (e) {
-    emit(SystemConfigState.error(e.toString()));
-  }
+  final saveResult = await _systemRepository.saveSystemConfiguration(data);
+  saveResult.when(
+    onSuccess: (_) {
+      emit(
+        SystemConfigState.loaded(
+          data,
+          feedbackMessage: &#39;Configurações salvas com sucesso.&#39;,
+          feedbackType: SystemConfigFeedbackType.saved,
+        ),
+      );
+    },
+    onError: (message) {
+      emit(SystemConfigState.error(message));
+    },
+  );
 }</code></pre>
 </section>
 

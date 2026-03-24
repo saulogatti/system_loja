@@ -80,27 +80,32 @@
         updateCompanionCallback:
             ({
               Value&lt;int&gt; id = const Value.absent(),
-              Value&lt;DateTime&gt; registrationDate = const Value.absent(),
               Value&lt;DateTime&gt; lastUpdatedDate = const Value.absent(),
               Value&lt;PriceConfiguration&gt; priceConfiguration =
                   const Value.absent(),
+              Value&lt;DateTime&gt; registrationDate = const Value.absent(),
+              Value&lt;SystemUserDataEntry&gt; systemUserData =
+                  const Value.absent(),
             }) =&gt; SystemRecordsCompanion(
               id: id,
-              registrationDate: registrationDate,
               lastUpdatedDate: lastUpdatedDate,
               priceConfiguration: priceConfiguration,
+              registrationDate: registrationDate,
+              systemUserData: systemUserData,
             ),
         createCompanionCallback:
             ({
               Value&lt;int&gt; id = const Value.absent(),
-              required DateTime registrationDate,
               required DateTime lastUpdatedDate,
               required PriceConfiguration priceConfiguration,
+              required DateTime registrationDate,
+              required SystemUserDataEntry systemUserData,
             }) =&gt; SystemRecordsCompanion.insert(
               id: id,
-              registrationDate: registrationDate,
               lastUpdatedDate: lastUpdatedDate,
               priceConfiguration: priceConfiguration,
+              registrationDate: registrationDate,
+              systemUserData: systemUserData,
             ),
         withReferenceMapper: (p0) =&gt; p0
             .map((e) =&gt; (e.readTable(table), BaseReferences(db, table, e)))

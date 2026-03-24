@@ -1,5 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/models/system_config/system_user_data.dart';
+import 'package:system_loja/screens/home/bloc/home_bloc.dart';
+import 'package:system_loja/screens/utils/text_formatters.dart';
 
 /// Tela de configuração da empresa emitente.
 ///
@@ -23,6 +27,10 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
   final _fantasyNameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _accessKeyController = TextEditingController();
+
+  final TextEditingController _cnpjController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +78,10 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
           children: [
             Row(
               children: [
-                Icon(Icons.vpn_key, color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.vpn_key,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 const Text(
                   'Acesso ao Sistema',
@@ -119,7 +130,10 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
           children: [
             Row(
               children: [
-                Icon(Icons.business, color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.business,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 const Text(
                   'Dados da Empresa',
@@ -149,10 +163,70 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
             ),
             const SizedBox(height: 16),
             TextFormField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                hintText: 'Ex.: contato@minhaloja.com',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.email),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Informe o Email';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _phoneController,
+              decoration: const InputDecoration(
+                labelText: 'Telefone',
+                hintText: 'Ex.: (11) 99999-9999',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.phone),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Informe o Telefone';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _cnpjController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [CnpjTextInputFormatter()],
+              decoration: const InputDecoration(
+                labelText: 'CNPJ',
+                hintText: 'Ex.: 12.345.678/0001-90',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.business),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Informe o CNPJ';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.email),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
               controller: _descriptionController,
               decoration: const InputDecoration(
                 labelText: 'Descrição',
-                hintText: 'Descreva brevemente a empresa ou os produtos/serviços oferecidos',
+                hintText:
+                    'Descreva brevemente a empresa ou os produtos/serviços oferecidos',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.description),
                 alignLabelWithHint: true,
@@ -193,7 +267,9 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: Theme.of(context).colorScheme.outline,
@@ -243,9 +319,28 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
     );
   }
 
-  /// Abre o seletor de imagem para o logotipo.
-  ///
-  /// Funcionalidade reservada para futura implementação com seleção real de arquivo.
+  /// Salva as configurações da empresa emitente.
+  void _salvarConfiguracoes() {
+    if (_formKey.currentState?.validate() ?? false) {
+      // O que é melhor? Enviar o SystemUserData completo ou apenas os campos que foram alterados?
+      // Vamos enviar o SystemUserData completo para simplificar o código.
+      context.read<HomeBloc>().add(
+        HomeEvent.saveSystemUserData(
+          SystemUserData(
+            id: 0,
+            registrationDate: DateTime.now(),
+            lastUpdatedDate: DateTime.now(),
+            name: _fantasyNameController.text,
+            systemKey: _accessKeyController.text,
+            description: _descriptionController.text,
+            email: _emailController.text,
+            phone: _phoneController.text,
+          ),
+        ),
+      );
+    }
+  }
+
   void _selecionarLogo() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -253,17 +348,5 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
         backgroundColor: Colors.orange,
       ),
     );
-  }
-
-  /// Salva as configurações da empresa emitente.
-  void _salvarConfiguracoes() {
-    if (_formKey.currentState?.validate() ?? false) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Configurações salvas com sucesso!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    }
   }
 }

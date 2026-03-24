@@ -4,24 +4,20 @@
 
 ```
 lib/data/database/
-├── app_database.dart              # Main database configuration
-├── app_database.g.dart            # Generated: table implementations
+├── app_database.dart              # AppDatabase, migrações, schemaVersion
+├── app_database.g.dart            # Gerado (Drift)
+├── system_database.dart           # Banco de sistema (logs, users, config)
 │
-├── table/                         # Table definitions (schema)
-│   ├── clientes_records.dart     # Customer table
-│   ├── products_records.dart     # Product table
-│   ├── invoices_records.dart     # Invoice table
-│   └── invoice_items_records.dart # Invoice items table
+├── table/                         # Definições de tabela (schema)
+│   ├── customer_records.dart, products_records.dart, categories_records.dart
+│   ├── company_records.dart, address_records.dart
+│   ├── invoices_records.dart, invoice_items_records.dart
+│   └── system/                    # Tabelas do SystemDatabase
 │
-├── extension/                     # Domain ↔ Drift converters
-│   ├── cliente_to_companion.dart # Customer conversions
-│   └── invoice_to_companion.dart # Invoice & InvoiceItem conversions
+├── mapper/                        # XxxRecord → modelos em lib/core/models/
+├── extension/                     # Domínio ↔ Companions (insert/update)
 │
-└── *_dao.dart                     # Data Access Objects
-    ├── cliente_dao.dart           # Customer CRUD
-    ├── product_dao.dart           # Product CRUD
-    ├── invoice_dao.dart           # Invoice CRUD (with transactions)
-    └── invoice_item_dao.dart      # Invoice item CRUD
+└── dao/                           # Data Access Objects (*_dao.dart)
 ```
 
 ## 🔄 Data Flow
@@ -61,36 +57,23 @@ lib/data/database/
 
 ## 🎯 Key Patterns
 
-### 1. Repository Pattern
-Each entity has a DAO that acts as a repository:
+### 1. Repository + DAO
+A **UI** fala com **interfaces** em `lib/core/interface/`; as **implementações** em `lib/domain/repository/` orquestram **DAOs** em `lib/data/database/dao/` (operações atômicas / queries). Transações que cruzam regras de negócio (ex.: nota + itens + estoque) ficam no repositório de domínio, não no DAO.
 ```dart
-class ClienteDao {
-  Future<List<Customer>> getAll() { ... }
-  Future<Customer?> getById(int id) { ... }
-  Future<int> insertCliente(Customer customer) { ... }
-  Future<int> updateCliente(Customer customer) { ... }
-  Future<int> deleteCliente(int id) { ... }
+// Exemplo ilustrativo — DAO focado em persistência
+class CustomerDao {
+  Future<List<CustomerRecord>> getAllRows() { ... }
+  Future<int> insertRow(CustomersRecordsCompanion row) { ... }
 }
 ```
 
 ### 2. Domain Separation
-- **Domain Models** (`Customer`, `Invoice`): No database dependencies
-- **Drift Records** (`ClientesRecord`): Generated database types
-- **Extensions**: Bridge between the two
+- **Domain Models** (`Customer`, `Invoice`, … em `lib/core/models/`): sem dependência de Drift
+- **Drift Records** (`XxxRecord`): tipos gerados pelas tabelas — **não** usar `@UseRowClass` com entidades de domínio
+- **Mappers + extensions**: conversão entre registro Drift e domínio / companions
 
 ### 3. Transaction Support
-Complex operations use transactions:
-```dart
-Future<int> insertInvoiceWithItems(Invoice invoice) async {
-  return await transaction(() async {
-    final invoiceId = await insertInvoice(invoice);
-    for (final item in invoice.data.items) {
-      await invoiceItemDao.insertInvoiceItem(item, invoiceId: invoiceId);
-    }
-    return invoiceId;
-  });
-}
-```
+Operações compostas usam `transaction` no **repositório** (ex.: `SalesRepository`), chamando métodos atômicos dos DAOs (`insertInvoice`, itens, atualização de estoque).
 
 ### 4. Denormalization for Performance
 Foreign key data is denormalized:

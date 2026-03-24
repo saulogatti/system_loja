@@ -7,23 +7,18 @@ part of 'system_error_model.dart';
 // **************************************************************************
 
 SystemErrorModel _$SystemErrorModelFromJson(Map<String, dynamic> json) =>
-    $checkedCreate('SystemErrorModel', json, ($checkedConvert) {
-      final val = SystemErrorModel(
-        message: $checkedConvert('message', (v) => v as String),
-        code: $checkedConvert('code', (v) => (v as num).toInt()),
-        stackTrace: $checkedConvert(
-          'stackTrace',
-          (v) => const StackTraceConverter().fromJson(v as String),
-        ),
-      );
-      $checkedConvert('cacheKey', (v) => val.cacheKey = v as String);
-      return val;
-    });
+    SystemErrorModel(
+      message: json['message'] as String,
+      code: (json['code'] as num).toInt(),
+      stackTrace: const StackTraceJsonConverter().fromJson(
+        json['stackTrace'] as String,
+      ),
+    )..cacheKey = json['cacheKey'] as String;
 
 Map<String, dynamic> _$SystemErrorModelToJson(SystemErrorModel instance) =>
     <String, dynamic>{
       'message': instance.message,
       'code': instance.code,
-      'stackTrace': const StackTraceConverter().toJson(instance.stackTrace),
+      'stackTrace': const StackTraceJsonConverter().toJson(instance.stackTrace),
       'cacheKey': instance.cacheKey,
     };

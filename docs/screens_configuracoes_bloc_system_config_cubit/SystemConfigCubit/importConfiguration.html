@@ -67,8 +67,6 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; importConfiguration() async {
-  final baseConfig = _currentConfiguration;
-
   try {
     const acceptedTypes = &lt;XTypeGroup&gt;[
       XTypeGroup(label: &#39;json&#39;, extensions: [&#39;json&#39;]),
@@ -80,39 +78,23 @@
     }
 
     final content = await file.readAsString();
-    final Map&lt;String, dynamic&gt; dataMap = jsonDecode(content) as Map&lt;String, dynamic&gt;;
-    final importedData = SystemConfiguration.fromJson(dataMap);
-
-    final validationError = _validateConfigurationData(
-      paymentMethods: importedData.priceConfiguration.types,
-      measurementUnits: importedData.priceConfiguration.measurementUnits,
-      reportConfiguration: importedData.priceConfiguration.reportConfiguration,
+    final result = await _systemRepository.importConfigurationFromJson(
+      content,
     );
 
-    if (validationError != null) {
-      emit(SystemConfigState.error(validationError));
-      return;
-    }
-
-    final normalizedData = SystemConfiguration(
-      id: baseConfig?.id ?? importedData.id,
-      registrationDate: baseConfig?.registrationDate ?? importedData.registrationDate,
-      lastUpdatedDate: DateTime.now(),
-      productCategories: baseConfig?.productCategories ?? importedData.productCategories,
-      priceConfiguration: PriceConfiguration(
-        types: importedData.priceConfiguration.types.toSet().toList(),
-        measurementUnits: _normalizeUnits(importedData.priceConfiguration.measurementUnits),
-        reportConfiguration: importedData.priceConfiguration.reportConfiguration,
-      ),
-    );
-
-    await _systemRepository.saveSystemConfiguration(normalizedData);
-    emit(
-      SystemConfigState.loaded(
-        normalizedData,
-        feedbackMessage: &#39;Configuração importada com sucesso.&#39;,
-        feedbackType: SystemConfigFeedbackType.imported,
-      ),
+    result.when(
+      onSuccess: (normalizedData) {
+        emit(
+          SystemConfigState.loaded(
+            normalizedData,
+            feedbackMessage: &#39;Configuração importada com sucesso.&#39;,
+            feedbackType: SystemConfigFeedbackType.imported,
+          ),
+        );
+      },
+      onError: (message) {
+        emit(SystemConfigState.error(message));
+      },
     );
   } catch (e) {
     emit(SystemConfigState.error(&#39;Erro ao importar configuração: $e&#39;));

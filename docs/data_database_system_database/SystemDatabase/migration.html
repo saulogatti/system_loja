@@ -64,7 +64,7 @@
         <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-      <span class="returntype"><a href="https://pub.dev/documentation/drift/2.32.0/drift/MigrationStrategy-class.html">MigrationStrategy</a></span>
+      <span class="returntype"><a href="https://pub.dev/documentation/drift/2.32.1/drift/MigrationStrategy-class.html">MigrationStrategy</a></span>
       get
       <span class="name ">migration</span>
       <div class="features"><span class="feature">override</span></div>
@@ -85,12 +85,7 @@ the new tables or change the columns.</p>
   <pre class="language-dart"><code class="language-dart">@override
 MigrationStrategy get migration =&gt; MigrationStrategy(
   onCreate: (Migrator m) =&gt; m.createAll(),
-  onUpgrade: (Migrator m, int from, int to) async {
-    if (from &lt; 2) {
-      await m.createAll();
-      await _migrateSystemConfiguration();
-    }
-  },
+  onUpgrade: (Migrator m, int from, int to) async {},
 );</code></pre>
 </section>
 
