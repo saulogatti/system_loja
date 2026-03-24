@@ -54,98 +54,40 @@ void _clearTables(Database database) {
 
 void _ensureSchema(Database database) {
   database.execute('''
-CREATE TABLE IF NOT EXISTS categories_records (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL UNIQUE,
-  description TEXT,
-  registration_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  last_updated_date TEXT
-);
+CREATE TABLE IF NOT EXISTS "categories_records" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "name" TEXT NOT NULL UNIQUE, "description" TEXT NULL, "registration_date" INTEGER NOT NULL DEFAULT (CAST(strftime('%s', CURRENT_TIMESTAMP) AS INTEGER)), "last_updated_date" INTEGER NULL);
 ''');
 
   database.execute('''
-CREATE TABLE IF NOT EXISTS company_records (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  cnpj TEXT NOT NULL UNIQUE,
-  name TEXT NOT NULL,
-  email TEXT,
-  address TEXT,
-  registration_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  last_updated_date TEXT
-);
+CREATE TABLE IF NOT EXISTS "company_records" ("address" TEXT NULL, "cnpj" TEXT NOT NULL UNIQUE, "name" TEXT NOT NULL, "email" TEXT NULL, "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "last_updated_date" INTEGER NULL, "registration_date" INTEGER NOT NULL DEFAULT (CAST(strftime('%s', CURRENT_TIMESTAMP) AS INTEGER)));
 ''');
 
   database.execute('''
-CREATE TABLE IF NOT EXISTS customer_records (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  cpf TEXT NOT NULL UNIQUE,
-  name TEXT NOT NULL,
-  email TEXT,
-  phone TEXT,
-  address TEXT,
-  registration_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  last_updated_date TEXT
-);
+CREATE TABLE IF NOT EXISTS "customer_records" ("address" TEXT NULL, "cpf" TEXT NOT NULL UNIQUE, "email" TEXT NULL, "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "last_updated_date" INTEGER NOT NULL DEFAULT (CAST(strftime('%s', CURRENT_TIMESTAMP) AS INTEGER)), "name" TEXT NOT NULL, "phone" TEXT NULL, "registration_date" INTEGER NOT NULL DEFAULT (CAST(strftime('%s', CURRENT_TIMESTAMP) AS INTEGER)));
 ''');
 
   database.execute('''
-CREATE TABLE IF NOT EXISTS products_records (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  code TEXT NOT NULL UNIQUE,
-  category_id INTEGER,
-  description TEXT NOT NULL,
-  name TEXT NOT NULL,
-  price REAL NOT NULL,
-  stock_quantity INTEGER NOT NULL,
-  registration_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  last_updated_date TEXT,
-  FOREIGN KEY (category_id) REFERENCES categories_records(id)
-);
+CREATE TABLE IF NOT EXISTS "products_records" ("code" TEXT NOT NULL UNIQUE, "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "category_id" INTEGER NULL REFERENCES categories_records (id), "description" TEXT NOT NULL, "last_updated_date" INTEGER NULL, "name" TEXT NOT NULL, "price" REAL NOT NULL, "registration_date" INTEGER NOT NULL DEFAULT (CAST(strftime('%s', CURRENT_TIMESTAMP) AS INTEGER)), "stock_quantity" INTEGER NOT NULL);
 ''');
 
   database.execute('''
-CREATE TABLE IF NOT EXISTS invoices_records (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  company_cnpj TEXT,
-  company_id INTEGER,
-  company_name TEXT,
-  customer_cpf TEXT,
-  customer_id INTEGER,
-  customer_name TEXT,
-  invoice_number TEXT NOT NULL UNIQUE,
-  issue_date TEXT NOT NULL,
-  last_updated_date TEXT,
-  payment_method TEXT NOT NULL,
-  registration_date TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  total_value REAL NOT NULL,
-  type TEXT NOT NULL DEFAULT 'exit'
-);
+CREATE TABLE IF NOT EXISTS "invoices_records" ("company_cnpj" TEXT NULL, "company_id" INTEGER NULL, "company_name" TEXT NULL, "customer_cpf" TEXT NULL, "customer_id" INTEGER NULL, "customer_name" TEXT NULL, "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "invoice_number" TEXT NOT NULL UNIQUE, "issue_date" INTEGER NOT NULL, "last_updated_date" INTEGER NULL, "payment_method" TEXT NOT NULL, "registration_date" INTEGER NOT NULL DEFAULT (CAST(strftime('%s', CURRENT_TIMESTAMP) AS INTEGER)), "total_value" REAL NOT NULL, "type" TEXT NOT NULL DEFAULT 'exit');
+  ''');
+
+  database.execute('''
+CREATE TABLE IF NOT EXISTS "invoice_items_records" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "invoice_id" INTEGER NOT NULL, "product_code" TEXT NOT NULL, "product_id" INTEGER NOT NULL, "product_name" TEXT NOT NULL, "quantity" INTEGER NOT NULL, "total_value" REAL NOT NULL, "unit_price" REAL NOT NULL);
 ''');
 
   database.execute('''
-CREATE TABLE IF NOT EXISTS invoice_items_records (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  nota_id INTEGER NOT NULL,
-  produto_id INTEGER NOT NULL,
-  produto_nome TEXT NOT NULL,
-  produto_codigo TEXT NOT NULL,
-  quantidade INTEGER NOT NULL,
-  preco_unitario REAL NOT NULL,
-  valor_total REAL NOT NULL,
-  FOREIGN KEY (nota_id) REFERENCES invoices_records(id)
-);
+CREATE TABLE IF NOT EXISTS "address_records" ("city" TEXT NOT NULL, "last_updated_date" INTEGER NULL, "neighborhood" TEXT NOT NULL, "state" TEXT NOT NULL, "street" TEXT NOT NULL, "zip_code" TEXT NOT NULL);
 ''');
+}
 
-  database.execute('''
-CREATE TABLE IF NOT EXISTS address_records (
-  city TEXT NOT NULL,
-  last_updated_date TEXT,
-  neighborhood TEXT NOT NULL,
-  state TEXT NOT NULL,
-  street TEXT NOT NULL,
-  zip_code TEXT NOT NULL
-);
-''');
+Set<String> _getTableColumns(Database database, String tableName) {
+  final result = database.select('PRAGMA table_info($tableName);');
+  return result
+      .map((row) => (row['name'] as String?)?.toLowerCase() ?? '')
+      .where((name) => name.isNotEmpty)
+      .toSet();
 }
 
 String _numericCode({required int length, required int value}) {
@@ -161,10 +103,30 @@ List<SeedProduct> _pickProducts({
   return copy.take(quantity).toList();
 }
 
+PreparedStatement _prepareInvoiceItemInsert({
+  required Database database,
+  required Set<String> availableColumns,
+}) {
+  final invoiceIdColumn = availableColumns.contains('invoice_id') ? 'invoice_id' : 'nota_id';
+  final productIdColumn = availableColumns.contains('product_id') ? 'product_id' : 'produto_id';
+  final productNameColumn = availableColumns.contains('product_name') ? 'product_name' : 'produto_nome';
+  final productCodeColumn = availableColumns.contains('product_code') ? 'product_code' : 'produto_codigo';
+  final quantityColumn = availableColumns.contains('quantity') ? 'quantity' : 'quantidade';
+  final unitPriceColumn = availableColumns.contains('unit_price') ? 'unit_price' : 'preco_unitario';
+  final totalValueColumn = availableColumns.contains('total_value') ? 'total_value' : 'valor_total';
+
+  return database.prepare('''
+INSERT INTO invoice_items_records (
+  $invoiceIdColumn, $productIdColumn, $productNameColumn, $productCodeColumn,
+  $quantityColumn, $unitPriceColumn, $totalValueColumn
+) VALUES (?, ?, ?, ?, ?, ?, ?);
+''');
+}
+
 SeedSummary _seedDatabase(Database database, SeedOptions options) {
   final random = Random(options.randomSeed);
   final now = DateTime.now();
-  final nowIso = now.toIso8601String();
+  final nowEpochSeconds = _toEpochSeconds(now);
 
   final categoryIds = <int>[];
   final companyIds = <int>[];
@@ -203,19 +165,18 @@ INSERT INTO invoices_records (
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 ''');
 
-    final insertInvoiceItem = database.prepare('''
-INSERT INTO invoice_items_records (
-  nota_id, produto_id, produto_nome, produto_codigo,
-  quantidade, preco_unitario, valor_total
-) VALUES (?, ?, ?, ?, ?, ?, ?);
-''');
+    final invoiceItemsColumns = _getTableColumns(database, 'invoice_items_records');
+    final insertInvoiceItem = _prepareInvoiceItemInsert(
+      database: database,
+      availableColumns: invoiceItemsColumns,
+    );
 
     for (var i = 0; i < options.categoryCount; i++) {
       insertCategory.execute([
         'Categoria ${i + 1}',
         'Categoria de teste ${i + 1}',
-        now.subtract(Duration(days: i)).toIso8601String(),
-        nowIso,
+        _toEpochSeconds(now.subtract(Duration(days: i))),
+        nowEpochSeconds,
       ]);
       final id = database.lastInsertRowId;
       categoryIds.add(id);
@@ -230,8 +191,8 @@ INSERT INTO invoice_items_records (
         'Empresa Teste ${i + 1}',
         'empresa${i + 1}@teste.local',
         addressJson,
-        now.subtract(Duration(days: 30 + i)).toIso8601String(),
-        nowIso,
+        _toEpochSeconds(now.subtract(Duration(days: 30 + i))),
+        nowEpochSeconds,
       ]);
       final id = database.lastInsertRowId;
       companyIds.add(id);
@@ -247,8 +208,8 @@ INSERT INTO invoice_items_records (
         'cliente${i + 1}@teste.local',
         '119${_numericCode(length: 8, value: i + 1)}',
         addressJson,
-        now.subtract(Duration(days: 20 + i)).toIso8601String(),
-        nowIso,
+        _toEpochSeconds(now.subtract(Duration(days: 20 + i))),
+        nowEpochSeconds,
       ]);
       final id = database.lastInsertRowId;
       customerIds.add(id);
@@ -266,8 +227,8 @@ INSERT INTO invoice_items_records (
         name,
         price,
         100 + (i * 3),
-        now.subtract(Duration(days: i)).toIso8601String(),
-        nowIso,
+        _toEpochSeconds(now.subtract(Duration(days: i))),
+        nowEpochSeconds,
       ]);
       final id = database.lastInsertRowId;
       products.add(SeedProduct(id: id, code: code, name: name, price: price));
@@ -309,10 +270,10 @@ INSERT INTO invoice_items_records (
         customerId,
         customerName,
         'NF-${now.year}-${_numericCode(length: 6, value: i + 1)}',
-        issueDate.toIso8601String(),
-        nowIso,
+        _toEpochSeconds(issueDate),
+        nowEpochSeconds,
         isExitInvoice ? 'PIX' : 'Boleto',
-        nowIso,
+        nowEpochSeconds,
         totalValue,
         isExitInvoice ? 'exit' : 'entry',
       ]);
@@ -352,6 +313,10 @@ INSERT INTO invoice_items_records (
     invoices: options.invoiceCount,
     invoiceItems: invoiceItemsCount,
   );
+}
+
+int _toEpochSeconds(DateTime value) {
+  return value.millisecondsSinceEpoch ~/ 1000;
 }
 
 class SeedInvoiceItem {
