@@ -28,7 +28,7 @@ Future<void> main(List<String> args) async {
     stdout.writeln('Notas inseridas: ${summary.invoices}');
     stdout.writeln('Itens de nota inseridos: ${summary.invoiceItems}');
   } finally {
-    database.dispose();
+    database.close();
   }
 }
 
@@ -293,12 +293,12 @@ INSERT INTO invoices_records (
       }
     }
 
-    insertCategory.dispose();
-    insertCompany.dispose();
-    insertCustomer.dispose();
-    insertProduct.dispose();
-    insertInvoice.dispose();
-    insertInvoiceItem.dispose();
+    insertCategory.close();
+    insertCompany.close();
+    insertCustomer.close();
+    insertProduct.close();
+    insertInvoice.close();
+    insertInvoiceItem.close();
     database.execute('COMMIT;');
   } catch (_) {
     database.execute('ROLLBACK;');
