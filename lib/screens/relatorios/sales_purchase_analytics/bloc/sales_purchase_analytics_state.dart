@@ -1,6 +1,9 @@
-import 'package:meta/meta.dart';
+import 'package:system_loja/core/models/analytics_point.dart';
 
 import 'sales_purchase_analytics_event.dart';
+
+export 'package:system_loja/core/models/analytics_point.dart'
+    show AnalyticsPoint;
 
 class SalesPurchaseAnalyticsEmpty extends SalesPurchaseAnalyticsState {
   final SalesPurchaseGrouping grouping;
@@ -20,7 +23,7 @@ class SalesPurchaseAnalyticsInitial extends SalesPurchaseAnalyticsState {
 
 class SalesPurchaseAnalyticsLoaded extends SalesPurchaseAnalyticsState {
   final SalesPurchaseGrouping grouping;
-  final List<SalesPurchaseAnalyticsPoint> points;
+  final List<AnalyticsPoint> points;
 
   const SalesPurchaseAnalyticsLoaded({required this.grouping, required this.points});
 
@@ -48,22 +51,6 @@ class SalesPurchaseAnalyticsLoading extends SalesPurchaseAnalyticsState {
   const SalesPurchaseAnalyticsLoading();
 }
 
-@immutable
-class SalesPurchaseAnalyticsPoint {
-  final String label;
-  final double salesValue;
-  final double purchaseValue;
-  final int productsCount;
-
-  const SalesPurchaseAnalyticsPoint({
-    required this.label,
-    required this.salesValue,
-    required this.purchaseValue,
-    required this.productsCount,
-  });
-}
-
-@immutable
 sealed class SalesPurchaseAnalyticsState {
   const SalesPurchaseAnalyticsState();
 }

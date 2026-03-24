@@ -1,12 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/aplication/app_injection.dart';
+import 'package:system_loja/core/interface/i_analytics_repository.dart';
 
 import 'bloc/sales_purchase_analytics_bloc.dart';
 import 'bloc/sales_purchase_analytics_event.dart';
 import 'bloc/sales_purchase_analytics_state.dart';
 
-/// Tela de analytics com comparativo de vendas e compras usando dados mockados.
+/// Tela de analytics com comparativo de vendas e compras.
 @RoutePage()
 class SalesPurchaseAnalyticsScreen extends StatelessWidget {
   const SalesPurchaseAnalyticsScreen({super.key});
@@ -14,7 +16,9 @@ class SalesPurchaseAnalyticsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SalesPurchaseAnalyticsBloc()..add(const LoadSalesPurchaseAnalytics()),
+      create: (_) => SalesPurchaseAnalyticsBloc(
+        analyticsRepository: appInjection.get<IAnalyticsRepository>(),
+      )..add(const LoadSalesPurchaseAnalytics()),
       child: const _SalesPurchaseAnalyticsView(),
     );
   }
@@ -70,7 +74,7 @@ class _ChartLegend extends StatelessWidget {
 }
 
 class _ComparisonBarTile extends StatelessWidget {
-  final SalesPurchaseAnalyticsPoint point;
+  final AnalyticsPoint point;
   final double maxValue;
 
   const _ComparisonBarTile({required this.point, required this.maxValue});
@@ -125,7 +129,7 @@ class _EmptyState extends StatelessWidget {
           children: [
             Icon(Icons.bar_chart, color: Theme.of(context).colorScheme.outline, size: 52),
             const SizedBox(height: 12),
-            Text('Sem dados mockados $groupingText.'),
+            Text('Nenhum dado encontrado $groupingText.'),
             const SizedBox(height: 16),
             OutlinedButton.icon(
               onPressed: () =>
