@@ -26,3 +26,4 @@ data/logs_atividade.json
 pubspec_build.yaml
 
 .vscode/
+data/
