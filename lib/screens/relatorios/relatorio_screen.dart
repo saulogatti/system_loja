@@ -8,7 +8,6 @@ import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_cubit.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_state.dart';
-import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
 
@@ -24,24 +23,6 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
       length: 2,
       child: Column(
         children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Text('Relatórios', style: Theme.of(context).textTheme.headlineSmall),
-                  const SizedBox(height: 12),
-                  FilledButton.icon(
-                    onPressed: () {
-                      context.router.push(const SalesPurchaseAnalyticsRoute());
-                    },
-                    icon: const Icon(Icons.bar_chart),
-                    label: const Text('Abrir gráficos de vendas e compras'),
-                  ),
-                ],
-              ),
-            ),
-          ),
           TabBar(
             tabs: const [
               Tab(icon: Icon(Icons.receipt_long), text: 'Notas Fiscais'),
@@ -131,7 +112,13 @@ class _EstoqueTab extends StatelessWidget {
 
     return RefreshIndicator(
       onRefresh: () => context.read<RelatorioCubit>().carregarRelatorios(),
-      child: ListView(
+      child: GridView(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 3,
+          mainAxisSpacing: 6,
+          crossAxisSpacing: 12,
+        ),
         padding: const EdgeInsets.all(16),
         children: [
           _ResumoEstoqueRow(total: products.length, semEstoque: semEstoque, estoqueBaixo: estoquesBaixo),

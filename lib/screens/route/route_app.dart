@@ -9,7 +9,10 @@ class RouteApp extends RootStackRouter {
       page: HostRoute.page,
       initial: true,
       children: [
-        AutoRoute(page: HomeRoute.page, title: (context, data) => 'Home'),
+        AutoRoute(
+          page: SalesPurchaseAnalyticsRoute.page,
+          title: (context, data) => 'Gráficos de Vendas e Compras',
+        ),
         AutoRoute(
           page: CadastroGroupRoute.page,
           title: (context, data) => 'Cadastro',
@@ -45,9 +48,6 @@ class RouteApp extends RootStackRouter {
     AutoRoute(page: SystemConfigRoute.page, title: (context, data) => 'System Config'),
     AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuários', maintainState: false),
     AutoRoute(page: IssuerConfigRoute.page, title: (context, data) => 'Empresa Emitente'),
-    AutoRoute(
-      page: SalesPurchaseAnalyticsRoute.page,
-      title: (context, data) => 'Gráficos de Vendas e Compras',
-    ),
+    AutoRoute(page: HomeRoute.page, title: (context, data) => 'Home'),
   ];
 }
