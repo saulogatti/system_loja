@@ -5,61 +5,25 @@ import 'package:system_loja/data/models/invoice_item_data.dart';
 
 part 'invoice_export_data.g.dart';
 
-/// JSON para importação/exportação de [Invoice].
-@JsonSerializable(explicitToJson: true)
-class InvoiceExportData {
-  final int id;
-  final DateTime registrationDate;
-  final DateTime lastUpdatedDate;
-  final InvoiceDataExport data;
-
-  const InvoiceExportData({
-    required this.id,
-    required this.registrationDate,
-    required this.lastUpdatedDate,
-    required this.data,
-  });
-
-  factory InvoiceExportData.fromJson(Map<String, dynamic> json) =>
-      _$InvoiceExportDataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$InvoiceExportDataToJson(this);
-
-  factory InvoiceExportData.fromDomain(Invoice value) => InvoiceExportData(
-    id: value.id,
-    registrationDate: value.registrationDate,
-    lastUpdatedDate: value.lastUpdatedDate,
-    data: InvoiceDataExport.fromDomain(value.data),
-  );
-
-  Invoice toDomain() => Invoice(
-    id: id,
-    registrationDate: registrationDate,
-    lastUpdatedDate: lastUpdatedDate,
-    data: data.toDomain(),
-  );
-}
-
 @JsonSerializable(explicitToJson: true)
 class InvoiceDataExport {
-  @JsonKey(name: 'numero_nota')
   final String invoiceNumber;
-  @JsonKey(name: 'cliente_id')
+
   final int? customerId;
-  @JsonKey(name: 'cliente_nome')
+
   final String? customerName;
-  @JsonKey(name: 'cliente_cpf')
+
   final String? customerCpf;
-  @JsonKey(name: 'empresa_id')
+
   final int? companyId;
-  @JsonKey(name: 'empresa_nome')
+
   final String? companyName;
-  @JsonKey(name: 'empresa_cnpj')
+
   final String? companyCnpj;
   final List<InvoiceItemData> items;
-  @JsonKey(name: 'forma_pagamento')
+
   final String paymentMethod;
-  @JsonKey(name: 'data_emissao')
+
   final DateTime issueDate;
 
   @JsonKey(fromJson: _invoiceTypeFromJson, toJson: _invoiceTypeToJson)
@@ -79,11 +43,6 @@ class InvoiceDataExport {
     this.type = InvoiceType.exit,
   });
 
-  factory InvoiceDataExport.fromJson(Map<String, dynamic> json) =>
-      _$InvoiceDataExportFromJson(json);
-
-  Map<String, dynamic> toJson() => _$InvoiceDataExportToJson(this);
-
   factory InvoiceDataExport.fromDomain(InvoiceData value) => InvoiceDataExport(
     invoiceNumber: value.invoiceNumber,
     customerId: value.customerId,
@@ -97,6 +56,8 @@ class InvoiceDataExport {
     issueDate: value.issueDate,
     type: value.type,
   );
+
+  factory InvoiceDataExport.fromJson(Map<String, dynamic> json) => _$InvoiceDataExportFromJson(json);
 
   InvoiceData toDomain() => InvoiceData(
     invoiceNumber: invoiceNumber,
@@ -112,8 +73,43 @@ class InvoiceDataExport {
     type: type,
   );
 
-  static InvoiceType _invoiceTypeFromJson(Object? json) =>
-      InvoiceType.values.byName(json as String);
+  Map<String, dynamic> toJson() => _$InvoiceDataExportToJson(this);
+
+  static InvoiceType _invoiceTypeFromJson(Object? json) => InvoiceType.values.byName(json as String);
 
   static String _invoiceTypeToJson(InvoiceType value) => value.name;
+}
+
+/// JSON para importação/exportação de [Invoice].
+@JsonSerializable(explicitToJson: true)
+class InvoiceExportData {
+  final int id;
+  final DateTime registrationDate;
+  final DateTime lastUpdatedDate;
+  final InvoiceDataExport data;
+
+  const InvoiceExportData({
+    required this.id,
+    required this.registrationDate,
+    required this.lastUpdatedDate,
+    required this.data,
+  });
+
+  factory InvoiceExportData.fromDomain(Invoice value) => InvoiceExportData(
+    id: value.id,
+    registrationDate: value.registrationDate,
+    lastUpdatedDate: value.lastUpdatedDate,
+    data: InvoiceDataExport.fromDomain(value.data),
+  );
+
+  factory InvoiceExportData.fromJson(Map<String, dynamic> json) => _$InvoiceExportDataFromJson(json);
+
+  Invoice toDomain() => Invoice(
+    id: id,
+    registrationDate: registrationDate,
+    lastUpdatedDate: lastUpdatedDate,
+    data: data.toDomain(),
+  );
+
+  Map<String, dynamic> toJson() => _$InvoiceExportDataToJson(this);
 }

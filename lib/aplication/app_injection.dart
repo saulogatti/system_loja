@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:system_loja/core/interface/i_analytics_repository.dart';
 import 'package:system_loja/core/interface/i_category_repository.dart';
 import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
@@ -16,6 +17,7 @@ import 'package:system_loja/data/cache/cache_manager.dart';
 import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/domain/code_generator_service.dart';
+import 'package:system_loja/domain/repository/analytics_repository.dart';
 import 'package:system_loja/domain/repository/category_repository.dart';
 import 'package:system_loja/domain/repository/company_repository.dart';
 import 'package:system_loja/domain/repository/configuration_repository.dart';
@@ -99,6 +101,11 @@ void setupAppInjection() {
   appInjection.registerSingleton<ICategoryRepository>(
     CategoryRepository(
       categoryDao: appInjection.get<AppDatabase>().categoryDao,
+    ),
+  );
+  appInjection.registerSingleton<IAnalyticsRepository>(
+    AnalyticsRepository(
+      invoiceDao: appInjection.get<AppDatabase>().invoiceDao,
     ),
   );
   unawaited(_carregarConfiguracaoInicial());
