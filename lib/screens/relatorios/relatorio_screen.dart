@@ -110,34 +110,55 @@ class _EstoqueTab extends StatelessWidget {
     final estoquesBaixo = products.where((p) => p.stockQuantity > 0 && p.stockQuantity <= 5).length;
     final sorted = List<Product>.from(products)..sort((a, b) => a.stockQuantity.compareTo(b.stockQuantity));
 
-    return RefreshIndicator(
-      onRefresh: () => context.read<RelatorioCubit>().carregarRelatorios(),
-      child: GridView(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 3,
-          mainAxisSpacing: 6,
-          crossAxisSpacing: 12,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: _ResumoEstoqueRow(
+            total: products.length,
+            semEstoque: semEstoque,
+            estoqueBaixo: estoquesBaixo,
+          ),
         ),
-        padding: const EdgeInsets.all(16),
-        children: [
-          _ResumoEstoqueRow(total: products.length, semEstoque: semEstoque, estoqueBaixo: estoquesBaixo),
-          const SizedBox(height: 24),
-          _SectionHeader(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: _SectionHeader(
             title: 'Produtos (${products.length})',
             icon: Icons.inventory_2,
             color: Theme.of(context).colorScheme.primary,
           ),
-          const SizedBox(height: 8),
-          if (sorted.isEmpty)
-            _EmptyMessage('Nenhum produto cadastrado')
-          else
-            ...sorted.map((p) => _ProdutoTile(product: p)),
-        ],
-      ),
+        ),
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: () => context.read<RelatorioCubit>().carregarRelatorios(),
+            child: sorted.isEmpty
+                ? ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                    children: const [_EmptyMessage('Nenhum produto cadastrado')],
+                  )
+                : GridView.builder(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 420,
+                      childAspectRatio: 2.8,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 12,
+                    ),
+                    itemCount: sorted.length,
+                    itemBuilder: (context, index) {
+                      return _ProdutoTile(product: sorted[index]);
+                    },
+                  ),
+          ),
+        ),
+      ],
     );
   }
 }
+
+enum _InvoiceFilterType { entrada, saida }
 
 /// Item de lista para uma nota fiscal.
 class _InvoiceTile extends StatelessWidget {
@@ -149,7 +170,7 @@ class _InvoiceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = invoice.data;
-    final String destino = data.personDisplayName;
+    final destino = data.personDisplayName;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
@@ -181,52 +202,118 @@ class _InvoiceTile extends StatelessWidget {
 }
 
 /// Aba de relatório de notas fiscais (entrada e saída).
-class _NotasFiscaisTab extends StatelessWidget {
+class _NotasFiscaisTab extends StatefulWidget {
   final Map<int, Invoice> entryInvoices;
   final Map<int, Invoice> exitInvoices;
 
   const _NotasFiscaisTab({required this.entryInvoices, required this.exitInvoices});
 
   @override
-  Widget build(BuildContext context) {
-    final totalEntrada = entryInvoices.values.fold<double>(0.0, (sum, inv) => sum + inv.data.totalValue);
-    final totalSaida = exitInvoices.values.fold<double>(0.0, (sum, inv) => sum + inv.data.totalValue);
+  State<_NotasFiscaisTab> createState() => _NotasFiscaisTabState();
+}
 
-    return RefreshIndicator(
-      onRefresh: () => context.read<RelatorioCubit>().carregarRelatorios(),
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _ResumoNotasRow(
+class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
+  _InvoiceFilterType _selectedFilter = _InvoiceFilterType.entrada;
+
+  @override
+  Widget build(BuildContext context) {
+    final totalEntrada = widget.entryInvoices.values.fold<double>(0.0, (sum, inv) {
+      return sum + inv.data.totalValue;
+    });
+    final totalSaida = widget.exitInvoices.values.fold<double>(0.0, (sum, inv) {
+      return sum + inv.data.totalValue;
+    });
+
+    final exibindoEntradas = _selectedFilter == _InvoiceFilterType.entrada;
+    final invoices = (exibindoEntradas ? widget.entryInvoices.values : widget.exitInvoices.values).toList();
+
+    final sectionTitle = exibindoEntradas
+        ? 'Notas de Entrada (${widget.entryInvoices.length})'
+        : 'Notas de Saída (${widget.exitInvoices.length})';
+    final sectionColor = exibindoEntradas ? Colors.green : Colors.orange;
+    final emptyMessage = exibindoEntradas
+        ? 'Nenhuma nota de entrada cadastrada'
+        : 'Nenhuma nota de saída cadastrada';
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: _ResumoNotasRow(
             totalEntrada: totalEntrada,
-            countEntrada: entryInvoices.length,
+            countEntrada: widget.entryInvoices.length,
             totalSaida: totalSaida,
-            countSaida: exitInvoices.length,
+            countSaida: widget.exitInvoices.length,
           ),
-          const SizedBox(height: 24),
-          _SectionHeader(
-            title: 'Notas de Entrada (${entryInvoices.length})',
-            icon: Icons.arrow_downward,
-            color: Colors.green,
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: Row(
+            children: [
+              Expanded(
+                child: _SectionHeader(
+                  title: 'Notas de Entrada (${widget.entryInvoices.length})',
+                  icon: Icons.arrow_downward,
+                  color: Colors.green,
+                  isSelected: exibindoEntradas,
+                  onTap: () {
+                    setState(() {
+                      _selectedFilter = _InvoiceFilterType.entrada;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _SectionHeader(
+                  title: 'Notas de Saída (${widget.exitInvoices.length})',
+                  icon: Icons.arrow_upward,
+                  color: Colors.orange,
+                  isSelected: !exibindoEntradas,
+                  onTap: () {
+                    setState(() {
+                      _selectedFilter = _InvoiceFilterType.saida;
+                    });
+                  },
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          if (entryInvoices.isEmpty)
-            _EmptyMessage('Nenhuma nota de entrada cadastrada')
-          else
-            ...entryInvoices.values.map((inv) => _InvoiceTile(invoice: inv, color: Colors.green)),
-          const SizedBox(height: 24),
-          _SectionHeader(
-            title: 'Notas de Saída (${exitInvoices.length})',
-            icon: Icons.arrow_upward,
-            color: Colors.orange,
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+          child: _SectionHeader(
+            title: sectionTitle,
+            icon: exibindoEntradas ? Icons.arrow_downward : Icons.arrow_upward,
+            color: sectionColor,
           ),
-          const SizedBox(height: 8),
-          if (exitInvoices.isEmpty)
-            _EmptyMessage('Nenhuma nota de saída cadastrada')
-          else
-            ...exitInvoices.values.map((inv) => _InvoiceTile(invoice: inv, color: Colors.orange)),
-        ],
-      ),
+        ),
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: () => context.read<RelatorioCubit>().carregarRelatorios(),
+            child: invoices.isEmpty
+                ? ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                    children: [_EmptyMessage(emptyMessage)],
+                  )
+                : GridView.builder(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 520,
+                      childAspectRatio: 2.3,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 12,
+                    ),
+                    itemCount: invoices.length,
+                    itemBuilder: (context, index) {
+                      return _InvoiceTile(invoice: invoices[index], color: sectionColor);
+                    },
+                  ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -462,20 +549,52 @@ class _SectionHeader extends StatelessWidget {
   final String title;
   final IconData icon;
   final Color color;
+  final bool isSelected;
+  final VoidCallback? onTap;
 
-  const _SectionHeader({required this.title, required this.icon, required this.color});
+  const _SectionHeader({
+    required this.title,
+    required this.icon,
+    required this.color,
+    this.isSelected = false,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final textColor = isSelected ? color : Theme.of(context).colorScheme.onSurfaceVariant;
+
+    final content = Row(
       children: [
-        Icon(icon, color: color, size: 20),
+        Icon(icon, color: textColor, size: 20),
         const SizedBox(width: 8),
-        Text(
-          title,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: color),
+        Expanded(
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: textColor),
+          ),
         ),
       ],
+    );
+
+    if (onTap == null) {
+      return content;
+    }
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Ink(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? color.withValues(alpha: 0.55) : Theme.of(context).colorScheme.outlineVariant,
+          ),
+          color: isSelected ? color.withValues(alpha: 0.1) : Colors.transparent,
+        ),
+        child: content,
+      ),
     );
   }
 }
