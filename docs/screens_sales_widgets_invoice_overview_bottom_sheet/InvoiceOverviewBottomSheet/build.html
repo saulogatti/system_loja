@@ -144,8 +144,7 @@ Widget build(BuildContext context) {
                   child: Icon(
                     Icons.receipt_long,
                     size: 28,
-                    color:
-                        Theme.of(context).colorScheme.onSecondaryContainer,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -157,17 +156,12 @@ Widget build(BuildContext context) {
                         &#39;NF ${data.invoiceNumber}&#39;,
                         style: Theme.of(
                           context,
-                        ).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       Text(
                         &#39;ID: ${invoice.id}&#39;,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodySmall?.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -181,14 +175,14 @@ Widget build(BuildContext context) {
                 controller: scrollController,
                 children: [
                   _InfoRow(
-                    icon: Icons.person_outline,
-                    label: &#39;Cliente&#39;,
-                    value: data.customerName ?? &#39;&#39;,
+                    icon: data.customerId != null ? Icons.person_outline : Icons.business_outlined,
+                    label: data.customerId != null ? &#39;Cliente&#39; : &#39;Empresa&#39;,
+                    value: data.personDisplayName,
                   ),
                   _InfoRow(
                     icon: Icons.badge_outlined,
-                    label: &#39;CPF&#39;,
-                    value: data.customerCpf ?? &#39;&#39;,
+                    label: data.customerId != null ? &#39;CPF&#39; : &#39;CNPJ&#39;,
+                    value: data.personDocument,
                   ),
                   _InfoRow(
                     icon: Icons.payment_outlined,
@@ -208,9 +202,7 @@ Widget build(BuildContext context) {
                   const SizedBox(height: 8),
                   Text(
                     &#39;Itens (${data.items.length})&#39;,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   ...data.items.map(
@@ -230,9 +222,7 @@ Widget build(BuildContext context) {
                             &#39;R\$ ${item.totalValue.toStringAsFixed(2)}&#39;,
                             style: Theme.of(
                               context,
-                            ).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
+                            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -242,10 +232,7 @@ Widget build(BuildContext context) {
               ),
             ),
             const SizedBox(height: 16),
-            TextButton(
-              onPressed: () =&gt; Navigator.of(context).pop(),
-              child: const Text(&#39;Fechar&#39;),
-            ),
+            TextButton(onPressed: () =&gt; Navigator.of(context).pop(), child: const Text(&#39;Fechar&#39;)),
           ],
         ),
       );

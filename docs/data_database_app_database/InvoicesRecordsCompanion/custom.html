@@ -59,6 +59,8 @@
 <li><span class="parameter" id="custom-param-customerId"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span>?</span> <span class="parameter-name">customerId</span>, </span></li>
 <li><span class="parameter" id="custom-param-customerName"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">customerName</span>, </span></li>
 <li><span class="parameter" id="custom-param-companyId"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span>?</span> <span class="parameter-name">companyId</span>, </span></li>
+<li><span class="parameter" id="custom-param-companyName"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">companyName</span>, </span></li>
+<li><span class="parameter" id="custom-param-companyCnpj"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">companyCnpj</span>, </span></li>
 <li><span class="parameter" id="custom-param-id"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span>?</span> <span class="parameter-name">id</span>, </span></li>
 <li><span class="parameter" id="custom-param-invoiceNumber"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">invoiceNumber</span>, </span></li>
 <li><span class="parameter" id="custom-param-issueDate"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>&gt;</span>?</span> <span class="parameter-name">issueDate</span>, </span></li>
@@ -83,6 +85,8 @@
   Expression&lt;int&gt;? customerId,
   Expression&lt;String&gt;? customerName,
   Expression&lt;int&gt;? companyId,
+  Expression&lt;String&gt;? companyName,
+  Expression&lt;String&gt;? companyCnpj,
   Expression&lt;int&gt;? id,
   Expression&lt;String&gt;? invoiceNumber,
   Expression&lt;DateTime&gt;? issueDate,
@@ -97,6 +101,8 @@
     if (customerId != null) &#39;cliente_id&#39;: customerId,
     if (customerName != null) &#39;cliente_nome&#39;: customerName,
     if (companyId != null) &#39;empresa_id&#39;: companyId,
+    if (companyName != null) &#39;empresa_nome&#39;: companyName,
+    if (companyCnpj != null) &#39;empresa_cnpj&#39;: companyCnpj,
     if (id != null) &#39;id&#39;: id,
     if (invoiceNumber != null) &#39;numero_nota&#39;: invoiceNumber,
     if (issueDate != null) &#39;data_emissao&#39;: issueDate,

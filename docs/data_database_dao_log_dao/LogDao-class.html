@@ -53,6 +53,11 @@
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>DAO para gerenciar operações CRUD de logs de atividade no <a href="../data_database_system_database/SystemDatabase-class.html">SystemDatabase</a>.</p>
+<p>Permite inserir, buscar e remover registros de auditoria (<a href="../core_models_activity_log/ActivityLog-class.html">ActivityLog</a>)
+com filtros por data, tipo de ação, entidade e usuário.</p>
+</section>
 
 
     <section>
@@ -442,7 +447,7 @@ query updates, especially when using triggers.
 
 </dt>
 <dd>
-  
+  Remove todos os registros de log da tabela.
   
 
 </dd>
@@ -455,7 +460,7 @@ query updates, especially when using triggers.
 
 </dt>
 <dd>
-  
+  Remove todos os logs com timestamp anterior a <code>dataLimite</code>.
   
 
 </dd>
@@ -496,7 +501,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Retorna todos os logs ordenados do mais recente para o mais antigo.
   
 
 </dd>
@@ -509,7 +514,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Retorna logs cujo timestamp está entre <code>dataInicio</code> e <code>dataFim</code> (inclusivo).
   
 
 </dd>
@@ -522,7 +527,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Retorna logs filtrados pelo tipo de ação <code>tipoAcao</code>.
   
 
 </dd>
@@ -535,7 +540,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Retorna logs filtrados pelo nome da entidade <code>entity</code>.
   
 
 </dd>
@@ -548,7 +553,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Retorna logs filtrados pelo ID do usuário <code>userId</code>.
   
 
 </dd>
@@ -575,7 +580,7 @@ to write data into the <code>table</code> by using <a href="https://pub.dev/docu
 
 </dt>
 <dd>
-  
+  Busca um log de atividade pelo <code>id</code>.
   
 
 </dd>
@@ -627,7 +632,7 @@ to write data into the <code>table</code> by using <a href="https://pub.dev/docu
 
 </dt>
 <dd>
-  
+  Remove um log pelo <code>id</code>.
   
 
 </dd>
@@ -653,7 +658,7 @@ to write data into the <code>table</code> by using <a href="https://pub.dev/docu
 
 </dt>
 <dd>
-  
+  Salva um novo log de atividade.
   
 
 </dd>

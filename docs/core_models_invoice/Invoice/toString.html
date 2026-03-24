@@ -86,7 +86,7 @@ mainly for debugging or logging.</p>
   <pre class="language-dart"><code class="language-dart">@override
 String toString() {
   final buffer = StringBuffer();
-  buffer.writeln(&#39;ID: $id&#39;);
+
   buffer.writeln(&#39;Invoice Number: ${data.invoiceNumber}&#39;);
   buffer.writeln(&#39;Type: ${data.type.name}&#39;);
   if (data.customerId != null) {
@@ -95,7 +95,9 @@ String toString() {
     );
   }
   if (data.companyId != null) {
-    buffer.writeln(&#39;Company ID: ${data.companyId}&#39;);
+    buffer.writeln(
+      &#39;Company: ${data.companyName} (CNPJ: ${data.companyCnpj})&#39;,
+    );
   }
   buffer.writeln(&#39;Total Value: R\$ ${data.totalValue.toStringAsFixed(2)}&#39;);
   buffer.writeln(&#39;Payment Method: ${data.paymentMethod}&#39;);

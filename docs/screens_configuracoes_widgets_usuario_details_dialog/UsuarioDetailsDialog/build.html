@@ -120,7 +120,7 @@ Widget build(BuildContext context) {
           _buildDetailRow(&#39;Email&#39;, usuario.email ?? &#39;N&#47;A&#39;),
           _buildDetailRow(
             &#39;Nível de Permissão&#39;,
-          AuthorizationLevel.values
+            AuthorizationLevel.values
                 .firstWhere((level) =&gt; level.value == usuario.permission)
                 .toDisplayName(),
           ),

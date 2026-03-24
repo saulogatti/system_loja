@@ -40,6 +40,10 @@ abstract interface class ISystemRepository {
     String jsonContent,
   );
 
+  /// Redefine as configurações do sistema para os valores padrão.
+  ///
+  /// Sobrescreve a configuração existente com os valores padrão do sistema
+  /// e persiste o resultado.
   Future<ResultStatus<SystemConfiguration, String>>
   resetToDefaultConfiguration();
 

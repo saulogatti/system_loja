@@ -54,9 +54,10 @@
 
     
 <section class="desc markdown">
-  <p>BLoC para gerenciar o estado das configurações do sistema</p>
-<p>Utiliza o ConfiguracaoManager para persistência de dados
-e gerencia os estados da tela de configurações.</p>
+  <p>BLoC para gerenciar o estado das configurações do sistema.</p>
+<p>Erros vindos do repositório já chegam como <a href="../core_utils_command_result/ResultStatus/ResultStatus.error.html">ResultStatus.error</a>; este BLoC
+apenas mapeia para <a href="../screens_configuracoes_bloc_settings_state/SettingsState-class.html">SettingsState</a>. <code>try/catch</code> fica limitado a fluxo de
+seleção de diretório quando a plataforma lança exceção.</p>
 </section>
 
 

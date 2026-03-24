@@ -12,6 +12,8 @@ import 'package:system_loja/screens/sales/models/person_selection_invoice_mappin
 
 /// Cubit do formulário de nova nota fiscal (delega persistência ao [SalesCubit]).
 class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
+  final SalesCubit _salesCubit;
+
   SalesInvoiceCubit({required SalesCubit salesCubit, required List<PaymentMethodType> paymentMethods})
     : _salesCubit = salesCubit,
       super(
@@ -19,48 +21,6 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
           form: SalesInvoiceFormData(paymentMethod: paymentMethods.isEmpty ? null : paymentMethods.first),
         ),
       );
-
-  final SalesCubit _salesCubit;
-
-  void _emitEditing(SalesInvoiceFormData form) {
-    emit(SalesInvoiceState.editing(form: form));
-  }
-
-  void _emitFeedback(String message) {
-    emit(SalesInvoiceState.feedback(form: state.form, message: message));
-  }
-
-  /// Volta para [SalesInvoiceEditing] após exibir o SnackBar (transição por tipo, sem campo solto).
-  void consumeFeedback() {
-    switch (state) {
-      case SalesInvoiceFeedback(:final form):
-        _emitEditing(form);
-      case SalesInvoiceEditing():
-        break;
-    }
-  }
-
-  void setInvoiceType(InvoiceType type) {
-    _emitEditing(state.form.copyWith(invoiceType: type, person: null));
-  }
-
-  void setPerson(PersonSelection? person) {
-    _emitEditing(state.form.copyWith(person: person));
-  }
-
-  void setPaymentMethod(PaymentMethodType? method) {
-    _emitEditing(state.form.copyWith(paymentMethod: method));
-  }
-
-  void toggleAutoInvoiceNumber() {
-    final form = state.form;
-    final next = !form.enableCodeGeneration;
-    _emitEditing(form.copyWith(enableCodeGeneration: next, invoiceNumber: next ? kStringGenerate : ''));
-  }
-
-  void updateInvoiceNumber(String value) {
-    _emitEditing(state.form.copyWith(invoiceNumber: value));
-  }
 
   /// Adiciona ou soma quantidade; em falta de estoque (saída), emite [SalesInvoiceState.feedback].
   void addOrMergeLine(Product product, int quantityToAdd) {
@@ -86,11 +46,33 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
     _emitEditing(form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder));
   }
 
+  /// Volta para [SalesInvoiceEditing] após exibir o SnackBar (transição por tipo, sem campo solto).
+  void consumeFeedback() {
+    switch (state) {
+      case SalesInvoiceFeedback(:final form):
+        _emitEditing(form);
+      case SalesInvoiceEditing():
+        break;
+    }
+  }
+
   void removeLine(int productId) {
     final form = state.form;
     final nextMap = Map<int, InvoiceLineEntry>.from(form.linesByProductId)..remove(productId);
     final nextOrder = form.orderedProductIds.where((id) => id != productId).toList();
     _emitEditing(form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder));
+  }
+
+  void setInvoiceType(InvoiceType type) {
+    _emitEditing(state.form.copyWith(invoiceType: type, person: null));
+  }
+
+  void setPaymentMethod(PaymentMethodType? method) {
+    _emitEditing(state.form.copyWith(paymentMethod: method));
+  }
+
+  void setPerson(PersonSelection? person) {
+    _emitEditing(state.form.copyWith(person: person));
   }
 
   /// Valida regras de negócio e delega ao [SalesCubit.registerSale].
@@ -130,11 +112,32 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
 
     _emitEditing(form.copyWith(isSubmitting: true));
     try {
+      // TODO: A chamada a `registerSale` não propaga o resultado de sucesso/erro.
+      // É necessário um mecanismo para que este Cubit saiba se a operação falhou
+      // e possa notificar o usuário (ex: retornando um Result do método ou ouvindo o stream do SalesCubit).
       await _salesCubit.registerSale(notaFiscal, form.enableCodeGeneration);
     } finally {
       if (!isClosed) {
         _emitEditing(state.form.copyWith(isSubmitting: false));
       }
     }
+  }
+
+  void toggleAutoInvoiceNumber() {
+    final form = state.form;
+    final next = !form.enableCodeGeneration;
+    _emitEditing(form.copyWith(enableCodeGeneration: next, invoiceNumber: next ? kStringGenerate : ''));
+  }
+
+  void updateInvoiceNumber(String value) {
+    _emitEditing(state.form.copyWith(invoiceNumber: value));
+  }
+
+  void _emitEditing(SalesInvoiceFormData form) {
+    emit(SalesInvoiceState.editing(form: form));
+  }
+
+  void _emitFeedback(String message) {
+    emit(SalesInvoiceState.feedback(form: state.form, message: message));
   }
 }

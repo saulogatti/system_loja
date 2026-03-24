@@ -70,10 +70,11 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;Category&gt;&gt; getAll() {
-  return (select(
+  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;Category&gt;&gt; getAll() async {
+  final rows = await (select(
     categoriesRecords,
   )..orderBy([(t) =&gt; OrderingTerm.asc(t.name)])).get();
+  return rows.map((e) =&gt; e.toDomain()).toList();
 }</code></pre>
 </section>
 

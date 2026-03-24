@@ -87,9 +87,10 @@ mainly for debugging or logging.</p>
 String toString() {
   return (StringBuffer(&#39;SystemRecordsCompanion(&#39;)
         ..write(&#39;id: $id, &#39;)
-        ..write(&#39;registrationDate: $registrationDate, &#39;)
         ..write(&#39;lastUpdatedDate: $lastUpdatedDate, &#39;)
-        ..write(&#39;priceConfiguration: $priceConfiguration&#39;)
+        ..write(&#39;priceConfiguration: $priceConfiguration, &#39;)
+        ..write(&#39;registrationDate: $registrationDate, &#39;)
+        ..write(&#39;systemUserData: $systemUserData&#39;)
         ..write(&#39;)&#39;))
       .toString();
 }</code></pre>

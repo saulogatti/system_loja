@@ -66,9 +66,9 @@
     </section>
     
 <section class="desc markdown">
-  <p>Cria uma cópia do usuário com campos atualizados</p>
-<p>Atualiza automaticamente a data de última atualização para o momento atual,
-a menos que uma data específica seja fornecida.</p>
+  <p>Cria uma cópia do usuário com campos atualizados.</p>
+<p>Preserva <a href="../../core_models_default_default_object/DefaultObject/registrationDate.html">registrationDate</a> original. A <a href="../../core_models_default_default_object/DefaultObject/lastUpdatedDate.html">lastUpdatedDate</a> <strong>não</strong> é
+alterada automaticamente — atualize-a explicitamente se necessário.</p>
 </section>
 
 
@@ -82,7 +82,6 @@ a menos que uma data específica seja fornecida.</p>
   int? permission,
 }) {
   return User(
-    id: id,
     name: name ?? this.name,
     email: email ?? this.email,
     passwordHash: passwordHash ?? this.passwordHash,

@@ -140,6 +140,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                         selector: (state) => state.form.person,
                         builder: (context, person) {
                           return DropdownButtonFormField<PersonSelection>(
+                            initialValue: person,
                             decoration: InputDecoration(
                               labelText: 'Cliente ou Empresa *',
                               border: const OutlineInputBorder(),

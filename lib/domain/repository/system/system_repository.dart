@@ -10,6 +10,16 @@ import 'package:system_loja/core/utils/repository_error_mapper.dart';
 import 'package:system_loja/data/converter/system_configuration_codec.dart';
 import 'package:system_loja/data/database/dao/system_dao.dart';
 
+/// Repositório para gerenciamento da configuração técnica do sistema usando Drift.
+///
+/// Persiste e recupera [SystemConfiguration] via [SystemDao], incluindo
+/// métodos de pagamento, unidades de medida e dados do usuário do sistema.
+/// Todos os erros são capturados internamente e devolvidos como
+/// [ResultStatus.error] com mensagem amigável.
+///
+/// Veja também:
+/// - [ISystemRepository] - contrato da interface
+/// - [SystemDao] - DAO do Drift
 class SystemRepository implements ISystemRepository {
   final SystemDao _systemDao;
   SystemRepository({required SystemDao systemDao}) : _systemDao = systemDao;

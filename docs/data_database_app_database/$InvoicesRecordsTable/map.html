@@ -96,6 +96,14 @@ InvoicesRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
       DriftSqlType.int,
       data[&#39;${effectivePrefix}empresa_id&#39;],
     ),
+    companyName: attachedDatabase.typeMapping.read(
+      DriftSqlType.string,
+      data[&#39;${effectivePrefix}empresa_nome&#39;],
+    ),
+    companyCnpj: attachedDatabase.typeMapping.read(
+      DriftSqlType.string,
+      data[&#39;${effectivePrefix}empresa_cnpj&#39;],
+    ),
     id: attachedDatabase.typeMapping.read(
       DriftSqlType.int,
       data[&#39;${effectivePrefix}id&#39;],
