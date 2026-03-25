@@ -5,6 +5,8 @@ import 'package:system_loja/aplication/app_injection.dart';
 import 'package:system_loja/core/interface/i_category_repository.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
+import 'package:system_loja/core/services/product_movement_report_service.dart';
+import 'package:system_loja/core/services/relatorio_overview_service.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/report/product_invoice_movement.dart';
@@ -101,6 +103,8 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
         salesRepository ?? appInjection.get<ISalesRepository>(),
         productRepository ?? appInjection.get<IProductRepository>(),
         categoryRepository ?? appInjection.get<ICategoryRepository>(),
+        appInjection.get<ProductMovementReportService>(),
+        appInjection.get<RelatorioOverviewService>(),
       ),
       child: this,
     );

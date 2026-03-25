@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:system_loja/screens/utils/input_formatters.dart';
 import 'package:system_loja/screens/utils/validators.dart';
 import 'package:system_loja/screens/products/widgets/product_category.dart';
-import 'package:system_loja/aplication/utils/constants.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
 
 /// Widget do formulário de cadastro de produto
 ///
