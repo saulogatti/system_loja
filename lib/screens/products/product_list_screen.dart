@@ -52,10 +52,7 @@ class ProductListScreenState extends State<ProductListScreen> {
           final produtos = _extractProducts(state);
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
-            child: ProductList(
-              products: produtos,
-              onProductTap: _abrirEdicaoProduto,
-            ),
+            child: ProductList(products: produtos, onProductTap: _abrirEdicaoProduto),
           );
         },
       ),
@@ -74,6 +71,14 @@ class ProductListScreenState extends State<ProductListScreen> {
     ProductListScreen._reloadSignal.addListener(_reloadProducts);
   }
 
+  Future<void> _abrirEdicaoProduto(Product produto) async {
+    final changed = await context.router.push<bool>(ProductDetailRoute(product: produto));
+
+    if (changed == true && mounted) {
+      _reloadProducts();
+    }
+  }
+
   List<Product> _extractProducts(ProductState state) {
     return switch (state) {
       ProductStateInsertSuccess(:final produtos) => produtos,
@@ -82,16 +87,6 @@ class ProductListScreenState extends State<ProductListScreen> {
       ProductStateLoaded(:final produtos) => produtos,
       _ => <Product>[],
     };
-  }
-
-  Future<void> _abrirEdicaoProduto(Product produto) async {
-    final changed = await context.router.push<bool>(
-      ProductDetailRoute(product: produto),
-    );
-
-    if (changed == true && mounted) {
-      _reloadProducts();
-    }
   }
 
   void _reloadProducts() {
