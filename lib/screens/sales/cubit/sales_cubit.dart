@@ -77,9 +77,25 @@ class SalesCubit extends Cubit<SalesState> {
         return;
     }
 
+    if (resultMap.hasError) {
+      emit(SalesState.loadProductsFailure(message: 'Erro ao carregar clientes: ${resultMap.asError}'));
+      return;
+    }
+
+    if (resultSales.hasError) {
+      emit(SalesState.loadProductsFailure(message: 'Erro ao carregar vendas: ${resultSales.asError}'));
+      return;
+    }
+
+    if (resultCompanies.hasError) {
+      emit(SalesState.loadProductsFailure(message: 'Erro ao carregar empresas: ${resultCompanies.asError}'));
+      return;
+    }
+
     final customers = resultMap.asSuccess;
     final invoices = resultSales.asSuccess;
     final companies = resultCompanies.asSuccess;
+
     switch (result) {
       case ResultSuccess(result: final products):
         emit(
