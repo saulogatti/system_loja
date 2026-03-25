@@ -23,6 +23,14 @@ class SalesView extends StatefulWidget {
 }
 
 class _SalesViewState extends State<SalesView> {
+  static const SliverGridDelegateWithMaxCrossAxisExtent _invoiceGridDelegate =
+      SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 350,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        mainAxisExtent: 188,
+      );
+
   List<Product> _productList = [];
   List<PaymentMethodType> _paymentMethods = [];
 
@@ -189,13 +197,8 @@ class _SalesViewState extends State<SalesView> {
                             ),
                           )
                         : GridView.builder(
-                            padding: const EdgeInsets.all(10),
-                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 350,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10,
-                              childAspectRatio: 1.3,
-                            ),
+                            padding: const EdgeInsets.all(12),
+                            gridDelegate: _invoiceGridDelegate,
                             itemCount: invoices.length,
                             itemBuilder: (context, index) {
                               final nf = invoices[index];

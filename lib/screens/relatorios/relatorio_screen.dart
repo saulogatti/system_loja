@@ -100,6 +100,14 @@ class _EmptyMessage extends StatelessWidget {
 
 /// Aba de relatório de estoque de produtos.
 class _EstoqueTab extends StatelessWidget {
+  static const SliverGridDelegateWithMaxCrossAxisExtent _productGridDelegate =
+      SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 420,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        mainAxisExtent: 112,
+      );
+
   final List<Product> products;
 
   const _EstoqueTab({required this.products});
@@ -140,12 +148,7 @@ class _EstoqueTab extends StatelessWidget {
                 : GridView.builder(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                     physics: const AlwaysScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 420,
-                      childAspectRatio: 2.8,
-                      mainAxisSpacing: 8,
-                      crossAxisSpacing: 12,
-                    ),
+                    gridDelegate: _productGridDelegate,
                     itemCount: sorted.length,
                     itemBuilder: (context, index) {
                       return _ProdutoTile(product: sorted[index]);
@@ -173,30 +176,49 @@ class _InvoiceTile extends StatelessWidget {
     final destino = data.personDisplayName;
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: Center(
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: color.withValues(alpha: 0.15),
-            child: Icon(Icons.receipt, color: color, size: 20),
-          ),
-          title: Text('NF ${data.invoiceNumber}', style: const TextStyle(fontWeight: FontWeight.w600)),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        onTap: () => InvoiceOverviewBottomSheet.show(context, invoice),
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
             children: [
-              Text(destino),
+              CircleAvatar(
+                backgroundColor: color.withValues(alpha: 0.15),
+                child: Icon(Icons.receipt, color: color, size: 20),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'NF ${data.invoiceNumber}',
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(destino, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    Text(
+                      data.issueDate.toFormattedDate(),
+                      style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
               Text(
-                data.issueDate.toFormattedDate(),
-                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                'R\$ ${data.totalValue.toStringAsFixed(2)}',
+                style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
-          trailing: Text(
-            'R\$ ${data.totalValue.toStringAsFixed(2)}',
-            style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14),
-          ),
-          isThreeLine: true,
-          onTap: () => InvoiceOverviewBottomSheet.show(context, invoice),
         ),
       ),
     );
@@ -215,6 +237,14 @@ class _NotasFiscaisTab extends StatefulWidget {
 }
 
 class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
+  static const SliverGridDelegateWithMaxCrossAxisExtent _invoiceGridDelegate =
+      SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 350,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        mainAxisExtent: 132,
+      );
+
   _InvoiceFilterType _selectedFilter = _InvoiceFilterType.entrada;
 
   @override
@@ -302,12 +332,7 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
                 : GridView.builder(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                     physics: const AlwaysScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 350,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      mainAxisExtent: 132,
-                    ),
+                    gridDelegate: _invoiceGridDelegate,
                     itemCount: invoices.length,
                     itemBuilder: (context, index) {
                       return _InvoiceTile(invoice: invoices[index], color: sectionColor);
@@ -343,15 +368,20 @@ class _ProdutoTile extends StatelessWidget {
     }
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: EdgeInsets.zero,
       child: Center(
         child: ListTile(
           leading: CircleAvatar(
             backgroundColor: stockColor.withValues(alpha: 0.15),
             child: Icon(stockIcon, color: stockColor, size: 20),
           ),
-          title: Text(product.name, style: const TextStyle(fontWeight: FontWeight.w600)),
-          subtitle: Text('Código: ${product.code}'),
+          title: Text(
+            product.name,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text('Código: ${product.code}', maxLines: 1, overflow: TextOverflow.ellipsis),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
