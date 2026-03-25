@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
-import 'package:system_loja/aplication/utils/constants.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
 
 /// Extensões para manipulação segura de strings em nomes de arquivos.
 ///

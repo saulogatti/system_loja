@@ -15,6 +15,8 @@ import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/interface/i_system_error_manager.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
+import 'package:system_loja/core/services/product_movement_report_service.dart';
+import 'package:system_loja/core/services/relatorio_overview_service.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
 import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/system_database.dart';
@@ -41,6 +43,8 @@ late LoggerCacheRepository printerLog;
 void setupAppInjection() {
   printerLog = registerLogPrinterColor(config: ConfigLog(enableLog: kDebugMode));
   appInjection.registerSingleton<RouteApp>(RouteApp());
+  appInjection.registerSingleton<ProductMovementReportService>(ProductMovementReportService());
+  appInjection.registerSingleton<RelatorioOverviewService>(RelatorioOverviewService());
   appInjection.registerSingleton<AppDatabase>(AppDatabase());
   appInjection.registerSingleton<SystemDatabase>(SystemDatabase());
   appInjection.registerSingleton<ISystemErrorManager>(SystemErrorManager.instance);

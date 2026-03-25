@@ -1,4 +1,4 @@
-import 'package:system_loja/aplication/utils/constants.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
 
 /// Combina múltiplos validadores em um único.
 ///

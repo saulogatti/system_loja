@@ -6,9 +6,9 @@ import 'package:system_loja/core/models/category.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/report/product_details_report_data.dart';
+import 'package:system_loja/core/services/product_movement_report_service.dart';
+import 'package:system_loja/core/services/relatorio_overview_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/domain/services/product_movement_report_service.dart';
-import 'package:system_loja/domain/services/relatorio_overview_service.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_state.dart';
 
 /// Cubit para gerenciamento de estado dos relatórios.
@@ -26,12 +26,10 @@ class RelatorioCubit extends Cubit<RelatorioState> {
   RelatorioCubit(
     this._salesRepository,
     this._productRepository,
-    this._categoryRepository, {
-    ProductMovementReportService? movementReportService,
-    RelatorioOverviewService? overviewService,
-  }) : _movementReportService = movementReportService ?? ProductMovementReportService(),
-       _overviewService = overviewService ?? RelatorioOverviewService(),
-       super(RelatorioState.initial()) {
+    this._categoryRepository,
+    this._movementReportService,
+    this._overviewService,
+  ) : super(RelatorioState.initial()) {
     carregarRelatorios();
   }
 

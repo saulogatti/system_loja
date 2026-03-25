@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:system_loja/aplication/utils/constants.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
 
 class TextFormFieldEmail extends StatelessWidget {
   final TextEditingController emailController;
