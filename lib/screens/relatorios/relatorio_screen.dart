@@ -9,6 +9,7 @@ import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/report/product_invoice_movement.dart';
 import 'package:system_loja/core/models/report/product_movement_summary.dart';
+import 'package:system_loja/core/models/report/relatorio_overview_data.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_cubit.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_state.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
@@ -17,8 +18,12 @@ import 'package:system_loja/screens/utils/extension_date_time.dart';
 /// Tela de relatórios com abas para notas fiscais (entrada/saída) e estoque.
 @RoutePage()
 class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
+  final ISalesRepository? salesRepository;
+  final IProductRepository? productRepository;
+  final ICategoryRepository? categoryRepository;
+
   /// Cria uma instância de [RelatoriosScreen].
-  const RelatoriosScreen({super.key});
+  const RelatoriosScreen({super.key, this.salesRepository, this.productRepository, this.categoryRepository});
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +67,22 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
                     :final categoryNamesById,
                     :final entryInvoices,
                     :final exitInvoices,
+                    :final estoqueOverview,
+                    :final notasOverview,
                     :final products,
                   ) =>
                     TabBarView(
                       children: [
-                        _NotasFiscaisTab(entryInvoices: entryInvoices, exitInvoices: exitInvoices),
-                        _EstoqueTab(categoryNamesById: categoryNamesById, products: products),
+                        _NotasFiscaisTab(
+                          entryInvoices: entryInvoices,
+                          exitInvoices: exitInvoices,
+                          notasOverview: notasOverview,
+                        ),
+                        _EstoqueTab(
+                          categoryNamesById: categoryNamesById,
+                          products: products,
+                          estoqueOverview: estoqueOverview,
+                        ),
                       ],
                     ),
                 };
@@ -83,9 +98,9 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<RelatorioCubit>(
       create: (_) => RelatorioCubit(
-        appInjection.get<ISalesRepository>(),
-        appInjection.get<IProductRepository>(),
-        appInjection.get<ICategoryRepository>(),
+        salesRepository ?? appInjection.get<ISalesRepository>(),
+        productRepository ?? appInjection.get<IProductRepository>(),
+        categoryRepository ?? appInjection.get<ICategoryRepository>(),
       ),
       child: this,
     );
@@ -122,23 +137,22 @@ class _EstoqueTab extends StatelessWidget {
 
   final Map<int, String> categoryNamesById;
   final List<Product> products;
+  final RelatorioEstoqueOverviewData estoqueOverview;
 
-  const _EstoqueTab({required this.categoryNamesById, required this.products});
+  const _EstoqueTab({required this.categoryNamesById, required this.products, required this.estoqueOverview});
 
   @override
   Widget build(BuildContext context) {
-    final semEstoque = products.where((p) => p.stockQuantity == 0).length;
-    final estoquesBaixo = products.where((p) => p.stockQuantity > 0 && p.stockQuantity <= 5).length;
-    final sorted = List<Product>.from(products)..sort((a, b) => a.stockQuantity.compareTo(b.stockQuantity));
+    final sorted = estoqueOverview.produtosOrdenadosPorEstoque;
 
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: _ResumoEstoqueRow(
-            total: products.length,
-            semEstoque: semEstoque,
-            estoqueBaixo: estoquesBaixo,
+            total: estoqueOverview.totalProdutos,
+            semEstoque: estoqueOverview.produtosSemEstoque,
+            estoqueBaixo: estoqueOverview.produtosComEstoqueBaixo,
           ),
         ),
         Padding(
@@ -339,8 +353,13 @@ class _MovementSection extends StatelessWidget {
 class _NotasFiscaisTab extends StatefulWidget {
   final Map<int, Invoice> entryInvoices;
   final Map<int, Invoice> exitInvoices;
+  final RelatorioNotasOverviewData notasOverview;
 
-  const _NotasFiscaisTab({required this.entryInvoices, required this.exitInvoices});
+  const _NotasFiscaisTab({
+    required this.entryInvoices,
+    required this.exitInvoices,
+    required this.notasOverview,
+  });
 
   @override
   State<_NotasFiscaisTab> createState() => _NotasFiscaisTabState();
@@ -359,13 +378,6 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
 
   @override
   Widget build(BuildContext context) {
-    final totalEntrada = widget.entryInvoices.values.fold<double>(0.0, (sum, inv) {
-      return sum + inv.data.totalValue;
-    });
-    final totalSaida = widget.exitInvoices.values.fold<double>(0.0, (sum, inv) {
-      return sum + inv.data.totalValue;
-    });
-
     final exibindoEntradas = _selectedFilter == _InvoiceFilterType.entrada;
     final invoices = (exibindoEntradas ? widget.entryInvoices.values : widget.exitInvoices.values).toList();
 
@@ -382,10 +394,10 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: _ResumoNotasRow(
-            totalEntrada: totalEntrada,
-            countEntrada: widget.entryInvoices.length,
-            totalSaida: totalSaida,
-            countSaida: widget.exitInvoices.length,
+            totalEntrada: widget.notasOverview.totalEntrada,
+            countEntrada: widget.notasOverview.quantidadeEntradas,
+            totalSaida: widget.notasOverview.totalSaida,
+            countSaida: widget.notasOverview.quantidadeSaidas,
           ),
         ),
         Padding(

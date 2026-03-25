@@ -62,7 +62,7 @@ void main() {
 
     test('submit chama registerSale quando válido', () {
       final cubit = SalesInvoiceCubit(salesCubit: salesCubit, paymentMethods: [PaymentMethodType.pix]);
-      cubit.updateInvoiceNumber('NF-1');
+      cubit.updateInvoiceNumber('1');
       cubit.setPerson(CustomerSelection(customer()));
       cubit.addOrMergeLine(product(id: 1, stock: 10), 1);
       cubit.submit();

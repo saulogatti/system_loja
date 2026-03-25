@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/report/product_details_report_data.dart';
+import 'package:system_loja/core/models/report/relatorio_overview_data.dart';
 
 part 'relatorio_state.freezed.dart';
 
@@ -21,6 +22,8 @@ sealed class RelatorioState with _$RelatorioState {
     required Map<int, Invoice> entryInvoices,
     required Map<int, Invoice> exitInvoices,
     required List<Product> products,
+    required RelatorioEstoqueOverviewData estoqueOverview,
+    required RelatorioNotasOverviewData notasOverview,
     ProductDetailsReportData? selectedProductDetails,
   }) = RelatorioLoaded;
 
