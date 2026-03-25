@@ -24,3 +24,4 @@ data/logs_atividade.json
 # Backup files
 *.bak
 pubspec_build.yaml
+data/

@@ -40,6 +40,8 @@ class RouteApp extends RootStackRouter {
 
     AutoRoute(page: SalesInvoiceRoute.page, title: (context, data) => 'Sales Invoice'),
     AutoRoute(page: PersonRegistrationRoute.page, title: (context, data) => 'Cadastro de Pessoa'),
+    AutoRoute(page: CustomerEditRoute.page, title: (context, data) => 'Editar Pessoa Física'),
+    AutoRoute(page: CompanyEditRoute.page, title: (context, data) => 'Editar Pessoa Jurídica'),
     AutoRoute(page: ProductInfoRoute.page, title: (context, data) => 'Cadastro de Produto'),
     AutoRoute(page: ProductDetailRoute.page, title: (context, data) => 'Product Detail'),
     AutoRoute(page: CategoryManagementRoute.page, title: (context, data) => 'Category Management'),

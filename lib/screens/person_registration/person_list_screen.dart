@@ -5,21 +5,22 @@ import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
+import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
 
 /// Exibe as listagens de pessoa fisica e pessoa juridica.
 @RoutePage()
 class PersonListScreen extends StatefulWidget {
+  static final ValueNotifier<int> _reloadSignal = ValueNotifier<int>(0);
+
   const PersonListScreen({super.key});
 
-  static final ValueNotifier<int> _reloadSignal = ValueNotifier<int>(0);
+  @override
+  State<PersonListScreen> createState() => PersonListScreenState();
 
   static void requestReload() {
     _reloadSignal.value++;
   }
-
-  @override
-  State<PersonListScreen> createState() => PersonListScreenState();
 }
 
 class PersonListScreenState extends State<PersonListScreen> {
@@ -32,10 +33,65 @@ class PersonListScreenState extends State<PersonListScreen> {
   List<Company> _companies = const [];
 
   @override
-  void initState() {
-    super.initState();
-    PersonListScreen._reloadSignal.addListener(_onReloadSignal);
-    reloadPeople();
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          const SizedBox(height: 8),
+          const TabBar(
+            tabs: [
+              Tab(text: 'Pessoa Física', icon: Icon(Icons.badge)),
+              Tab(text: 'Pessoa Jurídica', icon: Icon(Icons.business)),
+            ],
+          ),
+          if (_errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: MaterialBanner(
+                content: Text(_errorMessage!),
+                actions: [TextButton(onPressed: reloadPeople, child: const Text('Tentar novamente'))],
+              ),
+            ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                _PersonSectionList<Customer>(
+                  emptyMessage: 'Nenhuma pessoa física cadastrada.',
+                  entries: _customers,
+                  titleBuilder: (customer) => customer.name,
+                  subtitleBuilder: (customer) =>
+                      'CPF: ${customer.cpf}\nE-mail: ${customer.email ?? '-'}\nTelefone: ${customer.phone ?? '-'}',
+                  onTap: (customer) async {
+                    final changed = await context.router.push<bool>(CustomerEditRoute(customer: customer));
+                    if (changed == true && mounted) {
+                      await reloadPeople();
+                    }
+                  },
+                ),
+                _PersonSectionList<Company>(
+                  emptyMessage: 'Nenhuma pessoa jurídica cadastrada.',
+                  entries: _companies,
+                  titleBuilder: (company) => company.name,
+                  subtitleBuilder: (company) =>
+                      'CNPJ: ${company.cnpj}\nE-mail: ${company.email ?? '-'}\nTelefone: ${company.phone ?? '-'}',
+                  onTap: (company) async {
+                    final changed = await context.router.push<bool>(CompanyEditRoute(company: company));
+                    if (changed == true && mounted) {
+                      await reloadPeople();
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -44,7 +100,10 @@ class PersonListScreenState extends State<PersonListScreen> {
     super.dispose();
   }
 
-  void _onReloadSignal() {
+  @override
+  void initState() {
+    super.initState();
+    PersonListScreen._reloadSignal.addListener(_onReloadSignal);
     reloadPeople();
   }
 
@@ -84,54 +143,8 @@ class PersonListScreenState extends State<PersonListScreen> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    return DefaultTabController(
-      length: 2,
-      child: Column(
-        children: [
-          const SizedBox(height: 8),
-          const TabBar(
-            tabs: [
-              Tab(text: 'Pessoa Física', icon: Icon(Icons.badge)),
-              Tab(text: 'Pessoa Jurídica', icon: Icon(Icons.business)),
-            ],
-          ),
-          if (_errorMessage != null)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: MaterialBanner(
-                content: Text(_errorMessage!),
-                actions: [TextButton(onPressed: reloadPeople, child: const Text('Tentar novamente'))],
-              ),
-            ),
-          Expanded(
-            child: TabBarView(
-              children: [
-                _PersonSectionList<Customer>(
-                  emptyMessage: 'Nenhuma pessoa física cadastrada.',
-                  entries: _customers,
-                  titleBuilder: (customer) => customer.name,
-                  subtitleBuilder: (customer) =>
-                      'CPF: ${customer.cpf}\nE-mail: ${customer.email ?? '-'}\nTelefone: ${customer.phone ?? '-'}',
-                ),
-                _PersonSectionList<Company>(
-                  emptyMessage: 'Nenhuma pessoa jurídica cadastrada.',
-                  entries: _companies,
-                  titleBuilder: (company) => company.name,
-                  subtitleBuilder: (company) =>
-                      'CNPJ: ${company.cnpj}\nE-mail: ${company.email ?? '-'}\nTelefone: ${company.phone ?? '-'}',
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+  void _onReloadSignal() {
+    reloadPeople();
   }
 }
 
@@ -140,12 +153,14 @@ class _PersonSectionList<T> extends StatelessWidget {
   final String emptyMessage;
   final String Function(T entry) titleBuilder;
   final String Function(T entry) subtitleBuilder;
+  final Future<void> Function(T entry) onTap;
 
   const _PersonSectionList({
     required this.entries,
     required this.emptyMessage,
     required this.titleBuilder,
     required this.subtitleBuilder,
+    required this.onTap,
   });
 
   @override
@@ -165,7 +180,7 @@ class _PersonSectionList<T> extends StatelessWidget {
           colorAvatar: Theme.of(context).colorScheme.primary,
           title: titleBuilder(entry),
           subTitle: subtitleBuilder(entry),
-          onTap: () {},
+          onTap: () => onTap(entry),
         );
       },
     );
