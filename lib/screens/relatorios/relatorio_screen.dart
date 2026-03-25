@@ -9,7 +9,6 @@ import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/report/product_invoice_movement.dart';
 import 'package:system_loja/core/models/report/product_movement_summary.dart';
-import 'package:system_loja/domain/services/product_movement_report_service.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_cubit.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_state.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
@@ -59,16 +58,18 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
                       ],
                     ),
                   ),
-                  RelatorioLoaded(:final entryInvoices, :final exitInvoices, :final products) => TabBarView(
-                    children: [
-                      _NotasFiscaisTab(entryInvoices: entryInvoices, exitInvoices: exitInvoices),
-                      _EstoqueTab(
-                        products: products,
-                        entryInvoices: entryInvoices,
-                        exitInvoices: exitInvoices,
-                      ),
-                    ],
-                  ),
+                  RelatorioLoaded(
+                    :final categoryNamesById,
+                    :final entryInvoices,
+                    :final exitInvoices,
+                    :final products,
+                  ) =>
+                    TabBarView(
+                      children: [
+                        _NotasFiscaisTab(entryInvoices: entryInvoices, exitInvoices: exitInvoices),
+                        _EstoqueTab(categoryNamesById: categoryNamesById, products: products),
+                      ],
+                    ),
                 };
               },
             ),
@@ -81,8 +82,11 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<RelatorioCubit>(
-      create: (_) =>
-          RelatorioCubit(appInjection.get<ISalesRepository>(), appInjection.get<IProductRepository>()),
+      create: (_) => RelatorioCubit(
+        appInjection.get<ISalesRepository>(),
+        appInjection.get<IProductRepository>(),
+        appInjection.get<ICategoryRepository>(),
+      ),
       child: this,
     );
   }
@@ -107,7 +111,7 @@ class _EmptyMessage extends StatelessWidget {
 }
 
 /// Aba de relatório de estoque de produtos.
-class _EstoqueTab extends StatefulWidget {
+class _EstoqueTab extends StatelessWidget {
   static const SliverGridDelegateWithMaxCrossAxisExtent _productGridDelegate =
       SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 420,
@@ -116,34 +120,23 @@ class _EstoqueTab extends StatefulWidget {
         mainAxisExtent: 128,
       );
 
+  final Map<int, String> categoryNamesById;
   final List<Product> products;
-  final Map<int, Invoice> entryInvoices;
-  final Map<int, Invoice> exitInvoices;
 
-  const _EstoqueTab({required this.products, required this.entryInvoices, required this.exitInvoices});
-
-  @override
-  State<_EstoqueTab> createState() => _EstoqueTabState();
-}
-
-class _EstoqueTabState extends State<_EstoqueTab> {
-  final ICategoryRepository _categoryRepository = appInjection.get<ICategoryRepository>();
-  final ProductMovementReportService _movementReportService = ProductMovementReportService();
-  Map<int, String> _categoryNamesById = const {};
+  const _EstoqueTab({required this.categoryNamesById, required this.products});
 
   @override
   Widget build(BuildContext context) {
-    final semEstoque = widget.products.where((p) => p.stockQuantity == 0).length;
-    final estoquesBaixo = widget.products.where((p) => p.stockQuantity > 0 && p.stockQuantity <= 5).length;
-    final sorted = List<Product>.from(widget.products)
-      ..sort((a, b) => a.stockQuantity.compareTo(b.stockQuantity));
+    final semEstoque = products.where((p) => p.stockQuantity == 0).length;
+    final estoquesBaixo = products.where((p) => p.stockQuantity > 0 && p.stockQuantity <= 5).length;
+    final sorted = List<Product>.from(products)..sort((a, b) => a.stockQuantity.compareTo(b.stockQuantity));
 
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: _ResumoEstoqueRow(
-            total: widget.products.length,
+            total: products.length,
             semEstoque: semEstoque,
             estoqueBaixo: estoquesBaixo,
           ),
@@ -151,7 +144,7 @@ class _EstoqueTabState extends State<_EstoqueTab> {
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           child: _SectionHeader(
-            title: 'Produtos (${widget.products.length})',
+            title: 'Produtos (${products.length})',
             icon: Icons.inventory_2,
             color: Theme.of(context).colorScheme.primary,
           ),
@@ -174,8 +167,8 @@ class _EstoqueTabState extends State<_EstoqueTab> {
                       final product = sorted[index];
                       return _ProdutoTile(
                         product: product,
-                        categoryName: _resolveCategoryName(product),
-                        onTap: () => _openProductDetails(product),
+                        categoryName: _resolveCategoryName(product, categoryNamesById),
+                        onTap: () => _openProductDetails(context, product),
                       );
                     },
                   ),
@@ -185,47 +178,32 @@ class _EstoqueTabState extends State<_EstoqueTab> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _loadCategories();
-  }
+  void _openProductDetails(BuildContext context, Product product) {
+    final cubit = context.read<RelatorioCubit>();
+    cubit.prepareProductDetails(product);
 
-  Future<void> _loadCategories() async {
-    final result = await _categoryRepository.getAllCategories();
-    if (!mounted || !result.isSuccessful) {
+    final currentState = cubit.state;
+    if (currentState is! RelatorioLoaded || currentState.selectedProductDetails == null) {
       return;
     }
 
-    final categoriesMap = <int, String>{for (final category in result.asSuccess) category.id: category.name};
-
-    setState(() {
-      _categoryNamesById = categoriesMap;
-    });
-  }
-
-  void _openProductDetails(Product product) {
-    final categoryName = _resolveCategoryName(product);
-    final entradas = _movementReportService.buildMovements(widget.entryInvoices, product);
-    final saidas = _movementReportService.buildMovements(widget.exitInvoices, product);
-    final summary = _movementReportService.summarize(entradas: entradas, saidas: saidas);
-
+    final details = currentState.selectedProductDetails!;
     _ProductDetailsBottomSheet.show(
       context,
       product: product,
-      categoryName: categoryName,
-      entradas: entradas,
-      saidas: saidas,
-      summary: summary,
+      categoryName: details.categoryName,
+      entradas: details.entradas,
+      saidas: details.saidas,
+      summary: details.summary,
     );
   }
 
-  String _resolveCategoryName(Product product) {
+  String _resolveCategoryName(Product product, Map<int, String> categoryNamesById) {
     final categoryId = product.categoryId;
     if (categoryId == null) {
       return 'Sem categoria';
     }
-    return _categoryNamesById[categoryId] ?? 'Categoria #$categoryId';
+    return categoryNamesById[categoryId] ?? 'Categoria #$categoryId';
   }
 }
 

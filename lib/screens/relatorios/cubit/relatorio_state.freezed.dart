@@ -125,12 +125,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( Map<int, String> categoryNamesById,  Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products,  ProductDetailsReportData? selectedProductDetails)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case RelatorioInitial() when initial != null:
 return initial();case RelatorioLoading() when loading != null:
 return loading();case RelatorioLoaded() when loaded != null:
-return loaded(_that.entryInvoices,_that.exitInvoices,_that.products);case RelatorioError() when error != null:
+return loaded(_that.categoryNamesById,_that.entryInvoices,_that.exitInvoices,_that.products,_that.selectedProductDetails);case RelatorioError() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -149,12 +149,12 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( Map<int, String> categoryNamesById,  Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products,  ProductDetailsReportData? selectedProductDetails)  loaded,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case RelatorioInitial():
 return initial();case RelatorioLoading():
 return loading();case RelatorioLoaded():
-return loaded(_that.entryInvoices,_that.exitInvoices,_that.products);case RelatorioError():
+return loaded(_that.categoryNamesById,_that.entryInvoices,_that.exitInvoices,_that.products,_that.selectedProductDetails);case RelatorioError():
 return error(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -169,12 +169,12 @@ return error(_that.message);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( Map<int, String> categoryNamesById,  Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products,  ProductDetailsReportData? selectedProductDetails)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case RelatorioInitial() when initial != null:
 return initial();case RelatorioLoading() when loading != null:
 return loading();case RelatorioLoaded() when loaded != null:
-return loaded(_that.entryInvoices,_that.exitInvoices,_that.products);case RelatorioError() when error != null:
+return loaded(_that.categoryNamesById,_that.entryInvoices,_that.exitInvoices,_that.products,_that.selectedProductDetails);case RelatorioError() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -251,8 +251,15 @@ String toString() {
 
 
 class RelatorioLoaded implements RelatorioState {
-   RelatorioLoaded({required final  Map<int, Invoice> entryInvoices, required final  Map<int, Invoice> exitInvoices, required final  List<Product> products}): _entryInvoices = entryInvoices,_exitInvoices = exitInvoices,_products = products;
+   RelatorioLoaded({required final  Map<int, String> categoryNamesById, required final  Map<int, Invoice> entryInvoices, required final  Map<int, Invoice> exitInvoices, required final  List<Product> products, this.selectedProductDetails}): _categoryNamesById = categoryNamesById,_entryInvoices = entryInvoices,_exitInvoices = exitInvoices,_products = products;
   
+
+ final  Map<int, String> _categoryNamesById;
+ Map<int, String> get categoryNamesById {
+  if (_categoryNamesById is EqualUnmodifiableMapView) return _categoryNamesById;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_categoryNamesById);
+}
 
  final  Map<int, Invoice> _entryInvoices;
  Map<int, Invoice> get entryInvoices {
@@ -275,6 +282,7 @@ class RelatorioLoaded implements RelatorioState {
   return EqualUnmodifiableListView(_products);
 }
 
+ final  ProductDetailsReportData? selectedProductDetails;
 
 /// Create a copy of RelatorioState
 /// with the given fields replaced by the non-null parameter values.
@@ -286,16 +294,16 @@ $RelatorioLoadedCopyWith<RelatorioLoaded> get copyWith => _$RelatorioLoadedCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioLoaded&&const DeepCollectionEquality().equals(other._entryInvoices, _entryInvoices)&&const DeepCollectionEquality().equals(other._exitInvoices, _exitInvoices)&&const DeepCollectionEquality().equals(other._products, _products));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioLoaded&&const DeepCollectionEquality().equals(other._categoryNamesById, _categoryNamesById)&&const DeepCollectionEquality().equals(other._entryInvoices, _entryInvoices)&&const DeepCollectionEquality().equals(other._exitInvoices, _exitInvoices)&&const DeepCollectionEquality().equals(other._products, _products)&&(identical(other.selectedProductDetails, selectedProductDetails) || other.selectedProductDetails == selectedProductDetails));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_entryInvoices),const DeepCollectionEquality().hash(_exitInvoices),const DeepCollectionEquality().hash(_products));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categoryNamesById),const DeepCollectionEquality().hash(_entryInvoices),const DeepCollectionEquality().hash(_exitInvoices),const DeepCollectionEquality().hash(_products),selectedProductDetails);
 
 @override
 String toString() {
-  return 'RelatorioState.loaded(entryInvoices: $entryInvoices, exitInvoices: $exitInvoices, products: $products)';
+  return 'RelatorioState.loaded(categoryNamesById: $categoryNamesById, entryInvoices: $entryInvoices, exitInvoices: $exitInvoices, products: $products, selectedProductDetails: $selectedProductDetails)';
 }
 
 
@@ -306,7 +314,7 @@ abstract mixin class $RelatorioLoadedCopyWith<$Res> implements $RelatorioStateCo
   factory $RelatorioLoadedCopyWith(RelatorioLoaded value, $Res Function(RelatorioLoaded) _then) = _$RelatorioLoadedCopyWithImpl;
 @useResult
 $Res call({
- Map<int, Invoice> entryInvoices, Map<int, Invoice> exitInvoices, List<Product> products
+ Map<int, String> categoryNamesById, Map<int, Invoice> entryInvoices, Map<int, Invoice> exitInvoices, List<Product> products, ProductDetailsReportData? selectedProductDetails
 });
 
 
@@ -323,12 +331,14 @@ class _$RelatorioLoadedCopyWithImpl<$Res>
 
 /// Create a copy of RelatorioState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? entryInvoices = null,Object? exitInvoices = null,Object? products = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? categoryNamesById = null,Object? entryInvoices = null,Object? exitInvoices = null,Object? products = null,Object? selectedProductDetails = freezed,}) {
   return _then(RelatorioLoaded(
-entryInvoices: null == entryInvoices ? _self._entryInvoices : entryInvoices // ignore: cast_nullable_to_non_nullable
+categoryNamesById: null == categoryNamesById ? _self._categoryNamesById : categoryNamesById // ignore: cast_nullable_to_non_nullable
+as Map<int, String>,entryInvoices: null == entryInvoices ? _self._entryInvoices : entryInvoices // ignore: cast_nullable_to_non_nullable
 as Map<int, Invoice>,exitInvoices: null == exitInvoices ? _self._exitInvoices : exitInvoices // ignore: cast_nullable_to_non_nullable
 as Map<int, Invoice>,products: null == products ? _self._products : products // ignore: cast_nullable_to_non_nullable
-as List<Product>,
+as List<Product>,selectedProductDetails: freezed == selectedProductDetails ? _self.selectedProductDetails : selectedProductDetails // ignore: cast_nullable_to_non_nullable
+as ProductDetailsReportData?,
   ));
 }
 
