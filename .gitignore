@@ -25,3 +25,4 @@ data/logs_atividade.json
 *.bak
 pubspec_build.yaml
 data/
+.seed_db/*

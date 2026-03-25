@@ -65,7 +65,7 @@ class PersonListScreenState extends State<PersonListScreen> {
                   entries: _customers,
                   titleBuilder: (customer) => customer.name,
                   subtitleBuilder: (customer) =>
-                      'CPF: ${customer.cpf}\nE-mail: ${customer.email ?? '-'}\nTelefone: ${customer.phone ?? '-'}',
+                      'CPF: ${customer.cpf} • E-mail: ${customer.email ?? '-'} • Telefone: ${customer.phone ?? '-'}',
                   onTap: (customer) async {
                     final changed = await context.router.push<bool>(CustomerEditRoute(customer: customer));
                     if (changed == true && mounted) {
@@ -78,7 +78,7 @@ class PersonListScreenState extends State<PersonListScreen> {
                   entries: _companies,
                   titleBuilder: (company) => company.name,
                   subtitleBuilder: (company) =>
-                      'CNPJ: ${company.cnpj}\nE-mail: ${company.email ?? '-'}\nTelefone: ${company.phone ?? '-'}',
+                      'CNPJ: ${company.cnpj} • E-mail: ${company.email ?? '-'} • Telefone: ${company.phone ?? '-'}',
                   onTap: (company) async {
                     final changed = await context.router.push<bool>(CompanyEditRoute(company: company));
                     if (changed == true && mounted) {
@@ -149,6 +149,14 @@ class PersonListScreenState extends State<PersonListScreen> {
 }
 
 class _PersonSectionList<T> extends StatelessWidget {
+  static const SliverGridDelegateWithMaxCrossAxisExtent _gridDelegate =
+      SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 350,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        mainAxisExtent: 132,
+      );
+
   final List<T> entries;
   final String emptyMessage;
   final String Function(T entry) titleBuilder;
@@ -171,8 +179,9 @@ class _PersonSectionList<T> extends StatelessWidget {
       );
     }
 
-    return ListView.builder(
+    return GridView.builder(
       padding: const EdgeInsets.all(16),
+      gridDelegate: _gridDelegate,
       itemCount: entries.length,
       itemBuilder: (context, index) {
         final entry = entries[index];
@@ -180,6 +189,7 @@ class _PersonSectionList<T> extends StatelessWidget {
           colorAvatar: Theme.of(context).colorScheme.primary,
           title: titleBuilder(entry),
           subTitle: subtitleBuilder(entry),
+          margin: EdgeInsets.zero,
           onTap: () => onTap(entry),
         );
       },

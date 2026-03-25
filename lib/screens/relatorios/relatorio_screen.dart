@@ -174,28 +174,30 @@ class _InvoiceTile extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: color.withValues(alpha: 0.15),
-          child: Icon(Icons.receipt, color: color, size: 20),
+      child: Center(
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: color.withValues(alpha: 0.15),
+            child: Icon(Icons.receipt, color: color, size: 20),
+          ),
+          title: Text('NF ${data.invoiceNumber}', style: const TextStyle(fontWeight: FontWeight.w600)),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(destino),
+              Text(
+                data.issueDate.toFormattedDate(),
+                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              ),
+            ],
+          ),
+          trailing: Text(
+            'R\$ ${data.totalValue.toStringAsFixed(2)}',
+            style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14),
+          ),
+          isThreeLine: true,
+          onTap: () => InvoiceOverviewBottomSheet.show(context, invoice),
         ),
-        title: Text('NF ${data.invoiceNumber}', style: const TextStyle(fontWeight: FontWeight.w600)),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(destino),
-            Text(
-              data.issueDate.toFormattedDate(),
-              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
-            ),
-          ],
-        ),
-        trailing: Text(
-          'R\$ ${data.totalValue.toStringAsFixed(2)}',
-          style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14),
-        ),
-        isThreeLine: true,
-        onTap: () => InvoiceOverviewBottomSheet.show(context, invoice),
       ),
     );
   }
@@ -301,10 +303,10 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                     physics: const AlwaysScrollableScrollPhysics(),
                     gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 520,
-                      childAspectRatio: 2.3,
-                      mainAxisSpacing: 8,
+                      maxCrossAxisExtent: 350,
+                      mainAxisSpacing: 12,
                       crossAxisSpacing: 12,
+                      mainAxisExtent: 132,
                     ),
                     itemCount: invoices.length,
                     itemBuilder: (context, index) {
@@ -342,26 +344,28 @@ class _ProdutoTile extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: stockColor.withValues(alpha: 0.15),
-          child: Icon(stockIcon, color: stockColor, size: 20),
-        ),
-        title: Text(product.name, style: const TextStyle(fontWeight: FontWeight.w600)),
-        subtitle: Text('Código: ${product.code}'),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              '${product.stockQuantity} un.',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: stockColor),
-            ),
-            Text(
-              'R\$ ${product.price.toStringAsFixed(2)}',
-              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
-            ),
-          ],
+      child: Center(
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: stockColor.withValues(alpha: 0.15),
+            child: Icon(stockIcon, color: stockColor, size: 20),
+          ),
+          title: Text(product.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+          subtitle: Text('Código: ${product.code}'),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '${product.stockQuantity} un.',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: stockColor),
+              ),
+              Text(
+                'R\$ ${product.price.toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              ),
+            ],
+          ),
         ),
       ),
     );

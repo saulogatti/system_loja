@@ -50,7 +50,7 @@ class ProductListScreenState extends State<ProductListScreen> {
           }
 
           final produtos = _extractProducts(state);
-          return SingleChildScrollView(
+          return Padding(
             padding: const EdgeInsets.all(16),
             child: ProductList(products: produtos, onProductTap: _abrirEdicaoProduto),
           );
