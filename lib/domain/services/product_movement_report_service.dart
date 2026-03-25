@@ -1,0 +1,46 @@
+import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/models/product.dart';
+import 'package:system_loja/core/models/report/product_invoice_movement.dart';
+import 'package:system_loja/core/models/report/product_movement_summary.dart';
+
+/// Servico de dominio para consolidar movimentacoes de produto em notas.
+class ProductMovementReportService {
+  /// Monta a lista de movimentacoes de um [product] dentro de [invoices].
+  List<ProductInvoiceMovement> buildMovements(Map<int, Invoice> invoices, Product product) {
+    final movements = <ProductInvoiceMovement>[];
+    final hasValidProductId = product.id > 0;
+
+    for (final invoice in invoices.values) {
+      for (final item in invoice.data.items) {
+        final matchesById = hasValidProductId && item.productId == product.id;
+        final matchesByCode = item.productCode == product.code;
+        if (matchesById || matchesByCode) {
+          movements.add(ProductInvoiceMovement(invoice: invoice, item: item));
+        }
+      }
+    }
+
+    movements.sort((a, b) => b.invoice.data.issueDate.compareTo(a.invoice.data.issueDate));
+    return movements;
+  }
+
+  /// Calcula totais e saldo a partir de listas de entradas e saidas.
+  ProductMovementSummary summarize({
+    required List<ProductInvoiceMovement> entradas,
+    required List<ProductInvoiceMovement> saidas,
+  }) {
+    final totalEntradaQuantidade = entradas.fold<int>(0, (sum, movement) => sum + movement.item.quantity);
+    final totalSaidaQuantidade = saidas.fold<int>(0, (sum, movement) => sum + movement.item.quantity);
+    final totalEntradaValor = entradas.fold<double>(0, (sum, movement) => sum + movement.item.totalValue);
+    final totalSaidaValor = saidas.fold<double>(0, (sum, movement) => sum + movement.item.totalValue);
+
+    return ProductMovementSummary(
+      totalEntradaQuantidade: totalEntradaQuantidade,
+      totalSaidaQuantidade: totalSaidaQuantidade,
+      totalEntradaValor: totalEntradaValor,
+      totalSaidaValor: totalSaidaValor,
+      saldoQuantidade: totalEntradaQuantidade - totalSaidaQuantidade,
+      saldoValor: totalEntradaValor - totalSaidaValor,
+    );
+  }
+}
