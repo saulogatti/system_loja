@@ -19,15 +19,15 @@ class RouteApp extends RootStackRouter {
           maintainState: false,
           children: [
             AutoRoute(
-              page: PersonRegistrationRoute.page,
-              title: (context, data) => 'Cadastro de Pessoa',
+              page: PersonListRoute.page,
+              title: (context, data) => 'Lista de Pessoas',
               initial: true,
               maintainState: false,
             ),
 
             AutoRoute(
-              page: ProductInfoRoute.page,
-              title: (context, data) => 'Cadastro de Produto',
+              page: ProductListRoute.page,
+              title: (context, data) => 'Lista de Produtos',
               maintainState: false,
             ),
           ],
@@ -39,6 +39,8 @@ class RouteApp extends RootStackRouter {
     ),
 
     AutoRoute(page: SalesInvoiceRoute.page, title: (context, data) => 'Sales Invoice'),
+    AutoRoute(page: PersonRegistrationRoute.page, title: (context, data) => 'Cadastro de Pessoa'),
+    AutoRoute(page: ProductInfoRoute.page, title: (context, data) => 'Cadastro de Produto'),
     AutoRoute(page: ProductDetailRoute.page, title: (context, data) => 'Product Detail'),
     AutoRoute(page: CategoryManagementRoute.page, title: (context, data) => 'Category Management'),
     AutoRoute(page: LogSystemRoute.page, title: (context, data) => 'System Logs'),
