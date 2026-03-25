@@ -3,7 +3,7 @@ import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/report/product_invoice_movement.dart';
 import 'package:system_loja/core/models/report/product_movement_summary.dart';
 
-/// Serviço de domínio para consolidar movimentações de produto em notas.
+/// Serviço para consolidar movimentações de produto em notas.
 class ProductMovementReportService {
   /// Monta a lista de movimentações de um [product] dentro de [invoices].
   List<ProductInvoiceMovement> buildMovements(Map<int, Invoice> invoices, Product product) {
