@@ -4,6 +4,8 @@ import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
+import 'package:system_loja/core/models/company.dart';
+import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/utils/command_result.dart';
@@ -77,24 +79,32 @@ class SalesCubit extends Cubit<SalesState> {
         return;
     }
 
-    if (resultMap.hasError) {
-      emit(SalesState.loadProductsFailure(message: 'Erro ao carregar clientes: ${resultMap.asError}'));
-      return;
+    final Map<int, Customer> customers;
+    switch (resultMap) {
+      case ResultSuccess(result: final value):
+        customers = value;
+      case ResultError(resultError: final error):
+        emit(SalesState.loadProductsFailure(message: 'Erro ao carregar clientes: $error'));
+        return;
     }
 
-    if (resultSales.hasError) {
-      emit(SalesState.loadProductsFailure(message: 'Erro ao carregar vendas: ${resultSales.asError}'));
-      return;
+    final Map<int, Invoice> invoices;
+    switch (resultSales) {
+      case ResultSuccess(result: final value):
+        invoices = value;
+      case ResultError(resultError: final error):
+        emit(SalesState.loadProductsFailure(message: 'Erro ao carregar vendas: $error'));
+        return;
     }
 
-    if (resultCompanies.hasError) {
-      emit(SalesState.loadProductsFailure(message: 'Erro ao carregar empresas: ${resultCompanies.asError}'));
-      return;
+    final Map<int, Company> companies;
+    switch (resultCompanies) {
+      case ResultSuccess(result: final value):
+        companies = value;
+      case ResultError(resultError: final error):
+        emit(SalesState.loadProductsFailure(message: 'Erro ao carregar empresas: $error'));
+        return;
     }
-
-    final customers = resultMap.asSuccess;
-    final invoices = resultSales.asSuccess;
-    final companies = resultCompanies.asSuccess;
 
     switch (result) {
       case ResultSuccess(result: final products):

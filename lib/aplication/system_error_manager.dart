@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/interface/i_system_error_manager.dart';
 import 'package:system_loja/core/models/system_errors/system_error.dart';
 import 'package:system_loja/data/cache/models/system_model/system_error_model.dart';
 import 'package:system_loja/data/cache/system_cache_manager.dart';
@@ -16,7 +17,7 @@ Future<void> reportError(Object error, StackTrace stackTrace) async {
 }
 // TODO: Avaliar a necessidade de usar o SystemErrorManager
 
-class SystemErrorManager {
+class SystemErrorManager implements ISystemErrorManager {
   static final SystemErrorManager instance = SystemErrorManager._();
   final SystemCacheManager _cacheManager = SystemCacheManager();
   SystemErrorManager._() {
@@ -28,10 +29,13 @@ class SystemErrorManager {
       return true;
     };
   }
+
+  @override
   Future<void> clearAllErrors() async {
     await _cacheManager.clearErrors();
   }
 
+  @override
   Future<List<SystemError>> getAllErrors() async {
     final listLogs = await _cacheManager.retrieveAllErrors();
     final list = listLogs.map((logError) => logError.toDomain()).toList();
