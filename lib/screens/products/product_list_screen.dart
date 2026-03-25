@@ -7,7 +7,7 @@ import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/product_state.dart';
 import 'package:system_loja/screens/products/widgets/product_list.dart';
-import 'package:system_loja/screens/products/widgets/product_overview_bottom_sheet.dart';
+import 'package:system_loja/screens/route/route_app.gr.dart';
 
 /// Exibe a listagem de produtos cadastrados.
 @RoutePage()
@@ -54,7 +54,7 @@ class ProductListScreenState extends State<ProductListScreen> {
             padding: const EdgeInsets.all(16),
             child: ProductList(
               products: produtos,
-              onProductTap: (produto) => _mostrarDetalhesProduto(produto, produtos),
+              onProductTap: _abrirEdicaoProduto,
             ),
           );
         },
@@ -84,8 +84,14 @@ class ProductListScreenState extends State<ProductListScreen> {
     };
   }
 
-  void _mostrarDetalhesProduto(Product produto, List<Product> produtos) {
-    ProductOverviewBottomSheet.show(context, produto, produtos);
+  Future<void> _abrirEdicaoProduto(Product produto) async {
+    final changed = await context.router.push<bool>(
+      ProductDetailRoute(product: produto),
+    );
+
+    if (changed == true && mounted) {
+      _reloadProducts();
+    }
   }
 
   void _reloadProducts() {
