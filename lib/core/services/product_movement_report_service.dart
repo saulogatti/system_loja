@@ -29,18 +29,18 @@ class ProductMovementReportService {
     required List<ProductInvoiceMovement> entradas,
     required List<ProductInvoiceMovement> saidas,
   }) {
-    final totalEntradaQuantidade = entradas.fold<int>(0, (sum, movement) => sum + movement.item.quantity);
-    final totalSaidaQuantidade = saidas.fold<int>(0, (sum, movement) => sum + movement.item.quantity);
-    final totalEntradaValor = entradas.fold<double>(0, (sum, movement) => sum + movement.item.totalValue);
-    final totalSaidaValor = saidas.fold<double>(0, (sum, movement) => sum + movement.item.totalValue);
+    final totalEntryQuantity = entradas.fold<int>(0, (sum, movement) => sum + movement.item.quantity);
+    final totalExitQuantity = saidas.fold<int>(0, (sum, movement) => sum + movement.item.quantity);
+    final totalEntryValue = entradas.fold<double>(0, (sum, movement) => sum + movement.item.totalValue);
+    final totalExitValue = saidas.fold<double>(0, (sum, movement) => sum + movement.item.totalValue);
 
     return ProductMovementSummary(
-      totalEntradaQuantidade: totalEntradaQuantidade,
-      totalSaidaQuantidade: totalSaidaQuantidade,
-      totalEntradaValor: totalEntradaValor,
-      totalSaidaValor: totalSaidaValor,
-      saldoQuantidade: totalEntradaQuantidade - totalSaidaQuantidade,
-      saldoValor: totalEntradaValor - totalSaidaValor,
+      totalEntryQuantity: totalEntryQuantity,
+      totalExitQuantity: totalExitQuantity,
+      totalEntryValue: totalEntryValue,
+      totalExitValue: totalExitValue,
+      balanceQuantity: totalEntryQuantity - totalExitQuantity,
+      balanceValue: totalEntryValue - totalExitValue,
     );
   }
 }

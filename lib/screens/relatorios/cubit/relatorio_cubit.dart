@@ -112,8 +112,8 @@ class RelatorioCubit extends Cubit<RelatorioState> {
 
     return ProductDetailsReportData(
       categoryName: _resolveCategoryName(currentState.categoryNamesById, product.categoryId),
-      entradas: entradas,
-      saidas: saidas,
+      entries: entradas,
+      exits: saidas,
       summary: summary,
     );
   }
