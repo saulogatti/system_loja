@@ -273,13 +273,85 @@ class _LegendItem extends StatelessWidget {
   }
 }
 
-class _LoadedState extends StatelessWidget {
+enum _GridSortOrder { recentes, antigos }
+
+class _GridSortSegmentedControl extends StatelessWidget {
+  final _GridSortOrder current;
+  final ValueChanged<_GridSortOrder> onChanged;
+
+  const _GridSortSegmentedControl({required this.current, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return SegmentedButton<_GridSortOrder>(
+      segments: const [
+        ButtonSegment(
+          value: _GridSortOrder.recentes,
+          label: Text('Recentes'),
+          icon: Icon(Icons.schedule),
+        ),
+        ButtonSegment(
+          value: _GridSortOrder.antigos,
+          label: Text('Antigos'),
+          icon: Icon(Icons.history),
+        ),
+      ],
+      selected: {current},
+      onSelectionChanged: (selection) => onChanged(selection.first),
+    );
+  }
+}
+
+class _LoadedState extends StatefulWidget {
   final SalesPurchaseAnalyticsLoaded state;
 
   const _LoadedState({required this.state});
 
   @override
+  State<_LoadedState> createState() => _LoadedStateState();
+}
+
+class _LoadedStateState extends State<_LoadedState> {
+  _GridSortOrder _sortOrder = _GridSortOrder.recentes;
+
+  List<AnalyticsPoint> _sortedPoints() {
+    final points = widget.state.points.toList();
+
+    if (widget.state.grouping == SalesPurchaseGrouping.byDate) {
+      points.sort((a, b) {
+        final ak = _dateSortKey(a.label);
+        final bk = _dateSortKey(b.label);
+        if (ak == null && bk == null) return 0;
+        if (ak == null) return 1;
+        if (bk == null) return -1;
+        return ak.compareTo(bk);
+      });
+    } else {
+      points.sort((a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()));
+    }
+
+    if (_sortOrder == _GridSortOrder.recentes) {
+      return points.reversed.toList();
+    }
+    return points;
+  }
+
+  int? _dateSortKey(String label) {
+    // Esperado: DD/MM. Fallback: null (vai pro fim sem crash).
+    final parts = label.split('/');
+    if (parts.length != 2) return null;
+    final dd = int.tryParse(parts[0]);
+    final mm = int.tryParse(parts[1]);
+    if (dd == null || mm == null) return null;
+    if (dd < 1 || dd > 31 || mm < 1 || mm > 12) return null;
+    return mm * 100 + dd;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final state = widget.state;
+    final sortedPoints = _sortedPoints();
+
     return RefreshIndicator(
       onRefresh: () async {
         context.read<SalesPurchaseAnalyticsBloc>().add(ChangeSalesPurchaseGrouping(state.grouping));
@@ -295,7 +367,22 @@ class _LoadedState extends StatelessWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverToBoxAdapter(child: _SummaryCards(state: state)),
+            sliver: SliverToBoxAdapter(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: _SummaryCards(state: state)),
+                  const SizedBox(width: 12),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 260),
+                    child: _GridSortSegmentedControl(
+                      current: _sortOrder,
+                      onChanged: (value) => setState(() => _sortOrder = value),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverPadding(
@@ -305,8 +392,12 @@ class _LoadedState extends StatelessWidget {
                 builder: (context, constraints) {
                   final isWide = constraints.maxWidth >= 760;
                   final tiles = <Widget>[
-                    _SalesPurchaseDonutCard(totalSales: state.totalSales, totalPurchases: state.totalPurchases),
-                    if (state.grouping == SalesPurchaseGrouping.byDate) _ProductsCountChartCard(points: state.points),
+                    _SalesPurchaseDonutCard(
+                      totalSales: state.totalSales,
+                      totalPurchases: state.totalPurchases,
+                    ),
+                    if (state.grouping == SalesPurchaseGrouping.byDate)
+                      _ProductsCountChartCard(points: state.points),
                   ];
 
                   if (tiles.isEmpty) {
@@ -350,10 +441,10 @@ class _LoadedState extends StatelessWidget {
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final point = state.points[index];
+                  final point = sortedPoints[index];
                   return _ComparisonBarTile(point: point, maxValue: state.maxValue);
                 },
-                childCount: state.points.length,
+                childCount: sortedPoints.length,
               ),
             ),
           ),
@@ -369,6 +460,14 @@ class _SalesPurchaseDonutCard extends StatelessWidget {
 
   const _SalesPurchaseDonutCard({required this.totalSales, required this.totalPurchases});
 
+  Future<void> _openZoom(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => _DonutZoomDialog(totalSales: totalSales, totalPurchases: totalPurchases),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final total = totalSales + totalPurchases;
@@ -376,86 +475,202 @@ class _SalesPurchaseDonutCard extends StatelessWidget {
     final purchasesPct = total <= 0 ? 0.0 : totalPurchases / total;
 
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.donut_large, color: Theme.of(context).colorScheme.primary),
-                const SizedBox(width: 8),
-                const Expanded(
-                  child: Text('Distribuição: Vendas x Compras', style: TextStyle(fontWeight: FontWeight.w700)),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                SizedBox(
-                  width: 140,
-                  height: 140,
-                  child: CustomPaint(
-                    painter: _DonutPainter(
-                      salesFraction: salesPct,
-                      purchasesFraction: purchasesPct,
-                      salesColor: Colors.green,
-                      purchasesColor: Colors.orange,
-                      trackColor: Theme.of(context).colorScheme.outlineVariant,
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'R\$ ${total.toStringAsFixed(2)}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontWeight: FontWeight.w800),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Total',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => _openZoom(context),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.donut_large, color: Theme.of(context).colorScheme.primary),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text('Distribuição: Vendas x Compras', style: TextStyle(fontWeight: FontWeight.w700)),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    children: [
-                      _DonutLegendLine(
-                        color: Colors.green,
-                        title: 'Vendas',
-                        value: totalSales,
-                        percent: salesPct,
-                      ),
-                      const SizedBox(height: 10),
-                      _DonutLegendLine(
-                        color: Colors.orange,
-                        title: 'Compras',
-                        value: totalPurchases,
-                        percent: purchasesPct,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            if (total <= 0) ...[
-              const SizedBox(height: 10),
-              Text(
-                'Sem valores para exibir no gráfico.',
-                style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 12),
+                  Icon(Icons.zoom_in, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                ],
               ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 140,
+                    height: 140,
+                    child: CustomPaint(
+                      painter: _DonutPainter(
+                        salesFraction: salesPct,
+                        purchasesFraction: purchasesPct,
+                        salesColor: Colors.green,
+                        purchasesColor: Colors.orange,
+                        trackColor: Theme.of(context).colorScheme.outlineVariant,
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'R\$ ${total.toStringAsFixed(2)}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontWeight: FontWeight.w800),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'Total',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        _DonutLegendLine(
+                          color: Colors.green,
+                          title: 'Vendas',
+                          value: totalSales,
+                          percent: salesPct,
+                        ),
+                        const SizedBox(height: 10),
+                        _DonutLegendLine(
+                          color: Colors.orange,
+                          title: 'Compras',
+                          value: totalPurchases,
+                          percent: purchasesPct,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              if (total <= 0) ...[
+                const SizedBox(height: 10),
+                Text(
+                  'Sem valores para exibir no gráfico.',
+                  style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 12),
+                ),
+              ],
             ],
-          ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DonutZoomDialog extends StatelessWidget {
+  final double totalSales;
+  final double totalPurchases;
+
+  const _DonutZoomDialog({required this.totalSales, required this.totalPurchases});
+
+  @override
+  Widget build(BuildContext context) {
+    final total = totalSales + totalPurchases;
+    final salesPct = total <= 0 ? 0.0 : totalSales / total;
+    final purchasesPct = total <= 0 ? 0.0 : totalPurchases / total;
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.94, end: 1.0),
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeOutCubic,
+      builder: (context, scale, child) {
+        return Transform.scale(
+          scale: scale,
+          child: AnimatedOpacity(
+            opacity: scale,
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            child: child,
+          ),
+        );
+      },
+      child: Dialog(
+        insetPadding: const EdgeInsets.all(16),
+        clipBehavior: Clip.antiAlias,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Expanded(
+                      child: Text('Distribuição: Vendas x Compras', style: TextStyle(fontWeight: FontWeight.w800)),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close),
+                      tooltip: 'Fechar',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Center(
+                  child: SizedBox(
+                    width: 320,
+                    height: 320,
+                    child: CustomPaint(
+                      painter: _DonutPainter(
+                        salesFraction: salesPct,
+                        purchasesFraction: purchasesPct,
+                        salesColor: Colors.green,
+                        purchasesColor: Colors.orange,
+                        trackColor: Theme.of(context).colorScheme.outlineVariant,
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'R\$ ${total.toStringAsFixed(2)}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'Total',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _DonutLegendLine(color: Colors.green, title: 'Vendas', value: totalSales, percent: salesPct),
+                const SizedBox(height: 10),
+                _DonutLegendLine(
+                  color: Colors.orange,
+                  title: 'Compras',
+                  value: totalPurchases,
+                  percent: purchasesPct,
+                ),
+                if (total <= 0) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    'Sem valores para exibir no gráfico.',
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 12),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );
