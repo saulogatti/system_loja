@@ -124,6 +124,8 @@ docs/
 - `.github/copilot-instructions.md`
 - `.github/instructions/dartcode.instructions.md`
 - `AGENTS.md`
+- `docs/BUILD_INSTRUCTIONS.md`
 - `docs/DRIFT_ARCHITECTURE.md`
 - `docs/DRIFT_MIGRATION.md`
+- `docs/INTERFACES_ARCHITECTURE.md`
 - `docs/VALIDATION_SYSTEM.md`
