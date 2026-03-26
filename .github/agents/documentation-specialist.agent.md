@@ -1,16 +1,7 @@
 ---
 name: Documentation Specialist
 description: Especialista em documentação técnica para o System Loja
-target: github-copilot
-tools:
-  - read
-  - edit
-  - create
-  - grep
-  - glob
-infer: false
-metadata:
-  domain: documentation
+tools: [read, edit, search]
 ---
 
 # Documentation Specialist Agent

@@ -1,16 +1,16 @@
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
 
+class PersonListInitial extends PersonListState {
+  const PersonListInitial();
+}
+
 class PersonListLoaded extends PersonListState {
   final List<Customer> customers;
   final List<Company> companies;
   final String? errorMessage;
 
-  const PersonListLoaded({
-    required this.customers,
-    required this.companies,
-    this.errorMessage,
-  });
+  const PersonListLoaded({required this.customers, required this.companies, this.errorMessage});
 }
 
 class PersonListLoading extends PersonListState {

@@ -31,15 +31,12 @@ class _CadastroGroupScreenState extends State<CadastroGroupScreen> {
           length: 2,
           initialIndex: tabsRouter.activeIndex,
           child: Scaffold(
-            appBar: AppBar(
-              title: Text(tabsRouter.current.title(context)),
-              bottom: TabBar(
-                onTap: tabsRouter.setActiveIndex,
-                tabs: const [
-                  Tab(icon: Icon(Icons.people), text: 'Pessoas'),
-                  Tab(icon: Icon(Icons.inventory), text: 'Produtos'),
-                ],
-              ),
+            appBar: TabBar(
+              onTap: tabsRouter.setActiveIndex,
+              tabs: const [
+                Tab(icon: Icon(Icons.people), text: 'Pessoas'),
+                Tab(icon: Icon(Icons.inventory), text: 'Produtos'),
+              ],
             ),
             body: child,
             floatingActionButton: FloatingActionButton.extended(

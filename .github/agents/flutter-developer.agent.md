@@ -1,10 +1,19 @@
 ---
 name: Flutter Developer
 description: Expert em desenvolvimento Flutter/Dart para implementar features e correções no System Loja
-target: github-copilot
 tools:
-  ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'agent', 'dart-sdk-mcp-server/*', 'dart-code.dart-code/get_dtd_uri', 'dart-code.dart-code/dart_format', 'dart-code.dart-code/dart_fix', 'memory', 'todo']
-infer: false
+  - execute
+  - read
+  - edit
+  - search
+  - web
+  - agent
+  - dart-sdk-mcp-server/*
+  - dart-code.dart-code/get_dtd_uri
+  - dart-code.dart-code/dart_format
+  - dart-code.dart-code/dart_fix
+  - memory
+  - todo
 
 ---
 

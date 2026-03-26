@@ -55,14 +55,14 @@ extension RelatorioStatePatterns on RelatorioState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( RelatorioInitial value)?  initial,TResult Function( RelatorioLoading value)?  loading,TResult Function( RelatorioLoaded value)?  loaded,TResult Function( RelatorioError value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( RelatorioError value)?  error,TResult Function( RelatorioInitial value)?  initial,TResult Function( RelatorioLoaded value)?  loaded,TResult Function( RelatorioLoading value)?  loading,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case RelatorioInitial() when initial != null:
-return initial(_that);case RelatorioLoading() when loading != null:
-return loading(_that);case RelatorioLoaded() when loaded != null:
-return loaded(_that);case RelatorioError() when error != null:
-return error(_that);case _:
+case RelatorioError() when error != null:
+return error(_that);case RelatorioInitial() when initial != null:
+return initial(_that);case RelatorioLoaded() when loaded != null:
+return loaded(_that);case RelatorioLoading() when loading != null:
+return loading(_that);case _:
   return orElse();
 
 }
@@ -80,14 +80,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( RelatorioInitial value)  initial,required TResult Function( RelatorioLoading value)  loading,required TResult Function( RelatorioLoaded value)  loaded,required TResult Function( RelatorioError value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( RelatorioError value)  error,required TResult Function( RelatorioInitial value)  initial,required TResult Function( RelatorioLoaded value)  loaded,required TResult Function( RelatorioLoading value)  loading,}){
 final _that = this;
 switch (_that) {
-case RelatorioInitial():
-return initial(_that);case RelatorioLoading():
-return loading(_that);case RelatorioLoaded():
-return loaded(_that);case RelatorioError():
-return error(_that);}
+case RelatorioError():
+return error(_that);case RelatorioInitial():
+return initial(_that);case RelatorioLoaded():
+return loaded(_that);case RelatorioLoading():
+return loading(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -101,14 +101,14 @@ return error(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( RelatorioInitial value)?  initial,TResult? Function( RelatorioLoading value)?  loading,TResult? Function( RelatorioLoaded value)?  loaded,TResult? Function( RelatorioError value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( RelatorioError value)?  error,TResult? Function( RelatorioInitial value)?  initial,TResult? Function( RelatorioLoaded value)?  loaded,TResult? Function( RelatorioLoading value)?  loading,}){
 final _that = this;
 switch (_that) {
-case RelatorioInitial() when initial != null:
-return initial(_that);case RelatorioLoading() when loading != null:
-return loading(_that);case RelatorioLoaded() when loaded != null:
-return loaded(_that);case RelatorioError() when error != null:
-return error(_that);case _:
+case RelatorioError() when error != null:
+return error(_that);case RelatorioInitial() when initial != null:
+return initial(_that);case RelatorioLoaded() when loaded != null:
+return loaded(_that);case RelatorioLoading() when loading != null:
+return loading(_that);case _:
   return null;
 
 }
@@ -125,13 +125,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( Map<int, String> categoryNamesById,  Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products,  ProductDetailsReportData? selectedProductDetails)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  error,TResult Function()?  initial,TResult Function( Map<int, String> categoryNamesById,  Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products,  RelatorioEstoqueOverviewData estoqueOverview,  RelatorioNotasOverviewData notasOverview,  ProductDetailsReportData? selectedProductDetails)?  loaded,TResult Function()?  loading,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case RelatorioInitial() when initial != null:
-return initial();case RelatorioLoading() when loading != null:
-return loading();case RelatorioLoaded() when loaded != null:
-return loaded(_that.categoryNamesById,_that.entryInvoices,_that.exitInvoices,_that.products,_that.selectedProductDetails);case RelatorioError() when error != null:
-return error(_that.message);case _:
+case RelatorioError() when error != null:
+return error(_that.message);case RelatorioInitial() when initial != null:
+return initial();case RelatorioLoaded() when loaded != null:
+return loaded(_that.categoryNamesById,_that.entryInvoices,_that.exitInvoices,_that.products,_that.estoqueOverview,_that.notasOverview,_that.selectedProductDetails);case RelatorioLoading() when loading != null:
+return loading();case _:
   return orElse();
 
 }
@@ -149,13 +149,13 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( Map<int, String> categoryNamesById,  Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products,  ProductDetailsReportData? selectedProductDetails)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( Map<int, String> categoryNamesById,  Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products,  RelatorioEstoqueOverviewData estoqueOverview,  RelatorioNotasOverviewData notasOverview,  ProductDetailsReportData? selectedProductDetails)  loaded,required TResult Function()  loading,}) {final _that = this;
 switch (_that) {
-case RelatorioInitial():
-return initial();case RelatorioLoading():
-return loading();case RelatorioLoaded():
-return loaded(_that.categoryNamesById,_that.entryInvoices,_that.exitInvoices,_that.products,_that.selectedProductDetails);case RelatorioError():
-return error(_that.message);}
+case RelatorioError():
+return error(_that.message);case RelatorioInitial():
+return initial();case RelatorioLoaded():
+return loaded(_that.categoryNamesById,_that.entryInvoices,_that.exitInvoices,_that.products,_that.estoqueOverview,_that.notasOverview,_that.selectedProductDetails);case RelatorioLoading():
+return loading();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -169,179 +169,17 @@ return error(_that.message);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( Map<int, String> categoryNamesById,  Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products,  ProductDetailsReportData? selectedProductDetails)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  error,TResult? Function()?  initial,TResult? Function( Map<int, String> categoryNamesById,  Map<int, Invoice> entryInvoices,  Map<int, Invoice> exitInvoices,  List<Product> products,  RelatorioEstoqueOverviewData estoqueOverview,  RelatorioNotasOverviewData notasOverview,  ProductDetailsReportData? selectedProductDetails)?  loaded,TResult? Function()?  loading,}) {final _that = this;
 switch (_that) {
-case RelatorioInitial() when initial != null:
-return initial();case RelatorioLoading() when loading != null:
-return loading();case RelatorioLoaded() when loaded != null:
-return loaded(_that.categoryNamesById,_that.entryInvoices,_that.exitInvoices,_that.products,_that.selectedProductDetails);case RelatorioError() when error != null:
-return error(_that.message);case _:
+case RelatorioError() when error != null:
+return error(_that.message);case RelatorioInitial() when initial != null:
+return initial();case RelatorioLoaded() when loaded != null:
+return loaded(_that.categoryNamesById,_that.entryInvoices,_that.exitInvoices,_that.products,_that.estoqueOverview,_that.notasOverview,_that.selectedProductDetails);case RelatorioLoading() when loading != null:
+return loading();case _:
   return null;
 
 }
 }
-
-}
-
-/// @nodoc
-
-
-class RelatorioInitial implements RelatorioState {
-   RelatorioInitial();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioInitial);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'RelatorioState.initial()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class RelatorioLoading implements RelatorioState {
-   RelatorioLoading();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioLoading);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'RelatorioState.loading()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class RelatorioLoaded implements RelatorioState {
-   RelatorioLoaded({required final  Map<int, String> categoryNamesById, required final  Map<int, Invoice> entryInvoices, required final  Map<int, Invoice> exitInvoices, required final  List<Product> products, this.selectedProductDetails}): _categoryNamesById = categoryNamesById,_entryInvoices = entryInvoices,_exitInvoices = exitInvoices,_products = products;
-  
-
- final  Map<int, String> _categoryNamesById;
- Map<int, String> get categoryNamesById {
-  if (_categoryNamesById is EqualUnmodifiableMapView) return _categoryNamesById;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(_categoryNamesById);
-}
-
- final  Map<int, Invoice> _entryInvoices;
- Map<int, Invoice> get entryInvoices {
-  if (_entryInvoices is EqualUnmodifiableMapView) return _entryInvoices;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(_entryInvoices);
-}
-
- final  Map<int, Invoice> _exitInvoices;
- Map<int, Invoice> get exitInvoices {
-  if (_exitInvoices is EqualUnmodifiableMapView) return _exitInvoices;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableMapView(_exitInvoices);
-}
-
- final  List<Product> _products;
- List<Product> get products {
-  if (_products is EqualUnmodifiableListView) return _products;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_products);
-}
-
- final  ProductDetailsReportData? selectedProductDetails;
-
-/// Create a copy of RelatorioState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$RelatorioLoadedCopyWith<RelatorioLoaded> get copyWith => _$RelatorioLoadedCopyWithImpl<RelatorioLoaded>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioLoaded&&const DeepCollectionEquality().equals(other._categoryNamesById, _categoryNamesById)&&const DeepCollectionEquality().equals(other._entryInvoices, _entryInvoices)&&const DeepCollectionEquality().equals(other._exitInvoices, _exitInvoices)&&const DeepCollectionEquality().equals(other._products, _products)&&(identical(other.selectedProductDetails, selectedProductDetails) || other.selectedProductDetails == selectedProductDetails));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categoryNamesById),const DeepCollectionEquality().hash(_entryInvoices),const DeepCollectionEquality().hash(_exitInvoices),const DeepCollectionEquality().hash(_products),selectedProductDetails);
-
-@override
-String toString() {
-  return 'RelatorioState.loaded(categoryNamesById: $categoryNamesById, entryInvoices: $entryInvoices, exitInvoices: $exitInvoices, products: $products, selectedProductDetails: $selectedProductDetails)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $RelatorioLoadedCopyWith<$Res> implements $RelatorioStateCopyWith<$Res> {
-  factory $RelatorioLoadedCopyWith(RelatorioLoaded value, $Res Function(RelatorioLoaded) _then) = _$RelatorioLoadedCopyWithImpl;
-@useResult
-$Res call({
- Map<int, String> categoryNamesById, Map<int, Invoice> entryInvoices, Map<int, Invoice> exitInvoices, List<Product> products, ProductDetailsReportData? selectedProductDetails
-});
-
-
-
-
-}
-/// @nodoc
-class _$RelatorioLoadedCopyWithImpl<$Res>
-    implements $RelatorioLoadedCopyWith<$Res> {
-  _$RelatorioLoadedCopyWithImpl(this._self, this._then);
-
-  final RelatorioLoaded _self;
-  final $Res Function(RelatorioLoaded) _then;
-
-/// Create a copy of RelatorioState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? categoryNamesById = null,Object? entryInvoices = null,Object? exitInvoices = null,Object? products = null,Object? selectedProductDetails = freezed,}) {
-  return _then(RelatorioLoaded(
-categoryNamesById: null == categoryNamesById ? _self._categoryNamesById : categoryNamesById // ignore: cast_nullable_to_non_nullable
-as Map<int, String>,entryInvoices: null == entryInvoices ? _self._entryInvoices : entryInvoices // ignore: cast_nullable_to_non_nullable
-as Map<int, Invoice>,exitInvoices: null == exitInvoices ? _self._exitInvoices : exitInvoices // ignore: cast_nullable_to_non_nullable
-as Map<int, Invoice>,products: null == products ? _self._products : products // ignore: cast_nullable_to_non_nullable
-as List<Product>,selectedProductDetails: freezed == selectedProductDetails ? _self.selectedProductDetails : selectedProductDetails // ignore: cast_nullable_to_non_nullable
-as ProductDetailsReportData?,
-  ));
-}
-
 
 }
 
@@ -410,5 +248,171 @@ as String,
 
 
 }
+
+/// @nodoc
+
+
+class RelatorioInitial implements RelatorioState {
+   RelatorioInitial();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioInitial);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'RelatorioState.initial()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class RelatorioLoaded implements RelatorioState {
+   RelatorioLoaded({required final  Map<int, String> categoryNamesById, required final  Map<int, Invoice> entryInvoices, required final  Map<int, Invoice> exitInvoices, required final  List<Product> products, required this.estoqueOverview, required this.notasOverview, this.selectedProductDetails}): _categoryNamesById = categoryNamesById,_entryInvoices = entryInvoices,_exitInvoices = exitInvoices,_products = products;
+  
+
+ final  Map<int, String> _categoryNamesById;
+ Map<int, String> get categoryNamesById {
+  if (_categoryNamesById is EqualUnmodifiableMapView) return _categoryNamesById;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_categoryNamesById);
+}
+
+ final  Map<int, Invoice> _entryInvoices;
+ Map<int, Invoice> get entryInvoices {
+  if (_entryInvoices is EqualUnmodifiableMapView) return _entryInvoices;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_entryInvoices);
+}
+
+ final  Map<int, Invoice> _exitInvoices;
+ Map<int, Invoice> get exitInvoices {
+  if (_exitInvoices is EqualUnmodifiableMapView) return _exitInvoices;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_exitInvoices);
+}
+
+ final  List<Product> _products;
+ List<Product> get products {
+  if (_products is EqualUnmodifiableListView) return _products;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_products);
+}
+
+ final  RelatorioEstoqueOverviewData estoqueOverview;
+ final  RelatorioNotasOverviewData notasOverview;
+ final  ProductDetailsReportData? selectedProductDetails;
+
+/// Create a copy of RelatorioState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$RelatorioLoadedCopyWith<RelatorioLoaded> get copyWith => _$RelatorioLoadedCopyWithImpl<RelatorioLoaded>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioLoaded&&const DeepCollectionEquality().equals(other._categoryNamesById, _categoryNamesById)&&const DeepCollectionEquality().equals(other._entryInvoices, _entryInvoices)&&const DeepCollectionEquality().equals(other._exitInvoices, _exitInvoices)&&const DeepCollectionEquality().equals(other._products, _products)&&(identical(other.estoqueOverview, estoqueOverview) || other.estoqueOverview == estoqueOverview)&&(identical(other.notasOverview, notasOverview) || other.notasOverview == notasOverview)&&(identical(other.selectedProductDetails, selectedProductDetails) || other.selectedProductDetails == selectedProductDetails));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categoryNamesById),const DeepCollectionEquality().hash(_entryInvoices),const DeepCollectionEquality().hash(_exitInvoices),const DeepCollectionEquality().hash(_products),estoqueOverview,notasOverview,selectedProductDetails);
+
+@override
+String toString() {
+  return 'RelatorioState.loaded(categoryNamesById: $categoryNamesById, entryInvoices: $entryInvoices, exitInvoices: $exitInvoices, products: $products, estoqueOverview: $estoqueOverview, notasOverview: $notasOverview, selectedProductDetails: $selectedProductDetails)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $RelatorioLoadedCopyWith<$Res> implements $RelatorioStateCopyWith<$Res> {
+  factory $RelatorioLoadedCopyWith(RelatorioLoaded value, $Res Function(RelatorioLoaded) _then) = _$RelatorioLoadedCopyWithImpl;
+@useResult
+$Res call({
+ Map<int, String> categoryNamesById, Map<int, Invoice> entryInvoices, Map<int, Invoice> exitInvoices, List<Product> products, RelatorioEstoqueOverviewData estoqueOverview, RelatorioNotasOverviewData notasOverview, ProductDetailsReportData? selectedProductDetails
+});
+
+
+
+
+}
+/// @nodoc
+class _$RelatorioLoadedCopyWithImpl<$Res>
+    implements $RelatorioLoadedCopyWith<$Res> {
+  _$RelatorioLoadedCopyWithImpl(this._self, this._then);
+
+  final RelatorioLoaded _self;
+  final $Res Function(RelatorioLoaded) _then;
+
+/// Create a copy of RelatorioState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? categoryNamesById = null,Object? entryInvoices = null,Object? exitInvoices = null,Object? products = null,Object? estoqueOverview = null,Object? notasOverview = null,Object? selectedProductDetails = freezed,}) {
+  return _then(RelatorioLoaded(
+categoryNamesById: null == categoryNamesById ? _self._categoryNamesById : categoryNamesById // ignore: cast_nullable_to_non_nullable
+as Map<int, String>,entryInvoices: null == entryInvoices ? _self._entryInvoices : entryInvoices // ignore: cast_nullable_to_non_nullable
+as Map<int, Invoice>,exitInvoices: null == exitInvoices ? _self._exitInvoices : exitInvoices // ignore: cast_nullable_to_non_nullable
+as Map<int, Invoice>,products: null == products ? _self._products : products // ignore: cast_nullable_to_non_nullable
+as List<Product>,estoqueOverview: null == estoqueOverview ? _self.estoqueOverview : estoqueOverview // ignore: cast_nullable_to_non_nullable
+as RelatorioEstoqueOverviewData,notasOverview: null == notasOverview ? _self.notasOverview : notasOverview // ignore: cast_nullable_to_non_nullable
+as RelatorioNotasOverviewData,selectedProductDetails: freezed == selectedProductDetails ? _self.selectedProductDetails : selectedProductDetails // ignore: cast_nullable_to_non_nullable
+as ProductDetailsReportData?,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class RelatorioLoading implements RelatorioState {
+   RelatorioLoading();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioLoading);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'RelatorioState.loading()';
+}
+
+
+}
+
+
+
 
 // dart format on

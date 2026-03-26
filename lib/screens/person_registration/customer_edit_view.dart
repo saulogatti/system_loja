@@ -7,6 +7,7 @@ import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/screens/person_registration/cubit/customer_edit_cubit.dart';
 import 'package:system_loja/screens/person_registration/cubit/customer_edit_state.dart';
+import 'package:system_loja/screens/utils/extension_date_time.dart';
 import 'package:system_loja/screens/utils/validators.dart';
 import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
@@ -89,6 +90,16 @@ class _CustomerEditViewState extends State<CustomerEditView> {
                   neighborhoodController: _neighborhoodController,
                   cityController: _cityController,
                   stateController: _stateController,
+                ),
+                const SizedBox(height: 16),
+                _buildReadOnlyDateField(
+                  label: 'Data de Cadastro',
+                  value: widget.customer.registrationDate.toFormattedDate(),
+                ),
+                const SizedBox(height: 16),
+                _buildReadOnlyDateField(
+                  label: 'Última Atualização',
+                  value: widget.customer.lastUpdatedDate.toFormattedDate(),
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -247,6 +258,19 @@ class _CustomerEditViewState extends State<CustomerEditView> {
       context: context,
       barrierDismissible: false,
       builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  Widget _buildReadOnlyDateField({required String label, required String value}) {
+    return TextFormField(
+      initialValue: value,
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder(),
+        prefixIcon: const Icon(Icons.event_note),
+      ),
+      readOnly: true,
+      enabled: false,
     );
   }
 }

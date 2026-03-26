@@ -7,6 +7,7 @@ import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/screens/person_registration/cubit/company_edit_cubit.dart';
 import 'package:system_loja/screens/person_registration/cubit/company_edit_state.dart';
+import 'package:system_loja/screens/utils/extension_date_time.dart';
 import 'package:system_loja/screens/utils/validators.dart';
 import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
@@ -94,6 +95,16 @@ class _CompanyEditViewState extends State<CompanyEditView> {
                   neighborhoodController: _neighborhoodController,
                   cityController: _cityController,
                   stateController: _stateController,
+                ),
+                const SizedBox(height: 16),
+                _buildReadOnlyDateField(
+                  label: 'Data de Cadastro',
+                  value: widget.company.registrationDate.toFormattedDate(),
+                ),
+                const SizedBox(height: 16),
+                _buildReadOnlyDateField(
+                  label: 'Última Atualização',
+                  value: widget.company.lastUpdatedDate.toFormattedDate(),
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -252,6 +263,19 @@ class _CompanyEditViewState extends State<CompanyEditView> {
       context: context,
       barrierDismissible: false,
       builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  Widget _buildReadOnlyDateField({required String label, required String value}) {
+    return TextFormField(
+      initialValue: value,
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder(),
+        prefixIcon: const Icon(Icons.event_note),
+      ),
+      readOnly: true,
+      enabled: false,
     );
   }
 }

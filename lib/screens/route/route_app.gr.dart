@@ -12,11 +12,14 @@
 import 'package:auto_route/auto_route.dart' as _i22;
 import 'package:collection/collection.dart' as _i27;
 import 'package:flutter/material.dart' as _i24;
+import 'package:system_loja/core/interface/i_category_repository.dart' as _i30;
+import 'package:system_loja/core/interface/i_product_repository.dart' as _i29;
+import 'package:system_loja/core/interface/i_sales_repository.dart' as _i28;
 import 'package:system_loja/core/models/company.dart' as _i23;
 import 'package:system_loja/core/models/customer.dart' as _i25;
 import 'package:system_loja/core/models/product.dart' as _i26;
 import 'package:system_loja/core/models/system_config/price_configuration.dart'
-    as _i28;
+    as _i31;
 import 'package:system_loja/screens/categories/category_management_screen.dart'
     as _i2;
 import 'package:system_loja/screens/configuracoes/issuer_config_screen.dart'
@@ -47,7 +50,7 @@ import 'package:system_loja/screens/products/product_screen.dart' as _i13;
 import 'package:system_loja/screens/relatorios/relatorio_screen.dart' as _i15;
 import 'package:system_loja/screens/relatorios/sales_purchase_analytics/sales_purchase_analytics_screen.dart'
     as _i17;
-import 'package:system_loja/screens/sales/cubit/sales_cubit.dart' as _i29;
+import 'package:system_loja/screens/sales/cubit/sales_cubit.dart' as _i32;
 import 'package:system_loja/screens/sales/sales_invoice_screen.dart' as _i16;
 import 'package:system_loja/screens/sales/sales_screen.dart' as _i18;
 
@@ -272,7 +275,7 @@ class PersonListRoute extends _i22.PageRouteInfo<void> {
   static _i22.PageInfo page = _i22.PageInfo(
     name,
     builder: (data) {
-      return const _i10.PersonListScreen();
+      return _i22.WrappedRoute(child: const _i10.PersonListScreen());
     },
   );
 }
@@ -399,28 +402,91 @@ class ProductListRoute extends _i22.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i15.RelatoriosScreen]
-class RelatoriosRoute extends _i22.PageRouteInfo<void> {
-  const RelatoriosRoute({List<_i22.PageRouteInfo>? children})
-    : super(RelatoriosRoute.name, initialChildren: children);
+class RelatoriosRoute extends _i22.PageRouteInfo<RelatoriosRouteArgs> {
+  RelatoriosRoute({
+    _i24.Key? key,
+    _i28.ISalesRepository? salesRepository,
+    _i29.IProductRepository? productRepository,
+    _i30.ICategoryRepository? categoryRepository,
+    List<_i22.PageRouteInfo>? children,
+  }) : super(
+         RelatoriosRoute.name,
+         args: RelatoriosRouteArgs(
+           key: key,
+           salesRepository: salesRepository,
+           productRepository: productRepository,
+           categoryRepository: categoryRepository,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'RelatoriosRoute';
 
   static _i22.PageInfo page = _i22.PageInfo(
     name,
     builder: (data) {
-      return _i22.WrappedRoute(child: const _i15.RelatoriosScreen());
+      final args = data.argsAs<RelatoriosRouteArgs>(
+        orElse: () => const RelatoriosRouteArgs(),
+      );
+      return _i22.WrappedRoute(
+        child: _i15.RelatoriosScreen(
+          key: args.key,
+          salesRepository: args.salesRepository,
+          productRepository: args.productRepository,
+          categoryRepository: args.categoryRepository,
+        ),
+      );
     },
   );
+}
+
+class RelatoriosRouteArgs {
+  const RelatoriosRouteArgs({
+    this.key,
+    this.salesRepository,
+    this.productRepository,
+    this.categoryRepository,
+  });
+
+  final _i24.Key? key;
+
+  final _i28.ISalesRepository? salesRepository;
+
+  final _i29.IProductRepository? productRepository;
+
+  final _i30.ICategoryRepository? categoryRepository;
+
+  @override
+  String toString() {
+    return 'RelatoriosRouteArgs{key: $key, salesRepository: $salesRepository, productRepository: $productRepository, categoryRepository: $categoryRepository}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! RelatoriosRouteArgs) return false;
+    return key == other.key &&
+        salesRepository == other.salesRepository &&
+        productRepository == other.productRepository &&
+        categoryRepository == other.categoryRepository;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      salesRepository.hashCode ^
+      productRepository.hashCode ^
+      categoryRepository.hashCode;
 }
 
 /// generated route for
 /// [_i16.SalesInvoiceScreen]
 class SalesInvoiceRoute extends _i22.PageRouteInfo<SalesInvoiceRouteArgs> {
   SalesInvoiceRoute({
-    required List<_i28.PaymentMethodType> paymentMethods,
+    required List<_i31.PaymentMethodType> paymentMethods,
     required Map<int, _i25.Customer> customers,
     required Map<int, _i23.Company> companies,
-    required _i29.SalesCubit salesCubit,
+    required _i32.SalesCubit salesCubit,
     required List<_i26.Product> products,
     _i24.Key? key,
     List<_i22.PageRouteInfo>? children,
@@ -465,13 +531,13 @@ class SalesInvoiceRouteArgs {
     this.key,
   });
 
-  final List<_i28.PaymentMethodType> paymentMethods;
+  final List<_i31.PaymentMethodType> paymentMethods;
 
   final Map<int, _i25.Customer> customers;
 
   final Map<int, _i23.Company> companies;
 
-  final _i29.SalesCubit salesCubit;
+  final _i32.SalesCubit salesCubit;
 
   final List<_i26.Product> products;
 
@@ -486,7 +552,7 @@ class SalesInvoiceRouteArgs {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! SalesInvoiceRouteArgs) return false;
-    return const _i27.ListEquality<_i28.PaymentMethodType>().equals(
+    return const _i27.ListEquality<_i31.PaymentMethodType>().equals(
           paymentMethods,
           other.paymentMethods,
         ) &&
@@ -508,7 +574,7 @@ class SalesInvoiceRouteArgs {
 
   @override
   int get hashCode =>
-      const _i27.ListEquality<_i28.PaymentMethodType>().hash(paymentMethods) ^
+      const _i27.ListEquality<_i31.PaymentMethodType>().hash(paymentMethods) ^
       const _i27.MapEquality<int, _i25.Customer>().hash(customers) ^
       const _i27.MapEquality<int, _i23.Company>().hash(companies) ^
       salesCubit.hashCode ^

@@ -23,9 +23,10 @@ class PersonListScreen extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<PersonListCubit>(
+    return BlocProvider(
       create: (_) =>
-          PersonListCubit(appInjection.get<ICustomerRepository>(), appInjection.get<ICompanyRepository>()),
+          PersonListCubit(appInjection.get<ICustomerRepository>(), appInjection.get<ICompanyRepository>())
+            ..loadPeople(),
       child: this,
     );
   }
@@ -40,11 +41,13 @@ class PersonListScreenState extends State<PersonListScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<PersonListCubit, PersonListState>(
       builder: (context, state) {
-        if (state is PersonListLoading) {
+        if (state is PersonListLoading || state is PersonListInitial) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final loadedState = state as PersonListLoaded;
+        if (state is! PersonListLoaded) {
+          return const SizedBox.shrink();
+        }
 
         return DefaultTabController(
           length: 2,
@@ -57,12 +60,12 @@ class PersonListScreenState extends State<PersonListScreen> {
                   Tab(text: 'Pessoa Jurídica', icon: Icon(Icons.business)),
                 ],
               ),
-              if (loadedState.errorMessage != null)
+              if (state.errorMessage != null)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                   child: MaterialBanner(
-                    content: Text(loadedState.errorMessage!),
-                    actions: [TextButton(onPressed: reloadPeople, child: const Text('Tentar novamente'))],
+                    content: Text(state.errorMessage!),
+                    actions: [TextButton(onPressed: _reloadPeople, child: const Text('Tentar novamente'))],
                   ),
                 ),
               Expanded(
@@ -70,7 +73,7 @@ class PersonListScreenState extends State<PersonListScreen> {
                   children: [
                     _PersonSectionList<Customer>(
                       emptyMessage: 'Nenhuma pessoa física cadastrada.',
-                      entries: loadedState.customers,
+                      entries: state.customers,
                       titleBuilder: (customer) => customer.name,
                       subtitleBuilder: (customer) =>
                           'CPF: ${customer.cpf} • E-mail: ${customer.email ?? '-'} • Telefone: ${customer.phone ?? '-'}',
@@ -79,20 +82,20 @@ class PersonListScreenState extends State<PersonListScreen> {
                           CustomerEditRoute(customer: customer),
                         );
                         if (changed == true && mounted) {
-                          await reloadPeople();
+                          await _reloadPeople();
                         }
                       },
                     ),
                     _PersonSectionList<Company>(
                       emptyMessage: 'Nenhuma pessoa jurídica cadastrada.',
-                      entries: loadedState.companies,
+                      entries: state.companies,
                       titleBuilder: (company) => company.name,
                       subtitleBuilder: (company) =>
                           'CNPJ: ${company.cnpj} • E-mail: ${company.email ?? '-'} • Telefone: ${company.phone ?? '-'}',
                       onTap: (company) async {
                         final changed = await context.router.push<bool>(CompanyEditRoute(company: company));
                         if (changed == true && mounted) {
-                          await reloadPeople();
+                          await _reloadPeople();
                         }
                       },
                     ),
@@ -116,16 +119,14 @@ class PersonListScreenState extends State<PersonListScreen> {
   void initState() {
     super.initState();
     PersonListScreen._reloadSignal.addListener(_onReloadSignal);
-    reloadPeople();
-  }
-
-  /// Recarrega os dados das listas PF e PJ.
-  Future<void> reloadPeople() async {
-    await context.read<PersonListCubit>().reloadPeople();
   }
 
   void _onReloadSignal() {
-    reloadPeople();
+    _reloadPeople();
+  }
+
+  Future<void> _reloadPeople() {
+    return context.read<PersonListCubit>().loadPeople();
   }
 }
 
