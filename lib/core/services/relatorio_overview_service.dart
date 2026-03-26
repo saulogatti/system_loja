@@ -7,7 +7,7 @@ class RelatorioOverviewService {
   /// Calcula resumo de estoque e ordenação por quantidade.
   RelatorioEstoqueOverviewData buildEstoqueOverview(List<Product> products) {
     final produtosSemEstoque = products.where((p) => p.stockQuantity == 0).length;
-    final produtosComEstoqueBaixo = products.where((p) => p.stockQuantity > 0 && p.stockQuantity <= 5).length;
+    final produtosComEstoqueBaixo = products.where((p) => p.stockQuantity > 0 && p.stockQuantity <= kLowStockThreshold).length;
     final produtosOrdenadosPorEstoque = List<Product>.from(products)
       ..sort((a, b) => a.stockQuantity.compareTo(b.stockQuantity));
 
