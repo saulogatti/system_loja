@@ -1,3 +1,4 @@
+import 'package:system_loja/core/constants/app_constants.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/report/relatorio_overview_data.dart';
@@ -7,7 +8,9 @@ class RelatorioOverviewService {
   /// Calcula resumo de estoque e ordenação por quantidade.
   RelatorioEstoqueOverviewData buildEstoqueOverview(List<Product> products) {
     final produtosSemEstoque = products.where((p) => p.stockQuantity == 0).length;
-    final produtosComEstoqueBaixo = products.where((p) => p.stockQuantity > 0 && p.stockQuantity <= kLowStockThreshold).length;
+    final produtosComEstoqueBaixo = products
+        .where((p) => p.stockQuantity > 0 && p.stockQuantity <= Constants.kLowStockThreshold)
+        .length;
     final produtosOrdenadosPorEstoque = List<Product>.from(products)
       ..sort((a, b) => a.stockQuantity.compareTo(b.stockQuantity));
 

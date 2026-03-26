@@ -13,14 +13,13 @@ Future<void> reportError(Object error, StackTrace stackTrace) async {
     code: error.hashCode,
     stackTrace: stackTrace,
   );
-  await SystemErrorManager.instance.saveErrorToCache(systemError);
+  await SystemErrorManager().saveErrorToCache(systemError);
 }
 // TODO: Avaliar a necessidade de usar o SystemErrorManager
 
 class SystemErrorManager implements ISystemErrorManager {
-  static final SystemErrorManager instance = SystemErrorManager._();
   final SystemCacheManager _cacheManager = SystemCacheManager();
-  SystemErrorManager._() {
+  SystemErrorManager() {
     FlutterError.onError = (FlutterErrorDetails details) {
       reportError(details.exception, details.stack ?? StackTrace.current);
     };
