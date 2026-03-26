@@ -47,7 +47,7 @@ void setupAppInjection() {
   appInjection.registerSingleton<RelatorioOverviewService>(RelatorioOverviewService());
   appInjection.registerSingleton<AppDatabase>(AppDatabase());
   appInjection.registerSingleton<SystemDatabase>(SystemDatabase());
-  appInjection.registerSingleton<ISystemErrorManager>(SystemErrorManager.instance);
+  appInjection.registerSingleton<ISystemErrorManager>(SystemErrorManager());
   appInjection.registerSingleton<CacheManager>(CacheManager());
   appInjection.registerSingleton<CodeGeneratorService>(
     CodeGeneratorService(
