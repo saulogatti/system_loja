@@ -192,8 +192,8 @@ class _EstoqueTab extends StatelessWidget {
       context,
       product: product,
       categoryName: details.categoryName,
-      entradas: details.entradas,
-      saidas: details.saidas,
+      entries: details.entries,
+      exits: details.exits,
       summary: details.summary,
     );
   }
@@ -458,15 +458,15 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
 class _ProductDetailsBottomSheet extends StatelessWidget {
   final Product product;
   final String categoryName;
-  final List<ProductInvoiceMovement> entradas;
-  final List<ProductInvoiceMovement> saidas;
+  final List<ProductInvoiceMovement> entries;
+  final List<ProductInvoiceMovement> exits;
   final ProductMovementSummary summary;
 
   const _ProductDetailsBottomSheet({
     required this.product,
     required this.categoryName,
-    required this.entradas,
-    required this.saidas,
+    required this.entries,
+    required this.exits,
     required this.summary,
   });
 
@@ -503,9 +503,9 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
               const SizedBox(height: 12),
               _ProductMovementSummaryCard(summary: summary),
               const SizedBox(height: 16),
-              _MovementSection(title: 'Entradas do produto', color: Colors.green, movements: entradas),
+              _MovementSection(title: 'Entradas do produto', color: Colors.green, movements: entries),
               const SizedBox(height: 12),
-              _MovementSection(title: 'Saídas do produto', color: Colors.orange, movements: saidas),
+              _MovementSection(title: 'Saídas do produto', color: Colors.orange, movements: exits),
             ],
           );
         },
@@ -517,8 +517,8 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
     BuildContext context, {
     required Product product,
     required String categoryName,
-    required List<ProductInvoiceMovement> entradas,
-    required List<ProductInvoiceMovement> saidas,
+    required List<ProductInvoiceMovement> entries,
+    required List<ProductInvoiceMovement> exits,
     required ProductMovementSummary summary,
   }) {
     return showModalBottomSheet<void>(
@@ -528,8 +528,8 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
       builder: (_) => _ProductDetailsBottomSheet(
         product: product,
         categoryName: categoryName,
-        entradas: entradas,
-        saidas: saidas,
+        entries: entries,
+        exits: exits,
         summary: summary,
       ),
     );
@@ -543,7 +543,7 @@ class _ProductMovementSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final saldoColor = summary.saldoQuantidade >= 0 ? Colors.green : Colors.red;
+    final saldoColor = summary.balanceQuantity >= 0 ? Colors.green : Colors.red;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -554,21 +554,21 @@ class _ProductMovementSummaryCard extends StatelessWidget {
             const SizedBox(height: 8),
             _SummaryLine(
               label: 'Entradas',
-              quantityText: '${summary.totalEntradaQuantidade} un.',
-              valueText: 'R\$ ${summary.totalEntradaValor.toStringAsFixed(2)}',
+              quantityText: '${summary.totalEntryQuantity} un.',
+              valueText: 'R\$ ${summary.totalEntryValue.toStringAsFixed(2)}',
               color: Colors.green,
             ),
             _SummaryLine(
               label: 'Saídas',
-              quantityText: '${summary.totalSaidaQuantidade} un.',
-              valueText: 'R\$ ${summary.totalSaidaValor.toStringAsFixed(2)}',
+              quantityText: '${summary.totalExitQuantity} un.',
+              valueText: 'R\$ ${summary.totalExitValue.toStringAsFixed(2)}',
               color: Colors.orange,
             ),
             const Divider(height: 16),
             _SummaryLine(
               label: 'Saldo',
-              quantityText: '${summary.saldoQuantidade} un.',
-              valueText: 'R\$ ${summary.saldoValor.toStringAsFixed(2)}',
+              quantityText: '${summary.balanceQuantity} un.',
+              valueText: 'R\$ ${summary.balanceValue.toStringAsFixed(2)}',
               color: saldoColor,
               isBold: true,
             ),

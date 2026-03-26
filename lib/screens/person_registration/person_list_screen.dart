@@ -1,16 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/aplication/app_injection.dart';
 import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
+import 'package:system_loja/screens/person_registration/cubit/person_list_cubit.dart';
+import 'package:system_loja/screens/person_registration/cubit/person_list_state.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
 
 /// Exibe as listagens de pessoa fisica e pessoa juridica.
 @RoutePage()
-class PersonListScreen extends StatefulWidget {
+class PersonListScreen extends StatefulWidget implements AutoRouteWrapper {
   static final ValueNotifier<int> _reloadSignal = ValueNotifier<int>(0);
 
   const PersonListScreen({super.key});
@@ -18,79 +21,88 @@ class PersonListScreen extends StatefulWidget {
   @override
   State<PersonListScreen> createState() => PersonListScreenState();
 
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<PersonListCubit>(
+      create: (_) =>
+          PersonListCubit(appInjection.get<ICustomerRepository>(), appInjection.get<ICompanyRepository>()),
+      child: this,
+    );
+  }
+
   static void requestReload() {
     _reloadSignal.value++;
   }
 }
 
 class PersonListScreenState extends State<PersonListScreen> {
-  final ICustomerRepository _customerRepository = appInjection.get<ICustomerRepository>();
-  final ICompanyRepository _companyRepository = appInjection.get<ICompanyRepository>();
-
-  bool _isLoading = false;
-  String? _errorMessage;
-  List<Customer> _customers = const [];
-  List<Company> _companies = const [];
-
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    return BlocBuilder<PersonListCubit, PersonListState>(
+      builder: (context, state) {
+        if (state is PersonListLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-    return DefaultTabController(
-      length: 2,
-      child: Column(
-        children: [
-          const SizedBox(height: 8),
-          const TabBar(
-            tabs: [
-              Tab(text: 'Pessoa Física', icon: Icon(Icons.badge)),
-              Tab(text: 'Pessoa Jurídica', icon: Icon(Icons.business)),
+        final loadedState = state as PersonListLoaded;
+
+        return DefaultTabController(
+          length: 2,
+          child: Column(
+            children: [
+              const SizedBox(height: 8),
+              const TabBar(
+                tabs: [
+                  Tab(text: 'Pessoa Física', icon: Icon(Icons.badge)),
+                  Tab(text: 'Pessoa Jurídica', icon: Icon(Icons.business)),
+                ],
+              ),
+              if (loadedState.errorMessage != null)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                  child: MaterialBanner(
+                    content: Text(loadedState.errorMessage!),
+                    actions: [TextButton(onPressed: reloadPeople, child: const Text('Tentar novamente'))],
+                  ),
+                ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    _PersonSectionList<Customer>(
+                      emptyMessage: 'Nenhuma pessoa física cadastrada.',
+                      entries: loadedState.customers,
+                      titleBuilder: (customer) => customer.name,
+                      subtitleBuilder: (customer) =>
+                          'CPF: ${customer.cpf} • E-mail: ${customer.email ?? '-'} • Telefone: ${customer.phone ?? '-'}',
+                      onTap: (customer) async {
+                        final changed = await context.router.push<bool>(
+                          CustomerEditRoute(customer: customer),
+                        );
+                        if (changed == true && mounted) {
+                          await reloadPeople();
+                        }
+                      },
+                    ),
+                    _PersonSectionList<Company>(
+                      emptyMessage: 'Nenhuma pessoa jurídica cadastrada.',
+                      entries: loadedState.companies,
+                      titleBuilder: (company) => company.name,
+                      subtitleBuilder: (company) =>
+                          'CNPJ: ${company.cnpj} • E-mail: ${company.email ?? '-'} • Telefone: ${company.phone ?? '-'}',
+                      onTap: (company) async {
+                        final changed = await context.router.push<bool>(CompanyEditRoute(company: company));
+                        if (changed == true && mounted) {
+                          await reloadPeople();
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-          if (_errorMessage != null)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: MaterialBanner(
-                content: Text(_errorMessage!),
-                actions: [TextButton(onPressed: reloadPeople, child: const Text('Tentar novamente'))],
-              ),
-            ),
-          Expanded(
-            child: TabBarView(
-              children: [
-                _PersonSectionList<Customer>(
-                  emptyMessage: 'Nenhuma pessoa física cadastrada.',
-                  entries: _customers,
-                  titleBuilder: (customer) => customer.name,
-                  subtitleBuilder: (customer) =>
-                      'CPF: ${customer.cpf} • E-mail: ${customer.email ?? '-'} • Telefone: ${customer.phone ?? '-'}',
-                  onTap: (customer) async {
-                    final changed = await context.router.push<bool>(CustomerEditRoute(customer: customer));
-                    if (changed == true && mounted) {
-                      await reloadPeople();
-                    }
-                  },
-                ),
-                _PersonSectionList<Company>(
-                  emptyMessage: 'Nenhuma pessoa jurídica cadastrada.',
-                  entries: _companies,
-                  titleBuilder: (company) => company.name,
-                  subtitleBuilder: (company) =>
-                      'CNPJ: ${company.cnpj} • E-mail: ${company.email ?? '-'} • Telefone: ${company.phone ?? '-'}',
-                  onTap: (company) async {
-                    final changed = await context.router.push<bool>(CompanyEditRoute(company: company));
-                    if (changed == true && mounted) {
-                      await reloadPeople();
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -109,38 +121,7 @@ class PersonListScreenState extends State<PersonListScreen> {
 
   /// Recarrega os dados das listas PF e PJ.
   Future<void> reloadPeople() async {
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
-    final customerResult = await _customerRepository.getAllCustomers();
-    final companyResult = await _companyRepository.getAllCompanies();
-
-    if (!mounted) {
-      return;
-    }
-
-    final errors = <String>[];
-    final customers = customerResult.isSuccessful ? customerResult.asSuccess : <Customer>[];
-    final companies = companyResult.isSuccessful ? companyResult.asSuccess : <Company>[];
-
-    if (customerResult.hasError) {
-      errors.add(customerResult.asError);
-    }
-    if (companyResult.hasError) {
-      errors.add(companyResult.asError);
-    }
-
-    setState(() {
-      _customers = customers;
-      _companies = companies;
-      _errorMessage = errors.isEmpty ? null : errors.join(' | ');
-      _isLoading = false;
-    });
+    await context.read<PersonListCubit>().reloadPeople();
   }
 
   void _onReloadSignal() {
