@@ -1,0 +1,179 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/aplication/app_injection.dart';
+import 'package:system_loja/core/interface/i_company_repository.dart';
+import 'package:system_loja/core/interface/i_customer_repository.dart';
+import 'package:system_loja/core/models/company.dart';
+import 'package:system_loja/core/models/customer.dart';
+import 'package:system_loja/screens/person_registration/cubit/person_list_cubit.dart';
+import 'package:system_loja/screens/person_registration/cubit/person_list_state.dart';
+import 'package:system_loja/screens/route/route_app.gr.dart';
+import 'package:system_loja/screens/widgets/card_list_item.dart';
+
+/// Exibe as listagens de pessoa fisica e pessoa juridica.
+@RoutePage()
+class PersonListScreen extends StatefulWidget implements AutoRouteWrapper {
+  static final ValueNotifier<int> _reloadSignal = ValueNotifier<int>(0);
+
+  const PersonListScreen({super.key});
+
+  @override
+  State<PersonListScreen> createState() => PersonListScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<PersonListCubit>(
+      create: (_) =>
+          PersonListCubit(appInjection.get<ICustomerRepository>(), appInjection.get<ICompanyRepository>()),
+      child: this,
+    );
+  }
+
+  static void requestReload() {
+    _reloadSignal.value++;
+  }
+}
+
+class PersonListScreenState extends State<PersonListScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PersonListCubit, PersonListState>(
+      builder: (context, state) {
+        if (state is PersonListLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final loadedState = state as PersonListLoaded;
+
+        return DefaultTabController(
+          length: 2,
+          child: Column(
+            children: [
+              const SizedBox(height: 8),
+              const TabBar(
+                tabs: [
+                  Tab(text: 'Pessoa Física', icon: Icon(Icons.badge)),
+                  Tab(text: 'Pessoa Jurídica', icon: Icon(Icons.business)),
+                ],
+              ),
+              if (loadedState.errorMessage != null)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                  child: MaterialBanner(
+                    content: Text(loadedState.errorMessage!),
+                    actions: [TextButton(onPressed: reloadPeople, child: const Text('Tentar novamente'))],
+                  ),
+                ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    _PersonSectionList<Customer>(
+                      emptyMessage: 'Nenhuma pessoa física cadastrada.',
+                      entries: loadedState.customers,
+                      titleBuilder: (customer) => customer.name,
+                      subtitleBuilder: (customer) =>
+                          'CPF: ${customer.cpf} • E-mail: ${customer.email ?? '-'} • Telefone: ${customer.phone ?? '-'}',
+                      onTap: (customer) async {
+                        final changed = await context.router.push<bool>(
+                          CustomerEditRoute(customer: customer),
+                        );
+                        if (changed == true && mounted) {
+                          await reloadPeople();
+                        }
+                      },
+                    ),
+                    _PersonSectionList<Company>(
+                      emptyMessage: 'Nenhuma pessoa jurídica cadastrada.',
+                      entries: loadedState.companies,
+                      titleBuilder: (company) => company.name,
+                      subtitleBuilder: (company) =>
+                          'CNPJ: ${company.cnpj} • E-mail: ${company.email ?? '-'} • Telefone: ${company.phone ?? '-'}',
+                      onTap: (company) async {
+                        final changed = await context.router.push<bool>(CompanyEditRoute(company: company));
+                        if (changed == true && mounted) {
+                          await reloadPeople();
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    PersonListScreen._reloadSignal.removeListener(_onReloadSignal);
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    PersonListScreen._reloadSignal.addListener(_onReloadSignal);
+    reloadPeople();
+  }
+
+  /// Recarrega os dados das listas PF e PJ.
+  Future<void> reloadPeople() async {
+    await context.read<PersonListCubit>().reloadPeople();
+  }
+
+  void _onReloadSignal() {
+    reloadPeople();
+  }
+}
+
+class _PersonSectionList<T> extends StatelessWidget {
+  static const SliverGridDelegateWithMaxCrossAxisExtent _gridDelegate =
+      SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 350,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        mainAxisExtent: 132,
+      );
+
+  final List<T> entries;
+  final String emptyMessage;
+  final String Function(T entry) titleBuilder;
+  final String Function(T entry) subtitleBuilder;
+  final Future<void> Function(T entry) onTap;
+
+  const _PersonSectionList({
+    required this.entries,
+    required this.emptyMessage,
+    required this.titleBuilder,
+    required this.subtitleBuilder,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (entries.isEmpty) {
+      return Center(
+        child: Text(emptyMessage, style: const TextStyle(color: Colors.grey)),
+      );
+    }
+
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      gridDelegate: _gridDelegate,
+      itemCount: entries.length,
+      itemBuilder: (context, index) {
+        final entry = entries[index];
+        return CardListItem(
+          colorAvatar: Theme.of(context).colorScheme.primary,
+          title: titleBuilder(entry),
+          subTitle: subtitleBuilder(entry),
+          margin: EdgeInsets.zero,
+          onTap: () => onTap(entry),
+        );
+      },
+    );
+  }
+}

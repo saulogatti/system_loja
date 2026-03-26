@@ -9,6 +9,17 @@ class $CategoriesRecordsTable extends CategoriesRecords
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $CategoriesRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -22,6 +33,18 @@ class $CategoriesRecordsTable extends CategoriesRecords
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
+  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
+    'lastUpdatedDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastUpdatedDate =
+      GeneratedColumn<DateTime>(
+        'last_updated_date',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -31,17 +54,6 @@ class $CategoriesRecordsTable extends CategoriesRecords
     type: DriftSqlType.string,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
-  );
-  static const VerificationMeta _descriptionMeta = const VerificationMeta(
-    'description',
-  );
-  @override
-  late final GeneratedColumn<String> description = GeneratedColumn<String>(
-    'description',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
   );
   static const VerificationMeta _registrationDateMeta = const VerificationMeta(
     'registrationDate',
@@ -56,25 +68,13 @@ class $CategoriesRecordsTable extends CategoriesRecords
         requiredDuringInsert: false,
         defaultValue: currentDateAndTime,
       );
-  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
-    'lastUpdatedDate',
-  );
-  @override
-  late final GeneratedColumn<DateTime> lastUpdatedDate =
-      GeneratedColumn<DateTime>(
-        'last_updated_date',
-        aliasedName,
-        true,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-      );
   @override
   List<GeneratedColumn> get $columns => [
-    id,
-    name,
     description,
-    registrationDate,
+    id,
     lastUpdatedDate,
+    name,
+    registrationDate,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -88,17 +88,6 @@ class $CategoriesRecordsTable extends CategoriesRecords
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
     if (data.containsKey('description')) {
       context.handle(
         _descriptionMeta,
@@ -108,14 +97,8 @@ class $CategoriesRecordsTable extends CategoriesRecords
         ),
       );
     }
-    if (data.containsKey('registration_date')) {
-      context.handle(
-        _registrationDateMeta,
-        registrationDate.isAcceptableOrUnknown(
-          data['registration_date']!,
-          _registrationDateMeta,
-        ),
-      );
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('last_updated_date')) {
       context.handle(
@@ -123,6 +106,23 @@ class $CategoriesRecordsTable extends CategoriesRecords
         lastUpdatedDate.isAcceptableOrUnknown(
           data['last_updated_date']!,
           _lastUpdatedDateMeta,
+        ),
+      );
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('registration_date')) {
+      context.handle(
+        _registrationDateMeta,
+        registrationDate.isAcceptableOrUnknown(
+          data['registration_date']!,
+          _registrationDateMeta,
         ),
       );
     }
@@ -135,26 +135,26 @@ class $CategoriesRecordsTable extends CategoriesRecords
   CategoriesRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return CategoriesRecord(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      name: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}name'],
-      )!,
       description: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}description'],
       ),
-      registrationDate: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}registration_date'],
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
       )!,
       lastUpdatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_updated_date'],
       ),
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      registrationDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}registration_date'],
+      )!,
     );
   }
 
@@ -166,53 +166,53 @@ class $CategoriesRecordsTable extends CategoriesRecords
 
 class CategoriesRecord extends DataClass
     implements Insertable<CategoriesRecord> {
+  /// Descrição opcional da categoria
+  final String? description;
+
   /// Identificador único da categoria (auto-incrementado)
   final int id;
+
+  /// Data da última atualização
+  final DateTime? lastUpdatedDate;
 
   /// Nome da categoria (obrigatório e único)
   final String name;
 
-  /// Descrição opcional da categoria
-  final String? description;
-
   /// Data de criação do registro
   final DateTime registrationDate;
-
-  /// Data da última atualização
-  final DateTime? lastUpdatedDate;
   const CategoriesRecord({
-    required this.id,
-    required this.name,
     this.description,
-    required this.registrationDate,
+    required this.id,
     this.lastUpdatedDate,
+    required this.name,
+    required this.registrationDate,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['name'] = Variable<String>(name);
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
-    map['registration_date'] = Variable<DateTime>(registrationDate);
+    map['id'] = Variable<int>(id);
     if (!nullToAbsent || lastUpdatedDate != null) {
       map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate);
     }
+    map['name'] = Variable<String>(name);
+    map['registration_date'] = Variable<DateTime>(registrationDate);
     return map;
   }
 
   CategoriesRecordsCompanion toCompanion(bool nullToAbsent) {
     return CategoriesRecordsCompanion(
-      id: Value(id),
-      name: Value(name),
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
-      registrationDate: Value(registrationDate),
+      id: Value(id),
       lastUpdatedDate: lastUpdatedDate == null && nullToAbsent
           ? const Value.absent()
           : Value(lastUpdatedDate),
+      name: Value(name),
+      registrationDate: Value(registrationDate),
     );
   }
 
@@ -222,151 +222,151 @@ class CategoriesRecord extends DataClass
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return CategoriesRecord(
-      id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
       description: serializer.fromJson<String?>(json['description']),
-      registrationDate: serializer.fromJson<DateTime>(json['registrationDate']),
+      id: serializer.fromJson<int>(json['id']),
       lastUpdatedDate: serializer.fromJson<DateTime?>(json['lastUpdatedDate']),
+      name: serializer.fromJson<String>(json['name']),
+      registrationDate: serializer.fromJson<DateTime>(json['registrationDate']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
       'description': serializer.toJson<String?>(description),
-      'registrationDate': serializer.toJson<DateTime>(registrationDate),
+      'id': serializer.toJson<int>(id),
       'lastUpdatedDate': serializer.toJson<DateTime?>(lastUpdatedDate),
+      'name': serializer.toJson<String>(name),
+      'registrationDate': serializer.toJson<DateTime>(registrationDate),
     };
   }
 
   CategoriesRecord copyWith({
-    int? id,
-    String? name,
     Value<String?> description = const Value.absent(),
-    DateTime? registrationDate,
+    int? id,
     Value<DateTime?> lastUpdatedDate = const Value.absent(),
+    String? name,
+    DateTime? registrationDate,
   }) => CategoriesRecord(
-    id: id ?? this.id,
-    name: name ?? this.name,
     description: description.present ? description.value : this.description,
-    registrationDate: registrationDate ?? this.registrationDate,
+    id: id ?? this.id,
     lastUpdatedDate: lastUpdatedDate.present
         ? lastUpdatedDate.value
         : this.lastUpdatedDate,
+    name: name ?? this.name,
+    registrationDate: registrationDate ?? this.registrationDate,
   );
   CategoriesRecord copyWithCompanion(CategoriesRecordsCompanion data) {
     return CategoriesRecord(
-      id: data.id.present ? data.id.value : this.id,
-      name: data.name.present ? data.name.value : this.name,
       description: data.description.present
           ? data.description.value
           : this.description,
-      registrationDate: data.registrationDate.present
-          ? data.registrationDate.value
-          : this.registrationDate,
+      id: data.id.present ? data.id.value : this.id,
       lastUpdatedDate: data.lastUpdatedDate.present
           ? data.lastUpdatedDate.value
           : this.lastUpdatedDate,
+      name: data.name.present ? data.name.value : this.name,
+      registrationDate: data.registrationDate.present
+          ? data.registrationDate.value
+          : this.registrationDate,
     );
   }
 
   @override
   String toString() {
     return (StringBuffer('CategoriesRecord(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
           ..write('description: $description, ')
-          ..write('registrationDate: $registrationDate, ')
-          ..write('lastUpdatedDate: $lastUpdatedDate')
+          ..write('id: $id, ')
+          ..write('lastUpdatedDate: $lastUpdatedDate, ')
+          ..write('name: $name, ')
+          ..write('registrationDate: $registrationDate')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode =>
-      Object.hash(id, name, description, registrationDate, lastUpdatedDate);
+      Object.hash(description, id, lastUpdatedDate, name, registrationDate);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is CategoriesRecord &&
-          other.id == this.id &&
-          other.name == this.name &&
           other.description == this.description &&
-          other.registrationDate == this.registrationDate &&
-          other.lastUpdatedDate == this.lastUpdatedDate);
+          other.id == this.id &&
+          other.lastUpdatedDate == this.lastUpdatedDate &&
+          other.name == this.name &&
+          other.registrationDate == this.registrationDate);
 }
 
 class CategoriesRecordsCompanion extends UpdateCompanion<CategoriesRecord> {
-  final Value<int> id;
-  final Value<String> name;
   final Value<String?> description;
-  final Value<DateTime> registrationDate;
+  final Value<int> id;
   final Value<DateTime?> lastUpdatedDate;
+  final Value<String> name;
+  final Value<DateTime> registrationDate;
   const CategoriesRecordsCompanion({
-    this.id = const Value.absent(),
-    this.name = const Value.absent(),
     this.description = const Value.absent(),
-    this.registrationDate = const Value.absent(),
+    this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
+    this.name = const Value.absent(),
+    this.registrationDate = const Value.absent(),
   });
   CategoriesRecordsCompanion.insert({
-    this.id = const Value.absent(),
-    required String name,
     this.description = const Value.absent(),
-    this.registrationDate = const Value.absent(),
+    this.id = const Value.absent(),
     this.lastUpdatedDate = const Value.absent(),
+    required String name,
+    this.registrationDate = const Value.absent(),
   }) : name = Value(name);
   static Insertable<CategoriesRecord> custom({
-    Expression<int>? id,
-    Expression<String>? name,
     Expression<String>? description,
-    Expression<DateTime>? registrationDate,
+    Expression<int>? id,
     Expression<DateTime>? lastUpdatedDate,
+    Expression<String>? name,
+    Expression<DateTime>? registrationDate,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (name != null) 'name': name,
       if (description != null) 'description': description,
-      if (registrationDate != null) 'registration_date': registrationDate,
+      if (id != null) 'id': id,
       if (lastUpdatedDate != null) 'last_updated_date': lastUpdatedDate,
+      if (name != null) 'name': name,
+      if (registrationDate != null) 'registration_date': registrationDate,
     });
   }
 
   CategoriesRecordsCompanion copyWith({
-    Value<int>? id,
-    Value<String>? name,
     Value<String?>? description,
-    Value<DateTime>? registrationDate,
+    Value<int>? id,
     Value<DateTime?>? lastUpdatedDate,
+    Value<String>? name,
+    Value<DateTime>? registrationDate,
   }) {
     return CategoriesRecordsCompanion(
-      id: id ?? this.id,
-      name: name ?? this.name,
       description: description ?? this.description,
-      registrationDate: registrationDate ?? this.registrationDate,
+      id: id ?? this.id,
       lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
+      name: name ?? this.name,
+      registrationDate: registrationDate ?? this.registrationDate,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (lastUpdatedDate.present) {
+      map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
-    if (description.present) {
-      map['description'] = Variable<String>(description.value);
-    }
     if (registrationDate.present) {
       map['registration_date'] = Variable<DateTime>(registrationDate.value);
-    }
-    if (lastUpdatedDate.present) {
-      map['last_updated_date'] = Variable<DateTime>(lastUpdatedDate.value);
     }
     return map;
   }
@@ -374,11 +374,11 @@ class CategoriesRecordsCompanion extends UpdateCompanion<CategoriesRecord> {
   @override
   String toString() {
     return (StringBuffer('CategoriesRecordsCompanion(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
           ..write('description: $description, ')
-          ..write('registrationDate: $registrationDate, ')
-          ..write('lastUpdatedDate: $lastUpdatedDate')
+          ..write('id: $id, ')
+          ..write('lastUpdatedDate: $lastUpdatedDate, ')
+          ..write('name: $name, ')
+          ..write('registrationDate: $registrationDate')
           ..write(')'))
         .toString();
   }
@@ -3814,19 +3814,19 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 
 typedef $$CategoriesRecordsTableCreateCompanionBuilder =
     CategoriesRecordsCompanion Function({
-      Value<int> id,
-      required String name,
       Value<String?> description,
-      Value<DateTime> registrationDate,
+      Value<int> id,
       Value<DateTime?> lastUpdatedDate,
+      required String name,
+      Value<DateTime> registrationDate,
     });
 typedef $$CategoriesRecordsTableUpdateCompanionBuilder =
     CategoriesRecordsCompanion Function({
-      Value<int> id,
-      Value<String> name,
       Value<String?> description,
-      Value<DateTime> registrationDate,
+      Value<int> id,
       Value<DateTime?> lastUpdatedDate,
+      Value<String> name,
+      Value<DateTime> registrationDate,
     });
 
 final class $$CategoriesRecordsTableReferences
@@ -3875,8 +3875,18 @@ class $$CategoriesRecordsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3885,18 +3895,8 @@ class $$CategoriesRecordsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get description => $composableBuilder(
-    column: $table.description,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<DateTime> get registrationDate => $composableBuilder(
     column: $table.registrationDate,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3935,8 +3935,18 @@ class $$CategoriesRecordsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
+    column: $table.lastUpdatedDate,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3945,18 +3955,8 @@ class $$CategoriesRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get description => $composableBuilder(
-    column: $table.description,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
     column: $table.registrationDate,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
     builder: (column) => ColumnOrderings(column),
   );
 }
@@ -3970,24 +3970,24 @@ class $$CategoriesRecordsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
-
   GeneratedColumn<String> get description => $composableBuilder(
     column: $table.description,
     builder: (column) => column,
   );
 
-  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => column,
-  );
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
     column: $table.lastUpdatedDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
+    column: $table.registrationDate,
     builder: (column) => column,
   );
 
@@ -4050,31 +4050,31 @@ class $$CategoriesRecordsTableTableManager
               ),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                Value<String> name = const Value.absent(),
                 Value<String?> description = const Value.absent(),
-                Value<DateTime> registrationDate = const Value.absent(),
+                Value<int> id = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<DateTime> registrationDate = const Value.absent(),
               }) => CategoriesRecordsCompanion(
-                id: id,
-                name: name,
                 description: description,
-                registrationDate: registrationDate,
+                id: id,
                 lastUpdatedDate: lastUpdatedDate,
+                name: name,
+                registrationDate: registrationDate,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
-                required String name,
                 Value<String?> description = const Value.absent(),
-                Value<DateTime> registrationDate = const Value.absent(),
+                Value<int> id = const Value.absent(),
                 Value<DateTime?> lastUpdatedDate = const Value.absent(),
+                required String name,
+                Value<DateTime> registrationDate = const Value.absent(),
               }) => CategoriesRecordsCompanion.insert(
-                id: id,
-                name: name,
                 description: description,
-                registrationDate: registrationDate,
+                id: id,
                 lastUpdatedDate: lastUpdatedDate,
+                name: name,
+                registrationDate: registrationDate,
               ),
           withReferenceMapper: (p0) => p0
               .map(
