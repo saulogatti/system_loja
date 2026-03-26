@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:system_loja/aplication/system_error_manager.dart';
+import 'package:system_loja/core/interface/i_analytics_repository.dart';
 import 'package:system_loja/core/interface/i_category_repository.dart';
 import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
@@ -10,12 +12,16 @@ import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
+import 'package:system_loja/core/interface/i_system_error_manager.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
+import 'package:system_loja/core/services/product_movement_report_service.dart';
+import 'package:system_loja/core/services/relatorio_overview_service.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
 import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/domain/code_generator_service.dart';
+import 'package:system_loja/domain/repository/analytics_repository.dart';
 import 'package:system_loja/domain/repository/category_repository.dart';
 import 'package:system_loja/domain/repository/company_repository.dart';
 import 'package:system_loja/domain/repository/configuration_repository.dart';
@@ -35,12 +41,13 @@ late LoggerCacheRepository printerLog;
 /// Isso é usado no main.dart para configurar as dependências da aplicação.
 /// Para acessar as dependências, use o `appInjection.get<T>()` onde T é o tipo da dependência.
 void setupAppInjection() {
-  printerLog = registerLogPrinterColor(
-    config: ConfigLog(enableLog: kDebugMode),
-  );
+  printerLog = registerLogPrinterColor(config: ConfigLog(enableLog: kDebugMode));
   appInjection.registerSingleton<RouteApp>(RouteApp());
+  appInjection.registerSingleton<ProductMovementReportService>(ProductMovementReportService());
+  appInjection.registerSingleton<RelatorioOverviewService>(RelatorioOverviewService());
   appInjection.registerSingleton<AppDatabase>(AppDatabase());
   appInjection.registerSingleton<SystemDatabase>(SystemDatabase());
+  appInjection.registerSingleton<ISystemErrorManager>(SystemErrorManager());
   appInjection.registerSingleton<CacheManager>(CacheManager());
   appInjection.registerSingleton<CodeGeneratorService>(
     CodeGeneratorService(
@@ -97,21 +104,19 @@ void setupAppInjection() {
   );
 
   appInjection.registerSingleton<ICategoryRepository>(
-    CategoryRepository(
-      categoryDao: appInjection.get<AppDatabase>().categoryDao,
-    ),
+    CategoryRepository(categoryDao: appInjection.get<AppDatabase>().categoryDao),
+  );
+  appInjection.registerSingleton<IAnalyticsRepository>(
+    AnalyticsRepository(invoiceDao: appInjection.get<AppDatabase>().invoiceDao),
   );
   unawaited(_carregarConfiguracaoInicial());
 }
 
 /// Carrega preferências da aplicação após o registro do repositório.
 Future<void> _carregarConfiguracaoInicial() async {
-  final resultado = await appInjection
-      .get<IConfigurationRepository>()
-      .loadConfiguration();
+  final resultado = await appInjection.get<IConfigurationRepository>().loadConfiguration();
   resultado.when(
     onSuccess: (_) {},
-    onError: (mensagem) =>
-        debugPrint('Falha ao carregar configurações iniciais: $mensagem'),
+    onError: (mensagem) => debugPrint('Falha ao carregar configurações iniciais: $mensagem'),
   );
 }

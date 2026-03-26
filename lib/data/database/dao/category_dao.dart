@@ -111,6 +111,7 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
     required String name,
     String? description,
   }) async {
+    assert(id > 0, 'ID da categoria deve ser maior que zero');
     return await update(categoriesRecords).replace(
       CategoriesRecordsCompanion(
         id: Value(id),

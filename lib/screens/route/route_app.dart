@@ -9,22 +9,25 @@ class RouteApp extends RootStackRouter {
       page: HostRoute.page,
       initial: true,
       children: [
-        AutoRoute(page: HomeRoute.page, title: (context, data) => 'Home'),
+        AutoRoute(
+          page: SalesPurchaseAnalyticsRoute.page,
+          title: (context, data) => 'Gráficos de Vendas e Compras',
+        ),
         AutoRoute(
           page: CadastroGroupRoute.page,
           title: (context, data) => 'Cadastro',
           maintainState: false,
           children: [
             AutoRoute(
-              page: PersonRegistrationRoute.page,
-              title: (context, data) => 'Cadastro de Pessoa',
+              page: PersonListRoute.page,
+              title: (context, data) => 'Lista de Pessoas',
               initial: true,
               maintainState: false,
             ),
 
             AutoRoute(
-              page: ProductInfoRoute.page,
-              title: (context, data) => 'Cadastro de Produto',
+              page: ProductListRoute.page,
+              title: (context, data) => 'Lista de Produtos',
               maintainState: false,
             ),
           ],
@@ -36,18 +39,18 @@ class RouteApp extends RootStackRouter {
     ),
 
     AutoRoute(page: SalesInvoiceRoute.page, title: (context, data) => 'Sales Invoice'),
+    AutoRoute(page: PersonRegistrationRoute.page, title: (context, data) => 'Cadastro de Pessoa'),
+    AutoRoute(page: CustomerEditRoute.page, title: (context, data) => 'Editar Pessoa Física'),
+    AutoRoute(page: CompanyEditRoute.page, title: (context, data) => 'Editar Pessoa Jurídica'),
+    AutoRoute(page: ProductInfoRoute.page, title: (context, data) => 'Cadastro de Produto'),
     AutoRoute(page: ProductDetailRoute.page, title: (context, data) => 'Product Detail'),
     AutoRoute(page: CategoryManagementRoute.page, title: (context, data) => 'Category Management'),
     AutoRoute(page: LogSystemRoute.page, title: (context, data) => 'System Logs'),
     AutoRoute(page: LogsAnalyticsRoute.page, title: (context, data) => 'Logs Analytics'),
-    AutoRoute(page: CompanyEditRoute.page, title: (context, data) => 'Edit Company'),
 
     AutoRoute(page: SystemConfigRoute.page, title: (context, data) => 'System Config'),
     AutoRoute(page: UsuarioRoute.page, title: (context, data) => 'Usuários', maintainState: false),
     AutoRoute(page: IssuerConfigRoute.page, title: (context, data) => 'Empresa Emitente'),
-    AutoRoute(
-      page: SalesPurchaseAnalyticsRoute.page,
-      title: (context, data) => 'Gráficos de Vendas e Compras',
-    ),
+    AutoRoute(page: HomeRoute.page, title: (context, data) => 'Home'),
   ];
 }
