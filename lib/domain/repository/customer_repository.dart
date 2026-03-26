@@ -106,16 +106,8 @@ class CustomerRepository implements ICustomerRepository {
     required String cpf,
   }) async {
     try {
-      final allCustomers = await _customerDao.getAll();
-      try {
-        final customer = allCustomers.firstWhere(
-          (customer) => customer.cpf == cpf,
-        );
-        return ResultStatus.success(customer);
-      } on StateError {
-        // Cliente não encontrado
-        return ResultStatus.success(null);
-      }
+      final customer = await _customerDao.getByCpf(cpf);
+      return ResultStatus.success(customer);
     } on CustomerException catch (e) {
       await reportError(e, StackTrace.current);
       return ResultStatus.error(e.message);
