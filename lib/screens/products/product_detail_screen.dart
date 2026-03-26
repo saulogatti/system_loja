@@ -341,14 +341,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       final preco = double.parse(_precoController.text.trim().replaceAll(',', '.'));
       final estoque = int.parse(_estoqueController.text.trim());
 
-      final updatedProduct = Product(
+      final updatedProduct = widget.product.copyWith(
         name: _nomeController.text.trim(),
-        code: widget.product.code,
+       
         price: preco,
         stockQuantity: estoque,
         description: _descricaoController.text.trim(),
         categoryId: _selectedCategoryId,
-        id: widget.product.id,
+
         lastUpdatedDate: DateTime.now(),
       );
 

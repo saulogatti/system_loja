@@ -71,6 +71,7 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
         price: Value(data.price),
         stockQuantity: Value(data.stockQuantity),
         lastUpdatedDate: Value(data.lastUpdatedDate),
+        registrationDate: Value(data.registrationDate),
       ),
     );
   }
