@@ -128,8 +128,7 @@ void main() {
 
       service.buildEstoqueOverview(products);
 
-      expect(products[0].stockQuantity, originalOrder[0].stockQuantity);
-      expect(products[1].stockQuantity, originalOrder[1].stockQuantity);
+      expect(products, orderedEquals(originalOrder));
     });
   });
 }
