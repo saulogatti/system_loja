@@ -24,19 +24,13 @@ class UsuarioList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
-          'Usuários Cadastrados',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
+        const Text('Usuários Cadastrados', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         const SizedBox(height: 16),
         if (usuarios.isEmpty)
           const Center(
             child: Padding(
               padding: EdgeInsets.all(32.0),
-              child: Text(
-                'Nenhum usuário cadastrado',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
+              child: Text('Nenhum usuário cadastrado', style: TextStyle(fontSize: 16, color: Colors.grey)),
             ),
           )
         else

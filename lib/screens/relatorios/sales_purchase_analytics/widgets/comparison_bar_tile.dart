@@ -103,10 +103,7 @@ class _VerticalValueBar extends StatelessWidget {
             child: Container(
               width: 26,
               height: math.max(6.0, 140.0 * safeFactor),
-              decoration: BoxDecoration(
-                color: barColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
+              decoration: BoxDecoration(color: barColor, borderRadius: BorderRadius.circular(10)),
             ),
           ),
         ),
@@ -122,4 +119,3 @@ class _VerticalValueBar extends StatelessWidget {
     );
   }
 }
-

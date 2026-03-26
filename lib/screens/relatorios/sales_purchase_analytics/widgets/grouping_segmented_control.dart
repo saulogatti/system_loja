@@ -32,4 +32,3 @@ class GroupingSegmentedControl extends StatelessWidget {
     );
   }
 }
-

@@ -6,28 +6,19 @@ part of 'price_configuration_entry.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PriceConfigurationEntry _$PriceConfigurationEntryFromJson(
-  Map<String, dynamic> json,
-) => PriceConfigurationEntry(
-  types: (json['types'] as List<dynamic>)
-      .map((e) => $enumDecode(_$PaymentMethodTypeEnumMap, e))
-      .toList(),
-  measurementUnits: (json['measurementUnits'] as List<dynamic>)
-      .map((e) => e as String)
-      .toList(),
-  registrationDate: DateTime.parse(json['registrationDate'] as String),
-  lastUpdatedDate: DateTime.parse(json['lastUpdatedDate'] as String),
-  reportConfiguration: json['reportConfiguration'] == null
-      ? null
-      : ReportConfigurationEntry.fromJson(
-          json['reportConfiguration'] as Map<String, dynamic>,
-        ),
-  id: (json['id'] as num?)?.toInt() ?? -1,
-);
+PriceConfigurationEntry _$PriceConfigurationEntryFromJson(Map<String, dynamic> json) =>
+    PriceConfigurationEntry(
+      types: (json['types'] as List<dynamic>).map((e) => $enumDecode(_$PaymentMethodTypeEnumMap, e)).toList(),
+      measurementUnits: (json['measurementUnits'] as List<dynamic>).map((e) => e as String).toList(),
+      registrationDate: DateTime.parse(json['registrationDate'] as String),
+      lastUpdatedDate: DateTime.parse(json['lastUpdatedDate'] as String),
+      reportConfiguration: json['reportConfiguration'] == null
+          ? null
+          : ReportConfigurationEntry.fromJson(json['reportConfiguration'] as Map<String, dynamic>),
+      id: (json['id'] as num?)?.toInt() ?? -1,
+    );
 
-Map<String, dynamic> _$PriceConfigurationEntryToJson(
-  PriceConfigurationEntry instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$PriceConfigurationEntryToJson(PriceConfigurationEntry instance) => <String, dynamic>{
   'types': instance.types.map((e) => _$PaymentMethodTypeEnumMap[e]!).toList(),
   'measurementUnits': instance.measurementUnits,
   'reportConfiguration': instance.reportConfiguration,

@@ -10,10 +10,7 @@ import 'package:system_loja/core/constants/app_constants.dart';
 /// para permitir entrada formatada de CNPJ durante o registro.
 class CnpjTextInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // se oldValue é maior que newValue, significa que o usuário está apagando
     if (oldValue.text.length > newValue.text.length) {
       return newValue;
@@ -22,9 +19,7 @@ class CnpjTextInputFormatter extends TextInputFormatter {
     final digitsOnly = newValue.text.replaceAll(Constants.nonNumericRegExp, '');
 
     // Limita a 14 dígitos
-    final limitedDigits = digitsOnly.length > 14
-        ? digitsOnly.substring(0, 14)
-        : digitsOnly;
+    final limitedDigits = digitsOnly.length > 14 ? digitsOnly.substring(0, 14) : digitsOnly;
 
     // Aplica a formatação
     final formatted = _formatCnpj(limitedDigits);
@@ -62,10 +57,7 @@ class CnpjTextInputFormatter extends TextInputFormatter {
 /// Remove automaticamente caracteres não-numéricos e limita a 11 dígitos.
 class CpfTextInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // se oldValue é maior que newValue, significa que o usuário está apagando
     if (oldValue.text.length > newValue.text.length) {
       return newValue;
@@ -74,9 +66,7 @@ class CpfTextInputFormatter extends TextInputFormatter {
     final digitsOnly = newValue.text.replaceAll(Constants.nonNumericRegExp, '');
 
     // Limita a 11 dígitos
-    final limitedDigits = digitsOnly.length > 11
-        ? digitsOnly.substring(0, 11)
-        : digitsOnly;
+    final limitedDigits = digitsOnly.length > 11 ? digitsOnly.substring(0, 11) : digitsOnly;
 
     // Aplica a formatação
     final formatted = _formatCpf(limitedDigits);
@@ -111,15 +101,9 @@ class CpfTextInputFormatter extends TextInputFormatter {
 /// Formatador de entrada para valores decimais.
 class DecimalInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // Permite apenas dígitos e um ponto decimal
-    String normalizedText = newValue.text.replaceAll(
-      Constants.decimalAllowedRegExp,
-      '',
-    );
+    String normalizedText = newValue.text.replaceAll(Constants.decimalAllowedRegExp, '');
 
     // Garante que haja no máximo um ponto decimal
     final parts = normalizedText.split('.');
@@ -140,10 +124,7 @@ class DecimalInputFormatter extends TextInputFormatter {
 /// Remove automaticamente caracteres não-numéricos e limita a 11 dígitos.
 class PhoneTextInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // se oldValue é maior que newValue, significa que o usuário está apagando
     if (oldValue.text.length > newValue.text.length) {
       return newValue;
@@ -152,9 +133,7 @@ class PhoneTextInputFormatter extends TextInputFormatter {
     final digitsOnly = newValue.text.replaceAll(Constants.nonNumericRegExp, '');
 
     // Limita a 11 dígitos
-    final limitedDigits = digitsOnly.length > 11
-        ? digitsOnly.substring(0, 11)
-        : digitsOnly;
+    final limitedDigits = digitsOnly.length > 11 ? digitsOnly.substring(0, 11) : digitsOnly;
 
     // Aplica a formatação
     final formatted = _formatPhone(limitedDigits);
@@ -191,10 +170,7 @@ class CepTextInputFormatter extends TextInputFormatter {
   static const int _cepHyphenPosition = 4;
 
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // se o texto do oldValue é maior que o do newValue, permite que o usuário apague sem reformatar
     if (oldValue.text.length > newValue.text.length) {
       return newValue;
@@ -203,9 +179,7 @@ class CepTextInputFormatter extends TextInputFormatter {
     final digitsOnly = newValue.text.replaceAll(Constants.nonNumericRegExp, '');
 
     // Limita a 8 dígitos
-    final limitedDigits = digitsOnly.length > 8
-        ? digitsOnly.substring(0, 8)
-        : digitsOnly;
+    final limitedDigits = digitsOnly.length > 8 ? digitsOnly.substring(0, 8) : digitsOnly;
 
     // Aplica a formatação
     final formatted = _formatCep(limitedDigits);

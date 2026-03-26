@@ -33,15 +33,9 @@ class SecaoBackup extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.backup,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                Icon(Icons.backup, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
-                const Text(
-                  'Backup de Dados',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const Text('Backup de Dados', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
             const Divider(),

@@ -26,8 +26,7 @@ class IndividualEntry {
     this.phone,
   });
 
-  factory IndividualEntry.fromJson(Map<String, dynamic> json) =>
-      _$IndividualEntryFromJson(json);
+  factory IndividualEntry.fromJson(Map<String, dynamic> json) => _$IndividualEntryFromJson(json);
 
   factory IndividualEntry.fromPerson(Person<Cpf> person) {
     return IndividualEntry(

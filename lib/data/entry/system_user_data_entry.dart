@@ -26,14 +26,11 @@ class SystemUserDataEntry {
     this.id = -1,
   });
 
-  factory SystemUserDataEntry.fromJson(Map<String, dynamic> json) =>
-      _$SystemUserDataEntryFromJson(json);
+  factory SystemUserDataEntry.fromJson(Map<String, dynamic> json) => _$SystemUserDataEntryFromJson(json);
 
   Map<String, dynamic> toJson() => _$SystemUserDataEntryToJson(this);
 
-  factory SystemUserDataEntry.fromSystemUserData(
-    SystemUserData systemUserData,
-  ) {
+  factory SystemUserDataEntry.fromSystemUserData(SystemUserData systemUserData) {
     return SystemUserDataEntry(
       name: systemUserData.name,
       email: systemUserData.email,

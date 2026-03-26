@@ -8,10 +8,8 @@ part 'settings_state.freezed.dart';
 sealed class SettingsState with _$SettingsState {
   const factory SettingsState.error(String mensagem) = SettingsError;
   const factory SettingsState.initial() = SettingsInitialState;
-  const factory SettingsState.loaded(
-    AppSettings appSettings,
-    SettingsSuccessStatus status,
-  ) = SettingsLoadedState;
+  const factory SettingsState.loaded(AppSettings appSettings, SettingsSuccessStatus status) =
+      SettingsLoadedState;
   const factory SettingsState.loading() = SettingsLoadingState;
 }
 

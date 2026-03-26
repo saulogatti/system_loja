@@ -20,8 +20,7 @@ class CategoryData {
     this.lastUpdatedDate,
   });
 
-  factory CategoryData.fromJson(Map<String, dynamic> json) =>
-      _$CategoryDataFromJson(json);
+  factory CategoryData.fromJson(Map<String, dynamic> json) => _$CategoryDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategoryDataToJson(this);
 

@@ -25,12 +25,7 @@ class User extends PersonDefault {
   ///
   /// Preserva [registrationDate] original. A [lastUpdatedDate] **não** é
   /// alterada automaticamente — atualize-a explicitamente se necessário.
-  User copyWith({
-    String? name,
-    String? email,
-    String? passwordHash,
-    int? permission,
-  }) {
+  User copyWith({String? name, String? email, String? passwordHash, int? permission}) {
     return User(
       name: name ?? this.name,
       email: email ?? this.email,

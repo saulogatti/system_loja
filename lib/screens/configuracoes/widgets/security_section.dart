@@ -9,11 +9,7 @@ class SecuritySection extends StatelessWidget {
   /// Callback para atualizar a configuração
   final Function(AppSettings) onConfigChanged;
 
-  const SecuritySection({
-    required this.config,
-    required this.onConfigChanged,
-    super.key,
-  });
+  const SecuritySection({required this.config, required this.onConfigChanged, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +21,9 @@ class SecuritySection extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.security,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                Icon(Icons.security, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
-                const Text(
-                  'Segurança',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const Text('Segurança', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
             const Divider(),
@@ -55,9 +45,7 @@ class SecuritySection extends StatelessWidget {
                   divisions: 59,
                   label: '${config.tempoBloqueioMinutos} min',
                   onChanged: (value) {
-                    onConfigChanged(
-                      config.copyWith(tempoBloqueioMinutos: value.toInt()),
-                    );
+                    onConfigChanged(config.copyWith(tempoBloqueioMinutos: value.toInt()));
                   },
                 ),
                 trailing: Text('${config.tempoBloqueioMinutos} min'),
@@ -67,9 +55,7 @@ class SecuritySection extends StatelessWidget {
               subtitle: const Text('Habilitar gestão de usuários'),
               value: config.permitirMultiplosUsuarios,
               onChanged: (value) {
-                onConfigChanged(
-                  config.copyWith(permitirMultiplosUsuarios: value),
-                );
+                onConfigChanged(config.copyWith(permitirMultiplosUsuarios: value));
               },
             ),
           ],

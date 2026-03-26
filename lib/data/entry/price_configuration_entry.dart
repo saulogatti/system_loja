@@ -27,16 +27,12 @@ class PriceConfigurationEntry {
   factory PriceConfigurationEntry.fromJson(Map<String, dynamic> json) =>
       _$PriceConfigurationEntryFromJson(json);
 
-  factory PriceConfigurationEntry.fromDomain(
-    PriceConfiguration priceConfiguration,
-  ) {
+  factory PriceConfigurationEntry.fromDomain(PriceConfiguration priceConfiguration) {
     return PriceConfigurationEntry(
       types: priceConfiguration.types,
       measurementUnits: priceConfiguration.measurementUnits,
       reportConfiguration: priceConfiguration.reportConfiguration != null
-          ? ReportConfigurationEntry.fromDomain(
-              priceConfiguration.reportConfiguration!,
-            )
+          ? ReportConfigurationEntry.fromDomain(priceConfiguration.reportConfiguration!)
           : ReportConfigurationEntry.fromDomain(ReportConfiguration()),
       id: priceConfiguration.id,
       registrationDate: priceConfiguration.registrationDate,
@@ -49,8 +45,7 @@ class PriceConfigurationEntry {
   PriceConfiguration toDomain() => PriceConfiguration(
     types: types,
     measurementUnits: measurementUnits,
-    reportConfiguration:
-        reportConfiguration?.toDomain() ?? ReportConfiguration(),
+    reportConfiguration: reportConfiguration?.toDomain() ?? ReportConfiguration(),
     id: id,
     registrationDate: registrationDate,
     lastUpdatedDate: lastUpdatedDate,

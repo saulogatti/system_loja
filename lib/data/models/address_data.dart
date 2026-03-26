@@ -25,8 +25,7 @@ class AddressData {
     this.state = '',
   });
 
-  factory AddressData.fromJson(Map<String, dynamic> json) =>
-      _$AddressDataFromJson(json);
+  factory AddressData.fromJson(Map<String, dynamic> json) => _$AddressDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$AddressDataToJson(this);
 
@@ -38,11 +37,6 @@ class AddressData {
     state: value.state,
   );
 
-  Address toDomain() => Address(
-    street: street,
-    zipCode: zipCode,
-    neighborhood: neighborhood,
-    city: city,
-    state: state,
-  );
+  Address toDomain() =>
+      Address(street: street, zipCode: zipCode, neighborhood: neighborhood, city: city, state: state);
 }

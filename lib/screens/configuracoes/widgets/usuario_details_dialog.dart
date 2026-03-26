@@ -31,9 +31,7 @@ class UsuarioDetailsDialog extends StatelessWidget {
             ),
             _buildDetailRow(
               'Data de Cadastro',
-              DateFormat(
-                'dd/MM/yyyy HH:mm:ss',
-              ).format(usuario.registrationDate),
+              DateFormat('dd/MM/yyyy HH:mm:ss').format(usuario.registrationDate),
             ),
             _buildDetailRow(
               'Última Atualização',
@@ -42,12 +40,7 @@ class UsuarioDetailsDialog extends StatelessWidget {
           ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Fechar'),
-        ),
-      ],
+      actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
     );
   }
 
@@ -59,11 +52,7 @@ class UsuarioDetailsDialog extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.grey,
-              fontSize: 12,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 12),
           ),
           const SizedBox(height: 4),
           Text(value, style: const TextStyle(fontSize: 16)),

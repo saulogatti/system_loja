@@ -22,12 +22,7 @@ class ProductException implements Exception {
   /// - [message]: Mensagem descrevendo o erro
   /// - [details]: Detalhes adicionais (opcional)
   /// - [productCode]: Código do produto (opcional)
-  const ProductException({
-    required this.type,
-    required this.message,
-    this.details,
-    this.productCode,
-  });
+  const ProductException({required this.type, required this.message, this.details, this.productCode});
 
   @override
   String toString() {
@@ -76,16 +71,11 @@ class ProductException implements Exception {
   }
 
   /// Cria uma exceção para estoque insuficiente.
-  factory ProductException.insufficientStock(
-    String code,
-    int available,
-    int requested,
-  ) {
+  factory ProductException.insufficientStock(String code, int available, int requested) {
     return ProductException(
       type: ProductErrorType.insufficientStock,
       message: 'Estoque insuficiente',
-      details:
-          'Estoque disponível: $available. Quantidade solicitada: $requested.',
+      details: 'Estoque disponível: $available. Quantidade solicitada: $requested.',
       productCode: code,
     );
   }

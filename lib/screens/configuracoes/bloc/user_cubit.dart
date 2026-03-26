@@ -24,18 +24,13 @@ class UserCubit extends Cubit<UsuarioState> {
       permission: nivelPermissao.value,
     );
 
-    final ResultStatus<bool, String> executionResult = await _userRepository
-        .adicionarUsuario(usuario);
+    final ResultStatus<bool, String> executionResult = await _userRepository.adicionarUsuario(usuario);
     executionResult.when(
       onSuccess: (sucesso) {
         if (sucesso) {
           emit(UsuarioState.usuarioAdicionado(usuario, true));
         } else {
-          emit(
-            UsuarioState.loadFailure(
-              errorMessage: 'Não foi possível adicionar o usuário.',
-            ),
-          );
+          emit(UsuarioState.loadFailure(errorMessage: 'Não foi possível adicionar o usuário.'));
         }
       },
       onError: (resultError) {
@@ -45,26 +40,17 @@ class UserCubit extends Cubit<UsuarioState> {
   }
 
   Future<void> atualizarUsuario({required User usuarioAtualizado}) async {
-    final ResultStatus<bool, String> resultAdd = await _userRepository
-        .atualizarUsuario(usuarioAtualizado);
+    final ResultStatus<bool, String> resultAdd = await _userRepository.atualizarUsuario(usuarioAtualizado);
     resultAdd.when(
       onSuccess: (sucesso) {
         if (sucesso) {
           emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
         } else {
-          emit(
-            UsuarioState.loadFailure(
-              errorMessage: 'Falha ao atualizar usuário.',
-            ),
-          );
+          emit(UsuarioState.loadFailure(errorMessage: 'Falha ao atualizar usuário.'));
         }
       },
       onError: (resultError) {
-        emit(
-          UsuarioState.loadFailure(
-            errorMessage: 'Falha ao atualizar usuário: $resultError',
-          ),
-        );
+        emit(UsuarioState.loadFailure(errorMessage: 'Falha ao atualizar usuário: $resultError'));
       },
     );
   }
@@ -76,9 +62,7 @@ class UserCubit extends Cubit<UsuarioState> {
         emit(UsuarioState.loadSuccess(usuarios: usuarios));
       },
       onError: (message) {
-        emit(
-          UsuarioState.loadFailure(errorMessage: message),
-        );
+        emit(UsuarioState.loadFailure(errorMessage: message));
       },
     );
   }
@@ -90,9 +74,7 @@ class UserCubit extends Cubit<UsuarioState> {
         if (sucesso) {
           emit(UsuarioState.usuarioRemovido(id));
         } else {
-          emit(
-            UsuarioState.loadFailure(errorMessage: 'Falha ao remover usuário.'),
-          );
+          emit(UsuarioState.loadFailure(errorMessage: 'Falha ao remover usuário.'));
         }
       },
       onError: (message) {

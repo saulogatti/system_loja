@@ -27,8 +27,7 @@ class CustomerData {
     this.lastUpdatedDate,
   });
 
-  factory CustomerData.fromJson(Map<String, dynamic> json) =>
-      _$CustomerDataFromJson(json);
+  factory CustomerData.fromJson(Map<String, dynamic> json) => _$CustomerDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$CustomerDataToJson(this);
 

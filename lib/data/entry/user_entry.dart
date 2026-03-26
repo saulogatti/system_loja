@@ -25,8 +25,7 @@ class UserEntry {
     this.lastUpdatedDate,
   });
 
-  factory UserEntry.fromJson(Map<String, dynamic> json) =>
-      _$UserEntryFromJson(json);
+  factory UserEntry.fromJson(Map<String, dynamic> json) => _$UserEntryFromJson(json);
 
   factory UserEntry.fromUser(User user) {
     return UserEntry(

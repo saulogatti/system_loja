@@ -20,16 +20,10 @@ class CategoryCubit extends Cubit<CategoryState> {
   ///
   /// [name] Nome da categoria (obrigatório).
   /// [description] Descrição opcional da categoria.
-  Future<void> createCategory({
-    required String name,
-    String? description,
-  }) async {
+  Future<void> createCategory({required String name, String? description}) async {
     emit(const CategoryState.loading());
 
-    final result = await _repository.createCategory(
-      name: name,
-      description: description,
-    );
+    final result = await _repository.createCategory(name: name, description: description);
 
     switch (result) {
       case ResultSuccess():
@@ -85,18 +79,10 @@ class CategoryCubit extends Cubit<CategoryState> {
   /// [id] Identificador da categoria.
   /// [name] Novo nome da categoria.
   /// [description] Nova descrição da categoria.
-  Future<void> updateCategory({
-    required int id,
-    required String name,
-    String? description,
-  }) async {
+  Future<void> updateCategory({required int id, required String name, String? description}) async {
     emit(const CategoryState.loading());
 
-    final result = await _repository.updateCategory(
-      id: id,
-      name: name,
-      description: description,
-    );
+    final result = await _repository.updateCategory(id: id, name: name, description: description);
 
     switch (result) {
       case ResultSuccess():

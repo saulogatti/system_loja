@@ -10,6 +10,5 @@ class UsersRecords extends Table {
   TextColumn get passwordHash => text()();
   IntColumn get permission => integer()();
 
-  DateTimeColumn get registrationDate =>
-      dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get registrationDate => dateTime().withDefault(currentDateAndTime)();
 }

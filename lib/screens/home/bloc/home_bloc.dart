@@ -17,10 +17,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<SaveSystemUserData>(_onSaveSystemUserData);
   }
 
-  Future<void> _onLoadSystemUserData(
-    LoadSystemUserData event,
-    Emitter<HomeState> emit,
-  ) async {
+  Future<void> _onLoadSystemUserData(LoadSystemUserData event, Emitter<HomeState> emit) async {
     emit(const HomeLoading());
     final result = await _systemRepository.getSystemConfiguration();
     result.when(
@@ -33,10 +30,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
   }
 
-  FutureOr<void> _onSaveSystemUserData(
-    SaveSystemUserData event,
-    Emitter<HomeState> emit,
-  ) async {
+  FutureOr<void> _onSaveSystemUserData(SaveSystemUserData event, Emitter<HomeState> emit) async {
     emit(const HomeLoading());
     final loadResult = await _systemRepository.getSystemConfiguration();
     switch (loadResult) {
@@ -45,9 +39,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         return;
       case ResultSuccess(result: final systemConfiguration):
         systemConfiguration.systemUserData = event.systemUserData;
-        final saveResult = await _systemRepository.saveSystemConfiguration(
-          systemConfiguration,
-        );
+        final saveResult = await _systemRepository.saveSystemConfiguration(systemConfiguration);
         saveResult.when(
           onSuccess: (_) {
             emit(HomeSaved(systemConfiguration.systemUserData));

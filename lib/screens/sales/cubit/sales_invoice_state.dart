@@ -34,18 +34,15 @@ sealed class SalesInvoiceState with _$SalesInvoiceState {
 /// Acesso unificado aos campos do formulário em qualquer variante de [SalesInvoiceState].
 extension SalesInvoiceStateFormX on SalesInvoiceState {
   SalesInvoiceFormData get form => switch (this) {
-        SalesInvoiceEditing(:final form) => form,
-        SalesInvoiceFeedback(:final form) => form,
-      };
+    SalesInvoiceEditing(:final form) => form,
+    SalesInvoiceFeedback(:final form) => form,
+  };
 }
 
 /// Totais e lista ordenada derivados do formulário (fora do Cubit, para respeitar o bloc_lint).
 extension SalesInvoiceFormDataTotals on SalesInvoiceFormData {
   double computeTotal() {
-    return linesByProductId.values.fold<double>(
-      0,
-      (sum, line) => sum + line.product.price * line.quantity,
-    );
+    return linesByProductId.values.fold<double>(0, (sum, line) => sum + line.product.price * line.quantity);
   }
 
   List<InvoiceLineEntry> buildOrderedLines() {

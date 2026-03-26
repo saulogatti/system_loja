@@ -68,4 +68,3 @@ class ErrorStateView extends StatelessWidget {
     );
   }
 }
-

@@ -20,9 +20,7 @@ import '../../core/settings/app_settings.dart';
 /// Veja também:
 /// - [IConfigurationRepository] - contrato da interface
 /// - [AppSettings] - modelo de configurações
-class ConfigurationRepository
-    with LoggerClassMixin
-    implements IConfigurationRepository {
+class ConfigurationRepository with LoggerClassMixin implements IConfigurationRepository {
   AppSettings _configuracao = AppSettings.createDefaultSettings();
   final ILogRepository _logRepository;
   final ISettingsService _settingsService;
@@ -62,9 +60,7 @@ class ConfigurationRepository
     try {
       final int diasManterLogs = _configuracao.diasManterLogs;
       if (diasManterLogs > 0) {
-        final DateTime dataLimite = DateTime.now().subtract(
-          Duration(days: diasManterLogs),
-        );
+        final DateTime dataLimite = DateTime.now().subtract(Duration(days: diasManterLogs));
         final logResult = await _logRepository.clearOldLogs(dataLimite);
         if (logResult.hasError) {
           return ResultStatus.error(logResult.asError);
@@ -83,15 +79,11 @@ class ConfigurationRepository
   /// Cria uma cópia dos arquivos JSON em um diretório de backup
   /// com timestamp.
   @override
-  Future<ResultStatus<AppSettings, String>> createBackup(
-    String directoryPath,
-  ) async {
+  Future<ResultStatus<AppSettings, String>> createBackup(String directoryPath) async {
     try {
       final backupFiles = await _cache.createBackup(directoryPath);
       if (!backupFiles) {
-        return ResultStatus.error(
-          'Não foi possível concluir o backup no diretório selecionado.',
-        );
+        return ResultStatus.error('Não foi possível concluir o backup no diretório selecionado.');
       }
 
       logInfo('Backup realizado com sucesso: diretório $directoryPath');
@@ -139,9 +131,7 @@ class ConfigurationRepository
   /// do backup restaurado. Em caso de falha, retorna erro para a
   /// camada de apresentação tratar de forma padronizada.
   @override
-  Future<ResultStatus<AppSettings, String>> restoreBackup(
-    String direBackup,
-  ) async {
+  Future<ResultStatus<AppSettings, String>> restoreBackup(String direBackup) async {
     try {
       await _cache.restoreBackupFrom(direBackup);
       await _carregarDados();
@@ -158,16 +148,11 @@ class ConfigurationRepository
   /// Persiste [novaConfiguracao] no cache e notifica [ISettingsService]
   /// para atualizar cor primária e modo escuro em toda a UI.
   @override
-  Future<ResultStatus<AppSettings, String>> updateAppSettings(
-    AppSettings novaConfiguracao,
-  ) async {
+  Future<ResultStatus<AppSettings, String>> updateAppSettings(AppSettings novaConfiguracao) async {
     try {
       _configuracao = novaConfiguracao;
       await _salvarDados();
-      _settingsService.updateSettings(
-        novaConfiguracao.corPrimaria,
-        novaConfiguracao.temaEscuro,
-      );
+      _settingsService.updateSettings(novaConfiguracao.corPrimaria, novaConfiguracao.temaEscuro);
       logInfo('Configuração atualizada com sucesso');
       return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
@@ -188,10 +173,7 @@ class ConfigurationRepository
     } else {
       _configuracao = AppSettings.createDefaultSettings();
     }
-    _settingsService.updateSettings(
-      _configuracao.corPrimaria,
-      _configuracao.temaEscuro,
-    );
+    _settingsService.updateSettings(_configuracao.corPrimaria, _configuracao.temaEscuro);
   }
 
   // ignore: unused_element
@@ -208,9 +190,7 @@ class ConfigurationRepository
   }
 
   Future<void> _salvarDados() async {
-    final file = ConfigurationCacheEntry(
-      configuracao: AppSettingsEntry.fromAppSettings(_configuracao),
-    );
+    final file = ConfigurationCacheEntry(configuracao: AppSettingsEntry.fromAppSettings(_configuracao));
     await _cache.set(file);
   }
 }

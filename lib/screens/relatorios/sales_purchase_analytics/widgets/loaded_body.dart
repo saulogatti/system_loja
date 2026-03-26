@@ -102,8 +102,12 @@ class _LoadedBodyState extends State<LoadedBody> {
                 builder: (context, constraints) {
                   final isWide = constraints.maxWidth >= 760;
                   final tiles = <Widget>[
-                    SalesPurchaseDonutCard(totalSales: state.totalSales, totalPurchases: state.totalPurchases),
-                    if (state.grouping == SalesPurchaseGrouping.byDate) ProductsCountChartCard(points: state.points),
+                    SalesPurchaseDonutCard(
+                      totalSales: state.totalSales,
+                      totalPurchases: state.totalPurchases,
+                    ),
+                    if (state.grouping == SalesPurchaseGrouping.byDate)
+                      ProductsCountChartCard(points: state.points),
                   ];
 
                   if (tiles.isEmpty) {
@@ -145,13 +149,10 @@ class _LoadedBodyState extends State<LoadedBody> {
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
               ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final point = sortedPoints[index];
-                  return ComparisonBarTile(point: point, maxValue: state.maxValue);
-                },
-                childCount: sortedPoints.length,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final point = sortedPoints[index];
+                return ComparisonBarTile(point: point, maxValue: state.maxValue);
+              }, childCount: sortedPoints.length),
             ),
           ),
         ],
@@ -159,4 +160,3 @@ class _LoadedBodyState extends State<LoadedBody> {
     );
   }
 }
-

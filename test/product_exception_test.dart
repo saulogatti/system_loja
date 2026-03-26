@@ -9,31 +9,21 @@ import 'package:system_loja/core/exceptions/product_exception.dart';
 void main() {
   group('ProductException', () {
     group('insufficientStock', () {
-      test(
-        'deve criar exceção com mensagem clara sobre estoque disponível e quantidade solicitada',
-        () {
-          // Arrange
-          const code = 'PROD-001';
-          const available = 5;
-          const requested = 10;
+      test('deve criar exceção com mensagem clara sobre estoque disponível e quantidade solicitada', () {
+        // Arrange
+        const code = 'PROD-001';
+        const available = 5;
+        const requested = 10;
 
-          // Act
-          final exception = ProductException.insufficientStock(
-            code,
-            available,
-            requested,
-          );
+        // Act
+        final exception = ProductException.insufficientStock(code, available, requested);
 
-          // Assert
-          expect(exception.type, ProductErrorType.insufficientStock);
-          expect(exception.message, 'Estoque insuficiente');
-          expect(exception.productCode, code);
-          expect(
-            exception.details,
-            'Estoque disponível: $available. Quantidade solicitada: $requested.',
-          );
-        },
-      );
+        // Assert
+        expect(exception.type, ProductErrorType.insufficientStock);
+        expect(exception.message, 'Estoque insuficiente');
+        expect(exception.productCode, code);
+        expect(exception.details, 'Estoque disponível: $available. Quantidade solicitada: $requested.');
+      });
 
       test('deve incluir labels claros na mensagem de detalhes', () {
         // Arrange
@@ -42,11 +32,7 @@ void main() {
         const requested = 1;
 
         // Act
-        final exception = ProductException.insufficientStock(
-          code,
-          available,
-          requested,
-        );
+        final exception = ProductException.insufficientStock(code, available, requested);
 
         // Assert
         expect(exception.details, contains('Estoque disponível:'));
@@ -62,11 +48,7 @@ void main() {
         const requested = 7;
 
         // Act
-        final exception = ProductException.insufficientStock(
-          code,
-          available,
-          requested,
-        );
+        final exception = ProductException.insufficientStock(code, available, requested);
 
         // Assert
         final stringRepresentation = exception.toString();
@@ -74,14 +56,8 @@ void main() {
         expect(stringRepresentation, contains('insufficientStock'));
         expect(stringRepresentation, contains('Estoque insuficiente'));
         expect(stringRepresentation, contains('código: $code'));
-        expect(
-          stringRepresentation,
-          contains('Estoque disponível: $available'),
-        );
-        expect(
-          stringRepresentation,
-          contains('Quantidade solicitada: $requested'),
-        );
+        expect(stringRepresentation, contains('Estoque disponível: $available'));
+        expect(stringRepresentation, contains('Quantidade solicitada: $requested'));
       });
 
       test('deve formatar corretamente a mensagem userMessage', () {
@@ -91,11 +67,7 @@ void main() {
         const requested = 15;
 
         // Act
-        final exception = ProductException.insufficientStock(
-          code,
-          available,
-          requested,
-        );
+        final exception = ProductException.insufficientStock(code, available, requested);
 
         // Assert
         final userMessage = exception.userMessage;
@@ -111,17 +83,10 @@ void main() {
         const requested = 100;
 
         // Act
-        final exception = ProductException.insufficientStock(
-          code,
-          available,
-          requested,
-        );
+        final exception = ProductException.insufficientStock(code, available, requested);
 
         // Assert
-        expect(
-          exception.details,
-          'Estoque disponível: 0. Quantidade solicitada: 100.',
-        );
+        expect(exception.details, 'Estoque disponível: 0. Quantidade solicitada: 100.');
       });
 
       test('deve funcionar com grandes quantidades', () {
@@ -131,17 +96,10 @@ void main() {
         const requested = 5000;
 
         // Act
-        final exception = ProductException.insufficientStock(
-          code,
-          available,
-          requested,
-        );
+        final exception = ProductException.insufficientStock(code, available, requested);
 
         // Assert
-        expect(
-          exception.details,
-          'Estoque disponível: 1000. Quantidade solicitada: 5000.',
-        );
+        expect(exception.details, 'Estoque disponível: 1000. Quantidade solicitada: 5000.');
       });
     });
 

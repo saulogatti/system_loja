@@ -12,8 +12,5 @@ class CompanyDaoManager {
   final _$CompanyDaoMixin _db;
   CompanyDaoManager(this._db);
   $$CompanyRecordsTableTableManager get companyRecords =>
-      $$CompanyRecordsTableTableManager(
-        _db.attachedDatabase,
-        _db.companyRecords,
-      );
+      $$CompanyRecordsTableTableManager(_db.attachedDatabase, _db.companyRecords);
 }

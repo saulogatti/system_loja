@@ -8,21 +8,15 @@ import 'package:system_loja/screens/widgets/loading_overlay.dart';
 /// indicador de progresso e mensagem opcional.
 void main() {
   group('LoadingOverlay Widget Tests', () {
-    testWidgets('deve exibir CircularProgressIndicator', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('deve exibir CircularProgressIndicator', (WidgetTester tester) async {
       // Arrange & Act
-      await tester.pumpWidget(
-        const MaterialApp(home: Scaffold(body: LoadingOverlay())),
-      );
+      await tester.pumpWidget(const MaterialApp(home: Scaffold(body: LoadingOverlay())));
 
       // Assert
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('deve exibir mensagem quando fornecida', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('deve exibir mensagem quando fornecida', (WidgetTester tester) async {
       // Arrange
       const testMessage = 'Carregando dados...';
 
@@ -38,39 +32,24 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('não deve exibir mensagem quando não fornecida', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('não deve exibir mensagem quando não fornecida', (WidgetTester tester) async {
       // Arrange & Act
-      await tester.pumpWidget(
-        const MaterialApp(home: Scaffold(body: LoadingOverlay())),
-      );
+      await tester.pumpWidget(const MaterialApp(home: Scaffold(body: LoadingOverlay())));
 
       // Assert
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       // Não deve haver nenhum Text widget visível além dos do Scaffold
-      expect(
-        find.descendant(
-          of: find.byType(LoadingOverlay),
-          matching: find.byType(Text),
-        ),
-        findsNothing,
-      );
+      expect(find.descendant(of: find.byType(LoadingOverlay), matching: find.byType(Text)), findsNothing);
     });
 
-    testWidgets('deve bloquear interações com ModalBarrier', (
-      WidgetTester tester,
-    ) async {
+    testWidgets('deve bloquear interações com ModalBarrier', (WidgetTester tester) async {
       // Arrange
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: Stack(
               children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Test Button'),
-                ),
+                ElevatedButton(onPressed: () {}, child: const Text('Test Button')),
                 const LoadingOverlay(),
               ],
             ),

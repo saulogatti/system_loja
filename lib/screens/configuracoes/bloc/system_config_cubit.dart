@@ -12,8 +12,7 @@ import 'package:system_loja/screens/configuracoes/bloc/system_config_state.dart'
 class SystemConfigCubit extends Cubit<SystemConfigState> {
   final ISystemRepository _systemRepository;
 
-  SystemConfigCubit(this._systemRepository)
-    : super(SystemConfigState.initial()) {
+  SystemConfigCubit(this._systemRepository) : super(SystemConfigState.initial()) {
     loadConfigurationData();
   }
 
@@ -51,10 +50,7 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
       }
 
       final file = File(location.path);
-      await file.writeAsString(
-        jsonEncode(systemConfiguration),
-        flush: true,
-      );
+      await file.writeAsString(jsonEncode(systemConfiguration), flush: true);
 
       emit(
         SystemConfigState.loaded(
@@ -64,11 +60,7 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
         ),
       );
     } catch (_) {
-      emit(
-        SystemConfigState.error(
-          'Erro ao exportar configuração para o arquivo selecionado.',
-        ),
-      );
+      emit(SystemConfigState.error('Erro ao exportar configuração para o arquivo selecionado.'));
     }
   }
 
@@ -84,9 +76,7 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
       }
 
       final content = await file.readAsString();
-      final result = await _systemRepository.importConfigurationFromJson(
-        content,
-      );
+      final result = await _systemRepository.importConfigurationFromJson(content);
 
       result.when(
         onSuccess: (normalizedData) {
@@ -129,8 +119,7 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
         emit(
           SystemConfigState.loaded(
             defaultConfiguration,
-            feedbackMessage:
-                'Configurações restauradas para os valores padrão do sistema.',
+            feedbackMessage: 'Configurações restauradas para os valores padrão do sistema.',
             feedbackType: SystemConfigFeedbackType.reset,
           ),
         );
@@ -167,9 +156,7 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
       id: systemConfiguration.id,
       registrationDate: systemConfiguration.registrationDate,
       lastUpdatedDate: DateTime.now(),
-      productCategories: List<String>.from(
-        systemConfiguration.productCategories,
-      ),
+      productCategories: List<String>.from(systemConfiguration.productCategories),
       priceConfiguration: PriceConfiguration(
         types: paymentMethods.toSet().toList(),
         measurementUnits: normalizedUnits,

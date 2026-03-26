@@ -9,8 +9,7 @@ import 'package:system_loja/data/entry/price_configuration_entry.dart';
 /// O contrato JSON é [PriceConfigurationEntry] (`json_serializable`).
 class PriceConfigurationCodec {
   /// Conversor Drift (coluna texto ↔ objeto de domínio).
-  static drift.JsonTypeConverter2<PriceConfiguration, String, Object?>
-  get driftConverter =>
+  static drift.JsonTypeConverter2<PriceConfiguration, String, Object?> get driftConverter =>
       drift.TypeConverter.json2(fromJson: fromJson, toJson: toJson);
 
   PriceConfigurationCodec._();
@@ -21,14 +20,11 @@ class PriceConfigurationCodec {
     if (json == null) {
       return PriceConfiguration.defaultConfiguration();
     }
-    final priceConfigurationData = PriceConfigurationEntry.fromJson(
-      json as Map<String, dynamic>,
-    );
+    final priceConfigurationData = PriceConfigurationEntry.fromJson(json as Map<String, dynamic>);
     return priceConfigurationData.toDomain();
   }
 
-  static PriceConfiguration fromJsonString(String raw) =>
-      fromJson(jsonDecode(raw) as Map<String, dynamic>);
+  static PriceConfiguration fromJsonString(String raw) => fromJson(jsonDecode(raw) as Map<String, dynamic>);
 
   static Map<String, dynamic> toJson(PriceConfiguration instance) =>
       PriceConfigurationEntry.fromDomain(instance).toJson();

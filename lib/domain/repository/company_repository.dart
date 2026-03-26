@@ -15,11 +15,9 @@ class CompanyRepository implements ICompanyRepository {
   final ILogRepository _logRepository;
   final CompanyDao dao;
 
-  CompanyRepository({
-    required ILogRepository logRepository,
-    required CompanyDao companyDao,
-  }) : _logRepository = logRepository,
-       dao = companyDao;
+  CompanyRepository({required ILogRepository logRepository, required CompanyDao companyDao})
+    : _logRepository = logRepository,
+      dao = companyDao;
 
   /// Deleta uma empresa pelo ID.
   ///
@@ -57,9 +55,7 @@ class CompanyRepository implements ICompanyRepository {
     try {
       final data = await dao.getAll();
       final companies = data;
-      final mappedCompanies = {
-        for (var company in companies) company.id: company,
-      };
+      final mappedCompanies = {for (var company in companies) company.id: company};
       return ResultStatus.success(mappedCompanies);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
@@ -71,9 +67,7 @@ class CompanyRepository implements ICompanyRepository {
   ///
   /// Retorna [ResultStatus] com a empresa encontrada ou mensagem de erro.
   @override
-  Future<ResultStatus<Company?, String>> findByCnpj({
-    required String cnpj,
-  }) async {
+  Future<ResultStatus<Company?, String>> findByCnpj({required String cnpj}) async {
     try {
       final company = await dao.getByCnpj(cnpj);
       return ResultStatus.success(company);
@@ -108,9 +102,7 @@ class CompanyRepository implements ICompanyRepository {
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
       if (e is DriftRemoteException) {
-        return ResultStatus.error(
-          'Erro ao buscar todas as empresas: ${e.remoteCause.toString()}',
-        );
+        return ResultStatus.error('Erro ao buscar todas as empresas: ${e.remoteCause.toString()}');
       }
       return ResultStatus.error('Erro ao buscar todas as empresas.');
     }
@@ -125,9 +117,7 @@ class CompanyRepository implements ICompanyRepository {
       // Verifica se já existe empresa com o mesmo CNPJ
       final existingCompany = await dao.getByCnpj(company.cnpj);
       if (existingCompany != null) {
-        return ResultStatus.error(
-          'Já existe uma empresa cadastrada com o CNPJ ${company.cnpj}.',
-        );
+        return ResultStatus.error('Já existe uma empresa cadastrada com o CNPJ ${company.cnpj}.');
       }
 
       await dao.addCompany(company);
@@ -144,9 +134,7 @@ class CompanyRepository implements ICompanyRepository {
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
       if (e is DriftRemoteException) {
-        return ResultStatus.error(
-          'Erro ao salvar empresa: ${e.remoteCause.toString()}',
-        );
+        return ResultStatus.error('Erro ao salvar empresa: ${e.remoteCause.toString()}');
       }
       return ResultStatus.error('Erro ao salvar empresa.');
     }
@@ -160,17 +148,13 @@ class CompanyRepository implements ICompanyRepository {
     try {
       final exists = await dao.getById(company.id);
       if (exists == null) {
-        return ResultStatus.error(
-          'Empresa com ID ${company.id} não encontrada.',
-        );
+        return ResultStatus.error('Empresa com ID ${company.id} não encontrada.');
       }
 
       // Verifica se o CNPJ já existe em outra empresa
       final existingCompany = await dao.getByCnpj(company.cnpj);
       if (existingCompany != null && existingCompany.id != company.id) {
-        return ResultStatus.error(
-          'Já existe outra empresa cadastrada com o CNPJ ${company.cnpj}.',
-        );
+        return ResultStatus.error('Já existe outra empresa cadastrada com o CNPJ ${company.cnpj}.');
       }
 
       await dao.updateCompany(company);
@@ -187,9 +171,7 @@ class CompanyRepository implements ICompanyRepository {
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
       if (e is DriftRemoteException) {
-        return ResultStatus.error(
-          'Erro ao atualizar empresa: ${e.remoteCause.toString()}',
-        );
+        return ResultStatus.error('Erro ao atualizar empresa: ${e.remoteCause.toString()}');
       }
       return ResultStatus.error('Erro ao atualizar empresa.');
     }

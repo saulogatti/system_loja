@@ -4,11 +4,7 @@ class SystemError {
 
   final StackTrace stackTrace;
 
-  SystemError({
-    required this.message,
-    required this.code,
-    required this.stackTrace,
-  });
+  SystemError({required this.message, required this.code, required this.stackTrace});
 
   @override
   String toString() {

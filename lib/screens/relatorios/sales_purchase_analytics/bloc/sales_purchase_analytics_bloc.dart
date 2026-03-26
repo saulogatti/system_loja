@@ -61,4 +61,3 @@ class SalesPurchaseAnalyticsBloc extends Bloc<SalesPurchaseAnalyticsEvent, Sales
     );
   }
 }
-

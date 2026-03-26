@@ -11,17 +11,14 @@ part 'category_dao.g.dart';
 /// Implementa métodos para criar, ler, atualizar e deletar categorias,
 /// além de verificações de duplicidade de nomes.
 @DriftAccessor(tables: [CategoriesRecords])
-class CategoryDao extends DatabaseAccessor<AppDatabase>
-    with _$CategoryDaoMixin {
+class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin {
   CategoryDao(super.db);
 
   /// Busca todas as categorias ordenadas por nome.
   ///
   /// Retorna lista de todas as categorias cadastradas.
   Future<List<Category>> getAll() async {
-    final rows = await (select(
-      categoriesRecords,
-    )..orderBy([(t) => OrderingTerm.asc(t.name)])).get();
+    final rows = await (select(categoriesRecords)..orderBy([(t) => OrderingTerm.asc(t.name)])).get();
     return rows.map((e) => e.toDomain()).toList();
   }
 
@@ -30,9 +27,7 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
   /// [id] Identificador único da categoria.
   /// Retorna a categoria encontrada ou null se não existir.
   Future<Category?> getById(int id) async {
-    final row = await (select(
-      categoriesRecords,
-    )..where((t) => t.id.equals(id))).getSingleOrNull();
+    final row = await (select(categoriesRecords)..where((t) => t.id.equals(id))).getSingleOrNull();
     return row?.toDomain();
   }
 
@@ -41,9 +36,7 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
   /// [name] Nome da categoria a ser buscada.
   /// Retorna a categoria encontrada ou null se não existir.
   Future<Category?> getByName(String name) async {
-    final row = await (select(
-      categoriesRecords,
-    )..where((t) => t.name.equals(name))).getSingleOrNull();
+    final row = await (select(categoriesRecords)..where((t) => t.name.equals(name))).getSingleOrNull();
     return row?.toDomain();
   }
 
@@ -66,15 +59,9 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
   /// [name] Nome da categoria (obrigatório e único).
   /// [description] Descrição opcional da categoria.
   /// Retorna o ID da categoria criada.
-  Future<int> insertCategory({
-    required String name,
-    String? description,
-  }) async {
+  Future<int> insertCategory({required String name, String? description}) async {
     return await into(categoriesRecords).insert(
-      CategoriesRecordsCompanion.insert(
-        name: name,
-        description: Value(description),
-      ),
+      CategoriesRecordsCompanion.insert(name: name, description: Value(description)),
       mode: InsertMode.insertOrAbort,
     );
   }
@@ -94,10 +81,7 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
   /// Retorna true se a categoria foi removida com sucesso.
   /// Nota: A exclusão falhará se houver produtos associados (FK constraint).
   Future<bool> remove(int id) async {
-    return await (delete(
-          categoriesRecords,
-        )..where((t) => t.id.equals(id))).go() >
-        0;
+    return await (delete(categoriesRecords)..where((t) => t.id.equals(id))).go() > 0;
   }
 
   /// Atualiza uma categoria existente.
@@ -106,11 +90,7 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
   /// [name] Novo nome da categoria.
   /// [description] Nova descrição da categoria.
   /// Retorna true se a categoria foi atualizada com sucesso.
-  Future<bool> updateCategory({
-    required int id,
-    required String name,
-    String? description,
-  }) async {
+  Future<bool> updateCategory({required int id, required String name, String? description}) async {
     assert(id > 0, 'ID da categoria deve ser maior que zero');
     return await update(categoriesRecords).replace(
       CategoriesRecordsCompanion(

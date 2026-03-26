@@ -31,10 +31,7 @@ void main() {
         const description = 'Produtos eletrônicos e tecnologia';
 
         // Act
-        final id = await categoryDao.insertCategory(
-          name: name,
-          description: description,
-        );
+        final id = await categoryDao.insertCategory(name: name, description: description);
 
         // Assert
         expect(id, greaterThan(0));
@@ -114,10 +111,7 @@ void main() {
     group('updateCategory', () {
       test('deve atualizar categoria com sucesso', () async {
         // Arrange
-        final id = await categoryDao.insertCategory(
-          name: 'Nome Antigo',
-          description: 'Descrição antiga',
-        );
+        final id = await categoryDao.insertCategory(name: 'Nome Antigo', description: 'Descrição antiga');
 
         // Act
         final success = await categoryDao.updateCategory(

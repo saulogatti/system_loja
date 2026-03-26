@@ -7,5 +7,4 @@ Future<Object> testApplicationSupportDirectory() async {
 }
 
 /// Caminho para arquivos temporários do SQLite (`sqlite3.tempDirectory`), sem plugin.
-Future<String?> testSqliteTempDirectoryPath() async =>
-    Directory.systemTemp.path;
+Future<String?> testSqliteTempDirectoryPath() async => Directory.systemTemp.path;

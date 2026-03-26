@@ -8,9 +8,7 @@ class SettingsService implements ISettingsService {
   ValueNotifier<ThemeData> currentThemeNotifier = ValueNotifier<ThemeData>(
     AppTheme.light(seedColor: EnumColorAppThemeSettings.azul.color),
   );
-  ThemeData _appTheme = AppTheme.light(
-    seedColor: EnumColorAppThemeSettings.azul.color,
-  );
+  ThemeData _appTheme = AppTheme.light(seedColor: EnumColorAppThemeSettings.azul.color);
   bool _temaEscuro = false;
   SettingsService.injection();
   ThemeData get currentTheme => currentThemeNotifier.value;

@@ -9,11 +9,7 @@ class SecaoNotificacoes extends StatelessWidget {
   /// Callback para atualizar a configuração
   final Function(AppSettings) onConfigChanged;
 
-  const SecaoNotificacoes({
-    required this.config,
-    required this.onConfigChanged,
-    super.key,
-  });
+  const SecaoNotificacoes({required this.config, required this.onConfigChanged, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +21,9 @@ class SecaoNotificacoes extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.notifications,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                Icon(Icons.notifications, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
-                const Text(
-                  'Notificações',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const Text('Notificações', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
             const Divider(),
@@ -61,9 +51,7 @@ class SecaoNotificacoes extends StatelessWidget {
               value: config.notificarEstoqueBaixo,
               onChanged: config.notificacoesAtivadas
                   ? (value) {
-                      onConfigChanged(
-                        config.copyWith(notificarEstoqueBaixo: value),
-                      );
+                      onConfigChanged(config.copyWith(notificarEstoqueBaixo: value));
                     }
                   : null,
             ),
@@ -77,9 +65,7 @@ class SecaoNotificacoes extends StatelessWidget {
                   divisions: 49,
                   label: '${config.limiteEstoqueBaixo} unidades',
                   onChanged: (value) {
-                    onConfigChanged(
-                      config.copyWith(limiteEstoqueBaixo: value.toInt()),
-                    );
+                    onConfigChanged(config.copyWith(limiteEstoqueBaixo: value.toInt()));
                   },
                 ),
                 trailing: Text('${config.limiteEstoqueBaixo}'),

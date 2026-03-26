@@ -7,20 +7,14 @@ Future<int> insertInvoiceAndItemsOnly(AppDatabase database, Invoice invoice) {
   return database.transaction(() async {
     final invoiceId = await database.invoiceDao.insertInvoice(invoice);
     for (final item in invoice.data.items) {
-      await database.invoiceItemDao.insertInvoiceItem(
-        item,
-        invoiceId: invoiceId,
-      );
+      await database.invoiceItemDao.insertInvoiceItem(item, invoiceId: invoiceId);
     }
     return invoiceId;
   });
 }
 
 /// Replica a orquestração de [SalesRepository.saveSale] para testes de integração DAO.
-Future<int> insertInvoiceWithItemsLikeRepository(
-  AppDatabase database,
-  Invoice invoice,
-) async {
+Future<int> insertInvoiceWithItemsLikeRepository(AppDatabase database, Invoice invoice) async {
   if (invoice.data.type == InvoiceType.exit) {
     for (final item in invoice.data.items) {
       final product = await database.productDao.getById(item.productId);
@@ -33,17 +27,9 @@ Future<int> insertInvoiceWithItemsLikeRepository(
   return database.transaction(() async {
     final invoiceId = await database.invoiceDao.insertInvoice(invoice);
     for (final item in invoice.data.items) {
-      await database.invoiceItemDao.insertInvoiceItem(
-        item,
-        invoiceId: invoiceId,
-      );
-      final quantityChange = invoice.data.type == InvoiceType.entry
-          ? item.quantity
-          : -item.quantity;
-      final ok = await database.productDao.updateStockQuantity(
-        item.productId,
-        quantityChange,
-      );
+      await database.invoiceItemDao.insertInvoiceItem(item, invoiceId: invoiceId);
+      final quantityChange = invoice.data.type == InvoiceType.entry ? item.quantity : -item.quantity;
+      final ok = await database.productDao.updateStockQuantity(item.productId, quantityChange);
       if (!ok) {
         throw StateError('Falha ao atualizar estoque');
       }

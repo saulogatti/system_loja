@@ -24,6 +24,5 @@ class Company extends PersonDefault {
   }) : address = address ?? const Address();
 
   @override
-  String toString() =>
-      'Company(name: $name, cnpj: $cnpj, email: $email, phone: $phone, address: $address)';
+  String toString() => 'Company(name: $name, cnpj: $cnpj, email: $email, phone: $phone, address: $address)';
 }

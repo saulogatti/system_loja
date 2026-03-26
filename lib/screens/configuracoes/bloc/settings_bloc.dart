@@ -29,36 +29,19 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<RestoreBackupEvent>(_onRestoreBackup);
   }
 
-  Future<void> _onClearAllData(
-    ClearAllDataEvent event,
-    Emitter<SettingsState> emit,
-  ) async {
+  Future<void> _onClearAllData(ClearAllDataEvent event, Emitter<SettingsState> emit) async {
     emit(const SettingsLoadingState());
     final result = await _configurationRepository.clearAllData();
-    _emitResult(
-      emit: emit,
-      result: result,
-      successStatus: SettingsSuccessStatus.cleared,
-    );
+    _emitResult(emit: emit, result: result, successStatus: SettingsSuccessStatus.cleared);
   }
 
-  Future<void> _onClearOldLogs(
-    ClearOldLogsEvent event,
-    Emitter<SettingsState> emit,
-  ) async {
+  Future<void> _onClearOldLogs(ClearOldLogsEvent event, Emitter<SettingsState> emit) async {
     emit(const SettingsLoadingState());
     final result = await _configurationRepository.clearOldLogs();
-    _emitResult(
-      emit: emit,
-      result: result,
-      successStatus: SettingsSuccessStatus.clearedOldLogs,
-    );
+    _emitResult(emit: emit, result: result, successStatus: SettingsSuccessStatus.clearedOldLogs);
   }
 
-  Future<void> _onCreateBackup(
-    BackupSettingsEvent event,
-    Emitter<SettingsState> emit,
-  ) async {
+  Future<void> _onCreateBackup(BackupSettingsEvent event, Emitter<SettingsState> emit) async {
     emit(const SettingsLoadingState());
     final file = await getDirectoryPath(canCreateDirectories: true);
     if (file == null) {
@@ -66,43 +49,22 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       return;
     }
     final result = await _configurationRepository.createBackup(file);
-    _emitResult(
-      emit: emit,
-      result: result,
-      successStatus: SettingsSuccessStatus.backupDone,
-    );
+    _emitResult(emit: emit, result: result, successStatus: SettingsSuccessStatus.backupDone);
   }
 
-  Future<void> _onLoadSettings(
-    LoadSettingsEvent event,
-    Emitter<SettingsState> emit,
-  ) async {
+  Future<void> _onLoadSettings(LoadSettingsEvent event, Emitter<SettingsState> emit) async {
     emit(const SettingsLoadingState());
     final result = await _configurationRepository.loadConfiguration();
-    _emitResult(
-      emit: emit,
-      result: result,
-      successStatus: SettingsSuccessStatus.loaded,
-    );
+    _emitResult(emit: emit, result: result, successStatus: SettingsSuccessStatus.loaded);
   }
 
-  Future<void> _onResetToDefault(
-    ResetDefaultSettingsEvent event,
-    Emitter<SettingsState> emit,
-  ) async {
+  Future<void> _onResetToDefault(ResetDefaultSettingsEvent event, Emitter<SettingsState> emit) async {
     emit(const SettingsLoadingState());
     final result = await _configurationRepository.resetToDefaults();
-    _emitResult(
-      emit: emit,
-      result: result,
-      successStatus: SettingsSuccessStatus.restoredToDefault,
-    );
+    _emitResult(emit: emit, result: result, successStatus: SettingsSuccessStatus.restoredToDefault);
   }
 
-  FutureOr<void> _onRestoreBackup(
-    RestoreBackupEvent event,
-    Emitter<SettingsState> emit,
-  ) async {
+  FutureOr<void> _onRestoreBackup(RestoreBackupEvent event, Emitter<SettingsState> emit) async {
     String? direBackup;
     try {
       direBackup = await getDirectoryPath();
@@ -111,33 +73,18 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       return;
     }
     if (direBackup == null) {
-      emit(
-        SettingsError('Nenhum diretório selecionado para restaurar o backup.'),
-      );
+      emit(SettingsError('Nenhum diretório selecionado para restaurar o backup.'));
       return;
     }
     emit(const SettingsLoadingState());
     final result = await _configurationRepository.restoreBackup(direBackup);
-    _emitResult(
-      emit: emit,
-      result: result,
-      successStatus: SettingsSuccessStatus.backupRestored,
-    );
+    _emitResult(emit: emit, result: result, successStatus: SettingsSuccessStatus.backupRestored);
   }
 
-  Future<void> _onUpdateSettings(
-    UpdateSettingsEvent event,
-    Emitter<SettingsState> emit,
-  ) async {
+  Future<void> _onUpdateSettings(UpdateSettingsEvent event, Emitter<SettingsState> emit) async {
     emit(const SettingsLoadingState());
-    final result = await _configurationRepository.updateAppSettings(
-      event.appSettings,
-    );
-    _emitResult(
-      emit: emit,
-      result: result,
-      successStatus: SettingsSuccessStatus.updated,
-    );
+    final result = await _configurationRepository.updateAppSettings(event.appSettings);
+    _emitResult(emit: emit, result: result, successStatus: SettingsSuccessStatus.updated);
   }
 
   void _emitResult({

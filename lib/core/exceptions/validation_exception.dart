@@ -22,12 +22,7 @@ class ValidationException implements Exception {
   /// - [field]: Nome do campo que falhou (opcional)
   /// - [suggestion]: Sugestão de correção (opcional)
   /// - [invalidValue]: Valor que causou o erro (opcional)
-  const ValidationException(
-    this.message, {
-    this.field,
-    this.suggestion,
-    this.invalidValue,
-  });
+  const ValidationException(this.message, {this.field, this.suggestion, this.invalidValue});
 
   @override
   String toString() {

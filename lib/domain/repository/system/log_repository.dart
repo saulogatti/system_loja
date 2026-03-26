@@ -68,9 +68,7 @@ class LogRepository with LoggerClassMixin implements ILogRepository {
 
   /// Obtém logs por tipo de ação
   @override
-  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByActionType(
-    ActionType actionType,
-  ) async {
+  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByActionType(ActionType actionType) async {
     try {
       final result = await _logDao.getWithAction(actionType);
       return ResultStatus.success(result);
@@ -81,9 +79,7 @@ class LogRepository with LoggerClassMixin implements ILogRepository {
 
   /// Obtém logs de uma entidade específica
   @override
-  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByEntity(
-    String entity,
-  ) async {
+  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByEntity(String entity) async {
     try {
       final result = await _logDao.getWithFilter(entity);
       return ResultStatus.success(result);
@@ -110,9 +106,7 @@ class LogRepository with LoggerClassMixin implements ILogRepository {
 
   /// Obtém logs de um usuário específico
   @override
-  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByUser(
-    int userId,
-  ) async {
+  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByUser(int userId) async {
     try {
       final result = await _logDao.getWithUserId(userId);
       return ResultStatus.success(result);
@@ -129,9 +123,7 @@ class LogRepository with LoggerClassMixin implements ILogRepository {
   Future<ResultStatus<void, String>> saveActivityLog(ActivityLog log) async {
     try {
       await _logDao.save(log);
-      logInfo(
-        'Log registrado: ${log.actionType.name} - ${log.entity} - ${log.userName}',
-      );
+      logInfo('Log registrado: ${log.actionType.name} - ${log.entity} - ${log.userName}');
       return ResultStatus.success(null);
     } catch (e) {
       return ResultStatus.error('Falha ao salvar log de atividade: $e');

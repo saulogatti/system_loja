@@ -37,8 +37,7 @@ class ActivityLogData {
     this.lastUpdatedDate,
   });
 
-  factory ActivityLogData.fromJson(Map<String, dynamic> json) =>
-      _$ActivityLogDataFromJson(json);
+  factory ActivityLogData.fromJson(Map<String, dynamic> json) => _$ActivityLogDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$ActivityLogDataToJson(this);
 

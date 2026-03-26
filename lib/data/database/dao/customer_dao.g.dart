@@ -12,8 +12,5 @@ class CustomerDaoManager {
   final _$CustomerDaoMixin _db;
   CustomerDaoManager(this._db);
   $$CustomerRecordsTableTableManager get customerRecords =>
-      $$CustomerRecordsTableTableManager(
-        _db.attachedDatabase,
-        _db.customerRecords,
-      );
+      $$CustomerRecordsTableTableManager(_db.attachedDatabase, _db.customerRecords);
 }

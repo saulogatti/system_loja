@@ -3,8 +3,7 @@
 part of 'system_database.dart';
 
 // ignore_for_file: type=lint
-class $UsersRecordsTable extends UsersRecords
-    with TableInfo<$UsersRecordsTable, UserEntry> {
+class $UsersRecordsTable extends UsersRecords with TableInfo<$UsersRecordsTable, UserEntry> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -27,22 +26,17 @@ class $UsersRecordsTable extends UsersRecords
     hasAutoIncrement: true,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
+    defaultConstraints: GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'),
   );
-  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
-    'lastUpdatedDate',
-  );
+  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta('lastUpdatedDate');
   @override
-  late final GeneratedColumn<DateTime> lastUpdatedDate =
-      GeneratedColumn<DateTime>(
-        'last_updated_date',
-        aliasedName,
-        true,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-      );
+  late final GeneratedColumn<DateTime> lastUpdatedDate = GeneratedColumn<DateTime>(
+    'last_updated_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -52,9 +46,7 @@ class $UsersRecordsTable extends UsersRecords
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _passwordHashMeta = const VerificationMeta(
-    'passwordHash',
-  );
+  static const VerificationMeta _passwordHashMeta = const VerificationMeta('passwordHash');
   @override
   late final GeneratedColumn<String> passwordHash = GeneratedColumn<String>(
     'password_hash',
@@ -63,9 +55,7 @@ class $UsersRecordsTable extends UsersRecords
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _permissionMeta = const VerificationMeta(
-    'permission',
-  );
+  static const VerificationMeta _permissionMeta = const VerificationMeta('permission');
   @override
   late final GeneratedColumn<int> permission = GeneratedColumn<int>(
     'permission',
@@ -74,19 +64,16 @@ class $UsersRecordsTable extends UsersRecords
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _registrationDateMeta = const VerificationMeta(
-    'registrationDate',
-  );
+  static const VerificationMeta _registrationDateMeta = const VerificationMeta('registrationDate');
   @override
-  late final GeneratedColumn<DateTime> registrationDate =
-      GeneratedColumn<DateTime>(
-        'registration_date',
-        aliasedName,
-        false,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-        defaultValue: currentDateAndTime,
-      );
+  late final GeneratedColumn<DateTime> registrationDate = GeneratedColumn<DateTime>(
+    'registration_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     email,
@@ -103,17 +90,11 @@ class $UsersRecordsTable extends UsersRecords
   String get actualTableName => $name;
   static const String $name = 'users_records';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<UserEntry> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<UserEntry> instance, {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('email')) {
-      context.handle(
-        _emailMeta,
-        email.isAcceptableOrUnknown(data['email']!, _emailMeta),
-      );
+      context.handle(_emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
     }
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
@@ -121,46 +102,31 @@ class $UsersRecordsTable extends UsersRecords
     if (data.containsKey('last_updated_date')) {
       context.handle(
         _lastUpdatedDateMeta,
-        lastUpdatedDate.isAcceptableOrUnknown(
-          data['last_updated_date']!,
-          _lastUpdatedDateMeta,
-        ),
+        lastUpdatedDate.isAcceptableOrUnknown(data['last_updated_date']!, _lastUpdatedDateMeta),
       );
     }
     if (data.containsKey('name')) {
-      context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
-      );
+      context.handle(_nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('password_hash')) {
       context.handle(
         _passwordHashMeta,
-        passwordHash.isAcceptableOrUnknown(
-          data['password_hash']!,
-          _passwordHashMeta,
-        ),
+        passwordHash.isAcceptableOrUnknown(data['password_hash']!, _passwordHashMeta),
       );
     } else if (isInserting) {
       context.missing(_passwordHashMeta);
     }
     if (data.containsKey('permission')) {
-      context.handle(
-        _permissionMeta,
-        permission.isAcceptableOrUnknown(data['permission']!, _permissionMeta),
-      );
+      context.handle(_permissionMeta, permission.isAcceptableOrUnknown(data['permission']!, _permissionMeta));
     } else if (isInserting) {
       context.missing(_permissionMeta);
     }
     if (data.containsKey('registration_date')) {
       context.handle(
         _registrationDateMeta,
-        registrationDate.isAcceptableOrUnknown(
-          data['registration_date']!,
-          _registrationDateMeta,
-        ),
+        registrationDate.isAcceptableOrUnknown(data['registration_date']!, _registrationDateMeta),
       );
     }
     return context;
@@ -172,14 +138,8 @@ class $UsersRecordsTable extends UsersRecords
   UserEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return UserEntry(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      name: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}name'],
-      )!,
+      id: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       passwordHash: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}password_hash'],
@@ -188,14 +148,8 @@ class $UsersRecordsTable extends UsersRecords
         DriftSqlType.dateTime,
         data['${effectivePrefix}registration_date'],
       )!,
-      email: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}email'],
-      ),
-      permission: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}permission'],
-      )!,
+      email: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}email']),
+      permission: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}permission'])!,
       lastUpdatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_updated_date'],
@@ -319,24 +273,20 @@ class UsersRecordsCompanion extends UpdateCompanion<UserEntry> {
   }
 }
 
-class $LogsRecordsTable extends LogsRecords
-    with TableInfo<$LogsRecordsTable, LogsRecord> {
+class $LogsRecordsTable extends LogsRecords with TableInfo<$LogsRecordsTable, LogsRecord> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $LogsRecordsTable(this.attachedDatabase, [this._alias]);
   @override
-  late final GeneratedColumnWithTypeConverter<ActionType, int> actionType =
-      GeneratedColumn<int>(
-        'action_type',
-        aliasedName,
-        false,
-        type: DriftSqlType.int,
-        requiredDuringInsert: true,
-      ).withConverter<ActionType>($LogsRecordsTable.$converteractionType);
-  static const VerificationMeta _detailsMeta = const VerificationMeta(
-    'details',
-  );
+  late final GeneratedColumnWithTypeConverter<ActionType, int> actionType = GeneratedColumn<int>(
+    'action_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  ).withConverter<ActionType>($LogsRecordsTable.$converteractionType);
+  static const VerificationMeta _detailsMeta = const VerificationMeta('details');
   @override
   late final GeneratedColumn<String> details = GeneratedColumn<String>(
     'details',
@@ -364,39 +314,29 @@ class $LogsRecordsTable extends LogsRecords
     hasAutoIncrement: true,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
+    defaultConstraints: GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'),
   );
-  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
-    'lastUpdatedDate',
-  );
+  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta('lastUpdatedDate');
   @override
-  late final GeneratedColumn<DateTime> lastUpdatedDate =
-      GeneratedColumn<DateTime>(
-        'last_updated_date',
-        aliasedName,
-        false,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-        defaultValue: currentDateAndTime,
-      );
-  static const VerificationMeta _registrationDateMeta = const VerificationMeta(
-    'registrationDate',
+  late final GeneratedColumn<DateTime> lastUpdatedDate = GeneratedColumn<DateTime>(
+    'last_updated_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
   );
+  static const VerificationMeta _registrationDateMeta = const VerificationMeta('registrationDate');
   @override
-  late final GeneratedColumn<DateTime> registrationDate =
-      GeneratedColumn<DateTime>(
-        'registration_date',
-        aliasedName,
-        false,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-        defaultValue: currentDateAndTime,
-      );
-  static const VerificationMeta _timestampMeta = const VerificationMeta(
-    'timestamp',
+  late final GeneratedColumn<DateTime> registrationDate = GeneratedColumn<DateTime>(
+    'registration_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
   );
+  static const VerificationMeta _timestampMeta = const VerificationMeta('timestamp');
   @override
   late final GeneratedColumn<DateTime> timestamp = GeneratedColumn<DateTime>(
     'timestamp',
@@ -415,9 +355,7 @@ class $LogsRecordsTable extends LogsRecords
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _userNameMeta = const VerificationMeta(
-    'userName',
-  );
+  static const VerificationMeta _userNameMeta = const VerificationMeta('userName');
   @override
   late final GeneratedColumn<String> userName = GeneratedColumn<String>(
     'user_name',
@@ -444,23 +382,14 @@ class $LogsRecordsTable extends LogsRecords
   String get actualTableName => $name;
   static const String $name = 'logs_records';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<LogsRecord> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<LogsRecord> instance, {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('details')) {
-      context.handle(
-        _detailsMeta,
-        details.isAcceptableOrUnknown(data['details']!, _detailsMeta),
-      );
+      context.handle(_detailsMeta, details.isAcceptableOrUnknown(data['details']!, _detailsMeta));
     }
     if (data.containsKey('entity')) {
-      context.handle(
-        _entityMeta,
-        entity.isAcceptableOrUnknown(data['entity']!, _entityMeta),
-      );
+      context.handle(_entityMeta, entity.isAcceptableOrUnknown(data['entity']!, _entityMeta));
     } else if (isInserting) {
       context.missing(_entityMeta);
     }
@@ -470,40 +399,25 @@ class $LogsRecordsTable extends LogsRecords
     if (data.containsKey('last_updated_date')) {
       context.handle(
         _lastUpdatedDateMeta,
-        lastUpdatedDate.isAcceptableOrUnknown(
-          data['last_updated_date']!,
-          _lastUpdatedDateMeta,
-        ),
+        lastUpdatedDate.isAcceptableOrUnknown(data['last_updated_date']!, _lastUpdatedDateMeta),
       );
     }
     if (data.containsKey('registration_date')) {
       context.handle(
         _registrationDateMeta,
-        registrationDate.isAcceptableOrUnknown(
-          data['registration_date']!,
-          _registrationDateMeta,
-        ),
+        registrationDate.isAcceptableOrUnknown(data['registration_date']!, _registrationDateMeta),
       );
     }
     if (data.containsKey('timestamp')) {
-      context.handle(
-        _timestampMeta,
-        timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta),
-      );
+      context.handle(_timestampMeta, timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta));
     }
     if (data.containsKey('user_id')) {
-      context.handle(
-        _userIdMeta,
-        userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta),
-      );
+      context.handle(_userIdMeta, userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
     } else if (isInserting) {
       context.missing(_userIdMeta);
     }
     if (data.containsKey('user_name')) {
-      context.handle(
-        _userNameMeta,
-        userName.isAcceptableOrUnknown(data['user_name']!, _userNameMeta),
-      );
+      context.handle(_userNameMeta, userName.isAcceptableOrUnknown(data['user_name']!, _userNameMeta));
     } else if (isInserting) {
       context.missing(_userNameMeta);
     }
@@ -517,23 +431,11 @@ class $LogsRecordsTable extends LogsRecords
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return LogsRecord(
       actionType: $LogsRecordsTable.$converteractionType.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.int,
-          data['${effectivePrefix}action_type'],
-        )!,
+        attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}action_type'])!,
       ),
-      details: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}details'],
-      )!,
-      entity: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}entity'],
-      )!,
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
+      details: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}details'])!,
+      entity: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}entity'])!,
+      id: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       lastUpdatedDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_updated_date'],
@@ -546,14 +448,8 @@ class $LogsRecordsTable extends LogsRecords
         DriftSqlType.dateTime,
         data['${effectivePrefix}timestamp'],
       )!,
-      userId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}user_id'],
-      )!,
-      userName: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}user_name'],
-      )!,
+      userId: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
+      userName: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}user_name'])!,
     );
   }
 
@@ -562,8 +458,9 @@ class $LogsRecordsTable extends LogsRecords
     return $LogsRecordsTable(attachedDatabase, alias);
   }
 
-  static JsonTypeConverter2<ActionType, int, int> $converteractionType =
-      const EnumIndexConverter<ActionType>(ActionType.values);
+  static JsonTypeConverter2<ActionType, int, int> $converteractionType = const EnumIndexConverter<ActionType>(
+    ActionType.values,
+  );
 }
 
 class LogsRecord extends DataClass implements Insertable<LogsRecord> {
@@ -591,9 +488,7 @@ class LogsRecord extends DataClass implements Insertable<LogsRecord> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     {
-      map['action_type'] = Variable<int>(
-        $LogsRecordsTable.$converteractionType.toSql(actionType),
-      );
+      map['action_type'] = Variable<int>($LogsRecordsTable.$converteractionType.toSql(actionType));
     }
     map['details'] = Variable<String>(details);
     map['entity'] = Variable<String>(entity);
@@ -620,10 +515,7 @@ class LogsRecord extends DataClass implements Insertable<LogsRecord> {
     );
   }
 
-  factory LogsRecord.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory LogsRecord.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return LogsRecord(
       actionType: $LogsRecordsTable.$converteractionType.fromJson(
@@ -643,9 +535,7 @@ class LogsRecord extends DataClass implements Insertable<LogsRecord> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'actionType': serializer.toJson<int>(
-        $LogsRecordsTable.$converteractionType.toJson(actionType),
-      ),
+      'actionType': serializer.toJson<int>($LogsRecordsTable.$converteractionType.toJson(actionType)),
       'details': serializer.toJson<String>(details),
       'entity': serializer.toJson<String>(entity),
       'id': serializer.toJson<int>(id),
@@ -680,18 +570,12 @@ class LogsRecord extends DataClass implements Insertable<LogsRecord> {
   );
   LogsRecord copyWithCompanion(LogsRecordsCompanion data) {
     return LogsRecord(
-      actionType: data.actionType.present
-          ? data.actionType.value
-          : this.actionType,
+      actionType: data.actionType.present ? data.actionType.value : this.actionType,
       details: data.details.present ? data.details.value : this.details,
       entity: data.entity.present ? data.entity.value : this.entity,
       id: data.id.present ? data.id.value : this.id,
-      lastUpdatedDate: data.lastUpdatedDate.present
-          ? data.lastUpdatedDate.value
-          : this.lastUpdatedDate,
-      registrationDate: data.registrationDate.present
-          ? data.registrationDate.value
-          : this.registrationDate,
+      lastUpdatedDate: data.lastUpdatedDate.present ? data.lastUpdatedDate.value : this.lastUpdatedDate,
+      registrationDate: data.registrationDate.present ? data.registrationDate.value : this.registrationDate,
       timestamp: data.timestamp.present ? data.timestamp.value : this.timestamp,
       userId: data.userId.present ? data.userId.value : this.userId,
       userName: data.userName.present ? data.userName.value : this.userName,
@@ -828,9 +712,7 @@ class LogsRecordsCompanion extends UpdateCompanion<LogsRecord> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (actionType.present) {
-      map['action_type'] = Variable<int>(
-        $LogsRecordsTable.$converteractionType.toSql(actionType.value),
-      );
+      map['action_type'] = Variable<int>($LogsRecordsTable.$converteractionType.toSql(actionType.value));
     }
     if (details.present) {
       map['details'] = Variable<String>(details.value);
@@ -891,58 +773,44 @@ class $SystemRecordsTable extends SystemRecords
     hasAutoIncrement: true,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
+    defaultConstraints: GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'),
   );
-  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta(
-    'lastUpdatedDate',
+  static const VerificationMeta _lastUpdatedDateMeta = const VerificationMeta('lastUpdatedDate');
+  @override
+  late final GeneratedColumn<DateTime> lastUpdatedDate = GeneratedColumn<DateTime>(
+    'last_updated_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
   );
   @override
-  late final GeneratedColumn<DateTime> lastUpdatedDate =
-      GeneratedColumn<DateTime>(
-        'last_updated_date',
-        aliasedName,
-        false,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: true,
-      );
-  @override
-  late final GeneratedColumnWithTypeConverter<PriceConfiguration, String>
-  priceConfiguration =
+  late final GeneratedColumnWithTypeConverter<PriceConfiguration, String> priceConfiguration =
       GeneratedColumn<String>(
         'price_configuration',
         aliasedName,
         false,
         type: DriftSqlType.string,
         requiredDuringInsert: true,
-      ).withConverter<PriceConfiguration>(
-        $SystemRecordsTable.$converterpriceConfiguration,
-      );
-  static const VerificationMeta _registrationDateMeta = const VerificationMeta(
-    'registrationDate',
+      ).withConverter<PriceConfiguration>($SystemRecordsTable.$converterpriceConfiguration);
+  static const VerificationMeta _registrationDateMeta = const VerificationMeta('registrationDate');
+  @override
+  late final GeneratedColumn<DateTime> registrationDate = GeneratedColumn<DateTime>(
+    'registration_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
   );
   @override
-  late final GeneratedColumn<DateTime> registrationDate =
-      GeneratedColumn<DateTime>(
-        'registration_date',
-        aliasedName,
-        false,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: true,
-      );
-  @override
-  late final GeneratedColumnWithTypeConverter<SystemUserDataEntry, String>
-  systemUserData =
+  late final GeneratedColumnWithTypeConverter<SystemUserDataEntry, String> systemUserData =
       GeneratedColumn<String>(
         'system_user_data',
         aliasedName,
         false,
         type: DriftSqlType.string,
         requiredDuringInsert: true,
-      ).withConverter<SystemUserDataEntry>(
-        $SystemRecordsTable.$convertersystemUserData,
-      );
+      ).withConverter<SystemUserDataEntry>($SystemRecordsTable.$convertersystemUserData);
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -969,10 +837,7 @@ class $SystemRecordsTable extends SystemRecords
     if (data.containsKey('last_updated_date')) {
       context.handle(
         _lastUpdatedDateMeta,
-        lastUpdatedDate.isAcceptableOrUnknown(
-          data['last_updated_date']!,
-          _lastUpdatedDateMeta,
-        ),
+        lastUpdatedDate.isAcceptableOrUnknown(data['last_updated_date']!, _lastUpdatedDateMeta),
       );
     } else if (isInserting) {
       context.missing(_lastUpdatedDateMeta);
@@ -980,10 +845,7 @@ class $SystemRecordsTable extends SystemRecords
     if (data.containsKey('registration_date')) {
       context.handle(
         _registrationDateMeta,
-        registrationDate.isAcceptableOrUnknown(
-          data['registration_date']!,
-          _registrationDateMeta,
-        ),
+        registrationDate.isAcceptableOrUnknown(data['registration_date']!, _registrationDateMeta),
       );
     } else if (isInserting) {
       context.missing(_registrationDateMeta);
@@ -994,28 +856,18 @@ class $SystemRecordsTable extends SystemRecords
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  SystemConfigurationEntry map(
-    Map<String, dynamic> data, {
-    String? tablePrefix,
-  }) {
+  SystemConfigurationEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return SystemConfigurationEntry(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      priceConfiguration: $SystemRecordsTable.$converterpriceConfiguration
-          .fromSql(
-            attachedDatabase.typeMapping.read(
-              DriftSqlType.string,
-              data['${effectivePrefix}price_configuration'],
-            )!,
-          ),
-      systemUserData: $SystemRecordsTable.$convertersystemUserData.fromSql(
+      id: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      priceConfiguration: $SystemRecordsTable.$converterpriceConfiguration.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
-          data['${effectivePrefix}system_user_data'],
+          data['${effectivePrefix}price_configuration'],
         )!,
+      ),
+      systemUserData: $SystemRecordsTable.$convertersystemUserData.fromSql(
+        attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}system_user_data'])!,
       ),
       registrationDate: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -1033,10 +885,9 @@ class $SystemRecordsTable extends SystemRecords
     return $SystemRecordsTable(attachedDatabase, alias);
   }
 
-  static JsonTypeConverter2<PriceConfiguration, String, Object?>
-  $converterpriceConfiguration = PriceConfigurationCodec.driftConverter;
-  static TypeConverter<SystemUserDataEntry, String> $convertersystemUserData =
-      SystemUserDataConverter();
+  static JsonTypeConverter2<PriceConfiguration, String, Object?> $converterpriceConfiguration =
+      PriceConfigurationCodec.driftConverter;
+  static TypeConverter<SystemUserDataEntry, String> $convertersystemUserData = SystemUserDataConverter();
 }
 
 class SystemRecordsCompanion extends UpdateCompanion<SystemConfigurationEntry> {
@@ -1105,9 +956,7 @@ class SystemRecordsCompanion extends UpdateCompanion<SystemConfigurationEntry> {
     }
     if (priceConfiguration.present) {
       map['price_configuration'] = Variable<String>(
-        $SystemRecordsTable.$converterpriceConfiguration.toSql(
-          priceConfiguration.value,
-        ),
+        $SystemRecordsTable.$converterpriceConfiguration.toSql(priceConfiguration.value),
       );
     }
     if (registrationDate.present) {
@@ -1115,9 +964,7 @@ class SystemRecordsCompanion extends UpdateCompanion<SystemConfigurationEntry> {
     }
     if (systemUserData.present) {
       map['system_user_data'] = Variable<String>(
-        $SystemRecordsTable.$convertersystemUserData.toSql(
-          systemUserData.value,
-        ),
+        $SystemRecordsTable.$convertersystemUserData.toSql(systemUserData.value),
       );
     }
     return map;
@@ -1149,11 +996,7 @@ abstract class _$SystemDatabase extends GeneratedDatabase {
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [
-    usersRecords,
-    logsRecords,
-    systemRecords,
-  ];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [usersRecords, logsRecords, systemRecords];
 }
 
 typedef $$UsersRecordsTableCreateCompanionBuilder =
@@ -1177,8 +1020,7 @@ typedef $$UsersRecordsTableUpdateCompanionBuilder =
       Value<DateTime> registrationDate,
     });
 
-class $$UsersRecordsTableFilterComposer
-    extends Composer<_$SystemDatabase, $UsersRecordsTable> {
+class $$UsersRecordsTableFilterComposer extends Composer<_$SystemDatabase, $UsersRecordsTable> {
   $$UsersRecordsTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -1186,44 +1028,29 @@ class $$UsersRecordsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<String> get email => $composableBuilder(
-    column: $table.email,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<String> get email =>
+      $composableBuilder(column: $table.email, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get lastUpdatedDate =>
+      $composableBuilder(column: $table.lastUpdatedDate, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get passwordHash => $composableBuilder(
-    column: $table.passwordHash,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<String> get passwordHash =>
+      $composableBuilder(column: $table.passwordHash, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get permission => $composableBuilder(
-    column: $table.permission,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<int> get permission =>
+      $composableBuilder(column: $table.permission, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get registrationDate =>
+      $composableBuilder(column: $table.registrationDate, builder: (column) => ColumnFilters(column));
 }
 
-class $$UsersRecordsTableOrderingComposer
-    extends Composer<_$SystemDatabase, $UsersRecordsTable> {
+class $$UsersRecordsTableOrderingComposer extends Composer<_$SystemDatabase, $UsersRecordsTable> {
   $$UsersRecordsTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -1231,44 +1058,29 @@ class $$UsersRecordsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<String> get email => $composableBuilder(
-    column: $table.email,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get email =>
+      $composableBuilder(column: $table.email, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get lastUpdatedDate =>
+      $composableBuilder(column: $table.lastUpdatedDate, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get passwordHash => $composableBuilder(
-    column: $table.passwordHash,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get passwordHash =>
+      $composableBuilder(column: $table.passwordHash, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get permission => $composableBuilder(
-    column: $table.permission,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<int> get permission =>
+      $composableBuilder(column: $table.permission, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get registrationDate =>
+      $composableBuilder(column: $table.registrationDate, builder: (column) => ColumnOrderings(column));
 }
 
-class $$UsersRecordsTableAnnotationComposer
-    extends Composer<_$SystemDatabase, $UsersRecordsTable> {
+class $$UsersRecordsTableAnnotationComposer extends Composer<_$SystemDatabase, $UsersRecordsTable> {
   $$UsersRecordsTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -1276,34 +1088,23 @@ class $$UsersRecordsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<String> get email =>
-      $composableBuilder(column: $table.email, builder: (column) => column);
+  GeneratedColumn<String> get email => $composableBuilder(column: $table.email, builder: (column) => column);
 
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
+  GeneratedColumn<int> get id => $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => column,
-  );
+  GeneratedColumn<DateTime> get lastUpdatedDate =>
+      $composableBuilder(column: $table.lastUpdatedDate, builder: (column) => column);
 
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
+  GeneratedColumn<String> get name => $composableBuilder(column: $table.name, builder: (column) => column);
 
-  GeneratedColumn<String> get passwordHash => $composableBuilder(
-    column: $table.passwordHash,
-    builder: (column) => column,
-  );
+  GeneratedColumn<String> get passwordHash =>
+      $composableBuilder(column: $table.passwordHash, builder: (column) => column);
 
-  GeneratedColumn<int> get permission => $composableBuilder(
-    column: $table.permission,
-    builder: (column) => column,
-  );
+  GeneratedColumn<int> get permission =>
+      $composableBuilder(column: $table.permission, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => column,
-  );
+  GeneratedColumn<DateTime> get registrationDate =>
+      $composableBuilder(column: $table.registrationDate, builder: (column) => column);
 }
 
 class $$UsersRecordsTableTableManager
@@ -1317,10 +1118,7 @@ class $$UsersRecordsTableTableManager
           $$UsersRecordsTableAnnotationComposer,
           $$UsersRecordsTableCreateCompanionBuilder,
           $$UsersRecordsTableUpdateCompanionBuilder,
-          (
-            UserEntry,
-            BaseReferences<_$SystemDatabase, $UsersRecordsTable, UserEntry>,
-          ),
+          (UserEntry, BaseReferences<_$SystemDatabase, $UsersRecordsTable, UserEntry>),
           UserEntry,
           PrefetchHooks Function()
         > {
@@ -1329,12 +1127,9 @@ class $$UsersRecordsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer: () =>
-              $$UsersRecordsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$UsersRecordsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$UsersRecordsTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () => $$UsersRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () => $$UsersRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () => $$UsersRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<String?> email = const Value.absent(),
@@ -1371,9 +1166,8 @@ class $$UsersRecordsTableTableManager
                 permission: permission,
                 registrationDate: registrationDate,
               ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
+          withReferenceMapper: (p0) =>
+              p0.map((e) => (e.readTable(table), BaseReferences(db, table, e))).toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -1389,10 +1183,7 @@ typedef $$UsersRecordsTableProcessedTableManager =
       $$UsersRecordsTableAnnotationComposer,
       $$UsersRecordsTableCreateCompanionBuilder,
       $$UsersRecordsTableUpdateCompanionBuilder,
-      (
-        UserEntry,
-        BaseReferences<_$SystemDatabase, $UsersRecordsTable, UserEntry>,
-      ),
+      (UserEntry, BaseReferences<_$SystemDatabase, $UsersRecordsTable, UserEntry>),
       UserEntry,
       PrefetchHooks Function()
     >;
@@ -1421,8 +1212,7 @@ typedef $$LogsRecordsTableUpdateCompanionBuilder =
       Value<String> userName,
     });
 
-class $$LogsRecordsTableFilterComposer
-    extends Composer<_$SystemDatabase, $LogsRecordsTable> {
+class $$LogsRecordsTableFilterComposer extends Composer<_$SystemDatabase, $LogsRecordsTable> {
   $$LogsRecordsTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -1430,55 +1220,37 @@ class $$LogsRecordsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnWithTypeConverterFilters<ActionType, ActionType, int> get actionType =>
-      $composableBuilder(
-        column: $table.actionType,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
-
-  ColumnFilters<String> get details => $composableBuilder(
-    column: $table.details,
-    builder: (column) => ColumnFilters(column),
+  ColumnWithTypeConverterFilters<ActionType, ActionType, int> get actionType => $composableBuilder(
+    column: $table.actionType,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnFilters<String> get entity => $composableBuilder(
-    column: $table.entity,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<String> get details =>
+      $composableBuilder(column: $table.details, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<String> get entity =>
+      $composableBuilder(column: $table.entity, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get lastUpdatedDate =>
+      $composableBuilder(column: $table.lastUpdatedDate, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get timestamp => $composableBuilder(
-    column: $table.timestamp,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get registrationDate =>
+      $composableBuilder(column: $table.registrationDate, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get userId => $composableBuilder(
-    column: $table.userId,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get timestamp =>
+      $composableBuilder(column: $table.timestamp, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get userName => $composableBuilder(
-    column: $table.userName,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<int> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get userName =>
+      $composableBuilder(column: $table.userName, builder: (column) => ColumnFilters(column));
 }
 
-class $$LogsRecordsTableOrderingComposer
-    extends Composer<_$SystemDatabase, $LogsRecordsTable> {
+class $$LogsRecordsTableOrderingComposer extends Composer<_$SystemDatabase, $LogsRecordsTable> {
   $$LogsRecordsTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -1486,54 +1258,35 @@ class $$LogsRecordsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get actionType => $composableBuilder(
-    column: $table.actionType,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<int> get actionType =>
+      $composableBuilder(column: $table.actionType, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get details => $composableBuilder(
-    column: $table.details,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get details =>
+      $composableBuilder(column: $table.details, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get entity => $composableBuilder(
-    column: $table.entity,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get entity =>
+      $composableBuilder(column: $table.entity, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get lastUpdatedDate =>
+      $composableBuilder(column: $table.lastUpdatedDate, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get registrationDate =>
+      $composableBuilder(column: $table.registrationDate, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get timestamp => $composableBuilder(
-    column: $table.timestamp,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get timestamp =>
+      $composableBuilder(column: $table.timestamp, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get userId => $composableBuilder(
-    column: $table.userId,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<int> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get userName => $composableBuilder(
-    column: $table.userName,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get userName =>
+      $composableBuilder(column: $table.userName, builder: (column) => ColumnOrderings(column));
 }
 
-class $$LogsRecordsTableAnnotationComposer
-    extends Composer<_$SystemDatabase, $LogsRecordsTable> {
+class $$LogsRecordsTableAnnotationComposer extends Composer<_$SystemDatabase, $LogsRecordsTable> {
   $$LogsRecordsTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -1542,10 +1295,7 @@ class $$LogsRecordsTableAnnotationComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   GeneratedColumnWithTypeConverter<ActionType, int> get actionType =>
-      $composableBuilder(
-        column: $table.actionType,
-        builder: (column) => column,
-      );
+      $composableBuilder(column: $table.actionType, builder: (column) => column);
 
   GeneratedColumn<String> get details =>
       $composableBuilder(column: $table.details, builder: (column) => column);
@@ -1553,24 +1303,18 @@ class $$LogsRecordsTableAnnotationComposer
   GeneratedColumn<String> get entity =>
       $composableBuilder(column: $table.entity, builder: (column) => column);
 
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
+  GeneratedColumn<int> get id => $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => column,
-  );
+  GeneratedColumn<DateTime> get lastUpdatedDate =>
+      $composableBuilder(column: $table.lastUpdatedDate, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => column,
-  );
+  GeneratedColumn<DateTime> get registrationDate =>
+      $composableBuilder(column: $table.registrationDate, builder: (column) => column);
 
   GeneratedColumn<DateTime> get timestamp =>
       $composableBuilder(column: $table.timestamp, builder: (column) => column);
 
-  GeneratedColumn<int> get userId =>
-      $composableBuilder(column: $table.userId, builder: (column) => column);
+  GeneratedColumn<int> get userId => $composableBuilder(column: $table.userId, builder: (column) => column);
 
   GeneratedColumn<String> get userName =>
       $composableBuilder(column: $table.userName, builder: (column) => column);
@@ -1587,10 +1331,7 @@ class $$LogsRecordsTableTableManager
           $$LogsRecordsTableAnnotationComposer,
           $$LogsRecordsTableCreateCompanionBuilder,
           $$LogsRecordsTableUpdateCompanionBuilder,
-          (
-            LogsRecord,
-            BaseReferences<_$SystemDatabase, $LogsRecordsTable, LogsRecord>,
-          ),
+          (LogsRecord, BaseReferences<_$SystemDatabase, $LogsRecordsTable, LogsRecord>),
           LogsRecord,
           PrefetchHooks Function()
         > {
@@ -1599,12 +1340,9 @@ class $$LogsRecordsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer: () =>
-              $$LogsRecordsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$LogsRecordsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$LogsRecordsTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () => $$LogsRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () => $$LogsRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () => $$LogsRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<ActionType> actionType = const Value.absent(),
@@ -1649,9 +1387,8 @@ class $$LogsRecordsTableTableManager
                 userId: userId,
                 userName: userName,
               ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
+          withReferenceMapper: (p0) =>
+              p0.map((e) => (e.readTable(table), BaseReferences(db, table, e))).toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -1667,10 +1404,7 @@ typedef $$LogsRecordsTableProcessedTableManager =
       $$LogsRecordsTableAnnotationComposer,
       $$LogsRecordsTableCreateCompanionBuilder,
       $$LogsRecordsTableUpdateCompanionBuilder,
-      (
-        LogsRecord,
-        BaseReferences<_$SystemDatabase, $LogsRecordsTable, LogsRecord>,
-      ),
+      (LogsRecord, BaseReferences<_$SystemDatabase, $LogsRecordsTable, LogsRecord>),
       LogsRecord,
       PrefetchHooks Function()
     >;
@@ -1691,8 +1425,7 @@ typedef $$SystemRecordsTableUpdateCompanionBuilder =
       Value<SystemUserDataEntry> systemUserData,
     });
 
-class $$SystemRecordsTableFilterComposer
-    extends Composer<_$SystemDatabase, $SystemRecordsTable> {
+class $$SystemRecordsTableFilterComposer extends Composer<_$SystemDatabase, $SystemRecordsTable> {
   $$SystemRecordsTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -1700,40 +1433,29 @@ class $$SystemRecordsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get lastUpdatedDate =>
+      $composableBuilder(column: $table.lastUpdatedDate, builder: (column) => ColumnFilters(column));
 
-  ColumnWithTypeConverterFilters<PriceConfiguration, PriceConfiguration, String>
-  get priceConfiguration => $composableBuilder(
-    column: $table.priceConfiguration,
-    builder: (column) => ColumnWithTypeConverterFilters(column),
-  );
+  ColumnWithTypeConverterFilters<PriceConfiguration, PriceConfiguration, String> get priceConfiguration =>
+      $composableBuilder(
+        column: $table.priceConfiguration,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
-  ColumnFilters<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get registrationDate =>
+      $composableBuilder(column: $table.registrationDate, builder: (column) => ColumnFilters(column));
 
-  ColumnWithTypeConverterFilters<
-    SystemUserDataEntry,
-    SystemUserDataEntry,
-    String
-  >
-  get systemUserData => $composableBuilder(
-    column: $table.systemUserData,
-    builder: (column) => ColumnWithTypeConverterFilters(column),
-  );
+  ColumnWithTypeConverterFilters<SystemUserDataEntry, SystemUserDataEntry, String> get systemUserData =>
+      $composableBuilder(
+        column: $table.systemUserData,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 }
 
-class $$SystemRecordsTableOrderingComposer
-    extends Composer<_$SystemDatabase, $SystemRecordsTable> {
+class $$SystemRecordsTableOrderingComposer extends Composer<_$SystemDatabase, $SystemRecordsTable> {
   $$SystemRecordsTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -1741,34 +1463,23 @@ class $$SystemRecordsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get lastUpdatedDate =>
+      $composableBuilder(column: $table.lastUpdatedDate, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get priceConfiguration => $composableBuilder(
-    column: $table.priceConfiguration,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get priceConfiguration =>
+      $composableBuilder(column: $table.priceConfiguration, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get registrationDate =>
+      $composableBuilder(column: $table.registrationDate, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get systemUserData => $composableBuilder(
-    column: $table.systemUserData,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get systemUserData =>
+      $composableBuilder(column: $table.systemUserData, builder: (column) => ColumnOrderings(column));
 }
 
-class $$SystemRecordsTableAnnotationComposer
-    extends Composer<_$SystemDatabase, $SystemRecordsTable> {
+class $$SystemRecordsTableAnnotationComposer extends Composer<_$SystemDatabase, $SystemRecordsTable> {
   $$SystemRecordsTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -1776,30 +1487,19 @@ class $$SystemRecordsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
+  GeneratedColumn<int> get id => $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get lastUpdatedDate => $composableBuilder(
-    column: $table.lastUpdatedDate,
-    builder: (column) => column,
-  );
+  GeneratedColumn<DateTime> get lastUpdatedDate =>
+      $composableBuilder(column: $table.lastUpdatedDate, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<PriceConfiguration, String>
-  get priceConfiguration => $composableBuilder(
-    column: $table.priceConfiguration,
-    builder: (column) => column,
-  );
+  GeneratedColumnWithTypeConverter<PriceConfiguration, String> get priceConfiguration =>
+      $composableBuilder(column: $table.priceConfiguration, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get registrationDate => $composableBuilder(
-    column: $table.registrationDate,
-    builder: (column) => column,
-  );
+  GeneratedColumn<DateTime> get registrationDate =>
+      $composableBuilder(column: $table.registrationDate, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<SystemUserDataEntry, String>
-  get systemUserData => $composableBuilder(
-    column: $table.systemUserData,
-    builder: (column) => column,
-  );
+  GeneratedColumnWithTypeConverter<SystemUserDataEntry, String> get systemUserData =>
+      $composableBuilder(column: $table.systemUserData, builder: (column) => column);
 }
 
 class $$SystemRecordsTableTableManager
@@ -1815,37 +1515,26 @@ class $$SystemRecordsTableTableManager
           $$SystemRecordsTableUpdateCompanionBuilder,
           (
             SystemConfigurationEntry,
-            BaseReferences<
-              _$SystemDatabase,
-              $SystemRecordsTable,
-              SystemConfigurationEntry
-            >,
+            BaseReferences<_$SystemDatabase, $SystemRecordsTable, SystemConfigurationEntry>,
           ),
           SystemConfigurationEntry,
           PrefetchHooks Function()
         > {
-  $$SystemRecordsTableTableManager(
-    _$SystemDatabase db,
-    $SystemRecordsTable table,
-  ) : super(
+  $$SystemRecordsTableTableManager(_$SystemDatabase db, $SystemRecordsTable table)
+    : super(
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer: () =>
-              $$SystemRecordsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$SystemRecordsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$SystemRecordsTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () => $$SystemRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () => $$SystemRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () => $$SystemRecordsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 Value<DateTime> lastUpdatedDate = const Value.absent(),
-                Value<PriceConfiguration> priceConfiguration =
-                    const Value.absent(),
+                Value<PriceConfiguration> priceConfiguration = const Value.absent(),
                 Value<DateTime> registrationDate = const Value.absent(),
-                Value<SystemUserDataEntry> systemUserData =
-                    const Value.absent(),
+                Value<SystemUserDataEntry> systemUserData = const Value.absent(),
               }) => SystemRecordsCompanion(
                 id: id,
                 lastUpdatedDate: lastUpdatedDate,
@@ -1867,9 +1556,8 @@ class $$SystemRecordsTableTableManager
                 registrationDate: registrationDate,
                 systemUserData: systemUserData,
               ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
-              .toList(),
+          withReferenceMapper: (p0) =>
+              p0.map((e) => (e.readTable(table), BaseReferences(db, table, e))).toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -1887,11 +1575,7 @@ typedef $$SystemRecordsTableProcessedTableManager =
       $$SystemRecordsTableUpdateCompanionBuilder,
       (
         SystemConfigurationEntry,
-        BaseReferences<
-          _$SystemDatabase,
-          $SystemRecordsTable,
-          SystemConfigurationEntry
-        >,
+        BaseReferences<_$SystemDatabase, $SystemRecordsTable, SystemConfigurationEntry>,
       ),
       SystemConfigurationEntry,
       PrefetchHooks Function()
@@ -1900,10 +1584,8 @@ typedef $$SystemRecordsTableProcessedTableManager =
 class $SystemDatabaseManager {
   final _$SystemDatabase _db;
   $SystemDatabaseManager(this._db);
-  $$UsersRecordsTableTableManager get usersRecords =>
-      $$UsersRecordsTableTableManager(_db, _db.usersRecords);
-  $$LogsRecordsTableTableManager get logsRecords =>
-      $$LogsRecordsTableTableManager(_db, _db.logsRecords);
+  $$UsersRecordsTableTableManager get usersRecords => $$UsersRecordsTableTableManager(_db, _db.usersRecords);
+  $$LogsRecordsTableTableManager get logsRecords => $$LogsRecordsTableTableManager(_db, _db.logsRecords);
   $$SystemRecordsTableTableManager get systemRecords =>
       $$SystemRecordsTableTableManager(_db, _db.systemRecords);
 }

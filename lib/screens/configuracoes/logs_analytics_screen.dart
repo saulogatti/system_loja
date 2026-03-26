@@ -46,9 +46,7 @@ class _LogsAnalyticsScreenState extends State<LogsAnalyticsScreen> {
                   },
                   child: Text(
                     'Erro ao carregar logs: $message',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                 ),
               );

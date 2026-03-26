@@ -35,15 +35,9 @@ class MaintenanceSection extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.cleaning_services,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                Icon(Icons.cleaning_services, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
-                const Text(
-                  'Limpeza de Dados',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const Text('Limpeza de Dados', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
             const Divider(),
@@ -65,9 +59,7 @@ class MaintenanceSection extends StatelessWidget {
                   divisions: 51,
                   label: '${config.diasManterLogs} dias',
                   onChanged: (value) {
-                    onConfigChanged(
-                      config.copyWith(diasManterLogs: value.toInt()),
-                    );
+                    onConfigChanged(config.copyWith(diasManterLogs: value.toInt()));
                   },
                 ),
                 trailing: Text('${config.diasManterLogs}'),
@@ -85,10 +77,7 @@ class MaintenanceSection extends StatelessWidget {
               onTap: onLimparLogsAntigos,
             ),
             ListTile(
-              title: const Text(
-                'Limpar todos os dados',
-                style: TextStyle(color: Colors.red),
-              ),
+              title: const Text('Limpar todos os dados', style: TextStyle(color: Colors.red)),
               subtitle: const Text('Remover TODOS os dados do sistema'),
               leading: const Icon(Icons.warning, color: Colors.red),
               onTap: onLimparTodosDados,

@@ -36,7 +36,10 @@ class SalesPurchaseDonutCard extends StatelessWidget {
                   Icon(Icons.donut_large, color: Theme.of(context).colorScheme.primary),
                   const SizedBox(width: 8),
                   const Expanded(
-                    child: Text('Distribuição: Vendas x Compras', style: TextStyle(fontWeight: FontWeight.w700)),
+                    child: Text(
+                      'Distribuição: Vendas x Compras',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
                   ),
                   Icon(Icons.zoom_in, color: Theme.of(context).colorScheme.onSurfaceVariant),
                 ],
@@ -155,7 +158,10 @@ class _DonutZoomDialog extends StatelessWidget {
                 Row(
                   children: [
                     const Expanded(
-                      child: Text('Distribuição: Vendas x Compras', style: TextStyle(fontWeight: FontWeight.w800)),
+                      child: Text(
+                        'Distribuição: Vendas x Compras',
+                        style: TextStyle(fontWeight: FontWeight.w800),
+                      ),
                     ),
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(),
@@ -338,4 +344,3 @@ class _DonutPainter extends CustomPainter {
         oldDelegate.trackColor != trackColor;
   }
 }
-

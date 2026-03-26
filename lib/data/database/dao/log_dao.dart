@@ -26,54 +26,40 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
   ///
   /// Retorna true se ao menos um log foi removido.
   Future<bool> deleteLogsBefore(DateTime dataLimite) async {
-    return await (delete(logsRecords)
-          ..where((tbl) => tbl.timestamp.isSmallerThanValue(dataLimite)))
+    return await (delete(logsRecords)..where((tbl) => tbl.timestamp.isSmallerThanValue(dataLimite)))
         .go()
         .then((rowsAffected) => rowsAffected > 0);
   }
 
   /// Retorna todos os logs ordenados do mais recente para o mais antigo.
   Future<List<ActivityLog>> getAll() async {
-    final rows = await (select(
-      logsRecords,
-    )..orderBy([(t) => OrderingTerm.desc(t.timestamp)])).get();
+    final rows = await (select(logsRecords)..orderBy([(t) => OrderingTerm.desc(t.timestamp)])).get();
     return rows.map((e) => e.toDomain()).toList();
   }
 
   /// Retorna logs cujo timestamp está entre [dataInicio] e [dataFim] (inclusivo).
-  Future<List<ActivityLog>> getInDate(
-    DateTime dataInicio,
-    DateTime dataFim,
-  ) async {
-    final rows =
-        await (select(logsRecords)..where(
-              (tbl) => tbl.timestamp.isBetweenValues(dataInicio, dataFim),
-            ))
-            .get();
+  Future<List<ActivityLog>> getInDate(DateTime dataInicio, DateTime dataFim) async {
+    final rows = await (select(
+      logsRecords,
+    )..where((tbl) => tbl.timestamp.isBetweenValues(dataInicio, dataFim))).get();
     return rows.map((e) => e.toDomain()).toList();
   }
 
   /// Retorna logs filtrados pelo tipo de ação [tipoAcao].
   Future<List<ActivityLog>> getWithAction(ActionType tipoAcao) async {
-    final rows = await (select(
-      logsRecords,
-    )..where((tbl) => tbl.actionType.isValue(tipoAcao.index))).get();
+    final rows = await (select(logsRecords)..where((tbl) => tbl.actionType.isValue(tipoAcao.index))).get();
     return rows.map((e) => e.toDomain()).toList();
   }
 
   /// Retorna logs filtrados pelo nome da entidade [entity].
   Future<List<ActivityLog>> getWithFilter(String entity) async {
-    final rows = await (select(
-      logsRecords,
-    )..where((tbl) => tbl.entity.equals(entity))).get();
+    final rows = await (select(logsRecords)..where((tbl) => tbl.entity.equals(entity))).get();
     return rows.map((e) => e.toDomain()).toList();
   }
 
   /// Retorna logs filtrados pelo ID do usuário [userId].
   Future<List<ActivityLog>> getWithUserId(int userId) async {
-    final rows = await (select(
-      logsRecords,
-    )..where((tbl) => tbl.userId.equals(userId))).get();
+    final rows = await (select(logsRecords)..where((tbl) => tbl.userId.equals(userId))).get();
     return rows.map((e) => e.toDomain()).toList();
   }
 
@@ -81,9 +67,7 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
   ///
   /// Retorna null se o registro não for encontrado.
   Future<ActivityLog?> load(int id) async {
-    final row = await (select(
-      logsRecords,
-    )..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    final row = await (select(logsRecords)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
     return row?.toDomain();
   }
 
@@ -99,8 +83,6 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
   /// Usa `insertOrIgnore` para evitar duplicatas silenciosas.
   /// Retorna o ID do registro inserido.
   Future<int> save(ActivityLog log) {
-    return into(
-      logsRecords,
-    ).insert(log.toCompanion(), mode: InsertMode.insertOrIgnore);
+    return into(logsRecords).insert(log.toCompanion(), mode: InsertMode.insertOrIgnore);
   }
 }

@@ -12,8 +12,5 @@ class InvoiceDaoManager {
   final _$InvoiceDaoMixin _db;
   InvoiceDaoManager(this._db);
   $$InvoicesRecordsTableTableManager get invoicesRecords =>
-      $$InvoicesRecordsTableTableManager(
-        _db.attachedDatabase,
-        _db.invoicesRecords,
-      );
+      $$InvoicesRecordsTableTableManager(_db.attachedDatabase, _db.invoicesRecords);
 }

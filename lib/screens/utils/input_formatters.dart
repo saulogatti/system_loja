@@ -28,26 +28,18 @@ String formatarParaReal(String valorString) {
 /// ```
 class PriceInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     if (oldValue.text.length > newValue.text.length || newValue.text.isEmpty) {
       //Se o usuário está apagando e o campo está vazio, retorna vazio
-      return TextEditingValue(
-        text: '',
-        selection: TextSelection.collapsed(offset: 0),
-      );
+      return TextEditingValue(text: '', selection: TextSelection.collapsed(offset: 0));
     }
-    if (oldValue.text.length < newValue.text.length &&
-        newValue.text.contains(',')) {
+    if (oldValue.text.length < newValue.text.length && newValue.text.contains(',')) {
       //Se o usuário está digitando uma vírgula, remove a vírgula e adiciona um ponto
       return TextEditingValue(
         text: newValue.text.replaceAll(',', '.'),
         selection: TextSelection.collapsed(offset: newValue.text.length),
       );
-    } else if (oldValue.text.length < newValue.text.length &&
-        !newValue.text.contains('.')) {
+    } else if (oldValue.text.length < newValue.text.length && !newValue.text.contains('.')) {
       //Se o usuário está digitando um ponto, remove o ponto e adiciona uma vírgula
       return TextEditingValue(
         text: newValue.text,
@@ -66,14 +58,9 @@ class PriceInputFormatter extends TextInputFormatter {
 
 class ProductCodeInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // Permite apenas letras, números e hífens
-    final text = newValue.text
-        .replaceAll(Constants.productCodeReplaceRegExp, '')
-        .toUpperCase();
+    final text = newValue.text.replaceAll(Constants.productCodeReplaceRegExp, '').toUpperCase();
 
     return TextEditingValue(
       text: text,
@@ -95,10 +82,7 @@ class ProductCodeInputFormatter extends TextInputFormatter {
 /// ```
 class QuantityInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // Permite apenas dígitos
     final text = newValue.text.replaceAll(Constants.nonNumericRegExp, '');
 

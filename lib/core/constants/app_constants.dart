@@ -4,6 +4,7 @@ const String kStringGenerate = 'Será gerado automaticamente';
 /// Constantes de RegExp reutilizáveis no app.
 abstract final class Constants {
   static const int kLowStockThreshold = 5;
+
   /// Remove caracteres não numéricos (ex.: CNPJ, CPF, CEP).
   static final RegExp nonNumericRegExp = RegExp(r'[^0-9]');
 
@@ -14,9 +15,7 @@ abstract final class Constants {
   static final RegExp priceAllowedRegExp = RegExp(r'[^0-9,.]');
 
   /// Caracteres inválidos em nomes de arquivo (Windows/FS).
-  static final RegExp invalidFileNameCharsRegExp = RegExp(
-    r'[<>:"/\\|?*\x00-\x1F]',
-  );
+  static final RegExp invalidFileNameCharsRegExp = RegExp(r'[<>:"/\\|?*\x00-\x1F]');
 
   /// Um ou mais espaços em branco.
   static final RegExp oneOrMoreWhitespaceRegExp = RegExp(r'\s+');
@@ -42,14 +41,10 @@ abstract final class Constants {
   static final RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
   /// Caracteres acentuados para validação de email
-  static final RegExp accentedCharsRegExp = RegExp(
-    r'[àáâãäåèéêëìíîïòóôõöùúûüçñÀÁÂÃÄÅÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÇÑ]',
-  );
+  static final RegExp accentedCharsRegExp = RegExp(r'[àáâãäåèéêëìíîïòóôõöùúûüçñÀÁÂÃÄÅÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÇÑ]');
 
   /// Formato básico de telefone BR.
-  static final RegExp phoneRegExp = RegExp(
-    r'^\(?\d{2}\)?[\s-]?[\d\s-]{4,5}[\s-]?\d{4}$',
-  );
+  static final RegExp phoneRegExp = RegExp(r'^\(?\d{2}\)?[\s-]?[\d\s-]{4,5}[\s-]?\d{4}$');
 
   /// Pelo menos uma letra maiúscula (validação de senha).
   static final RegExp uppercaseLetterRegExp = RegExp(r'[A-Z]');

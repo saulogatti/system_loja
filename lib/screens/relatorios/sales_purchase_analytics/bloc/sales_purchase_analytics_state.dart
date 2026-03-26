@@ -2,8 +2,7 @@ import 'package:system_loja/core/models/analytics_point.dart';
 
 import 'sales_purchase_analytics_event.dart';
 
-export 'package:system_loja/core/models/analytics_point.dart'
-    show AnalyticsPoint;
+export 'package:system_loja/core/models/analytics_point.dart' show AnalyticsPoint;
 
 class SalesPurchaseAnalyticsEmpty extends SalesPurchaseAnalyticsState {
   final SalesPurchaseGrouping grouping;

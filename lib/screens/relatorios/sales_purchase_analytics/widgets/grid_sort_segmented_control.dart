@@ -12,20 +12,11 @@ class GridSortSegmentedControl extends StatelessWidget {
   Widget build(BuildContext context) {
     return SegmentedButton<GridSortOrder>(
       segments: const [
-        ButtonSegment(
-          value: GridSortOrder.recentes,
-          label: Text('Recentes'),
-          icon: Icon(Icons.schedule),
-        ),
-        ButtonSegment(
-          value: GridSortOrder.antigos,
-          label: Text('Antigos'),
-          icon: Icon(Icons.history),
-        ),
+        ButtonSegment(value: GridSortOrder.recentes, label: Text('Recentes'), icon: Icon(Icons.schedule)),
+        ButtonSegment(value: GridSortOrder.antigos, label: Text('Antigos'), icon: Icon(Icons.history)),
       ],
       selected: {current},
       onSelectionChanged: (selection) => onChanged(selection.first),
     );
   }
 }
-

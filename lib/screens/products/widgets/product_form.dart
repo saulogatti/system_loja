@@ -46,10 +46,7 @@ class _ProductFormState extends State<ProductForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            'Novo Produto',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+          const Text('Novo Produto', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           const SizedBox(height: 20),
           TextFormField(
             controller: widget.nomeController,
@@ -88,9 +85,7 @@ class _ProductFormState extends State<ProductForm> {
               IconButton(
                 onPressed: () {
                   _generatedCode = !_generatedCode;
-                  widget.codigoController.text = _generatedCode
-                      ? kStringGenerate
-                      : '';
+                  widget.codigoController.text = _generatedCode ? kStringGenerate : '';
                 },
                 icon: Icon(Icons.generating_tokens_outlined),
               ),
@@ -108,9 +103,7 @@ class _ProductFormState extends State<ProductForm> {
                     prefixIcon: Icon(Icons.attach_money),
                     helperText: 'Ex: 10,50',
                   ),
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [PriceInputFormatter()],
                   validator: validatePrice,
                 ),
@@ -133,10 +126,7 @@ class _ProductFormState extends State<ProductForm> {
             ],
           ),
           const SizedBox(height: 16),
-          ProductCategory(
-            selectedCategoryId: widget.selectedCategoryId,
-            onChanged: widget.onCategoryChanged,
-          ),
+          ProductCategory(selectedCategoryId: widget.selectedCategoryId, onChanged: widget.onCategoryChanged),
           const SizedBox(height: 16),
           TextFormField(
             controller: widget.descricaoController,

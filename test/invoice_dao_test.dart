@@ -41,11 +41,7 @@ void main() {
     );
   }
 
-  Invoice buildInvoice({
-    required int productId,
-    required int quantity,
-    required InvoiceType type,
-  }) {
+  Invoice buildInvoice({required int productId, required int quantity, required InvoiceType type}) {
     return Invoice(
       data: InvoiceData(
         invoiceNumber: 'NF-${DateTime.now().microsecondsSinceEpoch}',
@@ -92,8 +88,7 @@ void main() {
         expect(
           product!.stockQuantity,
           equals(initialStock + invoiceQuantity),
-          reason:
-              'Nota de entrada deve somar a quantidade ao estoque do produto',
+          reason: 'Nota de entrada deve somar a quantidade ao estoque do produto',
         );
       });
 
@@ -125,11 +120,7 @@ void main() {
         const invoiceQuantity = 3;
         final productId = await insertProduct(stockQuantity: initialStock);
 
-        final invoice = buildInvoice(
-          productId: productId,
-          quantity: invoiceQuantity,
-          type: InvoiceType.exit,
-        );
+        final invoice = buildInvoice(productId: productId, quantity: invoiceQuantity, type: InvoiceType.exit);
 
         // Act
         await insertInvoiceWithItemsLikeRepository(database, invoice);
@@ -139,32 +130,21 @@ void main() {
         expect(
           product!.stockQuantity,
           equals(initialStock - invoiceQuantity),
-          reason:
-              'Nota de saída deve subtrair a quantidade do estoque do produto',
+          reason: 'Nota de saída deve subtrair a quantidade do estoque do produto',
         );
       });
 
-      test(
-        'deve falhar antes de persistir quando estoque insuficiente (nota de saída)',
-        () async {
-          const initialStock = 2;
-          const invoiceQuantity = 5;
-          final productId = await insertProduct(stockQuantity: initialStock);
+      test('deve falhar antes de persistir quando estoque insuficiente (nota de saída)', () async {
+        const initialStock = 2;
+        const invoiceQuantity = 5;
+        final productId = await insertProduct(stockQuantity: initialStock);
 
-          final invoice = buildInvoice(
-            productId: productId,
-            quantity: invoiceQuantity,
-            type: InvoiceType.exit,
-          );
+        final invoice = buildInvoice(productId: productId, quantity: invoiceQuantity, type: InvoiceType.exit);
 
-          expect(
-            () => insertInvoiceWithItemsLikeRepository(database, invoice),
-            throwsStateError,
-          );
-          final product = await productDao.getById(productId);
-          expect(product!.stockQuantity, equals(initialStock));
-        },
-      );
+        expect(() => insertInvoiceWithItemsLikeRepository(database, invoice), throwsStateError);
+        final product = await productDao.getById(productId);
+        expect(product!.stockQuantity, equals(initialStock));
+      });
     });
   });
 }

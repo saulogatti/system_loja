@@ -31,8 +31,7 @@ class CacheException implements Exception {
 /// antes que o [CacheManager] tenha sido completamente inicializado.
 class CacheNotInitializedException extends CacheException {
   /// Cria uma nova instância de [CacheNotInitializedException].
-  const CacheNotInitializedException()
-    : super('O cache não foi inicializado. Aguarde a inicialização.');
+  const CacheNotInitializedException() : super('O cache não foi inicializado. Aguarde a inicialização.');
 }
 
 /// Exceção lançada quando uma chave não é encontrada no cache.
@@ -46,8 +45,7 @@ class CacheKeyNotFoundException extends CacheException {
   /// Cria uma nova instância de [CacheKeyNotFoundException].
   ///
   /// [key] é a chave que não foi encontrada no cache.
-  const CacheKeyNotFoundException(this.key)
-    : super('Chave não encontrada no cache: $key');
+  const CacheKeyNotFoundException(this.key) : super('Chave não encontrada no cache: $key');
 }
 
 /// Exceção lançada quando ocorre um erro de leitura do cache.

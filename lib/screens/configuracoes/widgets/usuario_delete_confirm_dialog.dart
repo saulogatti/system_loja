@@ -8,11 +8,7 @@ class UsuarioDeleteConfirmDialog extends StatelessWidget {
   final User usuario;
   final VoidCallback onConfirm;
 
-  const UsuarioDeleteConfirmDialog({
-    required this.usuario,
-    required this.onConfirm,
-    super.key,
-  });
+  const UsuarioDeleteConfirmDialog({required this.usuario, required this.onConfirm, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +16,7 @@ class UsuarioDeleteConfirmDialog extends StatelessWidget {
       title: const Text('Confirmar Exclusão'),
       content: Text('Deseja realmente excluir o usuário "${usuario.name}"?'),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancelar'),
-        ),
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
@@ -40,8 +33,7 @@ class UsuarioDeleteConfirmDialog extends StatelessWidget {
   static void show(BuildContext context, User usuario, VoidCallback onConfirm) {
     showDialog(
       context: context,
-      builder: (context) =>
-          UsuarioDeleteConfirmDialog(usuario: usuario, onConfirm: onConfirm),
+      builder: (context) => UsuarioDeleteConfirmDialog(usuario: usuario, onConfirm: onConfirm),
     );
   }
 }

@@ -109,4 +109,3 @@ class _MiniBar extends StatelessWidget {
     );
   }
 }
-

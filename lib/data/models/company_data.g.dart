@@ -14,19 +14,16 @@ CompanyData _$CompanyDataFromJson(Map<String, dynamic> json) => CompanyData(
   registrationDate: DateTime.parse(json['registrationDate'] as String),
   phone: json['phone'] as String?,
   email: json['email'] as String?,
-  lastUpdatedDate: json['lastUpdatedDate'] == null
-      ? null
-      : DateTime.parse(json['lastUpdatedDate'] as String),
+  lastUpdatedDate: json['lastUpdatedDate'] == null ? null : DateTime.parse(json['lastUpdatedDate'] as String),
 );
 
-Map<String, dynamic> _$CompanyDataToJson(CompanyData instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-      'cnpj': instance.cnpj,
-      'phone': instance.phone,
-      'email': instance.email,
-      'address': instance.address.toJson(),
-      'registrationDate': instance.registrationDate.toIso8601String(),
-      'lastUpdatedDate': instance.lastUpdatedDate?.toIso8601String(),
-    };
+Map<String, dynamic> _$CompanyDataToJson(CompanyData instance) => <String, dynamic>{
+  'id': instance.id,
+  'name': instance.name,
+  'cnpj': instance.cnpj,
+  'phone': instance.phone,
+  'email': instance.email,
+  'address': instance.address.toJson(),
+  'registrationDate': instance.registrationDate.toIso8601String(),
+  'lastUpdatedDate': instance.lastUpdatedDate?.toIso8601String(),
+};

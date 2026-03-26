@@ -81,10 +81,7 @@ sealed class ResultStatus<R, E> {
   ///
   /// - `onSuccess` é chamado se for sucesso.
   /// - `onError` é chamado se for erro.
-  void when({
-    required void Function(R valor) onSuccess,
-    required void Function(E error) onError,
-  }) {
+  void when({required void Function(R valor) onSuccess, required void Function(E error) onError}) {
     if (this is ResultSuccess<R, E>) {
       onSuccess((this as ResultSuccess<R, E>).result);
     } else if (this is ResultError<R, E>) {

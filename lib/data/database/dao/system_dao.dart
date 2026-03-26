@@ -26,17 +26,13 @@ class SystemDao extends DatabaseAccessor<SystemDatabase> with _$SystemDaoMixin {
             priceConfiguration: data.priceConfiguration,
             registrationDate: data.registrationDate,
             lastUpdatedDate: data.lastUpdatedDate,
-            systemUserData: SystemUserDataEntry.fromSystemUserData(
-              data.systemUserData,
-            ),
+            systemUserData: SystemUserDataEntry.fromSystemUserData(data.systemUserData),
           ),
         );
         return;
       }
 
-      await (update(
-        systemRecords,
-      )..where((table) => table.id.equals(latestConfiguration.id))).write(
+      await (update(systemRecords)..where((table) => table.id.equals(latestConfiguration.id))).write(
         SystemRecordsCompanion(
           priceConfiguration: Value(data.priceConfiguration),
           registrationDate: Value(latestConfiguration.registrationDate),
@@ -44,9 +40,7 @@ class SystemDao extends DatabaseAccessor<SystemDatabase> with _$SystemDaoMixin {
         ),
       );
 
-      await (delete(
-        systemRecords,
-      )..where((table) => table.id.isNotValue(latestConfiguration.id))).go();
+      await (delete(systemRecords)..where((table) => table.id.isNotValue(latestConfiguration.id))).go();
     });
   }
 

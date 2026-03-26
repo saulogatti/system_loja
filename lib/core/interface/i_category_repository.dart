@@ -35,10 +35,7 @@ abstract interface class ICategoryRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com ID da categoria criada ou mensagem de erro
-  Future<ResultStatus<int, String>> createCategory({
-    required String name,
-    String? description,
-  });
+  Future<ResultStatus<int, String>> createCategory({required String name, String? description});
 
   /// Remove uma categoria do sistema pelo ID.
   ///

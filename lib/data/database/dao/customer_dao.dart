@@ -12,8 +12,7 @@ part 'customer_dao.g.dart';
 /// Utiliza o padrão Repository e conversões entre Customer (domínio) e
 /// CustomerRecord (Drift) através de extensões.
 @DriftAccessor(tables: [CustomerRecords])
-class CustomerDao extends DatabaseAccessor<AppDatabase>
-    with _$CustomerDaoMixin {
+class CustomerDao extends DatabaseAccessor<AppDatabase> with _$CustomerDaoMixin {
   CustomerDao(super.db);
 
   /// Insere um novo cliente no banco de dados.
@@ -21,9 +20,7 @@ class CustomerDao extends DatabaseAccessor<AppDatabase>
   /// Aceita um objeto Customer do domínio e o converte para Companion.
   /// Retorna o ID gerado automaticamente.
   Future<int> addCustomer(Customer customer) {
-    return into(
-      customerRecords,
-    ).insert(customer.toCompanion(), mode: InsertMode.insertOrAbort);
+    return into(customerRecords).insert(customer.toCompanion(), mode: InsertMode.insertOrAbort);
   }
 
   /// Remove um cliente do banco de dados pelo ID.
@@ -43,9 +40,7 @@ class CustomerDao extends DatabaseAccessor<AppDatabase>
   ///
   /// Retorna null se o cliente não for encontrado.
   Future<Customer?> getById(int id) async {
-    final record = await (select(
-      customerRecords,
-    )..where((t) => t.id.equals(id))).getSingleOrNull();
+    final record = await (select(customerRecords)..where((t) => t.id.equals(id))).getSingleOrNull();
     return record?.toDomain();
   }
 
@@ -53,8 +48,6 @@ class CustomerDao extends DatabaseAccessor<AppDatabase>
   ///
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
   Future<bool> updateCustomer(Customer customer) {
-    return update(
-      customerRecords,
-    ).replace(customer.toCompanion(forUpdate: true));
+    return update(customerRecords).replace(customer.toCompanion(forUpdate: true));
   }
 }

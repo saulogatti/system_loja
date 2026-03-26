@@ -26,11 +26,7 @@ class OverlayApp {
             children: <Widget>[
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
               ),
               CircularProgressIndicator(color: Colors.white),
             ],

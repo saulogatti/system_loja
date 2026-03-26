@@ -96,8 +96,7 @@ class AppSettings {
     return AppSettings(
       notificacoesAtivadas: notificacoesAtivadas ?? this.notificacoesAtivadas,
       notificarVendas: notificarVendas ?? this.notificarVendas,
-      notificarEstoqueBaixo:
-          notificarEstoqueBaixo ?? this.notificarEstoqueBaixo,
+      notificarEstoqueBaixo: notificarEstoqueBaixo ?? this.notificarEstoqueBaixo,
       limiteEstoqueBaixo: limiteEstoqueBaixo ?? this.limiteEstoqueBaixo,
       temaEscuro: temaEscuro ?? this.temaEscuro,
       backupAutomatico: backupAutomatico ?? this.backupAutomatico,
@@ -107,8 +106,7 @@ class AppSettings {
       diasManterLogs: diasManterLogs ?? this.diasManterLogs,
       exigirSenha: exigirSenha ?? this.exigirSenha,
       tempoBloqueioMinutos: tempoBloqueioMinutos ?? this.tempoBloqueioMinutos,
-      permitirMultiplosUsuarios:
-          permitirMultiplosUsuarios ?? this.permitirMultiplosUsuarios,
+      permitirMultiplosUsuarios: permitirMultiplosUsuarios ?? this.permitirMultiplosUsuarios,
       corPrimaria: corPrimaria ?? this.corPrimaria,
     );
   }

@@ -5,6 +5,5 @@ part 'person_event.freezed.dart';
 
 @freezed
 sealed class PersonEvent with _$PersonEvent {
-  const factory PersonEvent.submit(PersonRegistrationFormData formData) =
-      PersonSubmit;
+  const factory PersonEvent.submit(PersonRegistrationFormData formData) = PersonSubmit;
 }

@@ -19,11 +19,7 @@ class SystemConfiguration extends DefaultObject {
     SystemUserData? systemUserData,
   }) : priceConfiguration =
            priceConfiguration ??
-           PriceConfiguration(
-             types: [],
-             measurementUnits: [],
-             reportConfiguration: ReportConfiguration(),
-           ),
+           PriceConfiguration(types: [], measurementUnits: [], reportConfiguration: ReportConfiguration()),
        productCategories = productCategories ?? [],
        systemUserData = systemUserData ?? SystemUserData.defaultObject();
 }

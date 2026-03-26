@@ -343,7 +343,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       final updatedProduct = widget.product.copyWith(
         name: _nomeController.text.trim(),
-       
+
         price: preco,
         stockQuantity: estoque,
         description: _descricaoController.text.trim(),

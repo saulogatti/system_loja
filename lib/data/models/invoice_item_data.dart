@@ -25,8 +25,7 @@ class InvoiceItemData {
     this.productId,
   });
 
-  factory InvoiceItemData.fromJson(Map<String, dynamic> json) =>
-      _$InvoiceItemDataFromJson(json);
+  factory InvoiceItemData.fromJson(Map<String, dynamic> json) => _$InvoiceItemDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$InvoiceItemDataToJson(this);
 

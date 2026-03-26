@@ -19,11 +19,9 @@ class ProductRepository implements IProductRepository {
   final ProductDao _productDao;
   final CodeGeneratorService _codeGeneratorService;
 
-  ProductRepository({
-    required ProductDao productDao,
-    required CodeGeneratorService codeGeneratorService,
-  }) : _productDao = productDao,
-       _codeGeneratorService = codeGeneratorService;
+  ProductRepository({required ProductDao productDao, required CodeGeneratorService codeGeneratorService})
+    : _productDao = productDao,
+      _codeGeneratorService = codeGeneratorService;
 
   /// Remove um produto do armazenamento.
   ///
@@ -37,9 +35,7 @@ class ProductRepository implements IProductRepository {
         case true:
           return ResultSuccess(result);
         case false:
-          return ResultError(
-            'Falha ao deletar produto com ID: $id - não encontrado',
-          );
+          return ResultError('Falha ao deletar produto com ID: $id - não encontrado');
       }
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
@@ -128,9 +124,7 @@ class ProductRepository implements IProductRepository {
   /// Retorna resultado da validação com mensagem descritiva.
   @override
   Future<ResultStatus<bool, String>> validateProductCode(String code) async {
-    final validationResult = await _codeGeneratorService.validateProductCode(
-      code,
-    );
+    final validationResult = await _codeGeneratorService.validateProductCode(code);
 
     if (validationResult.isValid) {
       return ResultSuccess(true);

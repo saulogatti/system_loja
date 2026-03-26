@@ -59,11 +59,7 @@ class ProductCubit extends Cubit<ProductState> {
     switch (resultSave) {
       case ResultSuccess(result: final saved):
         if (!saved) {
-          emit(
-            ProductState.error(
-              message: 'Erro ao adicionar produto: operação falhou',
-            ),
-          );
+          emit(ProductState.error(message: 'Erro ao adicionar produto: operação falhou'));
           return;
         }
         final result = await _productRepository.fetchProducts();
@@ -71,18 +67,10 @@ class ProductCubit extends Cubit<ProductState> {
           case ResultSuccess(result: final produtos):
             emit(ProductState.insertSuccess(produtos: produtos.toList()));
           case ResultError(resultError: final errorMessage):
-            emit(
-              ProductState.error(
-                message: 'Erro ao adicionar produto: $errorMessage',
-              ),
-            );
+            emit(ProductState.error(message: 'Erro ao adicionar produto: $errorMessage'));
         }
       case ResultError(resultError: final errorMessage):
-        emit(
-          ProductState.error(
-            message: 'Erro ao adicionar produto: $errorMessage',
-          ),
-        );
+        emit(ProductState.error(message: 'Erro ao adicionar produto: $errorMessage'));
     }
   }
 
@@ -102,17 +90,10 @@ class ProductCubit extends Cubit<ProductState> {
           case ResultSuccess(result: final produtos):
             emit(ProductState.deleteSuccess(produtos: produtos.toList()));
           case ResultError(resultError: final errorMessage):
-            emit(
-              ProductState.error(
-                message:
-                    'Erro ao carregar produtos após exclusão: $errorMessage',
-              ),
-            );
+            emit(ProductState.error(message: 'Erro ao carregar produtos após exclusão: $errorMessage'));
         }
       case ResultError(resultError: final errorMessage):
-        emit(
-          ProductState.error(message: 'Erro ao deletar produto: $errorMessage'),
-        );
+        emit(ProductState.error(message: 'Erro ao deletar produto: $errorMessage'));
     }
   }
 
@@ -127,16 +108,10 @@ class ProductCubit extends Cubit<ProductState> {
     final result = await _productRepository.findByCode(codigo);
     switch (result) {
       case ResultSuccess(result: final produto):
-        emit(
-          ProductState.error(
-            message: 'Funcionalidade não implementada: ${produto.name}',
-          ),
-        );
+        emit(ProductState.error(message: 'Funcionalidade não implementada: ${produto.name}'));
 
       case ResultError(resultError: final errorMessage):
-        emit(
-          ProductState.error(message: 'Erro ao buscar produto: $errorMessage'),
-        );
+        emit(ProductState.error(message: 'Erro ao buscar produto: $errorMessage'));
     }
   }
 
@@ -146,11 +121,7 @@ class ProductCubit extends Cubit<ProductState> {
       case ResultSuccess(result: final produtos):
         emit(ProductState.loaded(produtos: produtos.toList()));
       case ResultError(resultError: final errorMessage):
-        emit(
-          ProductState.error(
-            message: 'Erro ao carregar produtos: $errorMessage',
-          ),
-        );
+        emit(ProductState.error(message: 'Erro ao carregar produtos: $errorMessage'));
     }
   }
 
@@ -171,19 +142,10 @@ class ProductCubit extends Cubit<ProductState> {
           case ResultSuccess(result: final produtos):
             emit(ProductState.updateSuccess(produtos: produtos.toList()));
           case ResultError(resultError: final errorMessage):
-            emit(
-              ProductState.error(
-                message:
-                    'Erro ao carregar produtos após atualização: $errorMessage',
-              ),
-            );
+            emit(ProductState.error(message: 'Erro ao carregar produtos após atualização: $errorMessage'));
         }
       case ResultError(resultError: final errorMessage):
-        emit(
-          ProductState.error(
-            message: 'Erro ao atualizar produto: $errorMessage',
-          ),
-        );
+        emit(ProductState.error(message: 'Erro ao atualizar produto: $errorMessage'));
     }
   }
 }

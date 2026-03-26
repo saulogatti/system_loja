@@ -6,7 +6,6 @@ part 'logs_system_state.freezed.dart';
 sealed class LogsSystemState with _$LogsSystemState {
   const factory LogsSystemState.initial() = LogsSystemInitial;
   const factory LogsSystemState.loading() = LogsSystemLoading;
-  const factory LogsSystemState.loaded(List<SystemError> logs) =
-      LogsSystemLoaded;
+  const factory LogsSystemState.loaded(List<SystemError> logs) = LogsSystemLoaded;
   const factory LogsSystemState.error(String message) = LogsSystemError;
 }

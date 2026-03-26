@@ -20,11 +20,9 @@ import '../../../core/models/user.dart';
 class UserRepository with LoggerClassMixin implements IUserRepository {
   final ILogRepository _logRepository;
   final UsersDao _usersDao;
-  UserRepository({
-    required ILogRepository logRepository,
-    required UsersDao usersDao,
-  }) : _logRepository = logRepository,
-       _usersDao = usersDao;
+  UserRepository({required ILogRepository logRepository, required UsersDao usersDao})
+    : _logRepository = logRepository,
+      _usersDao = usersDao;
 
   @override
   Future<ResultStatus<bool, String>> adicionarUsuario(User usuario) async {
@@ -34,15 +32,12 @@ class UserRepository with LoggerClassMixin implements IUserRepository {
         logActionType: ActionType.criar,
         entityName: runtimeType.toString(),
         userId: result?.id ?? usuario.id,
-        logDetails:
-            'Usuário ${usuario.name} (ID: ${result?.id ?? usuario.id}) criado.',
+        logDetails: 'Usuário ${usuario.name} (ID: ${result?.id ?? usuario.id}) criado.',
         username: usuario.name,
       );
       return ResultStatus.success(result != null);
     } catch (e) {
-      return ResultStatus.error(
-        mensagemErroRepositorio(e, contexto: 'Falha ao adicionar usuário'),
-      );
+      return ResultStatus.error(mensagemErroRepositorio(e, contexto: 'Falha ao adicionar usuário'));
     }
   }
 
@@ -51,9 +46,7 @@ class UserRepository with LoggerClassMixin implements IUserRepository {
     try {
       final exists = await _usersDao.getById(usuario.id);
       if (exists == null) {
-        return ResultStatus.error(
-          'Usuário com ID ${usuario.id} não encontrado.',
-        );
+        return ResultStatus.error('Usuário com ID ${usuario.id} não encontrado.');
       }
       await _logRepository.createAndLogEntry(
         logActionType: ActionType.atualizar,
@@ -64,9 +57,7 @@ class UserRepository with LoggerClassMixin implements IUserRepository {
       final result = await _usersDao.updateUser(usuario);
       return ResultStatus.success(result);
     } catch (e) {
-      return ResultStatus.error(
-        mensagemErroRepositorio(e, contexto: 'Falha ao atualizar usuário'),
-      );
+      return ResultStatus.error(mensagemErroRepositorio(e, contexto: 'Falha ao atualizar usuário'));
     }
   }
 
@@ -80,9 +71,7 @@ class UserRepository with LoggerClassMixin implements IUserRepository {
       }
       return ResultStatus.success(res);
     } catch (e) {
-      return ResultStatus.error(
-        mensagemErroRepositorio(e, contexto: 'Falha ao listar usuários'),
-      );
+      return ResultStatus.error(mensagemErroRepositorio(e, contexto: 'Falha ao listar usuários'));
     }
   }
 
@@ -92,12 +81,7 @@ class UserRepository with LoggerClassMixin implements IUserRepository {
       final user = await _usersDao.findByEmail(email);
       return ResultStatus.success(user);
     } catch (e) {
-      return ResultStatus.error(
-        mensagemErroRepositorio(
-          e,
-          contexto: 'Falha ao buscar usuário por email',
-        ),
-      );
+      return ResultStatus.error(mensagemErroRepositorio(e, contexto: 'Falha ao buscar usuário por email'));
     }
   }
 
@@ -117,12 +101,7 @@ class UserRepository with LoggerClassMixin implements IUserRepository {
       }
       return ResultStatus.success(null);
     } catch (e) {
-      return ResultStatus.error(
-        mensagemErroRepositorio(
-          e,
-          contexto: 'Falha ao buscar usuário por id',
-        ),
-      );
+      return ResultStatus.error(mensagemErroRepositorio(e, contexto: 'Falha ao buscar usuário por id'));
     }
   }
 
@@ -143,9 +122,7 @@ class UserRepository with LoggerClassMixin implements IUserRepository {
       }
       return ResultStatus.error('Usuário com ID $id não encontrado.');
     } catch (e) {
-      return ResultStatus.error(
-        mensagemErroRepositorio(e, contexto: 'Falha ao remover usuário'),
-      );
+      return ResultStatus.error(mensagemErroRepositorio(e, contexto: 'Falha ao remover usuário'));
     }
   }
 }

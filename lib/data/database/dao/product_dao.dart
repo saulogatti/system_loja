@@ -24,10 +24,18 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   ///
   /// Retorna null se o produto não for encontrado.
   Future<Product?> getById(int id) async {
-    final row = await (select(
-      productsRecords,
-    )..where((t) => t.id.equals(id))).getSingleOrNull();
+    final row = await (select(productsRecords)..where((t) => t.id.equals(id))).getSingleOrNull();
     return row?.toDomain();
+  }
+
+  /// Busca produtos por uma lista de IDs.
+  ///
+  /// Retorna uma lista de produtos encontrados.
+  Future<List<Product>> getByIds(List<int> ids) async {
+    if (ids.isEmpty) return [];
+
+    final rows = await (select(productsRecords)..where((t) => t.id.isIn(ids))).get();
+    return rows.map((e) => e.toDomain()).toList();
   }
 
   /// Insere um novo produto no banco de dados.
@@ -53,8 +61,7 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   ///
   /// Retorna true se o produto foi removido, false se não encontrado.
   Future<bool> remove(int id) async {
-    return await (delete(productsRecords)..where((t) => t.id.equals(id))).go() >
-        0;
+    return await (delete(productsRecords)..where((t) => t.id.equals(id))).go() > 0;
   }
 
   /// Atualiza os dados de um produto existente.
@@ -80,9 +87,7 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   ///
   /// Retorna o produto encontrado ou null se não existir.
   Future<Product?> getByCode(String code) async {
-    final row = await (select(
-      productsRecords,
-    )..where((t) => t.code.equals(code))).getSingleOrNull();
+    final row = await (select(productsRecords)..where((t) => t.code.equals(code))).getSingleOrNull();
     return row?.toDomain();
   }
 

@@ -10,11 +10,9 @@ class CodeGeneratorService {
   final InvoiceDao _invoiceDao;
   // Utils? Services? Repositories? Domain? Aplication? Data?
   // TODO: Avaliar a necessidade de usar o CodeGeneratorService
-  CodeGeneratorService({
-    required ProductDao productDao,
-    required InvoiceDao invoiceDao,
-  }) : _productDao = productDao,
-       _invoiceDao = invoiceDao;
+  CodeGeneratorService({required ProductDao productDao, required InvoiceDao invoiceDao})
+    : _productDao = productDao,
+      _invoiceDao = invoiceDao;
 
   /// Gera um código único para produto baseado no timestamp e contador.
   ///
@@ -25,8 +23,7 @@ class CodeGeneratorService {
   /// Se existir, incrementa o contador até encontrar um código disponível.
   Future<String> generateProductCode() async {
     final now = DateTime.now();
-    final datePrefix =
-        'PRD-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
+    final datePrefix = 'PRD-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
 
     int counter = 1;
     String code;
@@ -53,8 +50,7 @@ class CodeGeneratorService {
   /// Se existir, incrementa o contador até encontrar um número disponível.
   Future<String> generateInvoiceNumber() async {
     final now = DateTime.now();
-    final datePrefix =
-        'NF-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
+    final datePrefix = 'NF-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
 
     int counter = 1;
     String invoiceNumber;
@@ -102,34 +98,22 @@ class CodeGeneratorService {
   Future<CodeValidationResult> validateProductCode(String code) async {
     // Verifica se está vazio
     if (code.trim().isEmpty) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Código não pode ser vazio',
-      );
+      return CodeValidationResult(isValid: false, message: 'Código não pode ser vazio');
     }
 
     // Verifica tamanho
     if (code.length < 3) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Código deve ter no mínimo 3 caracteres',
-      );
+      return CodeValidationResult(isValid: false, message: 'Código deve ter no mínimo 3 caracteres');
     }
 
     if (code.length > 50) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Código deve ter no máximo 50 caracteres',
-      );
+      return CodeValidationResult(isValid: false, message: 'Código deve ter no máximo 50 caracteres');
     }
 
     // Verifica se já existe
     final exists = await checkProductCodeExists(code);
     if (exists) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Código já existe no banco de dados',
-      );
+      return CodeValidationResult(isValid: false, message: 'Código já existe no banco de dados');
     }
 
     return CodeValidationResult(isValid: true, message: 'Código válido');
@@ -144,45 +128,28 @@ class CodeGeneratorService {
   /// - Não pode ser vazio
   /// - Deve ter entre 3 e 50 caracteres
   /// - Não pode já existir no banco de dados
-  Future<CodeValidationResult> validateInvoiceNumber(
-    String invoiceNumber,
-  ) async {
+  Future<CodeValidationResult> validateInvoiceNumber(String invoiceNumber) async {
     // Verifica se está vazio
     if (invoiceNumber.trim().isEmpty) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Número da nota não pode ser vazio',
-      );
+      return CodeValidationResult(isValid: false, message: 'Número da nota não pode ser vazio');
     }
 
     // Verifica tamanho
     if (invoiceNumber.length < 3) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Número da nota deve ter no mínimo 3 caracteres',
-      );
+      return CodeValidationResult(isValid: false, message: 'Número da nota deve ter no mínimo 3 caracteres');
     }
 
     if (invoiceNumber.length > 50) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Número da nota deve ter no máximo 50 caracteres',
-      );
+      return CodeValidationResult(isValid: false, message: 'Número da nota deve ter no máximo 50 caracteres');
     }
 
     // Verifica se já existe
     final exists = await checkInvoiceNumberExists(invoiceNumber);
     if (exists) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Número da nota já existe no banco de dados',
-      );
+      return CodeValidationResult(isValid: false, message: 'Número da nota já existe no banco de dados');
     }
 
-    return CodeValidationResult(
-      isValid: true,
-      message: 'Número da nota válido',
-    );
+    return CodeValidationResult(isValid: true, message: 'Número da nota válido');
   }
 
   /// Método auxiliar para adicionar zeros à esquerda.

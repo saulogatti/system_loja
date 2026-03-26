@@ -17,9 +17,7 @@ class UsersDao extends DatabaseAccessor<SystemDatabase> with _$UsersDaoMixin {
   }
 
   Future<User?> findByEmail(String email) async {
-    final row = await (select(
-      usersRecords,
-    )..where((tbl) => tbl.email.equals(email))).getSingleOrNull();
+    final row = await (select(usersRecords)..where((tbl) => tbl.email.equals(email))).getSingleOrNull();
     return row?.toUser();
   }
 
@@ -29,9 +27,7 @@ class UsersDao extends DatabaseAccessor<SystemDatabase> with _$UsersDaoMixin {
   }
 
   Future<User?> getById(int id) async {
-    final row = await (select(
-      usersRecords,
-    )..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    final row = await (select(usersRecords)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
     return row?.toUser();
   }
 

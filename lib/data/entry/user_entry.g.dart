@@ -13,9 +13,7 @@ UserEntry _$UserEntryFromJson(Map<String, dynamic> json) => UserEntry(
   registrationDate: DateTime.parse(json['registrationDate'] as String),
   email: json['email'] as String?,
   permission: (json['permission'] as num?)?.toInt() ?? 0,
-  lastUpdatedDate: json['lastUpdatedDate'] == null
-      ? null
-      : DateTime.parse(json['lastUpdatedDate'] as String),
+  lastUpdatedDate: json['lastUpdatedDate'] == null ? null : DateTime.parse(json['lastUpdatedDate'] as String),
 );
 
 Map<String, dynamic> _$UserEntryToJson(UserEntry instance) => <String, dynamic>{

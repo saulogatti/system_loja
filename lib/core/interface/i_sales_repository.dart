@@ -128,7 +128,5 @@ abstract interface class ISalesRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com true se o número é válido (não existe) ou mensagem de erro
-  Future<ResultStatus<bool, String>> validateInvoiceNumber(
-    String invoiceNumber,
-  );
+  Future<ResultStatus<bool, String>> validateInvoiceNumber(String invoiceNumber);
 }

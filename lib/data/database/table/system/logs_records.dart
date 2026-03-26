@@ -10,8 +10,7 @@ class LogsRecords extends Table {
       dateTime().named('last_updated_date').withDefault(currentDateAndTime)();
   DateTimeColumn get registrationDate =>
       dateTime().named('registration_date').withDefault(currentDateAndTime)();
-  DateTimeColumn get timestamp =>
-      dateTime().named('timestamp').withDefault(currentDateAndTime)();
+  DateTimeColumn get timestamp => dateTime().named('timestamp').withDefault(currentDateAndTime)();
   IntColumn get userId => integer().named('user_id')();
   TextColumn get userName => text().named('user_name')();
 }

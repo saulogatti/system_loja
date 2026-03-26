@@ -63,15 +63,7 @@ void main() {
         customerId: 1,
         customerName: 'Maria',
         customerCpf: '111.111.111-11',
-        items: [
-          InvoiceItem(
-            productId: 1,
-            productName: 'P',
-            productCode: 'C1',
-            quantity: 1,
-            unitPrice: 10,
-          ),
-        ],
+        items: [InvoiceItem(productId: 1, productName: 'P', productCode: 'C1', quantity: 1, unitPrice: 10)],
         paymentMethod: 'pix',
       );
 
@@ -85,15 +77,7 @@ void main() {
         companyId: 1,
         companyName: 'Empresa X',
         companyCnpj: '22.222.222/0001-22',
-        items: [
-          InvoiceItem(
-            productId: 1,
-            productName: 'P',
-            productCode: 'C1',
-            quantity: 1,
-            unitPrice: 10,
-          ),
-        ],
+        items: [InvoiceItem(productId: 1, productName: 'P', productCode: 'C1', quantity: 1, unitPrice: 10)],
         paymentMethod: 'cash',
       );
 

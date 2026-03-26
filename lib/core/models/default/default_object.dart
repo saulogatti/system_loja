@@ -12,11 +12,8 @@ abstract class DefaultObject {
   /// Data e hora da última atualização do registro.
   final DateTime lastUpdatedDate;
 
-  DefaultObject({
-    DateTime? registrationDate,
-    DateTime? lastUpdatedDate,
-    int? id,
-  }) : id = id ?? -1,
-       registrationDate = registrationDate ?? DateTime.now(),
-       lastUpdatedDate = lastUpdatedDate ?? DateTime.now();
+  DefaultObject({DateTime? registrationDate, DateTime? lastUpdatedDate, int? id})
+    : id = id ?? -1,
+      registrationDate = registrationDate ?? DateTime.now(),
+      lastUpdatedDate = lastUpdatedDate ?? DateTime.now();
 }

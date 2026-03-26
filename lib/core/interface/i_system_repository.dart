@@ -36,16 +36,13 @@ abstract interface class ISystemRepository {
   ///
   /// Faz parse, valida, normaliza e salva.
   /// Em caso de falha, retorna [ResultStatus.error] com mensagem amigável.
-  Future<ResultStatus<SystemConfiguration, String>> importConfigurationFromJson(
-    String jsonContent,
-  );
+  Future<ResultStatus<SystemConfiguration, String>> importConfigurationFromJson(String jsonContent);
 
   /// Redefine as configurações do sistema para os valores padrão.
   ///
   /// Sobrescreve a configuração existente com os valores padrão do sistema
   /// e persiste o resultado.
-  Future<ResultStatus<SystemConfiguration, String>>
-  resetToDefaultConfiguration();
+  Future<ResultStatus<SystemConfiguration, String>> resetToDefaultConfiguration();
 
   /// Salva as configurações do sistema.
   ///
@@ -53,7 +50,5 @@ abstract interface class ISystemRepository {
   ///
   /// Parâmetros:
   /// - [data]: Objeto SystemConfiguration com as configurações a serem salvas
-  Future<ResultStatus<bool, String>> saveSystemConfiguration(
-    SystemConfiguration data,
-  );
+  Future<ResultStatus<bool, String>> saveSystemConfiguration(SystemConfiguration data);
 }

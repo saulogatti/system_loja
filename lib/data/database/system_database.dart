@@ -27,14 +27,10 @@ part 'system_database.g.dart';
 /// ```dart
 /// final db = SystemDatabase(executor: NativeDatabase.memory());
 /// ```
-@DriftDatabase(
-  tables: [UsersRecords, LogsRecords, SystemRecords],
-  daos: [UsersDao, LogDao, SystemDao],
-)
+@DriftDatabase(tables: [UsersRecords, LogsRecords, SystemRecords], daos: [UsersDao, LogDao, SystemDao])
 class SystemDatabase extends _$SystemDatabase {
   static final _nameBd = 'system_database';
-  SystemDatabase({QueryExecutor? executor})
-    : super(executor ?? _openConnection());
+  SystemDatabase({QueryExecutor? executor}) : super(executor ?? _openConnection());
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (Migrator m) => m.createAll(),
@@ -46,13 +42,8 @@ class SystemDatabase extends _$SystemDatabase {
   static QueryExecutor _openConnection() {
     return driftDatabase(
       name: _nameBd,
-      web: DriftWebOptions(
-        sqlite3Wasm: Uri.parse('sqlite3.wasm'),
-        driftWorker: Uri.parse('drift_worker.js'),
-      ),
-      native: DriftNativeOptions(
-        databaseDirectory: getApplicationSupportDirectory,
-      ),
+      web: DriftWebOptions(sqlite3Wasm: Uri.parse('sqlite3.wasm'), driftWorker: Uri.parse('drift_worker.js')),
+      native: DriftNativeOptions(databaseDirectory: getApplicationSupportDirectory),
     );
   }
 }

@@ -59,13 +59,8 @@ extension CompanyRecordToDomain on CompanyRecord {
 }
 
 extension AddressRecordToDomain on AddressRecord {
-  Address toDomain() => Address(
-    street: street,
-    zipCode: zipCode,
-    neighborhood: neighborhood,
-    city: city,
-    state: state,
-  );
+  Address toDomain() =>
+      Address(street: street, zipCode: zipCode, neighborhood: neighborhood, city: city, state: state);
 }
 
 extension LogsRecordToDomain on LogsRecord {

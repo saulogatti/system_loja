@@ -92,14 +92,9 @@ extension InvoiceItemToCompanion on InvoiceItem {
   /// Converte um modelo de domínio [InvoiceItem] para Companion usado em insert.
   ///
   /// Requer o [invoiceId] para estabelecer o relacionamento com a nota fiscal.
-  InvoiceItemsRecordsCompanion toCompanion({
-    required int invoiceId,
-    bool forUpdate = false,
-  }) {
+  InvoiceItemsRecordsCompanion toCompanion({required int invoiceId, bool forUpdate = false}) {
     if (forUpdate) {
-      throw UnimplementedError(
-        'Update de InvoiceItem não suportado. Delete e reinsira os itens.',
-      );
+      throw UnimplementedError('Update de InvoiceItem não suportado. Delete e reinsira os itens.');
     }
     return InvoiceItemsRecordsCompanion.insert(
       invoiceId: invoiceId,

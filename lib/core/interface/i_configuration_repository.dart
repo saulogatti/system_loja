@@ -77,7 +77,5 @@ abstract interface class IConfigurationRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com [AppSettings] após persistência
-  Future<ResultStatus<AppSettings, String>> updateAppSettings(
-    AppSettings novaConfiguracao,
-  );
+  Future<ResultStatus<AppSettings, String>> updateAppSettings(AppSettings novaConfiguracao);
 }

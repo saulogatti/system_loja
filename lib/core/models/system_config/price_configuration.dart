@@ -18,10 +18,6 @@ class PriceConfiguration extends DefaultObject {
   });
 
   static PriceConfiguration defaultConfiguration() {
-    return PriceConfiguration(
-      types: [],
-      measurementUnits: [],
-      reportConfiguration: ReportConfiguration(),
-    );
+    return PriceConfiguration(types: [], measurementUnits: [], reportConfiguration: ReportConfiguration());
   }
 }

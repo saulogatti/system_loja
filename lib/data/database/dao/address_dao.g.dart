@@ -12,8 +12,5 @@ class AddressDaoManager {
   final _$AddressDaoMixin _db;
   AddressDaoManager(this._db);
   $$AddressRecordsTableTableManager get addressRecords =>
-      $$AddressRecordsTableTableManager(
-        _db.attachedDatabase,
-        _db.addressRecords,
-      );
+      $$AddressRecordsTableTableManager(_db.attachedDatabase, _db.addressRecords);
 }

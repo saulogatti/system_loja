@@ -14,20 +14,13 @@ class SystemConfigurationData {
   final DateTime registrationDate;
   final DateTime lastUpdatedDate;
 
-  @JsonKey(
-    fromJson: PriceConfigurationCodec.fromJson,
-    toJson: PriceConfigurationCodec.toJson,
-  )
+  @JsonKey(fromJson: PriceConfigurationCodec.fromJson, toJson: PriceConfigurationCodec.toJson)
   final PriceConfiguration priceConfiguration;
 
   @JsonKey(defaultValue: <String>[])
   final List<String> productCategories;
 
-  @JsonKey(
-    fromJson: _systemUserDataFromJson,
-    toJson: _systemUserDataToJson,
-    includeIfNull: false,
-  )
+  @JsonKey(fromJson: _systemUserDataFromJson, toJson: _systemUserDataToJson, includeIfNull: false)
   final SystemUserData systemUserData;
 
   SystemConfigurationData({

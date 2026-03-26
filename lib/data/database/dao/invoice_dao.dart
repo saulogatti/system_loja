@@ -42,16 +42,11 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
     // Group items by invoice ID for efficient lookup
     final itemsByInvoiceId = <int, List<InvoiceItem>>{};
     for (final itemRecord in itemRecords) {
-      (itemsByInvoiceId[itemRecord.invoiceId] ??= []).add(
-        itemRecord.toDomain(),
-      );
+      (itemsByInvoiceId[itemRecord.invoiceId] ??= []).add(itemRecord.toDomain());
     }
 
     // Build domain objects
-    return [
-      for (final record in records)
-        record.toDomain(itemsByInvoiceId[record.id] ?? []),
-    ];
+    return [for (final record in records) record.toDomain(itemsByInvoiceId[record.id] ?? [])];
   }
 
   /// Busca uma nota fiscal pelo ID.
@@ -59,9 +54,7 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   /// Carrega os itens da nota fiscal automaticamente.
   /// Retorna null se a nota fiscal não for encontrada.
   Future<Invoice?> getById(int id) async {
-    final record = await (select(
-      invoicesRecords,
-    )..where((t) => t.id.equals(id))).getSingleOrNull();
+    final record = await (select(invoicesRecords)..where((t) => t.id.equals(id))).getSingleOrNull();
 
     if (record == null) return null;
 
@@ -100,22 +93,15 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
 
     final itemsByInvoiceId = <int, List<InvoiceItem>>{};
     for (final itemRecord in itemRecords) {
-      (itemsByInvoiceId[itemRecord.invoiceId] ??= []).add(
-        itemRecord.toDomain(),
-      );
+      (itemsByInvoiceId[itemRecord.invoiceId] ??= []).add(itemRecord.toDomain());
     }
 
-    return [
-      for (final record in records)
-        record.toDomain(itemsByInvoiceId[record.id] ?? []),
-    ];
+    return [for (final record in records) record.toDomain(itemsByInvoiceId[record.id] ?? [])];
   }
 
   /// Retorna apenas notas fiscais de saída (vinculadas a clientes).
   Future<List<Invoice>> getExitInvoices() async {
-    final records = await (select(
-      invoicesRecords,
-    )..where((t) => t.type.equalsValue(InvoiceType.exit))).get();
+    final records = await (select(invoicesRecords)..where((t) => t.type.equalsValue(InvoiceType.exit))).get();
     if (records.isEmpty) return [];
 
     final invoiceIds = records.map((r) => r.id).toList();
@@ -125,15 +111,10 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
 
     final itemsByInvoiceId = <int, List<InvoiceItem>>{};
     for (final itemRecord in itemRecords) {
-      (itemsByInvoiceId[itemRecord.invoiceId] ??= []).add(
-        itemRecord.toDomain(),
-      );
+      (itemsByInvoiceId[itemRecord.invoiceId] ??= []).add(itemRecord.toDomain());
     }
 
-    return [
-      for (final record in records)
-        record.toDomain(itemsByInvoiceId[record.id] ?? []),
-    ];
+    return [for (final record in records) record.toDomain(itemsByInvoiceId[record.id] ?? [])];
   }
 
   /// Insere uma nova nota fiscal no banco de dados.
@@ -142,9 +123,7 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   /// Os itens da nota devem ser inseridos separadamente usando InvoiceItemDao.
   /// Retorna o ID gerado automaticamente.
   Future<int> insertInvoice(Invoice invoice) {
-    return into(
-      invoicesRecords,
-    ).insert(invoice.toCompanion(), mode: InsertMode.insertOrAbort);
+    return into(invoicesRecords).insert(invoice.toCompanion(), mode: InsertMode.insertOrAbort);
   }
 
   /// Verifica se um número de nota fiscal já existe no banco de dados.
@@ -162,8 +141,6 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   /// Use InvoiceItemDao para gerenciar os itens separadamente.
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
   Future<bool> updateInvoice(Invoice invoice) async {
-    return await update(
-      invoicesRecords,
-    ).replace(invoice.toCompanion(forUpdate: true));
+    return await update(invoicesRecords).replace(invoice.toCompanion(forUpdate: true));
   }
 }

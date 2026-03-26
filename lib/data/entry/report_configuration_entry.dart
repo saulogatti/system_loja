@@ -25,9 +25,7 @@ class ReportConfigurationEntry {
   factory ReportConfigurationEntry.fromJson(Map<String, dynamic> json) =>
       _$ReportConfigurationEntryFromJson(json);
 
-  factory ReportConfigurationEntry.fromDomain(
-    ReportConfiguration reportConfiguration,
-  ) {
+  factory ReportConfigurationEntry.fromDomain(ReportConfiguration reportConfiguration) {
     return ReportConfigurationEntry(
       enableSalesByPeriod: reportConfiguration.enableSalesByPeriod,
       enableTopProducts: reportConfiguration.enableTopProducts,
@@ -49,7 +47,6 @@ class ReportConfigurationEntry {
     lastUpdatedDate: lastUpdatedDate,
   );
 
-  static Map<String, dynamic> toJsonStatic(
-    ReportConfiguration reportConfiguration,
-  ) => ReportConfigurationEntry.fromDomain(reportConfiguration).toJson();
+  static Map<String, dynamic> toJsonStatic(ReportConfiguration reportConfiguration) =>
+      ReportConfigurationEntry.fromDomain(reportConfiguration).toJson();
 }

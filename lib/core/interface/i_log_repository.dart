@@ -84,9 +84,7 @@ abstract interface class ILogRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com lista de logs ou mensagem de erro
-  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByActionType(
-    ActionType actionType,
-  );
+  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByActionType(ActionType actionType);
 
   /// Retorna logs filtrados por entidade.
   ///
@@ -97,9 +95,7 @@ abstract interface class ILogRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com lista de logs ou mensagem de erro
-  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByEntity(
-    String entity,
-  );
+  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByEntity(String entity);
 
   /// Retorna logs de um período específico.
   ///
@@ -111,10 +107,7 @@ abstract interface class ILogRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com lista de logs ou mensagem de erro
-  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByPeriod(
-    DateTime startDate,
-    DateTime endDate,
-  );
+  Future<ResultStatus<List<ActivityLog>, String>> fetchLogsByPeriod(DateTime startDate, DateTime endDate);
 
   /// Retorna logs de um usuário específico.
   ///

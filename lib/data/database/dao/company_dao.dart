@@ -21,9 +21,7 @@ class CompanyDao extends DatabaseAccessor<AppDatabase> with _$CompanyDaoMixin {
   /// Retorna o ID gerado automaticamente.
   /// Lança exceção se o CNPJ já existir (constraint UNIQUE).
   Future<int> addCompany(Company company) {
-    return into(
-      companyRecords,
-    ).insert(company.toCompanion(), mode: InsertMode.insertOrAbort);
+    return into(companyRecords).insert(company.toCompanion(), mode: InsertMode.insertOrAbort);
   }
 
   /// Remove uma empresa do banco de dados pelo ID.
@@ -43,9 +41,7 @@ class CompanyDao extends DatabaseAccessor<AppDatabase> with _$CompanyDaoMixin {
   ///
   /// Retorna null se a empresa não for encontrada.
   Future<Company?> getById(int id) async {
-    final record = await (select(
-      companyRecords,
-    )..where((t) => t.id.equals(id))).getSingleOrNull();
+    final record = await (select(companyRecords)..where((t) => t.id.equals(id))).getSingleOrNull();
     return record?.toDomain();
   }
 
@@ -53,9 +49,7 @@ class CompanyDao extends DatabaseAccessor<AppDatabase> with _$CompanyDaoMixin {
   ///
   /// Retorna null se a empresa não for encontrada.
   Future<Company?> getByCnpj(String cnpj) async {
-    final record = await (select(
-      companyRecords,
-    )..where((t) => t.cnpj.equals(cnpj))).getSingleOrNull();
+    final record = await (select(companyRecords)..where((t) => t.cnpj.equals(cnpj))).getSingleOrNull();
     return record?.toDomain();
   }
 

@@ -27,4 +27,3 @@ class SalesPurchaseAnalyticsView extends StatelessWidget {
     );
   }
 }
-

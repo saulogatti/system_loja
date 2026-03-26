@@ -12,8 +12,7 @@ import 'package:system_loja/data/database/dao/invoice_dao.dart';
 class AnalyticsRepository implements IAnalyticsRepository {
   final InvoiceDao _invoiceDao;
 
-  AnalyticsRepository({required InvoiceDao invoiceDao})
-    : _invoiceDao = invoiceDao;
+  AnalyticsRepository({required InvoiceDao invoiceDao}) : _invoiceDao = invoiceDao;
 
   /// Agrupamento por data de emissão (DD/MM).
   ///
@@ -40,10 +39,7 @@ class AnalyticsRepository implements IAnalyticsRepository {
         acc.add(invoice.data.totalValue, _itemCount(invoice));
       }
 
-      final allDates = {
-        ...salesByDate.keys,
-        ...purchasesByDate.keys,
-      }.toList()..sort();
+      final allDates = {...salesByDate.keys, ...purchasesByDate.keys}.toList()..sort();
 
       final points = [
         for (final date in allDates)
@@ -51,9 +47,7 @@ class AnalyticsRepository implements IAnalyticsRepository {
             label: date,
             salesValue: salesByDate[date]?.value ?? 0.0,
             purchaseValue: purchasesByDate[date]?.value ?? 0.0,
-            productsCount:
-                (salesByDate[date]?.count ?? 0) +
-                (purchasesByDate[date]?.count ?? 0),
+            productsCount: (salesByDate[date]?.count ?? 0) + (purchasesByDate[date]?.count ?? 0),
           ),
       ];
 
@@ -69,8 +63,7 @@ class AnalyticsRepository implements IAnalyticsRepository {
   /// Itera sobre os itens de todas as notas de saída (vendas) e entrada
   /// (compras) e agrupa os totais por nome de produto.
   @override
-  Future<ResultStatus<List<AnalyticsPoint>, String>>
-  getAnalyticsByProduct() async {
+  Future<ResultStatus<List<AnalyticsPoint>, String>> getAnalyticsByProduct() async {
     try {
       final exits = await _invoiceDao.getExitInvoices();
       final entries = await _invoiceDao.getEntryInvoices();
@@ -80,28 +73,19 @@ class AnalyticsRepository implements IAnalyticsRepository {
 
       for (final invoice in exits) {
         for (final item in invoice.data.items) {
-          final acc = salesByProduct.putIfAbsent(
-            item.productName,
-            _Accumulator.new,
-          );
+          final acc = salesByProduct.putIfAbsent(item.productName, _Accumulator.new);
           acc.add(item.totalValue, item.quantity);
         }
       }
 
       for (final invoice in entries) {
         for (final item in invoice.data.items) {
-          final acc = purchasesByProduct.putIfAbsent(
-            item.productName,
-            _Accumulator.new,
-          );
+          final acc = purchasesByProduct.putIfAbsent(item.productName, _Accumulator.new);
           acc.add(item.totalValue, item.quantity);
         }
       }
 
-      final allProducts = {
-        ...salesByProduct.keys,
-        ...purchasesByProduct.keys,
-      }.toList()..sort();
+      final allProducts = {...salesByProduct.keys, ...purchasesByProduct.keys}.toList()..sort();
 
       final points = [
         for (final product in allProducts)
@@ -109,9 +93,7 @@ class AnalyticsRepository implements IAnalyticsRepository {
             label: product,
             salesValue: salesByProduct[product]?.value ?? 0.0,
             purchaseValue: purchasesByProduct[product]?.value ?? 0.0,
-            productsCount:
-                (salesByProduct[product]?.count ?? 0) +
-                (purchasesByProduct[product]?.count ?? 0),
+            productsCount: (salesByProduct[product]?.count ?? 0) + (purchasesByProduct[product]?.count ?? 0),
           ),
       ];
 

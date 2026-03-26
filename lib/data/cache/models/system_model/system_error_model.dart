@@ -33,17 +33,12 @@ class SystemErrorModel {
     String? cacheKeyConstraint,
   }) : cacheKey = cacheKeyConstraint ?? '';
 
-  factory SystemErrorModel.fromJson(Map<String, dynamic> json) =>
-      _$SystemErrorModelFromJson(json);
+  factory SystemErrorModel.fromJson(Map<String, dynamic> json) => _$SystemErrorModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$SystemErrorModelToJson(this);
 
-  SystemError toDomain() =>
-      SystemError(message: message, code: code, stackTrace: stackTrace);
+  SystemError toDomain() => SystemError(message: message, code: code, stackTrace: stackTrace);
 
-  factory SystemErrorModel.fromDomain(SystemError error) => SystemErrorModel(
-    message: error.message,
-    code: error.code,
-    stackTrace: error.stackTrace,
-  );
+  factory SystemErrorModel.fromDomain(SystemError error) =>
+      SystemErrorModel(message: error.message, code: error.code, stackTrace: error.stackTrace);
 }

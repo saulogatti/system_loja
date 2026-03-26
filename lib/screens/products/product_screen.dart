@@ -50,10 +50,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Cadastro de Produto'),
-          leading: const AutoLeadingButton(),
-        ),
+        appBar: AppBar(title: const Text('Cadastro de Produto'), leading: const AutoLeadingButton()),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: ProductForm(
@@ -120,15 +117,15 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
 
   /// Exibe mensagem de erro em SnackBar.
   void _mostrarErro(String mensagem) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(mensagem), backgroundColor: Colors.red),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.red));
   }
 
   /// Exibe mensagem de sucesso em SnackBar.
   void _mostrarSucesso(String mensagem) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(mensagem), backgroundColor: Colors.green),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.green));
   }
 }

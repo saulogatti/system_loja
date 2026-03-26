@@ -12,9 +12,7 @@ import 'package:system_loja/core/constants/app_constants.dart';
 ///   (value) => validateMinLength(value, 3, 'Nome'),
 /// ]),
 /// ```
-String? Function(String? value) combineValidators(
-  List<String? Function(String?)> validators,
-) {
+String? Function(String? value) combineValidators(List<String? Function(String?)> validators) {
   return (String? value) {
     for (final validator in validators) {
       final error = validator(value);

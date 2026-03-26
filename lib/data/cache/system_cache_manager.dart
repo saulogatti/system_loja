@@ -33,8 +33,7 @@ class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
               final Map<String, dynamic> dataMap = Map.from(jsonData);
               final errorModel = SystemErrorModel.fromJson(dataMap);
               errors.add(errorModel);
-              _fileStorageOptions['${errorModel.code}_error'] =
-                  errorModel.cacheKey;
+              _fileStorageOptions['${errorModel.code}_error'] = errorModel.cacheKey;
             }
           }
         case ResultError(resultError: final error):

@@ -11,15 +11,11 @@ import 'package:system_loja/screens/person_registration/models/person_registrati
 class PersonBloc extends Bloc<PersonEvent, PersonState> {
   final ICustomerRepository _customerRepository;
   final ICompanyRepository _companyRepository;
-  PersonBloc(this._customerRepository, this._companyRepository)
-    : super(const PersonState.initial()) {
+  PersonBloc(this._customerRepository, this._companyRepository) : super(const PersonState.initial()) {
     on<PersonSubmit>(_onSubmit);
   }
 
-  FutureOr<void> _onSubmit(
-    PersonSubmit event,
-    Emitter<PersonState> emit,
-  ) async {
+  FutureOr<void> _onSubmit(PersonSubmit event, Emitter<PersonState> emit) async {
     emit(const PersonState.loading());
     final data = event.formData;
 
@@ -30,9 +26,7 @@ class PersonBloc extends Bloc<PersonEvent, PersonState> {
         return;
       }
 
-      final result = await _customerRepository.saveCustomer(
-        data.retrieveCustomer(),
-      );
+      final result = await _customerRepository.saveCustomer(data.retrieveCustomer());
       switch (result) {
         case ResultSuccess(:final result):
           if (result) {
@@ -52,9 +46,7 @@ class PersonBloc extends Bloc<PersonEvent, PersonState> {
         return;
       }
 
-      final result = await _companyRepository.saveCompany(
-        data.retrieveCompany(),
-      );
+      final result = await _companyRepository.saveCompany(data.retrieveCompany());
       switch (result) {
         case ResultSuccess(:final result):
           if (result) {

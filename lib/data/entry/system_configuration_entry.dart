@@ -18,15 +18,11 @@ class SystemConfigurationEntry {
     required this.lastUpdatedDate,
   });
 
-  factory SystemConfigurationEntry.fromSystemConfiguration(
-    SystemConfiguration systemConfiguration,
-  ) {
+  factory SystemConfigurationEntry.fromSystemConfiguration(SystemConfiguration systemConfiguration) {
     return SystemConfigurationEntry(
       id: systemConfiguration.id,
       priceConfiguration: systemConfiguration.priceConfiguration,
-      systemUserData: SystemUserDataEntry.fromSystemUserData(
-        systemConfiguration.systemUserData,
-      ),
+      systemUserData: SystemUserDataEntry.fromSystemUserData(systemConfiguration.systemUserData),
       registrationDate: systemConfiguration.registrationDate,
       lastUpdatedDate: systemConfiguration.lastUpdatedDate,
     );

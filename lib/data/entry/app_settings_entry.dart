@@ -39,26 +39,24 @@ class AppSettingsEntry {
     this.permitirMultiplosUsuarios = false,
   });
 
-  factory AppSettingsEntry.fromAppSettings(AppSettings configuracao) =>
-      AppSettingsEntry(
-        notificacoesAtivadas: configuracao.notificacoesAtivadas,
-        notificarVendas: configuracao.notificarVendas,
-        notificarEstoqueBaixo: configuracao.notificarEstoqueBaixo,
-        limiteEstoqueBaixo: configuracao.limiteEstoqueBaixo,
-        corPrimaria: configuracao.corPrimaria,
-        temaEscuro: configuracao.temaEscuro,
-        backupAutomatico: configuracao.backupAutomatico,
-        frequenciaBackup: configuracao.frequenciaBackup,
-        localBackup: configuracao.localBackup,
-        limpezaAutomatica: configuracao.limpezaAutomatica,
-        diasManterLogs: configuracao.diasManterLogs,
-        exigirSenha: configuracao.exigirSenha,
-        tempoBloqueioMinutos: configuracao.tempoBloqueioMinutos,
-        permitirMultiplosUsuarios: configuracao.permitirMultiplosUsuarios,
-      );
+  factory AppSettingsEntry.fromAppSettings(AppSettings configuracao) => AppSettingsEntry(
+    notificacoesAtivadas: configuracao.notificacoesAtivadas,
+    notificarVendas: configuracao.notificarVendas,
+    notificarEstoqueBaixo: configuracao.notificarEstoqueBaixo,
+    limiteEstoqueBaixo: configuracao.limiteEstoqueBaixo,
+    corPrimaria: configuracao.corPrimaria,
+    temaEscuro: configuracao.temaEscuro,
+    backupAutomatico: configuracao.backupAutomatico,
+    frequenciaBackup: configuracao.frequenciaBackup,
+    localBackup: configuracao.localBackup,
+    limpezaAutomatica: configuracao.limpezaAutomatica,
+    diasManterLogs: configuracao.diasManterLogs,
+    exigirSenha: configuracao.exigirSenha,
+    tempoBloqueioMinutos: configuracao.tempoBloqueioMinutos,
+    permitirMultiplosUsuarios: configuracao.permitirMultiplosUsuarios,
+  );
 
-  factory AppSettingsEntry.fromJson(Map<String, dynamic> json) =>
-      _$AppSettingsEntryFromJson(json);
+  factory AppSettingsEntry.fromJson(Map<String, dynamic> json) => _$AppSettingsEntryFromJson(json);
 
   AppSettings toAppSettings() => AppSettings(
     notificacoesAtivadas: notificacoesAtivadas,
