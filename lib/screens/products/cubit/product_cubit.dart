@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/models/product.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/screens/products/cubit/product_state.dart';
 
 /// Gerencia o estado da tela de produtos e operações com a base de dados.

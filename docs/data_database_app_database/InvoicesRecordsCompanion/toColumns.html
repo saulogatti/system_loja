@@ -85,47 +85,47 @@ legacy reasons.</p>
   <pre class="language-dart"><code class="language-dart">@override
 Map&lt;String, Expression&gt; toColumns(bool nullToAbsent) {
   final map = &lt;String, Expression&gt;{};
-  if (customerCpf.present) {
-    map[&#39;cliente_cpf&#39;] = Variable&lt;String&gt;(customerCpf.value);
-  }
-  if (customerId.present) {
-    map[&#39;cliente_id&#39;] = Variable&lt;int&gt;(customerId.value);
-  }
-  if (customerName.present) {
-    map[&#39;cliente_nome&#39;] = Variable&lt;String&gt;(customerName.value);
+  if (companyCnpj.present) {
+    map[&#39;company_cnpj&#39;] = Variable&lt;String&gt;(companyCnpj.value);
   }
   if (companyId.present) {
-    map[&#39;empresa_id&#39;] = Variable&lt;int&gt;(companyId.value);
+    map[&#39;company_id&#39;] = Variable&lt;int&gt;(companyId.value);
   }
   if (companyName.present) {
-    map[&#39;empresa_nome&#39;] = Variable&lt;String&gt;(companyName.value);
+    map[&#39;company_name&#39;] = Variable&lt;String&gt;(companyName.value);
   }
-  if (companyCnpj.present) {
-    map[&#39;empresa_cnpj&#39;] = Variable&lt;String&gt;(companyCnpj.value);
+  if (customerCpf.present) {
+    map[&#39;customer_cpf&#39;] = Variable&lt;String&gt;(customerCpf.value);
+  }
+  if (customerId.present) {
+    map[&#39;customer_id&#39;] = Variable&lt;int&gt;(customerId.value);
+  }
+  if (customerName.present) {
+    map[&#39;customer_name&#39;] = Variable&lt;String&gt;(customerName.value);
   }
   if (id.present) {
     map[&#39;id&#39;] = Variable&lt;int&gt;(id.value);
   }
   if (invoiceNumber.present) {
-    map[&#39;numero_nota&#39;] = Variable&lt;String&gt;(invoiceNumber.value);
+    map[&#39;invoice_number&#39;] = Variable&lt;String&gt;(invoiceNumber.value);
   }
   if (issueDate.present) {
-    map[&#39;data_emissao&#39;] = Variable&lt;DateTime&gt;(issueDate.value);
+    map[&#39;issue_date&#39;] = Variable&lt;DateTime&gt;(issueDate.value);
   }
   if (lastUpdatedDate.present) {
     map[&#39;last_updated_date&#39;] = Variable&lt;DateTime&gt;(lastUpdatedDate.value);
   }
   if (paymentMethod.present) {
-    map[&#39;forma_pagamento&#39;] = Variable&lt;String&gt;(paymentMethod.value);
+    map[&#39;payment_method&#39;] = Variable&lt;String&gt;(paymentMethod.value);
   }
   if (registrationDate.present) {
     map[&#39;registration_date&#39;] = Variable&lt;DateTime&gt;(registrationDate.value);
   }
   if (totalValue.present) {
-    map[&#39;valor_total&#39;] = Variable&lt;double&gt;(totalValue.value);
+    map[&#39;total_value&#39;] = Variable&lt;double&gt;(totalValue.value);
   }
   if (type.present) {
-    map[&#39;tipo&#39;] = Variable&lt;String&gt;(
+    map[&#39;type&#39;] = Variable&lt;String&gt;(
       $InvoicesRecordsTable.$convertertype.toSql(type.value),
     );
   }

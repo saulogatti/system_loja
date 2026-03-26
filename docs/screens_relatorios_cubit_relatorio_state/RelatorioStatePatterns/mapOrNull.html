@@ -60,13 +60,13 @@
     </ol>
   </div>
 <span class="returntype">TResult?</span>
-<span class="name ">mapOrNull</span>&lt;<wbr><span class="type-parameter">TResult extends Object?</span>&gt;(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="mapOrNull-param-initial"><span class="type-annotation">TResult?</span> <span class="parameter-name">initial</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioInitial</span> <span class="parameter-name">value</span></span></li>
+<span class="name ">mapOrNull</span>&lt;<wbr><span class="type-parameter">TResult extends Object?</span>&gt;(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="mapOrNull-param-error"><span class="type-annotation">TResult?</span> <span class="parameter-name">error</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioError</span> <span class="parameter-name">value</span></span></li>
 </ol>)?, </span></li>
-<li><span class="parameter" id="mapOrNull-param-loading"><span class="type-annotation">TResult?</span> <span class="parameter-name">loading</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioLoading</span> <span class="parameter-name">value</span></span></li>
+<li><span class="parameter" id="mapOrNull-param-initial"><span class="type-annotation">TResult?</span> <span class="parameter-name">initial</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioInitial</span> <span class="parameter-name">value</span></span></li>
 </ol>)?, </span></li>
 <li><span class="parameter" id="mapOrNull-param-loaded"><span class="type-annotation">TResult?</span> <span class="parameter-name">loaded</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioLoaded</span> <span class="parameter-name">value</span></span></li>
 </ol>)?, </span></li>
-<li><span class="parameter" id="mapOrNull-param-error"><span class="type-annotation">TResult?</span> <span class="parameter-name">error</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioError</span> <span class="parameter-name">value</span></span></li>
+<li><span class="parameter" id="mapOrNull-param-loading"><span class="type-annotation">TResult?</span> <span class="parameter-name">loading</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioLoading</span> <span class="parameter-name">value</span></span></li>
 </ol>)?, </span></li>
 </ol>})
 
@@ -90,14 +90,14 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult? mapOrNull&lt;TResult extends Object?&gt;({TResult? Function( RelatorioInitial value)?  initial,TResult? Function( RelatorioLoading value)?  loading,TResult? Function( RelatorioLoaded value)?  loaded,TResult? Function( RelatorioError value)?  error,}){
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult? mapOrNull&lt;TResult extends Object?&gt;({TResult? Function( RelatorioError value)?  error,TResult? Function( RelatorioInitial value)?  initial,TResult? Function( RelatorioLoaded value)?  loaded,TResult? Function( RelatorioLoading value)?  loading,}){
 final _that = this;
 switch (_that) {
-case RelatorioInitial() when initial != null:
-return initial(_that);case RelatorioLoading() when loading != null:
-return loading(_that);case RelatorioLoaded() when loaded != null:
-return loaded(_that);case RelatorioError() when error != null:
-return error(_that);case _:
+case RelatorioError() when error != null:
+return error(_that);case RelatorioInitial() when initial != null:
+return initial(_that);case RelatorioLoaded() when loaded != null:
+return loaded(_that);case RelatorioLoading() when loading != null:
+return loading(_that);case _:
   return null;
 
 }

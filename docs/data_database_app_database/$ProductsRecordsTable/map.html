@@ -84,6 +84,10 @@ ProductsRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
       DriftSqlType.string,
       data[&#39;${effectivePrefix}code&#39;],
     )!,
+    id: attachedDatabase.typeMapping.read(
+      DriftSqlType.int,
+      data[&#39;${effectivePrefix}id&#39;],
+    )!,
     categoryId: attachedDatabase.typeMapping.read(
       DriftSqlType.int,
       data[&#39;${effectivePrefix}category_id&#39;],
@@ -91,10 +95,6 @@ ProductsRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
     description: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
       data[&#39;${effectivePrefix}description&#39;],
-    )!,
-    id: attachedDatabase.typeMapping.read(
-      DriftSqlType.int,
-      data[&#39;${effectivePrefix}id&#39;],
     )!,
     lastUpdatedDate: attachedDatabase.typeMapping.read(
       DriftSqlType.dateTime,

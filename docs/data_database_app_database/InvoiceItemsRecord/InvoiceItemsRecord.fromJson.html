@@ -72,12 +72,12 @@
   return InvoiceItemsRecord(
     id: serializer.fromJson&lt;int&gt;(json[&#39;id&#39;]),
     invoiceId: serializer.fromJson&lt;int&gt;(json[&#39;invoiceId&#39;]),
+    productCode: serializer.fromJson&lt;String&gt;(json[&#39;productCode&#39;]),
     productId: serializer.fromJson&lt;int&gt;(json[&#39;productId&#39;]),
     productName: serializer.fromJson&lt;String&gt;(json[&#39;productName&#39;]),
-    productCode: serializer.fromJson&lt;String&gt;(json[&#39;productCode&#39;]),
     quantity: serializer.fromJson&lt;int&gt;(json[&#39;quantity&#39;]),
-    unitPrice: serializer.fromJson&lt;double&gt;(json[&#39;unitPrice&#39;]),
     totalValue: serializer.fromJson&lt;double&gt;(json[&#39;totalValue&#39;]),
+    unitPrice: serializer.fromJson&lt;double&gt;(json[&#39;unitPrice&#39;]),
   );
 }</code></pre>
 </section>

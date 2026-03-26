@@ -8,7 +8,7 @@ import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 
 /// Cubit para gerenciamento de estado de vendas.

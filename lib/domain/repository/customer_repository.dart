@@ -3,10 +3,10 @@ import 'package:sqlite3/common.dart';
 import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/domain/repository/exceptions/customer_exception.dart';
-import 'package:system_loja/aplication/system_error_manager.dart';
+import 'package:system_loja/application/system_error_manager.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/models/customer.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/customer_dao.dart';
 
 /// Repositório para gerenciamento de clientes usando Drift.

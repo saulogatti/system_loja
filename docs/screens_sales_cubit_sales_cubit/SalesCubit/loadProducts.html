@@ -86,9 +86,33 @@
       return;
   }
 
-  final customers = resultMap.asSuccess;
-  final invoices = resultSales.asSuccess;
-  final companies = resultCompanies.asSuccess;
+  final Map&lt;int, Customer&gt; customers;
+  switch (resultMap) {
+    case ResultSuccess(result: final value):
+      customers = value;
+    case ResultError(resultError: final error):
+      emit(SalesState.loadProductsFailure(message: &#39;Erro ao carregar clientes: $error&#39;));
+      return;
+  }
+
+  final Map&lt;int, Invoice&gt; invoices;
+  switch (resultSales) {
+    case ResultSuccess(result: final value):
+      invoices = value;
+    case ResultError(resultError: final error):
+      emit(SalesState.loadProductsFailure(message: &#39;Erro ao carregar vendas: $error&#39;));
+      return;
+  }
+
+  final Map&lt;int, Company&gt; companies;
+  switch (resultCompanies) {
+    case ResultSuccess(result: final value):
+      companies = value;
+    case ResultError(resultError: final error):
+      emit(SalesState.loadProductsFailure(message: &#39;Erro ao carregar empresas: $error&#39;));
+      return;
+  }
+
   switch (result) {
     case ResultSuccess(result: final products):
       emit(

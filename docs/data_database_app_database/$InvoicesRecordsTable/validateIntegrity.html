@@ -84,72 +84,72 @@ VerificationContext validateIntegrity(
 }) {
   final context = VerificationContext();
   final data = instance.toColumns(true);
-  if (data.containsKey(&#39;cliente_cpf&#39;)) {
+  if (data.containsKey(&#39;company_cnpj&#39;)) {
     context.handle(
-      _customerCpfMeta,
-      customerCpf.isAcceptableOrUnknown(
-        data[&#39;cliente_cpf&#39;]!,
-        _customerCpfMeta,
+      _companyCnpjMeta,
+      companyCnpj.isAcceptableOrUnknown(
+        data[&#39;company_cnpj&#39;]!,
+        _companyCnpjMeta,
       ),
     );
   }
-  if (data.containsKey(&#39;cliente_id&#39;)) {
-    context.handle(
-      _customerIdMeta,
-      customerId.isAcceptableOrUnknown(data[&#39;cliente_id&#39;]!, _customerIdMeta),
-    );
-  }
-  if (data.containsKey(&#39;cliente_nome&#39;)) {
-    context.handle(
-      _customerNameMeta,
-      customerName.isAcceptableOrUnknown(
-        data[&#39;cliente_nome&#39;]!,
-        _customerNameMeta,
-      ),
-    );
-  }
-  if (data.containsKey(&#39;empresa_id&#39;)) {
+  if (data.containsKey(&#39;company_id&#39;)) {
     context.handle(
       _companyIdMeta,
-      companyId.isAcceptableOrUnknown(data[&#39;empresa_id&#39;]!, _companyIdMeta),
+      companyId.isAcceptableOrUnknown(data[&#39;company_id&#39;]!, _companyIdMeta),
     );
   }
-  if (data.containsKey(&#39;empresa_nome&#39;)) {
+  if (data.containsKey(&#39;company_name&#39;)) {
     context.handle(
       _companyNameMeta,
       companyName.isAcceptableOrUnknown(
-        data[&#39;empresa_nome&#39;]!,
+        data[&#39;company_name&#39;]!,
         _companyNameMeta,
       ),
     );
   }
-  if (data.containsKey(&#39;empresa_cnpj&#39;)) {
+  if (data.containsKey(&#39;customer_cpf&#39;)) {
     context.handle(
-      _companyCnpjMeta,
-      companyCnpj.isAcceptableOrUnknown(
-        data[&#39;empresa_cnpj&#39;]!,
-        _companyCnpjMeta,
+      _customerCpfMeta,
+      customerCpf.isAcceptableOrUnknown(
+        data[&#39;customer_cpf&#39;]!,
+        _customerCpfMeta,
+      ),
+    );
+  }
+  if (data.containsKey(&#39;customer_id&#39;)) {
+    context.handle(
+      _customerIdMeta,
+      customerId.isAcceptableOrUnknown(data[&#39;customer_id&#39;]!, _customerIdMeta),
+    );
+  }
+  if (data.containsKey(&#39;customer_name&#39;)) {
+    context.handle(
+      _customerNameMeta,
+      customerName.isAcceptableOrUnknown(
+        data[&#39;customer_name&#39;]!,
+        _customerNameMeta,
       ),
     );
   }
   if (data.containsKey(&#39;id&#39;)) {
     context.handle(_idMeta, id.isAcceptableOrUnknown(data[&#39;id&#39;]!, _idMeta));
   }
-  if (data.containsKey(&#39;numero_nota&#39;)) {
+  if (data.containsKey(&#39;invoice_number&#39;)) {
     context.handle(
       _invoiceNumberMeta,
       invoiceNumber.isAcceptableOrUnknown(
-        data[&#39;numero_nota&#39;]!,
+        data[&#39;invoice_number&#39;]!,
         _invoiceNumberMeta,
       ),
     );
   } else if (isInserting) {
     context.missing(_invoiceNumberMeta);
   }
-  if (data.containsKey(&#39;data_emissao&#39;)) {
+  if (data.containsKey(&#39;issue_date&#39;)) {
     context.handle(
       _issueDateMeta,
-      issueDate.isAcceptableOrUnknown(data[&#39;data_emissao&#39;]!, _issueDateMeta),
+      issueDate.isAcceptableOrUnknown(data[&#39;issue_date&#39;]!, _issueDateMeta),
     );
   } else if (isInserting) {
     context.missing(_issueDateMeta);
@@ -163,11 +163,11 @@ VerificationContext validateIntegrity(
       ),
     );
   }
-  if (data.containsKey(&#39;forma_pagamento&#39;)) {
+  if (data.containsKey(&#39;payment_method&#39;)) {
     context.handle(
       _paymentMethodMeta,
       paymentMethod.isAcceptableOrUnknown(
-        data[&#39;forma_pagamento&#39;]!,
+        data[&#39;payment_method&#39;]!,
         _paymentMethodMeta,
       ),
     );
@@ -183,10 +183,10 @@ VerificationContext validateIntegrity(
       ),
     );
   }
-  if (data.containsKey(&#39;valor_total&#39;)) {
+  if (data.containsKey(&#39;total_value&#39;)) {
     context.handle(
       _totalValueMeta,
-      totalValue.isAcceptableOrUnknown(data[&#39;valor_total&#39;]!, _totalValueMeta),
+      totalValue.isAcceptableOrUnknown(data[&#39;total_value&#39;]!, _totalValueMeta),
     );
   } else if (isInserting) {
     context.missing(_totalValueMeta);

@@ -86,31 +86,31 @@ InvoiceItemsRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
     )!,
     invoiceId: attachedDatabase.typeMapping.read(
       DriftSqlType.int,
-      data[&#39;${effectivePrefix}nota_id&#39;],
-    )!,
-    productId: attachedDatabase.typeMapping.read(
-      DriftSqlType.int,
-      data[&#39;${effectivePrefix}produto_id&#39;],
-    )!,
-    productName: attachedDatabase.typeMapping.read(
-      DriftSqlType.string,
-      data[&#39;${effectivePrefix}produto_nome&#39;],
+      data[&#39;${effectivePrefix}invoice_id&#39;],
     )!,
     productCode: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
-      data[&#39;${effectivePrefix}produto_codigo&#39;],
+      data[&#39;${effectivePrefix}product_code&#39;],
+    )!,
+    productId: attachedDatabase.typeMapping.read(
+      DriftSqlType.int,
+      data[&#39;${effectivePrefix}product_id&#39;],
+    )!,
+    productName: attachedDatabase.typeMapping.read(
+      DriftSqlType.string,
+      data[&#39;${effectivePrefix}product_name&#39;],
     )!,
     quantity: attachedDatabase.typeMapping.read(
       DriftSqlType.int,
-      data[&#39;${effectivePrefix}quantidade&#39;],
-    )!,
-    unitPrice: attachedDatabase.typeMapping.read(
-      DriftSqlType.double,
-      data[&#39;${effectivePrefix}preco_unitario&#39;],
+      data[&#39;${effectivePrefix}quantity&#39;],
     )!,
     totalValue: attachedDatabase.typeMapping.read(
       DriftSqlType.double,
-      data[&#39;${effectivePrefix}valor_total&#39;],
+      data[&#39;${effectivePrefix}total_value&#39;],
+    )!,
+    unitPrice: attachedDatabase.typeMapping.read(
+      DriftSqlType.double,
+      data[&#39;${effectivePrefix}unit_price&#39;],
     )!,
   );
 }</code></pre>

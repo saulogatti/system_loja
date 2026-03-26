@@ -74,7 +74,7 @@
     code: error.hashCode,
     stackTrace: stackTrace,
   );
-  await SystemErrorManager.instance.saveErrorToCache(systemError);
+  await SystemErrorManager().saveErrorToCache(systemError);
 }</code></pre>
 </section>
 

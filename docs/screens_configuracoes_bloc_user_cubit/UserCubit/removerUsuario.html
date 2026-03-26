@@ -68,15 +68,13 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; removerUsuario(int id) async {
-  final result = await _userRepository.removerUsuario(id);
+  final result = await _userRepository.deleteUser(id);
   result.when(
     onSuccess: (sucesso) {
       if (sucesso) {
         emit(UsuarioState.usuarioRemovido(id));
       } else {
-        emit(
-          UsuarioState.loadFailure(errorMessage: &#39;Falha ao remover usuário.&#39;),
-        );
+        emit(UsuarioState.loadFailure(errorMessage: &#39;Falha ao remover usuário.&#39;));
       }
     },
     onError: (message) {

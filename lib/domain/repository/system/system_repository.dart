@@ -5,7 +5,7 @@ import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/core/utils/repository_error_mapper.dart';
 import 'package:system_loja/data/converter/system_configuration_codec.dart';
 import 'package:system_loja/data/database/dao/system_dao.dart';

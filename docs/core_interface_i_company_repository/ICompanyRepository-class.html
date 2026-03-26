@@ -73,7 +73,7 @@ if (resultado.isSuccessful &amp;&amp; resultado.asSuccess != null) {
 <p>Veja também:</p>
 <ul>
 <li><a href="../core_models_company/Company-class.html">Company</a> - modelo de domínio de empresa</li>
-<li><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a> - tipo de retorno para operações</li>
+<li><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a> - tipo de retorno para operações</li>
 </ul>
 </section>
 
@@ -139,7 +139,7 @@ if (resultado.isSuccessful &amp;&amp; resultado.asSuccess != null) {
     <dl class="callables">
         <dt id="deleteCompany" class="callable">
   <span class="name"><a href="../core_interface_i_company_repository/ICompanyRepository/deleteCompany.html">deleteCompany</a></span><span class="signature">(<wbr><span class="parameter" id="deleteCompany-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -152,7 +152,7 @@ if (resultado.isSuccessful &amp;&amp; resultado.asSuccess != null) {
 
         <dt id="fetchMappedCompanies" class="callable">
   <span class="name"><a href="../core_interface_i_company_repository/ICompanyRepository/fetchMappedCompanies.html">fetchMappedCompanies</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>, <span class="type-parameter"><a href="../core_models_company/Company-class.html">Company</a></span>&gt;</span></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>, <span class="type-parameter"><a href="../core_models_company/Company-class.html">Company</a></span>&gt;</span></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -165,7 +165,7 @@ if (resultado.isSuccessful &amp;&amp; resultado.asSuccess != null) {
 
         <dt id="findByCnpj" class="callable">
   <span class="name"><a href="../core_interface_i_company_repository/ICompanyRepository/findByCnpj.html">findByCnpj</a></span><span class="signature">(<wbr>{<span class="parameter" id="findByCnpj-param-cnpj"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">cnpj</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_company/Company-class.html">Company</a>?</span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_company/Company-class.html">Company</a>?</span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -178,7 +178,7 @@ if (resultado.isSuccessful &amp;&amp; resultado.asSuccess != null) {
 
         <dt id="findCompanyById" class="callable">
   <span class="name"><a href="../core_interface_i_company_repository/ICompanyRepository/findCompanyById.html">findCompanyById</a></span><span class="signature">(<wbr><span class="parameter" id="findCompanyById-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_company/Company-class.html">Company</a>?</span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_company/Company-class.html">Company</a>?</span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -191,7 +191,7 @@ if (resultado.isSuccessful &amp;&amp; resultado.asSuccess != null) {
 
         <dt id="getAllCompanies" class="callable">
   <span class="name"><a href="../core_interface_i_company_repository/ICompanyRepository/getAllCompanies.html">getAllCompanies</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_company/Company-class.html">Company</a></span>&gt;</span></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_company/Company-class.html">Company</a></span>&gt;</span></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -217,7 +217,7 @@ if (resultado.isSuccessful &amp;&amp; resultado.asSuccess != null) {
 
         <dt id="saveCompany" class="callable">
   <span class="name"><a href="../core_interface_i_company_repository/ICompanyRepository/saveCompany.html">saveCompany</a></span><span class="signature">(<wbr><span class="parameter" id="saveCompany-param-company"><span class="type-annotation"><a href="../core_models_company/Company-class.html">Company</a></span> <span class="parameter-name">company</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -243,7 +243,7 @@ if (resultado.isSuccessful &amp;&amp; resultado.asSuccess != null) {
 
         <dt id="updateCompany" class="callable">
   <span class="name"><a href="../core_interface_i_company_repository/ICompanyRepository/updateCompany.html">updateCompany</a></span><span class="signature">(<wbr><span class="parameter" id="updateCompany-param-company"><span class="type-annotation"><a href="../core_models_company/Company-class.html">Company</a></span> <span class="parameter-name">company</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 

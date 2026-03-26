@@ -71,18 +71,18 @@
   return InvoiceItemsRecord(
     id: data.id.present ? data.id.value : this.id,
     invoiceId: data.invoiceId.present ? data.invoiceId.value : this.invoiceId,
+    productCode: data.productCode.present
+        ? data.productCode.value
+        : this.productCode,
     productId: data.productId.present ? data.productId.value : this.productId,
     productName: data.productName.present
         ? data.productName.value
         : this.productName,
-    productCode: data.productCode.present
-        ? data.productCode.value
-        : this.productCode,
     quantity: data.quantity.present ? data.quantity.value : this.quantity,
-    unitPrice: data.unitPrice.present ? data.unitPrice.value : this.unitPrice,
     totalValue: data.totalValue.present
         ? data.totalValue.value
         : this.totalValue,
+    unitPrice: data.unitPrice.present ? data.unitPrice.value : this.unitPrice,
   );
 }</code></pre>
 </section>

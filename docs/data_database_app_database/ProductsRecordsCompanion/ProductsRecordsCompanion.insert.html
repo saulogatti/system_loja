@@ -55,9 +55,9 @@
     <section class="multi-line-signature">
       
       <span class="name ">ProductsRecordsCompanion.insert</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="insert-param-code"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">code</span>, </span></li>
+<li><span class="parameter" id="insert-param-id"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">id</span> = <span class="default-value">const Value.absent()</span>, </span></li>
 <li><span class="parameter" id="insert-param-categoryId"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span>&gt;</span></span> <span class="parameter-name">categoryId</span> = <span class="default-value">const Value.absent()</span>, </span></li>
 <li><span class="parameter" id="insert-param-description"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">description</span>, </span></li>
-<li><span class="parameter" id="insert-param-id"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">id</span> = <span class="default-value">const Value.absent()</span>, </span></li>
 <li><span class="parameter" id="insert-param-lastUpdatedDate"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span>&gt;</span></span> <span class="parameter-name">lastUpdatedDate</span> = <span class="default-value">const Value.absent()</span>, </span></li>
 <li><span class="parameter" id="insert-param-name"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, </span></li>
 <li><span class="parameter" id="insert-param-price"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">price</span>, </span></li>
@@ -73,9 +73,9 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">ProductsRecordsCompanion.insert({
   required String code,
+  this.id = const Value.absent(),
   this.categoryId = const Value.absent(),
   required String description,
-  this.id = const Value.absent(),
   this.lastUpdatedDate = const Value.absent(),
   required String name,
   required double price,

@@ -110,7 +110,9 @@ and</li>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
   return BlocProvider(
-    create: (_) =&gt; SalesPurchaseAnalyticsBloc()..add(const LoadSalesPurchaseAnalytics()),
+    create: (_) =&gt; SalesPurchaseAnalyticsBloc(
+      analyticsRepository: appInjection.get&lt;IAnalyticsRepository&gt;(),
+    )..add(const LoadSalesPurchaseAnalytics()),
     child: const _SalesPurchaseAnalyticsView(),
   );
 }</code></pre>

@@ -83,18 +83,13 @@
     permission: nivelPermissao.value,
   );
 
-  final ResultStatus&lt;bool, String&gt; executionResult = await _userRepository
-      .adicionarUsuario(usuario);
+  final ResultStatus&lt;bool, String&gt; executionResult = await _userRepository.createUser(usuario);
   executionResult.when(
     onSuccess: (sucesso) {
       if (sucesso) {
         emit(UsuarioState.usuarioAdicionado(usuario, true));
       } else {
-        emit(
-          UsuarioState.loadFailure(
-            errorMessage: &#39;Não foi possível adicionar o usuário.&#39;,
-          ),
-        );
+        emit(UsuarioState.loadFailure(errorMessage: &#39;Não foi possível adicionar o usuário.&#39;));
       }
     },
     onError: (resultError) {

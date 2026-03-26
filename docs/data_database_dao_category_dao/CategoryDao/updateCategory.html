@@ -81,6 +81,7 @@ Retorna true se a categoria foi atualizada com sucesso.</p>
   required String name,
   String? description,
 }) async {
+  assert(id &gt; 0, &#39;ID da categoria deve ser maior que zero&#39;);
   return await update(categoriesRecords).replace(
     CategoriesRecordsCompanion(
       id: Value(id),

@@ -8,7 +8,7 @@ import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/report/product_details_report_data.dart';
 import 'package:system_loja/core/services/product_movement_report_service.dart';
 import 'package:system_loja/core/services/relatorio_overview_service.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_state.dart';
 
 /// Cubit para gerenciamento de estado dos relatórios.

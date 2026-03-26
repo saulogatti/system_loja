@@ -105,10 +105,16 @@
 
   _emitEditing(form.copyWith(isSubmitting: true));
   try {
-    &#47;&#47; TODO: A chamada a `registerSale` não propaga o resultado de sucesso&#47;erro.
-    &#47;&#47; É necessário um mecanismo para que este Cubit saiba se a operação falhou
-    &#47;&#47; e possa notificar o usuário (ex: retornando um Result do método ou ouvindo o stream do SalesCubit).
+    final registerFlow = _salesCubit.stream.firstWhere(
+      (state) =&gt; state is SalesSaved || state is SalesError,
+    );
+
     await _salesCubit.registerSale(notaFiscal, form.enableCodeGeneration);
+    final registerResult = await registerFlow;
+
+    if (registerResult case SalesError(:final message)) {
+      _emitFeedback(message);
+    }
   } finally {
     if (!isClosed) {
       _emitEditing(state.form.copyWith(isSubmitting: false));

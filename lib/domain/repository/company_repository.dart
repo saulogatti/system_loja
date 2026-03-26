@@ -1,10 +1,10 @@
 import 'package:drift/isolate.dart';
 import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
-import 'package:system_loja/aplication/system_error_manager.dart';
+import 'package:system_loja/application/system_error_manager.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/models/company.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/company_dao.dart';
 
 /// Repository para gerenciar operações de empresas.

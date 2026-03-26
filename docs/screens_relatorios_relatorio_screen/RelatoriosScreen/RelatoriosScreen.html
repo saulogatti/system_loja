@@ -55,6 +55,9 @@
     <section class="multi-line-signature">
       const
       <span class="name ">RelatoriosScreen</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
+<li><span class="parameter" id="-param-salesRepository"><span class="type-annotation"><a href="../../core_interface_i_sales_repository/ISalesRepository-class.html">ISalesRepository</a>?</span> <span class="parameter-name">salesRepository</span>, </span></li>
+<li><span class="parameter" id="-param-productRepository"><span class="type-annotation"><a href="../../core_interface_i_product_repository/IProductRepository-class.html">IProductRepository</a>?</span> <span class="parameter-name">productRepository</span>, </span></li>
+<li><span class="parameter" id="-param-categoryRepository"><span class="type-annotation"><a href="../../core_interface_i_category_repository/ICategoryRepository-class.html">ICategoryRepository</a>?</span> <span class="parameter-name">categoryRepository</span>, </span></li>
 </ol>})
     </section>
     
@@ -66,7 +69,7 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">const RelatoriosScreen({super.key});</code></pre>
+  <pre class="language-dart"><code class="language-dart">const RelatoriosScreen({super.key, this.salesRepository, this.productRepository, this.categoryRepository});</code></pre>
 </section>
 
 

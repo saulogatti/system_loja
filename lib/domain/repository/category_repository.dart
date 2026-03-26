@@ -1,7 +1,7 @@
 import 'package:system_loja/core/interface/i_category_repository.dart';
-import 'package:system_loja/aplication/system_error_manager.dart';
+import 'package:system_loja/application/system_error_manager.dart';
 import 'package:system_loja/core/models/category.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/category_dao.dart';
 
 /// Repositório para gerenciar operações de categorias de produtos.

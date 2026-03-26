@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/models/system_errors/system_error.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/cache/models/system_model/system_error_model.dart';
 import 'package:system_loja/data/files_utility/file_storage_utility.dart';
 

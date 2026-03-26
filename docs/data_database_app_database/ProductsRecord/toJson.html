@@ -83,9 +83,9 @@ Map&lt;String, dynamic&gt; toJson({ValueSerializer? serializer}) {
   serializer ??= driftRuntimeOptions.defaultSerializer;
   return &lt;String, dynamic&gt;{
     &#39;code&#39;: serializer.toJson&lt;String&gt;(code),
+    &#39;id&#39;: serializer.toJson&lt;int&gt;(id),
     &#39;categoryId&#39;: serializer.toJson&lt;int?&gt;(categoryId),
     &#39;description&#39;: serializer.toJson&lt;String&gt;(description),
-    &#39;id&#39;: serializer.toJson&lt;int&gt;(id),
     &#39;lastUpdatedDate&#39;: serializer.toJson&lt;DateTime?&gt;(lastUpdatedDate),
     &#39;name&#39;: serializer.toJson&lt;String&gt;(name),
     &#39;price&#39;: serializer.toJson&lt;double&gt;(price),

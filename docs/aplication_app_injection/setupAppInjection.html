@@ -72,12 +72,13 @@ Para acessar as dependências, use o <code>appInjection.get&lt;T&gt;()</code> on
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void setupAppInjection() {
-  printerLog = registerLogPrinterColor(
-    config: ConfigLog(enableLog: kDebugMode),
-  );
+  printerLog = registerLogPrinterColor(config: ConfigLog(enableLog: kDebugMode));
   appInjection.registerSingleton&lt;RouteApp&gt;(RouteApp());
+  appInjection.registerSingleton&lt;ProductMovementReportService&gt;(ProductMovementReportService());
+  appInjection.registerSingleton&lt;RelatorioOverviewService&gt;(RelatorioOverviewService());
   appInjection.registerSingleton&lt;AppDatabase&gt;(AppDatabase());
   appInjection.registerSingleton&lt;SystemDatabase&gt;(SystemDatabase());
+  appInjection.registerSingleton&lt;ISystemErrorManager&gt;(SystemErrorManager());
   appInjection.registerSingleton&lt;CacheManager&gt;(CacheManager());
   appInjection.registerSingleton&lt;CodeGeneratorService&gt;(
     CodeGeneratorService(
@@ -134,9 +135,10 @@ Para acessar as dependências, use o <code>appInjection.get&lt;T&gt;()</code> on
   );
 
   appInjection.registerSingleton&lt;ICategoryRepository&gt;(
-    CategoryRepository(
-      categoryDao: appInjection.get&lt;AppDatabase&gt;().categoryDao,
-    ),
+    CategoryRepository(categoryDao: appInjection.get&lt;AppDatabase&gt;().categoryDao),
+  );
+  appInjection.registerSingleton&lt;IAnalyticsRepository&gt;(
+    AnalyticsRepository(invoiceDao: appInjection.get&lt;AppDatabase&gt;().invoiceDao),
   );
   unawaited(_carregarConfiguracaoInicial());
 }</code></pre>

@@ -57,7 +57,7 @@
   <p>Repositório para gerenciamento de usuários usando Drift.</p>
 <p>Coordena operações CRUD sobre <a href="../core_models_user/User-class.html">User</a> via <a href="../data_database_dao_users_dao/UsersDao-class.html">UsersDao</a> e registra eventos
 de auditoria via <a href="../core_interface_i_log_repository/ILogRepository-class.html">ILogRepository</a>. Todos os erros são capturados
-internamente e devolvidos como <a href="../core_utils_command_result/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com mensagem amigável.</p>
+internamente e devolvidos como <a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com mensagem amigável.</p>
 <p>Veja também:</p>
 <ul>
 <li><a href="../core_interface_i_user_repository/IUserRepository-class.html">IUserRepository</a> - contrato da interface</li>
@@ -156,9 +156,9 @@ internamente e devolvidos como <a href="../core_utils_command_result/ResultStatu
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
-        <dt id="adicionarUsuario" class="callable">
-  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/adicionarUsuario.html">adicionarUsuario</a></span><span class="signature">(<wbr><span class="parameter" id="adicionarUsuario-param-usuario"><span class="type-annotation"><a href="../core_models_user/User-class.html">User</a></span> <span class="parameter-name">usuario</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+        <dt id="createUser" class="callable">
+  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/createUser.html">createUser</a></span><span class="signature">(<wbr><span class="parameter" id="createUser-param-user"><span class="type-annotation"><a href="../core_models_user/User-class.html">User</a></span> <span class="parameter-name">user</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -169,15 +169,54 @@ internamente e devolvidos como <a href="../core_utils_command_result/ResultStatu
 
 </dd>
 
-        <dt id="atualizarUsuario" class="callable">
-  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/atualizarUsuario.html">atualizarUsuario</a></span><span class="signature">(<wbr><span class="parameter" id="atualizarUsuario-param-usuario"><span class="type-annotation"><a href="../core_models_user/User-class.html">User</a></span> <span class="parameter-name">usuario</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+        <dt id="deleteUser" class="callable">
+  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/deleteUser.html">deleteUser</a></span><span class="signature">(<wbr><span class="parameter" id="deleteUser-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
 </dt>
 <dd>
-  Atualiza os dados de um usuário existente.
+  Remove um usuário do sistema pelo ID.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="fetchAllUsers" class="callable">
+  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/fetchAllUsers.html">fetchAllUsers</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a></span>&gt;</span></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Retorna todos os usuários cadastrados no sistema.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="fetchUserById" class="callable">
+  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/fetchUserById.html">fetchUserById</a></span><span class="signature">(<wbr><span class="parameter" id="fetchUserById-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a>?</span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Busca um usuário específico pelo ID.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="getUserByEmail" class="callable">
+  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/getUserByEmail.html">getUserByEmail</a></span><span class="signature">(<wbr><span class="parameter" id="getUserByEmail-param-email"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">email</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a>?</span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Busca um usuário pelo endereço de email.
   <div class="features"><span class="feature">override</span></div>
 
 </dd>
@@ -247,58 +286,6 @@ internamente e devolvidos como <a href="../core_utils_command_result/ResultStatu
 
 </dd>
 
-        <dt id="obterTodosUsuarios" class="callable">
-  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/obterTodosUsuarios.html">obterTodosUsuarios</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a></span>&gt;</span></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Retorna todos os usuários cadastrados no sistema.
-  <div class="features"><span class="feature">override</span></div>
-
-</dd>
-
-        <dt id="obterUsuarioPorEmail" class="callable">
-  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/obterUsuarioPorEmail.html">obterUsuarioPorEmail</a></span><span class="signature">(<wbr><span class="parameter" id="obterUsuarioPorEmail-param-email"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">email</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a>?</span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Busca um usuário pelo endereço de email.
-  <div class="features"><span class="feature">override</span></div>
-
-</dd>
-
-        <dt id="obterUsuarioPorId" class="callable">
-  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/obterUsuarioPorId.html">obterUsuarioPorId</a></span><span class="signature">(<wbr><span class="parameter" id="obterUsuarioPorId-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a>?</span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Busca um usuário específico pelo ID.
-  <div class="features"><span class="feature">override</span></div>
-
-</dd>
-
-        <dt id="removerUsuario" class="callable">
-  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/removerUsuario.html">removerUsuario</a></span><span class="signature">(<wbr><span class="parameter" id="removerUsuario-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Remove um usuário do sistema pelo ID.
-  <div class="features"><span class="feature">override</span></div>
-
-</dd>
-
         <dt id="toString" class="callable inherited">
   <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
     <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
@@ -309,6 +296,19 @@ internamente e devolvidos como <a href="../core_utils_command_result/ResultStatu
 <dd class="inherited">
   A string representation of this object.
   <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="updateUser" class="callable">
+  <span class="name"><a href="../domain_repository_system_user_repository/UserRepository/updateUser.html">updateUser</a></span><span class="signature">(<wbr><span class="parameter" id="updateUser-param-usuario"><span class="type-annotation"><a href="../core_models_user/User-class.html">User</a></span> <span class="parameter-name">usuario</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Atualiza os dados de um usuário existente.
+  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 

@@ -82,31 +82,31 @@
             ),
         updateCompanionCallback:
             ({
-              Value&lt;int&gt; id = const Value.absent(),
-              Value&lt;String&gt; name = const Value.absent(),
               Value&lt;String?&gt; description = const Value.absent(),
-              Value&lt;DateTime&gt; registrationDate = const Value.absent(),
+              Value&lt;int&gt; id = const Value.absent(),
               Value&lt;DateTime?&gt; lastUpdatedDate = const Value.absent(),
+              Value&lt;String&gt; name = const Value.absent(),
+              Value&lt;DateTime&gt; registrationDate = const Value.absent(),
             }) =&gt; CategoriesRecordsCompanion(
-              id: id,
-              name: name,
               description: description,
-              registrationDate: registrationDate,
+              id: id,
               lastUpdatedDate: lastUpdatedDate,
+              name: name,
+              registrationDate: registrationDate,
             ),
         createCompanionCallback:
             ({
-              Value&lt;int&gt; id = const Value.absent(),
-              required String name,
               Value&lt;String?&gt; description = const Value.absent(),
-              Value&lt;DateTime&gt; registrationDate = const Value.absent(),
+              Value&lt;int&gt; id = const Value.absent(),
               Value&lt;DateTime?&gt; lastUpdatedDate = const Value.absent(),
+              required String name,
+              Value&lt;DateTime&gt; registrationDate = const Value.absent(),
             }) =&gt; CategoriesRecordsCompanion.insert(
-              id: id,
-              name: name,
               description: description,
-              registrationDate: registrationDate,
+              id: id,
               lastUpdatedDate: lastUpdatedDate,
+              name: name,
+              registrationDate: registrationDate,
             ),
         withReferenceMapper: (p0) =&gt; p0
             .map(

@@ -1,5 +1,5 @@
 import 'package:system_loja/core/models/user.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 
 /// Interface que define o contrato para operações de repositório de usuários.
 ///
@@ -10,7 +10,6 @@ import 'package:system_loja/core/utils/command_result.dart';
 /// Inclui operações de autenticação, validação de email e gerenciamento
 /// completo de usuários do sistema.
 ///
-/// **Nota**: Alguns métodos desta interface usam nomenclatura em português
 /// mantendo compatibilidade com código legado.
 ///
 /// Exemplo de uso:
@@ -35,31 +34,36 @@ import 'package:system_loja/core/utils/command_result.dart';
 abstract interface class IUserRepository {
   /// Adiciona um novo usuário ao sistema.
   ///
-  /// O email deve ser único e válido (use [validarEmail] para verificar).
-  ///
   /// Parâmetros:
-  /// - [usuario]: Objeto User a ser adicionado
+  /// - [user]: Objeto User a ser adicionado
   ///
   /// Retorna:
   /// - [ResultStatus] com true se adicionado com sucesso ou mensagem de erro
-  Future<ResultStatus<bool, String>> adicionarUsuario(User usuario);
+  Future<ResultStatus<bool, String>> createUser(User user);
 
-  /// Atualiza os dados de um usuário existente.
-  ///
-  /// O usuário deve ter um ID válido.
+  /// Remove um usuário do sistema pelo ID.
   ///
   /// Parâmetros:
-  /// - [usuario]: Objeto User com dados atualizados
+  /// - [id]: ID único do usuário a ser removido
   ///
   /// Retorna:
-  /// - [ResultStatus] com true se atualizado com sucesso ou mensagem de erro
-  Future<ResultStatus<bool, String>> atualizarUsuario(User usuario);
+  /// - [ResultStatus] com true se removido com sucesso
+  Future<ResultStatus<bool, String>> deleteUser(int id);
 
   /// Retorna todos os usuários cadastrados no sistema.
   ///
   /// Retorna:
   /// - [ResultStatus] com lista de usuários (vazia se não houver usuários)
-  Future<ResultStatus<List<User>, String>> obterTodosUsuarios();
+  Future<ResultStatus<List<User>, String>> fetchAllUsers();
+
+  /// Busca um usuário específico pelo ID.
+  ///
+  /// Parâmetros:
+  /// - [id]: ID único do usuário
+  ///
+  /// Retorna:
+  /// - [ResultStatus] com [User] encontrado ou null se não existir
+  Future<ResultStatus<User?, String>> fetchUserById(int id);
 
   /// Busca um usuário pelo endereço de email.
   ///
@@ -70,25 +74,16 @@ abstract interface class IUserRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com [User] encontrado ou null se não existir
-  Future<ResultStatus<User?, String>> obterUsuarioPorEmail(String email);
+  Future<ResultStatus<User?, String>> getUserByEmail(String email);
 
-  /// Busca um usuário específico pelo ID.
+  /// Atualiza os dados de um usuário existente.
+  ///
+  /// O usuário deve ter um ID válido.
   ///
   /// Parâmetros:
-  /// - [id]: ID único do usuário
+  /// - [user]: Objeto User com dados atualizados
   ///
   /// Retorna:
-  /// - [ResultStatus] com [User] encontrado ou null se não existir
-  Future<ResultStatus<User?, String>> obterUsuarioPorId(int id);
-
-  /// Remove um usuário do sistema pelo ID.
-  ///
-  /// **ATENÇÃO**: Verifique se há dependências (logs, vendas) antes de remover.
-  ///
-  /// Parâmetros:
-  /// - [id]: ID único do usuário a ser removido
-  ///
-  /// Retorna:
-  /// - [ResultStatus] com true se removido com sucesso
-  Future<ResultStatus<bool, String>> removerUsuario(int id);
+  /// - [ResultStatus] com true se atualizado com sucesso ou mensagem de erro
+  Future<ResultStatus<bool, String>> updateUser(User user);
 }

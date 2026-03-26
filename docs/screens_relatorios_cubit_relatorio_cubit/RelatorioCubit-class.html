@@ -89,7 +89,7 @@ e estoque de produtos para exibição nos relatórios.</p>
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="RelatorioCubit.new" class="callable">
-          <span class="name"><a href="../screens_relatorios_cubit_relatorio_cubit/RelatorioCubit/RelatorioCubit.html">RelatorioCubit</a></span><span class="signature">(<span class="parameter" id="-param-_salesRepository"><span class="type-annotation"><a href="../core_interface_i_sales_repository/ISalesRepository-class.html">ISalesRepository</a></span> <span class="parameter-name">_salesRepository</span>, </span><span class="parameter" id="-param-_productRepository"><span class="type-annotation"><a href="../core_interface_i_product_repository/IProductRepository-class.html">IProductRepository</a></span> <span class="parameter-name">_productRepository</span></span>)</span>
+          <span class="name"><a href="../screens_relatorios_cubit_relatorio_cubit/RelatorioCubit/RelatorioCubit.html">RelatorioCubit</a></span><span class="signature">(<span class="parameter" id="-param-_salesRepository"><span class="type-annotation"><a href="../core_interface_i_sales_repository/ISalesRepository-class.html">ISalesRepository</a></span> <span class="parameter-name">_salesRepository</span>, </span><span class="parameter" id="-param-_productRepository"><span class="type-annotation"><a href="../core_interface_i_product_repository/IProductRepository-class.html">IProductRepository</a></span> <span class="parameter-name">_productRepository</span>, </span><span class="parameter" id="-param-_categoryRepository"><span class="type-annotation"><a href="../core_interface_i_category_repository/ICategoryRepository-class.html">ICategoryRepository</a></span> <span class="parameter-name">_categoryRepository</span>, </span><span class="parameter" id="-param-_movementReportService"><span class="type-annotation"><a href="../core_services_product_movement_report_service/ProductMovementReportService-class.html">ProductMovementReportService</a></span> <span class="parameter-name">_movementReportService</span>, </span><span class="parameter" id="-param-_overviewService"><span class="type-annotation"><a href="../core_services_relatorio_overview_service/RelatorioOverviewService-class.html">RelatorioOverviewService</a></span> <span class="parameter-name">_overviewService</span></span>)</span>
         </dt>
         <dd>
           Cria o cubit e inicia o carregamento dos dados.
@@ -266,6 +266,19 @@ A <code>change</code> occurs when a new <code>state</code> is emitted.
 <dd class="inherited">
   Called whenever an <code>error</code> occurs and notifies <a href="https://pub.dev/documentation/bloc/9.2.0/bloc/BlocObserver/onError.html">BlocObserver.onError</a>.
   <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="prepareProductDetails" class="callable">
+  <span class="name"><a href="../screens_relatorios_cubit_relatorio_cubit/RelatorioCubit/prepareProductDetails.html">prepareProductDetails</a></span><span class="signature">(<wbr><span class="parameter" id="prepareProductDetails-param-product"><span class="type-annotation"><a href="../core_models_product/Product-class.html">Product</a></span> <span class="parameter-name">product</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Prepara os dados de detalhe do produto no estado carregado.
+  
 
 </dd>
 

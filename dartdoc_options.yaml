@@ -1,0 +1,20 @@
+dartdoc:
+  categories:
+    awesome:
+      markdown: docs/COMPANY_FEATURE.md
+      displayName: Awesome
+    great:
+      markdown: docs/INTERFACES_ARCHITECTURE.md
+      displayName: Great
+  categoryOrder: [awesome, great]
+  includeExternal: ['bin/unusually_located_library.dart']
+  nodoc: ['lib/application/*.dart', 'lib/core/interface/*.dart', 'lib/core/models/*.dart', 'lib/screens/*/cubit/*.dart', 'lib/screens/*/widgets/*.dart']
+  linkTo:
+    url: "https://saulogatti.github.io/system_loja/{path}#{anchor}"
+  showUndocumentedCategories: true
+  ignore:
+    - ambiguous-doc-reference
+  errors:
+    - unresolved-doc-reference
+  warnings:
+    - tool-error

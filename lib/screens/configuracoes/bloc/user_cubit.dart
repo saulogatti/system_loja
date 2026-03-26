@@ -2,9 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/models/default/authorization_level.dart';
 import 'package:system_loja/core/models/user.dart';
-import 'package:system_loja/core/utils/command_result.dart';
-import 'package:system_loja/screens/utils/string_extensions.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
+import 'package:system_loja/screens/utils/string_extensions.dart';
 
 class UserCubit extends Cubit<UsuarioState> {
   final IUserRepository _userRepository;
@@ -24,18 +24,13 @@ class UserCubit extends Cubit<UsuarioState> {
       permission: nivelPermissao.value,
     );
 
-    final ResultStatus<bool, String> executionResult = await _userRepository
-        .adicionarUsuario(usuario);
+    final ResultStatus<bool, String> executionResult = await _userRepository.createUser(usuario);
     executionResult.when(
       onSuccess: (sucesso) {
         if (sucesso) {
           emit(UsuarioState.usuarioAdicionado(usuario, true));
         } else {
-          emit(
-            UsuarioState.loadFailure(
-              errorMessage: 'Não foi possível adicionar o usuário.',
-            ),
-          );
+          emit(UsuarioState.loadFailure(errorMessage: 'Não foi possível adicionar o usuário.'));
         }
       },
       onError: (resultError) {
@@ -45,54 +40,41 @@ class UserCubit extends Cubit<UsuarioState> {
   }
 
   Future<void> atualizarUsuario({required User usuarioAtualizado}) async {
-    final ResultStatus<bool, String> resultAdd = await _userRepository
-        .atualizarUsuario(usuarioAtualizado);
+    final ResultStatus<bool, String> resultAdd = await _userRepository.updateUser(usuarioAtualizado);
     resultAdd.when(
       onSuccess: (sucesso) {
         if (sucesso) {
           emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
         } else {
-          emit(
-            UsuarioState.loadFailure(
-              errorMessage: 'Falha ao atualizar usuário.',
-            ),
-          );
+          emit(UsuarioState.loadFailure(errorMessage: 'Falha ao atualizar usuário.'));
         }
       },
       onError: (resultError) {
-        emit(
-          UsuarioState.loadFailure(
-            errorMessage: 'Falha ao atualizar usuário: $resultError',
-          ),
-        );
+        emit(UsuarioState.loadFailure(errorMessage: 'Falha ao atualizar usuário: $resultError'));
       },
     );
   }
 
   Future<void> loadUsuarios() async {
-    final result = await _userRepository.obterTodosUsuarios();
+    final result = await _userRepository.fetchAllUsers();
     result.when(
       onSuccess: (usuarios) {
         emit(UsuarioState.loadSuccess(usuarios: usuarios));
       },
       onError: (message) {
-        emit(
-          UsuarioState.loadFailure(errorMessage: message),
-        );
+        emit(UsuarioState.loadFailure(errorMessage: message));
       },
     );
   }
 
   Future<void> removerUsuario(int id) async {
-    final result = await _userRepository.removerUsuario(id);
+    final result = await _userRepository.deleteUser(id);
     result.when(
       onSuccess: (sucesso) {
         if (sucesso) {
           emit(UsuarioState.usuarioRemovido(id));
         } else {
-          emit(
-            UsuarioState.loadFailure(errorMessage: 'Falha ao remover usuário.'),
-          );
+          emit(UsuarioState.loadFailure(errorMessage: 'Falha ao remover usuário.'));
         }
       },
       onError: (message) {

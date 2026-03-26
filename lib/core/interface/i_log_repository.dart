@@ -1,5 +1,5 @@
 import 'package:system_loja/core/models/activity_log.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 
 /// Interface que define o contrato para operações de repositório de logs.
 ///

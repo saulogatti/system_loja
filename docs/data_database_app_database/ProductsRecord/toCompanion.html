@@ -70,11 +70,11 @@
   <pre class="language-dart"><code class="language-dart">ProductsRecordsCompanion toCompanion(bool nullToAbsent) {
   return ProductsRecordsCompanion(
     code: Value(code),
+    id: Value(id),
     categoryId: categoryId == null &amp;&amp; nullToAbsent
         ? const Value.absent()
         : Value(categoryId),
     description: Value(description),
-    id: Value(id),
     lastUpdatedDate: lastUpdatedDate == null &amp;&amp; nullToAbsent
         ? const Value.absent()
         : Value(lastUpdatedDate),

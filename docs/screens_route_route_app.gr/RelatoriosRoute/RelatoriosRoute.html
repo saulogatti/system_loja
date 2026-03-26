@@ -27,7 +27,7 @@
     <li><a href="../../index.html">system_loja</a></li>
     <li><a href="../../screens_route_route_app.gr/">screens\route\route_app.gr.dart</a></li>
     <li><a href="../../screens_route_route_app.gr/RelatoriosRoute-class.html">RelatoriosRoute</a></li>
-    <li class="self-crumb">RelatoriosRoute.new const constructor</li>
+    <li class="self-crumb">RelatoriosRoute.new constructor</li>
   </ol>
   <div class="self-name">RelatoriosRoute.new</div>
   <form class="search navbar-right" role="search">
@@ -53,8 +53,12 @@
 </h1></div>
 
     <section class="multi-line-signature">
-      const
-      <span class="name ">RelatoriosRoute</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-children"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span>&gt;</span>?</span> <span class="parameter-name">children</span>, </span></li>
+      
+      <span class="name ">RelatoriosRoute</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
+<li><span class="parameter" id="-param-salesRepository"><span class="type-annotation"><a href="../../core_interface_i_sales_repository/ISalesRepository-class.html">ISalesRepository</a>?</span> <span class="parameter-name">salesRepository</span>, </span></li>
+<li><span class="parameter" id="-param-productRepository"><span class="type-annotation"><a href="../../core_interface_i_product_repository/IProductRepository-class.html">IProductRepository</a>?</span> <span class="parameter-name">productRepository</span>, </span></li>
+<li><span class="parameter" id="-param-categoryRepository"><span class="type-annotation"><a href="../../core_interface_i_category_repository/ICategoryRepository-class.html">ICategoryRepository</a>?</span> <span class="parameter-name">categoryRepository</span>, </span></li>
+<li><span class="parameter" id="-param-children"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span>&gt;</span>?</span> <span class="parameter-name">children</span>, </span></li>
 </ol>})
     </section>
     
@@ -63,8 +67,22 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">const RelatoriosRoute({List&lt;_i20.PageRouteInfo&gt;? children})
-  : super(RelatoriosRoute.name, initialChildren: children);</code></pre>
+  <pre class="language-dart"><code class="language-dart">RelatoriosRoute({
+  _i24.Key? key,
+  _i28.ISalesRepository? salesRepository,
+  _i29.IProductRepository? productRepository,
+  _i30.ICategoryRepository? categoryRepository,
+  List&lt;_i22.PageRouteInfo&gt;? children,
+}) : super(
+       RelatoriosRoute.name,
+       args: RelatoriosRouteArgs(
+         key: key,
+         salesRepository: salesRepository,
+         productRepository: productRepository,
+         categoryRepository: categoryRepository,
+       ),
+       initialChildren: children,
+     );</code></pre>
 </section>
 
 
@@ -80,7 +98,7 @@
     <li><a href="../../index.html">system_loja</a></li>
     <li><a href="../../screens_route_route_app.gr/">route_app.gr</a></li>
     <li><a href="../../screens_route_route_app.gr/RelatoriosRoute-class.html">RelatoriosRoute</a></li>
-    <li class="self-crumb">RelatoriosRoute.new const constructor</li>
+    <li class="self-crumb">RelatoriosRoute.new constructor</li>
 </ol>
 
     <h5>RelatoriosRoute class</h5>

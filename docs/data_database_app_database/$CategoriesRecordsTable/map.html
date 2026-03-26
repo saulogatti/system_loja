@@ -80,26 +80,26 @@
 CategoriesRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
   final effectivePrefix = tablePrefix != null ? &#39;$tablePrefix.&#39; : &#39;&#39;;
   return CategoriesRecord(
-    id: attachedDatabase.typeMapping.read(
-      DriftSqlType.int,
-      data[&#39;${effectivePrefix}id&#39;],
-    )!,
-    name: attachedDatabase.typeMapping.read(
-      DriftSqlType.string,
-      data[&#39;${effectivePrefix}name&#39;],
-    )!,
     description: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
       data[&#39;${effectivePrefix}description&#39;],
     ),
-    registrationDate: attachedDatabase.typeMapping.read(
-      DriftSqlType.dateTime,
-      data[&#39;${effectivePrefix}registration_date&#39;],
+    id: attachedDatabase.typeMapping.read(
+      DriftSqlType.int,
+      data[&#39;${effectivePrefix}id&#39;],
     )!,
     lastUpdatedDate: attachedDatabase.typeMapping.read(
       DriftSqlType.dateTime,
       data[&#39;${effectivePrefix}last_updated_date&#39;],
     ),
+    name: attachedDatabase.typeMapping.read(
+      DriftSqlType.string,
+      data[&#39;${effectivePrefix}name&#39;],
+    )!,
+    registrationDate: attachedDatabase.typeMapping.read(
+      DriftSqlType.dateTime,
+      data[&#39;${effectivePrefix}registration_date&#39;],
+    )!,
   );
 }</code></pre>
 </section>

@@ -58,7 +58,7 @@
 <p>Persiste e recupera <a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a> via <a href="../data_database_dao_system_dao/SystemDao-class.html">SystemDao</a>, incluindo
 métodos de pagamento, unidades de medida e dados do usuário do sistema.
 Todos os erros são capturados internamente e devolvidos como
-<a href="../core_utils_command_result/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com mensagem amigável.</p>
+<a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com mensagem amigável.</p>
 <p>Veja também:</p>
 <ul>
 <li><a href="../core_interface_i_system_repository/ISystemRepository-class.html">ISystemRepository</a> - contrato da interface</li>
@@ -141,7 +141,7 @@ Todos os erros são capturados internamente e devolvidos como
     <dl class="callables">
         <dt id="getSystemConfiguration" class="callable">
   <span class="name"><a href="../domain_repository_system_system_repository/SystemRepository/getSystemConfiguration.html">getSystemConfiguration</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -154,7 +154,7 @@ Todos os erros são capturados internamente e devolvidos como
 
         <dt id="importConfigurationFromJson" class="callable">
   <span class="name"><a href="../domain_repository_system_system_repository/SystemRepository/importConfigurationFromJson.html">importConfigurationFromJson</a></span><span class="signature">(<wbr><span class="parameter" id="importConfigurationFromJson-param-jsonContent"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">jsonContent</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -180,7 +180,7 @@ Todos os erros são capturados internamente e devolvidos como
 
         <dt id="resetToDefaultConfiguration" class="callable">
   <span class="name"><a href="../domain_repository_system_system_repository/SystemRepository/resetToDefaultConfiguration.html">resetToDefaultConfiguration</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -193,7 +193,7 @@ Todos os erros são capturados internamente e devolvidos como
 
         <dt id="saveSystemConfiguration" class="callable">
   <span class="name"><a href="../domain_repository_system_system_repository/SystemRepository/saveSystemConfiguration.html">saveSystemConfiguration</a></span><span class="signature">(<wbr><span class="parameter" id="saveSystemConfiguration-param-data"><span class="type-annotation"><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span> <span class="parameter-name">data</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 

@@ -86,11 +86,11 @@ mainly for debugging or logging.</p>
   <pre class="language-dart"><code class="language-dart">@override
 String toString() {
   return (StringBuffer(&#39;CategoriesRecordsCompanion(&#39;)
-        ..write(&#39;id: $id, &#39;)
-        ..write(&#39;name: $name, &#39;)
         ..write(&#39;description: $description, &#39;)
-        ..write(&#39;registrationDate: $registrationDate, &#39;)
-        ..write(&#39;lastUpdatedDate: $lastUpdatedDate&#39;)
+        ..write(&#39;id: $id, &#39;)
+        ..write(&#39;lastUpdatedDate: $lastUpdatedDate, &#39;)
+        ..write(&#39;name: $name, &#39;)
+        ..write(&#39;registrationDate: $registrationDate&#39;)
         ..write(&#39;)&#39;))
       .toString();
 }</code></pre>

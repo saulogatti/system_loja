@@ -56,9 +56,9 @@
       
 <span class="returntype"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Insertable-class.html">Insertable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../data_database_app_database/ProductsRecord-class.html">ProductsRecord</a></span>&gt;</span></span>
 <span class="name ">custom</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="custom-param-code"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">code</span>, </span></li>
+<li><span class="parameter" id="custom-param-id"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span>?</span> <span class="parameter-name">id</span>, </span></li>
 <li><span class="parameter" id="custom-param-categoryId"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span>?</span> <span class="parameter-name">categoryId</span>, </span></li>
 <li><span class="parameter" id="custom-param-description"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">description</span>, </span></li>
-<li><span class="parameter" id="custom-param-id"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span>?</span> <span class="parameter-name">id</span>, </span></li>
 <li><span class="parameter" id="custom-param-lastUpdatedDate"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>&gt;</span>?</span> <span class="parameter-name">lastUpdatedDate</span>, </span></li>
 <li><span class="parameter" id="custom-param-name"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">name</span>, </span></li>
 <li><span class="parameter" id="custom-param-price"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Expression-class.html">Expression</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>&gt;</span>?</span> <span class="parameter-name">price</span>, </span></li>
@@ -77,9 +77,9 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">static Insertable&lt;ProductsRecord&gt; custom({
   Expression&lt;String&gt;? code,
+  Expression&lt;int&gt;? id,
   Expression&lt;int&gt;? categoryId,
   Expression&lt;String&gt;? description,
-  Expression&lt;int&gt;? id,
   Expression&lt;DateTime&gt;? lastUpdatedDate,
   Expression&lt;String&gt;? name,
   Expression&lt;double&gt;? price,
@@ -88,9 +88,9 @@
 }) {
   return RawValuesInsertable({
     if (code != null) &#39;code&#39;: code,
+    if (id != null) &#39;id&#39;: id,
     if (categoryId != null) &#39;category_id&#39;: categoryId,
     if (description != null) &#39;description&#39;: description,
-    if (id != null) &#39;id&#39;: id,
     if (lastUpdatedDate != null) &#39;last_updated_date&#39;: lastUpdatedDate,
     if (name != null) &#39;name&#39;: name,
     if (price != null) &#39;price&#39;: price,

@@ -112,36 +112,33 @@ Widget build(BuildContext context) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const Text(
-        &#39;Produtos Cadastrados&#39;,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
+      const Text(&#39;Produtos Cadastrados&#39;, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
       const SizedBox(height: _defaultSpacing),
       if (products.isEmpty)
         const Center(
           child: Padding(
             padding: EdgeInsets.all(32.0),
-            child: Text(
-              &#39;Nenhum produto cadastrado&#39;,
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
+            child: Text(&#39;Nenhum produto cadastrado&#39;, style: TextStyle(fontSize: 16, color: Colors.grey)),
           ),
         )
       else
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: products.length,
-          itemBuilder: (context, index) {
-            final product = products[index];
-            return CardListItem(
-              colorAvatar: Colors.green,
-              title: product.name,
-              subTitle:
-                  &#39;Código: ${product.code}\n${product.price.toFormattedPrice()} - Estoque: ${product.stockQuantity}&#39;,
-              onTap: () =&gt; onProductTap(product),
-            );
-          },
+        Expanded(
+          child: GridView.builder(
+            padding: const EdgeInsets.only(bottom: 16),
+            gridDelegate: _gridDelegate,
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return CardListItem(
+                colorAvatar: Colors.green,
+                title: product.name,
+                subTitle:
+                    &#39;Código: ${product.code}\n${product.price.toFormattedPrice()} - Estoque: ${product.stockQuantity}&#39;,
+                margin: EdgeInsets.zero,
+                onTap: () =&gt; onProductTap(product),
+              );
+            },
+          ),
         ),
     ],
   );

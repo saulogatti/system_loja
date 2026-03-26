@@ -68,8 +68,12 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; clearLogs() async {
   emit(const LogsSystemState.loading());
-  await SystemErrorManager.instance.clearAllErrors();
-  emit(const LogsSystemState.loaded([]));
+  try {
+    await _systemErrorManager.clearAllErrors();
+    emit(const LogsSystemState.loaded([]));
+  } catch (_) {
+    emit(const LogsSystemState.error(&#39;Falha ao limpar logs do sistema.&#39;));
+  }
 }</code></pre>
 </section>
 

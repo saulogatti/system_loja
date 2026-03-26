@@ -4,12 +4,12 @@ import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/utils/input_formatters.dart';
 import 'package:system_loja/screens/utils/validators.dart';
 
-/// Diálogo para informar a quantidade de um produto; faz [dispose] do controller.
+/// Diálogo para informar a quantidade de um produto; faz [State.dispose] do controller.
 class InvoiceQuantityDialog extends StatefulWidget {
-  const InvoiceQuantityDialog({required this.product, required this.invoiceType, super.key});
-
   final Product product;
+
   final InvoiceType invoiceType;
+  const InvoiceQuantityDialog({required this.product, required this.invoiceType, super.key});
 
   @override
   State<InvoiceQuantityDialog> createState() => _InvoiceQuantityDialogState();
@@ -18,12 +18,6 @@ class InvoiceQuantityDialog extends StatefulWidget {
 class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
   final _controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,5 +64,11 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

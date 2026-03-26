@@ -77,7 +77,10 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget wrappedRoute(BuildContext context) {
-  return BlocProvider(create: (context) =&gt; LogsSystemCubit(), child: this);
+  return BlocProvider(
+    create: (context) =&gt; LogsSystemCubit(appInjection.get&lt;ISystemErrorManager&gt;()),
+    child: this,
+  );
 }</code></pre>
 </section>
 

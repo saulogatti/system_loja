@@ -89,25 +89,25 @@ Map&lt;String, Expression&gt; toColumns(bool nullToAbsent) {
     map[&#39;id&#39;] = Variable&lt;int&gt;(id.value);
   }
   if (invoiceId.present) {
-    map[&#39;nota_id&#39;] = Variable&lt;int&gt;(invoiceId.value);
-  }
-  if (productId.present) {
-    map[&#39;produto_id&#39;] = Variable&lt;int&gt;(productId.value);
-  }
-  if (productName.present) {
-    map[&#39;produto_nome&#39;] = Variable&lt;String&gt;(productName.value);
+    map[&#39;invoice_id&#39;] = Variable&lt;int&gt;(invoiceId.value);
   }
   if (productCode.present) {
-    map[&#39;produto_codigo&#39;] = Variable&lt;String&gt;(productCode.value);
+    map[&#39;product_code&#39;] = Variable&lt;String&gt;(productCode.value);
+  }
+  if (productId.present) {
+    map[&#39;product_id&#39;] = Variable&lt;int&gt;(productId.value);
+  }
+  if (productName.present) {
+    map[&#39;product_name&#39;] = Variable&lt;String&gt;(productName.value);
   }
   if (quantity.present) {
-    map[&#39;quantidade&#39;] = Variable&lt;int&gt;(quantity.value);
-  }
-  if (unitPrice.present) {
-    map[&#39;preco_unitario&#39;] = Variable&lt;double&gt;(unitPrice.value);
+    map[&#39;quantity&#39;] = Variable&lt;int&gt;(quantity.value);
   }
   if (totalValue.present) {
-    map[&#39;valor_total&#39;] = Variable&lt;double&gt;(totalValue.value);
+    map[&#39;total_value&#39;] = Variable&lt;double&gt;(totalValue.value);
+  }
+  if (unitPrice.present) {
+    map[&#39;unit_price&#39;] = Variable&lt;double&gt;(unitPrice.value);
   }
   return map;
 }</code></pre>

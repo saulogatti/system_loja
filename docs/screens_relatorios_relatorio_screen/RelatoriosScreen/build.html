@@ -113,24 +113,6 @@ Widget build(BuildContext context) {
     length: 2,
     child: Column(
       children: [
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Text(&#39;Relatórios&#39;, style: Theme.of(context).textTheme.headlineSmall),
-                const SizedBox(height: 12),
-                FilledButton.icon(
-                  onPressed: () {
-                    context.router.push(const SalesPurchaseAnalyticsRoute());
-                  },
-                  icon: const Icon(Icons.bar_chart),
-                  label: const Text(&#39;Abrir gráficos de vendas e compras&#39;),
-                ),
-              ],
-            ),
-          ),
-        ),
         TabBar(
           tabs: const [
             Tab(icon: Icon(Icons.receipt_long), text: &#39;Notas Fiscais&#39;),
@@ -163,12 +145,28 @@ Widget build(BuildContext context) {
                     ],
                   ),
                 ),
-                RelatorioLoaded(:final entryInvoices, :final exitInvoices, :final products) =&gt; TabBarView(
-                  children: [
-                    _NotasFiscaisTab(entryInvoices: entryInvoices, exitInvoices: exitInvoices),
-                    _EstoqueTab(products: products),
-                  ],
-                ),
+                RelatorioLoaded(
+                  :final categoryNamesById,
+                  :final entryInvoices,
+                  :final exitInvoices,
+                  :final estoqueOverview,
+                  :final notasOverview,
+                  :final products,
+                ) =&gt;
+                  TabBarView(
+                    children: [
+                      _NotasFiscaisTab(
+                        entryInvoices: entryInvoices,
+                        exitInvoices: exitInvoices,
+                        notasOverview: notasOverview,
+                      ),
+                      _EstoqueTab(
+                        categoryNamesById: categoryNamesById,
+                        products: products,
+                        estoqueOverview: estoqueOverview,
+                      ),
+                    ],
+                  ),
               };
             },
           ),

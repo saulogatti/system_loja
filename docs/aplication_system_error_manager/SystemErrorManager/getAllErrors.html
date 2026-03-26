@@ -54,19 +54,28 @@
 
     <section class="multi-line-signature">
       
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
 <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_system_errors_system_error/SystemError-class.html">SystemError</a></span>&gt;</span></span>&gt;</span></span>
 <span class="name ">getAllErrors</span>(<wbr>)
 
-      
+      <div class="features"><span class="feature">override</span></div>
 
     </section>
     
+<section class="desc markdown">
+  <p>Retorna todos os erros sistêmicos armazenados.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;SystemError&gt;&gt; getAllErrors() async {
+  <pre class="language-dart"><code class="language-dart">@override
+Future&lt;List&lt;SystemError&gt;&gt; getAllErrors() async {
   final listLogs = await _cacheManager.retrieveAllErrors();
   final list = listLogs.map((logError) =&gt; logError.toDomain()).toList();
   return list;

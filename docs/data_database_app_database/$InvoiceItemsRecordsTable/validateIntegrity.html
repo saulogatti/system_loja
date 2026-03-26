@@ -87,70 +87,67 @@ VerificationContext validateIntegrity(
   if (data.containsKey(&#39;id&#39;)) {
     context.handle(_idMeta, id.isAcceptableOrUnknown(data[&#39;id&#39;]!, _idMeta));
   }
-  if (data.containsKey(&#39;nota_id&#39;)) {
+  if (data.containsKey(&#39;invoice_id&#39;)) {
     context.handle(
       _invoiceIdMeta,
-      invoiceId.isAcceptableOrUnknown(data[&#39;nota_id&#39;]!, _invoiceIdMeta),
+      invoiceId.isAcceptableOrUnknown(data[&#39;invoice_id&#39;]!, _invoiceIdMeta),
     );
   } else if (isInserting) {
     context.missing(_invoiceIdMeta);
   }
-  if (data.containsKey(&#39;produto_id&#39;)) {
-    context.handle(
-      _productIdMeta,
-      productId.isAcceptableOrUnknown(data[&#39;produto_id&#39;]!, _productIdMeta),
-    );
-  } else if (isInserting) {
-    context.missing(_productIdMeta);
-  }
-  if (data.containsKey(&#39;produto_nome&#39;)) {
-    context.handle(
-      _productNameMeta,
-      productName.isAcceptableOrUnknown(
-        data[&#39;produto_nome&#39;]!,
-        _productNameMeta,
-      ),
-    );
-  } else if (isInserting) {
-    context.missing(_productNameMeta);
-  }
-  if (data.containsKey(&#39;produto_codigo&#39;)) {
+  if (data.containsKey(&#39;product_code&#39;)) {
     context.handle(
       _productCodeMeta,
       productCode.isAcceptableOrUnknown(
-        data[&#39;produto_codigo&#39;]!,
+        data[&#39;product_code&#39;]!,
         _productCodeMeta,
       ),
     );
   } else if (isInserting) {
     context.missing(_productCodeMeta);
   }
-  if (data.containsKey(&#39;quantidade&#39;)) {
+  if (data.containsKey(&#39;product_id&#39;)) {
+    context.handle(
+      _productIdMeta,
+      productId.isAcceptableOrUnknown(data[&#39;product_id&#39;]!, _productIdMeta),
+    );
+  } else if (isInserting) {
+    context.missing(_productIdMeta);
+  }
+  if (data.containsKey(&#39;product_name&#39;)) {
+    context.handle(
+      _productNameMeta,
+      productName.isAcceptableOrUnknown(
+        data[&#39;product_name&#39;]!,
+        _productNameMeta,
+      ),
+    );
+  } else if (isInserting) {
+    context.missing(_productNameMeta);
+  }
+  if (data.containsKey(&#39;quantity&#39;)) {
     context.handle(
       _quantityMeta,
-      quantity.isAcceptableOrUnknown(data[&#39;quantidade&#39;]!, _quantityMeta),
+      quantity.isAcceptableOrUnknown(data[&#39;quantity&#39;]!, _quantityMeta),
     );
   } else if (isInserting) {
     context.missing(_quantityMeta);
   }
-  if (data.containsKey(&#39;preco_unitario&#39;)) {
-    context.handle(
-      _unitPriceMeta,
-      unitPrice.isAcceptableOrUnknown(
-        data[&#39;preco_unitario&#39;]!,
-        _unitPriceMeta,
-      ),
-    );
-  } else if (isInserting) {
-    context.missing(_unitPriceMeta);
-  }
-  if (data.containsKey(&#39;valor_total&#39;)) {
+  if (data.containsKey(&#39;total_value&#39;)) {
     context.handle(
       _totalValueMeta,
-      totalValue.isAcceptableOrUnknown(data[&#39;valor_total&#39;]!, _totalValueMeta),
+      totalValue.isAcceptableOrUnknown(data[&#39;total_value&#39;]!, _totalValueMeta),
     );
   } else if (isInserting) {
     context.missing(_totalValueMeta);
+  }
+  if (data.containsKey(&#39;unit_price&#39;)) {
+    context.handle(
+      _unitPriceMeta,
+      unitPrice.isAcceptableOrUnknown(data[&#39;unit_price&#39;]!, _unitPriceMeta),
+    );
+  } else if (isInserting) {
+    context.missing(_unitPriceMeta);
   }
   return context;
 }</code></pre>

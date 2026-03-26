@@ -86,12 +86,12 @@ mainly for debugging or logging.</p>
   <pre class="language-dart"><code class="language-dart">@override
 String toString() {
   return (StringBuffer(&#39;InvoicesRecordsCompanion(&#39;)
+        ..write(&#39;companyCnpj: $companyCnpj, &#39;)
+        ..write(&#39;companyId: $companyId, &#39;)
+        ..write(&#39;companyName: $companyName, &#39;)
         ..write(&#39;customerCpf: $customerCpf, &#39;)
         ..write(&#39;customerId: $customerId, &#39;)
         ..write(&#39;customerName: $customerName, &#39;)
-        ..write(&#39;companyId: $companyId, &#39;)
-        ..write(&#39;companyName: $companyName, &#39;)
-        ..write(&#39;companyCnpj: $companyCnpj, &#39;)
         ..write(&#39;id: $id, &#39;)
         ..write(&#39;invoiceNumber: $invoiceNumber, &#39;)
         ..write(&#39;issueDate: $issueDate, &#39;)

@@ -86,11 +86,11 @@ legacy reasons.</p>
 Map&lt;String, Expression&gt; toColumns(bool nullToAbsent) {
   final map = &lt;String, Expression&gt;{};
   map[&#39;code&#39;] = Variable&lt;String&gt;(code);
+  map[&#39;id&#39;] = Variable&lt;int&gt;(id);
   if (!nullToAbsent || categoryId != null) {
     map[&#39;category_id&#39;] = Variable&lt;int&gt;(categoryId);
   }
   map[&#39;description&#39;] = Variable&lt;String&gt;(description);
-  map[&#39;id&#39;] = Variable&lt;int&gt;(id);
   if (!nullToAbsent || lastUpdatedDate != null) {
     map[&#39;last_updated_date&#39;] = Variable&lt;DateTime&gt;(lastUpdatedDate);
   }

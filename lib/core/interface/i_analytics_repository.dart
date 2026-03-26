@@ -1,5 +1,5 @@
 import 'package:system_loja/core/models/analytics_point.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 
 /// Contrato para recuperação de dados agregados de vendas e compras.
 ///

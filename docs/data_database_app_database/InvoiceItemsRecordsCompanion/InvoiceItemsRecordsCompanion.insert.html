@@ -56,12 +56,12 @@
       
       <span class="name ">InvoiceItemsRecordsCompanion.insert</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="insert-param-id"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.1/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">id</span> = <span class="default-value">const Value.absent()</span>, </span></li>
 <li><span class="parameter" id="insert-param-invoiceId"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">invoiceId</span>, </span></li>
+<li><span class="parameter" id="insert-param-productCode"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">productCode</span>, </span></li>
 <li><span class="parameter" id="insert-param-productId"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">productId</span>, </span></li>
 <li><span class="parameter" id="insert-param-productName"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">productName</span>, </span></li>
-<li><span class="parameter" id="insert-param-productCode"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">productCode</span>, </span></li>
 <li><span class="parameter" id="insert-param-quantity"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">quantity</span>, </span></li>
-<li><span class="parameter" id="insert-param-unitPrice"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">unitPrice</span>, </span></li>
 <li><span class="parameter" id="insert-param-totalValue"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">totalValue</span>, </span></li>
+<li><span class="parameter" id="insert-param-unitPrice"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">unitPrice</span>, </span></li>
 </ol>})
     </section>
     
@@ -73,19 +73,19 @@
   <pre class="language-dart"><code class="language-dart">InvoiceItemsRecordsCompanion.insert({
   this.id = const Value.absent(),
   required int invoiceId,
+  required String productCode,
   required int productId,
   required String productName,
-  required String productCode,
   required int quantity,
-  required double unitPrice,
   required double totalValue,
+  required double unitPrice,
 }) : invoiceId = Value(invoiceId),
+     productCode = Value(productCode),
      productId = Value(productId),
      productName = Value(productName),
-     productCode = Value(productCode),
      quantity = Value(quantity),
-     unitPrice = Value(unitPrice),
-     totalValue = Value(totalValue);</code></pre>
+     totalValue = Value(totalValue),
+     unitPrice = Value(unitPrice);</code></pre>
 </section>
 
 

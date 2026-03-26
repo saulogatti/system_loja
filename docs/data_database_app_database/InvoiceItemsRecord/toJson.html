@@ -84,12 +84,12 @@ Map&lt;String, dynamic&gt; toJson({ValueSerializer? serializer}) {
   return &lt;String, dynamic&gt;{
     &#39;id&#39;: serializer.toJson&lt;int&gt;(id),
     &#39;invoiceId&#39;: serializer.toJson&lt;int&gt;(invoiceId),
+    &#39;productCode&#39;: serializer.toJson&lt;String&gt;(productCode),
     &#39;productId&#39;: serializer.toJson&lt;int&gt;(productId),
     &#39;productName&#39;: serializer.toJson&lt;String&gt;(productName),
-    &#39;productCode&#39;: serializer.toJson&lt;String&gt;(productCode),
     &#39;quantity&#39;: serializer.toJson&lt;int&gt;(quantity),
-    &#39;unitPrice&#39;: serializer.toJson&lt;double&gt;(unitPrice),
     &#39;totalValue&#39;: serializer.toJson&lt;double&gt;(totalValue),
+    &#39;unitPrice&#39;: serializer.toJson&lt;double&gt;(unitPrice),
   };
 }</code></pre>
 </section>

@@ -60,13 +60,13 @@
     </ol>
   </div>
 <span class="returntype">TResult</span>
-<span class="name ">map</span>&lt;<wbr><span class="type-parameter">TResult extends Object?</span>&gt;(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="map-param-initial"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">initial</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioInitial</span> <span class="parameter-name">value</span></span></li>
+<span class="name ">map</span>&lt;<wbr><span class="type-parameter">TResult extends Object?</span>&gt;(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="map-param-error"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">error</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioError</span> <span class="parameter-name">value</span></span></li>
 </ol>), </span></li>
-<li><span class="parameter" id="map-param-loading"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loading</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioLoading</span> <span class="parameter-name">value</span></span></li>
+<li><span class="parameter" id="map-param-initial"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">initial</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioInitial</span> <span class="parameter-name">value</span></span></li>
 </ol>), </span></li>
 <li><span class="parameter" id="map-param-loaded"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loaded</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioLoaded</span> <span class="parameter-name">value</span></span></li>
 </ol>), </span></li>
-<li><span class="parameter" id="map-param-error"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">error</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioError</span> <span class="parameter-name">value</span></span></li>
+<li><span class="parameter" id="map-param-loading"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loading</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">RelatorioLoading</span> <span class="parameter-name">value</span></span></li>
 </ol>), </span></li>
 </ol>})
 
@@ -91,14 +91,14 @@ It is equivalent to doing:</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult map&lt;TResult extends Object?&gt;({required TResult Function( RelatorioInitial value)  initial,required TResult Function( RelatorioLoading value)  loading,required TResult Function( RelatorioLoaded value)  loaded,required TResult Function( RelatorioError value)  error,}){
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult map&lt;TResult extends Object?&gt;({required TResult Function( RelatorioError value)  error,required TResult Function( RelatorioInitial value)  initial,required TResult Function( RelatorioLoaded value)  loaded,required TResult Function( RelatorioLoading value)  loading,}){
 final _that = this;
 switch (_that) {
-case RelatorioInitial():
-return initial(_that);case RelatorioLoading():
-return loading(_that);case RelatorioLoaded():
-return loaded(_that);case RelatorioError():
-return error(_that);}
+case RelatorioError():
+return error(_that);case RelatorioInitial():
+return initial(_that);case RelatorioLoaded():
+return loaded(_that);case RelatorioLoading():
+return loading(_that);}
 }</code></pre>
 </section>
 

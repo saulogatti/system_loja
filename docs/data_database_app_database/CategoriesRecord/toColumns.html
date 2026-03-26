@@ -85,15 +85,15 @@ legacy reasons.</p>
   <pre class="language-dart"><code class="language-dart">@override
 Map&lt;String, Expression&gt; toColumns(bool nullToAbsent) {
   final map = &lt;String, Expression&gt;{};
-  map[&#39;id&#39;] = Variable&lt;int&gt;(id);
-  map[&#39;name&#39;] = Variable&lt;String&gt;(name);
   if (!nullToAbsent || description != null) {
     map[&#39;description&#39;] = Variable&lt;String&gt;(description);
   }
-  map[&#39;registration_date&#39;] = Variable&lt;DateTime&gt;(registrationDate);
+  map[&#39;id&#39;] = Variable&lt;int&gt;(id);
   if (!nullToAbsent || lastUpdatedDate != null) {
     map[&#39;last_updated_date&#39;] = Variable&lt;DateTime&gt;(lastUpdatedDate);
   }
+  map[&#39;name&#39;] = Variable&lt;String&gt;(name);
+  map[&#39;registration_date&#39;] = Variable&lt;DateTime&gt;(registrationDate);
   return map;
 }</code></pre>
 </section>

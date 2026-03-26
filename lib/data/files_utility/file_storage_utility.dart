@@ -4,7 +4,7 @@ import 'package:async/async.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 
 /// Gerenciador centralizado de operações de sistema de arquivos JSON.

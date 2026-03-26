@@ -1,8 +1,8 @@
 import 'package:system_loja/core/interface/i_product_repository.dart';
-import 'package:system_loja/aplication/system_error_manager.dart';
+import 'package:system_loja/application/system_error_manager.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/domain/code_generator_service.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
 
 /// Repositório para gerenciamento de produtos usando Drift.

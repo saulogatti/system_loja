@@ -67,15 +67,13 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; loadUsuarios() async {
-  final result = await _userRepository.obterTodosUsuarios();
+  final result = await _userRepository.fetchAllUsers();
   result.when(
     onSuccess: (usuarios) {
       emit(UsuarioState.loadSuccess(usuarios: usuarios));
     },
     onError: (message) {
-      emit(
-        UsuarioState.loadFailure(errorMessage: message),
-      );
+      emit(UsuarioState.loadFailure(errorMessage: message));
     },
   );
 }</code></pre>

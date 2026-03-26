@@ -69,6 +69,13 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">InvoicesRecord copyWithCompanion(InvoicesRecordsCompanion data) {
   return InvoicesRecord(
+    companyCnpj: data.companyCnpj.present
+        ? data.companyCnpj.value
+        : this.companyCnpj,
+    companyId: data.companyId.present ? data.companyId.value : this.companyId,
+    companyName: data.companyName.present
+        ? data.companyName.value
+        : this.companyName,
     customerCpf: data.customerCpf.present
         ? data.customerCpf.value
         : this.customerCpf,
@@ -78,13 +85,6 @@
     customerName: data.customerName.present
         ? data.customerName.value
         : this.customerName,
-    companyId: data.companyId.present ? data.companyId.value : this.companyId,
-    companyName: data.companyName.present
-        ? data.companyName.value
-        : this.companyName,
-    companyCnpj: data.companyCnpj.present
-        ? data.companyCnpj.value
-        : this.companyCnpj,
     id: data.id.present ? data.id.value : this.id,
     invoiceNumber: data.invoiceNumber.present
         ? data.invoiceNumber.value

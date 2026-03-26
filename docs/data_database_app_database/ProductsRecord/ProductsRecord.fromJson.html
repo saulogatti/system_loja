@@ -71,9 +71,9 @@
   serializer ??= driftRuntimeOptions.defaultSerializer;
   return ProductsRecord(
     code: serializer.fromJson&lt;String&gt;(json[&#39;code&#39;]),
+    id: serializer.fromJson&lt;int&gt;(json[&#39;id&#39;]),
     categoryId: serializer.fromJson&lt;int?&gt;(json[&#39;categoryId&#39;]),
     description: serializer.fromJson&lt;String&gt;(json[&#39;description&#39;]),
-    id: serializer.fromJson&lt;int&gt;(json[&#39;id&#39;]),
     lastUpdatedDate: serializer.fromJson&lt;DateTime?&gt;(json[&#39;lastUpdatedDate&#39;]),
     name: serializer.fromJson&lt;String&gt;(json[&#39;name&#39;]),
     price: serializer.fromJson&lt;double&gt;(json[&#39;price&#39;]),

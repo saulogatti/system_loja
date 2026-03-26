@@ -60,6 +60,10 @@
 <li><span class="parameter" id="-param-onTap"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/gestures/GestureTapCallback.html">GestureTapCallback</a></span> <span class="parameter-name">onTap</span>, </span></li>
 <li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
 <li><span class="parameter" id="-param-onDelete"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/gestures/GestureTapCallback.html">GestureTapCallback</a>?</span> <span class="parameter-name">onDelete</span>, </span></li>
+<li><span class="parameter" id="-param-margin"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/painting/EdgeInsetsGeometry-class.html">EdgeInsetsGeometry</a></span> <span class="parameter-name">margin</span> = <span class="default-value">const EdgeInsets.only(bottom: 12)</span>, </span></li>
+<li><span class="parameter" id="-param-contentPadding"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/painting/EdgeInsetsGeometry-class.html">EdgeInsetsGeometry</a></span> <span class="parameter-name">contentPadding</span> = <span class="default-value">const EdgeInsets.symmetric(horizontal: 16, vertical: 8)</span>, </span></li>
+<li><span class="parameter" id="-param-titleMaxLines"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">titleMaxLines</span> = <span class="default-value">2</span>, </span></li>
+<li><span class="parameter" id="-param-subTitleMaxLines"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">subTitleMaxLines</span> = <span class="default-value">2</span>, </span></li>
 </ol>})
     </section>
     
@@ -75,6 +79,10 @@
   required this.onTap,
   super.key,
   this.onDelete,
+  this.margin = const EdgeInsets.only(bottom: 12),
+  this.contentPadding = const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  this.titleMaxLines = 2,
+  this.subTitleMaxLines = 2,
 });</code></pre>
 </section>
 

@@ -3,7 +3,7 @@ import 'package:system_loja/core/constants/cache_keys.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_settings_service.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
 import 'package:system_loja/data/entry/app_settings_entry.dart';
 import 'package:system_loja/data/entry/configuration_cache_entry.dart';

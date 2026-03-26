@@ -65,10 +65,20 @@
       
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static _i20.PageInfo page = _i20.PageInfo(
+  <pre class="language-dart"><code class="language-dart">static _i22.PageInfo page = _i22.PageInfo(
   name,
   builder: (data) {
-    return _i20.WrappedRoute(child: const _i13.RelatoriosScreen());
+    final args = data.argsAs&lt;RelatoriosRouteArgs&gt;(
+      orElse: () =&gt; const RelatoriosRouteArgs(),
+    );
+    return _i22.WrappedRoute(
+      child: _i15.RelatoriosScreen(
+        key: args.key,
+        salesRepository: args.salesRepository,
+        productRepository: args.productRepository,
+        categoryRepository: args.categoryRepository,
+      ),
+    );
   },
 );</code></pre>
 </section>

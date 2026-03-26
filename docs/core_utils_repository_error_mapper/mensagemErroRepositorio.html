@@ -70,10 +70,10 @@ capturadas nos repositórios.</p>
 <ul>
 <li>Repositórios (<code>lib/domain/repository/</code>): usam <code>try/catch</code> em torno de
 I/O, Drift e parse; <strong>não</strong> propagam exceção para BLoC/Cubit; retornam
-<a href="../core_utils_command_result/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com texto obtido via <a href="../core_utils_repository_error_mapper/mensagemErroRepositorio.html">mensagemErroRepositorio</a> quando
+<a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com texto obtido via <a href="../core_utils_repository_error_mapper/mensagemErroRepositorio.html">mensagemErroRepositorio</a> quando
 fizer sentido.</li>
 <li>Apresentação (<code>lib/screens/</code>): <strong>não</strong> envolve chamadas ao repositório
-em <code>try/catch</code>; usa <code>when</code> ou <code>switch</code> em <a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a> e emite estado
+em <code>try/catch</code>; usa <code>when</code> ou <code>switch</code> em <a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a> e emite estado
 de erro com a mensagem já tratada.</li>
 <li><code>try/catch</code> na UI fica reservado a operações locais (ex.: seletor de
 arquivo, escrita em <a href="https://pub.dev/documentation/web/1.1.1/web/File-extension-type.html">File</a>) que não passam pelo contrato do repositório.</li>

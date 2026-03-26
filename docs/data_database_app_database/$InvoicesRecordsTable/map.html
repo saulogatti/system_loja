@@ -80,29 +80,29 @@
 InvoicesRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
   final effectivePrefix = tablePrefix != null ? &#39;$tablePrefix.&#39; : &#39;&#39;;
   return InvoicesRecord(
-    customerCpf: attachedDatabase.typeMapping.read(
+    companyCnpj: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
-      data[&#39;${effectivePrefix}cliente_cpf&#39;],
-    ),
-    customerId: attachedDatabase.typeMapping.read(
-      DriftSqlType.int,
-      data[&#39;${effectivePrefix}cliente_id&#39;],
-    ),
-    customerName: attachedDatabase.typeMapping.read(
-      DriftSqlType.string,
-      data[&#39;${effectivePrefix}cliente_nome&#39;],
+      data[&#39;${effectivePrefix}company_cnpj&#39;],
     ),
     companyId: attachedDatabase.typeMapping.read(
       DriftSqlType.int,
-      data[&#39;${effectivePrefix}empresa_id&#39;],
+      data[&#39;${effectivePrefix}company_id&#39;],
     ),
     companyName: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
-      data[&#39;${effectivePrefix}empresa_nome&#39;],
+      data[&#39;${effectivePrefix}company_name&#39;],
     ),
-    companyCnpj: attachedDatabase.typeMapping.read(
+    customerCpf: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
-      data[&#39;${effectivePrefix}empresa_cnpj&#39;],
+      data[&#39;${effectivePrefix}customer_cpf&#39;],
+    ),
+    customerId: attachedDatabase.typeMapping.read(
+      DriftSqlType.int,
+      data[&#39;${effectivePrefix}customer_id&#39;],
+    ),
+    customerName: attachedDatabase.typeMapping.read(
+      DriftSqlType.string,
+      data[&#39;${effectivePrefix}customer_name&#39;],
     ),
     id: attachedDatabase.typeMapping.read(
       DriftSqlType.int,
@@ -110,11 +110,11 @@ InvoicesRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
     )!,
     invoiceNumber: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
-      data[&#39;${effectivePrefix}numero_nota&#39;],
+      data[&#39;${effectivePrefix}invoice_number&#39;],
     )!,
     issueDate: attachedDatabase.typeMapping.read(
       DriftSqlType.dateTime,
-      data[&#39;${effectivePrefix}data_emissao&#39;],
+      data[&#39;${effectivePrefix}issue_date&#39;],
     )!,
     lastUpdatedDate: attachedDatabase.typeMapping.read(
       DriftSqlType.dateTime,
@@ -122,7 +122,7 @@ InvoicesRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
     ),
     paymentMethod: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
-      data[&#39;${effectivePrefix}forma_pagamento&#39;],
+      data[&#39;${effectivePrefix}payment_method&#39;],
     )!,
     registrationDate: attachedDatabase.typeMapping.read(
       DriftSqlType.dateTime,
@@ -130,12 +130,12 @@ InvoicesRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
     )!,
     totalValue: attachedDatabase.typeMapping.read(
       DriftSqlType.double,
-      data[&#39;${effectivePrefix}valor_total&#39;],
+      data[&#39;${effectivePrefix}total_value&#39;],
     )!,
     type: $InvoicesRecordsTable.$convertertype.fromSql(
       attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data[&#39;${effectivePrefix}tipo&#39;],
+        data[&#39;${effectivePrefix}type&#39;],
       )!,
     ),
   );

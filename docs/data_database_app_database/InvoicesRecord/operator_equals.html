@@ -105,12 +105,12 @@ the <a href="../../data_database_app_database/InvoicesRecord/hashCode.html">hash
 bool operator ==(Object other) =&gt;
     identical(this, other) ||
     (other is InvoicesRecord &amp;&amp;
+        other.companyCnpj == this.companyCnpj &amp;&amp;
+        other.companyId == this.companyId &amp;&amp;
+        other.companyName == this.companyName &amp;&amp;
         other.customerCpf == this.customerCpf &amp;&amp;
         other.customerId == this.customerId &amp;&amp;
         other.customerName == this.customerName &amp;&amp;
-        other.companyId == this.companyId &amp;&amp;
-        other.companyName == this.companyName &amp;&amp;
-        other.companyCnpj == this.companyCnpj &amp;&amp;
         other.id == this.id &amp;&amp;
         other.invoiceNumber == this.invoiceNumber &amp;&amp;
         other.issueDate == this.issueDate &amp;&amp;

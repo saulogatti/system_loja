@@ -88,14 +88,14 @@ Map&lt;String, Expression&gt; toColumns(bool nullToAbsent) {
   if (code.present) {
     map[&#39;code&#39;] = Variable&lt;String&gt;(code.value);
   }
+  if (id.present) {
+    map[&#39;id&#39;] = Variable&lt;int&gt;(id.value);
+  }
   if (categoryId.present) {
     map[&#39;category_id&#39;] = Variable&lt;int&gt;(categoryId.value);
   }
   if (description.present) {
     map[&#39;description&#39;] = Variable&lt;String&gt;(description.value);
-  }
-  if (id.present) {
-    map[&#39;id&#39;] = Variable&lt;int&gt;(id.value);
   }
   if (lastUpdatedDate.present) {
     map[&#39;last_updated_date&#39;] = Variable&lt;DateTime&gt;(lastUpdatedDate.value);

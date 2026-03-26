@@ -69,15 +69,15 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">CategoriesRecordsCompanion toCompanion(bool nullToAbsent) {
   return CategoriesRecordsCompanion(
-    id: Value(id),
-    name: Value(name),
     description: description == null &amp;&amp; nullToAbsent
         ? const Value.absent()
         : Value(description),
-    registrationDate: Value(registrationDate),
+    id: Value(id),
     lastUpdatedDate: lastUpdatedDate == null &amp;&amp; nullToAbsent
         ? const Value.absent()
         : Value(lastUpdatedDate),
+    name: Value(name),
+    registrationDate: Value(registrationDate),
   );
 }</code></pre>
 </section>

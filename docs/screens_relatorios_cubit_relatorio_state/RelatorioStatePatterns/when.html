@@ -60,14 +60,18 @@
     </ol>
   </div>
 <span class="returntype">TResult</span>
-<span class="name ">when</span>&lt;<wbr><span class="type-parameter">TResult extends Object?</span>&gt;(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="when-param-initial"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">initial</span>(), </span></li>
-<li><span class="parameter" id="when-param-loading"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loading</span>(), </span></li>
-<li><span class="parameter" id="when-param-loaded"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loaded</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-entryInvoices"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>, <span class="type-parameter"><a href="../../core_models_invoice/Invoice-class.html">Invoice</a></span>&gt;</span></span> <span class="parameter-name">entryInvoices</span>, </span></li>
+<span class="name ">when</span>&lt;<wbr><span class="type-parameter">TResult extends Object?</span>&gt;(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="when-param-error"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">error</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-message"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">message</span></span></li>
+</ol>), </span></li>
+<li><span class="parameter" id="when-param-initial"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">initial</span>(), </span></li>
+<li><span class="parameter" id="when-param-loaded"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loaded</span>(<ol class="parameter-list"> <li><span class="parameter" id="param-categoryNamesById"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">categoryNamesById</span>, </span></li>
+<li><span class="parameter" id="param-entryInvoices"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>, <span class="type-parameter"><a href="../../core_models_invoice/Invoice-class.html">Invoice</a></span>&gt;</span></span> <span class="parameter-name">entryInvoices</span>, </span></li>
 <li><span class="parameter" id="param-exitInvoices"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>, <span class="type-parameter"><a href="../../core_models_invoice/Invoice-class.html">Invoice</a></span>&gt;</span></span> <span class="parameter-name">exitInvoices</span>, </span></li>
-<li><span class="parameter" id="param-products"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_product/Product-class.html">Product</a></span>&gt;</span></span> <span class="parameter-name">products</span></span></li>
+<li><span class="parameter" id="param-products"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_product/Product-class.html">Product</a></span>&gt;</span></span> <span class="parameter-name">products</span>, </span></li>
+<li><span class="parameter" id="param-estoqueOverview"><span class="type-annotation"><a href="../../core_models_report_relatorio_overview_data/RelatorioEstoqueOverviewData-class.html">RelatorioEstoqueOverviewData</a></span> <span class="parameter-name">estoqueOverview</span>, </span></li>
+<li><span class="parameter" id="param-notasOverview"><span class="type-annotation"><a href="../../core_models_report_relatorio_overview_data/RelatorioNotasOverviewData-class.html">RelatorioNotasOverviewData</a></span> <span class="parameter-name">notasOverview</span>, </span></li>
+<li><span class="parameter" id="param-selectedProductDetails"><span class="type-annotation"><a href="../../core_models_report_product_details_report_data/ProductDetailsReportData-class.html">ProductDetailsReportData</a>?</span> <span class="parameter-name">selectedProductDetails</span>, </span></li>
 </ol>), </span></li>
-<li><span class="parameter" id="when-param-error"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">error</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-message"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">message</span></span></li>
-</ol>), </span></li>
+<li><span class="parameter" id="when-param-loading"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">loading</span>(), </span></li>
 </ol>})
 
       
@@ -91,13 +95,13 @@ It is equivalent to doing:</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult when&lt;TResult extends Object?&gt;({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( Map&lt;int, Invoice&gt; entryInvoices,  Map&lt;int, Invoice&gt; exitInvoices,  List&lt;Product&gt; products)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult when&lt;TResult extends Object?&gt;({required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( Map&lt;int, String&gt; categoryNamesById,  Map&lt;int, Invoice&gt; entryInvoices,  Map&lt;int, Invoice&gt; exitInvoices,  List&lt;Product&gt; products,  RelatorioEstoqueOverviewData estoqueOverview,  RelatorioNotasOverviewData notasOverview,  ProductDetailsReportData? selectedProductDetails)  loaded,required TResult Function()  loading,}) {final _that = this;
 switch (_that) {
-case RelatorioInitial():
-return initial();case RelatorioLoading():
-return loading();case RelatorioLoaded():
-return loaded(_that.entryInvoices,_that.exitInvoices,_that.products);case RelatorioError():
-return error(_that.message);}
+case RelatorioError():
+return error(_that.message);case RelatorioInitial():
+return initial();case RelatorioLoaded():
+return loaded(_that.categoryNamesById,_that.entryInvoices,_that.exitInvoices,_that.products,_that.estoqueOverview,_that.notasOverview,_that.selectedProductDetails);case RelatorioLoading():
+return loading();}
 }</code></pre>
 </section>
 

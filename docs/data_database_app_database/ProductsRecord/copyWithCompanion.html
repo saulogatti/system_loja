@@ -70,13 +70,13 @@
   <pre class="language-dart"><code class="language-dart">ProductsRecord copyWithCompanion(ProductsRecordsCompanion data) {
   return ProductsRecord(
     code: data.code.present ? data.code.value : this.code,
+    id: data.id.present ? data.id.value : this.id,
     categoryId: data.categoryId.present
         ? data.categoryId.value
         : this.categoryId,
     description: data.description.present
         ? data.description.value
         : this.description,
-    id: data.id.present ? data.id.value : this.id,
     lastUpdatedDate: data.lastUpdatedDate.present
         ? data.lastUpdatedDate.value
         : this.lastUpdatedDate,

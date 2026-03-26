@@ -69,17 +69,17 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">CategoriesRecord copyWithCompanion(CategoriesRecordsCompanion data) {
   return CategoriesRecord(
-    id: data.id.present ? data.id.value : this.id,
-    name: data.name.present ? data.name.value : this.name,
     description: data.description.present
         ? data.description.value
         : this.description,
-    registrationDate: data.registrationDate.present
-        ? data.registrationDate.value
-        : this.registrationDate,
+    id: data.id.present ? data.id.value : this.id,
     lastUpdatedDate: data.lastUpdatedDate.present
         ? data.lastUpdatedDate.value
         : this.lastUpdatedDate,
+    name: data.name.present ? data.name.value : this.name,
+    registrationDate: data.registrationDate.present
+        ? data.registrationDate.value
+        : this.registrationDate,
   );
 }</code></pre>
 </section>

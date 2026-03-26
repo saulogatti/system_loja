@@ -59,7 +59,7 @@
   <p>Interface que define o contrato para operações de configuração do sistema.</p>
 <p>Esta interface gerencia as configurações globais da aplicação,
 incluindo backup/restore, limpeza de dados e reset de configurações.</p>
-<p>Todas as operações retornam <a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a> com <a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a> em sucesso
+<p>Todas as operações retornam <a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a> com <a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a> em sucesso
 e mensagem de erro em texto — sem propagar exceções para a UI.</p>
 <p>Veja também:</p>
 <ul>
@@ -129,7 +129,7 @@ e mensagem de erro em texto — sem propagar exceções para a UI.</p>
     <dl class="callables">
         <dt id="clearAllData" class="callable">
   <span class="name"><a href="../core_interface_i_configuration_repository/IConfigurationRepository/clearAllData.html">clearAllData</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -142,7 +142,7 @@ e mensagem de erro em texto — sem propagar exceções para a UI.</p>
 
         <dt id="clearOldLogs" class="callable">
   <span class="name"><a href="../core_interface_i_configuration_repository/IConfigurationRepository/clearOldLogs.html">clearOldLogs</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -155,7 +155,7 @@ e mensagem de erro em texto — sem propagar exceções para a UI.</p>
 
         <dt id="createBackup" class="callable">
   <span class="name"><a href="../core_interface_i_configuration_repository/IConfigurationRepository/createBackup.html">createBackup</a></span><span class="signature">(<wbr><span class="parameter" id="createBackup-param-directoryPath"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">directoryPath</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -168,7 +168,7 @@ e mensagem de erro em texto — sem propagar exceções para a UI.</p>
 
         <dt id="loadConfiguration" class="callable">
   <span class="name"><a href="../core_interface_i_configuration_repository/IConfigurationRepository/loadConfiguration.html">loadConfiguration</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -194,7 +194,7 @@ e mensagem de erro em texto — sem propagar exceções para a UI.</p>
 
         <dt id="resetToDefaults" class="callable">
   <span class="name"><a href="../core_interface_i_configuration_repository/IConfigurationRepository/resetToDefaults.html">resetToDefaults</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -207,7 +207,7 @@ e mensagem de erro em texto — sem propagar exceções para a UI.</p>
 
         <dt id="restoreBackup" class="callable">
   <span class="name"><a href="../core_interface_i_configuration_repository/IConfigurationRepository/restoreBackup.html">restoreBackup</a></span><span class="signature">(<wbr><span class="parameter" id="restoreBackup-param-direBackup"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">direBackup</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -233,7 +233,7 @@ e mensagem de erro em texto — sem propagar exceções para a UI.</p>
 
         <dt id="updateAppSettings" class="callable">
   <span class="name"><a href="../core_interface_i_configuration_repository/IConfigurationRepository/updateAppSettings.html">updateAppSettings</a></span><span class="signature">(<wbr><span class="parameter" id="updateAppSettings-param-novaConfiguracao"><span class="type-annotation"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span> <span class="parameter-name">novaConfiguracao</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 

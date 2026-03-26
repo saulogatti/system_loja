@@ -67,11 +67,13 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; loadLogs() async {
-  &#47;&#47; Implement log loading logic here
   emit(const LogsSystemState.loading());
-  final logs = await SystemErrorManager.instance.getAllErrors();
-  &#47;&#47; After loading logs, emit loaded state
-  emit(LogsSystemState.loaded(logs));
+  try {
+    final logs = await _systemErrorManager.getAllErrors();
+    emit(LogsSystemState.loaded(logs));
+  } catch (_) {
+    emit(const LogsSystemState.error(&#39;Falha ao carregar logs do sistema.&#39;));
+  }
 }</code></pre>
 </section>
 

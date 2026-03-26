@@ -1,7 +1,7 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/models/activity_log.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/log_dao.dart';
 
 /// Repositório para gerenciamento de logs de auditoria usando Drift.

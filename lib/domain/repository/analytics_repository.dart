@@ -1,8 +1,8 @@
-import 'package:system_loja/aplication/system_error_manager.dart';
+import 'package:system_loja/application/system_error_manager.dart';
 import 'package:system_loja/core/interface/i_analytics_repository.dart';
 import 'package:system_loja/core/models/analytics_point.dart';
 import 'package:system_loja/core/models/invoice.dart';
-import 'package:system_loja/core/utils/command_result.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/invoice_dao.dart';
 
 /// Repositório de analytics de vendas e compras.

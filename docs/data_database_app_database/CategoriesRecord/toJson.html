@@ -82,11 +82,11 @@ be used. See <a href="https://pub.dev/documentation/drift/2.32.1/drift/ValueSeri
 Map&lt;String, dynamic&gt; toJson({ValueSerializer? serializer}) {
   serializer ??= driftRuntimeOptions.defaultSerializer;
   return &lt;String, dynamic&gt;{
-    &#39;id&#39;: serializer.toJson&lt;int&gt;(id),
-    &#39;name&#39;: serializer.toJson&lt;String&gt;(name),
     &#39;description&#39;: serializer.toJson&lt;String?&gt;(description),
-    &#39;registrationDate&#39;: serializer.toJson&lt;DateTime&gt;(registrationDate),
+    &#39;id&#39;: serializer.toJson&lt;int&gt;(id),
     &#39;lastUpdatedDate&#39;: serializer.toJson&lt;DateTime?&gt;(lastUpdatedDate),
+    &#39;name&#39;: serializer.toJson&lt;String&gt;(name),
+    &#39;registrationDate&#39;: serializer.toJson&lt;DateTime&gt;(registrationDate),
   };
 }</code></pre>
 </section>

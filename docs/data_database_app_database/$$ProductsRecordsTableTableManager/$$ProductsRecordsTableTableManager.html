@@ -80,9 +80,9 @@
         updateCompanionCallback:
             ({
               Value&lt;String&gt; code = const Value.absent(),
+              Value&lt;int&gt; id = const Value.absent(),
               Value&lt;int?&gt; categoryId = const Value.absent(),
               Value&lt;String&gt; description = const Value.absent(),
-              Value&lt;int&gt; id = const Value.absent(),
               Value&lt;DateTime?&gt; lastUpdatedDate = const Value.absent(),
               Value&lt;String&gt; name = const Value.absent(),
               Value&lt;double&gt; price = const Value.absent(),
@@ -90,9 +90,9 @@
               Value&lt;int&gt; stockQuantity = const Value.absent(),
             }) =&gt; ProductsRecordsCompanion(
               code: code,
+              id: id,
               categoryId: categoryId,
               description: description,
-              id: id,
               lastUpdatedDate: lastUpdatedDate,
               name: name,
               price: price,
@@ -102,9 +102,9 @@
         createCompanionCallback:
             ({
               required String code,
+              Value&lt;int&gt; id = const Value.absent(),
               Value&lt;int?&gt; categoryId = const Value.absent(),
               required String description,
-              Value&lt;int&gt; id = const Value.absent(),
               Value&lt;DateTime?&gt; lastUpdatedDate = const Value.absent(),
               required String name,
               required double price,
@@ -112,9 +112,9 @@
               required int stockQuantity,
             }) =&gt; ProductsRecordsCompanion.insert(
               code: code,
+              id: id,
               categoryId: categoryId,
               description: description,
-              id: id,
               lastUpdatedDate: lastUpdatedDate,
               name: name,
               price: price,

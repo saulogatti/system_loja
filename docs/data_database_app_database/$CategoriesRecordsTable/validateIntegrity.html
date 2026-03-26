@@ -84,17 +84,6 @@ VerificationContext validateIntegrity(
 }) {
   final context = VerificationContext();
   final data = instance.toColumns(true);
-  if (data.containsKey(&#39;id&#39;)) {
-    context.handle(_idMeta, id.isAcceptableOrUnknown(data[&#39;id&#39;]!, _idMeta));
-  }
-  if (data.containsKey(&#39;name&#39;)) {
-    context.handle(
-      _nameMeta,
-      name.isAcceptableOrUnknown(data[&#39;name&#39;]!, _nameMeta),
-    );
-  } else if (isInserting) {
-    context.missing(_nameMeta);
-  }
   if (data.containsKey(&#39;description&#39;)) {
     context.handle(
       _descriptionMeta,
@@ -104,14 +93,8 @@ VerificationContext validateIntegrity(
       ),
     );
   }
-  if (data.containsKey(&#39;registration_date&#39;)) {
-    context.handle(
-      _registrationDateMeta,
-      registrationDate.isAcceptableOrUnknown(
-        data[&#39;registration_date&#39;]!,
-        _registrationDateMeta,
-      ),
-    );
+  if (data.containsKey(&#39;id&#39;)) {
+    context.handle(_idMeta, id.isAcceptableOrUnknown(data[&#39;id&#39;]!, _idMeta));
   }
   if (data.containsKey(&#39;last_updated_date&#39;)) {
     context.handle(
@@ -119,6 +102,23 @@ VerificationContext validateIntegrity(
       lastUpdatedDate.isAcceptableOrUnknown(
         data[&#39;last_updated_date&#39;]!,
         _lastUpdatedDateMeta,
+      ),
+    );
+  }
+  if (data.containsKey(&#39;name&#39;)) {
+    context.handle(
+      _nameMeta,
+      name.isAcceptableOrUnknown(data[&#39;name&#39;]!, _nameMeta),
+    );
+  } else if (isInserting) {
+    context.missing(_nameMeta);
+  }
+  if (data.containsKey(&#39;registration_date&#39;)) {
+    context.handle(
+      _registrationDateMeta,
+      registrationDate.isAcceptableOrUnknown(
+        data[&#39;registration_date&#39;]!,
+        _registrationDateMeta,
       ),
     );
   }

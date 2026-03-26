@@ -92,6 +92,9 @@ VerificationContext validateIntegrity(
   } else if (isInserting) {
     context.missing(_codeMeta);
   }
+  if (data.containsKey(&#39;id&#39;)) {
+    context.handle(_idMeta, id.isAcceptableOrUnknown(data[&#39;id&#39;]!, _idMeta));
+  }
   if (data.containsKey(&#39;category_id&#39;)) {
     context.handle(
       _categoryIdMeta,
@@ -108,9 +111,6 @@ VerificationContext validateIntegrity(
     );
   } else if (isInserting) {
     context.missing(_descriptionMeta);
-  }
-  if (data.containsKey(&#39;id&#39;)) {
-    context.handle(_idMeta, id.isAcceptableOrUnknown(data[&#39;id&#39;]!, _idMeta));
   }
   if (data.containsKey(&#39;last_updated_date&#39;)) {
     context.handle(

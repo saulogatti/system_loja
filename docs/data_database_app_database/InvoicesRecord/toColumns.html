@@ -85,35 +85,35 @@ legacy reasons.</p>
   <pre class="language-dart"><code class="language-dart">@override
 Map&lt;String, Expression&gt; toColumns(bool nullToAbsent) {
   final map = &lt;String, Expression&gt;{};
-  if (!nullToAbsent || customerCpf != null) {
-    map[&#39;cliente_cpf&#39;] = Variable&lt;String&gt;(customerCpf);
-  }
-  if (!nullToAbsent || customerId != null) {
-    map[&#39;cliente_id&#39;] = Variable&lt;int&gt;(customerId);
-  }
-  if (!nullToAbsent || customerName != null) {
-    map[&#39;cliente_nome&#39;] = Variable&lt;String&gt;(customerName);
+  if (!nullToAbsent || companyCnpj != null) {
+    map[&#39;company_cnpj&#39;] = Variable&lt;String&gt;(companyCnpj);
   }
   if (!nullToAbsent || companyId != null) {
-    map[&#39;empresa_id&#39;] = Variable&lt;int&gt;(companyId);
+    map[&#39;company_id&#39;] = Variable&lt;int&gt;(companyId);
   }
   if (!nullToAbsent || companyName != null) {
-    map[&#39;empresa_nome&#39;] = Variable&lt;String&gt;(companyName);
+    map[&#39;company_name&#39;] = Variable&lt;String&gt;(companyName);
   }
-  if (!nullToAbsent || companyCnpj != null) {
-    map[&#39;empresa_cnpj&#39;] = Variable&lt;String&gt;(companyCnpj);
+  if (!nullToAbsent || customerCpf != null) {
+    map[&#39;customer_cpf&#39;] = Variable&lt;String&gt;(customerCpf);
+  }
+  if (!nullToAbsent || customerId != null) {
+    map[&#39;customer_id&#39;] = Variable&lt;int&gt;(customerId);
+  }
+  if (!nullToAbsent || customerName != null) {
+    map[&#39;customer_name&#39;] = Variable&lt;String&gt;(customerName);
   }
   map[&#39;id&#39;] = Variable&lt;int&gt;(id);
-  map[&#39;numero_nota&#39;] = Variable&lt;String&gt;(invoiceNumber);
-  map[&#39;data_emissao&#39;] = Variable&lt;DateTime&gt;(issueDate);
+  map[&#39;invoice_number&#39;] = Variable&lt;String&gt;(invoiceNumber);
+  map[&#39;issue_date&#39;] = Variable&lt;DateTime&gt;(issueDate);
   if (!nullToAbsent || lastUpdatedDate != null) {
     map[&#39;last_updated_date&#39;] = Variable&lt;DateTime&gt;(lastUpdatedDate);
   }
-  map[&#39;forma_pagamento&#39;] = Variable&lt;String&gt;(paymentMethod);
+  map[&#39;payment_method&#39;] = Variable&lt;String&gt;(paymentMethod);
   map[&#39;registration_date&#39;] = Variable&lt;DateTime&gt;(registrationDate);
-  map[&#39;valor_total&#39;] = Variable&lt;double&gt;(totalValue);
+  map[&#39;total_value&#39;] = Variable&lt;double&gt;(totalValue);
   {
-    map[&#39;tipo&#39;] = Variable&lt;String&gt;(
+    map[&#39;type&#39;] = Variable&lt;String&gt;(
       $InvoicesRecordsTable.$convertertype.toSql(type),
     );
   }

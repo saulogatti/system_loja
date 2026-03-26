@@ -54,8 +54,11 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">RelatorioCubit</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="-param-_salesRepository"><span class="type-annotation"><a href="../../core_interface_i_sales_repository/ISalesRepository-class.html">ISalesRepository</a></span> <span class="parameter-name">_salesRepository</span>, </span></li>
-<li><span class="parameter" id="-param-_productRepository"><span class="type-annotation"><a href="../../core_interface_i_product_repository/IProductRepository-class.html">IProductRepository</a></span> <span class="parameter-name">_productRepository</span></span></li>
+      <span class="name ">RelatorioCubit</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-_salesRepository"><span class="type-annotation"><a href="../../core_interface_i_sales_repository/ISalesRepository-class.html">ISalesRepository</a></span> <span class="parameter-name">_salesRepository</span>, </span></li>
+<li><span class="parameter" id="-param-_productRepository"><span class="type-annotation"><a href="../../core_interface_i_product_repository/IProductRepository-class.html">IProductRepository</a></span> <span class="parameter-name">_productRepository</span>, </span></li>
+<li><span class="parameter" id="-param-_categoryRepository"><span class="type-annotation"><a href="../../core_interface_i_category_repository/ICategoryRepository-class.html">ICategoryRepository</a></span> <span class="parameter-name">_categoryRepository</span>, </span></li>
+<li><span class="parameter" id="-param-_movementReportService"><span class="type-annotation"><a href="../../core_services_product_movement_report_service/ProductMovementReportService-class.html">ProductMovementReportService</a></span> <span class="parameter-name">_movementReportService</span>, </span></li>
+<li><span class="parameter" id="-param-_overviewService"><span class="type-annotation"><a href="../../core_services_relatorio_overview_service/RelatorioOverviewService-class.html">RelatorioOverviewService</a></span> <span class="parameter-name">_overviewService</span>, </span></li>
 </ol>)
     </section>
     
@@ -67,8 +70,13 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">RelatorioCubit(this._salesRepository, this._productRepository)
-  : super(RelatorioState.initial()) {
+  <pre class="language-dart"><code class="language-dart">RelatorioCubit(
+  this._salesRepository,
+  this._productRepository,
+  this._categoryRepository,
+  this._movementReportService,
+  this._overviewService,
+) : super(RelatorioState.initial()) {
   carregarRelatorios();
 }</code></pre>
 </section>
