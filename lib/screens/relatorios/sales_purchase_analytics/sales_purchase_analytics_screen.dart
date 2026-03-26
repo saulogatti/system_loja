@@ -25,36 +25,49 @@ class SalesPurchaseAnalyticsScreen extends StatelessWidget {
   }
 }
 
-class _BarLine extends StatelessWidget {
+class _VerticalValueBar extends StatelessWidget {
+  final String title;
   final double value;
   final double factor;
   final Color color;
 
-  const _BarLine({required this.value, required this.factor, required this.color});
+  const _VerticalValueBar({
+    required this.title,
+    required this.value,
+    required this.factor,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final safeFactor = factor.clamp(0.0, 1.0);
+    final barColor = color.withValues(alpha: 0.9);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
+        const SizedBox(height: 6),
         Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: LinearProgressIndicator(
-              minHeight: 14,
-              value: factor.clamp(0, 1),
-              backgroundColor: color.withValues(alpha: 0.15),
-              valueColor: AlwaysStoppedAnimation<Color>(color),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: 26,
+              height: math.max(6.0, 140.0 * safeFactor),
+              decoration: BoxDecoration(
+                color: barColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
           ),
         ),
-        const SizedBox(width: 10),
-        SizedBox(
-          width: 90,
-          child: Text(
-            'R\$ ${value.toStringAsFixed(2)}',
-            textAlign: TextAlign.right,
-            style: TextStyle(fontWeight: FontWeight.w600, color: color),
-          ),
+        const SizedBox(height: 8),
+        Text(
+          'R\$ ${value.toStringAsFixed(2)}',
+          style: TextStyle(fontWeight: FontWeight.w700, color: color, fontSize: 12),
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
@@ -87,18 +100,52 @@ class _ComparisonBarTile extends StatelessWidget {
     final purchaseFactor = point.purchaseValue / safeMax;
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(point.label, style: const TextStyle(fontWeight: FontWeight.w600)),
-            const SizedBox(height: 8),
-            _BarLine(value: point.salesValue, factor: salesFactor, color: Colors.green),
-            const SizedBox(height: 6),
-            _BarLine(value: point.purchaseValue, factor: purchaseFactor, color: Colors.orange),
-            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    point.label,
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(Icons.bar_chart, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              ],
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 190,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _VerticalValueBar(
+                      title: 'Venda',
+                      value: point.salesValue,
+                      factor: salesFactor,
+                      color: Colors.green,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _VerticalValueBar(
+                      title: 'Compra',
+                      value: point.purchaseValue,
+                      factor: purchaseFactor,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
             Text(
               'Produtos movimentados: ${point.productsCount}',
               style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 12),
@@ -237,47 +284,79 @@ class _LoadedState extends StatelessWidget {
       onRefresh: () async {
         context.read<SalesPurchaseAnalyticsBloc>().add(ChangeSalesPurchaseGrouping(state.grouping));
       },
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _GroupingSegmentedControl(current: state.grouping),
-          const SizedBox(height: 16),
-          _SummaryCards(state: state),
-          const SizedBox(height: 16),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final isWide = constraints.maxWidth >= 760;
-              final tiles = <Widget>[
-                _SalesPurchaseDonutCard(totalSales: state.totalSales, totalPurchases: state.totalPurchases),
-                if (state.grouping == SalesPurchaseGrouping.byDate) _ProductsCountChartCard(points: state.points),
-              ];
-
-              if (tiles.isEmpty) {
-                return const SizedBox.shrink();
-              }
-
-              if (isWide && tiles.length == 2) {
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(child: tiles[0]),
-                    const SizedBox(width: 12),
-                    Expanded(child: tiles[1]),
-                  ],
-                );
-              }
-
-              return Column(
-                children: [
-                  for (final tile in tiles) ...[tile, const SizedBox(height: 12)],
-                ],
-              );
-            },
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(child: _GroupingSegmentedControl(current: state.grouping)),
           ),
-          const SizedBox(height: 8),
-          _ChartLegend(),
-          const SizedBox(height: 12),
-          ...state.points.map((point) => _ComparisonBarTile(point: point, maxValue: state.maxValue)),
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(child: _SummaryCards(state: state)),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final isWide = constraints.maxWidth >= 760;
+                  final tiles = <Widget>[
+                    _SalesPurchaseDonutCard(totalSales: state.totalSales, totalPurchases: state.totalPurchases),
+                    if (state.grouping == SalesPurchaseGrouping.byDate) _ProductsCountChartCard(points: state.points),
+                  ];
+
+                  if (tiles.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+
+                  if (isWide && tiles.length == 2) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: tiles[0]),
+                        const SizedBox(width: 12),
+                        Expanded(child: tiles[1]),
+                      ],
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      for (final tile in tiles) ...[tile, const SizedBox(height: 12)],
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 8)),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(child: _ChartLegend()),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 12)),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 420,
+                mainAxisExtent: 290,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final point = state.points[index];
+                  return _ComparisonBarTile(point: point, maxValue: state.maxValue);
+                },
+                childCount: state.points.length,
+              ),
+            ),
+          ),
         ],
       ),
     );
