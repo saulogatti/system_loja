@@ -102,10 +102,8 @@ void main() {
       final overview = service.buildEstoqueOverview(products);
 
       final sortedProducts = overview.produtosOrdenadosPorEstoque;
-      expect(sortedProducts[0].stockQuantity, 0);
-      expect(sortedProducts[1].stockQuantity, 2);
-      expect(sortedProducts[2].stockQuantity, 5);
-      expect(sortedProducts[3].stockQuantity, 10);
+      final quantities = sortedProducts.map((p) => p.stockQuantity).toList();
+      expect(quantities, [0, 2, 5, 10]);
     });
 
     test('does not modify the original products list', () {
