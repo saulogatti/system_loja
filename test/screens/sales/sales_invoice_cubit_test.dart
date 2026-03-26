@@ -20,7 +20,7 @@ void main() {
     return Customer(name: 'João', cpf: '00000000000', id: id);
   }
 
-  setUpAll(() {
+  setUp(() {
     salesCubit = _FakeSalesCubit();
   });
 
