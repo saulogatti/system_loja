@@ -7,6 +7,7 @@ import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_invoice_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_invoice_state.dart';
+import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/models/person_selection.dart';
 
 void main() {
@@ -96,4 +97,10 @@ class _FakeSalesCubit extends Fake implements SalesCubit {
   Future<void> registerSale(InvoiceData invoiceData, bool enableCodeGeneration) async {
     registerSaleCalls++;
   }
+
+  @override
+  Stream<SalesState> get stream => Stream.value(SalesState.saved(items: {}));
+
+  @override
+  bool get isClosed => false;
 }

@@ -8,7 +8,11 @@ class InvoiceLineTile extends StatelessWidget {
   final InvoiceLineEntry entry;
 
   final VoidCallback onDelete;
-  const InvoiceLineTile({required this.entry, required this.onDelete, super.key});
+  const InvoiceLineTile({
+    required this.entry,
+    required this.onDelete,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +21,17 @@ class InvoiceLineTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         title: Text(product.name),
-        subtitle: Text('${entry.quantity}x R\$ ${product.price.toStringAsFixed(2)}'),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete, color: Colors.red),
-          onPressed: onDelete,
+        subtitle: Text(
+          '${entry.quantity}x R\$ ${product.price.toStringAsFixed(2)}',
+        ),
+        trailing: Semantics(
+          button: true,
+          label: 'Remover ${product.name}',
+          child: IconButton(
+            tooltip: 'Remover item',
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: onDelete,
+          ),
         ),
       ),
     );
