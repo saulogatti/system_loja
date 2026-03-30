@@ -28,7 +28,7 @@ class InvoiceLineTile extends StatelessWidget {
           button: true,
           label: 'Remover ${product.name}',
           child: IconButton(
-            tooltip: 'Remover item',
+            tooltip: 'Remover ${product.name}',
             icon: const Icon(Icons.delete, color: Colors.red),
             onPressed: onDelete,
           ),
