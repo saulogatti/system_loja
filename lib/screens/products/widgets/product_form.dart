@@ -85,14 +85,19 @@ class _ProductFormState extends State<ProductForm> {
                   },
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  _generatedCode = !_generatedCode;
-                  widget.codigoController.text = _generatedCode
-                      ? kStringGenerate
-                      : '';
-                },
-                icon: Icon(Icons.generating_tokens_outlined),
+              Semantics(
+                button: true,
+                label: 'Gerar código automaticamente',
+                child: IconButton(
+                  tooltip: 'Gerar código automaticamente',
+                  onPressed: () {
+                    _generatedCode = !_generatedCode;
+                    widget.codigoController.text = _generatedCode
+                        ? kStringGenerate
+                        : '';
+                  },
+                  icon: const Icon(Icons.generating_tokens_outlined),
+                ),
               ),
             ],
           ),
