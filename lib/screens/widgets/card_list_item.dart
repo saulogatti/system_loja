@@ -64,10 +64,14 @@ class CardListItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (onDelete != null)
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: onDelete,
-                  tooltip: 'Excluir $title',
+                Semantics(
+                  button: true,
+                  label: 'Excluir $title',
+                  child: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: onDelete,
+                    tooltip: 'Excluir $title',
+                  ),
                 ),
               const Icon(Icons.arrow_forward_ios, size: 16),
             ],
