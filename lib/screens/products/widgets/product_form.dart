@@ -86,14 +86,17 @@ class _ProductFormState extends State<ProductForm> {
                 ),
               ),
               IconButton(
+                tooltip: 'Gerar código automaticamente',
                 onPressed: () {
-                  _generatedCode = !_generatedCode;
-                  widget.codigoController.text = _generatedCode
-                      ? kStringGenerate
-                      : '';
+                  setState(() {
+                    _generatedCode = !_generatedCode;
+                    widget.codigoController.text = switch (_generatedCode) {
+                      true => kStringGenerate,
+                      _ => '',
+                    };
+                  });
                 },
                 icon: const Icon(Icons.generating_tokens_outlined),
-                tooltip: 'Gerar código automaticamente',
               ),
             ],
           ),
