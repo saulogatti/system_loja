@@ -23,6 +23,8 @@ class TextFormFieldEmail extends StatelessWidget {
       ),
       enabled: isEditing,
       keyboardType: TextInputType.emailAddress,
+      autofillHints: const [AutofillHints.email],
+      textInputAction: TextInputAction.next,
       inputFormatters: [
         FilteringTextInputFormatter.deny(
           Constants.oneOrMoreWhitespaceRegExp,
