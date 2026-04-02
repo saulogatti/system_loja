@@ -21,7 +21,8 @@ class TextFormFieldCpf extends StatelessWidget {
         border: OutlineInputBorder(),
         prefixIcon: Icon(Icons.badge),
       ),
-      enabled: enable, // CPF não pode ser alterado
+      enabled: enable, // CPF cannot be changed
+      keyboardType: TextInputType.number,
       textInputAction: TextInputAction.next,
       inputFormatters: [CpfTextInputFormatter()],
       validator: validatorOptions,
