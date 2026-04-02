@@ -92,7 +92,8 @@ class _ProductFormState extends State<ProductForm> {
                       ? kStringGenerate
                       : '';
                 },
-                icon: Icon(Icons.generating_tokens_outlined),
+                icon: const Icon(Icons.generating_tokens_outlined),
+                tooltip: 'Gerar código automaticamente',
               ),
             ],
           ),

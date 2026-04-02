@@ -7,3 +7,6 @@
 ## 26-03-2026 - [Merging Semantics in Complex Cards]
 **Learning:** In complex Flutter list items like `InvoiceCard` containing multiple text elements, screen readers natively read every text separately, causing excessive swipes for users to get context.
 **Action:** Use a `Semantics` wrapper around the container with `excludeSemantics: true` and provide a comprehensive `label` that concatenates the most relevant information for quick context.
+## 01-04-2026 - Missing Tooltips on Custom IconButtons
+**Learning:** Custom interactive widgets, specifically icon-only `IconButton`s, frequently lack semantics or `tooltip` properties in this codebase, which severely impacts screen reader accessibility and desktop hover states.
+**Action:** Always review newly added or existing icon-only buttons for `tooltip` properties to ensure a11y compliance, applying `tooltip` to all `IconButton`s as standard practice.
