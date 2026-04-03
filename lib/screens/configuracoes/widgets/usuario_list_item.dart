@@ -55,10 +55,12 @@ class UsuarioListItem extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit, color: Colors.blue),
               onPressed: onEdit,
+              tooltip: 'Editar usuário',
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: onDelete,
+              tooltip: 'Excluir usuário',
             ),
           ],
         ),

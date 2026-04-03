@@ -91,6 +91,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
               border: const OutlineInputBorder(),
               prefixIcon: const Icon(Icons.lock),
               suffixIcon: IconButton(
+                tooltip: _senhaVisivel ? 'Ocultar senha' : 'Mostrar senha',
                 icon: Icon(
                   _senhaVisivel ? Icons.visibility_off : Icons.visibility,
                 ),

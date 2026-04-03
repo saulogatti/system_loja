@@ -10,128 +10,166 @@ class InvoiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final itemCount = invoice.data.items.length;
+    final itemText = itemCount == 1 ? '1 item' : '$itemCount itens';
+    final formattedValue = invoice.data.totalValue.toStringAsFixed(2);
+    final semanticLabel =
+        'Nota Fiscal ${invoice.data.invoiceNumber}, '
+        'Cliente: ${invoice.data.personDisplayName}, '
+        'Data: ${invoice.registrationDate.toFormattedDate()}, '
+        '$itemText, Valor total: R\$ $formattedValue';
+
     return Card(
       elevation: 2,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      Icons.receipt_long,
-                      size: 28,
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'NF ${invoice.data.invoiceNumber}',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          'ID: ${invoice.id}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.person_outline,
-                        size: 16,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+        child: Semantics(
+          button: true,
+          label: semanticLabel,
+          excludeSemantics: true,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          invoice.data.personDisplayName,
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
+                      child: Icon(
+                        Icons.receipt_long,
+                        size: 28,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSecondaryContainer,
                       ),
-                    ],
-                  ),
-                  Text(
-                    invoice.registrationDate.toFormattedDate(),
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.shopping_cart_outlined,
-                            size: 16,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: 4),
                           Text(
-                            '${invoice.data.items.length} ${invoice.data.items.length == 1 ? 'item' : 'itens'}',
+                            'NF ${invoice.data.invoiceNumber}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            'ID: ${invoice.id}',
                             style: TextStyle(
-                              fontSize: 13,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              fontSize: 12,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.person_outline,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            invoice.data.personDisplayName,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
                             ),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                           ),
-                        ],
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primaryContainer,
-                          borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Text(
-                          'R\$ ${invoice.data.totalValue.toStringAsFixed(2)}',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ],
+                    ),
+                    Text(
+                      invoice.registrationDate.toFormattedDate(),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.shopping_cart_outlined,
+                              size: 16,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${invoice.data.items.length} ${invoice.data.items.length == 1 ? 'item' : 'itens'}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            'R\$ ${invoice.data.totalValue.toStringAsFixed(2)}',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimaryContainer,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
