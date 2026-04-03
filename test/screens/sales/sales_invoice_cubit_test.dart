@@ -99,8 +99,5 @@ class _FakeSalesCubit extends Fake implements SalesCubit {
   }
 
   @override
-  Stream<SalesState> get stream => Stream.value(SalesState.saved(items: {}));
-
-  @override
   bool get isClosed => false;
 }
