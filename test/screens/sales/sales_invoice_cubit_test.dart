@@ -8,7 +8,6 @@ import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/cubit/sales_invoice_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_invoice_state.dart';
-import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/models/person_selection.dart';
 
 void main() {
@@ -93,9 +92,6 @@ void main() {
 /// [SalesCubit] mínimo para testes: só [registerSale] é usado pelo [SalesInvoiceCubit].
 class _FakeSalesCubit extends Fake implements SalesCubit {
   int registerSaleCalls = 0;
-
-  @override
-  Stream<SalesState> get stream => Stream.value(SalesSaved(items: {}));
 
   @override
   Future<void> registerSale(InvoiceData invoiceData, bool enableCodeGeneration) async {
