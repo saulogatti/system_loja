@@ -265,24 +265,28 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                       builder: (context, state) {
                         final orderedLines = state.form.buildOrderedLines();
                         if (orderedLines.isEmpty) {
-                          return const SliverToBoxAdapter(
+                          return SliverToBoxAdapter(
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.all(32),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.remove_shopping_cart,
-                                      size: 48,
-                                      color: Colors.grey,
-                                    ),
-                                    SizedBox(height: 16),
-                                    Text(
-                                      'Nenhum item adicionado',
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ],
+                                padding: const EdgeInsets.all(32),
+                                child: Semantics(
+                                  label: 'Nenhum item adicionado',
+                                  excludeSemantics: true,
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.remove_shopping_cart,
+                                        size: 48,
+                                        color: Colors.grey,
+                                      ),
+                                      SizedBox(height: 16),
+                                      Text(
+                                        'Nenhum item adicionado',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
