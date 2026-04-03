@@ -271,6 +271,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                                 padding: const EdgeInsets.all(32),
                                 child: Semantics(
                                   label: 'Nenhum item adicionado',
+                                  excludeSemantics: true,
                                   child: const Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
