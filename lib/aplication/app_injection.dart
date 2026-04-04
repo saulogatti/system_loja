@@ -35,7 +35,7 @@ import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
 final appInjection = GetIt.instance;
-late LoggerCacheRepository printerLog;
+late LoggerPersistenceService printerLog;
 
 /// Configura as dependências da aplicação.
 /// Isso é usado no main.dart para configurar as dependências da aplicação.
