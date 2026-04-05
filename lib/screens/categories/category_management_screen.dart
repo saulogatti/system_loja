@@ -88,20 +88,24 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
   Widget _buildCategoryList(List<Category> categories) {
     if (categories.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.category_outlined,
-              size: 64,
-              color: Theme.of(context).colorScheme.primary.withAlpha(128),
-            ),
-            const SizedBox(height: 16),
-            Text('Nenhuma categoria cadastrada', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            const Text('Toque no botão + para adicionar'),
-          ],
+      return Semantics(
+        label: 'Lista de categorias vazia. Nenhuma categoria cadastrada. Toque no botão mais para adicionar.',
+        excludeSemantics: true,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.category_outlined,
+                size: 64,
+                color: Theme.of(context).colorScheme.primary.withAlpha(128),
+              ),
+              const SizedBox(height: 16),
+              Text('Nenhuma categoria cadastrada', style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              const Text('Toque no botão + para adicionar'),
+            ],
+          ),
         ),
       );
     }
