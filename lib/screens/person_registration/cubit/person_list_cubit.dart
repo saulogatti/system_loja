@@ -12,7 +12,8 @@ class PersonListCubit extends Cubit<PersonListState> {
   final ICustomerRepository _customerRepository;
   final ICompanyRepository _companyRepository;
 
-  PersonListCubit(this._customerRepository, this._companyRepository) : super(const PersonListInitial());
+  PersonListCubit(this._customerRepository, this._companyRepository)
+    : super(const PersonListInitial());
 
   Future<void> loadPeople() async {
     emit(const PersonListLoading());

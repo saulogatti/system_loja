@@ -51,10 +51,7 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
       }
 
       final file = File(location.path);
-      await file.writeAsString(
-        jsonEncode(systemConfiguration),
-        flush: true,
-      );
+      await file.writeAsString(jsonEncode(systemConfiguration), flush: true);
 
       emit(
         SystemConfigState.loaded(

@@ -27,9 +27,10 @@ class GroupingSegmentedControl extends StatelessWidget {
       selected: {current},
       onSelectionChanged: (selection) {
         final selected = selection.first;
-        context.read<SalesPurchaseAnalyticsBloc>().add(ChangeSalesPurchaseGrouping(selected));
+        context.read<SalesPurchaseAnalyticsBloc>().add(
+          ChangeSalesPurchaseGrouping(selected),
+        );
       },
     );
   }
 }
-

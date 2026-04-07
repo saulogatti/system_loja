@@ -22,13 +22,18 @@ class EmptyStateView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.bar_chart, color: Theme.of(context).colorScheme.outline, size: 52),
+            Icon(
+              Icons.bar_chart,
+              color: Theme.of(context).colorScheme.outline,
+              size: 52,
+            ),
             const SizedBox(height: 12),
             Text('Nenhum dado encontrado $groupingText.'),
             const SizedBox(height: 16),
             OutlinedButton.icon(
-              onPressed: () =>
-                  context.read<SalesPurchaseAnalyticsBloc>().add(const LoadSalesPurchaseAnalytics()),
+              onPressed: () => context.read<SalesPurchaseAnalyticsBloc>().add(
+                const LoadSalesPurchaseAnalytics(),
+              ),
               icon: const Icon(Icons.refresh),
               label: const Text('Recarregar'),
             ),
@@ -52,13 +57,18 @@ class ErrorStateView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline, color: Theme.of(context).colorScheme.error, size: 48),
+            Icon(
+              Icons.error_outline,
+              color: Theme.of(context).colorScheme.error,
+              size: 48,
+            ),
             const SizedBox(height: 12),
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 16),
             FilledButton.icon(
-              onPressed: () =>
-                  context.read<SalesPurchaseAnalyticsBloc>().add(const LoadSalesPurchaseAnalytics()),
+              onPressed: () => context.read<SalesPurchaseAnalyticsBloc>().add(
+                const LoadSalesPurchaseAnalytics(),
+              ),
               icon: const Icon(Icons.refresh),
               label: const Text('Tentar novamente'),
             ),
@@ -68,4 +78,3 @@ class ErrorStateView extends StatelessWidget {
     );
   }
 }
-

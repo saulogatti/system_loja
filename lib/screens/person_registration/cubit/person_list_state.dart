@@ -10,7 +10,11 @@ class PersonListLoaded extends PersonListState {
   final List<Company> companies;
   final String? errorMessage;
 
-  const PersonListLoaded({required this.customers, required this.companies, this.errorMessage});
+  const PersonListLoaded({
+    required this.customers,
+    required this.companies,
+    this.errorMessage,
+  });
 }
 
 class PersonListLoading extends PersonListState {

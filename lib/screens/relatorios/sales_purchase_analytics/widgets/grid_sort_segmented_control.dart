@@ -6,7 +6,11 @@ class GridSortSegmentedControl extends StatelessWidget {
   final GridSortOrder current;
   final ValueChanged<GridSortOrder> onChanged;
 
-  const GridSortSegmentedControl({required this.current, required this.onChanged, super.key});
+  const GridSortSegmentedControl({
+    required this.current,
+    required this.onChanged,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,4 +32,3 @@ class GridSortSegmentedControl extends StatelessWidget {
     );
   }
 }
-

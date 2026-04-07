@@ -8,12 +8,14 @@ import 'sales_purchase_analytics_state.dart';
 ///
 /// Carrega dados reais via [IAnalyticsRepository] e os expõe como
 /// estados de UI para exibição em gráficos comparativos.
-class SalesPurchaseAnalyticsBloc extends Bloc<SalesPurchaseAnalyticsEvent, SalesPurchaseAnalyticsState> {
+class SalesPurchaseAnalyticsBloc
+    extends Bloc<SalesPurchaseAnalyticsEvent, SalesPurchaseAnalyticsState> {
   final IAnalyticsRepository _analyticsRepository;
 
-  SalesPurchaseAnalyticsBloc({required IAnalyticsRepository analyticsRepository})
-    : _analyticsRepository = analyticsRepository,
-      super(const SalesPurchaseAnalyticsInitial()) {
+  SalesPurchaseAnalyticsBloc({
+    required IAnalyticsRepository analyticsRepository,
+  }) : _analyticsRepository = analyticsRepository,
+       super(const SalesPurchaseAnalyticsInitial()) {
     on<LoadSalesPurchaseAnalytics>(_onLoadAnalytics);
     on<ChangeSalesPurchaseGrouping>(_onChangeGrouping);
   }
@@ -25,8 +27,10 @@ class SalesPurchaseAnalyticsBloc extends Bloc<SalesPurchaseAnalyticsEvent, Sales
     emit(const SalesPurchaseAnalyticsLoading());
 
     final result = switch (event.grouping) {
-      SalesPurchaseGrouping.byDate => await _analyticsRepository.getAnalyticsByDate(),
-      SalesPurchaseGrouping.byProduct => await _analyticsRepository.getAnalyticsByProduct(),
+      SalesPurchaseGrouping.byDate =>
+        await _analyticsRepository.getAnalyticsByDate(),
+      SalesPurchaseGrouping.byProduct =>
+        await _analyticsRepository.getAnalyticsByProduct(),
     };
 
     result.when(
@@ -34,7 +38,12 @@ class SalesPurchaseAnalyticsBloc extends Bloc<SalesPurchaseAnalyticsEvent, Sales
         if (points.isEmpty) {
           emit(SalesPurchaseAnalyticsEmpty(grouping: event.grouping));
         } else {
-          emit(SalesPurchaseAnalyticsLoaded(grouping: event.grouping, points: points));
+          emit(
+            SalesPurchaseAnalyticsLoaded(
+              grouping: event.grouping,
+              points: points,
+            ),
+          );
         }
       },
       onError: (message) => emit(SalesPurchaseAnalyticsError(message: message)),
@@ -52,13 +61,21 @@ class SalesPurchaseAnalyticsBloc extends Bloc<SalesPurchaseAnalyticsEvent, Sales
     result.when(
       onSuccess: (points) {
         if (points.isEmpty) {
-          emit(const SalesPurchaseAnalyticsEmpty(grouping: SalesPurchaseGrouping.byDate));
+          emit(
+            const SalesPurchaseAnalyticsEmpty(
+              grouping: SalesPurchaseGrouping.byDate,
+            ),
+          );
         } else {
-          emit(SalesPurchaseAnalyticsLoaded(grouping: SalesPurchaseGrouping.byDate, points: points));
+          emit(
+            SalesPurchaseAnalyticsLoaded(
+              grouping: SalesPurchaseGrouping.byDate,
+              points: points,
+            ),
+          );
         }
       },
       onError: (message) => emit(SalesPurchaseAnalyticsError(message: message)),
     );
   }
 }
-

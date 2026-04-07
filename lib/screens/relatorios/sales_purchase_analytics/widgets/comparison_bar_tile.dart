@@ -8,7 +8,11 @@ class ComparisonBarTile extends StatelessWidget {
   final AnalyticsPoint point;
   final double maxValue;
 
-  const ComparisonBarTile({required this.point, required this.maxValue, super.key});
+  const ComparisonBarTile({
+    required this.point,
+    required this.maxValue,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,10 @@ class ComparisonBarTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(Icons.bar_chart, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                Icon(
+                  Icons.bar_chart,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ],
             ),
             const SizedBox(height: 10),
@@ -65,7 +72,10 @@ class ComparisonBarTile extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'Produtos movimentados: ${point.productsCount}',
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 12),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 12,
+              ),
             ),
           ],
         ),
@@ -95,7 +105,10 @@ class _VerticalValueBar extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
+        Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
+        ),
         const SizedBox(height: 6),
         Expanded(
           child: Align(
@@ -113,7 +126,11 @@ class _VerticalValueBar extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           'R\$ ${value.toStringAsFixed(2)}',
-          style: TextStyle(fontWeight: FontWeight.w700, color: color, fontSize: 12),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            color: color,
+            fontSize: 12,
+          ),
           textAlign: TextAlign.center,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -122,4 +139,3 @@ class _VerticalValueBar extends StatelessWidget {
     );
   }
 }
-
