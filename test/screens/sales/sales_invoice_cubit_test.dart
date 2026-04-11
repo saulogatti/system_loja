@@ -9,7 +9,6 @@ import 'package:system_loja/screens/sales/cubit/sales_invoice_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_invoice_state.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/models/person_selection.dart';
-import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 
 void main() {
   late _FakeSalesCubit salesCubit;
