@@ -232,9 +232,15 @@ extension ValidateDataCustomer on String {
   ///
   /// Suporta tanto o novo formato BCrypt quanto o antigo SHA-256 para migração.
   bool verifyPassword(String hashedPassword) {
-    if (hashedPassword.startsWith('\$2b\$') ||
-        hashedPassword.startsWith('\$2a\$')) {
-      return BCrypt.checkpw(this, hashedPassword);
+    try {
+      if (hashedPassword.startsWith(r'$2b$') ||
+          hashedPassword.startsWith(r'$2a$') ||
+          hashedPassword.startsWith(r'$2y$')) {
+        return BCrypt.checkpw(this, hashedPassword);
+      }
+    } catch (_) {
+      // Trata hashes malformados como falha na verificação
+      return false;
     }
 
     // Fallback para SHA-256 (legado)
