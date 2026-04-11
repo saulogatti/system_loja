@@ -165,7 +165,9 @@ class _PersonSectionList<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (entries.isEmpty) {
-      return EmptyWidget(message: emptyMessage);
+      return Center(
+        child: Text(emptyMessage, style: const TextStyle(color: Colors.grey)),
+      );
     }
 
     return GridView.builder(

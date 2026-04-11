@@ -38,8 +38,11 @@ class ProductList extends StatelessWidget {
         ),
         const SizedBox(height: _defaultSpacing),
         if (products.isEmpty)
-          const Expanded(
-            child: EmptyWidget(message: 'Nenhum produto cadastrado'),
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Text('Nenhum produto cadastrado', style: TextStyle(fontSize: 16, color: Colors.grey)),
+            ),
           )
         else
           Expanded(
