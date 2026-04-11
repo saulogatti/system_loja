@@ -22,3 +22,6 @@
 ## 08-04-2026 - Consolidating Empty States Semantics
 **Learning:** When creating reusable empty states containing both icons and multiple lines of text, screen readers natively read the elements sequentially and disjointedly. Using `excludeSemantics: true` on a parent `Semantics` wrapper combines the elements into a single cohesive announcement.
 **Action:** Use `excludeSemantics: true` in custom reusable widgets (like `EmptyWidget`) alongside an explicit, combined `label` string to prevent redundant readouts for complex states.
+## $(date +%d-%m-%Y) - Empty States semantic Label overriding
+**Learning:** Utilizing a generic empty state widget can cause regressions in accessibility if the generic widget does not expose a way to inject specific semantic labels (e.g. replacing a fully customized empty state containing specific Semantics).
+**Action:** The reusable `EmptyWidget` was updated to accept an optional `semanticLabel` parameter, which it then uses in its parent `Semantics` widget. Use this parameter whenever replacing a custom empty state that previously provided specifically tailored accessibility context.

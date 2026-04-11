@@ -16,6 +16,7 @@ import 'package:system_loja/screens/relatorios/cubit/relatorio_cubit.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_state.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Tela de relatórios com abas para notas fiscais (entrada/saída) e estoque.
 @RoutePage()
@@ -111,24 +112,6 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
   }
 }
 
-/// Mensagem exibida quando não há itens.
-class _EmptyMessage extends StatelessWidget {
-  final String message;
-
-  const _EmptyMessage(this.message);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        message,
-        style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontStyle: FontStyle.italic),
-      ),
-    );
-  }
-}
-
 /// Aba de relatório de estoque de produtos.
 class _EstoqueTab extends StatelessWidget {
   static const SliverGridDelegateWithMaxCrossAxisExtent _productGridDelegate =
@@ -174,7 +157,9 @@ class _EstoqueTab extends StatelessWidget {
                 ? ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    children: const [_EmptyMessage('Nenhum produto cadastrado')],
+                    children: const [
+                      EmptyWidget(message: 'Nenhum produto cadastrado', icon: Icons.inventory_2_outlined),
+                    ],
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -318,10 +303,7 @@ class _MovementSection extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             if (movements.isEmpty)
-              Text(
-                'Nenhum registro encontrado.',
-                style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
-              )
+              const EmptyWidget(message: 'Nenhum registro encontrado.', icon: Icons.search_off)
             else
               ...movements.map((movement) {
                 final invoice = movement.invoice;
@@ -453,7 +435,7 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
                 ? ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    children: [_EmptyMessage(emptyMessage)],
+                    children: [EmptyWidget(message: emptyMessage, icon: Icons.receipt_long_outlined)],
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),

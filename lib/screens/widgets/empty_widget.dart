@@ -6,19 +6,21 @@ class EmptyWidget extends StatelessWidget {
   final String? subMessage;
   final IconData icon;
   final Widget? action;
+  final String? semanticLabel;
 
   const EmptyWidget({
     required this.message,
     this.subMessage,
     this.icon = Icons.inbox_outlined,
     this.action,
+    this.semanticLabel,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: subMessage != null ? '$message. $subMessage' : message,
+      label: semanticLabel ?? (subMessage != null ? '$message. $subMessage' : message),
       container: true,
       excludeSemantics: true,
       child: Center(
