@@ -30,8 +30,7 @@ class UsuarioListItem extends StatelessWidget {
         minVerticalPadding: 0,
         titleAlignment: ListTileTitleAlignment.center,
         leading: CircleAvatar(
-          backgroundColor:
-              usuario.permission == AuthorizationLevel.administrador.value
+          backgroundColor: usuario.permission == AuthorizationLevel.administrador.value
               ? Colors.purple
               : Colors.blue,
           child: Icon(
@@ -41,10 +40,7 @@ class UsuarioListItem extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        title: Text(
-          usuario.name,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: Text(usuario.name, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(
           '${usuario.email}\n${AuthorizationLevel.values.firstWhere((level) => level.value == usuario.permission).toDisplayName()}',
         ),
@@ -55,12 +51,12 @@ class UsuarioListItem extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit, color: Colors.blue),
               onPressed: onEdit,
-              tooltip: 'Editar usuário',
+              tooltip: 'Editar ${usuario.name}',
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: onDelete,
-              tooltip: 'Excluir usuário',
+              tooltip: 'Excluir ${usuario.name}',
             ),
           ],
         ),
