@@ -21,18 +21,28 @@ class ProductList extends StatelessWidget {
   final List<Product> products;
   final Function(Product) onProductTap;
 
-  const ProductList({required this.products, required this.onProductTap, super.key});
+  const ProductList({
+    required this.products,
+    required this.onProductTap,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text('Produtos Cadastrados', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        const Text(
+          'Produtos Cadastrados',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: _defaultSpacing),
         if (products.isEmpty)
-          const Expanded(
-            child: EmptyWidget(message: 'Nenhum produto cadastrado', icon: Icons.inventory_2_outlined),
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Text('Nenhum produto cadastrado', style: TextStyle(fontSize: 16, color: Colors.grey)),
+            ),
           )
         else
           Expanded(

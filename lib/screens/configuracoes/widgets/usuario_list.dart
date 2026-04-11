@@ -28,7 +28,15 @@ class UsuarioList extends StatelessWidget {
         const Text('Usuários Cadastrados', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         const SizedBox(height: 16),
         if (usuarios.isEmpty)
-          const EmptyWidget(message: 'Nenhum usuário cadastrado', icon: Icons.people_outline)
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Text(
+                'Nenhum usuário cadastrado',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ),
+          )
         else
           ListView.builder(
             shrinkWrap: true,

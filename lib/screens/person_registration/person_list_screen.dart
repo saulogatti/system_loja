@@ -25,9 +25,10 @@ class PersonListScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          PersonListCubit(appInjection.get<ICustomerRepository>(), appInjection.get<ICompanyRepository>())
-            ..loadPeople(),
+      create: (_) => PersonListCubit(
+        appInjection.get<ICustomerRepository>(),
+        appInjection.get<ICompanyRepository>(),
+      )..loadPeople(),
       child: this,
     );
   }
@@ -66,7 +67,12 @@ class PersonListScreenState extends State<PersonListScreen> {
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                   child: MaterialBanner(
                     content: Text(state.errorMessage!),
-                    actions: [TextButton(onPressed: _reloadPeople, child: const Text('Tentar novamente'))],
+                    actions: [
+                      TextButton(
+                        onPressed: _reloadPeople,
+                        child: const Text('Tentar novamente'),
+                      ),
+                    ],
                   ),
                 ),
               Expanded(
@@ -94,7 +100,9 @@ class PersonListScreenState extends State<PersonListScreen> {
                       subtitleBuilder: (company) =>
                           'CNPJ: ${company.cnpj} • E-mail: ${company.email ?? '-'} • Telefone: ${company.phone ?? '-'}',
                       onTap: (company) async {
-                        final changed = await context.router.push<bool>(CompanyEditRoute(company: company));
+                        final changed = await context.router.push<bool>(
+                          CompanyEditRoute(company: company),
+                        );
                         if (changed == true && mounted) {
                           await _reloadPeople();
                         }
@@ -157,7 +165,9 @@ class _PersonSectionList<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (entries.isEmpty) {
-      return EmptyWidget(message: emptyMessage, icon: Icons.person_outline);
+      return Center(
+        child: Text(emptyMessage, style: const TextStyle(color: Colors.grey)),
+      );
     }
 
     return GridView.builder(
