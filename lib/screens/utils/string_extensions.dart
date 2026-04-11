@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bcrypt/bcrypt.dart';
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_loja/core/constants/app_constants.dart';
@@ -222,14 +223,30 @@ extension FileNameStringExtensions on String {
 extension ValidateDataCustomer on String {
   static const int senhaMinLength = 8;
 
-  /// Gera hash SHA-256 da senha
+  /// Gera hash seguro da senha usando BCrypt
   String hashPassword() {
-    // TODO(security): Vulnerabilidade de hash fraco (SHA-256 sem salt).
-    // Usar um algoritmo moderno como Argon2 ou bcrypt com salt único
-    // durante a próxima migração do banco de dados.
+    return BCrypt.hashpw(this, BCrypt.gensalt());
+  }
+
+  /// Verifica se a senha corresponde ao hash fornecido.
+  ///
+  /// Suporta tanto o novo formato BCrypt quanto o antigo SHA-256 para migração.
+  bool verifyPassword(String hashedPassword) {
+    try {
+      if (hashedPassword.startsWith(r'$2b$') ||
+          hashedPassword.startsWith(r'$2a$') ||
+          hashedPassword.startsWith(r'$2y$')) {
+        return BCrypt.checkpw(this, hashedPassword);
+      }
+    } catch (_) {
+      // Trata hashes malformados como falha na verificação
+      return false;
+    }
+
+    // Fallback para SHA-256 (legado)
     final bytes = utf8.encode(this);
     final digest = sha256.convert(bytes);
-    return digest.toString();
+    return digest.toString() == hashedPassword;
   }
 
   /// Valida se a string é um CPF válido.

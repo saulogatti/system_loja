@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_list_item.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Widget da lista de usuários cadastrados
 ///

@@ -6,6 +6,7 @@ import 'package:system_loja/core/interface/i_category_repository.dart';
 import 'package:system_loja/core/models/category.dart';
 import 'package:system_loja/screens/categories/cubit/category_cubit.dart';
 import 'package:system_loja/screens/categories/cubit/category_state.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Tela de gerenciamento de categorias de produtos.
 ///
@@ -88,25 +89,10 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
   Widget _buildCategoryList(List<Category> categories) {
     if (categories.isEmpty) {
-      return Semantics(
-        label: 'Lista de categorias vazia. Nenhuma categoria cadastrada. Toque no botão mais para adicionar.',
-        excludeSemantics: true,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.category_outlined,
-                size: 64,
-                color: Theme.of(context).colorScheme.primary.withAlpha(128),
-              ),
-              const SizedBox(height: 16),
-              Text('Nenhuma categoria cadastrada', style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 8),
-              const Text('Toque no botão + para adicionar'),
-            ],
-          ),
-        ),
+      return const EmptyWidget(
+        message: 'Nenhuma categoria cadastrada',
+        subMessage: 'Toque no botão + para adicionar',
+        icon: Icons.category_outlined,
       );
     }
 
