@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/utils_extensions.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Widget da lista de produtos cadastrados
 ///
@@ -37,15 +38,9 @@ class ProductList extends StatelessWidget {
         ),
         const SizedBox(height: _defaultSpacing),
         if (products.isEmpty)
-          Semantics(
-            label: 'Lista de produtos vazia. Nenhum produto cadastrado.',
-            excludeSemantics: true,
-            child: const Center(
-              child: Padding(
-                padding: EdgeInsets.all(32.0),
-                child: Text('Nenhum produto cadastrado', style: TextStyle(fontSize: 16, color: Colors.grey)),
-              ),
-            ),
+          const EmptyWidget(
+            message: 'Nenhum produto cadastrado',
+            subMessage: 'Lista de produtos vazia.',
           )
         else
           Expanded(

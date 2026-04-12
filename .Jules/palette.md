@@ -22,3 +22,7 @@
 ## 08-04-2026 - Consolidating Empty States Semantics
 **Learning:** When creating reusable empty states containing both icons and multiple lines of text, screen readers natively read the elements sequentially and disjointedly. Using `excludeSemantics: true` on a parent `Semantics` wrapper combines the elements into a single cohesive announcement.
 **Action:** Use `excludeSemantics: true` in custom reusable widgets (like `EmptyWidget`) alongside an explicit, combined `label` string to prevent redundant readouts for complex states.
+
+## 05-04-2024 - Shared EmptyWidget Usage
+**Learning:** Standard "empty state" implementations manually implemented with `Center` + `Icon`/`Text` across lists often lack a unified `Semantics` wrapper, resulting in screen readers either ignoring them entirely or reading them piecemeal without proper context.
+**Action:** Always utilize the shared `EmptyWidget` (`lib/screens/widgets/empty_widget.dart`) across the application to ensure visual and semantic consistency for all list screens instead of manual implementations.

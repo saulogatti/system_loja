@@ -18,7 +18,9 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       builder: (_) => InvoiceOverviewBottomSheet(invoice: invoice),
     );
   }
@@ -70,15 +72,17 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
                       children: [
                         Text(
                           'NF ${data.invoiceNumber}',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         Text(
                           'ID: ${invoice.id}',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                         ),
                       ],
                     ),
@@ -91,7 +95,9 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
                   controller: scrollController,
                   children: [
                     _InfoRow(
-                      icon: data.customerId != null ? Icons.person_outline : Icons.business_outlined,
+                      icon: data.customerId != null
+                          ? Icons.person_outline
+                          : Icons.business_outlined,
                       label: data.customerId != null ? 'Cliente' : 'Empresa',
                       value: data.personDisplayName,
                     ),
@@ -118,7 +124,9 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       'Itens (${data.items.length})',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     ...data.items.map(
@@ -136,9 +144,8 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
                             ),
                             Text(
                               'R\$ ${item.totalValue.toStringAsFixed(2)}',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),
@@ -148,7 +155,10 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Fechar')),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Fechar'),
+              ),
             ],
           ),
         );
@@ -163,7 +173,11 @@ class _InfoRow extends StatelessWidget {
   final String label;
   final String value;
 
-  const _InfoRow({required this.icon, required this.label, required this.value});
+  const _InfoRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -180,9 +194,9 @@ class _InfoRow extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelSmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
                 Text(value, style: Theme.of(context).textTheme.bodyMedium),
               ],

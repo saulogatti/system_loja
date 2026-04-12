@@ -17,7 +17,8 @@ class LogSystemScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (context) => LogsSystemCubit(appInjection.get<ISystemErrorManager>()),
+      create: (context) =>
+          LogsSystemCubit(appInjection.get<ISystemErrorManager>()),
       child: this,
     );
   }

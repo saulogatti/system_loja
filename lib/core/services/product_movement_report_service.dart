@@ -6,7 +6,10 @@ import 'package:system_loja/core/models/report/product_movement_summary.dart';
 /// Serviço para consolidar movimentações de produto em notas.
 class ProductMovementReportService {
   /// Monta a lista de movimentações de um [product] dentro de [invoices].
-  List<ProductInvoiceMovement> buildMovements(Map<int, Invoice> invoices, Product product) {
+  List<ProductInvoiceMovement> buildMovements(
+    Map<int, Invoice> invoices,
+    Product product,
+  ) {
     final movements = <ProductInvoiceMovement>[];
     final hasValidProductId = product.id > 0;
 
@@ -20,7 +23,9 @@ class ProductMovementReportService {
       }
     }
 
-    movements.sort((a, b) => b.invoice.data.issueDate.compareTo(a.invoice.data.issueDate));
+    movements.sort(
+      (a, b) => b.invoice.data.issueDate.compareTo(a.invoice.data.issueDate),
+    );
     return movements;
   }
 
@@ -29,10 +34,22 @@ class ProductMovementReportService {
     required List<ProductInvoiceMovement> entradas,
     required List<ProductInvoiceMovement> saidas,
   }) {
-    final totalEntryQuantity = entradas.fold<int>(0, (sum, movement) => sum + movement.item.quantity);
-    final totalExitQuantity = saidas.fold<int>(0, (sum, movement) => sum + movement.item.quantity);
-    final totalEntryValue = entradas.fold<double>(0, (sum, movement) => sum + movement.item.totalValue);
-    final totalExitValue = saidas.fold<double>(0, (sum, movement) => sum + movement.item.totalValue);
+    final totalEntryQuantity = entradas.fold<int>(
+      0,
+      (sum, movement) => sum + movement.item.quantity,
+    );
+    final totalExitQuantity = saidas.fold<int>(
+      0,
+      (sum, movement) => sum + movement.item.quantity,
+    );
+    final totalEntryValue = entradas.fold<double>(
+      0,
+      (sum, movement) => sum + movement.item.totalValue,
+    );
+    final totalExitValue = saidas.fold<double>(
+      0,
+      (sum, movement) => sum + movement.item.totalValue,
+    );
 
     return ProductMovementSummary(
       totalEntryQuantity: totalEntryQuantity,

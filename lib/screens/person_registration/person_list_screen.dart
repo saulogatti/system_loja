@@ -10,6 +10,7 @@ import 'package:system_loja/screens/person_registration/cubit/person_list_cubit.
 import 'package:system_loja/screens/person_registration/cubit/person_list_state.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Exibe as listagens de pessoa fisica e pessoa juridica.
 @RoutePage()
@@ -164,9 +165,7 @@ class _PersonSectionList<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (entries.isEmpty) {
-      return Center(
-        child: Text(emptyMessage, style: const TextStyle(color: Colors.grey)),
-      );
+      return EmptyWidget(message: emptyMessage);
     }
 
     return GridView.builder(

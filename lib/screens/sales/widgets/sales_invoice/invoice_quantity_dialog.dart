@@ -6,7 +6,11 @@ import 'package:system_loja/screens/utils/validators.dart';
 
 /// Diálogo para informar a quantidade de um produto; faz [dispose] do controller.
 class InvoiceQuantityDialog extends StatefulWidget {
-  const InvoiceQuantityDialog({required this.product, required this.invoiceType, super.key});
+  const InvoiceQuantityDialog({
+    required this.product,
+    required this.invoiceType,
+    super.key,
+  });
 
   final Product product;
   final InvoiceType invoiceType;
@@ -49,7 +53,8 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
             if (error != null) return error;
 
             final qtd = int.parse(value!.trim());
-            if (widget.invoiceType == InvoiceType.exit && qtd > product.stockQuantity) {
+            if (widget.invoiceType == InvoiceType.exit &&
+                qtd > product.stockQuantity) {
               return 'Quantidade maior que o estoque disponível';
             }
 
@@ -58,7 +63,10 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancelar'),
+        ),
         ElevatedButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {

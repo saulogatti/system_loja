@@ -21,7 +21,9 @@ class EmptyStateView extends StatelessWidget {
       message: 'Nenhum dado encontrado $groupingText.',
       icon: Icons.bar_chart,
       action: OutlinedButton.icon(
-        onPressed: () => context.read<SalesPurchaseAnalyticsBloc>().add(const LoadSalesPurchaseAnalytics()),
+        onPressed: () => context.read<SalesPurchaseAnalyticsBloc>().add(
+          const LoadSalesPurchaseAnalytics(),
+        ),
         icon: const Icon(Icons.refresh),
         label: const Text('Recarregar'),
       ),
@@ -42,13 +44,18 @@ class ErrorStateView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline, color: Theme.of(context).colorScheme.error, size: 48),
+            Icon(
+              Icons.error_outline,
+              color: Theme.of(context).colorScheme.error,
+              size: 48,
+            ),
             const SizedBox(height: 12),
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 16),
             FilledButton.icon(
-              onPressed: () =>
-                  context.read<SalesPurchaseAnalyticsBloc>().add(const LoadSalesPurchaseAnalytics()),
+              onPressed: () => context.read<SalesPurchaseAnalyticsBloc>().add(
+                const LoadSalesPurchaseAnalytics(),
+              ),
               icon: const Icon(Icons.refresh),
               label: const Text('Tentar novamente'),
             ),
