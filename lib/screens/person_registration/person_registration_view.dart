@@ -47,19 +47,24 @@ class _PersonRegistrationViewState extends State<PersonRegistrationView> {
           ),
           success: () {
             Navigator.of(context).pop();
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('Cadastro realizado com sucesso!')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Cadastro realizado com sucesso!')),
+            );
             context.router.maybePop(true);
           },
           failure: (error) {
             Navigator.of(context).pop(); // Fecha o dialog de loading
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro: $error')));
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Erro: $error')));
           },
         );
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Cadastro de Pessoa'), leading: const AutoLeadingButton()),
+        appBar: AppBar(
+          title: const Text('Cadastro de Pessoa'),
+          leading: const AutoLeadingButton(),
+        ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: PersonRegistrationForm(
@@ -117,7 +122,10 @@ class _PersonRegistrationViewState extends State<PersonRegistrationView> {
     final formData = PersonRegistrationFormData(
       personType: _selectedPersonType,
       name: _nameController.text.trim(),
-      document: _documentController.text.replaceAll(Constants.nonNumericRegExp, ''),
+      document: _documentController.text.replaceAll(
+        Constants.nonNumericRegExp,
+        '',
+      ),
       email: _emailController.text.trim(),
       phone: _phoneController.text.trim(),
       street: _streetController.text.trim(),

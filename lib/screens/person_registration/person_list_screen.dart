@@ -10,6 +10,7 @@ import 'package:system_loja/screens/person_registration/cubit/person_list_cubit.
 import 'package:system_loja/screens/person_registration/cubit/person_list_state.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Exibe as listagens de pessoa fisica e pessoa juridica.
 @RoutePage()
@@ -24,9 +25,10 @@ class PersonListScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          PersonListCubit(appInjection.get<ICustomerRepository>(), appInjection.get<ICompanyRepository>())
-            ..loadPeople(),
+      create: (_) => PersonListCubit(
+        appInjection.get<ICustomerRepository>(),
+        appInjection.get<ICompanyRepository>(),
+      )..loadPeople(),
       child: this,
     );
   }
@@ -65,7 +67,12 @@ class PersonListScreenState extends State<PersonListScreen> {
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                   child: MaterialBanner(
                     content: Text(state.errorMessage!),
-                    actions: [TextButton(onPressed: _reloadPeople, child: const Text('Tentar novamente'))],
+                    actions: [
+                      TextButton(
+                        onPressed: _reloadPeople,
+                        child: const Text('Tentar novamente'),
+                      ),
+                    ],
                   ),
                 ),
               Expanded(
@@ -93,7 +100,9 @@ class PersonListScreenState extends State<PersonListScreen> {
                       subtitleBuilder: (company) =>
                           'CNPJ: ${company.cnpj} • E-mail: ${company.email ?? '-'} • Telefone: ${company.phone ?? '-'}',
                       onTap: (company) async {
-                        final changed = await context.router.push<bool>(CompanyEditRoute(company: company));
+                        final changed = await context.router.push<bool>(
+                          CompanyEditRoute(company: company),
+                        );
                         if (changed == true && mounted) {
                           await _reloadPeople();
                         }
@@ -156,8 +165,9 @@ class _PersonSectionList<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (entries.isEmpty) {
-      return Center(
-        child: Text(emptyMessage, style: const TextStyle(color: Colors.grey)),
+      return EmptyWidget(
+        message: emptyMessage,
+        icon: Icons.person_off_outlined,
       );
     }
 

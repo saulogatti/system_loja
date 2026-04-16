@@ -16,6 +16,7 @@ import 'package:system_loja/screens/relatorios/cubit/relatorio_cubit.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_state.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Tela de relatórios com abas para notas fiscais (entrada/saída) e estoque.
 @RoutePage()
@@ -25,7 +26,12 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
   final ICategoryRepository? categoryRepository;
 
   /// Cria uma instância de [RelatoriosScreen].
-  const RelatoriosScreen({super.key, this.salesRepository, this.productRepository, this.categoryRepository});
+  const RelatoriosScreen({
+    super.key,
+    this.salesRepository,
+    this.productRepository,
+    this.categoryRepository,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,22 +49,31 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
             child: BlocBuilder<RelatorioCubit, RelatorioState>(
               builder: (context, state) {
                 return switch (state) {
-                  RelatorioInitial() ||
-                  RelatorioLoading() => const Center(child: CircularProgressIndicator()),
+                  RelatorioInitial() || RelatorioLoading() => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
                   RelatorioError(:final message) => Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.error_outline, size: 64, color: Theme.of(context).colorScheme.error),
+                        Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                         const SizedBox(height: 16),
                         Text(
                           message,
-                          style: TextStyle(color: Theme.of(context).colorScheme.error),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton.icon(
-                          onPressed: () => context.read<RelatorioCubit>().carregarRelatorios(),
+                          onPressed: () => context
+                              .read<RelatorioCubit>()
+                              .carregarRelatorios(),
                           icon: const Icon(Icons.refresh),
                           label: const Text('Tentar novamente'),
                         ),
@@ -123,7 +138,10 @@ class _EmptyMessage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Text(
         message,
-        style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontStyle: FontStyle.italic),
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+          fontStyle: FontStyle.italic,
+        ),
       ),
     );
   }
@@ -143,7 +161,11 @@ class _EstoqueTab extends StatelessWidget {
   final List<Product> products;
   final RelatorioEstoqueOverviewData estoqueOverview;
 
-  const _EstoqueTab({required this.categoryNamesById, required this.products, required this.estoqueOverview});
+  const _EstoqueTab({
+    required this.categoryNamesById,
+    required this.products,
+    required this.estoqueOverview,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -169,12 +191,15 @@ class _EstoqueTab extends StatelessWidget {
         ),
         Expanded(
           child: RefreshIndicator(
-            onRefresh: () => context.read<RelatorioCubit>().carregarRelatorios(),
+            onRefresh: () =>
+                context.read<RelatorioCubit>().carregarRelatorios(),
             child: sorted.isEmpty
                 ? ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    children: const [_EmptyMessage('Nenhum produto cadastrado')],
+                    children: const [
+                      EmptyWidget(message: 'Nenhum produto cadastrado', icon: Icons.inventory_2_outlined),
+                    ],
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -185,7 +210,10 @@ class _EstoqueTab extends StatelessWidget {
                       final product = sorted[index];
                       return _ProdutoTile(
                         product: product,
-                        categoryName: _resolveCategoryName(product, categoryNamesById),
+                        categoryName: _resolveCategoryName(
+                          product,
+                          categoryNamesById,
+                        ),
                         onTap: () => _openProductDetails(context, product),
                       );
                     },
@@ -201,7 +229,8 @@ class _EstoqueTab extends StatelessWidget {
     cubit.prepareProductDetails(product);
 
     final currentState = cubit.state;
-    if (currentState is! RelatorioLoaded || currentState.selectedProductDetails == null) {
+    if (currentState is! RelatorioLoaded ||
+        currentState.selectedProductDetails == null) {
       return;
     }
 
@@ -216,7 +245,10 @@ class _EstoqueTab extends StatelessWidget {
     );
   }
 
-  String _resolveCategoryName(Product product, Map<int, String> categoryNamesById) {
+  String _resolveCategoryName(
+    Product product,
+    Map<int, String> categoryNamesById,
+  ) {
     final categoryId = product.categoryId;
     if (categoryId == null) {
       return 'Sem categoria';
@@ -267,7 +299,10 @@ class _InvoiceTile extends StatelessWidget {
                     Text(destino, maxLines: 1, overflow: TextOverflow.ellipsis),
                     Text(
                       data.issueDate.toFormattedDate(),
-                      style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -277,7 +312,11 @@ class _InvoiceTile extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'R\$ ${data.totalValue.toStringAsFixed(2)}',
-                style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                  fontSize: 14,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -294,7 +333,11 @@ class _MovementSection extends StatelessWidget {
   final Color color;
   final List<ProductInvoiceMovement> movements;
 
-  const _MovementSection({required this.title, required this.color, required this.movements});
+  const _MovementSection({
+    required this.title,
+    required this.color,
+    required this.movements,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -318,10 +361,7 @@ class _MovementSection extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             if (movements.isEmpty)
-              Text(
-                'Nenhum registro encontrado.',
-                style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
-              )
+              const EmptyWidget(message: 'Nenhum registro encontrado.', icon: Icons.search_off)
             else
               ...movements.map((movement) {
                 final invoice = movement.invoice;
@@ -343,7 +383,8 @@ class _MovementSection extends StatelessWidget {
                     'R\$ ${item.totalValue.toStringAsFixed(2)}',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  onTap: () => InvoiceOverviewBottomSheet.show(context, invoice),
+                  onTap: () =>
+                      InvoiceOverviewBottomSheet.show(context, invoice),
                 );
               }),
           ],
@@ -382,8 +423,12 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
 
   @override
   Widget build(BuildContext context) {
-    final exibindoEntradas = _selectedFilter == _InvoiceFilterType.entrada;
-    final invoices = (exibindoEntradas ? widget.entryInvoices.values : widget.exitInvoices.values).toList();
+    final isShowingEntries = _selectedFilter == _InvoiceFilterType.entrada;
+    final invoices =
+        (exibindoEntradas
+                ? widget.entryInvoices.values
+                : widget.exitInvoices.values)
+            .toList();
 
     final sectionTitle = exibindoEntradas
         ? 'Notas de Entrada (${widget.entryInvoices.length})'
@@ -448,12 +493,13 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
         ),
         Expanded(
           child: RefreshIndicator(
-            onRefresh: () => context.read<RelatorioCubit>().carregarRelatorios(),
+            onRefresh: () =>
+                context.read<RelatorioCubit>().carregarRelatorios(),
             child: invoices.isEmpty
                 ? ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    children: [_EmptyMessage(emptyMessage)],
+                    children: [EmptyWidget(message: emptyMessage, icon: Icons.receipt_long_outlined)],
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -461,7 +507,10 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
                     gridDelegate: _invoiceGridDelegate,
                     itemCount: invoices.length,
                     itemBuilder: (context, index) {
-                      return _InvoiceTile(invoice: invoices[index], color: sectionColor);
+                      return _InvoiceTile(
+                        invoice: invoices[index],
+                        color: sectionColor,
+                      );
                     },
                   ),
           ),
@@ -510,7 +559,13 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              Text(product.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(
+                product.name,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 4),
               Text('Código: ${product.code}'),
               Text('Categoria: $categoryName'),
@@ -519,9 +574,17 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
               const SizedBox(height: 12),
               _ProductMovementSummaryCard(summary: summary),
               const SizedBox(height: 16),
-              _MovementSection(title: 'Entradas do produto', color: Colors.green, movements: entries),
+              _MovementSection(
+                title: 'Entradas do produto',
+                color: Colors.green,
+                movements: entries,
+              ),
               const SizedBox(height: 12),
-              _MovementSection(title: 'Saídas do produto', color: Colors.orange, movements: exits),
+              _MovementSection(
+                title: 'Saídas do produto',
+                color: Colors.orange,
+                movements: exits,
+              ),
             ],
           );
         },
@@ -540,7 +603,9 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       builder: (_) => _ProductDetailsBottomSheet(
         product: product,
         categoryName: categoryName,
@@ -566,7 +631,10 @@ class _ProductMovementSummaryCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Resumo de Movimentação', style: TextStyle(fontWeight: FontWeight.w700)),
+            const Text(
+              'Resumo de Movimentação',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
             const SizedBox(height: 8),
             _SummaryLine(
               label: 'Entradas',
@@ -601,7 +669,11 @@ class _ProdutoTile extends StatelessWidget {
   final String categoryName;
   final VoidCallback onTap;
 
-  const _ProdutoTile({required this.product, required this.categoryName, required this.onTap});
+  const _ProdutoTile({
+    required this.product,
+    required this.categoryName,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -646,11 +718,18 @@ class _ProdutoTile extends StatelessWidget {
             children: [
               Text(
                 '${product.stockQuantity} un.',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: stockColor),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: stockColor,
+                ),
               ),
               Text(
                 'R\$ ${product.price.toStringAsFixed(2)}',
-                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),
@@ -691,7 +770,11 @@ class _ResumoCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   titulo,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: color,
+                  ),
                 ),
               ],
             ),
@@ -702,7 +785,10 @@ class _ResumoCard extends StatelessWidget {
             ),
             Text(
               '$quantidade ${quantidade == 1 ? 'nota' : 'notas'}',
-              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           ],
         ),
@@ -737,11 +823,18 @@ class _ResumoEstoqueCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               '$valor',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
             ),
             Text(
               label,
-              style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              style: TextStyle(
+                fontSize: 11,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -757,7 +850,11 @@ class _ResumoEstoqueRow extends StatelessWidget {
   final int semEstoque;
   final int estoqueBaixo;
 
-  const _ResumoEstoqueRow({required this.total, required this.semEstoque, required this.estoqueBaixo});
+  const _ResumoEstoqueRow({
+    required this.total,
+    required this.semEstoque,
+    required this.estoqueBaixo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -854,7 +951,9 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = isSelected ? color : Theme.of(context).colorScheme.onSurfaceVariant;
+    final textColor = isSelected
+        ? color
+        : Theme.of(context).colorScheme.onSurfaceVariant;
 
     final content = Row(
       children: [
@@ -863,7 +962,11 @@ class _SectionHeader extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: textColor),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: textColor,
+            ),
           ),
         ),
       ],
@@ -881,7 +984,9 @@ class _SectionHeader extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isSelected ? color.withValues(alpha: 0.55) : Theme.of(context).colorScheme.outlineVariant,
+            color: isSelected
+                ? color.withValues(alpha: 0.55)
+                : Theme.of(context).colorScheme.outlineVariant,
           ),
           color: isSelected ? color.withValues(alpha: 0.1) : Colors.transparent,
         ),

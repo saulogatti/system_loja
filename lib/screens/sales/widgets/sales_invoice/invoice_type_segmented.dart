@@ -8,7 +8,11 @@ class InvoiceTypeSegmented extends StatelessWidget {
   final InvoiceType invoiceType;
   final ValueChanged<InvoiceType> onChanged;
 
-  const InvoiceTypeSegmented({required this.invoiceType, required this.onChanged, super.key});
+  const InvoiceTypeSegmented({
+    required this.invoiceType,
+    required this.onChanged,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

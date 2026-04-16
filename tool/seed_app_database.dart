@@ -107,13 +107,27 @@ PreparedStatement _prepareInvoiceItemInsert({
   required Database database,
   required Set<String> availableColumns,
 }) {
-  final invoiceIdColumn = availableColumns.contains('invoice_id') ? 'invoice_id' : 'nota_id';
-  final productIdColumn = availableColumns.contains('product_id') ? 'product_id' : 'produto_id';
-  final productNameColumn = availableColumns.contains('product_name') ? 'product_name' : 'produto_nome';
-  final productCodeColumn = availableColumns.contains('product_code') ? 'product_code' : 'produto_codigo';
-  final quantityColumn = availableColumns.contains('quantity') ? 'quantity' : 'quantidade';
-  final unitPriceColumn = availableColumns.contains('unit_price') ? 'unit_price' : 'preco_unitario';
-  final totalValueColumn = availableColumns.contains('total_value') ? 'total_value' : 'valor_total';
+  final invoiceIdColumn = availableColumns.contains('invoice_id')
+      ? 'invoice_id'
+      : 'nota_id';
+  final productIdColumn = availableColumns.contains('product_id')
+      ? 'product_id'
+      : 'produto_id';
+  final productNameColumn = availableColumns.contains('product_name')
+      ? 'product_name'
+      : 'produto_nome';
+  final productCodeColumn = availableColumns.contains('product_code')
+      ? 'product_code'
+      : 'produto_codigo';
+  final quantityColumn = availableColumns.contains('quantity')
+      ? 'quantity'
+      : 'quantidade';
+  final unitPriceColumn = availableColumns.contains('unit_price')
+      ? 'unit_price'
+      : 'preco_unitario';
+  final totalValueColumn = availableColumns.contains('total_value')
+      ? 'total_value'
+      : 'valor_total';
 
   return database.prepare('''
 INSERT INTO invoice_items_records (
@@ -165,7 +179,10 @@ INSERT INTO invoices_records (
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 ''');
 
-    final invoiceItemsColumns = _getTableColumns(database, 'invoice_items_records');
+    final invoiceItemsColumns = _getTableColumns(
+      database,
+      'invoice_items_records',
+    );
     final insertInvoiceItem = _prepareInvoiceItemInsert(
       database: database,
       availableColumns: invoiceItemsColumns,
@@ -244,20 +261,36 @@ INSERT INTO invoices_records (
       );
 
       final items = selectedProducts
-          .map((product) => SeedInvoiceItem(product: product, quantity: 1 + random.nextInt(4)))
+          .map(
+            (product) => SeedInvoiceItem(
+              product: product,
+              quantity: 1 + random.nextInt(4),
+            ),
+          )
           .toList();
 
-      final totalValue = items.fold<double>(0, (sum, item) => sum + item.totalValue);
+      final totalValue = items.fold<double>(
+        0,
+        (sum, item) => sum + item.totalValue,
+      );
 
-      final customerId = isExitInvoice ? customerIds[i % customerIds.length] : null;
-      final companyId = isExitInvoice ? null : companyIds[i % companyIds.length];
+      final customerId = isExitInvoice
+          ? customerIds[i % customerIds.length]
+          : null;
+      final companyId = isExitInvoice
+          ? null
+          : companyIds[i % companyIds.length];
 
-      final customerName = customerId == null ? null : 'Cliente Teste ${(i % customerIds.length) + 1}';
+      final customerName = customerId == null
+          ? null
+          : 'Cliente Teste ${(i % customerIds.length) + 1}';
       final customerCpf = customerId == null
           ? null
           : _numericCode(length: 11, value: (i % customerIds.length) + 1);
 
-      final companyName = companyId == null ? null : 'Empresa Teste ${(i % companyIds.length) + 1}';
+      final companyName = companyId == null
+          ? null
+          : 'Empresa Teste ${(i % companyIds.length) + 1}';
       final companyCnpj = companyId == null
           ? null
           : _numericCode(length: 14, value: (i % companyIds.length) + 1);
@@ -395,7 +428,12 @@ class SeedProduct {
   final String name;
   final double price;
 
-  const SeedProduct({required this.id, required this.code, required this.name, required this.price});
+  const SeedProduct({
+    required this.id,
+    required this.code,
+    required this.name,
+    required this.price,
+  });
 }
 
 class SeedSummary {

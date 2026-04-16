@@ -9,6 +9,7 @@ import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_card.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
@@ -61,7 +62,9 @@ class _SalesViewState extends State<SalesView> {
             case SalesError():
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Erro ao carregar notas fiscais! ${state.message}'),
+                  content: Text(
+                    'Erro ao carregar notas fiscais! ${state.message}',
+                  ),
                   backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
@@ -99,7 +102,10 @@ class _SalesViewState extends State<SalesView> {
         },
         builder: (context, state) {
           final invoices = _extractInvoices(state);
-          final totalValue = invoices.fold<double>(0.0, (sum, invoice) => sum + invoice.data.totalValue);
+          final totalValue = invoices.fold<double>(
+            0.0,
+            (sum, invoice) => sum + invoice.data.totalValue,
+          );
 
           return Stack(
             children: [
@@ -120,7 +126,9 @@ class _SalesViewState extends State<SalesView> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
+                            color: Theme.of(
+                              context,
+                            ).shadowColor.withValues(alpha: 0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -142,7 +150,9 @@ class _SalesViewState extends State<SalesView> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
                                 ),
                               ),
                             ],
@@ -161,7 +171,9 @@ class _SalesViewState extends State<SalesView> {
                             '${invoices.length} ${invoices.length == 1 ? 'nota fiscal' : 'notas fiscais'}',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.9),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimary.withValues(alpha: 0.9),
                             ),
                           ),
                         ],
@@ -169,25 +181,9 @@ class _SalesViewState extends State<SalesView> {
                     ),
                   Expanded(
                     child: invoices.isEmpty
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.receipt_long,
-                                  size: 80,
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  'Nenhuma nota fiscal cadastrada',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ],
-                            ),
+                        ? const EmptyWidget(
+                            message: 'Nenhuma nota fiscal cadastrada',
+                            icon: Icons.receipt_long,
                           )
                         : GridView.builder(
                             padding: const EdgeInsets.all(12),
@@ -195,7 +191,10 @@ class _SalesViewState extends State<SalesView> {
                             itemCount: invoices.length,
                             itemBuilder: (context, index) {
                               final nf = invoices[index];
-                              return InvoiceCard(invoice: nf, onTap: () => _mostrarDetalhesNota(nf));
+                              return InvoiceCard(
+                                invoice: nf,
+                                onTap: () => _mostrarDetalhesNota(nf),
+                              );
                             },
                           ),
                   ),
@@ -237,7 +236,9 @@ class _SalesViewState extends State<SalesView> {
     if (viewData == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Aguarde o carregamento completo dos dados para continuar.'),
+          content: const Text(
+            'Aguarde o carregamento completo dos dados para continuar.',
+          ),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
@@ -281,15 +282,23 @@ class _SalesViewState extends State<SalesView> {
 
   List<Invoice> _extractInvoices(SalesState state) {
     return switch (state) {
-      SalesLoadedAll(:final invoices) => invoices.values.toList(growable: false),
-      SalesLoaded(:final items) || SalesSaved(:final items) => items.values.toList(growable: false),
+      SalesLoadedAll(:final invoices) => invoices.values.toList(
+        growable: false,
+      ),
+      SalesLoaded(:final items) ||
+      SalesSaved(:final items) => items.values.toList(growable: false),
       _ => const <Invoice>[],
     };
   }
 
   _SalesLoadedAllViewData? _extractLoadedAll(SalesState state) {
     return switch (state) {
-      SalesLoadedAll(:final products, :final paymentMethods, :final customers, :final companies) =>
+      SalesLoadedAll(
+        :final products,
+        :final paymentMethods,
+        :final customers,
+        :final companies,
+      ) =>
         _SalesLoadedAllViewData(
           products: products,
           paymentMethods: paymentMethods,
