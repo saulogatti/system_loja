@@ -34,6 +34,7 @@ class UsuarioList extends StatelessWidget {
           const EmptyWidget(
             message: 'Nenhum usuário cadastrado',
             icon: Icons.people_outline,
+            subMessage: 'Lista de usuários vazia.',
           )
         else
           ListView.builder(

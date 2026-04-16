@@ -16,6 +16,7 @@ import 'package:system_loja/screens/relatorios/cubit/relatorio_cubit.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_state.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Tela de relatórios com abas para notas fiscais (entrada/saída) e estoque.
 @RoutePage()
@@ -197,7 +198,7 @@ class _EstoqueTab extends StatelessWidget {
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                     children: const [
-                      _EmptyMessage('Nenhum produto cadastrado'),
+                      EmptyWidget(message: 'Nenhum produto cadastrado', icon: Icons.inventory_2_outlined),
                     ],
                   )
                 : GridView.builder(
@@ -360,12 +361,7 @@ class _MovementSection extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             if (movements.isEmpty)
-              Text(
-                'Nenhum registro encontrado.',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              )
+              const EmptyWidget(message: 'Nenhum registro encontrado.', icon: Icons.search_off)
             else
               ...movements.map((movement) {
                 final invoice = movement.invoice;
@@ -427,7 +423,7 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
 
   @override
   Widget build(BuildContext context) {
-    final exibindoEntradas = _selectedFilter == _InvoiceFilterType.entrada;
+    final isShowingEntries = _selectedFilter == _InvoiceFilterType.entrada;
     final invoices =
         (exibindoEntradas
                 ? widget.entryInvoices.values
@@ -503,7 +499,7 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
                 ? ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    children: [_EmptyMessage(emptyMessage)],
+                    children: [EmptyWidget(message: emptyMessage, icon: Icons.receipt_long_outlined)],
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),

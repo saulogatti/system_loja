@@ -9,6 +9,7 @@ import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_card.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
@@ -180,27 +181,9 @@ class _SalesViewState extends State<SalesView> {
                     ),
                   Expanded(
                     child: invoices.isEmpty
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.receipt_long,
-                                  size: 80,
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  'Nenhuma nota fiscal cadastrada',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ],
-                            ),
+                        ? const EmptyWidget(
+                            message: 'Nenhuma nota fiscal cadastrada',
+                            icon: Icons.receipt_long,
                           )
                         : GridView.builder(
                             padding: const EdgeInsets.all(12),

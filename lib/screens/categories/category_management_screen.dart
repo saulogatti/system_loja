@@ -98,6 +98,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       return const EmptyWidget(
         message: 'Nenhuma categoria cadastrada',
         subtitle: 'Toque no botão + para adicionar',
+        subMessage: 'Toque no botão + para adicionar',
         icon: Icons.category_outlined,
       );
     }
@@ -178,7 +179,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
             child: const Text('Cancelar'),
           ),
           ElevatedButton(
-onPressed: () => dialogContext.router.pop(true),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,
             ),

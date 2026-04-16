@@ -1,38 +1,34 @@
 import 'package:flutter/material.dart';
 
-/// A reusable widget to display empty states consistently across the application.
-///
-/// It provides a standardized visual representation for empty lists or missing data,
-/// including an icon, a primary message, and an optional subtitle.
-/// It wraps its content in a [Semantics] widget with `excludeSemantics: true`
-/// to ensure screen readers read the state as a single unified label, improving accessibility.
+/// Um widget reutilizável para exibir estados vazios com semântica adequada.
 class EmptyWidget extends StatelessWidget {
-  /// The primary message to display.
   final String message;
-
-  /// The icon to display above the message. Defaults to [Icons.inbox_outlined].
+  final String? subMessage;
   final IconData icon;
-
-  /// An optional subtitle providing more context or instructions.
-  final String? subtitle;
+  final Widget? action;
+  final String? semanticLabel;
 
   const EmptyWidget({
     required this.message,
+    this.subMessage,
     this.icon = Icons.inbox_outlined,
-    this.subtitle,
+    this.action,
+    this.semanticLabel,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Semantics(
-          label: subtitle != null ? '$message. $subtitle' : message,
-          excludeSemantics: true,
+    return Semantics(
+      label: semanticLabel ?? (subMessage != null ? '$message. $subMessage' : message),
+      container: true,
+      excludeSemantics: true,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 icon,
@@ -42,19 +38,20 @@ class EmptyWidget extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 message,
-                style: Theme.of(context).textTheme.titleMedium,
                 textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-              if (subtitle != null) ...[
+              if (subMessage != null) ...[
                 const SizedBox(height: 8),
                 Text(
-                  subtitle!,
+                  subMessage!,
+                  textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ],
+              if (action != null) ...[const SizedBox(height: 16), action!],
             ],
           ),
         ),

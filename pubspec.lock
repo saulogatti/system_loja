@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.5.0"
+  bcrypt:
+    dependency: "direct main"
+    description:
+      name: bcrypt
+      sha256: "6073a700cbbc59f1d4ab27cd532755e3de5e676c4941f535f351374df849270b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   bloc:
     dependency: "direct main"
     description:
@@ -436,10 +444,10 @@ packages:
     dependency: transitive
     description:
       name: hotreloader
-      sha256: bc167a1163807b03bada490bfe2df25b0d744df359227880220a5cbd04e5734b
+      sha256: "66871df468fc24eee81f1a0a7cb98acc104716f9b7376d355437b48d633c4ebf"
       url: "https://pub.dev"
     source: hosted
-    version: "4.3.0"
+    version: "4.4.0"
   http:
     dependency: transitive
     description:
@@ -480,6 +488,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  jni:
+    dependency: transitive
+    description:
+      name: jni
+      sha256: c2230682d5bc2362c1c9e8d3c7f406d9cbba23ab3f2e203a025dd47e0fb2e68f
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  jni_flutter:
+    dependency: transitive
+    description:
+      name: jni_flutter
+      sha256: "8b59e590786050b1cd866677dddaf76b1ade5e7bc751abe04b86e84d379d3ba6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   json_annotation:
     dependency: "direct main"
     description:
@@ -645,10 +669,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: "149441ca6e4f38193b2e004c0ca6376a3d11f51fa5a77552d8bd4d2b0c0912ba"
+      sha256: "69cbd515a62b94d32a7944f086b2f82b4ac40a1d45bebfc00813a430ab2dabcd"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.23"
+    version: "2.3.1"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -818,10 +842,10 @@ packages:
     dependency: "direct main"
     description:
       name: sqlite3
-      sha256: caa693ad15a587a2b4fde093b728131a1827903872171089dedb16f7665d3a91
+      sha256: b3fe250b4ebd681a8ba20b12794c42b00c1375e5b51005568f0b8731265beb03
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.0"
+    version: "3.3.0"
   sqlite3_flutter_libs:
     dependency: "direct main"
     description:
@@ -897,20 +921,20 @@ packages:
   typed_data:
     dependency: transitive
     description:
-      name: typed_data
-      sha256: f9049c039ebfeb4cf7a7104a675823cd72dba8297f264b6637062516699fa006
+      name: test_api
+      sha256: "93167629bfc610f71560ab9312acdda4959de4df6fac7492c89ff0d3886f6636"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
-  url_launcher_linux:
+    version: "0.7.9"
+  test_core:
     dependency: transitive
     description:
-      name: url_launcher_linux
-      sha256: d5e14138b3bc193a0f63c10a53c94b91d399df0512b1f29b94a043db7482384a
+      name: test_core
+      sha256: "394f07d21f0f2255ec9e3989f21e54d3c7dc0e6e9dbce160e5a9c1a6be0e2943"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.2"
-  url_launcher_platform_interface:
+    version: "0.6.15"
+  typed_data:
     dependency: transitive
     description:
       name: url_launcher_platform_interface

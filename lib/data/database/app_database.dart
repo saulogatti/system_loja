@@ -119,9 +119,8 @@ class AppDatabase extends _$AppDatabase {
   /// Escapa aspas simples no [backupFile] para evitar erros de SQL e reduzir
   /// a superfície de injeção caso o caminho não seja totalmente confiável.
   Future<void> manualBackup(String backupFile) async {
-    final sanitizedBackupFile = backupFile.replaceAll("'", "''");
-
     // O comando VACUUM INTO cria um backup consistente "a quente"
+    final sanitizedBackupFile = backupFile.replaceAll("'", "''");
     await customStatement("VACUUM INTO '$sanitizedBackupFile'");
   }
 

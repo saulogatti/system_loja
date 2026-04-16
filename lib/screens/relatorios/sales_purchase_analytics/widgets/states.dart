@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 import '../bloc/sales_purchase_analytics_bloc.dart';
 import '../bloc/sales_purchase_analytics_event.dart';
@@ -16,29 +17,15 @@ class EmptyStateView extends StatelessWidget {
       SalesPurchaseGrouping.byProduct => 'por produto',
     };
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.bar_chart,
-              color: Theme.of(context).colorScheme.outline,
-              size: 52,
-            ),
-            const SizedBox(height: 12),
-            Text('Nenhum dado encontrado $groupingText.'),
-            const SizedBox(height: 16),
-            OutlinedButton.icon(
-              onPressed: () => context.read<SalesPurchaseAnalyticsBloc>().add(
-                const LoadSalesPurchaseAnalytics(),
-              ),
-              icon: const Icon(Icons.refresh),
-              label: const Text('Recarregar'),
-            ),
-          ],
+    return EmptyWidget(
+      message: 'Nenhum dado encontrado $groupingText.',
+      icon: Icons.bar_chart,
+      action: OutlinedButton.icon(
+        onPressed: () => context.read<SalesPurchaseAnalyticsBloc>().add(
+          const LoadSalesPurchaseAnalytics(),
         ),
+        icon: const Icon(Icons.refresh),
+        label: const Text('Recarregar'),
       ),
     );
   }

@@ -125,17 +125,17 @@ class RelatorioCubit extends Cubit<RelatorioState> {
     RelatorioLoaded currentState,
     Product product,
   ) {
-    final entradas = _movementReportService.buildMovements(
+    final entries = _movementReportService.buildMovements(
       currentState.entryInvoices,
       product,
     );
-    final saidas = _movementReportService.buildMovements(
+    final exits = _movementReportService.buildMovements(
       currentState.exitInvoices,
       product,
     );
     final summary = _movementReportService.summarize(
-      entradas: entradas,
-      saidas: saidas,
+      entries: entries,
+      exits: exits,
     );
 
     return ProductDetailsReportData(
