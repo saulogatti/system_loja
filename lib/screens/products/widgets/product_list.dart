@@ -53,7 +53,7 @@ class ProductList extends StatelessWidget {
                         context,
                       ).colorScheme.primary.withAlpha(128),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: _defaultSpacing),
                     Text(
                       'Nenhum produto cadastrado',
                       style: Theme.of(context).textTheme.titleMedium,
