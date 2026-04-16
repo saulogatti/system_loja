@@ -5,9 +5,9 @@ import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
-import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/cubit/sales_invoice_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_invoice_state.dart';
+import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/models/person_selection.dart';
 
 void main() {
@@ -94,10 +94,13 @@ class _FakeSalesCubit extends Fake implements SalesCubit {
   int registerSaleCalls = 0;
 
   @override
+  bool get isClosed => false;
+
+  @override
+  Stream<SalesState> get stream => Stream.value(SalesSaved(items: {}));
+
+  @override
   Future<void> registerSale(InvoiceData invoiceData, bool enableCodeGeneration) async {
     registerSaleCalls++;
   }
-
-  @override
-  bool get isClosed => false;
 }

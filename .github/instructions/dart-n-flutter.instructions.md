@@ -5,7 +5,7 @@ applyTo: '**/*.dart'
 
 # Dart and Flutter
 
-Best practices recommended by the Dart and Flutter teams. These instructions were taken from [Effective Dart](https://dart.dev/effective-dart) and [Architecture Recommendations](https://docs.flutter.dev/app-architecture/recommendations).
+Best practices recommended by the Dart and Flutter teams. These instructions were taken from [Effective Dart](https://dart.dev/effective-dart)
 
 ## Regras do repositório System Loja
 
