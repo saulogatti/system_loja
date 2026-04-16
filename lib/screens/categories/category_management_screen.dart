@@ -178,7 +178,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
             child: const Text('Cancelar'),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
+onPressed: () => dialogContext.router.pop(true),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,
             ),
