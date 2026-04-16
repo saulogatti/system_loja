@@ -33,6 +33,7 @@ class UsuarioList extends StatelessWidget {
         if (usuarios.isEmpty)
           const EmptyWidget(
             message: 'Nenhum usuário cadastrado',
+            icon: Icons.people_outline,
             subMessage: 'Lista de usuários vazia.',
           )
         else

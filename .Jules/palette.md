@@ -14,6 +14,9 @@
 ## 25-10-2023 - Empty States lacking Semantics
 **Learning:** Standard "empty state" implementations (e.g., using `SliverToBoxAdapter` + `Center` + `Icon`/`Text`) often lack a unified `Semantics` wrapper, resulting in screen readers either ignoring them entirely or reading them piecemeal without proper context.
 **Action:** Always wrap empty state visual components in a `Semantics` widget with an explicit `label` to ensure screen readers provide users with immediate feedback that a list or container is empty.
+## 07-04-2026 - [Unified Empty States]
+**Learning:** Wrapping complex empty state widgets (containing both icons and text) in a `Semantics` widget with `excludeSemantics: true` prevents screen readers from reading each element individually. This creates a unified, cleaner auditory experience.
+**Action:** Use a reusable `EmptyWidget` with properly configured `Semantics` properties for all empty states to ensure consistent accessibility across the application.
 
 ## $(date +%d-%m-%Y) - Empty States lacking Semantics
 **Learning:** Standard "empty state" implementations (e.g., using `SliverToBoxAdapter` + `Center` + `Icon`/`Text`) often lack a unified `Semantics` wrapper, resulting in screen readers either ignoring them entirely or reading them piecemeal without proper context.
