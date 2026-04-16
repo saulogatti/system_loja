@@ -26,3 +26,9 @@
 ## 13-04-2026 - Standardizing Empty States with EmptyWidget
 **Learning:** Found that scattered empty states were using custom, complex widget trees (like nested Columns inside Centers and Slivers) with incomplete accessibility semantics, missing `excludeSemantics: true`.
 **Action:** Consistently replace these custom visual layouts with the project's standard `EmptyWidget`, which simplifies the widget tree and ensures cohesive screen reader behavior across the app.
+## $(date +%d-%m-%Y) - Empty States semantic Label overriding
+**Learning:** Utilizing a generic empty state widget can cause regressions in accessibility if the generic widget does not expose a way to inject specific semantic labels (e.g. replacing a fully customized empty state containing specific Semantics).
+**Action:** The reusable `EmptyWidget` was updated to accept an optional `semanticLabel` parameter, which it then uses in its parent `Semantics` widget. Use this parameter whenever replacing a custom empty state that previously provided specifically tailored accessibility context.
+## 14-04-2026 - Consolidating Reports Empty States Semantics
+**Learning:** Previously, standard text-only empty states in reports lacked proper accessibility and consistency. Implementing the centralized EmptyWidget unifies the visual language and ensures that screen readers receive well-formatted and contextual semantics via excludeSemantics.
+**Action:** Favor replacing custom local empty state widgets with the global EmptyWidget throughout the application to enforce accessibility and visual consistency.

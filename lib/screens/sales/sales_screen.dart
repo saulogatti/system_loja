@@ -170,11 +170,9 @@ class _SalesViewState extends State<SalesView> {
                     ),
                   Expanded(
                     child: invoices.isEmpty
-                        ? Center(
-                            child: const EmptyWidget(
-                              message: 'Nenhuma nota fiscal cadastrada',
-                              icon: Icons.receipt_long,
-                            ),
+                        ? const EmptyWidget(
+                            message: 'Nenhuma nota fiscal cadastrada',
+                            icon: Icons.receipt_long,
                           )
                         : GridView.builder(
                             padding: const EdgeInsets.all(12),
