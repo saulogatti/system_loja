@@ -14,3 +14,15 @@
 ## 25-10-2023 - Empty States lacking Semantics
 **Learning:** Standard "empty state" implementations (e.g., using `SliverToBoxAdapter` + `Center` + `Icon`/`Text`) often lack a unified `Semantics` wrapper, resulting in screen readers either ignoring them entirely or reading them piecemeal without proper context.
 **Action:** Always wrap empty state visual components in a `Semantics` widget with an explicit `label` to ensure screen readers provide users with immediate feedback that a list or container is empty.
+
+## $(date +%d-%m-%Y) - Empty States lacking Semantics
+**Learning:** Standard "empty state" implementations (e.g., using `SliverToBoxAdapter` + `Center` + `Icon`/`Text`) often lack a unified `Semantics` wrapper, resulting in screen readers either ignoring them entirely or reading them piecemeal without proper context.
+**Action:** Always wrap empty state visual components in a `Semantics` widget with an explicit `label` to ensure screen readers provide users with immediate feedback that a list or container is empty.
+
+## 08-04-2026 - Consolidating Empty States Semantics
+**Learning:** When creating reusable empty states containing both icons and multiple lines of text, screen readers natively read the elements sequentially and disjointedly. Using `excludeSemantics: true` on a parent `Semantics` wrapper combines the elements into a single cohesive announcement.
+**Action:** Use `excludeSemantics: true` in custom reusable widgets (like `EmptyWidget`) alongside an explicit, combined `label` string to prevent redundant readouts for complex states.
+
+## 27-05-2024 - Standardizing Empty States
+**Learning:** Custom implementations of empty state messages in lists, such as `_EmptyMessage` returning a raw `Text` widget without proper padding and structure, create visual inconsistencies and lack accessibility (semantics). The codebase has a standardized `EmptyWidget` that handles these concerns natively.
+**Action:** When implementing or refactoring empty states in screens containing lists (like reports or products), always use the standard `EmptyWidget` located in `lib/screens/widgets/empty_widget.dart` instead of ad-hoc `Text` or `Center` elements to ensure visual consistency and correct semantics.

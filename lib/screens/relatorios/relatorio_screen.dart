@@ -16,6 +16,7 @@ import 'package:system_loja/screens/relatorios/cubit/relatorio_cubit.dart';
 import 'package:system_loja/screens/relatorios/cubit/relatorio_state.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Tela de relatórios com abas para notas fiscais (entrada/saída) e estoque.
 @RoutePage()
@@ -119,13 +120,7 @@ class _EmptyMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        message,
-        style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontStyle: FontStyle.italic),
-      ),
-    );
+    return EmptyWidget(message: message);
   }
 }
 
