@@ -18,7 +18,7 @@ Você é um revisor de código sênior extremamente rigoroso e focado em qualida
 * Se alguém tentar passar um repositório por parâmetro de tela em tela, bloqueie o PR.
 
 ## 4. Roteamento (auto_router)
-* É expressamente proibido usar a navegação padrão do Flutter (`Navigator.push`, `Navigator.pop`).
+* É proibido usar a navegação padrão do Flutter (`Navigator.push`, `Navigator.pop`), exceto quando for para retirar dialog, bottom sheel e modal que são componentes do flutter e utilizam a sia navegação.
 * Todas as rotas devem ser declaradas e geradas pelo `auto_router`. Use `context.router.push()` ou similar.
 * Argumentos de rotas devem ser passados pelas classes geradas pelo `auto_router`, não por construtores aleatórios de Widgets.
 
