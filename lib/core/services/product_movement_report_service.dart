@@ -34,19 +34,23 @@ class ProductMovementReportService {
     required List<ProductInvoiceMovement> entradas,
     required List<ProductInvoiceMovement> saidas,
   }) {
-    final totalEntryQuantity = entradas.fold<int>(
+      ProductMovementSummary summarize({
+    required List<ProductInvoiceMovement> entries,
+    required List<ProductInvoiceMovement> exits,
+  }) {
+    final totalEntryQuantity = entries.fold<int>(
       0,
       (sum, movement) => sum + movement.item.quantity,
     );
-    final totalExitQuantity = saidas.fold<int>(
+    final totalExitQuantity = exits.fold<int>(
       0,
       (sum, movement) => sum + movement.item.quantity,
     );
-    final totalEntryValue = entradas.fold<double>(
+    final totalEntryValue = entries.fold<double>(
       0,
       (sum, movement) => sum + movement.item.totalValue,
     );
-    final totalExitValue = saidas.fold<double>(
+    final totalExitValue = exits.fold<double>(
       0,
       (sum, movement) => sum + movement.item.totalValue,
     );
