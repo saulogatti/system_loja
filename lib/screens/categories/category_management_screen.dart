@@ -174,7 +174,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => dialogContext.router.maybePop(false),
+            onPressed: () => Navigator.of(dialogContext).pop(false),
             child: const Text('Cancelar'),
           ),
           ElevatedButton(

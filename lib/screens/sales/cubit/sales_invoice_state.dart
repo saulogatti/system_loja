@@ -24,19 +24,23 @@ abstract class SalesInvoiceFormData with _$SalesInvoiceFormData {
 /// Estado da tela: edição normal ou feedback transitório (SnackBar) sem campo opcional solto.
 @freezed
 sealed class SalesInvoiceState with _$SalesInvoiceState {
-  const factory SalesInvoiceState.editing({required SalesInvoiceFormData form}) = SalesInvoiceEditing;
+  const factory SalesInvoiceState.editing({
+    required SalesInvoiceFormData form,
+  }) = SalesInvoiceEditing;
 
   /// Mensagem já tratada para exibir na UI; após o SnackBar, volta para [editing] com o mesmo [form].
-  const factory SalesInvoiceState.feedback({required SalesInvoiceFormData form, required String message}) =
-      SalesInvoiceFeedback;
+  const factory SalesInvoiceState.feedback({
+    required SalesInvoiceFormData form,
+    required String message,
+  }) = SalesInvoiceFeedback;
 }
 
 /// Acesso unificado aos campos do formulário em qualquer variante de [SalesInvoiceState].
 extension SalesInvoiceStateFormX on SalesInvoiceState {
   SalesInvoiceFormData get form => switch (this) {
-        SalesInvoiceEditing(:final form) => form,
-        SalesInvoiceFeedback(:final form) => form,
-      };
+    SalesInvoiceEditing(:final form) => form,
+    SalesInvoiceFeedback(:final form) => form,
+  };
 }
 
 /// Totais e lista ordenada derivados do formulário (fora do Cubit, para respeitar o bloc_lint).

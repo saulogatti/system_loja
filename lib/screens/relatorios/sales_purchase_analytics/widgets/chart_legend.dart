@@ -28,7 +28,10 @@ class _LegendItem extends StatelessWidget {
         Container(
           width: 14,
           height: 14,
-          decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(3)),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(3),
+          ),
         ),
         const SizedBox(width: 6),
         Text(label),
@@ -36,4 +39,3 @@ class _LegendItem extends StatelessWidget {
     );
   }
 }
-

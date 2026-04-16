@@ -43,10 +43,10 @@ class CardListItem extends StatelessWidget {
 
           leading: CircleAvatar(
             backgroundColor: colorAvatar,
-            child: Text(
-              switch (title.isNotEmpty) { true => title[0].toUpperCase(), _ => '' },
-              style: const TextStyle(color: Colors.white),
-            ),
+            child: Text(switch (title.isNotEmpty) {
+              true => title[0].toUpperCase(),
+              _ => '',
+            }, style: const TextStyle(color: Colors.white)),
           ),
           title: Text(
             title,

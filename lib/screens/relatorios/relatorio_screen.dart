@@ -402,7 +402,7 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
 
   @override
   Widget build(BuildContext context) {
-    final exibindoEntradas = _selectedFilter == _InvoiceFilterType.entrada;
+    final isShowingEntries = _selectedFilter == _InvoiceFilterType.entrada;
     final invoices =
         (exibindoEntradas
                 ? widget.entryInvoices.values

@@ -37,7 +37,6 @@ typedef CacheableFactory<T extends Cacheable> =
 /// ```
 class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// Instância única do [CacheManager].
-   
 
   /// Cache em memória para acesso rápido.
   ///

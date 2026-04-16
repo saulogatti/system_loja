@@ -33,7 +33,8 @@ class _InvoiceNumberFieldState extends State<InvoiceNumberField> {
     return BlocConsumer<SalesInvoiceCubit, SalesInvoiceState>(
       listenWhen: (previous, current) =>
           previous.form.invoiceNumber != current.form.invoiceNumber ||
-          previous.form.enableCodeGeneration != current.form.enableCodeGeneration,
+          previous.form.enableCodeGeneration !=
+              current.form.enableCodeGeneration,
       listener: (context, state) {
         final n = state.form.invoiceNumber;
         if (_controller.text != n) {
