@@ -37,13 +37,31 @@ class ProductList extends StatelessWidget {
         ),
         const SizedBox(height: _defaultSpacing),
         if (products.isEmpty)
-          Semantics(
-            label: 'Lista de produtos vazia. Nenhum produto cadastrado.',
-            excludeSemantics: true,
-            child: const Center(
-              child: Padding(
-                padding: EdgeInsets.all(32.0),
-                child: Text('Nenhum produto cadastrado', style: TextStyle(fontSize: 16, color: Colors.grey)),
+          Expanded(
+            child: Center(
+              child: Semantics(
+                label:
+                    'Nenhum produto cadastrado. Cadastre um novo produto para começar.',
+                excludeSemantics: true,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.inventory_2_outlined,
+                      size: 64,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withAlpha(128),
+                    ),
+                    const SizedBox(height: _defaultSpacing),
+                    Text(
+                      'Nenhum produto cadastrado',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text('Cadastre um novo produto para começar'),
+                  ],
+                ),
               ),
             ),
           )
