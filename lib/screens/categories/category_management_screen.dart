@@ -13,16 +13,19 @@ import 'package:system_loja/screens/widgets/empty_widget.dart';
 /// Permite visualizar, criar, editar e excluir categorias.
 /// Acessível através das configurações da aplicação.
 @RoutePage()
-class CategoryManagementScreen extends StatefulWidget implements AutoRouteWrapper {
+class CategoryManagementScreen extends StatefulWidget
+    implements AutoRouteWrapper {
   const CategoryManagementScreen({super.key});
 
   @override
-  State<CategoryManagementScreen> createState() => _CategoryManagementScreenState();
+  State<CategoryManagementScreen> createState() =>
+      _CategoryManagementScreenState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<CategoryCubit>(
-      create: (_) => CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
+      create: (_) =>
+          CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
       child: this,
     );
   }
@@ -41,7 +44,10 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
             loaded: (_) {},
             created: (_) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Categoria criada com sucesso'), backgroundColor: Colors.green),
+                const SnackBar(
+                  content: Text('Categoria criada com sucesso'),
+                  backgroundColor: Colors.green,
+                ),
               );
             },
             updated: (_) {
@@ -61,9 +67,9 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
               );
             },
             error: (message) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(message), backgroundColor: Colors.red),
+              );
             },
           );
         },
@@ -105,7 +111,9 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           child: ListTile(
             leading: const Icon(Icons.category),
             title: Text(category.name),
-            subtitle: category.description != null ? Text(category.description!) : null,
+            subtitle: category.description != null
+                ? Text(category.description!)
+                : null,
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -132,9 +140,16 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline, size: 64, color: Theme.of(context).colorScheme.error),
+          Icon(
+            Icons.error_outline,
+            size: 64,
+            color: Theme.of(context).colorScheme.error,
+          ),
           const SizedBox(height: 16),
-          Text('Erro ao carregar categorias', style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            'Erro ao carregar categorias',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 8),
           Text(message),
           const SizedBox(height: 16),
@@ -158,10 +173,15 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           'Esta ação não poderá ser desfeita e falhará se houver produtos associados.',
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => dialogContext.router.maybePop(false),
+            child: const Text('Cancelar'),
+          ),
           ElevatedButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.error),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
             child: const Text('Excluir'),
           ),
         ],
@@ -175,7 +195,9 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
   Future<void> _showCategoryDialog({Category? category}) async {
     final nameController = TextEditingController(text: category?.name ?? '');
-    final descriptionController = TextEditingController(text: category?.description ?? '');
+    final descriptionController = TextEditingController(
+      text: category?.description ?? '',
+    );
     final formKey = GlobalKey<FormState>();
     final isEdit = category != null;
 
@@ -216,7 +238,10 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Cancelar'),
+          ),
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState!.validate()) {

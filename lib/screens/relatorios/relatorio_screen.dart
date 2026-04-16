@@ -126,6 +126,18 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
   }
 }
 
+/// Mensagem exibida quando não há itens.
+class _EmptyMessage extends StatelessWidget {
+  final String message;
+
+  const _EmptyMessage(this.message);
+
+  @override
+  Widget build(BuildContext context) {
+    return EmptyWidget(message: message);
+  }
+}
+
 /// Aba de relatório de estoque de produtos.
 class _EstoqueTab extends StatelessWidget {
   static const SliverGridDelegateWithMaxCrossAxisExtent _productGridDelegate =
