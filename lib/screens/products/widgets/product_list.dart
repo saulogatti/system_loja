@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/utils_extensions.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Widget da lista de produtos cadastrados
 ///
@@ -20,50 +21,20 @@ class ProductList extends StatelessWidget {
   final List<Product> products;
   final Function(Product) onProductTap;
 
-  const ProductList({
-    required this.products,
-    required this.onProductTap,
-    super.key,
-  });
+  const ProductList({required this.products, required this.onProductTap, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
-          'Produtos Cadastrados',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
+        const Text('Produtos Cadastrados', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         const SizedBox(height: _defaultSpacing),
         if (products.isEmpty)
-          Expanded(
-            child: Center(
-              child: Semantics(
-                label:
-                    'Nenhum produto cadastrado. Cadastre um novo produto para começar.',
-                excludeSemantics: true,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.inventory_2_outlined,
-                      size: 64,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withAlpha(128),
-                    ),
-                    const SizedBox(height: _defaultSpacing),
-                    Text(
-                      'Nenhum produto cadastrado',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    const Text('Cadastre um novo produto para começar'),
-                  ],
-                ),
-              ),
-            ),
+          const EmptyWidget(
+            message: 'Nenhum produto cadastrado',
+            icon: Icons.inventory_2_outlined,
+            semanticLabel: 'Lista de produtos vazia. Nenhum produto cadastrado.',
           )
         else
           Expanded(

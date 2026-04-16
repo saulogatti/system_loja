@@ -126,18 +126,6 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
   }
 }
 
-/// Mensagem exibida quando não há itens.
-class _EmptyMessage extends StatelessWidget {
-  final String message;
-
-  const _EmptyMessage(this.message);
-
-  @override
-  Widget build(BuildContext context) {
-    return EmptyWidget(message: message);
-  }
-}
-
 /// Aba de relatório de estoque de produtos.
 class _EstoqueTab extends StatelessWidget {
   static const SliverGridDelegateWithMaxCrossAxisExtent _productGridDelegate =
@@ -189,10 +177,7 @@ class _EstoqueTab extends StatelessWidget {
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                     children: const [
-                      EmptyWidget(
-                        message: 'Nenhum produto cadastrado',
-                        icon: Icons.inventory_2_outlined,
-                      ),
+                      EmptyWidget(message: 'Nenhum produto cadastrado', icon: Icons.inventory_2_outlined),
                     ],
                   )
                 : GridView.builder(
@@ -355,12 +340,7 @@ class _MovementSection extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             if (movements.isEmpty)
-              Text(
-                'Nenhum registro encontrado.',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              )
+              const EmptyWidget(message: 'Nenhum registro encontrado.', icon: Icons.search_off)
             else
               ...movements.map((movement) {
                 final invoice = movement.invoice;
@@ -498,14 +478,7 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
                 ? ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    children: [
-                      EmptyWidget(
-                        message: emptyMessage,
-                        icon: exibindoEntradas
-                            ? Icons.arrow_downward
-                            : Icons.arrow_upward,
-                      ),
-                    ],
+                    children: [EmptyWidget(message: emptyMessage, icon: Icons.receipt_long_outlined)],
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
