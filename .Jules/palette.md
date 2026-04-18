@@ -35,3 +35,6 @@
 ## 14-04-2026 - Consolidating Reports Empty States Semantics
 **Learning:** Previously, standard text-only empty states in reports lacked proper accessibility and consistency. Implementing the centralized EmptyWidget unifies the visual language and ensures that screen readers receive well-formatted and contextual semantics via excludeSemantics.
 **Action:** Favor replacing custom local empty state widgets with the global EmptyWidget throughout the application to enforce accessibility and visual consistency.
+## 18-04-2026 - Redundant Semantics/Tooltip Wrappers on IconButton
+**Learning:** Found that `IconButton` instances were sometimes wrapped explicitly in `Semantics` or `Tooltip` widgets to provide screen reader labels. This causes screen readers to double-read the button context or adds redundant widget nesting, since `IconButton` automatically provides accessibility semantics via its built-in `tooltip` property.
+**Action:** Always prefer setting the `tooltip` property directly on `IconButton` instead of wrapping it in a `Semantics` or `Tooltip` widget, to keep the widget tree clean and prevent duplicate screen reader announcements.
