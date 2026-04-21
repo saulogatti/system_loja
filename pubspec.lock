@@ -77,10 +77,10 @@ packages:
     dependency: "direct main"
     description:
       name: bloc_lint
-      sha256: e40b578297488e5a263cbfa2180b186546f32da40ae8a57cad6aa68be5a46f79
+      sha256: "5bf965e3be5346fd6133e7f2eb4c845de3f2ae09eeae4d6622f400848b4aba71"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "0.4.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -565,7 +565,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "5ab5a4deafabb2d98184397c60da4b1b3731465c"
+      resolved-ref: "198e1038f56d81ae17f698d98542303dd9a0e777"
       url: "https://github.com/saulogatti/log_custom_printer"
     source: git
     version: "2.2.0"
@@ -842,10 +842,10 @@ packages:
     dependency: "direct main"
     description:
       name: sqlite3
-      sha256: b3fe250b4ebd681a8ba20b12794c42b00c1375e5b51005568f0b8731265beb03
+      sha256: "56da3e13ed7d28a66f930aa2b2b29db6736a233f08283326e96321dd812030f5"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.0"
+    version: "3.3.1"
   sqlite3_flutter_libs:
     dependency: "direct main"
     description:
@@ -921,20 +921,20 @@ packages:
   typed_data:
     dependency: transitive
     description:
-      name: test_api
-      sha256: "93167629bfc610f71560ab9312acdda4959de4df6fac7492c89ff0d3886f6636"
+      name: typed_data
+      sha256: f9049c039ebfeb4cf7a7104a675823cd72dba8297f264b6637062516699fa006
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.9"
-  test_core:
+    version: "1.4.0"
+  url_launcher_linux:
     dependency: transitive
     description:
-      name: test_core
-      sha256: "394f07d21f0f2255ec9e3989f21e54d3c7dc0e6e9dbce160e5a9c1a6be0e2943"
+      name: url_launcher_linux
+      sha256: d5e14138b3bc193a0f63c10a53c94b91d399df0512b1f29b94a043db7482384a
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.15"
-  typed_data:
+    version: "3.2.2"
+  url_launcher_platform_interface:
     dependency: transitive
     description:
       name: url_launcher_platform_interface
@@ -978,10 +978,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: "45caa6c5917fa127b5dbcfbd1fa60b14e583afdc08bfc96dda38886ca252eb60"
+      sha256: "046d3928e16fa4dc46e8350415661755ab759d9fc97fc21b5ab295f71e4f0499"
       url: "https://pub.dev"
     source: hosted
-    version: "15.0.2"
+    version: "15.1.0"
   watcher:
     dependency: transitive
     description:
