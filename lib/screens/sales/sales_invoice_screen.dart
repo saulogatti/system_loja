@@ -19,7 +19,10 @@ import 'package:system_loja/screens/sales/widgets/sales_invoice/select_product_d
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Evita SnackBar duplicado ao reemitir o mesmo [SalesInvoiceFeedback].
-bool _shouldListenForFeedbackSnackBar(SalesInvoiceState previous, SalesInvoiceState current) {
+bool _shouldListenForFeedbackSnackBar(
+  SalesInvoiceState previous,
+  SalesInvoiceState current,
+) {
   if (current is! SalesInvoiceFeedback) return false;
   if (previous is! SalesInvoiceFeedback) return true;
   return previous.message != current.message;
@@ -45,7 +48,10 @@ class SalesInvoiceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SalesInvoiceCubit(salesCubit: salesCubit, paymentMethods: paymentMethods),
+      create: (_) => SalesInvoiceCubit(
+        salesCubit: salesCubit,
+        paymentMethods: paymentMethods,
+      ),
       child: _SalesInvoiceBody(
         paymentMethods: paymentMethods,
         customers: customers,
@@ -87,9 +93,9 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
       listenWhen: _shouldListenForFeedbackSnackBar,
       listener: (context, state) {
         if (state case SalesInvoiceFeedback(:final message)) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message), backgroundColor: Colors.red),
+          );
           context.read<SalesInvoiceCubit>().consumeFeedback();
         }
       },
@@ -104,7 +110,10 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
           child: CustomScrollView(
             slivers: [
               SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 16.0,
+                ),
                 sliver: SliverMainAxisGroup(
                   slivers: [
                     SliverToBoxAdapter(
@@ -113,96 +122,128 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                         children: [
                           const Expanded(child: InvoiceNumberField()),
                           const SizedBox(width: 8),
-                          Tooltip(
-                            message: 'Gerar número automaticamente',
-                            child: IconButton(
-                              onPressed: () => context.read<SalesInvoiceCubit>().toggleAutoInvoiceNumber(),
-                              icon: const Icon(Icons.generating_tokens_outlined),
-                            ),
+                          IconButton(
+                            tooltip: 'Gerar número automaticamente',
+                            onPressed: () => context
+                                .read<SalesInvoiceCubit>()
+                                .toggleAutoInvoiceNumber(),
+                            icon: const Icon(Icons.generating_tokens_outlined),
                           ),
                         ],
                       ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 16)),
                     SliverToBoxAdapter(
-                      child: BlocSelector<SalesInvoiceCubit, SalesInvoiceState, InvoiceType>(
-                        selector: (state) => state.form.invoiceType,
-                        builder: (context, invoiceType) {
-                          return InvoiceTypeSegmented(
-                            invoiceType: invoiceType,
-                            onChanged: context.read<SalesInvoiceCubit>().setInvoiceType,
-                          );
-                        },
-                      ),
-                    ),
-                    const SliverToBoxAdapter(child: SizedBox(height: 16)),
-                    SliverToBoxAdapter(
-                      child: BlocSelector<SalesInvoiceCubit, SalesInvoiceState, PersonSelection?>(
-                        selector: (state) => state.form.person,
-                        builder: (context, person) {
-                          return DropdownButtonFormField<PersonSelection>(
-                            initialValue: person,
-                            decoration: InputDecoration(
-                              labelText: 'Cliente ou Empresa *',
-                              border: const OutlineInputBorder(),
-                              prefixIcon: Icon(person?.icon ?? Icons.person_search),
-                            ),
-                            items: _personOptions.map((p) {
-                              return DropdownMenuItem(
-                                value: p,
-                                child: Text(
-                                  '${p.displayName} (${p.document})',
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                      child:
+                          BlocSelector<
+                            SalesInvoiceCubit,
+                            SalesInvoiceState,
+                            InvoiceType
+                          >(
+                            selector: (state) => state.form.invoiceType,
+                            builder: (context, invoiceType) {
+                              return InvoiceTypeSegmented(
+                                invoiceType: invoiceType,
+                                onChanged: context
+                                    .read<SalesInvoiceCubit>()
+                                    .setInvoiceType,
                               );
-                            }).toList(),
-                            onChanged: (value) => context.read<SalesInvoiceCubit>().setPerson(value),
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Selecione um cliente ou empresa';
-                              }
-                              return null;
                             },
-                          );
-                        },
-                      ),
+                          ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 16)),
                     SliverToBoxAdapter(
-                      child: BlocSelector<SalesInvoiceCubit, SalesInvoiceState, PaymentMethodType?>(
-                        selector: (state) => state.form.paymentMethod,
-                        builder: (context, paymentMethod) {
-                          return DropdownButtonFormField<PaymentMethodType>(
-                            initialValue: paymentMethod,
-                            decoration: const InputDecoration(
-                              labelText: 'Forma de Pagamento *',
-                              border: OutlineInputBorder(),
-                              prefixIcon: Icon(Icons.payment),
-                              helperText: 'Ex: Dinheiro, Cartão, Pix',
-                            ),
-                            items: widget.paymentMethods.map((method) {
-                              return DropdownMenuItem(value: method, child: Text(method.name));
-                            }).toList(),
-                            onChanged: (value) {
-                              if (value == null) return;
-                              context.read<SalesInvoiceCubit>().setPaymentMethod(value);
+                      child:
+                          BlocSelector<
+                            SalesInvoiceCubit,
+                            SalesInvoiceState,
+                            PersonSelection?
+                          >(
+                            selector: (state) => state.form.person,
+                            builder: (context, person) {
+                              return DropdownButtonFormField<PersonSelection>(
+                                initialValue: person,
+                                decoration: InputDecoration(
+                                  labelText: 'Cliente ou Empresa *',
+                                  border: const OutlineInputBorder(),
+                                  prefixIcon: Icon(
+                                    person?.icon ?? Icons.person_search,
+                                  ),
+                                ),
+                                items: _personOptions.map((p) {
+                                  return DropdownMenuItem(
+                                    value: p,
+                                    child: Text(
+                                      '${p.displayName} (${p.document})',
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (value) => context
+                                    .read<SalesInvoiceCubit>()
+                                    .setPerson(value),
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Selecione um cliente ou empresa';
+                                  }
+                                  return null;
+                                },
+                              );
                             },
-                            validator: (value) {
-                              if (value == null) {
-                                return 'Selecione uma forma de pagamento';
-                              }
-                              return null;
+                          ),
+                    ),
+                    const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                    SliverToBoxAdapter(
+                      child:
+                          BlocSelector<
+                            SalesInvoiceCubit,
+                            SalesInvoiceState,
+                            PaymentMethodType?
+                          >(
+                            selector: (state) => state.form.paymentMethod,
+                            builder: (context, paymentMethod) {
+                              return DropdownButtonFormField<PaymentMethodType>(
+                                initialValue: paymentMethod,
+                                decoration: const InputDecoration(
+                                  labelText: 'Forma de Pagamento *',
+                                  border: OutlineInputBorder(),
+                                  prefixIcon: Icon(Icons.payment),
+                                  helperText: 'Ex: Dinheiro, Cartão, Pix',
+                                ),
+                                items: widget.paymentMethods.map((method) {
+                                  return DropdownMenuItem(
+                                    value: method,
+                                    child: Text(method.name),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  if (value == null) return;
+                                  context
+                                      .read<SalesInvoiceCubit>()
+                                      .setPaymentMethod(value);
+                                },
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Selecione uma forma de pagamento';
+                                  }
+                                  return null;
+                                },
+                              );
                             },
-                          );
-                        },
-                      ),
+                          ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 24)),
                     SliverToBoxAdapter(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Itens', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          const Text(
+                            'Itens',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                           ElevatedButton.icon(
                             onPressed: _onAddItem,
                             icon: const Icon(Icons.add),
@@ -214,8 +255,10 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                     const SliverToBoxAdapter(child: SizedBox(height: 16)),
                     BlocBuilder<SalesInvoiceCubit, SalesInvoiceState>(
                       buildWhen: (previous, current) =>
-                          previous.form.linesByProductId != current.form.linesByProductId ||
-                          previous.form.orderedProductIds != current.form.orderedProductIds,
+                          previous.form.linesByProductId !=
+                              current.form.linesByProductId ||
+                          previous.form.orderedProductIds !=
+                              current.form.orderedProductIds,
                       builder: (context, state) {
                         final orderedLines = state.form.buildOrderedLines();
                         if (orderedLines.isEmpty) {
@@ -232,7 +275,9 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                             final line = orderedLines[index];
                             return InvoiceLineTile(
                               entry: line,
-                              onDelete: () => context.read<SalesInvoiceCubit>().removeLine(line.product.id),
+                              onDelete: () => context
+                                  .read<SalesInvoiceCubit>()
+                                  .removeLine(line.product.id),
                             );
                           },
                         );
@@ -240,31 +285,48 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 24)),
                     SliverToBoxAdapter(
-                      child: BlocSelector<SalesInvoiceCubit, SalesInvoiceState, double>(
-                        selector: (state) => state.form.computeTotal(),
-                        builder: (context, total) {
-                          return InvoiceTotalBar(total: total);
-                        },
-                      ),
+                      child:
+                          BlocSelector<
+                            SalesInvoiceCubit,
+                            SalesInvoiceState,
+                            double
+                          >(
+                            selector: (state) => state.form.computeTotal(),
+                            builder: (context, total) {
+                              return InvoiceTotalBar(total: total);
+                            },
+                          ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 24)),
                     SliverToBoxAdapter(
-                      child: BlocSelector<SalesInvoiceCubit, SalesInvoiceState, bool>(
-                        selector: (state) => state.form.isSubmitting,
-                        builder: (context, isSubmitting) {
-                          return ElevatedButton(
-                            onPressed: isSubmitting ? null : _onSave,
-                            style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
-                            child: isSubmitting
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
-                                  )
-                                : const Text('Salvar Nota Fiscal', style: TextStyle(fontSize: 16)),
-                          );
-                        },
-                      ),
+                      child:
+                          BlocSelector<
+                            SalesInvoiceCubit,
+                            SalesInvoiceState,
+                            bool
+                          >(
+                            selector: (state) => state.form.isSubmitting,
+                            builder: (context, isSubmitting) {
+                              return ElevatedButton(
+                                onPressed: isSubmitting ? null : _onSave,
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.all(16),
+                                ),
+                                child: isSubmitting
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Salvar Nota Fiscal',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                              );
+                            },
+                          ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 32)),
                   ],
@@ -287,8 +349,10 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
     final invoiceCubit = context.read<SalesInvoiceCubit>();
     final quantity = await showDialog<int>(
       context: context,
-      builder: (context) =>
-          InvoiceQuantityDialog(product: product, invoiceType: invoiceCubit.state.form.invoiceType),
+      builder: (context) => InvoiceQuantityDialog(
+        product: product,
+        invoiceType: invoiceCubit.state.form.invoiceType,
+      ),
     );
 
     if (quantity == null || !mounted) return;
