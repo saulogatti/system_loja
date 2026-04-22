@@ -97,7 +97,6 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
     if (categories.isEmpty) {
       return const EmptyWidget(
         message: 'Nenhuma categoria cadastrada',
-        subtitle: 'Toque no botão + para adicionar',
         subMessage: 'Toque no botão + para adicionar',
         icon: Icons.category_outlined,
       );
