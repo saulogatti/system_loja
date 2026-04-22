@@ -33,6 +33,8 @@ class EmptyWidget extends StatelessWidget {
               container: true,
               excludeSemantics: true,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                 children: [
                   Icon(
                     icon,
