@@ -41,3 +41,6 @@
 ## 18-04-2026 - Redundant Semantics/Tooltip Wrappers on IconButton
 **Learning:** Found that `IconButton` instances were sometimes wrapped explicitly in `Semantics` or `Tooltip` widgets to provide screen reader labels. This causes screen readers to double-read the button context or adds redundant widget nesting, since `IconButton` automatically provides accessibility semantics via its built-in `tooltip` property.
 **Action:** Always prefer setting the `tooltip` property directly on `IconButton` instead of wrapping it in a `Semantics` or `Tooltip` widget, to keep the widget tree clean and prevent duplicate screen reader announcements.
+## 24-05-2024 - [Fixed EmptyWidget Accessibility Regression]
+**Learning:** Using `excludeSemantics: true` on a parent `Semantics` node that contains interactive children (like `action` buttons in `EmptyWidget`) completely hides those interactive elements from screen readers, creating a critical accessibility blocker.
+**Action:** Apply `excludeSemantics: true` selectively only to the non-interactive informational content (text/icons) while leaving interactive children (buttons) outside the exclusion wrapper so they remain focusable and readable.
