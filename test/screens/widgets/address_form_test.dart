@@ -45,6 +45,7 @@ void main() {
     expect(fields[1].textInputAction, TextInputAction.next);
 
     // Field 2: Bairro
+    expect(fields[2].autofillHints, contains(AutofillHints.sublocality));
     expect(fields[2].textInputAction, TextInputAction.next);
 
     // Field 3: Cidade
