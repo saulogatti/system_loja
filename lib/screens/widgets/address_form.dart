@@ -63,6 +63,7 @@ class AddressForm extends StatelessWidget {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.map),
                 ),
+                autofillHints: const [AutofillHints.sublocality],
                 textInputAction: TextInputAction.next,
               ),
             ),
