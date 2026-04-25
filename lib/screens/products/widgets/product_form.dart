@@ -53,6 +53,7 @@ class _ProductFormState extends State<ProductForm> {
           const SizedBox(height: 20),
           TextFormField(
             controller: widget.nomeController,
+            textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
               labelText: 'Nome do Produto *',
               border: OutlineInputBorder(),
@@ -72,6 +73,7 @@ class _ProductFormState extends State<ProductForm> {
                 child: TextFormField(
                   readOnly: _generatedCode,
                   controller: widget.codigoController,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Código *',
                     border: OutlineInputBorder(),
@@ -106,6 +108,7 @@ class _ProductFormState extends State<ProductForm> {
               Expanded(
                 child: TextFormField(
                   controller: widget.precoController,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Preço *',
                     border: OutlineInputBorder(),
@@ -123,6 +126,7 @@ class _ProductFormState extends State<ProductForm> {
               Expanded(
                 child: TextFormField(
                   controller: widget.estoqueController,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Estoque *',
                     border: OutlineInputBorder(),
