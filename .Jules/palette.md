@@ -51,3 +51,6 @@
 ## $(date +%d-%m-%Y) - Form Field Keyboard UX
 **Learning:** Proper use of `keyboardType`, `autofillHints`, and `textInputAction` (especially ending with `TextInputAction.done` linked to `onFieldSubmitted`) drastically reduces friction for users filling out forms, as it keeps their hands on the virtual keyboard instead of requiring them to search for a separate submit button.
 **Action:** When creating or modifying forms, always ensure fields flow sequentially via `TextInputAction.next` and end with `TextInputAction.done` that triggers form submission.
+## 28-04-2026 - Form Field Keyboard UX
+**Learning:** Proper use of `keyboardType`, `autofillHints`, and `textInputAction` (especially ending with `TextInputAction.done` linked to `onFieldSubmitted`) drastically reduces friction for users filling out forms, as it keeps their hands on the virtual keyboard instead of requiring them to search for a separate submit button.
+**Action:** When creating or modifying forms, always ensure fields flow sequentially via `TextInputAction.next` and end with `TextInputAction.done` that triggers form submission. Multiline fields should omit `textInputAction` to preserve line break behavior.

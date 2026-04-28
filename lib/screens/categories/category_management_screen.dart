@@ -212,6 +212,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
             children: [
               TextFormField(
                 controller: nameController,
+                textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                   labelText: 'Nome *',
                   border: OutlineInputBorder(),
