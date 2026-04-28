@@ -89,6 +89,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
           const SizedBox(height: 16),
           TextFormField(
             controller: widget.senhaController,
+            keyboardType: TextInputType.visiblePassword,
             textInputAction: TextInputAction.done,
             autofillHints: const [AutofillHints.newPassword],
             decoration: InputDecoration(
