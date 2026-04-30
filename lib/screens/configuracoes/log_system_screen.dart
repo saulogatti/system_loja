@@ -44,7 +44,7 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                 icon: const Icon(Icons.delete),
                 onPressed: hasLogs
                     ? () async {
-                        final confirmar = await showDialog<bool>(
+                        final confirmed = await showDialog<bool>(
                           context: context,
                           builder: (context) => AlertDialog(
                             title: const Text('Limpar Logs'),
