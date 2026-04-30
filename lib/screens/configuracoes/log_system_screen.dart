@@ -59,7 +59,7 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                               ),
                               ElevatedButton(
                                 onPressed: () =>
-                                    Navigator.of(context).pop(true),
+                                    context.router.pop(true),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Theme.of(
                                     context,
@@ -74,7 +74,7 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                           ),
                         );
 
-                        if (confirmar == true && context.mounted) {
+                        if (confirmed == true && context.mounted) {
                           context.read<LogsSystemCubit>().clearLogs();
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -123,7 +123,7 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                             ),
                             actions: [
                               TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
+                                onPressed: () => context.router.pop(),
                                 child: const Text('Fechar'),
                               ),
                             ],
