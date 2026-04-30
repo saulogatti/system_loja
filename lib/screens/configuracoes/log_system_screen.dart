@@ -18,8 +18,7 @@ class LogSystemScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          LogsSystemCubit(appInjection.get<ISystemErrorManager>()),
+      create: (context) => LogsSystemCubit(appInjection.get<ISystemErrorManager>()),
       child: this,
     );
   }
@@ -28,12 +27,18 @@ class LogSystemScreen extends StatefulWidget implements AutoRouteWrapper {
 class _LogSystemScreenState extends State<LogSystemScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LogsSystemCubit, LogsSystemState>(
-      builder: (context, state) {
-        final hasLogs = state.maybeWhen(
-          loaded: (logs) => logs.isNotEmpty,
-          orElse: () => false,
+    return BlocConsumer<LogsSystemCubit, LogsSystemState>(
+      listener: (context, state) {
+        state.whenOrNull(
+          error: (message) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(message), backgroundColor: Theme.of(context).colorScheme.error),
+            );
+          },
         );
+      },
+      builder: (context, state) {
+        final hasLogs = state.maybeWhen(loaded: (logs) => logs.isNotEmpty, orElse: () => false);
 
         return Scaffold(
           appBar: AppBar(
@@ -44,7 +49,7 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                 icon: const Icon(Icons.delete),
                 onPressed: hasLogs
                     ? () async {
-                        final confirmed = await showDialog<bool>(
+                        final confirmar = await showDialog<bool>(
                           context: context,
                           builder: (context) => AlertDialog(
                             title: const Text('Limpar Logs'),
@@ -53,20 +58,14 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                             ),
                             actions: [
                               TextButton(
-                                onPressed: () =>
-                                    context.router.pop(false),
+                                onPressed: () => Navigator.of(context).pop(false),
                                 child: const Text('Cancelar'),
                               ),
                               ElevatedButton(
-                                onPressed: () =>
-                                    context.router.pop(true),
+                                onPressed: () => Navigator.of(context).pop(true),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(
-                                    context,
-                                  ).colorScheme.error,
-                                  foregroundColor: Theme.of(
-                                    context,
-                                  ).colorScheme.onError,
+                                  backgroundColor: Theme.of(context).colorScheme.error,
+                                  foregroundColor: Theme.of(context).colorScheme.onError,
                                 ),
                                 child: const Text('Limpar'),
                               ),
@@ -74,7 +73,7 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                           ),
                         );
 
-                        if (confirmed == true && context.mounted) {
+                        if (confirmar == true && context.mounted) {
                           context.read<LogsSystemCubit>().clearLogs();
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -97,11 +96,9 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                 if (logs.isEmpty) {
                   return const EmptyWidget(
                     message: 'Nenhum log registrado',
-                    subMessage:
-                        'O sistema não possui erros registrados no momento.',
+                    subMessage: 'O sistema não possui erros registrados no momento.',
                     icon: Icons.check_circle_outline,
-                    semanticLabel:
-                        'Lista de logs vazia. Nenhum log registrado.',
+                    semanticLabel: 'Lista de logs vazia. Nenhum log registrado.',
                   );
                 }
 
@@ -123,7 +120,7 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                             ),
                             actions: [
                               TextButton(
-                                onPressed: () => context.router.pop(),
+                                onPressed: () => Navigator.of(context).pop(),
                                 child: const Text('Fechar'),
                               ),
                             ],
