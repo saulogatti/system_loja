@@ -40,6 +40,13 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
           controller: _controller,
           keyboardType: TextInputType.number,
           inputFormatters: [QuantityInputFormatter()],
+          textInputAction: TextInputAction.done,
+          onFieldSubmitted: (_) {
+            if (_formKey.currentState!.validate()) {
+              final qtd = int.parse(_controller.text.trim());
+              Navigator.pop(context, qtd);
+            }
+          },
           decoration: InputDecoration(
             labelText: 'Quantidade *',
             helperText: widget.invoiceType == InvoiceType.exit
