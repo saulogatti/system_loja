@@ -54,7 +54,7 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                             actions: [
                               TextButton(
                                 onPressed: () =>
-                                    Navigator.of(context).pop(false),
+                                    context.router.pop(false),
                                 child: const Text('Cancelar'),
                               ),
                               ElevatedButton(
