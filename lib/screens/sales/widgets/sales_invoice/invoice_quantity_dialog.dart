@@ -43,8 +43,8 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
           textInputAction: TextInputAction.done,
           onFieldSubmitted: (_) {
             if (_formKey.currentState!.validate()) {
-              final qtd = int.parse(_controller.text.trim());
-              Navigator.pop(context, qtd);
+              final quantity = int.parse(_controller.text.trim());
+              context.router.maybePop(quantity);
             }
           },
           decoration: InputDecoration(
