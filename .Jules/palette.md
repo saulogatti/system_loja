@@ -54,3 +54,6 @@
 ## 28-04-2026 - Form Field Keyboard UX
 **Learning:** Proper use of `keyboardType`, `autofillHints`, and `textInputAction` (especially ending with `TextInputAction.done` linked to `onFieldSubmitted`) drastically reduces friction for users filling out forms, as it keeps their hands on the virtual keyboard instead of requiring them to search for a separate submit button.
 **Action:** When creating or modifying forms, always ensure fields flow sequentially via `TextInputAction.next` and end with `TextInputAction.done` that triggers form submission. Multiline fields should omit `textInputAction` to preserve line break behavior.
+## 02-05-2024 - [Visual Affordance in Dialog Lists]
+**Learning:** ListTiles inside selection dialogs often look like static data. Without a trailing action icon (like `add_circle_outline` or `chevron_right`), users might not realize the entire row is tappable to make a selection.
+**Action:** Always add a trailing icon to ListTiles used for single-item selection in dialogs to provide clear visual interaction cues.
