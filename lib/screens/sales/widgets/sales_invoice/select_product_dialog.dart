@@ -21,20 +21,14 @@ class SelectProductDialog extends StatelessWidget {
             final product = products[index];
             return ListTile(
               title: Text(product.name),
-              subtitle: Text(
-                'R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}',
-              ),
+              subtitle: Text('R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}'),
+              trailing: const Icon(Icons.add_circle_outline),
               onTap: () => Navigator.pop(context, product),
             );
           },
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancelar'),
-        ),
-      ],
+      actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar'))],
     );
   }
 }
