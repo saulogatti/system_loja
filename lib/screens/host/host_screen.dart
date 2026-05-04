@@ -17,7 +17,7 @@ class HostScreen extends StatelessWidget {
         );
       },
       routes: [
-        HomeRoute(),
+        SalesPurchaseAnalyticsRoute(),
         CadastroGroupRoute(),
         SalesRoute(),
         RelatoriosRoute(),

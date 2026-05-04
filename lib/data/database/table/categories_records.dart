@@ -6,19 +6,19 @@ import 'package:drift/drift.dart';
 /// quando produtos são deletados. Produtos referenciam categorias através
 /// de chave estrangeira (categoryId).
 class CategoriesRecords extends Table {
+  /// Descrição opcional da categoria
+  TextColumn get description => text().nullable()();
+
   /// Identificador único da categoria (auto-incrementado)
   IntColumn get id => integer().autoIncrement()();
+
+  /// Data da última atualização
+  DateTimeColumn get lastUpdatedDate => dateTime().nullable()();
 
   /// Nome da categoria (obrigatório e único)
   TextColumn get name => text().unique()();
 
-  /// Descrição opcional da categoria
-  TextColumn get description => text().nullable()();
-
   /// Data de criação do registro
   DateTimeColumn get registrationDate =>
       dateTime().withDefault(currentDateAndTime)();
-
-  /// Data da última atualização
-  DateTimeColumn get lastUpdatedDate => dateTime().nullable()();
 }

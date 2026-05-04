@@ -33,4 +33,26 @@ class Product extends DefaultObject {
     this.categoryId,
     super.id,
   });
+
+  Product copyWith({
+    String? name,
+    String? description,
+    double? price,
+    int? stockQuantity,
+    int? categoryId,
+
+    DateTime? lastUpdatedDate,
+  }) {
+    return Product(
+      name: name ?? this.name,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      stockQuantity: stockQuantity ?? this.stockQuantity,
+      categoryId: categoryId ?? this.categoryId,
+      code: code,
+      registrationDate: registrationDate,
+      lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
+      id: id,
+    );
+  }
 }

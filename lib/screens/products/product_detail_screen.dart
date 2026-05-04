@@ -7,6 +7,7 @@ import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/products/cubit/product_cubit.dart';
 import 'package:system_loja/screens/products/cubit/product_state.dart';
+import 'package:system_loja/screens/products/product_list_screen.dart';
 import 'package:system_loja/screens/products/widgets/product_category.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
 
@@ -46,34 +47,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late final TextEditingController _descricaoController;
   int? _selectedCategoryId;
   final _formKey = GlobalKey<FormState>();
-  bool _isEditing = false;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProductCubit, ProductState>(
       listener: (context, state) {
         if (state is ProductStateUpdateSuccess) {
-          // Produto foi atualizado com sucesso
-          if (_isEditing) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Produto atualizado com sucesso!'),
-                backgroundColor: Colors.green,
-              ),
-            );
-            setState(() {
-              _isEditing = false;
-            });
-          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Produto atualizado com sucesso!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          ProductListScreen.requestReload();
+          context.router.maybePop(true);
         } else if (state is ProductStateDeleteSuccess) {
-          // Produto foi deletado
-          Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Produto deletado com sucesso!'),
               backgroundColor: Colors.green,
             ),
           );
+          ProductListScreen.requestReload();
+          context.router.maybePop(true);
         } else if (state is ProductStateError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message), backgroundColor: Colors.red),
@@ -83,22 +79,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            if (!_isEditing)
-              IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: () {
-                  setState(() {
-                    _isEditing = true;
-                  });
-                },
-                tooltip: 'Editar',
-              ),
-            if (!_isEditing)
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: _confirmarExclusao,
-                tooltip: 'Deletar',
-              ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: _confirmarExclusao,
+              tooltip: 'Deletar',
+            ),
           ],
         ),
         body: SingleChildScrollView(
@@ -145,7 +130,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.inventory_2),
                           ),
-                          enabled: _isEditing,
+                          enabled: true,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return 'Nome é obrigatório';
@@ -161,8 +146,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.qr_code),
                           ),
-                          readOnly:
-                              true, // Código não editável para manter integridade dos dados
+                          enabled: false,
+                          readOnly: true,
                         ),
                         const SizedBox(height: 16),
                         Row(
@@ -179,7 +164,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     const TextInputType.numberWithOptions(
                                       decimal: true,
                                     ),
-                                enabled: _isEditing,
+                                enabled: true,
                                 validator: (value) {
                                   if (value == null || value.trim().isEmpty) {
                                     return 'Preço é obrigatório';
@@ -207,7 +192,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
                                 ],
-                                enabled: _isEditing,
+                                enabled: true,
                                 validator: (value) {
                                   if (value == null || value.trim().isEmpty) {
                                     return 'Estoque é obrigatório';
@@ -225,7 +210,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         const SizedBox(height: 16),
                         ProductCategory(
                           selectedCategoryId: _selectedCategoryId,
-                          enabled: _isEditing,
+                          enabled: true,
                           onChanged: (categoryId) {
                             setState(() {
                               _selectedCategoryId = categoryId;
@@ -240,7 +225,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.description),
                           ),
-                          enabled: _isEditing,
+                          enabled: true,
                           maxLines: 3,
                         ),
                       ],
@@ -289,40 +274,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                 const SizedBox(height: 24),
 
-                // Botões de ação quando em modo de edição
-                if (_isEditing)
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            setState(() {
-                              _isEditing = false;
-                              // Restaurar valores originais
-                              _nomeController.text = widget.product.name;
-                              _precoController.text = widget.product.price
-                                  .toStringAsFixed(2);
-                              _estoqueController.text = widget
-                                  .product
-                                  .stockQuantity
-                                  .toString();
-                              _selectedCategoryId = widget.product.categoryId;
-                              _descricaoController.text =
-                                  widget.product.description;
-                            });
-                          },
-                          child: const Text('Cancelar'),
-                        ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => context.router.maybePop(false),
+                        child: const Text('Voltar'),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: _salvarAlteracoes,
-                          child: const Text('Salvar Alterações'),
-                        ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _salvarAlteracoes,
+                        child: const Text('Salvar Alterações'),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -429,14 +397,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       );
       final estoque = int.parse(_estoqueController.text.trim());
 
-      final updatedProduct = Product(
+      final updatedProduct = widget.product.copyWith(
         name: _nomeController.text.trim(),
-        code: widget.product.code,
+
         price: preco,
         stockQuantity: estoque,
         description: _descricaoController.text.trim(),
         categoryId: _selectedCategoryId,
-        id: widget.product.id,
+
         lastUpdatedDate: DateTime.now(),
       );
 

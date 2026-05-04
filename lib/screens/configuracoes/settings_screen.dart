@@ -102,6 +102,8 @@ class SettingsScreen extends StatefulWidget implements AutoRouteWrapper {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  AppSettings? _draftConfig;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,6 +128,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: BlocConsumer<SettingsBloc, SettingsState>(
         listener: (context, state) {
           if (state is SettingsLoadedState) {
+            _draftConfig = state.appSettings;
             if (state.status != SettingsSuccessStatus.loaded) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -169,7 +172,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               return const Center(child: CircularProgressIndicator());
 
             case SettingsLoadedState():
-              final currentConfig = state.appSettings;
+              final currentConfig = _draftConfig ?? state.appSettings;
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -177,14 +180,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     SecaoNotificacoes(
                       config: currentConfig,
-                      onConfigChanged: (newConfig) =>
-                          _updateConfig(context, newConfig),
+                      onConfigChanged: _updateConfig,
                     ),
                     const SizedBox(height: 24),
                     ThemeSettings(
                       config: currentConfig,
-                      onConfigChanged: (newConfig) =>
-                          _updateConfig(context, newConfig),
+                      onConfigChanged: _updateConfig,
                       onMostrarSeletorCor: () =>
                           _mostrarSeletorCor(context, currentConfig),
                     ),
@@ -192,8 +193,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     const SizedBox(height: 24),
                     SecaoBackup(
                       config: currentConfig,
-                      onConfigChanged: (newConfig) =>
-                          _updateConfig(context, newConfig),
+                      onConfigChanged: _updateConfig,
                       onRealizarBackup: () => context.read<SettingsBloc>().add(
                         const BackupSettingsEvent(),
                       ),
@@ -203,8 +203,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     const SizedBox(height: 24),
                     MaintenanceSection(
                       config: currentConfig,
-                      onConfigChanged: (newConfig) =>
-                          _updateConfig(context, newConfig),
+                      onConfigChanged: _updateConfig,
                       onLimparLogsAntigos: () =>
                           _limparLogsAntigos(context, currentConfig),
                       onLimparTodosDados: () => _limparTodosDados(context),
@@ -212,8 +211,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     const SizedBox(height: 24),
                     SecuritySection(
                       config: currentConfig,
-                      onConfigChanged: (newConfig) =>
-                          _updateConfig(context, newConfig),
+                      onConfigChanged: _updateConfig,
                     ),
                     const SizedBox(height: 24),
                     const LogErrorSystemSection(),
@@ -244,7 +242,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         label: const Text('Salvar Configurações'),
         style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
         onPressed: () {
-          context.read<SettingsBloc>().add(UpdateSettingsEvent(config));
+          context.read<SettingsBloc>().add(
+            UpdateSettingsEvent(_draftConfig ?? config),
+          );
         },
       ),
     );
@@ -374,7 +374,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     if (selecionada != null && context.mounted) {
       final newConfig = config.copyWith(corPrimaria: selecionada);
-      context.read<SettingsBloc>().add(UpdateSettingsEvent(newConfig));
+      _updateConfig(newConfig);
     }
   }
 
@@ -440,17 +440,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     if (selecionado != null && context.mounted) {
       final newConfig = config.copyWith(frequenciaBackup: selecionado.value);
-      context.read<SettingsBloc>().add(UpdateSettingsEvent(newConfig));
+      _updateConfig(newConfig);
     }
   }
 
   /// Atualiza a configuração no estado local (não salva ainda)
-  void _updateConfig(BuildContext context, AppSettings newConfig) {
-    context.read<SettingsBloc>().add(
-      UpdateSettingsEvent(newConfig),
-    ); // Recarrega para manter estado
-    // Aqui mantemos o config local até salvar
-    // Em uma implementação mais complexa, usaríamos outro evento
+  void _updateConfig(AppSettings newConfig) {
+    setState(() {
+      _draftConfig = newConfig;
+    });
   }
 }
 

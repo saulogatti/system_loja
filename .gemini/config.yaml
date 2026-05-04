@@ -12,7 +12,7 @@ max_review_comments: 10
 pull_request_opened:
   summary: true # Faz um resumão automático do que o desenvolvedor tentou fazer.
   code_review: true # Ativa a revisão linha a linha de fato.
-  help: false
+  help: true
 
 code_review:
   disable: false

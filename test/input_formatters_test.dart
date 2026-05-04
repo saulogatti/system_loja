@@ -44,7 +44,6 @@ void main() {
       final result = format('R\$ 10.50');
       expect(result.text, equals('10.50'));
     });
- 
 
     test('deve aceitar zero com decimais', () {
       final result = format('0.99');

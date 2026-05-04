@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:system_loja/screens/utils/input_formatters.dart';
 import 'package:system_loja/screens/utils/validators.dart';
 import 'package:system_loja/screens/products/widgets/product_category.dart';
-import 'package:system_loja/aplication/utils/constants.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
 
 /// Widget do formulário de cadastro de produto
 ///
@@ -53,6 +53,7 @@ class _ProductFormState extends State<ProductForm> {
           const SizedBox(height: 20),
           TextFormField(
             controller: widget.nomeController,
+            textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
               labelText: 'Nome do Produto *',
               border: OutlineInputBorder(),
@@ -72,6 +73,7 @@ class _ProductFormState extends State<ProductForm> {
                 child: TextFormField(
                   readOnly: _generatedCode,
                   controller: widget.codigoController,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Código *',
                     border: OutlineInputBorder(),
@@ -86,13 +88,17 @@ class _ProductFormState extends State<ProductForm> {
                 ),
               ),
               IconButton(
+                tooltip: 'Gerar código automaticamente',
                 onPressed: () {
-                  _generatedCode = !_generatedCode;
-                  widget.codigoController.text = _generatedCode
-                      ? kStringGenerate
-                      : '';
+                  setState(() {
+                    _generatedCode = !_generatedCode;
+                    widget.codigoController.text = switch (_generatedCode) {
+                      true => kStringGenerate,
+                      _ => '',
+                    };
+                  });
                 },
-                icon: Icon(Icons.generating_tokens_outlined),
+                icon: const Icon(Icons.generating_tokens_outlined),
               ),
             ],
           ),
@@ -102,6 +108,7 @@ class _ProductFormState extends State<ProductForm> {
               Expanded(
                 child: TextFormField(
                   controller: widget.precoController,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Preço *',
                     border: OutlineInputBorder(),
@@ -119,6 +126,7 @@ class _ProductFormState extends State<ProductForm> {
               Expanded(
                 child: TextFormField(
                   controller: widget.estoqueController,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Estoque *',
                     border: OutlineInputBorder(),

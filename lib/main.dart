@@ -9,10 +9,8 @@ import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
-import 'package:system_loja/screens/company/bloc/company_bloc.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/user_cubit.dart';
-import 'package:system_loja/screens/customer/bloc/customer_bloc.dart';
 import 'package:system_loja/screens/home/bloc/home_bloc.dart';
 import 'package:system_loja/screens/person_registration/bloc/person_bloc.dart';
 import 'package:system_loja/screens/route/route_app.dart';
@@ -33,14 +31,6 @@ class SystemLojaApp extends StatelessWidget {
     //sem add event aqui, apeans o bloc provider
     return MultiBlocProvider(
       providers: [
-        BlocProvider<CustomerBloc>(
-          create: (context) =>
-              CustomerBloc(appInjection.get<ICustomerRepository>()),
-        ),
-        BlocProvider<CompanyBloc>(
-          create: (context) =>
-              CompanyBloc(appInjection.get<ICompanyRepository>()),
-        ),
         BlocProvider<SalesCubit>(
           create: (context) => SalesCubit(
             appInjection.get<ISalesRepository>(),

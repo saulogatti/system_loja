@@ -7,17 +7,8 @@ import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_invoice_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_invoice_state.dart';
+import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/models/person_selection.dart';
-
-/// [SalesCubit] mínimo para testes: só [registerSale] é usado pelo [SalesInvoiceCubit].
-class _FakeSalesCubit extends Fake implements SalesCubit {
-  int registerSaleCalls = 0;
-
-  @override
-  Future<void> registerSale(InvoiceData invoiceData, bool enableCodeGeneration) async {
-    registerSaleCalls++;
-  }
-}
 
 void main() {
   late _FakeSalesCubit salesCubit;
@@ -72,7 +63,7 @@ void main() {
 
     test('submit chama registerSale quando válido', () {
       final cubit = SalesInvoiceCubit(salesCubit: salesCubit, paymentMethods: [PaymentMethodType.pix]);
-      cubit.updateInvoiceNumber('NF-1');
+      cubit.updateInvoiceNumber('1');
       cubit.setPerson(CustomerSelection(customer()));
       cubit.addOrMergeLine(product(id: 1, stock: 10), 1);
       cubit.submit();
@@ -96,4 +87,20 @@ void main() {
       expect(cubit.state, isA<SalesInvoiceEditing>());
     });
   });
+}
+
+/// [SalesCubit] mínimo para testes: só [registerSale] é usado pelo [SalesInvoiceCubit].
+class _FakeSalesCubit extends Fake implements SalesCubit {
+  int registerSaleCalls = 0;
+
+  @override
+  bool get isClosed => false;
+
+  @override
+  Stream<SalesState> get stream => Stream.value(SalesSaved(items: const {}));
+
+  @override
+  Future<void> registerSale(InvoiceData invoiceData, bool enableCodeGeneration) async {
+    registerSaleCalls++;
+  }
 }

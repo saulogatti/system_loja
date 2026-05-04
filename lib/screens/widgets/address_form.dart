@@ -23,10 +23,7 @@ class AddressForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          'Endereço',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
+        Text('Endereço', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
         TextFormField(
           controller: streetController,
@@ -35,6 +32,9 @@ class AddressForm extends StatelessWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.location_on),
           ),
+          keyboardType: TextInputType.streetAddress,
+          autofillHints: const [AutofillHints.streetAddressLine1],
+          textInputAction: TextInputAction.next,
         ),
         const SizedBox(height: 16),
         Row(
@@ -49,6 +49,8 @@ class AddressForm extends StatelessWidget {
                   hintText: '00000-000',
                 ),
                 keyboardType: TextInputType.number,
+                autofillHints: const [AutofillHints.postalCode],
+                textInputAction: TextInputAction.next,
                 inputFormatters: [CepTextInputFormatter()],
               ),
             ),
@@ -61,6 +63,8 @@ class AddressForm extends StatelessWidget {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.map),
                 ),
+                autofillHints: const [AutofillHints.sublocality],
+                textInputAction: TextInputAction.next,
               ),
             ),
           ],
@@ -73,6 +77,8 @@ class AddressForm extends StatelessWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.location_city),
           ),
+          autofillHints: const [AutofillHints.addressCity],
+          textInputAction: TextInputAction.next,
         ),
         const SizedBox(height: 16),
         DropdownButtonFormField<BrazilianState>(
@@ -89,10 +95,7 @@ class AddressForm extends StatelessWidget {
             prefixIcon: Icon(Icons.map),
           ),
           items: brazilianStates.map((BrazilianState state) {
-            return DropdownMenuItem<BrazilianState>(
-              value: state,
-              child: Text(state.displayName),
-            );
+            return DropdownMenuItem<BrazilianState>(value: state, child: Text(state.displayName));
           }).toList(),
           onChanged: (BrazilianState? newValue) {
             if (newValue != null) {
