@@ -28,7 +28,7 @@ class SelectProductDialog extends StatelessWidget {
           },
         ),
       ),
-      actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar'))],
+      actions: [TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar'))],
     );
   }
 }
