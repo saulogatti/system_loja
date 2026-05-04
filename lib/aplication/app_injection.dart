@@ -44,7 +44,7 @@ late LoggerPersistenceService printerLog;
 /// Para acessar as dependências, use o `appInjection.get<T>()` onde T é o tipo da dependência.
 void setupAppInjection() {
   printerLog = registerLogPrinterColor(
-    config: ConfigLog(enableLog: true),
+    config: ConfigLog(enableLog: kDebugMode),
     cacheFilePath: p.join(Directory.current.path, 'system_loja_cache'),
   );
   appInjection.registerSingleton<RouteApp>(RouteApp());
