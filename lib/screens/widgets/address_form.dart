@@ -23,7 +23,10 @@ class AddressForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('Endereço', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(
+          'Endereço',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 12),
         TextFormField(
           controller: streetController,
@@ -95,7 +98,10 @@ class AddressForm extends StatelessWidget {
             prefixIcon: Icon(Icons.map),
           ),
           items: brazilianStates.map((BrazilianState state) {
-            return DropdownMenuItem<BrazilianState>(value: state, child: Text(state.displayName));
+            return DropdownMenuItem<BrazilianState>(
+              value: state,
+              child: Text(state.displayName),
+            );
           }).toList(),
           onChanged: (BrazilianState? newValue) {
             if (newValue != null) {

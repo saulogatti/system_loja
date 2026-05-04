@@ -17,7 +17,10 @@ class SelectProductDialog extends StatelessWidget {
       content: SizedBox(
         width: double.maxFinite,
         child: products.isEmpty
-            ? const EmptyWidget(message: 'Nenhum produto disponível', icon: Icons.inventory_2_outlined)
+            ? const EmptyWidget(
+                message: 'Nenhum produto disponível',
+                icon: Icons.inventory_2_outlined,
+              )
             : ListView.builder(
                 shrinkWrap: true,
                 itemCount: products.length,
@@ -28,13 +31,21 @@ class SelectProductDialog extends StatelessWidget {
                     subtitle: Text(
                       'R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}',
                     ),
-                    trailing: Icon(Icons.add_circle_outline, color: Theme.of(context).colorScheme.primary),
+                    trailing: Icon(
+                      Icons.add_circle_outline,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     onTap: () => context.router.maybePop(product),
                   );
                 },
               ),
       ),
-      actions: [TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar'))],
+      actions: [
+        TextButton(
+          onPressed: () => context.router.maybePop(),
+          child: const Text('Cancelar'),
+        ),
+      ],
     );
   }
 }

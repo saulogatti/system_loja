@@ -42,7 +42,8 @@ class ProductList extends StatelessWidget {
             message: 'Nenhum produto cadastrado',
             subMessage: 'Lista de produtos vazia.',
             icon: Icons.inventory_2_outlined,
-            semanticLabel: 'Lista de produtos vazia. Nenhum produto cadastrado.',
+            semanticLabel:
+                'Lista de produtos vazia. Nenhum produto cadastrado.',
           )
         else
           Expanded(

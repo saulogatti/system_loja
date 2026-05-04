@@ -116,22 +116,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                 ),
                 sliver: SliverMainAxisGroup(
                   slivers: [
-                    SliverToBoxAdapter(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Expanded(child: InvoiceNumberField()),
-                          const SizedBox(width: 8),
-                          IconButton(
-                            tooltip: 'Gerar número automaticamente',
-                            onPressed: () => context
-                                .read<SalesInvoiceCubit>()
-                                .toggleAutoInvoiceNumber(),
-                            icon: const Icon(Icons.generating_tokens_outlined),
-                          ),
-                        ],
-                      ),
-                    ),
+                    const SliverToBoxAdapter(child: InvoiceNumberField()),
                     const SliverToBoxAdapter(child: SizedBox(height: 16)),
                     SliverToBoxAdapter(
                       child:

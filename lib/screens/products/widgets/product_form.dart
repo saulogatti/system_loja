@@ -67,28 +67,18 @@ class _ProductFormState extends State<ProductForm> {
             },
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  readOnly: _generatedCode,
-                  controller: widget.codigoController,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: 'Código *',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.qr_code),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Código é obrigatório';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              IconButton(
-                tooltip: 'Gerar código automaticamente',
+          TextFormField(
+            readOnly: _generatedCode,
+            controller: widget.codigoController,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              labelText: 'Código *',
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.qr_code),
+              suffixIcon: IconButton(
+                tooltip: _generatedCode
+                    ? 'Desativar geração automática'
+                    : 'Gerar código automaticamente',
                 onPressed: () {
                   setState(() {
                     _generatedCode = !_generatedCode;
@@ -98,9 +88,20 @@ class _ProductFormState extends State<ProductForm> {
                     };
                   });
                 },
-                icon: const Icon(Icons.generating_tokens_outlined),
+                icon: Icon(
+                  Icons.generating_tokens_outlined,
+                  color: _generatedCode
+                      ? Theme.of(context).colorScheme.primary
+                      : null,
+                ),
               ),
-            ],
+            ),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Código é obrigatório';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 16),
           Row(

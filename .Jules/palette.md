@@ -60,3 +60,6 @@
 ## 03-05-2026 - Affordance in Single-Item Selection Dialogs
 **Learning:** ListTiles in dialogs used for single-item selection often lack visual cues that they are tappable. Users might think they need to tap the text precisely or look for a confirmation button that doesn't exist.
 **Action:** Always add a trailing icon (like `Icons.add_circle_outline` or `Icons.chevron_right`) to `ListTile` widgets in selection dialogs to provide clear visual affordance and interaction cues indicating the entire row is tappable and will trigger an action.
+## 24-05-2024 - [Consolidating Form Actions into Suffix Icons]
+**Learning:** Placing field-specific actions (like auto-generating values) in an external IconButton breaks the visual grouping and wastes horizontal space, especially in forms.
+**Action:** Always prefer `suffixIcon` in `TextFormField` or `InputDecoration` for actions strictly related to that field. Change the icon color to the primary color to indicate active states (e.g. `color: isActive ? Theme.of(context).colorScheme.primary : null`). Update the `tooltip` to reflect the current state (e.g., "Generate" vs. "Disable generation").
