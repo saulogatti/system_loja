@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/product.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Diálogo para escolher um produto na nota fiscal.
