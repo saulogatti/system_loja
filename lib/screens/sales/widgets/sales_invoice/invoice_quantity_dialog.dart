@@ -60,7 +60,7 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+        TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
         ElevatedButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
