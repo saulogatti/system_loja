@@ -10,7 +10,7 @@ dependencies:
   log_custom_printer:
     git:
       url: https://github.com/saulogatti/log_custom_printer
-      ref: main
+      ref: melhoria_code
 
   flutter:
     sdk: flutter
