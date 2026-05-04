@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widget_previews.dart';
 import 'package:system_loja/screens/widgets/report_widget.dart';
 
-class ReportScreen extends StatefulWidget {
-  @Preview()
-  const ReportScreen({super.key});
+class ExportReportScreen extends StatefulWidget {
+  const ExportReportScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return ReportScreenState();
+    return ExportReportScreenState();
   }
 }
 
-class ReportScreenState extends State<ReportScreen> {
+class ExportReportScreenState extends State<ExportReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Relatório')),
+      appBar: AppBar(title: Text('Exportar Relatório')),
       body: Column(
         children: [
           Expanded(
