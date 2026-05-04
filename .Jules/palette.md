@@ -48,7 +48,7 @@
 ## 24-04-2026 - Address Form Field Flow and Autofill
 **Learning:** Address forms containing multiple sequential text fields (like Street, ZIP code, Neighborhood, City) can be tedious to fill manually, especially on mobile devices. If these fields lack `textInputAction: TextInputAction.next`, users are forced to dismiss the keyboard or manually tap the next field. Furthermore, missing `autofillHints` prevents the OS from automatically filling in the user's saved address.
 **Action:** Always provide `textInputAction: TextInputAction.next` on all fields of a sequential form except the last one. Additionally, apply appropriate `autofillHints` (e.g., `AutofillHints.streetAddressLine1`, `AutofillHints.postalCode`, `AutofillHints.addressCity`) to address fields to leverage OS-level form filling capabilities.
-## $(date +%d-%m-%Y) - Form Field Keyboard UX
+## 03-05-2026 - Form Field Keyboard UX
 **Learning:** Proper use of `keyboardType`, `autofillHints`, and `textInputAction` (especially ending with `TextInputAction.done` linked to `onFieldSubmitted`) drastically reduces friction for users filling out forms, as it keeps their hands on the virtual keyboard instead of requiring them to search for a separate submit button.
 **Action:** When creating or modifying forms, always ensure fields flow sequentially via `TextInputAction.next` and end with `TextInputAction.done` that triggers form submission.
 ## 28-04-2026 - Form Field Keyboard UX
@@ -57,3 +57,6 @@
 ## 02-05-2024 - [Visual Affordance in Dialog Lists]
 **Learning:** ListTiles inside selection dialogs often look like static data. Without a trailing action icon (like `add_circle_outline` or `chevron_right`), users might not realize the entire row is tappable to make a selection.
 **Action:** Always add a trailing icon to ListTiles used for single-item selection in dialogs to provide clear visual interaction cues.
+## 03-05-2026 - Affordance in Single-Item Selection Dialogs
+**Learning:** ListTiles in dialogs used for single-item selection often lack visual cues that they are tappable. Users might think they need to tap the text precisely or look for a confirmation button that doesn't exist.
+**Action:** Always add a trailing icon (like `Icons.add_circle_outline` or `Icons.chevron_right`) to `ListTile` widgets in selection dialogs to provide clear visual affordance and interaction cues indicating the entire row is tappable and will trigger an action.

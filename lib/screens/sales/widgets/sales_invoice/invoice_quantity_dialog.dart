@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/models/product.dart';
@@ -6,14 +7,10 @@ import 'package:system_loja/screens/utils/validators.dart';
 
 /// Diálogo para informar a quantidade de um produto; faz [dispose] do controller.
 class InvoiceQuantityDialog extends StatefulWidget {
-  const InvoiceQuantityDialog({
-    required this.product,
-    required this.invoiceType,
-    super.key,
-  });
-
   final Product product;
+
   final InvoiceType invoiceType;
+  const InvoiceQuantityDialog({required this.product, required this.invoiceType, super.key});
 
   @override
   State<InvoiceQuantityDialog> createState() => _InvoiceQuantityDialogState();
@@ -22,12 +19,6 @@ class InvoiceQuantityDialog extends StatefulWidget {
 class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
   final _controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +51,7 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
             if (error != null) return error;
 
             final qtd = int.parse(value!.trim());
-            if (widget.invoiceType == InvoiceType.exit &&
-                qtd > product.stockQuantity) {
+            if (widget.invoiceType == InvoiceType.exit && qtd > product.stockQuantity) {
               return 'Quantidade maior que o estoque disponível';
             }
 
@@ -70,10 +60,7 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancelar'),
-        ),
+        TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
         ElevatedButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
@@ -85,5 +72,11 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
