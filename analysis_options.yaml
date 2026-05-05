@@ -1,12 +1,22 @@
-include:
+includes:
   - package:flutter_lints/flutter.yaml
   - package:bloc_lint/recommended.yaml
-  
-formatter: 
-  page_width: 110
 
+formatter:
+  page_width: 110
+analyzer:
+  exclude:
+    - build/**
+  errors:
+    missing_override_of_must_be_overridden: error
+    inference_failure_on_function_invocation: ignore
+    await_only_futures: warning
+    avoid_void_async: warning
+    avoid_dynamic_calls: error
+    return_without_value: error
 
 linter:
+
   rules:
     camel_case_types: true
     constant_identifier_names: true
@@ -43,14 +53,3 @@ linter:
     await_only_futures: true
     avoid_void_async: true
     always_put_required_named_parameters_first: true
-
-analyzer:
-  exclude:
-    - build/**
-  errors:
-    missing_override_of_must_be_overridden: error
-    inference_failure_on_function_invocation: ignore
-    await_only_futures: warning
-    avoid_void_async: warning
-    avoid_dynamic_calls: error
-    return_without_value: error

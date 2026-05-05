@@ -63,3 +63,6 @@
 ## 24-05-2024 - [Consolidating Form Actions into Suffix Icons]
 **Learning:** Placing field-specific actions (like auto-generating values) in an external IconButton breaks the visual grouping and wastes horizontal space, especially in forms.
 **Action:** Always prefer `suffixIcon` in `TextFormField` or `InputDecoration` for actions strictly related to that field. Change the icon color to the primary color to indicate active states (e.g. `color: isActive ? Theme.of(context).colorScheme.primary : null`). Update the `tooltip` to reflect the current state (e.g., "Generate" vs. "Disable generation").
+## 05-05-2026 - [Consistent Analytics Empty States]
+**Learning:** Found plain Text widgets acting as empty states inside analytics cards (like DonutCard and ProductsCountChartCard) which visually clash with the rest of the application's empty states and lack proper semantics.
+**Action:** Use the global EmptyWidget across all analytics and reporting empty states to maintain a11y and visual harmony.

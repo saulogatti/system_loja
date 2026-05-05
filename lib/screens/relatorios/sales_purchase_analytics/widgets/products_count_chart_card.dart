@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../bloc/sales_purchase_analytics_state.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 class ProductsCountChartCard extends StatelessWidget {
   final List<AnalyticsPoint> points;
@@ -37,14 +38,9 @@ class ProductsCountChartCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             if (points.isEmpty || maxCount <= 0)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  'Sem dados para exibir.',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
+              const EmptyWidget(
+                message: 'Sem dados para exibir.',
+                icon: Icons.bar_chart_outlined,
               )
             else
               SizedBox(

@@ -74,7 +74,7 @@ packages:
     source: hosted
     version: "9.2.0"
   bloc_lint:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: bloc_lint
       sha256: "5bf965e3be5346fd6133e7f2eb4c845de3f2ae09eeae4d6622f400848b4aba71"
@@ -385,7 +385,7 @@ packages:
     source: sdk
     version: "0.0.0"
   freezed:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: freezed
       sha256: f23ea33b3863f119b58ed1b586e881a46bd28715ddcc4dbc33104524e3434131
@@ -563,11 +563,10 @@ packages:
   log_custom_printer:
     dependency: "direct main"
     description:
-      path: "."
-      ref: melhoria_code
-      resolved-ref: "3d7d1c6ba5cfbd2ec02861ee6220a72da8a4a0e6"
-      url: "https://github.com/saulogatti/log_custom_printer"
-    source: git
+      name: log_custom_printer
+      sha256: f70239221c1035ee15b13417a6eb3046c0cf920c0295b9f3b355be21c28b760e
+      url: "https://pub.dev"
+    source: hosted
     version: "3.0.0"
   logging:
     dependency: transitive
