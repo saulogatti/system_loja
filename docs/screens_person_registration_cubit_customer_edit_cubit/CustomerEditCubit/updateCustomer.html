@@ -74,9 +74,15 @@
   switch (result) {
     case ResultSuccess(:final result):
       if (result) {
-        emit(const CustomerEditSaved(&#39;Pessoa física atualizada com sucesso.&#39;));
+        emit(
+          const CustomerEditSaved(&#39;Pessoa física atualizada com sucesso.&#39;),
+        );
       } else {
-        emit(const CustomerEditError(&#39;Não foi possível atualizar a pessoa física.&#39;));
+        emit(
+          const CustomerEditError(
+            &#39;Não foi possível atualizar a pessoa física.&#39;,
+          ),
+        );
       }
     case ResultError(:final resultError):
       emit(CustomerEditError(resultError));

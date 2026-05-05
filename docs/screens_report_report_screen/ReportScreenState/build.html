@@ -186,14 +186,20 @@ Widget build(BuildContext context) {
             onAction: (action) async {
               switch (action) {
                 case ReportAction.shareCsv:
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(&#39;Exportar CSV&#39;)));
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(&#39;Exportar CSV&#39;)));
                   break;
                 case ReportAction.sharePdf:
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(&#39;Compartilhar PDF&#39;)));
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(&#39;Compartilhar PDF&#39;)));
                   break;
                 case ReportAction.printPdf:
                   &#47;&#47; Implementar impressão PDF
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(&#39;Imprimir PDF&#39;)));
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(&#39;Imprimir PDF&#39;)));
                   break;
               }
             },

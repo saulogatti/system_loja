@@ -67,38 +67,26 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; importConfiguration() async {
-  try {
-    const acceptedTypes = &lt;XTypeGroup&gt;[
-      XTypeGroup(label: &#39;json&#39;, extensions: [&#39;json&#39;]),
-    ];
-    final file = await openFile(acceptedTypeGroups: acceptedTypes);
+  final result = await _systemRepository.importConfigurationFromJson();
 
-    if (file == null) {
-      return;
-    }
-
-    final content = await file.readAsString();
-    final result = await _systemRepository.importConfigurationFromJson(
-      content,
-    );
-
-    result.when(
-      onSuccess: (normalizedData) {
-        emit(
-          SystemConfigState.loaded(
-            normalizedData,
-            feedbackMessage: &#39;Configuração importada com sucesso.&#39;,
-            feedbackType: SystemConfigFeedbackType.imported,
-          ),
-        );
-      },
-      onError: (message) {
-        emit(SystemConfigState.error(message));
-      },
-    );
-  } catch (e) {
-    emit(SystemConfigState.error(&#39;Erro ao importar configuração: $e&#39;));
-  }
+  result.when(
+    onSuccess: (normalizedData) {
+      emit(
+        SystemConfigState.loaded(
+          normalizedData,
+          feedbackMessage: &#39;Configuração importada com sucesso.&#39;,
+          feedbackType: SystemConfigFeedbackType.imported,
+        ),
+      );
+    },
+    onError: (message) {
+      &#47;&#47;Cancelado pelo usuário que não selecionou um arquivo
+      if (message.isEmpty) {
+        return;
+      }
+      emit(SystemConfigState.error(message));
+    },
+  );
 }</code></pre>
 </section>
 

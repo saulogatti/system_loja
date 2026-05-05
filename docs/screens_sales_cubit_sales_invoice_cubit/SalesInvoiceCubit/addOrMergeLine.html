@@ -78,20 +78,28 @@
   final existing = form.linesByProductId[product.id];
   final mergedQty = (existing?.quantity ?? 0) + quantityToAdd;
 
-  if (form.invoiceType == InvoiceType.exit &amp;&amp; mergedQty &gt; product.stockQuantity) {
-    _emitFeedback(&#39;Estoque insuficiente! Disponível: ${product.stockQuantity}&#39;);
+  if (form.invoiceType == InvoiceType.exit &amp;&amp;
+      mergedQty &gt; product.stockQuantity) {
+    _emitFeedback(
+      &#39;Estoque insuficiente! Disponível: ${product.stockQuantity}&#39;,
+    );
     return;
   }
 
   final nextMap = Map&lt;int, InvoiceLineEntry&gt;.from(form.linesByProductId);
-  nextMap[product.id] = InvoiceLineEntry(product: product, quantity: mergedQty);
+  nextMap[product.id] = InvoiceLineEntry(
+    product: product,
+    quantity: mergedQty,
+  );
 
   final nextOrder = List&lt;int&gt;.from(form.orderedProductIds);
   if (!nextOrder.contains(product.id)) {
     nextOrder.add(product.id);
   }
 
-  _emitEditing(form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder));
+  _emitEditing(
+    form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder),
+  );
 }</code></pre>
 </section>
 

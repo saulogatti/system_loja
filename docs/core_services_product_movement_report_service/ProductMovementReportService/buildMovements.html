@@ -71,7 +71,10 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">List&lt;ProductInvoiceMovement&gt; buildMovements(Map&lt;int, Invoice&gt; invoices, Product product) {
+  <pre class="language-dart"><code class="language-dart">List&lt;ProductInvoiceMovement&gt; buildMovements(
+  Map&lt;int, Invoice&gt; invoices,
+  Product product,
+) {
   final movements = &lt;ProductInvoiceMovement&gt;[];
   final hasValidProductId = product.id &gt; 0;
 
@@ -85,7 +88,9 @@
     }
   }
 
-  movements.sort((a, b) =&gt; b.invoice.data.issueDate.compareTo(a.invoice.data.issueDate));
+  movements.sort(
+    (a, b) =&gt; b.invoice.data.issueDate.compareTo(a.invoice.data.issueDate),
+  );
   return movements;
 }</code></pre>
 </section>

@@ -99,7 +99,9 @@ Future&lt;ResultStatus&lt;User?, String&gt;&gt; fetchUserById(int id) async {
     }
     return ResultStatus.success(null);
   } catch (e) {
-    return ResultStatus.error(mensagemErroRepositorio(e, contexto: &#39;Falha ao buscar usuário por id&#39;));
+    return ResultStatus.error(
+      mensagemErroRepositorio(e, contexto: &#39;Falha ao buscar usuário por id&#39;),
+    );
   }
 }</code></pre>
 </section>

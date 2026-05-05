@@ -55,8 +55,8 @@
     <section class="multi-line-signature">
       
 <span class="returntype"><a href="../../core_models_report_product_movement_summary/ProductMovementSummary-class.html">ProductMovementSummary</a></span>
-<span class="name ">summarize</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="summarize-param-entradas"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_report_product_invoice_movement/ProductInvoiceMovement-class.html">ProductInvoiceMovement</a></span>&gt;</span></span> <span class="parameter-name">entradas</span>, </span></li>
-<li><span class="parameter" id="summarize-param-saidas"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_report_product_invoice_movement/ProductInvoiceMovement-class.html">ProductInvoiceMovement</a></span>&gt;</span></span> <span class="parameter-name">saidas</span>, </span></li>
+<span class="name ">summarize</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="summarize-param-entries"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_report_product_invoice_movement/ProductInvoiceMovement-class.html">ProductInvoiceMovement</a></span>&gt;</span></span> <span class="parameter-name">entries</span>, </span></li>
+<li><span class="parameter" id="summarize-param-exits"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_report_product_invoice_movement/ProductInvoiceMovement-class.html">ProductInvoiceMovement</a></span>&gt;</span></span> <span class="parameter-name">exits</span>, </span></li>
 </ol>})
 
       
@@ -72,13 +72,25 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">ProductMovementSummary summarize({
-  required List&lt;ProductInvoiceMovement&gt; entradas,
-  required List&lt;ProductInvoiceMovement&gt; saidas,
+  required List&lt;ProductInvoiceMovement&gt; entries,
+  required List&lt;ProductInvoiceMovement&gt; exits,
 }) {
-  final totalEntryQuantity = entradas.fold&lt;int&gt;(0, (sum, movement) =&gt; sum + movement.item.quantity);
-  final totalExitQuantity = saidas.fold&lt;int&gt;(0, (sum, movement) =&gt; sum + movement.item.quantity);
-  final totalEntryValue = entradas.fold&lt;double&gt;(0, (sum, movement) =&gt; sum + movement.item.totalValue);
-  final totalExitValue = saidas.fold&lt;double&gt;(0, (sum, movement) =&gt; sum + movement.item.totalValue);
+  final totalEntryQuantity = entries.fold&lt;int&gt;(
+    0,
+    (sum, movement) =&gt; sum + movement.item.quantity,
+  );
+  final totalExitQuantity = exits.fold&lt;int&gt;(
+    0,
+    (sum, movement) =&gt; sum + movement.item.quantity,
+  );
+  final totalEntryValue = entries.fold&lt;double&gt;(
+    0,
+    (sum, movement) =&gt; sum + movement.item.totalValue,
+  );
+  final totalExitValue = exits.fold&lt;double&gt;(
+    0,
+    (sum, movement) =&gt; sum + movement.item.totalValue,
+  );
 
   return ProductMovementSummary(
     totalEntryQuantity: totalEntryQuantity,

@@ -113,12 +113,23 @@ Widget build(BuildContext context) {
     onSelected: onAction,
     enabled: hasData,
     itemBuilder: (context) =&gt; const [
-      PopupMenuItem(value: ReportAction.shareCsv, child: Text(&#39;Exportar CSV&#39;)),
-      PopupMenuItem(value: ReportAction.sharePdf, child: Text(&#39;Compartilhar PDF&#39;)),
-      PopupMenuItem(value: ReportAction.printPdf, child: Text(&#39;Imprimir PDF&#39;)),
+      PopupMenuItem(
+        value: ReportAction.shareCsv,
+        child: Text(&#39;Exportar CSV&#39;),
+      ),
+      PopupMenuItem(
+        value: ReportAction.sharePdf,
+        child: Text(&#39;Compartilhar PDF&#39;),
+      ),
+      PopupMenuItem(
+        value: ReportAction.printPdf,
+        child: Text(&#39;Imprimir PDF&#39;),
+      ),
     ],
     icon: const Icon(Icons.picture_as_pdf_outlined),
-    tooltip: hasData ? &#39;Exportar relatório&#39; : &#39;Cadastre itens para habilitar o relatório&#39;,
+    tooltip: hasData
+        ? &#39;Exportar relatório&#39;
+        : &#39;Cadastre itens para habilitar o relatório&#39;,
   );
 }</code></pre>
 </section>

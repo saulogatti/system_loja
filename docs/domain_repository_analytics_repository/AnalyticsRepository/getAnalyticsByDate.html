@@ -77,7 +77,8 @@ e as combina num mapa por data para compor os pontos do gráfico.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Future&lt;ResultStatus&lt;List&lt;AnalyticsPoint&gt;, String&gt;&gt; getAnalyticsByDate() async {
+Future&lt;ResultStatus&lt;List&lt;AnalyticsPoint&gt;, String&gt;&gt;
+getAnalyticsByDate() async {
   try {
     final exits = await _invoiceDao.getExitInvoices();
     final entries = await _invoiceDao.getEntryInvoices();
@@ -97,10 +98,8 @@ Future&lt;ResultStatus&lt;List&lt;AnalyticsPoint&gt;, String&gt;&gt; getAnalytic
       acc.add(invoice.data.totalValue, _itemCount(invoice));
     }
 
-    final allDates = {
-      ...salesByDate.keys,
-      ...purchasesByDate.keys,
-    }.toList()..sort();
+    final allDates = {...salesByDate.keys, ...purchasesByDate.keys}.toList()
+      ..sort();
 
     final points = [
       for (final date in allDates)

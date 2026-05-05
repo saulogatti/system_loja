@@ -113,7 +113,7 @@ Widget build(BuildContext context) {
     create: (_) =&gt; SalesPurchaseAnalyticsBloc(
       analyticsRepository: appInjection.get&lt;IAnalyticsRepository&gt;(),
     )..add(const LoadSalesPurchaseAnalytics()),
-    child: const _SalesPurchaseAnalyticsView(),
+    child: const SalesPurchaseAnalyticsView(),
   );
 }</code></pre>
 </section>

@@ -118,6 +118,8 @@ Widget build(BuildContext context) {
     ),
     enabled: isEditing,
     keyboardType: TextInputType.phone,
+    autofillHints: const [AutofillHints.telephoneNumber],
+    textInputAction: TextInputAction.next,
     inputFormatters: [PhoneTextInputFormatter()],
   );
 }</code></pre>

@@ -154,15 +154,17 @@ Widget build(BuildContext context) {
                     children: [
                       Text(
                         &#39;NF ${data.invoiceNumber}&#39;,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       Text(
                         &#39;ID: ${invoice.id}&#39;,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
                       ),
                     ],
                   ),
@@ -175,7 +177,9 @@ Widget build(BuildContext context) {
                 controller: scrollController,
                 children: [
                   _InfoRow(
-                    icon: data.customerId != null ? Icons.person_outline : Icons.business_outlined,
+                    icon: data.customerId != null
+                        ? Icons.person_outline
+                        : Icons.business_outlined,
                     label: data.customerId != null ? &#39;Cliente&#39; : &#39;Empresa&#39;,
                     value: data.personDisplayName,
                   ),
@@ -202,7 +206,9 @@ Widget build(BuildContext context) {
                   const SizedBox(height: 8),
                   Text(
                     &#39;Itens (${data.items.length})&#39;,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   ...data.items.map(
@@ -220,9 +226,8 @@ Widget build(BuildContext context) {
                           ),
                           Text(
                             &#39;R\$ ${item.totalValue.toStringAsFixed(2)}&#39;,
-                            style: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -232,7 +237,10 @@ Widget build(BuildContext context) {
               ),
             ),
             const SizedBox(height: 16),
-            TextButton(onPressed: () =&gt; Navigator.of(context).pop(), child: const Text(&#39;Fechar&#39;)),
+            TextButton(
+              onPressed: () =&gt; Navigator.of(context).pop(),
+              child: const Text(&#39;Fechar&#39;),
+            ),
           ],
         ),
       );

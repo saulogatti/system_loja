@@ -74,9 +74,15 @@
   switch (result) {
     case ResultSuccess(:final result):
       if (result) {
-        emit(const CompanyEditSaved(&#39;Pessoa jurídica atualizada com sucesso.&#39;));
+        emit(
+          const CompanyEditSaved(&#39;Pessoa jurídica atualizada com sucesso.&#39;),
+        );
       } else {
-        emit(const CompanyEditError(&#39;Não foi possível atualizar a pessoa jurídica.&#39;));
+        emit(
+          const CompanyEditError(
+            &#39;Não foi possível atualizar a pessoa jurídica.&#39;,
+          ),
+        );
       }
     case ResultError(:final resultError):
       emit(CompanyEditError(resultError));

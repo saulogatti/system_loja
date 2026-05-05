@@ -79,7 +79,9 @@
     0,
     (currentMax, point) =&gt; point.salesValue &gt; currentMax
         ? point.salesValue
-        : (point.purchaseValue &gt; currentMax ? point.purchaseValue : currentMax),
+        : (point.purchaseValue &gt; currentMax
+              ? point.purchaseValue
+              : currentMax),
   );
 }</code></pre>
 </section>

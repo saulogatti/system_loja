@@ -67,44 +67,21 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; exportConfiguration() async {
-  final systemConfiguration = await _obterConfiguracaoAtual();
-  if (systemConfiguration == null) {
-    return;
-  }
-
-  try {
-    const acceptedTypes = &lt;XTypeGroup&gt;[
-      XTypeGroup(label: &#39;json&#39;, extensions: [&#39;json&#39;]),
-    ];
-    final location = await getSaveLocation(
-      suggestedName: &#39;system_configuration.json&#39;,
-      acceptedTypeGroups: acceptedTypes,
-    );
-
-    if (location == null) {
-      return;
-    }
-
-    final file = File(location.path);
-    await file.writeAsString(
-      jsonEncode(systemConfiguration),
-      flush: true,
-    );
-
-    emit(
-      SystemConfigState.loaded(
-        systemConfiguration,
-        feedbackMessage: &#39;Configuração exportada com sucesso.&#39;,
-        feedbackType: SystemConfigFeedbackType.exported,
-      ),
-    );
-  } catch (_) {
-    emit(
-      SystemConfigState.error(
-        &#39;Erro ao exportar configuração para o arquivo selecionado.&#39;,
-      ),
-    );
-  }
+  final result = await _systemRepository.exportConfigurationToJson();
+  result.when(
+    onSuccess: (systemConfiguration) {
+      emit(
+        SystemConfigState.loaded(
+          systemConfiguration,
+          feedbackMessage: &#39;Configuração exportada com sucesso.&#39;,
+          feedbackType: SystemConfigFeedbackType.exported,
+        ),
+      );
+    },
+    onError: (message) {
+      emit(SystemConfigState.error(message));
+    },
+  );
 }</code></pre>
 </section>
 

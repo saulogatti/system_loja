@@ -75,7 +75,9 @@
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    ),
     builder: (_) =&gt; InvoiceOverviewBottomSheet(invoice: invoice),
   );
 }</code></pre>

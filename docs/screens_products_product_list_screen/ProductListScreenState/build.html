@@ -179,9 +179,9 @@ Widget build(BuildContext context) {
   return BlocListener&lt;ProductCubit, ProductState&gt;(
     listener: (context, state) {
       if (state is ProductStateError) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+        );
       }
     },
     child: BlocBuilder&lt;ProductCubit, ProductState&gt;(
@@ -193,7 +193,10 @@ Widget build(BuildContext context) {
         final produtos = _extractProducts(state);
         return Padding(
           padding: const EdgeInsets.all(16),
-          child: ProductList(products: produtos, onProductTap: _abrirEdicaoProduto),
+          child: ProductList(
+            products: produtos,
+            onProductTap: _abrirEdicaoProduto,
+          ),
         );
       },
     ),

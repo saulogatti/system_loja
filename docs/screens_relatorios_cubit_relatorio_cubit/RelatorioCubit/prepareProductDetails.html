@@ -76,7 +76,11 @@
     return;
   }
 
-  emit(currentState.copyWith(selectedProductDetails: _buildProductDetails(currentState, product)));
+  emit(
+    currentState.copyWith(
+      selectedProductDetails: _buildProductDetails(currentState, product),
+    ),
+  );
 }</code></pre>
 </section>
 

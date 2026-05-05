@@ -113,20 +113,36 @@ Widget build(BuildContext context) {
     title: const Text(&#39;Selecionar Produto&#39;),
     content: SizedBox(
       width: double.maxFinite,
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final product = products[index];
-          return ListTile(
-            title: Text(product.name),
-            subtitle: Text(&#39;R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}&#39;),
-            onTap: () =&gt; Navigator.pop(context, product),
-          );
-        },
-      ),
+      child: products.isEmpty
+          ? const EmptyWidget(
+              message: &#39;Nenhum produto disponível&#39;,
+              icon: Icons.inventory_2_outlined,
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return ListTile(
+                  title: Text(product.name),
+                  subtitle: Text(
+                    &#39;R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}&#39;,
+                  ),
+                  trailing: Icon(
+                    Icons.add_circle_outline,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  onTap: () =&gt; context.router.maybePop(product),
+                );
+              },
+            ),
     ),
-    actions: [TextButton(onPressed: () =&gt; Navigator.pop(context), child: const Text(&#39;Cancelar&#39;))],
+    actions: [
+      TextButton(
+        onPressed: () =&gt; context.router.maybePop(),
+        child: const Text(&#39;Cancelar&#39;),
+      ),
+    ],
   );
 }</code></pre>
 </section>

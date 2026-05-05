@@ -81,16 +81,8 @@ Future&lt;ResultStatus&lt;Customer?, String&gt;&gt; findWith({
   required String cpf,
 }) async {
   try {
-    final allCustomers = await _customerDao.getAll();
-    try {
-      final customer = allCustomers.firstWhere(
-        (customer) =&gt; customer.cpf == cpf,
-      );
-      return ResultStatus.success(customer);
-    } on StateError {
-      &#47;&#47; Cliente não encontrado
-      return ResultStatus.success(null);
-    }
+    final customer = await _customerDao.getByCpf(cpf);
+    return ResultStatus.success(customer);
   } on CustomerException catch (e) {
     await reportError(e, StackTrace.current);
     return ResultStatus.error(e.message);

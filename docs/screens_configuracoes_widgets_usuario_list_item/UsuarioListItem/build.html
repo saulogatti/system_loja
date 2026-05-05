@@ -142,10 +142,12 @@ Widget build(BuildContext context) {
           IconButton(
             icon: const Icon(Icons.edit, color: Colors.blue),
             onPressed: onEdit,
+            tooltip: &#39;Editar ${usuario.name}&#39;,
           ),
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
             onPressed: onDelete,
+            tooltip: &#39;Excluir ${usuario.name}&#39;,
           ),
         ],
       ),

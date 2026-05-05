@@ -71,9 +71,15 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">RelatorioEstoqueOverviewData buildEstoqueOverview(List&lt;Product&gt; products) {
-  final produtosSemEstoque = products.where((p) =&gt; p.stockQuantity == 0).length;
+  final produtosSemEstoque = products
+      .where((p) =&gt; p.stockQuantity == 0)
+      .length;
   final produtosComEstoqueBaixo = products
-      .where((p) =&gt; p.stockQuantity &gt; 0 &amp;&amp; p.stockQuantity &lt;= Constants.kLowStockThreshold)
+      .where(
+        (p) =&gt;
+            p.stockQuantity &gt; 0 &amp;&amp;
+            p.stockQuantity &lt;= Constants.kLowStockThreshold,
+      )
       .length;
   final produtosOrdenadosPorEstoque = List&lt;Product&gt;.from(products)
     ..sort((a, b) =&gt; a.stockQuantity.compareTo(b.stockQuantity));

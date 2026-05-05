@@ -112,14 +112,18 @@ Widget build(BuildContext context) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
-      const Text(&#39;Produtos Cadastrados&#39;, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+      const Text(
+        &#39;Produtos Cadastrados&#39;,
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
       const SizedBox(height: _defaultSpacing),
       if (products.isEmpty)
-        const Center(
-          child: Padding(
-            padding: EdgeInsets.all(32.0),
-            child: Text(&#39;Nenhum produto cadastrado&#39;, style: TextStyle(fontSize: 16, color: Colors.grey)),
-          ),
+        const EmptyWidget(
+          message: &#39;Nenhum produto cadastrado&#39;,
+          subMessage: &#39;Lista de produtos vazia.&#39;,
+          icon: Icons.inventory_2_outlined,
+          semanticLabel:
+              &#39;Lista de produtos vazia. Nenhum produto cadastrado.&#39;,
         )
       else
         Expanded(

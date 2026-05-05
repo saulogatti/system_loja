@@ -121,21 +121,33 @@ Widget build(BuildContext context) {
           appInjection.get&lt;ICompanyRepository&gt;(),
         ),
       ),
-      BlocProvider&lt;UserCubit&gt;(create: (context) =&gt; UserCubit(appInjection.get&lt;IUserRepository&gt;())),
-      BlocProvider&lt;LogsCubit&gt;(create: (context) =&gt; LogsCubit(appInjection.get&lt;ILogRepository&gt;())),
-      BlocProvider&lt;PersonBloc&gt;(
-        create: (context) =&gt;
-            PersonBloc(appInjection.get&lt;ICustomerRepository&gt;(), appInjection.get&lt;ICompanyRepository&gt;()),
+      BlocProvider&lt;UserCubit&gt;(
+        create: (context) =&gt; UserCubit(appInjection.get&lt;IUserRepository&gt;()),
       ),
-      BlocProvider&lt;HomeBloc&gt;(create: (context) =&gt; HomeBloc(appInjection.get&lt;ISystemRepository&gt;())),
+      BlocProvider&lt;LogsCubit&gt;(
+        create: (context) =&gt; LogsCubit(appInjection.get&lt;ILogRepository&gt;()),
+      ),
+      BlocProvider&lt;PersonBloc&gt;(
+        create: (context) =&gt; PersonBloc(
+          appInjection.get&lt;ICustomerRepository&gt;(),
+          appInjection.get&lt;ICompanyRepository&gt;(),
+        ),
+      ),
+      BlocProvider&lt;HomeBloc&gt;(
+        create: (context) =&gt; HomeBloc(appInjection.get&lt;ISystemRepository&gt;()),
+      ),
     ],
     child: ValueListenableBuilder(
-      valueListenable: appInjection.get&lt;SettingsService&gt;().currentThemeNotifier,
+      valueListenable: appInjection
+          .get&lt;SettingsService&gt;()
+          .currentThemeNotifier,
       builder: (context, value, child) {
         return MaterialApp.router(
           title: &#39;Sistema de Gerenciamento de Loja&#39;,
           theme: value,
-          themeMode: appInjection.get&lt;SettingsService&gt;().temaEscuro ? ThemeMode.dark : ThemeMode.light,
+          themeMode: appInjection.get&lt;SettingsService&gt;().temaEscuro
+              ? ThemeMode.dark
+              : ThemeMode.light,
           routerConfig: appInjection.get&lt;RouteApp&gt;().config(),
           debugShowCheckedModeBanner: kDebugMode,
         );

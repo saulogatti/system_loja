@@ -75,8 +75,14 @@
   required Map&lt;int, Invoice&gt; entryInvoices,
   required Map&lt;int, Invoice&gt; exitInvoices,
 }) {
-  final totalEntrada = entryInvoices.values.fold&lt;double&gt;(0, (sum, inv) =&gt; sum + inv.data.totalValue);
-  final totalSaida = exitInvoices.values.fold&lt;double&gt;(0, (sum, inv) =&gt; sum + inv.data.totalValue);
+  final totalEntrada = entryInvoices.values.fold&lt;double&gt;(
+    0,
+    (sum, inv) =&gt; sum + inv.data.totalValue,
+  );
+  final totalSaida = exitInvoices.values.fold&lt;double&gt;(
+    0,
+    (sum, inv) =&gt; sum + inv.data.totalValue,
+  );
 
   return RelatorioNotasOverviewData(
     quantidadeEntradas: entryInvoices.length,

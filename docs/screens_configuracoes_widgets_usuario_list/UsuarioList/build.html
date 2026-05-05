@@ -118,14 +118,10 @@ Widget build(BuildContext context) {
       ),
       const SizedBox(height: 16),
       if (usuarios.isEmpty)
-        const Center(
-          child: Padding(
-            padding: EdgeInsets.all(32.0),
-            child: Text(
-              &#39;Nenhum usuário cadastrado&#39;,
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          ),
+        const EmptyWidget(
+          message: &#39;Nenhum usuário cadastrado&#39;,
+          icon: Icons.people_outline,
+          subMessage: &#39;Lista de usuários vazia.&#39;,
         )
       else
         ListView.builder(

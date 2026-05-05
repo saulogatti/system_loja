@@ -77,7 +77,10 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget wrappedRoute(BuildContext context) {
-  return BlocProvider(create: (_) =&gt; CompanyEditCubit(appInjection.get&lt;ICompanyRepository&gt;()), child: this);
+  return BlocProvider(
+    create: (_) =&gt; CompanyEditCubit(appInjection.get&lt;ICompanyRepository&gt;()),
+    child: this,
+  );
 }</code></pre>
 </section>
 

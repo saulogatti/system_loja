@@ -73,9 +73,8 @@ a superfície de injeção caso o caminho não seja totalmente confiável.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; manualBackup(String backupFile) async {
-  final sanitizedBackupFile = backupFile.replaceAll(&quot;&#39;&quot;, &quot;&#39;&#39;&quot;);
-
   &#47;&#47; O comando VACUUM INTO cria um backup consistente &quot;a quente&quot;
+  final sanitizedBackupFile = backupFile.replaceAll(&quot;&#39;&quot;, &quot;&#39;&#39;&quot;);
   await customStatement(&quot;VACUUM INTO &#39;$sanitizedBackupFile&#39;&quot;);
 }</code></pre>
 </section>

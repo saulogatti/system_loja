@@ -116,7 +116,9 @@ Widget build(BuildContext context) {
       border: OutlineInputBorder(),
       prefixIcon: Icon(Icons.badge),
     ),
-    enabled: enable, &#47;&#47; CPF não pode ser alterado
+    enabled: enable, &#47;&#47; CPF cannot be changed
+    keyboardType: TextInputType.number,
+    textInputAction: TextInputAction.next,
     inputFormatters: [CpfTextInputFormatter()],
     validator: validatorOptions,
   );

@@ -202,7 +202,12 @@ Widget build(BuildContext context) {
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                 child: MaterialBanner(
                   content: Text(state.errorMessage!),
-                  actions: [TextButton(onPressed: _reloadPeople, child: const Text(&#39;Tentar novamente&#39;))],
+                  actions: [
+                    TextButton(
+                      onPressed: _reloadPeople,
+                      child: const Text(&#39;Tentar novamente&#39;),
+                    ),
+                  ],
                 ),
               ),
             Expanded(
@@ -230,7 +235,9 @@ Widget build(BuildContext context) {
                     subtitleBuilder: (company) =&gt;
                         &#39;CNPJ: ${company.cnpj} • E-mail: ${company.email ?? &#39;-&#39;} • Telefone: ${company.phone ?? &#39;-&#39;}&#39;,
                     onTap: (company) async {
-                      final changed = await context.router.push&lt;bool&gt;(CompanyEditRoute(company: company));
+                      final changed = await context.router.push&lt;bool&gt;(
+                        CompanyEditRoute(company: company),
+                      );
                       if (changed == true &amp;&amp; mounted) {
                         await _reloadPeople();
                       }

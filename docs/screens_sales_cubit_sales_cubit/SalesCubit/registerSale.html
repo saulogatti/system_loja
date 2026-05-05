@@ -73,11 +73,15 @@ e salva no banco de dados.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; registerSale(InvoiceData invoiceData, bool enableCodeGeneration) async {
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; registerSale(
+  InvoiceData invoiceData,
+  bool enableCodeGeneration,
+) async {
   emit(SalesState.loading());
 
   if (enableCodeGeneration) {
-    final invoiceNumberResult = await _salesRepository.generateInvoiceNumber();
+    final invoiceNumberResult = await _salesRepository
+        .generateInvoiceNumber();
     switch (invoiceNumberResult) {
       case ResultSuccess(result: final invoiceNumber):
         invoiceData.invoiceNumber = invoiceNumber;

@@ -63,9 +63,10 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">SalesPurchaseAnalyticsBloc({required IAnalyticsRepository analyticsRepository})
-  : _analyticsRepository = analyticsRepository,
-    super(const SalesPurchaseAnalyticsInitial()) {
+  <pre class="language-dart"><code class="language-dart">SalesPurchaseAnalyticsBloc({
+  required IAnalyticsRepository analyticsRepository,
+}) : _analyticsRepository = analyticsRepository,
+     super(const SalesPurchaseAnalyticsInitial()) {
   on&lt;LoadSalesPurchaseAnalytics&gt;(_onLoadAnalytics);
   on&lt;ChangeSalesPurchaseGrouping&gt;(_onChangeGrouping);
 }</code></pre>

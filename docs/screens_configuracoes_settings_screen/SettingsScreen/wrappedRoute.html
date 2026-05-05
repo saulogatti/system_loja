@@ -78,7 +78,9 @@
   <pre class="language-dart"><code class="language-dart">@override
 Widget wrappedRoute(BuildContext context) {
   return BlocProvider&lt;SettingsBloc&gt;(
-    create: (_) =&gt; SettingsBloc(configurationRepository: appInjection.get&lt;IConfigurationRepository&gt;()),
+    create: (_) =&gt; SettingsBloc(
+      configurationRepository: appInjection.get&lt;IConfigurationRepository&gt;(),
+    ),
     child: this,
   );
 }</code></pre>
