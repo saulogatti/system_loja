@@ -74,9 +74,7 @@ class SystemRepository implements ISystemRepository {
     try {
       final jsonContent = await SelectorFileService().getSystemConfiguration();
       if (jsonContent == null) {
-        return ResultStatus.error(
-          '',
-        );
+        return ResultStatus.error('');
       }
       final dataMap = jsonDecode(jsonContent) as Map<String, dynamic>;
       final importedData = SystemConfigurationCodec.fromJson(dataMap);

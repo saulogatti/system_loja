@@ -27,23 +27,33 @@ class EmptyWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Semantics(
-              label: semanticLabel ?? (subMessage != null ? '$message. $subMessage' : message),
+              label:
+                  semanticLabel ??
+                  (subMessage != null ? '$message. $subMessage' : message),
               container: true,
               excludeSemantics: true,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(icon, size: 64, color: Theme.of(context).colorScheme.primary.withAlpha(128)),
+                  Icon(
+                    icon,
+                    size: 64,
+                    color: Theme.of(context).colorScheme.primary.withAlpha(128),
+                  ),
                   const SizedBox(height: 16),
-                  Text(message, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   if (subMessage != null) ...[
                     const SizedBox(height: 8),
                     Text(
                       subMessage!,
                       textAlign: TextAlign.center,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ],
