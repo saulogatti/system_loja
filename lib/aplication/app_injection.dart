@@ -48,8 +48,12 @@ void setupAppInjection() {
     cacheFilePath: p.join(Directory.current.path, 'system_loja_cache'),
   );
   appInjection.registerSingleton<RouteApp>(RouteApp());
-  appInjection.registerSingleton<ProductMovementReportService>(ProductMovementReportService());
-  appInjection.registerSingleton<RelatorioOverviewService>(RelatorioOverviewService());
+  appInjection.registerSingleton<ProductMovementReportService>(
+    ProductMovementReportService(),
+  );
+  appInjection.registerSingleton<RelatorioOverviewService>(
+    RelatorioOverviewService(),
+  );
   appInjection.registerSingleton<AppDatabase>(AppDatabase());
   appInjection.registerSingleton<SystemDatabase>(SystemDatabase());
   appInjection.registerSingleton<ISystemErrorManager>(SystemErrorManager());
@@ -109,7 +113,9 @@ void setupAppInjection() {
   );
 
   appInjection.registerSingleton<ICategoryRepository>(
-    CategoryRepository(categoryDao: appInjection.get<AppDatabase>().categoryDao),
+    CategoryRepository(
+      categoryDao: appInjection.get<AppDatabase>().categoryDao,
+    ),
   );
   appInjection.registerSingleton<IAnalyticsRepository>(
     AnalyticsRepository(invoiceDao: appInjection.get<AppDatabase>().invoiceDao),
@@ -119,9 +125,12 @@ void setupAppInjection() {
 
 /// Carrega preferências da aplicação após o registro do repositório.
 Future<void> _carregarConfiguracaoInicial() async {
-  final resultado = await appInjection.get<IConfigurationRepository>().loadConfiguration();
+  final resultado = await appInjection
+      .get<IConfigurationRepository>()
+      .loadConfiguration();
   resultado.when(
     onSuccess: (_) {},
-    onError: (mensagem) => debugPrint('Falha ao carregar configurações iniciais: $mensagem'),
+    onError: (mensagem) =>
+        debugPrint('Falha ao carregar configurações iniciais: $mensagem'),
   );
 }

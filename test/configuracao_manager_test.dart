@@ -53,7 +53,10 @@ void main() {
 
     test('Deve atualizar configurações com sucesso', () async {
       final currentConfig = await _obterSucesso(manager.loadConfiguration());
-      final novaConfig = currentConfig.copyWith(temaEscuro: true, notificarVendas: false);
+      final novaConfig = currentConfig.copyWith(
+        temaEscuro: true,
+        notificarVendas: false,
+      );
 
       await _executarSucesso(manager.updateAppSettings(novaConfig));
 
@@ -66,7 +69,10 @@ void main() {
 
     test('Deve persistir configurações após salvar', () async {
       final currentConfig = await _obterSucesso(manager.loadConfiguration());
-      final novaConfig = currentConfig.copyWith(limiteEstoqueBaixo: 25, frequenciaBackup: 'mensal');
+      final novaConfig = currentConfig.copyWith(
+        limiteEstoqueBaixo: 25,
+        frequenciaBackup: 'mensal',
+      );
 
       await _executarSucesso(manager.updateAppSettings(novaConfig));
 
@@ -85,7 +91,10 @@ void main() {
     test('Deve restaurar configurações padrão', () async {
       // Primeiro altera as configurações
       final currentConfig = await _obterSucesso(manager.loadConfiguration());
-      final novaConfig = currentConfig.copyWith(temaEscuro: true, limiteEstoqueBaixo: 50);
+      final novaConfig = currentConfig.copyWith(
+        temaEscuro: true,
+        limiteEstoqueBaixo: 50,
+      );
       await _executarSucesso(manager.updateAppSettings(novaConfig));
 
       // Depois restaura padrão
@@ -127,18 +136,25 @@ void main() {
       final logsAntigos = [
         {
           'id': 1,
-          'data_hora': DateTime.now().subtract(const Duration(days: 100)).toIso8601String(),
+          'data_hora': DateTime.now()
+              .subtract(const Duration(days: 100))
+              .toIso8601String(),
           'descricao': 'Log antigo',
         },
         {
           'id': 2,
-          'data_hora': DateTime.now().subtract(const Duration(days: 10)).toIso8601String(),
+          'data_hora': DateTime.now()
+              .subtract(const Duration(days: 10))
+              .toIso8601String(),
           'descricao': 'Log recente',
         },
       ];
 
       final jsonContent = logsAntigos
-          .map((l) => '{"id":${l['id']},"data_hora":"${l['data_hora']}","descricao":"${l['descricao']}"}')
+          .map(
+            (l) =>
+                '{"id":${l['id']},"data_hora":"${l['data_hora']}","descricao":"${l['descricao']}"}',
+          )
           .join(',');
       File('data/logs_atividade.json').writeAsStringSync('[$jsonContent]');
 
@@ -188,52 +204,67 @@ void main() {
   });
 
   group('ConfiguracaoManager - Serialização JSON', () {
-    test('Deve serializar e desserializar configurações corretamente', () async {
-      final configOriginal = AppSettings(
-        notificacoesAtivadas: false,
-        notificarVendas: false,
-        notificarEstoqueBaixo: true,
-        limiteEstoqueBaixo: 20,
-        temaEscuro: true,
-        corPrimaria: EnumColorAppThemeSettings.verde,
-        backupAutomatico: true,
-        frequenciaBackup: 'diario',
-        localBackup: 'custom/path',
-        limpezaAutomatica: true,
-        diasManterLogs: 60,
-        exigirSenha: true,
-        tempoBloqueioMinutos: 30,
-        permitirMultiplosUsuarios: true,
-      );
+    test(
+      'Deve serializar e desserializar configurações corretamente',
+      () async {
+        final configOriginal = AppSettings(
+          notificacoesAtivadas: false,
+          notificarVendas: false,
+          notificarEstoqueBaixo: true,
+          limiteEstoqueBaixo: 20,
+          temaEscuro: true,
+          corPrimaria: EnumColorAppThemeSettings.verde,
+          backupAutomatico: true,
+          frequenciaBackup: 'diario',
+          localBackup: 'custom/path',
+          limpezaAutomatica: true,
+          diasManterLogs: 60,
+          exigirSenha: true,
+          tempoBloqueioMinutos: 30,
+          permitirMultiplosUsuarios: true,
+        );
 
-      await _executarSucesso(manager.updateAppSettings(configOriginal));
+        await _executarSucesso(manager.updateAppSettings(configOriginal));
 
-      final manager2 = ConfigurationRepository(
-        logRepository: LogRepository(logDao: systemDatabase.logDao),
-        settingsService: SettingsService.injection(),
-        cache: CacheManager(),
-      );
-      final configuracao = await _obterSucesso(manager2.loadConfiguration());
-      expect(configuracao.notificacoesAtivadas, equals(configOriginal.notificacoesAtivadas));
-      expect(configuracao.temaEscuro, equals(configOriginal.temaEscuro));
-      expect(configuracao.corPrimaria, equals(configOriginal.corPrimaria));
-      expect(configuracao.backupAutomatico, equals(configOriginal.backupAutomatico));
-    });
+        final manager2 = ConfigurationRepository(
+          logRepository: LogRepository(logDao: systemDatabase.logDao),
+          settingsService: SettingsService.injection(),
+          cache: CacheManager(),
+        );
+        final configuracao = await _obterSucesso(manager2.loadConfiguration());
+        expect(
+          configuracao.notificacoesAtivadas,
+          equals(configOriginal.notificacoesAtivadas),
+        );
+        expect(configuracao.temaEscuro, equals(configOriginal.temaEscuro));
+        expect(configuracao.corPrimaria, equals(configOriginal.corPrimaria));
+        expect(
+          configuracao.backupAutomatico,
+          equals(configOriginal.backupAutomatico),
+        );
+      },
+    );
   });
 }
 
-Future<void> _executarSucesso(Future<ResultStatus<AppSettings, String>> future) async {
+Future<void> _executarSucesso(
+  Future<ResultStatus<AppSettings, String>> future,
+) async {
   final r = await future;
   expect(r.isSuccessful, isTrue, reason: r.hasError ? r.asError : null);
 }
 
-Future<AppSettings> _obterSucesso(Future<ResultStatus<AppSettings, String>> future) async {
+Future<AppSettings> _obterSucesso(
+  Future<ResultStatus<AppSettings, String>> future,
+) async {
   final r = await future;
   expect(r.isSuccessful, isTrue, reason: r.hasError ? r.asError : null);
   return r.asSuccess;
 }
 
-class FakePathProviderPlatform extends Fake with MockPlatformInterfaceMixin implements PathProviderPlatform {
+class FakePathProviderPlatform extends Fake
+    with MockPlatformInterfaceMixin
+    implements PathProviderPlatform {
   @override
   Future<String?> getApplicationDocumentsPath() async {
     return '/tmp';

@@ -51,7 +51,9 @@ class RelatorioCubit extends Cubit<RelatorioState> {
       case ResultSuccess(result: final data):
         categoryNamesById = _toCategoryMap(data);
       case ResultError(resultError: final error):
-        emit(RelatorioState.error(message: 'Erro ao carregar categorias: $error'));
+        emit(
+          RelatorioState.error(message: 'Erro ao carregar categorias: $error'),
+        );
         return;
     }
 
@@ -59,7 +61,11 @@ class RelatorioCubit extends Cubit<RelatorioState> {
       case ResultSuccess(result: final data):
         entryInvoices = data;
       case ResultError(resultError: final error):
-        emit(RelatorioState.error(message: 'Erro ao carregar notas de entrada: $error'));
+        emit(
+          RelatorioState.error(
+            message: 'Erro ao carregar notas de entrada: $error',
+          ),
+        );
         return;
     }
 
@@ -67,7 +73,11 @@ class RelatorioCubit extends Cubit<RelatorioState> {
       case ResultSuccess(result: final data):
         exitInvoices = data;
       case ResultError(resultError: final error):
-        emit(RelatorioState.error(message: 'Erro ao carregar notas de saída: $error'));
+        emit(
+          RelatorioState.error(
+            message: 'Erro ao carregar notas de saída: $error',
+          ),
+        );
         return;
     }
 
@@ -75,7 +85,9 @@ class RelatorioCubit extends Cubit<RelatorioState> {
       case ResultSuccess(result: final data):
         products = data;
       case ResultError(resultError: final error):
-        emit(RelatorioState.error(message: 'Erro ao carregar produtos: $error'));
+        emit(
+          RelatorioState.error(message: 'Erro ao carregar produtos: $error'),
+        );
         return;
     }
 
@@ -102,23 +114,45 @@ class RelatorioCubit extends Cubit<RelatorioState> {
       return;
     }
 
-    emit(currentState.copyWith(selectedProductDetails: _buildProductDetails(currentState, product)));
+    emit(
+      currentState.copyWith(
+        selectedProductDetails: _buildProductDetails(currentState, product),
+      ),
+    );
   }
 
-  ProductDetailsReportData _buildProductDetails(RelatorioLoaded currentState, Product product) {
-    final entries = _movementReportService.buildMovements(currentState.entryInvoices, product);
-    final exits = _movementReportService.buildMovements(currentState.exitInvoices, product);
-    final summary = _movementReportService.summarize(entries: entries, exits: exits);
+  ProductDetailsReportData _buildProductDetails(
+    RelatorioLoaded currentState,
+    Product product,
+  ) {
+    final entries = _movementReportService.buildMovements(
+      currentState.entryInvoices,
+      product,
+    );
+    final exits = _movementReportService.buildMovements(
+      currentState.exitInvoices,
+      product,
+    );
+    final summary = _movementReportService.summarize(
+      entries: entries,
+      exits: exits,
+    );
 
     return ProductDetailsReportData(
-      categoryName: _resolveCategoryName(currentState.categoryNamesById, product.categoryId),
+      categoryName: _resolveCategoryName(
+        currentState.categoryNamesById,
+        product.categoryId,
+      ),
       entries: entries,
       exits: exits,
       summary: summary,
     );
   }
 
-  String _resolveCategoryName(Map<int, String> categoryNamesById, int? categoryId) {
+  String _resolveCategoryName(
+    Map<int, String> categoryNamesById,
+    int? categoryId,
+  ) {
     if (categoryId == null) {
       return 'Sem categoria';
     }

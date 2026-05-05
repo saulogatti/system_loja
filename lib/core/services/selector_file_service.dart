@@ -22,7 +22,9 @@ class SelectorFileService {
     return content;
   }
 
-  Future<void> saveSystemConfiguration(SystemConfiguration systemConfiguration) async {
+  Future<void> saveSystemConfiguration(
+    SystemConfiguration systemConfiguration,
+  ) async {
     const acceptedTypes = <XTypeGroup>[
       XTypeGroup(label: 'json', extensions: ['json']),
     ];
@@ -36,6 +38,9 @@ class SelectorFileService {
     }
 
     final file = File(location.path);
-    await file.writeAsString(jsonEncode(SystemConfigurationCodec.toJson(systemConfiguration)), flush: true);
+    await file.writeAsString(
+      jsonEncode(SystemConfigurationCodec.toJson(systemConfiguration)),
+      flush: true,
+    );
   }
 }
