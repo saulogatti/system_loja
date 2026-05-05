@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 class SalesPurchaseDonutCard extends StatelessWidget {
   final double totalSales;
@@ -128,12 +129,9 @@ class SalesPurchaseDonutCard extends StatelessWidget {
                   ),
                   if (total <= 0) ...[
                     const SizedBox(height: 10),
-                    Text(
-                      'Sem valores para exibir no gráfico.',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontSize: 12,
-                      ),
+                    const EmptyWidget(
+                      message: 'Sem valores para exibir no gráfico.',
+                      icon: Icons.pie_chart_outline,
                     ),
                   ],
                 ],
@@ -261,12 +259,9 @@ class _DonutZoomDialog extends StatelessWidget {
                 ),
                 if (total <= 0) ...[
                   const SizedBox(height: 12),
-                  Text(
-                    'Sem valores para exibir no gráfico.',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      fontSize: 12,
-                    ),
+                  const EmptyWidget(
+                    message: 'Sem valores para exibir no gráfico.',
+                    icon: Icons.pie_chart_outline,
                   ),
                 ],
               ],
