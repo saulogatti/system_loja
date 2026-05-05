@@ -4,6 +4,7 @@ const String kStringGenerate = 'Será gerado automaticamente';
 /// Constantes de RegExp reutilizáveis no app.
 abstract final class Constants {
   static const int kLowStockThreshold = 5;
+
   /// Remove caracteres não numéricos (ex.: CNPJ, CPF, CEP).
   static final RegExp nonNumericRegExp = RegExp(r'[^0-9]');
 

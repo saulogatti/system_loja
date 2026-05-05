@@ -20,7 +20,8 @@ class AnalyticsRepository implements IAnalyticsRepository {
   /// Carrega notas de saída (vendas) e entrada (compras) separadamente
   /// e as combina num mapa por data para compor os pontos do gráfico.
   @override
-  Future<ResultStatus<List<AnalyticsPoint>, String>> getAnalyticsByDate() async {
+  Future<ResultStatus<List<AnalyticsPoint>, String>>
+  getAnalyticsByDate() async {
     try {
       final exits = await _invoiceDao.getExitInvoices();
       final entries = await _invoiceDao.getEntryInvoices();
@@ -40,10 +41,8 @@ class AnalyticsRepository implements IAnalyticsRepository {
         acc.add(invoice.data.totalValue, _itemCount(invoice));
       }
 
-      final allDates = {
-        ...salesByDate.keys,
-        ...purchasesByDate.keys,
-      }.toList()..sort();
+      final allDates = {...salesByDate.keys, ...purchasesByDate.keys}.toList()
+        ..sort();
 
       final points = [
         for (final date in allDates)

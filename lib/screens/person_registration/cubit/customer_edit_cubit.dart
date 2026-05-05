@@ -16,9 +16,15 @@ class CustomerEditCubit extends Cubit<CustomerEditState> {
     switch (result) {
       case ResultSuccess(:final result):
         if (result) {
-          emit(const CustomerEditDeleted('Pessoa física excluída com sucesso.'));
+          emit(
+            const CustomerEditDeleted('Pessoa física excluída com sucesso.'),
+          );
         } else {
-          emit(const CustomerEditError('Não foi possível excluir a pessoa física.'));
+          emit(
+            const CustomerEditError(
+              'Não foi possível excluir a pessoa física.',
+            ),
+          );
         }
       case ResultError(:final resultError):
         emit(CustomerEditError(resultError));
@@ -32,9 +38,15 @@ class CustomerEditCubit extends Cubit<CustomerEditState> {
     switch (result) {
       case ResultSuccess(:final result):
         if (result) {
-          emit(const CustomerEditSaved('Pessoa física atualizada com sucesso.'));
+          emit(
+            const CustomerEditSaved('Pessoa física atualizada com sucesso.'),
+          );
         } else {
-          emit(const CustomerEditError('Não foi possível atualizar a pessoa física.'));
+          emit(
+            const CustomerEditError(
+              'Não foi possível atualizar a pessoa física.',
+            ),
+          );
         }
       case ResultError(:final resultError):
         emit(CustomerEditError(resultError));

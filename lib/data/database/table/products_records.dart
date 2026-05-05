@@ -7,11 +7,13 @@ class ProductsRecords extends Table {
   late final IntColumn id = integer().autoIncrement()();
 
   /// ID da categoria (chave estrangeira para categories_records)
-  IntColumn get categoryId => integer().nullable().references(CategoriesRecords, #id)();
+  IntColumn get categoryId =>
+      integer().nullable().references(CategoriesRecords, #id)();
   TextColumn get description => text()();
   DateTimeColumn get lastUpdatedDate => dateTime().nullable()();
   TextColumn get name => text()();
   RealColumn get price => real()();
-  DateTimeColumn get registrationDate => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get registrationDate =>
+      dateTime().withDefault(currentDateAndTime)();
   IntColumn get stockQuantity => integer()();
 }

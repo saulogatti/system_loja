@@ -53,6 +53,7 @@ class _ProductFormState extends State<ProductForm> {
           const SizedBox(height: 20),
           TextFormField(
             controller: widget.nomeController,
+            textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
               labelText: 'Nome do Produto *',
               border: OutlineInputBorder(),
@@ -66,35 +67,41 @@ class _ProductFormState extends State<ProductForm> {
             },
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  readOnly: _generatedCode,
-                  controller: widget.codigoController,
-                  decoration: const InputDecoration(
-                    labelText: 'Código *',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.qr_code),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Código é obrigatório';
-                    }
-                    return null;
-                  },
+          TextFormField(
+            readOnly: _generatedCode,
+            controller: widget.codigoController,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              labelText: 'Código *',
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(Icons.qr_code),
+              suffixIcon: IconButton(
+                tooltip: _generatedCode
+                    ? 'Desativar geração automática'
+                    : 'Gerar código automaticamente',
+                onPressed: () {
+                  setState(() {
+                    _generatedCode = !_generatedCode;
+                    widget.codigoController.text = switch (_generatedCode) {
+                      true => kStringGenerate,
+                      _ => '',
+                    };
+                  });
+                },
+                icon: Icon(
+                  Icons.generating_tokens_outlined,
+                  color: _generatedCode
+                      ? Theme.of(context).colorScheme.primary
+                      : null,
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  _generatedCode = !_generatedCode;
-                  widget.codigoController.text = _generatedCode
-                      ? kStringGenerate
-                      : '';
-                },
-                icon: Icon(Icons.generating_tokens_outlined),
-              ),
-            ],
+            ),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Código é obrigatório';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 16),
           Row(
@@ -102,6 +109,7 @@ class _ProductFormState extends State<ProductForm> {
               Expanded(
                 child: TextFormField(
                   controller: widget.precoController,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Preço *',
                     border: OutlineInputBorder(),
@@ -119,6 +127,7 @@ class _ProductFormState extends State<ProductForm> {
               Expanded(
                 child: TextFormField(
                   controller: widget.estoqueController,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Estoque *',
                     border: OutlineInputBorder(),

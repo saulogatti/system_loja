@@ -16,9 +16,15 @@ class CompanyEditCubit extends Cubit<CompanyEditState> {
     switch (result) {
       case ResultSuccess(:final result):
         if (result) {
-          emit(const CompanyEditDeleted('Pessoa jurídica excluída com sucesso.'));
+          emit(
+            const CompanyEditDeleted('Pessoa jurídica excluída com sucesso.'),
+          );
         } else {
-          emit(const CompanyEditError('Não foi possível excluir a pessoa jurídica.'));
+          emit(
+            const CompanyEditError(
+              'Não foi possível excluir a pessoa jurídica.',
+            ),
+          );
         }
       case ResultError(:final resultError):
         emit(CompanyEditError(resultError));
@@ -32,9 +38,15 @@ class CompanyEditCubit extends Cubit<CompanyEditState> {
     switch (result) {
       case ResultSuccess(:final result):
         if (result) {
-          emit(const CompanyEditSaved('Pessoa jurídica atualizada com sucesso.'));
+          emit(
+            const CompanyEditSaved('Pessoa jurídica atualizada com sucesso.'),
+          );
         } else {
-          emit(const CompanyEditError('Não foi possível atualizar a pessoa jurídica.'));
+          emit(
+            const CompanyEditError(
+              'Não foi possível atualizar a pessoa jurídica.',
+            ),
+          );
         }
       case ResultError(:final resultError):
         emit(CompanyEditError(resultError));

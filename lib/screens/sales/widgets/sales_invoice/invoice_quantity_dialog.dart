@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/models/product.dart';
@@ -9,7 +10,11 @@ class InvoiceQuantityDialog extends StatefulWidget {
   final Product product;
 
   final InvoiceType invoiceType;
-  const InvoiceQuantityDialog({required this.product, required this.invoiceType, super.key});
+  const InvoiceQuantityDialog({
+    required this.product,
+    required this.invoiceType,
+    super.key,
+  });
 
   @override
   State<InvoiceQuantityDialog> createState() => _InvoiceQuantityDialogState();
@@ -30,6 +35,13 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
           controller: _controller,
           keyboardType: TextInputType.number,
           inputFormatters: [QuantityInputFormatter()],
+          textInputAction: TextInputAction.done,
+          onFieldSubmitted: (_) {
+            if (_formKey.currentState!.validate()) {
+              final quantity = int.parse(_controller.text.trim());
+              context.router.maybePop(quantity);
+            }
+          },
           decoration: InputDecoration(
             labelText: 'Quantidade *',
             helperText: widget.invoiceType == InvoiceType.exit
@@ -43,7 +55,8 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
             if (error != null) return error;
 
             final qtd = int.parse(value!.trim());
-            if (widget.invoiceType == InvoiceType.exit && qtd > product.stockQuantity) {
+            if (widget.invoiceType == InvoiceType.exit &&
+                qtd > product.stockQuantity) {
               return 'Quantidade maior que o estoque disponível';
             }
 
@@ -52,7 +65,10 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+        TextButton(
+          onPressed: () => context.router.maybePop(),
+          child: const Text('Cancelar'),
+        ),
         ElevatedButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
