@@ -104,3 +104,7 @@
 
 **Learning:** Found plain Text widgets acting as empty states inside analytics cards (like DonutCard and ProductsCountChartCard) which visually clash with the rest of the application's empty states and lack proper semantics.
 **Action:** Use the global EmptyWidget across all analytics and reporting empty states to maintain a11y and visual harmony.
+
+## 06-05-2024 - Missing Semantics on Custom InkWell Components
+**Learning:** Custom interactive widgets built directly with `InkWell` (e.g. interactive cards, custom header filters) often lack automatic accessibility attributes, making them opaque to screen readers despite their visual affordance.
+**Action:** Always verify that standalone `InkWell` or `GestureDetector` widgets have adequate `Semantics` wrappers. This is especially true for items like `_InvoiceTile` and `_SectionHeader`, ensuring they use `Semantics(button: true, label: '...', excludeSemantics: true)` when visual content needs to be combined into a single accessible node.
