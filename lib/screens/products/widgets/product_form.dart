@@ -78,7 +78,7 @@ class _ProductFormState extends State<ProductForm> {
               prefixIcon: const Icon(Icons.qr_code),
               suffixIcon: IconButton(
                 tooltip: _generatedCode ? 'Desativar geração automática' : 'Gerar código automaticamente',
-                onPressed: () {
+                onPressed: widget.isLoading ? null : () {
                   setState(() {
                     _generatedCode = !_generatedCode;
                     widget.codigoController.text = switch (_generatedCode) {
