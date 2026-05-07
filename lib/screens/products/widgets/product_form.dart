@@ -17,6 +17,7 @@ class ProductForm extends StatefulWidget {
   final ValueChanged<bool> onSubmit;
   final int? selectedCategoryId;
   final ValueChanged<int?> onCategoryChanged;
+  final bool isLoading;
 
   const ProductForm({
     required this.formKey,
@@ -29,6 +30,7 @@ class ProductForm extends StatefulWidget {
     required this.onCategoryChanged,
     super.key,
     this.selectedCategoryId,
+    this.isLoading = false,
   });
 
   @override
@@ -46,12 +48,10 @@ class _ProductFormState extends State<ProductForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            'Novo Produto',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+          const Text('Novo Produto', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           const SizedBox(height: 20),
           TextFormField(
+            enabled: !widget.isLoading,
             controller: widget.nomeController,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
@@ -68,6 +68,7 @@ class _ProductFormState extends State<ProductForm> {
           ),
           const SizedBox(height: 16),
           TextFormField(
+            enabled: !widget.isLoading,
             readOnly: _generatedCode,
             controller: widget.codigoController,
             textInputAction: TextInputAction.next,
@@ -76,9 +77,7 @@ class _ProductFormState extends State<ProductForm> {
               border: const OutlineInputBorder(),
               prefixIcon: const Icon(Icons.qr_code),
               suffixIcon: IconButton(
-                tooltip: _generatedCode
-                    ? 'Desativar geração automática'
-                    : 'Gerar código automaticamente',
+                tooltip: _generatedCode ? 'Desativar geração automática' : 'Gerar código automaticamente',
                 onPressed: () {
                   setState(() {
                     _generatedCode = !_generatedCode;
@@ -90,9 +89,7 @@ class _ProductFormState extends State<ProductForm> {
                 },
                 icon: Icon(
                   Icons.generating_tokens_outlined,
-                  color: _generatedCode
-                      ? Theme.of(context).colorScheme.primary
-                      : null,
+                  color: _generatedCode ? Theme.of(context).colorScheme.primary : null,
                 ),
               ),
             ),
@@ -108,6 +105,7 @@ class _ProductFormState extends State<ProductForm> {
             children: [
               Expanded(
                 child: TextFormField(
+                  enabled: !widget.isLoading,
                   controller: widget.precoController,
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
@@ -116,9 +114,7 @@ class _ProductFormState extends State<ProductForm> {
                     prefixIcon: Icon(Icons.attach_money),
                     helperText: 'Ex: 10,50',
                   ),
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [PriceInputFormatter()],
                   validator: validatePrice,
                 ),
@@ -126,6 +122,7 @@ class _ProductFormState extends State<ProductForm> {
               const SizedBox(width: 16),
               Expanded(
                 child: TextFormField(
+                  enabled: !widget.isLoading,
                   controller: widget.estoqueController,
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
@@ -145,9 +142,11 @@ class _ProductFormState extends State<ProductForm> {
           ProductCategory(
             selectedCategoryId: widget.selectedCategoryId,
             onChanged: widget.onCategoryChanged,
+            enabled: !widget.isLoading,
           ),
           const SizedBox(height: 16),
           TextFormField(
+            enabled: !widget.isLoading,
             controller: widget.descricaoController,
             decoration: const InputDecoration(
               labelText: 'Descrição',
@@ -158,9 +157,11 @@ class _ProductFormState extends State<ProductForm> {
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
-            onPressed: () => widget.onSubmit(_generatedCode),
-            icon: const Icon(Icons.add),
-            label: const Text('Adicionar Produto'),
+            onPressed: widget.isLoading ? null : () => widget.onSubmit(_generatedCode),
+            icon: widget.isLoading
+                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                : const Icon(Icons.add),
+            label: Text(widget.isLoading ? 'Adicionando...' : 'Adicionar Produto'),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(16),
               textStyle: const TextStyle(fontSize: 16),
