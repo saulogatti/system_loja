@@ -108,3 +108,6 @@
 ## 06-05-2024 - Missing Semantics on Custom InkWell Components
 **Learning:** Custom interactive widgets built directly with `InkWell` (e.g. interactive cards, custom header filters) often lack automatic accessibility attributes, making them opaque to screen readers despite their visual affordance.
 **Action:** Always verify that standalone `InkWell` or `GestureDetector` widgets have adequate `Semantics` wrappers. This is especially true for items like `_InvoiceTile` and `_SectionHeader`, ensuring they use `Semantics(button: true, label: '...', excludeSemantics: true)` when visual content needs to be combined into a single accessible node.
+## 07-05-2025 - Loading State in Forms
+**Learning:** Adding a boolean `isLoading` flag to forms with explicit visual dimming via `enabled: false` on inputs and a `CircularProgressIndicator` on the submit button significantly improves perceived responsiveness and prevents duplicate submissions during asynchronous operations.
+**Action:** When creating or updating form widgets that trigger database or API calls, always verify if `BlocBuilder` can be used to pass a loading state into the form to disable fields and show visual feedback on the main action button.
