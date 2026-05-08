@@ -27,11 +27,8 @@ class SystemConfigScreen extends StatefulWidget implements AutoRouteWrapper {
 }
 
 class _SystemConfigScreenState extends State<SystemConfigScreen> {
-  final TextEditingController _measurementUnitController =
-      TextEditingController();
-  final TextEditingController _defaultPeriodController = TextEditingController(
-    text: '30',
-  );
+  final TextEditingController _measurementUnitController = TextEditingController();
+  final TextEditingController _defaultPeriodController = TextEditingController(text: '30');
 
   List<PaymentMethodType> _selectedPaymentMethods = [];
   List<String> _measurementUnits = [];
@@ -47,21 +44,15 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
           if (state is SystemConfigStateLoaded) {
             _applyLoadedData(state.data);
             if (state.feedbackMessage != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.feedbackMessage!),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.feedbackMessage!), backgroundColor: Colors.green));
             }
             setState(() {});
           } else if (state is SystemConfigStateError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
           }
         },
         builder: (context, state) {
@@ -108,10 +99,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
 
     if (_measurementUnits.any((unit) => unit.toUpperCase() == rawUnit)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Unidade de medida já adicionada.'),
-          backgroundColor: Colors.orange,
-        ),
+        const SnackBar(content: Text('Unidade de medida já adicionada.'), backgroundColor: Colors.orange),
       );
       return;
     }
@@ -124,20 +112,13 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
   }
 
   void _applyLoadedData(SystemConfiguration data) {
-    _selectedPaymentMethods = List<PaymentMethodType>.from(
-      data.priceConfiguration.types,
-      growable: true,
-    );
-    _measurementUnits = List<String>.from(
-      data.priceConfiguration.measurementUnits,
-      growable: true,
-    );
+    _selectedPaymentMethods = List<PaymentMethodType>.from(data.priceConfiguration.types, growable: true);
+    _measurementUnits = List<String>.from(data.priceConfiguration.measurementUnits, growable: true);
 
     final reportConfiguration = data.priceConfiguration.reportConfiguration;
     _enableSalesByPeriod = reportConfiguration?.enableSalesByPeriod ?? false;
     _enableTopProducts = reportConfiguration?.enableTopProducts ?? false;
-    _defaultPeriodController.text =
-        reportConfiguration?.defaultPeriodInDays.toString() ?? '0';
+    _defaultPeriodController.text = reportConfiguration?.defaultPeriodInDays.toString() ?? '0';
   }
 
   Widget _buildActions(BuildContext context) {
@@ -154,10 +135,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
               label: const Text('Salvar'),
             ),
             OutlinedButton.icon(
-              onPressed: () => _resetConfiguration(
-                context,
-                context.read<SystemConfigCubit>(),
-              ),
+              onPressed: () => _resetConfiguration(context, context.read<SystemConfigCubit>()),
               icon: const Icon(Icons.restore),
               label: const Text('Restaurar padrão'),
             ),
@@ -169,10 +147,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
               label: const Text('Exportar'),
             ),
             OutlinedButton.icon(
-              onPressed: () => _importConfiguration(
-                context,
-                context.read<SystemConfigCubit>(),
-              ),
+              onPressed: () => _importConfiguration(context, context.read<SystemConfigCubit>()),
               icon: const Icon(Icons.download),
               label: const Text('Importar'),
             ),
@@ -213,24 +188,22 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
                 Expanded(
                   child: TextField(
                     controller: _measurementUnitController,
-                    decoration: const InputDecoration(
-                      hintText: 'Ex.: UN, KG, CX',
-                    ),
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => _addMeasurementUnit(),
+                    decoration: const InputDecoration(hintText: 'Ex.: UN, KG, CX'),
                   ),
                 ),
                 const SizedBox(width: 8),
                 IconButton.filled(
                   onPressed: _addMeasurementUnit,
                   icon: const Icon(Icons.add),
+                  tooltip: 'Adicionar unidade',
                 ),
               ],
             ),
             const SizedBox(height: 8),
             if (_measurementUnits.isEmpty)
-              const Text(
-                'Nenhuma unidade adicionada.',
-                style: TextStyle(color: Colors.grey),
-              )
+              const Text('Nenhuma unidade adicionada.', style: TextStyle(color: Colors.grey))
             else
               Wrap(
                 spacing: 8,
@@ -319,9 +292,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
             TextField(
               controller: _defaultPeriodController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Período padrão (dias)',
-              ),
+              decoration: const InputDecoration(labelText: 'Período padrão (dias)'),
             ),
           ],
         ),
@@ -329,18 +300,13 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     );
   }
 
-  Future<void> _importConfiguration(
-    BuildContext context,
-    SystemConfigCubit systemConfigCubit,
-  ) async {
+  Future<void> _importConfiguration(BuildContext context, SystemConfigCubit systemConfigCubit) async {
     final shouldImport = await showDialog<bool>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
           title: const Text('Importar configurações'),
-          content: const Text(
-            'Esta ação sobrescreve a configuração atual. Deseja continuar?',
-          ),
+          content: const Text('Esta ação sobrescreve a configuração atual. Deseja continuar?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -366,18 +332,13 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     await systemConfigCubit.importConfiguration();
   }
 
-  Future<void> _resetConfiguration(
-    BuildContext context,
-    SystemConfigCubit systemConfigCubit,
-  ) async {
+  Future<void> _resetConfiguration(BuildContext context, SystemConfigCubit systemConfigCubit) async {
     final shouldReset = await showDialog<bool>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
           title: const Text('Restaurar padrão'),
-          content: const Text(
-            'Deseja restaurar as configurações para os valores padrão?',
-          ),
+          content: const Text('Deseja restaurar as configurações para os valores padrão?'),
           actions: [
             TextButton(
               onPressed: () {
