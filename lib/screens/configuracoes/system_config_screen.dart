@@ -43,11 +43,6 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
         listener: (context, state) {
           if (state is SystemConfigStateLoaded) {
             _applyLoadedData(state.data);
-            if (state.feedbackMessage != null) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.feedbackMessage!), backgroundColor: Colors.green));
-            }
             setState(() {});
           } else if (state is SystemConfigStateError) {
             ScaffoldMessenger.of(
