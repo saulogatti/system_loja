@@ -21,11 +21,7 @@ class ProductDetailScreen extends StatefulWidget implements AutoRouteWrapper {
   final Product product;
   final List<Product> productList;
 
-  const ProductDetailScreen({
-    required this.product,
-    super.key,
-    this.productList = const [],
-  });
+  const ProductDetailScreen({required this.product, super.key, this.productList = const []});
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -50,252 +46,239 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ProductCubit, ProductState>(
+    return BlocConsumer<ProductCubit, ProductState>(
       listener: (context, state) {
         if (state is ProductStateUpdateSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Produto atualizado com sucesso!'),
-              backgroundColor: Colors.green,
-            ),
+            const SnackBar(content: Text('Produto atualizado com sucesso!'), backgroundColor: Colors.green),
           );
           ProductListScreen.requestReload();
           context.router.maybePop(true);
         } else if (state is ProductStateDeleteSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Produto deletado com sucesso!'),
-              backgroundColor: Colors.green,
-            ),
+            const SnackBar(content: Text('Produto deletado com sucesso!'), backgroundColor: Colors.green),
           );
           ProductListScreen.requestReload();
           context.router.maybePop(true);
         } else if (state is ProductStateError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: _confirmarExclusao,
-              tooltip: 'Deletar',
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Ícone e nome do produto
-                Center(
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.green,
-                    child: Icon(
-                      Icons.inventory_2,
-                      size: 50,
-                      color: Colors.white,
+      builder: (context, state) {
+        final isLoading = state is ProductStateLoading;
+        return Scaffold(
+          appBar: AppBar(
+            actions: [
+              IconButton(
+                icon: isLoading
+                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Icon(Icons.delete),
+                onPressed: isLoading ? null : _confirmarExclusao,
+                tooltip: 'Deletar ${widget.product.name}',
+              ),
+            ],
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Ícone e nome do produto
+                  Center(
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.green,
+                      child: Icon(Icons.inventory_2, size: 50, color: Colors.white),
                     ),
                   ),
-                ),
-                const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-                // Informações principais do produto
-                Card(
-                  elevation: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Informações do Produto',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                  // Informações principais do produto
+                  Card(
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Informações do Produto',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _nomeController,
-                          decoration: const InputDecoration(
-                            labelText: 'Nome *',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.inventory_2),
-                          ),
-                          enabled: true,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Nome é obrigatório';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _codigoController,
-                          decoration: const InputDecoration(
-                            labelText: 'Código *',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.qr_code),
-                          ),
-                          enabled: false,
-                          readOnly: true,
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: _precoController,
-                                decoration: const InputDecoration(
-                                  labelText: 'Preço (R\$) *',
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(Icons.attach_money),
-                                ),
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                      decimal: true,
-                                    ),
-                                enabled: true,
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Preço é obrigatório';
-                                  }
-                                  final preco = double.tryParse(
-                                    value.trim().replaceAll(',', '.'),
-                                  );
-                                  if (preco == null || preco < 0) {
-                                    return 'Preço inválido';
-                                  }
-                                  return null;
-                                },
-                              ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _nomeController,
+                            textInputAction: TextInputAction.next,
+                            decoration: const InputDecoration(
+                              labelText: 'Nome *',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.inventory_2),
                             ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: TextFormField(
-                                controller: _estoqueController,
-                                decoration: const InputDecoration(
-                                  labelText: 'Estoque *',
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(Icons.inventory),
-                                ),
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                enabled: true,
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Estoque é obrigatório';
-                                  }
-                                  final estoque = int.tryParse(value.trim());
-                                  if (estoque == null || estoque < 0) {
-                                    return 'Estoque inválido';
-                                  }
-                                  return null;
-                                },
-                              ),
+                            enabled: !isLoading,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Nome é obrigatório';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _codigoController,
+                            decoration: const InputDecoration(
+                              labelText: 'Código *',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.qr_code),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        ProductCategory(
-                          selectedCategoryId: _selectedCategoryId,
-                          enabled: true,
-                          onChanged: (categoryId) {
-                            setState(() {
-                              _selectedCategoryId = categoryId;
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _descricaoController,
-                          decoration: const InputDecoration(
-                            labelText: 'Descrição',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.description),
+                            enabled: false,
+                            readOnly: true,
                           ),
-                          enabled: true,
-                          maxLines: 3,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Card com informações do sistema
-                Card(
-                  elevation: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Informações do Sistema',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _precoController,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Preço (R\$) *',
+                                    border: OutlineInputBorder(),
+                                    prefixIcon: Icon(Icons.attach_money),
+                                  ),
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  enabled: !isLoading,
+                                  validator: (value) {
+                                    if (value == null || value.trim().isEmpty) {
+                                      return 'Preço é obrigatório';
+                                    }
+                                    final preco = double.tryParse(value.trim().replaceAll(',', '.'));
+                                    if (preco == null || preco < 0) {
+                                      return 'Preço inválido';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _estoqueController,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Estoque *',
+                                    border: OutlineInputBorder(),
+                                    prefixIcon: Icon(Icons.inventory),
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                  enabled: !isLoading,
+                                  validator: (value) {
+                                    if (value == null || value.trim().isEmpty) {
+                                      return 'Estoque é obrigatório';
+                                    }
+                                    final estoque = int.tryParse(value.trim());
+                                    if (estoque == null || estoque < 0) {
+                                      return 'Estoque inválido';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        _buildInfoRow(
-                          'ID',
-                          widget.product.code.toString(),
-                          Icons.numbers,
-                        ),
-                        const Divider(),
-                        _buildInfoRow(
-                          'Data de Cadastro',
-                          widget.product.registrationDate.toFormattedDate(),
-                          Icons.calendar_today,
-                        ),
-                        const Divider(),
-                        _buildInfoRow(
-                          'Data de Atualização',
-                          widget.product.lastUpdatedDate.toFormattedDate(),
-                          Icons.calendar_today,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => context.router.maybePop(false),
-                        child: const Text('Voltar'),
+                          const SizedBox(height: 16),
+                          ProductCategory(
+                            selectedCategoryId: _selectedCategoryId,
+                            enabled: !isLoading,
+                            onChanged: (categoryId) {
+                              setState(() {
+                                _selectedCategoryId = categoryId;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _descricaoController,
+                            decoration: const InputDecoration(
+                              labelText: 'Descrição',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Icons.description),
+                            ),
+                            enabled: !isLoading,
+                            maxLines: 3,
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _salvarAlteracoes,
-                        child: const Text('Salvar Alterações'),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Card com informações do sistema
+                  Card(
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Informações do Sistema',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 16),
+                          _buildInfoRow('ID', widget.product.code.toString(), Icons.numbers),
+                          const Divider(),
+                          _buildInfoRow(
+                            'Data de Cadastro',
+                            widget.product.registrationDate.toFormattedDate(),
+                            Icons.calendar_today,
+                          ),
+                          const Divider(),
+                          _buildInfoRow(
+                            'Data de Atualização',
+                            widget.product.lastUpdatedDate.toFormattedDate(),
+                            Icons.calendar_today,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: isLoading ? null : () => context.router.maybePop(false),
+                          child: const Text('Voltar'),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: isLoading ? null : _salvarAlteracoes,
+                          child: isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                              : const Text('Salvar Alterações'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -314,15 +297,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _nomeController = TextEditingController(text: widget.product.name);
     _codigoController = TextEditingController(text: widget.product.code);
-    _precoController = TextEditingController(
-      text: widget.product.price.toStringAsFixed(2),
-    );
-    _estoqueController = TextEditingController(
-      text: widget.product.stockQuantity.toString(),
-    );
-    _descricaoController = TextEditingController(
-      text: widget.product.description,
-    );
+    _precoController = TextEditingController(text: widget.product.price.toStringAsFixed(2));
+    _estoqueController = TextEditingController(text: widget.product.stockQuantity.toString());
+    _descricaoController = TextEditingController(text: widget.product.description);
     _selectedCategoryId = widget.product.categoryId;
   }
 
@@ -339,20 +316,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               children: [
                 Text(
                   label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600], fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
               ],
             ),
           ),
@@ -370,10 +337,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           'Tem certeza que deseja excluir o produto "${widget.product.name}"?\n\nEsta ação não pode ser desfeita.',
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context); // Fecha o diálogo
@@ -392,9 +356,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   void _salvarAlteracoes() {
     if (_formKey.currentState!.validate()) {
-      final preco = double.parse(
-        _precoController.text.trim().replaceAll(',', '.'),
-      );
+      final preco = double.parse(_precoController.text.trim().replaceAll(',', '.'));
       final estoque = int.parse(_estoqueController.text.trim());
 
       final updatedProduct = widget.product.copyWith(
