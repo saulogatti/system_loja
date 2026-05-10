@@ -48,22 +48,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<ProductCubit, ProductState>(
       listener: (context, state) {
-        if (state is ProductStateUpdateSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Produto atualizado com sucesso!'), backgroundColor: Colors.green),
-          );
-          ProductListScreen.requestReload();
-          context.router.maybePop(true);
-        } else if (state is ProductStateDeleteSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Produto deletado com sucesso!'), backgroundColor: Colors.green),
-          );
-          ProductListScreen.requestReload();
-          context.router.maybePop(true);
-        } else if (state is ProductStateError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
+        switch (state) {
+          case ProductStateUpdateSuccess():
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Produto atualizado com sucesso!'), backgroundColor: Colors.green),
+            );
+            ProductListScreen.requestReload();
+            context.router.maybePop(true);
+          case ProductStateDeleteSuccess():
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Produto deletado com sucesso!'), backgroundColor: Colors.green),
+            );
+            ProductListScreen.requestReload();
+            context.router.maybePop(true);
+          case ProductStateError(:final message):
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+          default:
+            break;
         }
       },
       builder: (context, state) {
@@ -333,9 +336,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Confirmar Exclusão'),
-        content: Text(
-          'Tem certeza que deseja excluir o produto "${widget.product.name}"?\n\nEsta ação não pode ser desfeita.',
-        ),
+        content: TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
           ElevatedButton(
