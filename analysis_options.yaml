@@ -3,7 +3,7 @@ includes:
   - package:bloc_lint/recommended.yaml
 
 formatter:
-  page_width: 110
+  page_width: 100
 analyzer:
   exclude:
     - build/**

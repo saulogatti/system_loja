@@ -4,10 +4,11 @@ version: 0.0.1
 publish_to: "none"
 
 environment:
-  sdk: ">=3.11.0"
+  sdk: ">=3.11.5 <4.0.0"
+  flutter: ">=3.41.9 <4.0.0"
 
 dependencies:
-  log_custom_printer: ^3.0.0
+  log_custom_printer: ^3.0.1
 
   flutter:
     sdk: flutter
@@ -38,7 +39,6 @@ dependencies:
   get_it: ^9.2.1
 
 dev_dependencies:
-
   freezed: ^3.2.5
   bloc_lint: ^0.4.1
   flutter_test:

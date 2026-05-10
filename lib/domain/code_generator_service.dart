@@ -8,40 +8,27 @@ import 'package:system_loja/data/database/dao/product_dao.dart';
 class CodeGeneratorService {
   final ProductDao _productDao;
   final InvoiceDao _invoiceDao;
-  // Utils? Services? Repositories? Domain? Aplication? Data?
-  // TODO: Avaliar a necessidade de usar o CodeGeneratorService
-  CodeGeneratorService({
-    required ProductDao productDao,
-    required InvoiceDao invoiceDao,
-  }) : _productDao = productDao,
-       _invoiceDao = invoiceDao;
 
-  /// Gera um código único para produto baseado no timestamp e contador.
+  CodeGeneratorService({required ProductDao productDao, required InvoiceDao invoiceDao})
+    : _productDao = productDao,
+      _invoiceDao = invoiceDao;
+
+  /// Verifica se um número de nota fiscal já existe no banco de dados.
   ///
-  /// Formato: PRD-YYYYMMDD-NNNN
-  /// Exemplo: PRD-20260123-0001
+  /// [invoiceNumber] Número da nota fiscal a ser verificado.
+  /// Retorna true se o número já existe, false caso contrário.
+  Future<bool> checkInvoiceNumberExists(String invoiceNumber) async {
+    final invoice = await _invoiceDao.getByInvoiceNumber(invoiceNumber);
+    return invoice != null;
+  }
+
+  /// Verifica se um código de produto já existe no banco de dados.
   ///
-  /// Verifica se o código já existe no banco antes de retornar.
-  /// Se existir, incrementa o contador até encontrar um código disponível.
-  Future<String> generateProductCode() async {
-    final now = DateTime.now();
-    final datePrefix =
-        'PRD-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
-
-    int counter = 1;
-    String code;
-
-    do {
-      code = '$datePrefix-${_padLeft(counter, 4)}';
-      final exists = await checkProductCodeExists(code);
-      if (!exists) {
-        return code;
-      }
-      counter++;
-    } while (counter < 10000); // Limite de segurança
-
-    // Se atingir o limite, adiciona timestamp em milissegundos
-    return '$datePrefix-${now.millisecondsSinceEpoch % 10000}';
+  /// [code] Código do produto a ser verificado.
+  /// Retorna true se o código já existe, false caso contrário.
+  Future<bool> checkProductCodeExists(String code) async {
+    final product = await _productDao.getByCode(code);
+    return product != null;
   }
 
   /// Gera um número único para nota fiscal baseado no timestamp e contador.
@@ -53,8 +40,7 @@ class CodeGeneratorService {
   /// Se existir, incrementa o contador até encontrar um número disponível.
   Future<String> generateInvoiceNumber() async {
     final now = DateTime.now();
-    final datePrefix =
-        'NF-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
+    final datePrefix = 'NF-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
 
     int counter = 1;
     String invoiceNumber;
@@ -72,67 +58,31 @@ class CodeGeneratorService {
     return '$datePrefix-${now.millisecondsSinceEpoch % 10000}';
   }
 
-  /// Verifica se um código de produto já existe no banco de dados.
+  /// Gera um código único para produto baseado no timestamp e contador.
   ///
-  /// [code] Código do produto a ser verificado.
-  /// Retorna true se o código já existe, false caso contrário.
-  Future<bool> checkProductCodeExists(String code) async {
-    final product = await _productDao.getByCode(code);
-    return product != null;
-  }
-
-  /// Verifica se um número de nota fiscal já existe no banco de dados.
+  /// Formato: PRD-YYYYMMDD-NNNN
+  /// Exemplo: PRD-20260123-0001
   ///
-  /// [invoiceNumber] Número da nota fiscal a ser verificado.
-  /// Retorna true se o número já existe, false caso contrário.
-  Future<bool> checkInvoiceNumberExists(String invoiceNumber) async {
-    final invoice = await _invoiceDao.getByInvoiceNumber(invoiceNumber);
-    return invoice != null;
-  }
+  /// Verifica se o código já existe no banco antes de retornar.
+  /// Se existir, incrementa o contador até encontrar um código disponível.
+  Future<String> generateProductCode() async {
+    final now = DateTime.now();
+    final datePrefix = 'PRD-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
 
-  /// Valida um código de produto fornecido pelo usuário.
-  ///
-  /// [code] Código fornecido pelo usuário.
-  /// Retorna um [CodeValidationResult] com o status da validação.
-  ///
-  /// Regras de validação:
-  /// - Não pode ser vazio
-  /// - Deve ter entre 3 e 50 caracteres
-  /// - Não pode já existir no banco de dados
-  Future<CodeValidationResult> validateProductCode(String code) async {
-    // Verifica se está vazio
-    if (code.trim().isEmpty) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Código não pode ser vazio',
-      );
-    }
+    int counter = 1;
+    String code;
 
-    // Verifica tamanho
-    if (code.length < 3) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Código deve ter no mínimo 3 caracteres',
-      );
-    }
+    do {
+      code = '$datePrefix-${_padLeft(counter, 4)}';
+      final exists = await checkProductCodeExists(code);
+      if (!exists) {
+        return code;
+      }
+      counter++;
+    } while (counter < 10000); // Limite de segurança
 
-    if (code.length > 50) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Código deve ter no máximo 50 caracteres',
-      );
-    }
-
-    // Verifica se já existe
-    final exists = await checkProductCodeExists(code);
-    if (exists) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Código já existe no banco de dados',
-      );
-    }
-
-    return CodeValidationResult(isValid: true, message: 'Código válido');
+    // Se atingir o limite, adiciona timestamp em milissegundos
+    return '$datePrefix-${now.millisecondsSinceEpoch % 10000}';
   }
 
   /// Valida um número de nota fiscal fornecido pelo usuário.
@@ -144,15 +94,10 @@ class CodeGeneratorService {
   /// - Não pode ser vazio
   /// - Deve ter entre 3 e 50 caracteres
   /// - Não pode já existir no banco de dados
-  Future<CodeValidationResult> validateInvoiceNumber(
-    String invoiceNumber,
-  ) async {
+  Future<CodeValidationResult> validateInvoiceNumber(String invoiceNumber) async {
     // Verifica se está vazio
     if (invoiceNumber.trim().isEmpty) {
-      return CodeValidationResult(
-        isValid: false,
-        message: 'Número da nota não pode ser vazio',
-      );
+      return CodeValidationResult(isValid: false, message: 'Número da nota não pode ser vazio');
     }
 
     // Verifica tamanho
@@ -179,10 +124,46 @@ class CodeGeneratorService {
       );
     }
 
-    return CodeValidationResult(
-      isValid: true,
-      message: 'Número da nota válido',
-    );
+    return CodeValidationResult(isValid: true, message: 'Número da nota válido');
+  }
+
+  /// Valida um código de produto fornecido pelo usuário.
+  ///
+  /// [code] Código fornecido pelo usuário.
+  /// Retorna um [CodeValidationResult] com o status da validação.
+  ///
+  /// Regras de validação:
+  /// - Não pode ser vazio
+  /// - Deve ter entre 3 e 50 caracteres
+  /// - Não pode já existir no banco de dados
+  Future<CodeValidationResult> validateProductCode(String code) async {
+    // Verifica se está vazio
+    if (code.trim().isEmpty) {
+      return CodeValidationResult(isValid: false, message: 'Código não pode ser vazio');
+    }
+
+    // Verifica tamanho
+    if (code.length < 3) {
+      return CodeValidationResult(
+        isValid: false,
+        message: 'Código deve ter no mínimo 3 caracteres',
+      );
+    }
+
+    if (code.length > 50) {
+      return CodeValidationResult(
+        isValid: false,
+        message: 'Código deve ter no máximo 50 caracteres',
+      );
+    }
+
+    // Verifica se já existe
+    final exists = await checkProductCodeExists(code);
+    if (exists) {
+      return CodeValidationResult(isValid: false, message: 'Código já existe no banco de dados');
+    }
+
+    return CodeValidationResult(isValid: true, message: 'Código válido');
   }
 
   /// Método auxiliar para adicionar zeros à esquerda.
