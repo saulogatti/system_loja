@@ -5,6 +5,7 @@ import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
+import 'package:system_loja/core/services/selector_file_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/core/utils/repository_error_mapper.dart';
 import 'package:system_loja/data/converter/system_configuration_codec.dart';
@@ -23,6 +24,28 @@ import 'package:system_loja/data/database/dao/system_dao.dart';
 class SystemRepository implements ISystemRepository {
   final SystemDao _systemDao;
   SystemRepository({required SystemDao systemDao}) : _systemDao = systemDao;
+
+  @override
+  Future<ResultStatus<SystemConfiguration, String>>
+  exportConfigurationToJson() async {
+    try {
+      final systemConfiguration = await getSystemConfiguration();
+      if (systemConfiguration.hasError) {
+        return ResultStatus.error(systemConfiguration.asError);
+      }
+      await SelectorFileService().saveSystemConfiguration(
+        systemConfiguration.asSuccess,
+      );
+      return ResultStatus.success(systemConfiguration.asSuccess);
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(
+          e,
+          contexto: 'Falha ao exportar configuração para o arquivo selecionado',
+        ),
+      );
+    }
+  }
 
   @override
   Future<ResultStatus<SystemConfiguration, String>>
@@ -46,10 +69,13 @@ class SystemRepository implements ISystemRepository {
   }
 
   @override
-  Future<ResultStatus<SystemConfiguration, String>> importConfigurationFromJson(
-    String jsonContent,
-  ) async {
+  Future<ResultStatus<SystemConfiguration, String>>
+  importConfigurationFromJson() async {
     try {
+      final jsonContent = await SelectorFileService().getSystemConfiguration();
+      if (jsonContent == null) {
+        return ResultStatus.error('');
+      }
       final dataMap = jsonDecode(jsonContent) as Map<String, dynamic>;
       final importedData = SystemConfigurationCodec.fromJson(dataMap);
 

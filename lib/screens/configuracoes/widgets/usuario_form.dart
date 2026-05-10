@@ -52,6 +52,9 @@ class _UsuarioFormState extends State<UsuarioForm> {
           const SizedBox(height: 20),
           TextFormField(
             controller: widget.nomeController,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.next,
+            autofillHints: const [AutofillHints.name],
             decoration: const InputDecoration(
               labelText: 'Nome *',
               border: OutlineInputBorder(),
@@ -65,12 +68,14 @@ class _UsuarioFormState extends State<UsuarioForm> {
           const SizedBox(height: 16),
           TextFormField(
             controller: widget.emailController,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            autofillHints: const [AutofillHints.email],
             decoration: const InputDecoration(
               labelText: 'Email *',
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.email),
             ),
-            keyboardType: TextInputType.emailAddress,
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
                 return 'Email é obrigatório';
@@ -84,6 +89,9 @@ class _UsuarioFormState extends State<UsuarioForm> {
           const SizedBox(height: 16),
           TextFormField(
             controller: widget.senhaController,
+            keyboardType: TextInputType.visiblePassword,
+            textInputAction: TextInputAction.done,
+            autofillHints: const [AutofillHints.newPassword],
             decoration: InputDecoration(
               labelText: widget.usuarioEditando == null
                   ? 'Senha *'
@@ -106,6 +114,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
               helperMaxLines: 2,
             ),
             obscureText: !_senhaVisivel,
+            onFieldSubmitted: (_) => widget.onSubmit(),
             validator: (value) {
               // Se está editando e senha está vazia, não valida
               if (widget.usuarioEditando != null &&

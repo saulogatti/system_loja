@@ -25,14 +25,20 @@ class ReportScreenState extends State<ReportScreen> {
               onAction: (action) async {
                 switch (action) {
                   case ReportAction.shareCsv:
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Exportar CSV')));
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('Exportar CSV')));
                     break;
                   case ReportAction.sharePdf:
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Compartilhar PDF')));
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('Compartilhar PDF')));
                     break;
                   case ReportAction.printPdf:
                     // Implementar impressão PDF
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Imprimir PDF')));
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('Imprimir PDF')));
                     break;
                 }
               },

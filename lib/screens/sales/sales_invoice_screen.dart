@@ -16,6 +16,7 @@ import 'package:system_loja/screens/sales/widgets/sales_invoice/invoice_quantity
 import 'package:system_loja/screens/sales/widgets/sales_invoice/invoice_total_bar.dart';
 import 'package:system_loja/screens/sales/widgets/sales_invoice/invoice_type_segmented.dart';
 import 'package:system_loja/screens/sales/widgets/sales_invoice/select_product_dialog.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Evita SnackBar duplicado ao reemitir o mesmo [SalesInvoiceFeedback].
 bool _shouldListenForFeedbackSnackBar(
@@ -115,26 +116,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                 ),
                 sliver: SliverMainAxisGroup(
                   slivers: [
-                    SliverToBoxAdapter(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Expanded(child: InvoiceNumberField()),
-                          const SizedBox(width: 8),
-                          Tooltip(
-                            message: 'Gerar número automaticamente',
-                            child: IconButton(
-                              onPressed: () => context
-                                  .read<SalesInvoiceCubit>()
-                                  .toggleAutoInvoiceNumber(),
-                              icon: const Icon(
-                                Icons.generating_tokens_outlined,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    const SliverToBoxAdapter(child: InvoiceNumberField()),
                     const SliverToBoxAdapter(child: SizedBox(height: 16)),
                     SliverToBoxAdapter(
                       child:
@@ -265,30 +247,10 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                       builder: (context, state) {
                         final orderedLines = state.form.buildOrderedLines();
                         if (orderedLines.isEmpty) {
-                          return SliverToBoxAdapter(
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(32),
-                                child: Semantics(
-                                  label: 'Nenhum item adicionado',
-                                  excludeSemantics: true,
-                                  child: const Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.remove_shopping_cart,
-                                        size: 48,
-                                        color: Colors.grey,
-                                      ),
-                                      SizedBox(height: 16),
-                                      Text(
-                                        'Nenhum item adicionado',
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                          return const SliverToBoxAdapter(
+                            child: EmptyWidget(
+                              message: 'Nenhum item adicionado',
+                              icon: Icons.remove_shopping_cart,
                             ),
                           );
                         }

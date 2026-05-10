@@ -62,7 +62,9 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textValue = suffix.isNotEmpty ? '$suffix ${value.toStringAsFixed(2)}' : value.toStringAsFixed(0);
+    final textValue = suffix.isNotEmpty
+        ? '$suffix ${value.toStringAsFixed(2)}'
+        : value.toStringAsFixed(0);
 
     return Card(
       child: Padding(
@@ -84,4 +86,3 @@ class _SummaryCard extends StatelessWidget {
     );
   }
 }
-

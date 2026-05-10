@@ -41,10 +41,22 @@ class HostScreen extends StatelessWidget {
           },
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_add), label: 'Cadastro'),
-            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Vendas'),
-            BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Relatórios'),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Configurações'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_add),
+              label: 'Cadastro',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart),
+              label: 'Vendas',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.bar_chart),
+              label: 'Relatórios',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Configurações',
+            ),
           ],
         );
       },

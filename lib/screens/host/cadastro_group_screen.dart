@@ -42,7 +42,9 @@ class _CadastroGroupScreenState extends State<CadastroGroupScreen> {
             floatingActionButton: FloatingActionButton.extended(
               onPressed: () => _handleFabAction(isPersonTab: isPersonTab),
               icon: Icon(isPersonTab ? Icons.person_add : Icons.add_box),
-              label: Text(isPersonTab ? 'Cadastrar Pessoa' : 'Cadastrar Produto'),
+              label: Text(
+                isPersonTab ? 'Cadastrar Pessoa' : 'Cadastrar Produto',
+              ),
             ),
           ),
         );

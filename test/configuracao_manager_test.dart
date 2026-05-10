@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:system_loja/aplication/app_injection.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 import 'package:system_loja/core/utils/command_result.dart';
@@ -29,14 +31,14 @@ void main() {
       settingsService: SettingsService.injection(),
       cache: CacheManager(),
     );
+    printerLog = registerLogPrinterColor(config: ConfigLog(enableLog: false));
   });
 
-  tearDownAll(() {
-    manager.clearAllData();
-    manager.resetToDefaults();
-    manager.createBackup('data/backups');
-    manager.clearOldLogs();
-    manager.updateAppSettings(AppSettings.createDefaultSettings());
+  tearDownAll(() async {
+    await manager.clearAllData();
+
+    await manager.clearOldLogs();
+    await manager.updateAppSettings(AppSettings.createDefaultSettings());
   });
 
   group('ConfiguracaoManager - Operações Básicas', () {
