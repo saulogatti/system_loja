@@ -72,6 +72,9 @@ class _CustomerEditViewState extends State<CustomerEditView> {
               children: [
                 TextFormField(
                   controller: _nameController,
+                  keyboardType: TextInputType.name,
+                  autofillHints: const [AutofillHints.name],
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Nome Completo *',
                     border: OutlineInputBorder(),

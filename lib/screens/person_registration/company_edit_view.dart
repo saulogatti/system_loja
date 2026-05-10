@@ -71,6 +71,9 @@ class _CompanyEditViewState extends State<CompanyEditView> {
               children: [
                 TextFormField(
                   controller: _nameController,
+                  keyboardType: TextInputType.name,
+                  autofillHints: const [AutofillHints.organizationName],
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Razão Social *',
                     border: OutlineInputBorder(),
