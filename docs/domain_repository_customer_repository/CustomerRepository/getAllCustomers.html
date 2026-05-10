@@ -85,11 +85,6 @@ Future&lt;ResultStatus&lt;List&lt;Customer&gt;, String&gt;&gt; getAllCustomers()
     return ResultStatus.error(e.message);
   } catch (e, stackTrace) {
     await reportError(e, stackTrace);
-    if (e is DriftRemoteException) {
-      return ResultStatus.error(
-        &#39;Erro ao buscar todos os clientes: ${e.remoteCause.toString()}&#39;,
-      );
-    }
     return ResultStatus.error(&#39;Erro ao buscar todos os clientes.&#39;);
   }
 }</code></pre>

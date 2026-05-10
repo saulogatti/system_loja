@@ -123,31 +123,22 @@ Widget build(BuildContext context) {
           child: BlocBuilder&lt;RelatorioCubit, RelatorioState&gt;(
             builder: (context, state) {
               return switch (state) {
-                RelatorioInitial() || RelatorioLoading() =&gt; const Center(
-                  child: CircularProgressIndicator(),
-                ),
+                RelatorioInitial() ||
+                RelatorioLoading() =&gt; const Center(child: CircularProgressIndicator()),
                 RelatorioError(:final message) =&gt; Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.error_outline,
-                        size: 64,
-                        color: Theme.of(context).colorScheme.error,
-                      ),
+                      Icon(Icons.error_outline, size: 64, color: Theme.of(context).colorScheme.error),
                       const SizedBox(height: 16),
                       Text(
                         message,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.error,
-                        ),
+                        style: TextStyle(color: Theme.of(context).colorScheme.error),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton.icon(
-                        onPressed: () =&gt; context
-                            .read&lt;RelatorioCubit&gt;()
-                            .carregarRelatorios(),
+                        onPressed: () =&gt; context.read&lt;RelatorioCubit&gt;().carregarRelatorios(),
                         icon: const Icon(Icons.refresh),
                         label: const Text(&#39;Tentar novamente&#39;),
                       ),

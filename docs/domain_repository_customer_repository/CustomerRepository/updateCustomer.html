@@ -102,11 +102,6 @@ Future&lt;ResultStatus&lt;bool, String&gt;&gt; updateCustomer(Customer customer)
     return ResultStatus.error(e.message);
   } catch (e, stackTrace) {
     await reportError(e, stackTrace);
-    if (e is DriftRemoteException &amp;&amp; e.remoteCause is SqliteException) {
-      return ResultStatus.error(
-        &#39;Erro ao atualizar cliente: ${(e.remoteCause as SqliteException).message.toString()}&#39;,
-      );
-    }
     return ResultStatus.error(&#39;Erro ao atualizar cliente.&#39;);
   }
 }</code></pre>

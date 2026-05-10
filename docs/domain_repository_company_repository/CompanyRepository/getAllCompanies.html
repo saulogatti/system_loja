@@ -82,11 +82,6 @@ Future&lt;ResultStatus&lt;List&lt;Company&gt;, String&gt;&gt; getAllCompanies() 
     return ResultStatus.success(data);
   } catch (e, stackTrace) {
     await reportError(e, stackTrace);
-    if (e is DriftRemoteException) {
-      return ResultStatus.error(
-        &#39;Erro ao buscar todas as empresas: ${e.remoteCause.toString()}&#39;,
-      );
-    }
     return ResultStatus.error(&#39;Erro ao buscar todas as empresas.&#39;);
   }
 }</code></pre>

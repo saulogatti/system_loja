@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the build method from the ReportScreenState class, for the Dart programming language.">
-  <title>build method - ReportScreenState class - report_screen library - Dart API</title>
+  <meta name="description" content="API docs for the build method from the ExportReportScreenState class, for the Dart programming language.">
+  <title>build method - ExportReportScreenState class - export_report_screen library - Dart API</title>
 
 
   
@@ -25,8 +25,8 @@
   <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">system_loja</a></li>
-    <li><a href="../../screens_report_report_screen/">screens\report\report_screen.dart</a></li>
-    <li><a href="../../screens_report_report_screen/ReportScreenState-class.html">ReportScreenState</a></li>
+    <li><a href="../../screens_report_export_report_screen/">screens\report\export_report_screen.dart</a></li>
+    <li><a href="../../screens_report_export_report_screen/ExportReportScreenState-class.html">ExportReportScreenState</a></li>
     <li class="self-crumb">build method</li>
   </ol>
   <div class="self-name">build</div>
@@ -46,7 +46,7 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="screens_report_report_screen&#47;ReportScreenState-class-sidebar.html"
+    data-above-sidebar="screens_report_export_report_screen&#47;ExportReportScreenState-class-sidebar.html"
     data-below-sidebar="">
     <div>
 <h1><span class="kind-method">build</span> method 
@@ -76,7 +76,7 @@ example:</p>
 <li>After calling <a href="https://api.flutter.dev/flutter/widgets/State/didUpdateWidget.html">didUpdateWidget</a>.</li>
 <li>After receiving a call to <a href="https://api.flutter.dev/flutter/widgets/State/setState.html">setState</a>.</li>
 <li>After a dependency of this <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object changes (e.g., an
-<a href="https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html">InheritedWidget</a> referenced by the previous <a href="../../screens_report_report_screen/ReportScreenState/build.html">build</a> changes).</li>
+<a href="https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html">InheritedWidget</a> referenced by the previous <a href="../../screens_report_export_report_screen/ExportReportScreenState/build.html">build</a> changes).</li>
 <li>After calling <a href="https://api.flutter.dev/flutter/widgets/State/deactivate.html">deactivate</a> and then reinserting the <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object into
 the tree at another location.</li>
 </ul>
@@ -98,23 +98,23 @@ this <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a
 object. The <a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a> argument is provided redundantly here so that
 this method matches the signature for a <a href="https://api.flutter.dev/flutter/widgets/WidgetBuilder.html">WidgetBuilder</a>.</p>
 <h2 id="design-discussion">Design discussion</h2>
-<h3 id="why-is-the-build-method-on-state-and-not-statefulwidget">Why is the <a href="../../screens_report_report_screen/ReportScreenState/build.html">build</a> method on <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a>, and not <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a>?</h3>
+<h3 id="why-is-the-build-method-on-state-and-not-statefulwidget">Why is the <a href="../../screens_report_export_report_screen/ExportReportScreenState/build.html">build</a> method on <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a>, and not <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a>?</h3>
 <p>Putting a <code>Widget build(BuildContext context)</code> method on <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> rather
 than putting a <code>Widget build(BuildContext context, State state)</code> method
 on <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> gives developers more flexibility when subclassing
 <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a>.</p>
 <p>For example, <a href="https://api.flutter.dev/flutter/widgets/AnimatedWidget-class.html">AnimatedWidget</a> is a subclass of <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> that
 introduces an abstract <code>Widget build(BuildContext context)</code> method for its
-subclasses to implement. If <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> already had a <a href="../../screens_report_report_screen/ReportScreenState/build.html">build</a> method
+subclasses to implement. If <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> already had a <a href="../../screens_report_export_report_screen/ExportReportScreenState/build.html">build</a> method
 that took a <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> argument, <a href="https://api.flutter.dev/flutter/widgets/AnimatedWidget-class.html">AnimatedWidget</a> would be forced to provide
 its <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object to subclasses even though its <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object is an
 internal implementation detail of <a href="https://api.flutter.dev/flutter/widgets/AnimatedWidget-class.html">AnimatedWidget</a>.</p>
 <p>Conceptually, <a href="https://api.flutter.dev/flutter/widgets/StatelessWidget-class.html">StatelessWidget</a> could also be implemented as a subclass of
-<a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> in a similar manner. If the <a href="../../screens_report_report_screen/ReportScreenState/build.html">build</a> method were on
+<a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> in a similar manner. If the <a href="../../screens_report_export_report_screen/ExportReportScreenState/build.html">build</a> method were on
 <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> rather than <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a>, that would not be possible anymore.</p>
-<p>Putting the <a href="../../screens_report_report_screen/ReportScreenState/build.html">build</a> function on <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> rather than <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> also
+<p>Putting the <a href="../../screens_report_export_report_screen/ExportReportScreenState/build.html">build</a> function on <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> rather than <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a> also
 helps avoid a category of bugs related to closures implicitly capturing
-<code>this</code>. If you defined a closure in a <a href="../../screens_report_report_screen/ReportScreenState/build.html">build</a> function on a
+<code>this</code>. If you defined a closure in a <a href="../../screens_report_export_report_screen/ExportReportScreenState/build.html">build</a> function on a
 <a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a>, that closure would implicitly capture <code>this</code>, which is
 the current widget instance, and would have the (immutable) fields of that
 instance in scope:</p>
@@ -139,8 +139,8 @@ the first build still implicitly refers to the original widget and the
 <code>$color</code> still prints blue even through the widget has been updated to
 green; should that closure outlive its widget, it would print outdated
 information.</p>
-<p>In contrast, with the <a href="../../screens_report_report_screen/ReportScreenState/build.html">build</a> function on the <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object, closures
-created during <a href="../../screens_report_report_screen/ReportScreenState/build.html">build</a> implicitly capture the <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> instance instead of
+<p>In contrast, with the <a href="../../screens_report_export_report_screen/ExportReportScreenState/build.html">build</a> function on the <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> object, closures
+created during <a href="../../screens_report_export_report_screen/ExportReportScreenState/build.html">build</a> implicitly capture the <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a> instance instead of
 the widget instance:</p>
 <pre class="language-dart"><code class="language-dart">class MyButton extends StatefulWidget {
   const MyButton({super.key, this.color = Colors.teal});
@@ -177,7 +177,7 @@ prints green, as expected.</p>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(title: Text(&#39;Relatório&#39;)),
+    appBar: AppBar(title: Text(&#39;Exportar Relatório&#39;)),
     body: Column(
       children: [
         Expanded(
@@ -222,12 +222,12 @@ Widget build(BuildContext context) {
 </header>
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">system_loja</a></li>
-    <li><a href="../../screens_report_report_screen/">report_screen</a></li>
-    <li><a href="../../screens_report_report_screen/ReportScreenState-class.html">ReportScreenState</a></li>
+    <li><a href="../../screens_report_export_report_screen/">export_report_screen</a></li>
+    <li><a href="../../screens_report_export_report_screen/ExportReportScreenState-class.html">ExportReportScreenState</a></li>
     <li class="self-crumb">build method</li>
 </ol>
 
-    <h5>ReportScreenState class</h5>
+    <h5>ExportReportScreenState class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">

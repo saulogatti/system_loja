@@ -100,11 +100,6 @@ Future&lt;ResultStatus&lt;bool, String&gt;&gt; saveCompany(Company company) asyn
     return ResultStatus.success(true);
   } catch (e, stackTrace) {
     await reportError(e, stackTrace);
-    if (e is DriftRemoteException) {
-      return ResultStatus.error(
-        &#39;Erro ao salvar empresa: ${e.remoteCause.toString()}&#39;,
-      );
-    }
     return ResultStatus.error(&#39;Erro ao salvar empresa.&#39;);
   }
 }</code></pre>
