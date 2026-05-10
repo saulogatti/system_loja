@@ -1,176 +1,97 @@
-# Drift Database Architecture
+# Arquitetura Drift no System Loja
 
-## 📁 File Structure
+## Índice
 
-```
+- [Visão Geral](#visão-geral)
+- [Estrutura de Arquivos](#estrutura-de-arquivos)
+- [Fluxo de Camadas](#fluxo-de-camadas)
+- [Padrões Arquiteturais](#padrões-arquiteturais)
+- [Versionamento de Schema](#versionamento-de-schema)
+- [Boas Práticas](#boas-práticas)
+- [Referências](#referências)
+
+## Visão Geral
+
+O projeto usa Drift como camada principal de persistência local em SQLite.
+O fluxo recomendado é: Screen (BLoC/Cubit) -> Interface -> Repository -> DAO Drift -> Banco.
+
+Há dois bancos principais:
+
+- `AppDatabase` para dados de negócio (clientes, produtos, categorias, empresa, notas e itens).
+- `SystemDatabase` para dados de sistema (usuários, logs e configurações).
+
+## Estrutura de Arquivos
+
+```text
 lib/data/database/
-├── app_database.dart              # AppDatabase, migrações, schemaVersion
-├── app_database.g.dart            # Gerado (Drift)
-├── system_database.dart           # Banco de sistema (logs, users, config)
-│
-├── table/                         # Definições de tabela (schema)
-│   ├── customer_records.dart, products_records.dart, categories_records.dart
-│   ├── company_records.dart, address_records.dart
-│   ├── invoices_records.dart, invoice_items_records.dart
-│   └── system/                    # Tabelas do SystemDatabase
-│
-├── mapper/                        # XxxRecord → modelos em lib/core/models/
-├── extension/                     # Domínio ↔ Companions (insert/update)
-│
-└── dao/                           # Data Access Objects (*_dao.dart)
+├── app_database.dart              # Banco principal, schema e migrações
+├── app_database.g.dart            # Gerado pelo Drift
+├── system_database.dart           # Banco de sistema
+├── system_database.g.dart         # Gerado pelo Drift
+├── dao/                           # DAOs (XxxDao)
+├── table/                         # Tabelas Drift (XxxRecords)
+│   └── system/                    # Tabelas do banco de sistema
+├── extension/                     # Conversões para Companions
+└── mapper/                        # Conversões XxxRecord -> domínio
 ```
 
-## 🔄 Data Flow
+## Fluxo de Camadas
 
-```
-┌─────────────────┐
-│  Domain Models  │  (Customer, Invoice, Product)
-│  lib/core/      │  Pure business logic
-└────────┬────────┘
-         │ uses
-         ▼
-┌─────────────────┐
-│   Extensions    │  toCompanion() / toDomain()
-│  lib/data/      │  Type conversions
-│  database/      │
-│  extension/     │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│      DAOs       │  CRUD operations
-│   *_dao.dart    │  Query builders
-└────────┬────────┘
-         │ operates on
-         ▼
-┌─────────────────┐
-│  Drift Tables   │  Table definitions
-│  table/*.dart   │  Column types & constraints
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   AppDatabase   │  Coordination layer
-│app_database.dart│  Schema version, migrations
-└─────────────────┘
+```text
+Screen (BLoC/Cubit)
+  -> Interface (lib/core/interface/)
+  -> Repository (lib/domain/repository/)
+  -> DAO (lib/data/database/dao/)
+  -> Tables/AppDatabase/SystemDatabase
+  -> SQLite
 ```
 
-## 🎯 Key Patterns
+## Padrões Arquiteturais
 
-### 1. Repository + DAO
-A **UI** fala com **interfaces** em `lib/core/interface/`; as **implementações** em `lib/domain/repository/` orquestram **DAOs** em `lib/data/database/dao/` (operações atômicas / queries). Transações que cruzam regras de negócio (ex.: nota + itens + estoque) ficam no repositório de domínio, não no DAO.
-```dart
-// Exemplo ilustrativo — DAO focado em persistência
-class CustomerDao {
-  Future<List<CustomerRecord>> getAllRows() { ... }
-  Future<int> insertRow(CustomersRecordsCompanion row) { ... }
-}
-```
+### Repository + DAO
 
-### 2. Domain Separation
-- **Domain Models** (`Customer`, `Invoice`, … em `lib/core/models/`): sem dependência de Drift
-- **Drift Records** (`XxxRecord`): tipos gerados pelas tabelas — **não** usar `@UseRowClass` com entidades de domínio
-- **Mappers + extensions**: conversão entre registro Drift e domínio / companions
+- A UI depende de interfaces em `lib/core/interface/`.
+- Repositórios em `lib/domain/repository/` coordenam DAOs e regras de negócio.
+- DAOs em `lib/data/database/dao/` executam operações de persistência e consultas.
+- Transações de múltiplas entidades ficam no repositório, não no DAO.
 
-### 3. Transaction Support
-Operações compostas usam `transaction` no **repositório** (ex.: `SalesRepository`), chamando métodos atômicos dos DAOs (`insertInvoice`, itens, atualização de estoque).
+### Separação de Domínio
 
-### 4. Denormalization for Performance
-Foreign key data is denormalized:
-- `InvoicesRecords` stores `customer_name` and `customer_cpf`
-- `InvoiceItemsRecords` stores `product_name` and `product_code`
+- Modelos de domínio em `lib/core/models/` não dependem de Drift.
+- Registros gerados (`XxxRecord`) representam o schema físico.
+- Conversão entre domínio e persistência é feita por `mapper/` e `extension/`.
+- Não usar `@UseRowClass` com entidades de domínio.
 
-This avoids joins in common queries while maintaining referential integrity via IDs.
+### Tratamento de Erros
 
-## 📊 Entity Relationships
+- Repositórios capturam exceções internamente e retornam `ResultStatus.error(...)`.
+- A camada de apresentação não envolve chamadas de repositório em `try/catch`.
 
-```
-┌─────────────┐
-│  Customer   │
-│  (Cliente)  │
-└──────┬──────┘
-       │ 1
-       │
-       │ N
-       ▼
-┌─────────────┐
-│   Invoice   │──┐
-│   (Nota)    │  │ 1
-└─────────────┘  │
-                 │ N
-                 ▼
-            ┌────────────────┐
-            │  InvoiceItem   │──┐
-            │ (Item da Nota) │  │ N
-            └────────────────┘  │
-                                │ 1
-                                ▼
-                           ┌─────────┐
-                           │ Product │
-                           └─────────┘
-```
+## Versionamento de Schema
 
-## 🔧 Schema Version: 2
+Estado atual dos bancos:
 
-### Version 1 (Initial)
-- Customers (clientes_records)
-- Products (products_records)
+- `AppDatabase`: `schemaVersion => 12`
+- `SystemDatabase`: `schemaVersion => 1`
 
-### Version 2 (Current)
-- Added: Invoices (invoices_records)
-- Added: Invoice Items (invoice_items_records)
+Ao alterar tabelas, DAOs ou tipos persistidos:
 
-## 💡 Best Practices
+1. Atualize o schema no banco correto.
+2. Implemente/ajuste a estratégia de migração.
+3. Gere código com `dart run build_runner build --delete-conflicting-outputs`.
+4. Valide com `dart analyze` e `flutter test`.
 
-### When to Use Extensions
-- Always use `toCompanion()` when inserting/updating
-- Always use `toDomain()` when reading from database
-- Keep extensions pure (no business logic)
+## Boas Práticas
 
-### Transaction Guidelines
-- Use for multi-table operations (invoice + items)
-- Use for operations that must be atomic
-- Avoid for single-table operations
+- Mantenha migrações pequenas, explícitas e incrementais.
+- Centralize lógica de negócio no repositório.
+- Evite expor detalhes de persistência para camadas superiores.
+- Use nomes consistentes: tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`.
+- Preserve dados quando aplicável; em cenários pré-produção, mudanças incompatíveis podem ser aceitas quando alinhadas com o time.
 
-### Error Handling
-```dart
-try {
-  final id = await dao.insertCliente(customer);
-  print('Inserted with ID: $id');
-} on SqliteException catch (e) {
-  if (e.extendedResultCode == 2067) {
-    // UNIQUE constraint failed
-    print('CPF already exists');
-  }
-}
-```
+## Referências
 
-## 🚀 Next Steps After Build Runner
-
-1. **Test Individual DAOs**
-   ```dart
-   final db = AppDatabase();
-   final customer = await db.clienteDao.getAll();
-   ```
-
-2. **Test Relationships**
-   ```dart
-   final invoice = await db.invoiceDao.getById(1);
-   print('Invoice has ${invoice?.data.items.length} items');
-   ```
-
-3. **Test Transactions**
-   ```dart
-   final id = await db.invoiceDao.insertInvoiceWithItems(invoice);
-   ```
-
-4. **Integration Tests**
-   - Create test suite for each DAO
-   - Test error conditions (unique constraints, etc.)
-   - Test transaction rollback scenarios
-
----
-
-**Status**: ✅ Implementation complete  
-**Pending**: Build runner execution  
-**Schema**: Version 2
+- `README.md`
+- `docs/DRIFT_MIGRATION.md`
+- `docs/INTERFACES_ARCHITECTURE.md`
+- `.github/copilot-instructions.md`
