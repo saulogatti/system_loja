@@ -1,4 +1,3 @@
-import 'package:drift/isolate.dart';
 import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/application/system_error_manager.dart';
@@ -107,11 +106,6 @@ class CompanyRepository implements ICompanyRepository {
       return ResultStatus.success(data);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      if (e is DriftRemoteException) {
-        return ResultStatus.error(
-          'Erro ao buscar todas as empresas: ${e.remoteCause.toString()}',
-        );
-      }
       return ResultStatus.error('Erro ao buscar todas as empresas.');
     }
   }
@@ -143,11 +137,6 @@ class CompanyRepository implements ICompanyRepository {
       return ResultStatus.success(true);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      if (e is DriftRemoteException) {
-        return ResultStatus.error(
-          'Erro ao salvar empresa: ${e.remoteCause.toString()}',
-        );
-      }
       return ResultStatus.error('Erro ao salvar empresa.');
     }
   }
@@ -186,11 +175,6 @@ class CompanyRepository implements ICompanyRepository {
       return ResultStatus.success(true);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      if (e is DriftRemoteException) {
-        return ResultStatus.error(
-          'Erro ao atualizar empresa: ${e.remoteCause.toString()}',
-        );
-      }
       return ResultStatus.error('Erro ao atualizar empresa.');
     }
   }

@@ -50,27 +50,30 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Cadastro de Produto'),
-          leading: const AutoLeadingButton(),
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: ProductForm(
-            formKey: _formKey,
-            nomeController: _nomeController,
-            codigoController: _codigoController,
-            precoController: _precoController,
-            estoqueController: _estoqueController,
-            descricaoController: _descricaoController,
-            selectedCategoryId: _selectedCategoryId,
-            onCategoryChanged: (categoryId) {
-              setState(() {
-                _selectedCategoryId = categoryId;
-              });
-            },
-            onSubmit: _adicionarProduto,
-          ),
+        appBar: AppBar(title: const Text('Cadastro de Produto'), leading: const AutoLeadingButton()),
+        body: BlocBuilder<ProductCubit, ProductState>(
+          builder: (context, state) {
+            final isLoading = state is ProductStateLoading;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: ProductForm(
+                isLoading: isLoading,
+                formKey: _formKey,
+                nomeController: _nomeController,
+                codigoController: _codigoController,
+                precoController: _precoController,
+                estoqueController: _estoqueController,
+                descricaoController: _descricaoController,
+                selectedCategoryId: _selectedCategoryId,
+                onCategoryChanged: (categoryId) {
+                  setState(() {
+                    _selectedCategoryId = categoryId;
+                  });
+                },
+                onSubmit: _adicionarProduto,
+              ),
+            );
+          },
         ),
       ),
     );
@@ -120,15 +123,15 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
 
   /// Exibe mensagem de erro em SnackBar.
   void _mostrarErro(String mensagem) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(mensagem), backgroundColor: Colors.red),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.red));
   }
 
   /// Exibe mensagem de sucesso em SnackBar.
   void _mostrarSucesso(String mensagem) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(mensagem), backgroundColor: Colors.green),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.green));
   }
 }

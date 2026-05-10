@@ -1,5 +1,3 @@
-import 'package:drift/isolate.dart';
-import 'package:sqlite3/common.dart';
 import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/domain/repository/exceptions/customer_exception.dart';
@@ -130,11 +128,6 @@ class CustomerRepository implements ICustomerRepository {
       return ResultStatus.error(e.message);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      if (e is DriftRemoteException) {
-        return ResultStatus.error(
-          'Erro ao buscar todos os clientes: ${e.remoteCause.toString()}',
-        );
-      }
       return ResultStatus.error('Erro ao buscar todos os clientes.');
     }
   }
@@ -161,11 +154,6 @@ class CustomerRepository implements ICustomerRepository {
       return ResultStatus.error(e.message);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      if (e is DriftRemoteException && e.remoteCause is SqliteException) {
-        return ResultStatus.error(
-          'Erro ao salvar cliente: ${(e.remoteCause as SqliteException).message.toString()}',
-        );
-      }
       return ResultStatus.error('Erro ao salvar cliente.');
     }
   }
@@ -199,11 +187,6 @@ class CustomerRepository implements ICustomerRepository {
       return ResultStatus.error(e.message);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
-      if (e is DriftRemoteException && e.remoteCause is SqliteException) {
-        return ResultStatus.error(
-          'Erro ao atualizar cliente: ${(e.remoteCause as SqliteException).message.toString()}',
-        );
-      }
       return ResultStatus.error('Erro ao atualizar cliente.');
     }
   }
