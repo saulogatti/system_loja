@@ -50,10 +50,23 @@ class _InvoiceNumberFieldState extends State<InvoiceNumberField> {
           readOnly: form.enableCodeGeneration,
           controller: _controller,
           onChanged: context.read<SalesInvoiceCubit>().updateInvoiceNumber,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Número da Nota *',
-            border: OutlineInputBorder(),
-            prefixIcon: Icon(Icons.numbers),
+            border: const OutlineInputBorder(),
+            prefixIcon: const Icon(Icons.numbers),
+            suffixIcon: IconButton(
+              tooltip: form.enableCodeGeneration
+                  ? 'Desativar geração automática'
+                  : 'Gerar número automaticamente',
+              onPressed: () =>
+                  context.read<SalesInvoiceCubit>().toggleAutoInvoiceNumber(),
+              icon: Icon(
+                Icons.generating_tokens_outlined,
+                color: form.enableCodeGeneration
+                    ? Theme.of(context).colorScheme.primary
+                    : null,
+              ),
+            ),
           ),
           validator: (value) => validateRequired(value, 'Número da nota'),
         );

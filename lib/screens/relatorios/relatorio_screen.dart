@@ -223,50 +223,61 @@ class _InvoiceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final data = invoice.data;
     final destino = data.personDisplayName;
+    final formattedValue = data.totalValue.toStringAsFixed(2);
+    final semanticLabel =
+        'Nota Fiscal ${data.invoiceNumber}, '
+        'Destino: $destino, '
+        'Data: ${data.issueDate.toFormattedDate()}, '
+        'Valor total: R\$ $formattedValue';
 
     return Card(
       margin: EdgeInsets.zero,
-      child: InkWell(
-        onTap: () => InvoiceOverviewBottomSheet.show(context, invoice),
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: color.withValues(alpha: 0.15),
-                child: Icon(Icons.receipt, color: color, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'NF ${data.invoiceNumber}',
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(destino, maxLines: 1, overflow: TextOverflow.ellipsis),
-                    Text(
-                      data.issueDate.toFormattedDate(),
-                      style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+      child: Semantics(
+        button: true,
+        label: semanticLabel,
+        excludeSemantics: true,
+        child: InkWell(
+          onTap: () => InvoiceOverviewBottomSheet.show(context, invoice),
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: color.withValues(alpha: 0.15),
+                  child: Icon(Icons.receipt, color: color, size: 20),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'R\$ ${data.totalValue.toStringAsFixed(2)}',
-                style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'NF ${data.invoiceNumber}',
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(destino, maxLines: 1, overflow: TextOverflow.ellipsis),
+                      Text(
+                        data.issueDate.toFormattedDate(),
+                        style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'R\$ $formattedValue',
+                  style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -855,19 +866,27 @@ class _SectionHeader extends StatelessWidget {
       return content;
     }
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Ink(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: isSelected ? color.withValues(alpha: 0.55) : Theme.of(context).colorScheme.outlineVariant,
+    return Semantics(
+      button: true,
+      label: 'Filtro: $title',
+      selected: isSelected,
+      excludeSemantics: true,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: Ink(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: isSelected
+                  ? color.withValues(alpha: 0.55)
+                  : Theme.of(context).colorScheme.outlineVariant,
+            ),
+            color: isSelected ? color.withValues(alpha: 0.1) : Colors.transparent,
           ),
-          color: isSelected ? color.withValues(alpha: 0.1) : Colors.transparent,
+          child: content,
         ),
-        child: content,
       ),
     );
   }
