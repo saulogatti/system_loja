@@ -8,9 +8,44 @@ import 'package:system_loja/screens/configs/system/bloc/system_config_state.dart
 class SystemConfigCubit extends Cubit<SystemConfigState> {
   final ISystemRepository _systemRepository;
 
-  SystemConfigCubit(this._systemRepository)
-    : super(SystemConfigState.initial()) {
+  SystemConfigCubit(this._systemRepository) : super(SystemConfigState.initial()) {
     loadConfigurationData();
+  }
+
+  Future<void> clearAllData() async {
+    final result = await _systemRepository.clearAllData();
+    result.when(
+      onSuccess: (data) {
+        emit(
+          SystemConfigState.loaded(
+            data,
+            feedbackMessage: 'Todos os dados do sistema foram limpos.',
+            feedbackType: SystemConfigFeedbackType.cleared,
+          ),
+        );
+      },
+      onError: (message) {
+        emit(SystemConfigState.error(message));
+      },
+    );
+  }
+
+  Future<void> clearOldLogs() async {
+    final result = await _systemRepository.clearOldLogs();
+    result.when(
+      onSuccess: (data) {
+        emit(
+          SystemConfigState.loaded(
+            data,
+            feedbackMessage: 'Logs antigos foram limpos.',
+            feedbackType: SystemConfigFeedbackType.cleared,
+          ),
+        );
+      },
+      onError: (message) {
+        emit(SystemConfigState.error(message));
+      },
+    );
   }
 
   Future<void> exportConfiguration() async {
@@ -76,8 +111,7 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
         emit(
           SystemConfigState.loaded(
             defaultConfiguration,
-            feedbackMessage:
-                'Configurações restauradas para os valores padrão do sistema.',
+            feedbackMessage: 'Configurações restauradas para os valores padrão do sistema.',
             feedbackType: SystemConfigFeedbackType.reset,
           ),
         );
@@ -110,29 +144,71 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
       return;
     }
 
-    final data = SystemConfiguration(
-      id: systemConfiguration.id,
-      registrationDate: systemConfiguration.registrationDate,
-      lastUpdatedDate: DateTime.now(),
-      productCategories: List<String>.from(
-        systemConfiguration.productCategories,
-      ),
-      priceConfiguration: PriceConfiguration(
-        types: paymentMethods.toSet().toList(),
+    final data = systemConfiguration.copyWith(
+      priceConfiguration: systemConfiguration.priceConfiguration.copyWith(
+        types: paymentMethods,
         measurementUnits: normalizedUnits,
         reportConfiguration: reportConfiguration,
       ),
-      systemUserData: systemConfiguration.systemUserData,
     );
+    await saveSystemConfiguration(data);
+  }
 
-    final saveResult = await _systemRepository.saveSystemConfiguration(data);
+  Future<void> saveSystemConfiguration(SystemConfiguration config) async {
+    final saveResult = await _systemRepository.saveSystemConfiguration(config);
     saveResult.when(
-      onSuccess: (_) {
+      onSuccess: (data) {
         emit(
           SystemConfigState.loaded(
             data,
             feedbackMessage: 'Configurações salvas com sucesso.',
             feedbackType: SystemConfigFeedbackType.saved,
+          ),
+        );
+      },
+      onError: (message) {
+        emit(SystemConfigState.error(message));
+      },
+    );
+  }
+
+  Future<void> updatePriceConfiguration(PriceConfiguration priceConfig) async {
+    final systemConfiguration = await _obterConfiguracaoAtual();
+    if (systemConfiguration == null) {
+      return;
+    }
+    final updatedConfig = systemConfiguration.copyWith(priceConfiguration: priceConfig);
+    final result = await _systemRepository.saveSystemConfiguration(updatedConfig);
+    result.when(
+      onSuccess: (data) {
+        emit(
+          SystemConfigState.loaded(
+            data,
+            feedbackMessage: 'Configurações de preço atualizadas.',
+            feedbackType: SystemConfigFeedbackType.updated,
+          ),
+        );
+      },
+      onError: (message) {
+        emit(SystemConfigState.error(message));
+      },
+    );
+  }
+
+  Future<void> updateProductCategories(List<String> categories) async {
+    final systemConfiguration = await _obterConfiguracaoAtual();
+    if (systemConfiguration == null) {
+      return;
+    }
+    final updatedConfig = systemConfiguration.copyWith(productCategories: categories);
+    final result = await _systemRepository.saveSystemConfiguration(updatedConfig);
+    result.when(
+      onSuccess: (data) {
+        emit(
+          SystemConfigState.loaded(
+            data,
+            feedbackMessage: 'Categorias de produtos atualizadas.',
+            feedbackType: SystemConfigFeedbackType.updated,
           ),
         );
       },

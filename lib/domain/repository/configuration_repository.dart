@@ -10,6 +10,7 @@ import 'package:system_loja/data/entry/configuration_cache_entry.dart';
 
 import '../../core/settings/app_settings.dart';
 
+//TODO: Refatorar para tirar mistura de data e domain, deixando este repositório apenas com lógica de domínio e delegando persistência para camada de dados. Talvez criar um ConfigurationService para lidar com cache e arquivos, e este repositório só chamar o service e mapear erros para mensagens amigáveis.
 /// Repositório para gerenciamento de configurações da aplicação.
 ///
 /// Persiste e recupera [AppSettings] via [CacheManager] e aplica o tema
@@ -20,19 +21,16 @@ import '../../core/settings/app_settings.dart';
 /// Veja também:
 /// - [IConfigurationRepository] - contrato da interface
 /// - [AppSettings] - modelo de configurações
-class ConfigurationRepository
-    with LoggerClassMixin
-    implements IConfigurationRepository {
+class ConfigurationRepository with LoggerClassMixin implements IConfigurationRepository {
   AppSettings _configuracao = AppSettings.createDefaultSettings();
-  final ILogRepository _logRepository;
+
   final ISettingsService _settingsService;
   final CacheManager _cache;
   ConfigurationRepository({
     required ILogRepository logRepository,
     required ISettingsService settingsService,
     required CacheManager cache,
-  }) : _logRepository = logRepository,
-       _cache = cache,
+  }) : _cache = cache,
        _settingsService = settingsService;
 
   /// Limpa todos os dados do sistema armazenados em cache.
@@ -60,16 +58,16 @@ class ConfigurationRepository
   @override
   Future<ResultStatus<AppSettings, String>> clearOldLogs() async {
     try {
-      final int diasManterLogs = _configuracao.diasManterLogs;
-      if (diasManterLogs > 0) {
-        final DateTime dataLimite = DateTime.now().subtract(
-          Duration(days: diasManterLogs),
-        );
-        final logResult = await _logRepository.clearOldLogs(dataLimite);
-        if (logResult.hasError) {
-          return ResultStatus.error(logResult.asError);
-        }
-      }
+      // final int diasManterLogs = _configuracao.diasManterLogs;
+      // if (diasManterLogs > 0) {
+      //   final DateTime dataLimite = DateTime.now().subtract(
+      //     Duration(days: diasManterLogs),
+      //   );
+      //   final logResult = await _logRepository.clearOldLogs(dataLimite);
+      //   if (logResult.hasError) {
+      //     return ResultStatus.error(logResult.asError);
+      //   }
+      // }
       await _salvarDados();
       return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
@@ -83,15 +81,11 @@ class ConfigurationRepository
   /// Cria uma cópia dos arquivos JSON em um diretório de backup
   /// com timestamp.
   @override
-  Future<ResultStatus<AppSettings, String>> createBackup(
-    String directoryPath,
-  ) async {
+  Future<ResultStatus<AppSettings, String>> createBackup(String directoryPath) async {
     try {
       final backupFiles = await _cache.createBackup(directoryPath);
       if (!backupFiles) {
-        return ResultStatus.error(
-          'Não foi possível concluir o backup no diretório selecionado.',
-        );
+        return ResultStatus.error('Não foi possível concluir o backup no diretório selecionado.');
       }
 
       logInfo('Backup realizado com sucesso: diretório $directoryPath');
@@ -139,9 +133,7 @@ class ConfigurationRepository
   /// do backup restaurado. Em caso de falha, retorna erro para a
   /// camada de apresentação tratar de forma padronizada.
   @override
-  Future<ResultStatus<AppSettings, String>> restoreBackup(
-    String direBackup,
-  ) async {
+  Future<ResultStatus<AppSettings, String>> restoreBackup(String direBackup) async {
     try {
       await _cache.restoreBackupFrom(direBackup);
       await _carregarDados();
@@ -158,16 +150,11 @@ class ConfigurationRepository
   /// Persiste [novaConfiguracao] no cache e notifica [ISettingsService]
   /// para atualizar cor primária e modo escuro em toda a UI.
   @override
-  Future<ResultStatus<AppSettings, String>> updateAppSettings(
-    AppSettings novaConfiguracao,
-  ) async {
+  Future<ResultStatus<AppSettings, String>> updateAppSettings(AppSettings novaConfiguracao) async {
     try {
       _configuracao = novaConfiguracao;
       await _salvarDados();
-      _settingsService.updateSettings(
-        novaConfiguracao.corPrimaria,
-        novaConfiguracao.temaEscuro,
-      );
+      _settingsService.updateSettings(novaConfiguracao.corPrimaria, novaConfiguracao.temaEscuro);
       logInfo('Configuração atualizada com sucesso');
       return ResultStatus.success(_configuracao);
     } catch (e, stackTrace) {
@@ -188,23 +175,7 @@ class ConfigurationRepository
     } else {
       _configuracao = AppSettings.createDefaultSettings();
     }
-    _settingsService.updateSettings(
-      _configuracao.corPrimaria,
-      _configuracao.temaEscuro,
-    );
-  }
-
-  // ignore: unused_element
-  bool _isLogRecent(Object log, DateTime dataLimite) {
-    try {
-      if (log is Map<String, dynamic> && log['data_hora'] is String) {
-        final dataLog = DateTime.parse(log['data_hora'] as String);
-        return dataLog.isAfter(dataLimite);
-      }
-      return true;
-    } catch (e) {
-      return true;
-    }
+    _settingsService.updateSettings(_configuracao.corPrimaria, _configuracao.temaEscuro);
   }
 
   Future<void> _salvarDados() async {

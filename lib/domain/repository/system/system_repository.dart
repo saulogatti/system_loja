@@ -26,16 +26,25 @@ class SystemRepository implements ISystemRepository {
   SystemRepository({required SystemDao systemDao}) : _systemDao = systemDao;
 
   @override
-  Future<ResultStatus<SystemConfiguration, String>>
-  exportConfigurationToJson() async {
+  Future<ResultStatus<SystemConfiguration, String>> clearAllData() {
+    // TODO: implement clearAllData
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ResultStatus<SystemConfiguration, String>> clearOldLogs() {
+    // TODO: implement clearOldLogs
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ResultStatus<SystemConfiguration, String>> exportConfigurationToJson() async {
     try {
       final systemConfiguration = await getSystemConfiguration();
       if (systemConfiguration.hasError) {
         return ResultStatus.error(systemConfiguration.asError);
       }
-      await SelectorFileService().saveSystemConfiguration(
-        systemConfiguration.asSuccess,
-      );
+      await SelectorFileService().saveSystemConfiguration(systemConfiguration.asSuccess);
       return ResultStatus.success(systemConfiguration.asSuccess);
     } catch (e) {
       return ResultStatus.error(
@@ -48,11 +57,9 @@ class SystemRepository implements ISystemRepository {
   }
 
   @override
-  Future<ResultStatus<SystemConfiguration, String>>
-  getSystemConfiguration() async {
+  Future<ResultStatus<SystemConfiguration, String>> getSystemConfiguration() async {
     try {
-      SystemConfiguration? systemConfiguration = await _systemDao
-          .getSystemConfiguration();
+      SystemConfiguration? systemConfiguration = await _systemDao.getSystemConfiguration();
       if (systemConfiguration == null) {
         systemConfiguration = _createDefaultConfiguration();
         await _systemDao.saveSystemConfiguration(systemConfiguration);
@@ -60,17 +67,13 @@ class SystemRepository implements ISystemRepository {
       return ResultStatus.success(systemConfiguration);
     } catch (e) {
       return ResultStatus.error(
-        mensagemErroRepositorio(
-          e,
-          contexto: 'Falha ao obter configuração do sistema',
-        ),
+        mensagemErroRepositorio(e, contexto: 'Falha ao obter configuração do sistema'),
       );
     }
   }
 
   @override
-  Future<ResultStatus<SystemConfiguration, String>>
-  importConfigurationFromJson() async {
+  Future<ResultStatus<SystemConfiguration, String>> importConfigurationFromJson() async {
     try {
       final jsonContent = await SelectorFileService().getSystemConfiguration();
       if (jsonContent == null) {
@@ -82,8 +85,7 @@ class SystemRepository implements ISystemRepository {
       final validationError = _validateConfigurationData(
         paymentMethods: importedData.priceConfiguration.types,
         measurementUnits: importedData.priceConfiguration.measurementUnits,
-        reportConfiguration:
-            importedData.priceConfiguration.reportConfiguration,
+        reportConfiguration: importedData.priceConfiguration.reportConfiguration,
       );
       if (validationError != null) {
         return ResultStatus.error(validationError);
@@ -95,11 +97,8 @@ class SystemRepository implements ISystemRepository {
         productCategories: List<String>.from(importedData.productCategories),
         priceConfiguration: PriceConfiguration(
           types: importedData.priceConfiguration.types.toSet().toList(),
-          measurementUnits: _normalizeUnits(
-            importedData.priceConfiguration.measurementUnits,
-          ),
-          reportConfiguration:
-              importedData.priceConfiguration.reportConfiguration,
+          measurementUnits: _normalizeUnits(importedData.priceConfiguration.measurementUnits),
+          reportConfiguration: importedData.priceConfiguration.reportConfiguration,
         ),
         systemUserData: importedData.systemUserData,
       );
@@ -114,29 +113,25 @@ class SystemRepository implements ISystemRepository {
   }
 
   @override
-  Future<ResultStatus<SystemConfiguration, String>>
-  resetToDefaultConfiguration() async {
+  Future<ResultStatus<SystemConfiguration, String>> resetToDefaultConfiguration() async {
     try {
       final defaultConfiguration = _createDefaultConfiguration();
       await _systemDao.saveSystemConfiguration(defaultConfiguration);
       return ResultStatus.success(defaultConfiguration);
     } catch (e) {
       return ResultStatus.error(
-        mensagemErroRepositorio(
-          e,
-          contexto: 'Falha ao restaurar configuração padrão',
-        ),
+        mensagemErroRepositorio(e, contexto: 'Falha ao restaurar configuração padrão'),
       );
     }
   }
 
   @override
-  Future<ResultStatus<bool, String>> saveSystemConfiguration(
+  Future<ResultStatus<SystemConfiguration, String>> saveSystemConfiguration(
     SystemConfiguration data,
   ) async {
     try {
       await _systemDao.saveSystemConfiguration(data);
-      return ResultStatus.success(true);
+      return ResultStatus.success(data);
     } catch (e) {
       return ResultStatus.error(
         mensagemErroRepositorio(e, contexto: 'Falha ao salvar configuração'),
@@ -180,8 +175,7 @@ class SystemRepository implements ISystemRepository {
     if (normalizedUnits.isEmpty) {
       return 'Adicione pelo menos uma unidade de medida.';
     }
-    if (reportConfiguration != null &&
-        reportConfiguration.defaultPeriodInDays <= 0) {
+    if (reportConfiguration != null && reportConfiguration.defaultPeriodInDays <= 0) {
       return 'O período padrão de relatório deve ser maior que zero.';
     }
     return null;

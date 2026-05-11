@@ -6,12 +6,9 @@ import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
-import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/screens/configs/system/bloc/system_config_cubit.dart';
 import 'package:system_loja/screens/configs/system/bloc/system_config_state.dart';
 import 'package:system_loja/screens/configs/system/log_error_system_section.dart';
-import 'package:system_loja/screens/configuracoes/bloc/settings_bloc.dart';
-import 'package:system_loja/screens/configuracoes/bloc/settings_event.dart';
 import 'package:system_loja/screens/configuracoes/widgets/maintenance_section.dart';
 import 'package:system_loja/screens/configuracoes/widgets/security_section.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
@@ -40,6 +37,8 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
   List<String> _measurementUnits = [];
   bool _enableSalesByPeriod = true;
   bool _enableTopProducts = true;
+
+  SystemConfiguration _systemData = SystemConfiguration();
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +116,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
   }
 
   void _applyLoadedData(SystemConfiguration data) {
+    _systemData = data;
     _selectedPaymentMethods = List<PaymentMethodType>.from(
       data.priceConfiguration.types,
       growable: true,
@@ -309,7 +309,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
   }
 
   Widget _buildSystemSection(BuildContext context) {
-    final currentConfig = AppSettings();
+    final currentConfig = _systemData;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -370,12 +370,12 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
   }
 
   /// Limpa logs antigos
-  Future<void> _limparLogsAntigos(BuildContext context, AppSettings config) async {
+  Future<void> _limparLogsAntigos(BuildContext context, SystemConfiguration config) async {
     final confirmado = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Limpar Logs Antigos'),
-        content: Text('Deseja remover logs com mais de ${config.diasManterLogs} dias?'),
+        content: Text('Deseja remover logs com mais de ${config.logRetentionDays} dias?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
@@ -390,7 +390,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     );
 
     if (confirmado == true && context.mounted) {
-      context.read<SettingsBloc>().add(const ClearOldLogsEvent());
+      context.read<SystemConfigCubit>().clearOldLogs();
     }
   }
 
@@ -421,7 +421,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     );
 
     if (confirmado == true && context.mounted) {
-      context.read<SettingsBloc>().add(const ClearAllDataEvent());
+      context.read<SystemConfigCubit>().clearAllData();
     }
   }
 
@@ -486,5 +486,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     );
   }
 
-  _updateConfig(AppSettings p1) {}
+  void _updateConfig(SystemConfiguration config) {
+    context.read<SystemConfigCubit>().saveSystemConfiguration(config);
+  }
 }
