@@ -29,7 +29,7 @@ import 'package:system_loja/screens/configuracoes/log_system_screen.dart'
 import 'package:system_loja/screens/configuracoes/logs_analytics_screen.dart'
     as _i9;
 import 'package:system_loja/screens/configuracoes/settings_screen.dart' as _i19;
-import 'package:system_loja/screens/configuracoes/system_config_screen.dart'
+import 'package:system_loja/screens/configs/system/system_config_screen.dart'
     as _i20;
 import 'package:system_loja/screens/configuracoes/usuario_screen.dart' as _i21;
 import 'package:system_loja/screens/home/home_screen.dart' as _i5;

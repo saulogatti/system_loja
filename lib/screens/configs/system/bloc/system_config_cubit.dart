@@ -3,7 +3,7 @@ import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
-import 'package:system_loja/screens/configuracoes/bloc/system_config_state.dart';
+import 'package:system_loja/screens/configs/system/bloc/system_config_state.dart';
 
 class SystemConfigCubit extends Cubit<SystemConfigState> {
   final ISystemRepository _systemRepository;
