@@ -79,7 +79,12 @@ class PersonRegistrationForm extends StatelessWidget {
           TextFormField(
             controller: nameController,
             keyboardType: TextInputType.name,
-            autofillHints: const [AutofillHints.name],
+            autofillHints: [
+              switch (selectedPersonType) {
+                PersonType.individual => AutofillHints.name,
+                _ => AutofillHints.organizationName,
+              }
+            ],
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
               labelText: '${selectedPersonType.nameLabel} *',
