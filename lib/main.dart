@@ -43,9 +43,7 @@ class SystemLojaApp extends StatelessWidget {
         BlocProvider<UserCubit>(
           create: (context) => UserCubit(appInjection.get<IUserRepository>()),
         ),
-        BlocProvider<LogsCubit>(
-          create: (context) => LogsCubit(appInjection.get<ILogRepository>()),
-        ),
+        BlocProvider<LogsCubit>(create: (context) => LogsCubit(appInjection.get<ILogRepository>())),
         BlocProvider<PersonBloc>(
           create: (context) => PersonBloc(
             appInjection.get<ICustomerRepository>(),
@@ -57,9 +55,7 @@ class SystemLojaApp extends StatelessWidget {
         ),
       ],
       child: ValueListenableBuilder(
-        valueListenable: appInjection
-            .get<SettingsService>()
-            .currentThemeNotifier,
+        valueListenable: appInjection.get<SettingsService>().currentThemeNotifier,
         builder: (context, value, child) {
           return MaterialApp.router(
             title: 'Sistema de Gerenciamento de Loja',

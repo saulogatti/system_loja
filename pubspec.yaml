@@ -8,7 +8,7 @@ environment:
   flutter: ">=3.41.9 <4.0.0"
 
 dependencies:
-  log_custom_printer: ^3.0.1
+  log_custom_printer: ^3.0.2
 
   flutter:
     sdk: flutter

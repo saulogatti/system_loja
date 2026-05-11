@@ -14,7 +14,7 @@ analyzer:
     avoid_void_async: error
     avoid_dynamic_calls: error
     return_without_value: error
-
+    deprecated_member_use: warning
 linter:
   rules:
     camel_case_types: true
