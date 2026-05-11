@@ -103,7 +103,10 @@ void setupAppInjection() {
     ),
   );
   appInjection.registerSingleton<ISystemRepository>(
-    SystemRepository(systemDao: appInjection.get<SystemDatabase>().systemDao),
+    SystemRepository(
+      systemDao: appInjection.get<SystemDatabase>().systemDao,
+      logRepository: appInjection.get<ILogRepository>(),
+    ),
   );
 
   appInjection.registerSingleton<ICategoryRepository>(
