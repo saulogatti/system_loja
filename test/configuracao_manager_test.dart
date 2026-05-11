@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -11,7 +10,6 @@ import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
-import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/domain/repository/configuration_repository.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
@@ -21,9 +19,8 @@ void main() {
   late ConfigurationRepository manager;
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
   driftRuntimeOptions.defaultSerializer = const ValueSerializer.defaults();
-  late SystemDatabase systemDatabase;
+
   setUpAll(() {
-    systemDatabase = SystemDatabase(executor: NativeDatabase.memory());
     PathProviderPlatform.instance = FakePathProviderPlatform();
     manager = ConfigurationRepository(
       settingsService: SettingsService.injection(),
