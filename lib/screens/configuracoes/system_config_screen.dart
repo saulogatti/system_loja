@@ -6,8 +6,14 @@ import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/screens/configuracoes/bloc/settings_bloc.dart';
+import 'package:system_loja/screens/configuracoes/bloc/settings_event.dart';
 import 'package:system_loja/screens/configuracoes/bloc/system_config_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/system_config_state.dart';
+import 'package:system_loja/screens/configuracoes/settings_screen.dart';
+import 'package:system_loja/screens/configuracoes/widgets/maintenance_section.dart';
+import 'package:system_loja/screens/configuracoes/widgets/security_section.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 
 /// Tela para configurar dados padrão e parâmetros técnicos do sistema.
@@ -67,6 +73,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
                     _buildMeasurementUnitsSection(),
                     _buildCategoriesSection(context),
                     _buildReportsSection(),
+                    _buildSystemSection(context),
                     _buildActions(context),
                   ],
                 ),
@@ -94,7 +101,10 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
 
     if (_measurementUnits.any((unit) => unit.toUpperCase() == rawUnit)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unidade de medida já adicionada.'), backgroundColor: Colors.orange),
+        const SnackBar(
+          content: Text('Unidade de medida já adicionada.'),
+          backgroundColor: Colors.orange,
+        ),
       );
       return;
     }
@@ -107,7 +117,10 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
   }
 
   void _applyLoadedData(SystemConfiguration data) {
-    _selectedPaymentMethods = List<PaymentMethodType>.from(data.priceConfiguration.types, growable: true);
+    _selectedPaymentMethods = List<PaymentMethodType>.from(
+      data.priceConfiguration.types,
+      growable: true,
+    );
     _measurementUnits = List<String>.from(data.priceConfiguration.measurementUnits, growable: true);
 
     final reportConfiguration = data.priceConfiguration.reportConfiguration;
@@ -295,7 +308,36 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     );
   }
 
-  Future<void> _importConfiguration(BuildContext context, SystemConfigCubit systemConfigCubit) async {
+  Widget _buildSystemSection(BuildContext context) {
+    final currentConfig = AppSettings();
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Configurações de manutenção e segurança'),
+            const SizedBox(height: 24),
+            MaintenanceSection(
+              config: currentConfig,
+              onConfigChanged: _updateConfig,
+              onLimparLogsAntigos: () => _limparLogsAntigos(context, currentConfig),
+              onLimparTodosDados: () => _limparTodosDados(context),
+            ),
+            const SizedBox(height: 24),
+            SecuritySection(config: currentConfig, onConfigChanged: _updateConfig),
+            const SizedBox(height: 24),
+            const LogErrorSystemSection(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _importConfiguration(
+    BuildContext context,
+    SystemConfigCubit systemConfigCubit,
+  ) async {
     final shouldImport = await showDialog<bool>(
       context: context,
       builder: (dialogContext) {
@@ -327,7 +369,66 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     await systemConfigCubit.importConfiguration();
   }
 
-  Future<void> _resetConfiguration(BuildContext context, SystemConfigCubit systemConfigCubit) async {
+  /// Limpa logs antigos
+  Future<void> _limparLogsAntigos(BuildContext context, AppSettings config) async {
+    final confirmado = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Limpar Logs Antigos'),
+        content: Text('Deseja remover logs com mais de ${config.diasManterLogs} dias?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Limpar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmado == true && context.mounted) {
+      context.read<SettingsBloc>().add(const ClearOldLogsEvent());
+    }
+  }
+
+  /// Limpa todos os dados do sistema
+  Future<void> _limparTodosDados(BuildContext context) async {
+    final confirmado = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('ATENÇÃO!'),
+        content: const Text(
+          'Esta ação irá REMOVER TODOS OS DADOS do sistema '
+          '(clientes, produtos, notas fiscais, usuários e logs).\n\n'
+          'Esta ação NÃO PODE ser desfeita!\n\n'
+          'Tem certeza que deseja continuar?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Sim, Limpar Tudo'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmado == true && context.mounted) {
+      context.read<SettingsBloc>().add(const ClearAllDataEvent());
+    }
+  }
+
+  Future<void> _resetConfiguration(
+    BuildContext context,
+    SystemConfigCubit systemConfigCubit,
+  ) async {
     final shouldReset = await showDialog<bool>(
       context: context,
       builder: (dialogContext) {
@@ -384,4 +485,6 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
       reportConfiguration: reportConfiguration,
     );
   }
+
+  _updateConfig(AppSettings p1) {}
 }
