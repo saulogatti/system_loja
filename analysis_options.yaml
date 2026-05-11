@@ -3,7 +3,7 @@ includes:
   - package:bloc_lint/recommended.yaml
 
 formatter:
-  page_width: 110
+  page_width: 100
 analyzer:
   exclude:
     - build/**
@@ -14,7 +14,7 @@ analyzer:
     avoid_void_async: error
     avoid_dynamic_calls: error
     return_without_value: error
-
+    deprecated_member_use: warning
 linter:
   rules:
     camel_case_types: true
