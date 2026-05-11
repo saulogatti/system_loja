@@ -53,10 +53,7 @@ void main() {
 
     test('Deve atualizar configurações com sucesso', () async {
       final currentConfig = await _obterSucesso(manager.loadConfiguration());
-      final novaConfig = currentConfig.copyWith(
-        temaEscuro: true,
-        notificarVendas: false,
-      );
+      final novaConfig = currentConfig.copyWith(temaEscuro: true, notificarVendas: false);
 
       await _executarSucesso(manager.updateAppSettings(novaConfig));
 
@@ -69,10 +66,7 @@ void main() {
 
     test('Deve persistir configurações após salvar', () async {
       final currentConfig = await _obterSucesso(manager.loadConfiguration());
-      final novaConfig = currentConfig.copyWith(
-        limiteEstoqueBaixo: 25,
-        frequenciaBackup: 'mensal',
-      );
+      final novaConfig = currentConfig.copyWith(limiteEstoqueBaixo: 25, frequenciaBackup: 'mensal');
 
       await _executarSucesso(manager.updateAppSettings(novaConfig));
 
@@ -91,10 +85,7 @@ void main() {
     test('Deve restaurar configurações padrão', () async {
       // Primeiro altera as configurações
       final currentConfig = await _obterSucesso(manager.loadConfiguration());
-      final novaConfig = currentConfig.copyWith(
-        temaEscuro: true,
-        limiteEstoqueBaixo: 50,
-      );
+      final novaConfig = currentConfig.copyWith(temaEscuro: true, limiteEstoqueBaixo: 50);
       await _executarSucesso(manager.updateAppSettings(novaConfig));
 
       // Depois restaura padrão
@@ -136,16 +127,12 @@ void main() {
       final logsAntigos = [
         {
           'id': 1,
-          'data_hora': DateTime.now()
-              .subtract(const Duration(days: 100))
-              .toIso8601String(),
+          'data_hora': DateTime.now().subtract(const Duration(days: 100)).toIso8601String(),
           'descricao': 'Log antigo',
         },
         {
           'id': 2,
-          'data_hora': DateTime.now()
-              .subtract(const Duration(days: 10))
-              .toIso8601String(),
+          'data_hora': DateTime.now().subtract(const Duration(days: 10)).toIso8601String(),
           'descricao': 'Log recente',
         },
       ];
@@ -190,73 +177,55 @@ void main() {
       }
     });
 
-    test('Deve aceitar tempo de bloqueio válido', () async {
-      final tempos = [1, 5, 15, 30, 60];
+    // test('Deve aceitar tempo de bloqueio válido', () async {
+    //   final tempos = [1, 5, 15, 30, 60];
 
-      for (final tempo in tempos) {
-        final currentConfig = await _obterSucesso(manager.loadConfiguration());
-        final config = currentConfig.copyWith(tempoBloqueioMinutos: tempo);
-        await _executarSucesso(manager.updateAppSettings(config));
-        final updatedConfig = await _obterSucesso(manager.loadConfiguration());
-        expect(updatedConfig.tempoBloqueioMinutos, equals(tempo));
-      }
-    });
+    //   for (final tempo in tempos) {
+    //     final currentConfig = await _obterSucesso(manager.loadConfiguration());
+    //     final config = currentConfig.copyWith(tempoBloqueioMinutos: tempo);
+    //     await _executarSucesso(manager.updateAppSettings(config));
+    //     final updatedConfig = await _obterSucesso(manager.loadConfiguration());
+    //     expect(updatedConfig.tempoBloqueioMinutos, equals(tempo));
+    //   }
+    // });
   });
 
   group('ConfiguracaoManager - Serialização JSON', () {
-    test(
-      'Deve serializar e desserializar configurações corretamente',
-      () async {
-        final configOriginal = AppSettings(
-          notificacoesAtivadas: false,
-          notificarVendas: false,
-          notificarEstoqueBaixo: true,
-          limiteEstoqueBaixo: 20,
-          temaEscuro: true,
-          corPrimaria: EnumColorAppThemeSettings.verde,
-          backupAutomatico: true,
-          frequenciaBackup: 'diario',
-          localBackup: 'custom/path',
-          limpezaAutomatica: true,
-          diasManterLogs: 60,
-          exigirSenha: true,
-          tempoBloqueioMinutos: 30,
-          permitirMultiplosUsuarios: true,
-        );
+    test('Deve serializar e desserializar configurações corretamente', () async {
+      final configOriginal = AppSettings(
+        notificacoesAtivadas: false,
+        notificarVendas: false,
+        notificarEstoqueBaixo: true,
+        limiteEstoqueBaixo: 20,
+        temaEscuro: true,
+        corPrimaria: EnumColorAppThemeSettings.verde,
+        backupAutomatico: true,
+        frequenciaBackup: 'diario',
+        localBackup: 'custom/path',
+      );
 
-        await _executarSucesso(manager.updateAppSettings(configOriginal));
+      await _executarSucesso(manager.updateAppSettings(configOriginal));
 
-        final manager2 = ConfigurationRepository(
-          logRepository: LogRepository(logDao: systemDatabase.logDao),
-          settingsService: SettingsService.injection(),
-          cache: CacheManager(),
-        );
-        final configuracao = await _obterSucesso(manager2.loadConfiguration());
-        expect(
-          configuracao.notificacoesAtivadas,
-          equals(configOriginal.notificacoesAtivadas),
-        );
-        expect(configuracao.temaEscuro, equals(configOriginal.temaEscuro));
-        expect(configuracao.corPrimaria, equals(configOriginal.corPrimaria));
-        expect(
-          configuracao.backupAutomatico,
-          equals(configOriginal.backupAutomatico),
-        );
-      },
-    );
+      final manager2 = ConfigurationRepository(
+        logRepository: LogRepository(logDao: systemDatabase.logDao),
+        settingsService: SettingsService.injection(),
+        cache: CacheManager(),
+      );
+      final configuracao = await _obterSucesso(manager2.loadConfiguration());
+      expect(configuracao.notificacoesAtivadas, equals(configOriginal.notificacoesAtivadas));
+      expect(configuracao.temaEscuro, equals(configOriginal.temaEscuro));
+      expect(configuracao.corPrimaria, equals(configOriginal.corPrimaria));
+      expect(configuracao.backupAutomatico, equals(configOriginal.backupAutomatico));
+    });
   });
 }
 
-Future<void> _executarSucesso(
-  Future<ResultStatus<AppSettings, String>> future,
-) async {
+Future<void> _executarSucesso(Future<ResultStatus<AppSettings, String>> future) async {
   final r = await future;
   expect(r.isSuccessful, isTrue, reason: r.hasError ? r.asError : null);
 }
 
-Future<AppSettings> _obterSucesso(
-  Future<ResultStatus<AppSettings, String>> future,
-) async {
+Future<AppSettings> _obterSucesso(Future<ResultStatus<AppSettings, String>> future) async {
   final r = await future;
   expect(r.isSuccessful, isTrue, reason: r.hasError ? r.asError : null);
   return r.asSuccess;

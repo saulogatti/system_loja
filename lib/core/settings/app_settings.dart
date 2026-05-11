@@ -39,23 +39,6 @@ class AppSettings {
 
   // Opções de Limpeza de Dados
 
-  /// Define se a limpeza automática de logs antigos está habilitada
-  final bool limpezaAutomatica;
-
-  /// Número de dias para manter logs no sistema antes da limpeza (7-365)
-  final int diasManterLogs;
-
-  // Opções de Segurança
-
-  /// Define se o sistema deve exigir senha ao ser aberto
-  final bool exigirSenha;
-
-  /// Tempo em minutos de inatividade antes de solicitar senha novamente (1-60)
-  final int tempoBloqueioMinutos;
-
-  /// Define se o sistema permite gestão de múltiplos usuários
-  final bool permitirMultiplosUsuarios;
-
   AppSettings({
     this.notificacoesAtivadas = true,
     this.notificarVendas = true,
@@ -65,11 +48,7 @@ class AppSettings {
     this.backupAutomatico = false,
     this.frequenciaBackup = 'semanal',
     this.localBackup = 'data/backups',
-    this.limpezaAutomatica = false,
-    this.diasManterLogs = 90,
-    this.exigirSenha = false,
-    this.tempoBloqueioMinutos = 15,
-    this.permitirMultiplosUsuarios = false,
+
     this.corPrimaria = EnumColorAppThemeSettings.azul,
   });
 
@@ -86,29 +65,18 @@ class AppSettings {
     bool? backupAutomatico,
     String? frequenciaBackup,
     String? localBackup,
-    bool? limpezaAutomatica,
-    int? diasManterLogs,
-    bool? exigirSenha,
-    int? tempoBloqueioMinutos,
-    bool? permitirMultiplosUsuarios,
+
     EnumColorAppThemeSettings? corPrimaria,
   }) {
     return AppSettings(
       notificacoesAtivadas: notificacoesAtivadas ?? this.notificacoesAtivadas,
       notificarVendas: notificarVendas ?? this.notificarVendas,
-      notificarEstoqueBaixo:
-          notificarEstoqueBaixo ?? this.notificarEstoqueBaixo,
+      notificarEstoqueBaixo: notificarEstoqueBaixo ?? this.notificarEstoqueBaixo,
       limiteEstoqueBaixo: limiteEstoqueBaixo ?? this.limiteEstoqueBaixo,
       temaEscuro: temaEscuro ?? this.temaEscuro,
       backupAutomatico: backupAutomatico ?? this.backupAutomatico,
       frequenciaBackup: frequenciaBackup ?? this.frequenciaBackup,
       localBackup: localBackup ?? this.localBackup,
-      limpezaAutomatica: limpezaAutomatica ?? this.limpezaAutomatica,
-      diasManterLogs: diasManterLogs ?? this.diasManterLogs,
-      exigirSenha: exigirSenha ?? this.exigirSenha,
-      tempoBloqueioMinutos: tempoBloqueioMinutos ?? this.tempoBloqueioMinutos,
-      permitirMultiplosUsuarios:
-          permitirMultiplosUsuarios ?? this.permitirMultiplosUsuarios,
       corPrimaria: corPrimaria ?? this.corPrimaria,
     );
   }

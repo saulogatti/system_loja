@@ -3,7 +3,7 @@ import 'package:system_loja/core/models/system_config/system_configuration.dart'
 
 part 'system_config_state.freezed.dart';
 
-enum SystemConfigFeedbackType { saved, reset, imported, exported }
+enum SystemConfigFeedbackType { saved, reset, imported, exported, cleared, updated }
 
 @freezed
 sealed class SystemConfigState with _$SystemConfigState {
