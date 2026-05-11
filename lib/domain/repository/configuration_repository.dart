@@ -1,7 +1,6 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/constants/cache_keys.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
-import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_settings_service.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
@@ -26,12 +25,9 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
 
   final ISettingsService _settingsService;
   final CacheManager _cache;
-  ConfigurationRepository({
-    required ILogRepository logRepository,
-    required ISettingsService settingsService,
-    required CacheManager cache,
-  }) : _cache = cache,
-       _settingsService = settingsService;
+  ConfigurationRepository({required ISettingsService settingsService, required CacheManager cache})
+    : _cache = cache,
+      _settingsService = settingsService;
 
   /// Limpa todos os dados do sistema armazenados em cache.
   ///
