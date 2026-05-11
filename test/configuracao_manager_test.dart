@@ -13,7 +13,6 @@ import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
 import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/domain/repository/configuration_repository.dart';
-import 'package:system_loja/domain/repository/system/log_repository.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
 void main() {
@@ -27,7 +26,6 @@ void main() {
     systemDatabase = SystemDatabase(executor: NativeDatabase.memory());
     PathProviderPlatform.instance = FakePathProviderPlatform();
     manager = ConfigurationRepository(
-      logRepository: LogRepository(logDao: systemDatabase.logDao),
       settingsService: SettingsService.injection(),
       cache: CacheManager(),
     );
@@ -71,7 +69,6 @@ void main() {
       await _executarSucesso(manager.updateAppSettings(novaConfig));
 
       final manager2 = ConfigurationRepository(
-        logRepository: LogRepository(logDao: systemDatabase.logDao),
         settingsService: SettingsService.injection(),
         cache: CacheManager(),
       );
@@ -207,7 +204,6 @@ void main() {
       await _executarSucesso(manager.updateAppSettings(configOriginal));
 
       final manager2 = ConfigurationRepository(
-        logRepository: LogRepository(logDao: systemDatabase.logDao),
         settingsService: SettingsService.injection(),
         cache: CacheManager(),
       );
