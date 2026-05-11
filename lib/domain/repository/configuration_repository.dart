@@ -22,7 +22,7 @@ import '../../core/settings/app_settings.dart';
 /// - [IConfigurationRepository] - contrato da interface
 /// - [AppSettings] - modelo de configurações
 class ConfigurationRepository with LoggerClassMixin implements IConfigurationRepository {
-  AppSettings _configuracao = AppSettings.createDefaultSettings();
+  AppSettings _configuration = AppSettings.createDefaultSettings();
 
   final ISettingsService _settingsService;
   final CacheManager _cache;
