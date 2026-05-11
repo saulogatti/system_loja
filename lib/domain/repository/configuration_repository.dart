@@ -43,7 +43,7 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
       await _cache.clearAll();
       logInfo('Todos os dados foram limpos com sucesso');
       await _salvarDados();
-      return ResultStatus.success(_configuracao);
+      return ResultStatus.success(_configuration);
     } catch (e, stackTrace) {
       logError('Erro ao limpar dados: $e', stackTrace);
       return ResultStatus.error('Erro ao limpar todos os dados do sistema.');
@@ -58,7 +58,7 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
   @override
   Future<ResultStatus<AppSettings, String>> clearOldLogs() async {
     try {
-      // final int diasManterLogs = _configuracao.diasManterLogs;
+      // final int diasManterLogs = _configuration.diasManterLogs;
       // if (diasManterLogs > 0) {
       //   final DateTime dataLimite = DateTime.now().subtract(
       //     Duration(days: diasManterLogs),
@@ -69,7 +69,7 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
       //   }
       // }
       await _salvarDados();
-      return ResultStatus.success(_configuracao);
+      return ResultStatus.success(_configuration);
     } catch (e, stackTrace) {
       logError('Erro ao limpar logs antigos: $e', stackTrace);
       return ResultStatus.error('Erro ao limpar logs antigos.');
@@ -89,7 +89,7 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
       }
 
       logInfo('Backup realizado com sucesso: diretório $directoryPath');
-      return ResultStatus.success(_configuracao);
+      return ResultStatus.success(_configuration);
     } catch (e, stackTrace) {
       logError('Erro ao realizar backup: $e', stackTrace);
       return ResultStatus.error('Erro ao realizar backup.');
@@ -104,7 +104,7 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
   Future<ResultStatus<AppSettings, String>> loadConfiguration() async {
     try {
       await _carregarDados();
-      return ResultStatus.success(_configuracao);
+      return ResultStatus.success(_configuration);
     } catch (e, stackTrace) {
       logError('Erro ao carregar configurações: $e', stackTrace);
       return ResultStatus.error('Erro ao carregar configurações do sistema.');
@@ -117,10 +117,10 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
   @override
   Future<ResultStatus<AppSettings, String>> resetToDefaults() async {
     try {
-      _configuracao = AppSettings.createDefaultSettings();
+      _configuration = AppSettings.createDefaultSettings();
       await _salvarDados();
       logInfo('Configurações restauradas para padrão');
-      return ResultStatus.success(_configuracao);
+      return ResultStatus.success(_configuration);
     } catch (e, stackTrace) {
       logError('Erro ao restaurar configurações padrão: $e', stackTrace);
       return ResultStatus.error('Erro ao restaurar configurações padrão.');
@@ -138,7 +138,7 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
       await _cache.restoreBackupFrom(direBackup);
       await _carregarDados();
       logInfo('Restauração de backup realizada com sucesso');
-      return ResultStatus.success(_configuracao);
+      return ResultStatus.success(_configuration);
     } catch (e, stackTrace) {
       logError('Erro ao restaurar backup: $e', stackTrace);
       return ResultStatus.error('Erro ao restaurar backup.');
@@ -152,11 +152,11 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
   @override
   Future<ResultStatus<AppSettings, String>> updateAppSettings(AppSettings novaConfiguracao) async {
     try {
-      _configuracao = novaConfiguracao;
+      _configuration = novaConfiguracao;
       await _salvarDados();
       _settingsService.updateSettings(novaConfiguracao.corPrimaria, novaConfiguracao.temaEscuro);
       logInfo('Configuração atualizada com sucesso');
-      return ResultStatus.success(_configuracao);
+      return ResultStatus.success(_configuration);
     } catch (e, stackTrace) {
       logError('Erro ao atualizar configurações: $e', stackTrace);
       return ResultStatus.error('Erro ao salvar configurações.');
@@ -170,17 +170,17 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
       ConfigurationCacheEntry.fromJson,
     );
     if (file != null) {
-      _configuracao = file.configuracao.toAppSettings();
+      _configuration = file.configuracao.toAppSettings();
       logInfo('Configurações carregadas com sucesso');
     } else {
-      _configuracao = AppSettings.createDefaultSettings();
+      _configuration = AppSettings.createDefaultSettings();
     }
-    _settingsService.updateSettings(_configuracao.corPrimaria, _configuracao.temaEscuro);
+    _settingsService.updateSettings(_configuration.corPrimaria, _configuration.temaEscuro);
   }
 
   Future<void> _salvarDados() async {
     final file = ConfigurationCacheEntry(
-      configuracao: AppSettingsEntry.fromAppSettings(_configuracao),
+      configuracao: AppSettingsEntry.fromAppSettings(_configuration),
     );
     await _cache.set(file);
   }

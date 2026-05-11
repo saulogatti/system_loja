@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
@@ -23,18 +24,37 @@ import 'package:system_loja/data/database/dao/system_dao.dart';
 /// - [SystemDao] - DAO do Drift
 class SystemRepository implements ISystemRepository {
   final SystemDao _systemDao;
-  SystemRepository({required SystemDao systemDao}) : _systemDao = systemDao;
+  final ILogRepository _logRepository;
+  SystemRepository({required SystemDao systemDao, required ILogRepository logRepository})
+    : _systemDao = systemDao,
+      _logRepository = logRepository;
 
   @override
-  Future<ResultStatus<SystemConfiguration, String>> clearAllData() {
-    // TODO: implement clearAllData
-    throw UnimplementedError();
+  Future<ResultStatus<SystemConfiguration, String>> clearAllData() async {
+    try {
+      await _systemDao.deleteSystemConfiguration();
+      return ResultStatus.success(_createDefaultConfiguration());
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(e, contexto: 'Falha ao limpar dados do sistema'),
+      );
+    }
   }
 
   @override
-  Future<ResultStatus<SystemConfiguration, String>> clearOldLogs() {
-    // TODO: implement clearOldLogs
-    throw UnimplementedError();
+  Future<ResultStatus<SystemConfiguration, String>> clearOldLogs() async {
+    try {
+      final cutoffDate = DateTime.now().subtract(const Duration(days: 90));
+      final result = await _logRepository.clearOldLogs(cutoffDate);
+      if (result.hasError) {
+        return ResultStatus.error(result.asError);
+      }
+      return ResultStatus.success(_createDefaultConfiguration());
+    } catch (e) {
+      return ResultStatus.error(
+        mensagemErroRepositorio(e, contexto: 'Falha ao limpar logs antigos'),
+      );
+    }
   }
 
   @override
