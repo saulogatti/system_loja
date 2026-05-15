@@ -53,6 +53,7 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
             leading: const AutoLeadingButton(),
             actions: [
               IconButton(
+                tooltip: 'Limpar todos os logs',
                 icon: const Icon(Icons.delete),
                 onPressed: hasLogs
                     ? () async {
@@ -97,7 +98,6 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                         }
                       }
                     : null,
-                tooltip: 'Limpar Logs',
               ),
             ],
           ),
