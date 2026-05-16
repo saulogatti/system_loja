@@ -60,19 +60,21 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
         appBar: AppBar(title: const Text('Empresa Emitente'), leading: const AutoLeadingButton()),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildLogoSection(context),
-                const SizedBox(height: 24),
-                _buildInfoSection(context),
-                const SizedBox(height: 24),
-                _buildAccessKeySection(context),
-                const SizedBox(height: 32),
-                _buildSaveButton(context),
-              ],
+          child: AutofillGroup(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildLogoSection(context),
+                  const SizedBox(height: 24),
+                  _buildInfoSection(context),
+                  const SizedBox(height: 24),
+                  _buildAccessKeySection(context),
+                  const SizedBox(height: 32),
+                  _buildSaveButton(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -239,7 +241,6 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
               controller: _cnpjController,
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
-              autofillHints: const [AutofillHints.taxId],
               inputFormatters: [CnpjTextInputFormatter()],
               decoration: const InputDecoration(
                 labelText: 'CNPJ',
