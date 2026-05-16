@@ -153,6 +153,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
                 border: const OutlineInputBorder(),
                 prefixIcon: const Icon(Icons.lock_outline),
                 suffixIcon: const IconButton(
+                  tooltip: 'Visibilidade da chave de acesso indisponível',
                   icon: Icon(Icons.visibility_off),
                   onPressed: null,
                 ),
