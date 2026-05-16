@@ -239,6 +239,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
               controller: _cnpjController,
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.taxId],
               inputFormatters: [CnpjTextInputFormatter()],
               decoration: const InputDecoration(
                 labelText: 'CNPJ',
