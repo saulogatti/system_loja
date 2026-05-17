@@ -22,6 +22,8 @@ class TextFormFieldPhone extends StatelessWidget {
       ),
       enabled: isEditing,
       keyboardType: TextInputType.phone,
+      autofillHints: const [AutofillHints.telephoneNumber],
+      textInputAction: TextInputAction.next,
       inputFormatters: [PhoneTextInputFormatter()],
     );
   }
