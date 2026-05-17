@@ -238,7 +238,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// Restaura configurações padrão
   Future<void> _resetToDefault(BuildContext context) async {
     // Neste modal bottom sheet vai ter opções de recuperar padrão ou recuperar do backup. //
-    showModalBottomSheet(
+    await showModalBottomSheet(
       context: context,
       builder: (buildContext) {
         return Column(

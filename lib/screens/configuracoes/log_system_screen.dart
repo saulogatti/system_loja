@@ -18,8 +18,7 @@ class LogSystemScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          LogsSystemCubit(appInjection.get<ISystemErrorManager>()),
+      create: (context) => LogsSystemCubit(appInjection.get<ISystemErrorManager>()),
       child: this,
     );
   }
@@ -39,13 +38,18 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
               ),
             );
           },
+          deleted: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Logs do sistema limpos com sucesso.'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          },
         );
       },
       builder: (context, state) {
-        final hasLogs = state.maybeWhen(
-          loaded: (logs) => logs.isNotEmpty,
-          orElse: () => false,
-        );
+        final hasLogs = state.maybeWhen(loaded: (logs) => logs.isNotEmpty, orElse: () => false);
 
         return Scaffold(
           appBar: AppBar(
@@ -53,6 +57,7 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
             leading: const AutoLeadingButton(),
             actions: [
               IconButton(
+                tooltip: 'Limpar todos os logs',
                 icon: const Icon(Icons.delete),
                 onPressed: hasLogs
                     ? () async {
@@ -65,20 +70,14 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                             ),
                             actions: [
                               TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
+                                onPressed: () => Navigator.of(context).pop(false),
                                 child: const Text('Cancelar'),
                               ),
                               ElevatedButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(true),
+                                onPressed: () => Navigator.of(context).pop(true),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(
-                                    context,
-                                  ).colorScheme.error,
-                                  foregroundColor: Theme.of(
-                                    context,
-                                  ).colorScheme.onError,
+                                  backgroundColor: Theme.of(context).colorScheme.error,
+                                  foregroundColor: Theme.of(context).colorScheme.onError,
                                 ),
                                 child: const Text('Limpar'),
                               ),
@@ -87,33 +86,30 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                         );
 
                         if (confirmar == true && context.mounted) {
-                          context.read<LogsSystemCubit>().clearLogs();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Logs limpos com sucesso.'),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
+                          await context.read<LogsSystemCubit>().clearLogs();
                         }
                       }
                     : null,
-                tooltip: 'Limpar Logs',
               ),
             ],
           ),
           body: Center(
             child: state.when(
+              deleted: () => const EmptyWidget(
+                message: 'Logs limpos com sucesso',
+                subMessage: 'Todos os logs do sistema foram removidos.',
+                icon: Icons.delete_forever,
+                semanticLabel: 'Logs limpos. Nenhum log registrado.',
+              ),
               initial: () => const Text('Por favor, carregue os logs.'),
               loading: () => const CircularProgressIndicator(),
               loaded: (logs) {
                 if (logs.isEmpty) {
                   return const EmptyWidget(
                     message: 'Nenhum log registrado',
-                    subMessage:
-                        'O sistema não possui erros registrados no momento.',
+                    subMessage: 'O sistema não possui erros registrados no momento.',
                     icon: Icons.check_circle_outline,
-                    semanticLabel:
-                        'Lista de logs vazia. Nenhum log registrado.',
+                    semanticLabel: 'Lista de logs vazia. Nenhum log registrado.',
                   );
                 }
 

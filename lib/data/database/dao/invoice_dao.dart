@@ -161,8 +161,8 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   /// Nota: Os itens não são atualizados automaticamente.
   /// Use InvoiceItemDao para gerenciar os itens separadamente.
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
-  Future<bool> updateInvoice(Invoice invoice) async {
-    return await update(
+  Future<bool> updateInvoice(Invoice invoice) {
+    return update(
       invoicesRecords,
     ).replace(invoice.toCompanion(forUpdate: true));
   }

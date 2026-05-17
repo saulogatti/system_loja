@@ -205,7 +205,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     }
 
     if (shouldDelete == true) {
-      context.read<CompanyEditCubit>().deleteCompany(widget.company.id);
+      await context.read<CompanyEditCubit>().deleteCompany(widget.company.id);
     }
   }
 
