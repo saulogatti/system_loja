@@ -76,9 +76,7 @@ class UserCubit extends Cubit<UsuarioState> {
         emit(UsuarioState.loadSuccess(usuarios: usuarios));
       },
       onError: (message) {
-        emit(
-          UsuarioState.loadFailure(errorMessage: message),
-        );
+        emit(UsuarioState.loadFailure(errorMessage: message));
       },
     );
   }

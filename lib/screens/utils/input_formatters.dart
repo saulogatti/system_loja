@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:system_loja/aplication/utils/constants.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
 
 String formatarParaReal(String valorString) {
   // Limpa a sujeira que o usuário digitar (remove tudo que não for dígito)

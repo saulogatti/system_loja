@@ -16,6 +16,17 @@ class SystemDao extends DatabaseAccessor<SystemDatabase> with _$SystemDaoMixin {
     return row?.toDomain();
   }
 
+  Future<void> deleteSystemConfiguration() async {
+    await transaction(() async {
+      final latestConfiguration = await _getLatestConfiguration();
+      if (latestConfiguration != null) {
+        await (delete(systemRecords)
+              ..where((table) => table.id.equals(latestConfiguration.id)))
+            .go();
+      }
+    });
+  }
+
   Future<void> saveSystemConfiguration(SystemConfiguration data) async {
     await transaction(() async {
       final latestConfiguration = await _getLatestConfiguration();

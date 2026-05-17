@@ -25,8 +25,8 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
   /// Remove todos os logs com timestamp anterior a [dataLimite].
   ///
   /// Retorna true se ao menos um log foi removido.
-  Future<bool> deleteLogsBefore(DateTime dataLimite) async {
-    return await (delete(logsRecords)
+  Future<bool> deleteLogsBefore(DateTime dataLimite) {
+    return (delete(logsRecords)
           ..where((tbl) => tbl.timestamp.isSmallerThanValue(dataLimite)))
         .go()
         .then((rowsAffected) => rowsAffected > 0);

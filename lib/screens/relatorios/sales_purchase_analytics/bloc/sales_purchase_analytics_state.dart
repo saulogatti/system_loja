@@ -1,6 +1,9 @@
-import 'package:meta/meta.dart';
+import 'package:system_loja/core/models/analytics_point.dart';
 
 import 'sales_purchase_analytics_event.dart';
+
+export 'package:system_loja/core/models/analytics_point.dart'
+    show AnalyticsPoint;
 
 class SalesPurchaseAnalyticsEmpty extends SalesPurchaseAnalyticsState {
   final SalesPurchaseGrouping grouping;
@@ -20,9 +23,12 @@ class SalesPurchaseAnalyticsInitial extends SalesPurchaseAnalyticsState {
 
 class SalesPurchaseAnalyticsLoaded extends SalesPurchaseAnalyticsState {
   final SalesPurchaseGrouping grouping;
-  final List<SalesPurchaseAnalyticsPoint> points;
+  final List<AnalyticsPoint> points;
 
-  const SalesPurchaseAnalyticsLoaded({required this.grouping, required this.points});
+  const SalesPurchaseAnalyticsLoaded({
+    required this.grouping,
+    required this.points,
+  });
 
   double get maxValue {
     if (points.isEmpty) {
@@ -33,37 +39,26 @@ class SalesPurchaseAnalyticsLoaded extends SalesPurchaseAnalyticsState {
       0,
       (currentMax, point) => point.salesValue > currentMax
           ? point.salesValue
-          : (point.purchaseValue > currentMax ? point.purchaseValue : currentMax),
+          : (point.purchaseValue > currentMax
+                ? point.purchaseValue
+                : currentMax),
     );
   }
 
-  int get totalProducts => points.fold<int>(0, (sum, point) => sum + point.productsCount);
+  int get totalProducts =>
+      points.fold<int>(0, (sum, point) => sum + point.productsCount);
 
-  double get totalPurchases => points.fold<double>(0, (sum, point) => sum + point.purchaseValue);
+  double get totalPurchases =>
+      points.fold<double>(0, (sum, point) => sum + point.purchaseValue);
 
-  double get totalSales => points.fold<double>(0, (sum, point) => sum + point.salesValue);
+  double get totalSales =>
+      points.fold<double>(0, (sum, point) => sum + point.salesValue);
 }
 
 class SalesPurchaseAnalyticsLoading extends SalesPurchaseAnalyticsState {
   const SalesPurchaseAnalyticsLoading();
 }
 
-@immutable
-class SalesPurchaseAnalyticsPoint {
-  final String label;
-  final double salesValue;
-  final double purchaseValue;
-  final int productsCount;
-
-  const SalesPurchaseAnalyticsPoint({
-    required this.label,
-    required this.salesValue,
-    required this.purchaseValue,
-    required this.productsCount,
-  });
-}
-
-@immutable
 sealed class SalesPurchaseAnalyticsState {
   const SalesPurchaseAnalyticsState();
 }

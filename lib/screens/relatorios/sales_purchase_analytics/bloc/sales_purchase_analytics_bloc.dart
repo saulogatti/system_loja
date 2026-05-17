@@ -1,42 +1,21 @@
 import 'package:bloc/bloc.dart';
+import 'package:system_loja/core/interface/i_analytics_repository.dart';
 
 import 'sales_purchase_analytics_event.dart';
 import 'sales_purchase_analytics_state.dart';
 
-const List<SalesPurchaseAnalyticsPoint> _mockByDate = [
-  SalesPurchaseAnalyticsPoint(label: '10/03', salesValue: 1520.0, purchaseValue: 980.0, productsCount: 12),
-  SalesPurchaseAnalyticsPoint(label: '11/03', salesValue: 1870.0, purchaseValue: 1100.0, productsCount: 18),
-  SalesPurchaseAnalyticsPoint(label: '12/03', salesValue: 1325.0, purchaseValue: 760.0, productsCount: 9),
-  SalesPurchaseAnalyticsPoint(label: '13/03', salesValue: 2090.0, purchaseValue: 1400.0, productsCount: 22),
-  SalesPurchaseAnalyticsPoint(label: '14/03', salesValue: 1760.0, purchaseValue: 1180.0, productsCount: 15),
-];
+/// BLoC da tela de analytics de vendas e compras.
+///
+/// Carrega dados reais via [IAnalyticsRepository] e os expõe como
+/// estados de UI para exibição em gráficos comparativos.
+class SalesPurchaseAnalyticsBloc
+    extends Bloc<SalesPurchaseAnalyticsEvent, SalesPurchaseAnalyticsState> {
+  final IAnalyticsRepository _analyticsRepository;
 
-const List<SalesPurchaseAnalyticsPoint> _mockByProduct = [
-  SalesPurchaseAnalyticsPoint(label: 'Arroz 5kg', salesValue: 980.0, purchaseValue: 640.0, productsCount: 31),
-  SalesPurchaseAnalyticsPoint(
-    label: 'Feijão 1kg',
-    salesValue: 760.0,
-    purchaseValue: 510.0,
-    productsCount: 27,
-  ),
-  SalesPurchaseAnalyticsPoint(
-    label: 'Óleo 900ml',
-    salesValue: 540.0,
-    purchaseValue: 360.0,
-    productsCount: 19,
-  ),
-  SalesPurchaseAnalyticsPoint(
-    label: 'Açúcar 1kg',
-    salesValue: 690.0,
-    purchaseValue: 470.0,
-    productsCount: 24,
-  ),
-  SalesPurchaseAnalyticsPoint(label: 'Macarrão', salesValue: 430.0, purchaseValue: 290.0, productsCount: 16),
-];
-
-/// BLoC da tela de analytics de vendas e compras com dados mockados.
-class SalesPurchaseAnalyticsBloc extends Bloc<SalesPurchaseAnalyticsEvent, SalesPurchaseAnalyticsState> {
-  SalesPurchaseAnalyticsBloc() : super(const SalesPurchaseAnalyticsInitial()) {
+  SalesPurchaseAnalyticsBloc({
+    required IAnalyticsRepository analyticsRepository,
+  }) : _analyticsRepository = analyticsRepository,
+       super(const SalesPurchaseAnalyticsInitial()) {
     on<LoadSalesPurchaseAnalytics>(_onLoadAnalytics);
     on<ChangeSalesPurchaseGrouping>(_onChangeGrouping);
   }
@@ -47,17 +26,28 @@ class SalesPurchaseAnalyticsBloc extends Bloc<SalesPurchaseAnalyticsEvent, Sales
   ) async {
     emit(const SalesPurchaseAnalyticsLoading());
 
-    final points = switch (event.grouping) {
-      SalesPurchaseGrouping.byDate => _mockByDate,
-      SalesPurchaseGrouping.byProduct => _mockByProduct,
+    final result = switch (event.grouping) {
+      SalesPurchaseGrouping.byDate =>
+        await _analyticsRepository.getAnalyticsByDate(),
+      SalesPurchaseGrouping.byProduct =>
+        await _analyticsRepository.getAnalyticsByProduct(),
     };
 
-    if (points.isEmpty) {
-      emit(SalesPurchaseAnalyticsEmpty(grouping: event.grouping));
-      return;
-    }
-
-    emit(SalesPurchaseAnalyticsLoaded(grouping: event.grouping, points: points));
+    result.when(
+      onSuccess: (points) {
+        if (points.isEmpty) {
+          emit(SalesPurchaseAnalyticsEmpty(grouping: event.grouping));
+        } else {
+          emit(
+            SalesPurchaseAnalyticsLoaded(
+              grouping: event.grouping,
+              points: points,
+            ),
+          );
+        }
+      },
+      onError: (message) => emit(SalesPurchaseAnalyticsError(message: message)),
+    );
   }
 
   Future<void> _onLoadAnalytics(
@@ -66,12 +56,26 @@ class SalesPurchaseAnalyticsBloc extends Bloc<SalesPurchaseAnalyticsEvent, Sales
   ) async {
     emit(const SalesPurchaseAnalyticsLoading());
 
-    final points = _mockByDate;
-    if (points.isEmpty) {
-      emit(const SalesPurchaseAnalyticsEmpty(grouping: SalesPurchaseGrouping.byDate));
-      return;
-    }
+    final result = await _analyticsRepository.getAnalyticsByDate();
 
-    emit(const SalesPurchaseAnalyticsLoaded(grouping: SalesPurchaseGrouping.byDate, points: _mockByDate));
+    result.when(
+      onSuccess: (points) {
+        if (points.isEmpty) {
+          emit(
+            const SalesPurchaseAnalyticsEmpty(
+              grouping: SalesPurchaseGrouping.byDate,
+            ),
+          );
+        } else {
+          emit(
+            SalesPurchaseAnalyticsLoaded(
+              grouping: SalesPurchaseGrouping.byDate,
+              points: points,
+            ),
+          );
+        }
+      },
+      onError: (message) => emit(SalesPurchaseAnalyticsError(message: message)),
+    );
   }
 }

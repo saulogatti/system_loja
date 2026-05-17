@@ -49,6 +49,16 @@ class CustomerDao extends DatabaseAccessor<AppDatabase>
     return record?.toDomain();
   }
 
+  /// Busca um cliente pelo CPF.
+  ///
+  /// Retorna null se o cliente não for encontrado.
+  Future<Customer?> getByCpf(String cpf) async {
+    final record = await (select(
+      customerRecords,
+    )..where((t) => t.cpf.equals(cpf))).getSingleOrNull();
+    return record?.toDomain();
+  }
+
   /// Atualiza um cliente existente no banco de dados.
   ///
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
