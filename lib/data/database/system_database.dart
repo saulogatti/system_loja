@@ -3,51 +3,45 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
-import 'package:system_loja/core/models/system_config/system_configuration.dart';
-import 'package:system_loja/core/models/user.dart';
+import 'package:system_loja/data/converter/price_configuration_codec.dart';
 import 'package:system_loja/data/database/dao/log_dao.dart';
 import 'package:system_loja/data/database/dao/system_dao.dart';
 import 'package:system_loja/data/database/dao/users_dao.dart';
 import 'package:system_loja/data/database/table/system/logs_records.dart';
 import 'package:system_loja/data/database/table/system/system_records.dart';
 import 'package:system_loja/data/database/table/system/users_records.dart';
+import 'package:system_loja/data/entry/system_configuration_entry.dart';
+import 'package:system_loja/data/entry/system_user_data_entry.dart';
+import 'package:system_loja/data/entry/user_entry.dart';
 
 part 'system_database.g.dart';
 
+/// Banco de dados de sistema usando Drift.
+///
+/// Gerencia tabelas de usuários ([UsersRecords]), logs ([LogsRecords]) e
+/// configurações do sistema ([SystemRecords]).
+///
+/// Aceita um [QueryExecutor] opcional para facilitar testes com banco em memória.
+///
+/// Exemplo de uso em testes:
+/// ```dart
+/// final db = SystemDatabase(executor: NativeDatabase.memory());
+/// ```
 @DriftDatabase(
   tables: [UsersRecords, LogsRecords, SystemRecords],
   daos: [UsersDao, LogDao, SystemDao],
 )
 class SystemDatabase extends _$SystemDatabase {
   static final _nameBd = 'system_database';
-  SystemDatabase() : super(_openConnection());
+  SystemDatabase({QueryExecutor? executor})
+    : super(executor ?? _openConnection());
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (Migrator m) => m.createAll(),
-    onUpgrade: (Migrator m, int from, int to) async {
-      if (from < 2) {
-        await m.createAll();
-        await _migrateSystemConfiguration();
-      }
-    },
+    onUpgrade: (Migrator m, int from, int to) async {},
   );
   @override
-  int get schemaVersion => 2;
-  Future<void> _migrateSystemConfiguration() async {
-    // nao tem nada para recuperar da tabela system_records. Inserimos um registro padrão.
-    await into(systemRecords).insert(
-      SystemRecordsCompanion(
-        id: Value(1),
-        registrationDate: Value(DateTime.now()),
-        lastUpdatedDate: Value(DateTime.now()),
-        priceConfiguration: Value(
-          PriceConfiguration(
-            types: [PaymentMethodType.cash, PaymentMethodType.pix],
-          ),
-        ),
-      ),
-    );
-  }
+  int get schemaVersion => 1;
 
   static QueryExecutor _openConnection() {
     return driftDatabase(

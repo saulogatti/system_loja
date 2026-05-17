@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/models/product.dart';
-import 'package:system_loja/core/repository/product_repository.dart';
 import 'package:system_loja/core/utils/command_result.dart';
 import 'package:system_loja/screens/products/cubit/product_state.dart';
 
@@ -9,7 +8,7 @@ import 'package:system_loja/screens/products/cubit/product_state.dart';
 ///
 /// Este Cubit é responsável por coordenar operações CRUD (criar, ler,
 /// atualizar, deletar) de produtos, mantendo o estado sincronizado com
-/// a [ProductRepository]. Emite estados que refletem o resultado de cada
+/// a [IProductRepository]. Emite estados que refletem o resultado de cada
 /// operação para a UI.
 class ProductCubit extends Cubit<ProductState> {
   /// Repositório utilizado para acessar dados de produtos.
@@ -41,7 +40,8 @@ class ProductCubit extends Cubit<ProductState> {
     required double preco,
     required int estoque,
     required String descricao,
-    required bool codeGenerate, int? categoryId,
+    required bool codeGenerate,
+    int? categoryId,
   }) async {
     if (codeGenerate) {
       codigo = await _productRepository.generateProductCode();

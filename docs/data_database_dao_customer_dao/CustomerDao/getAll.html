@@ -71,7 +71,7 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;Customer&gt;&gt; getAll() async {
   final records = await select(customerRecords).get();
-  return records;
+  return records.map((e) =&gt; e.toDomain()).toList();
 }</code></pre>
 </section>
 

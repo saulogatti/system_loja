@@ -19,7 +19,7 @@
 //           home: ClienteScreen(),
 //         ),
 //       );
-      
+
 //       // Aguarda o carregamento inicial
 //       await tester.pumpAndSettle();
 
@@ -40,7 +40,7 @@
 //           home: ClienteScreen(),
 //         ),
 //       );
-      
+
 //       // Aguarda o carregamento inicial
 //       await tester.pumpAndSettle();
 
@@ -55,13 +55,13 @@
 //           home: ClienteScreen(),
 //         ),
 //       );
-      
+
 //       await tester.pumpAndSettle();
 
 //       // Primeiro, precisamos adicionar um cliente para que o campo de busca apareça
 //       // Como não podemos interagir com o formulário facilmente neste teste,
 //       // vamos validar a estrutura básica
-      
+
 //       // Verificar que existe o título
 //       expect(find.text('Clientes Cadastrados'), findsOneWidget);
 //     });

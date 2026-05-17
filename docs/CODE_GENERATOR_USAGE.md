@@ -33,20 +33,22 @@ O `CodeGeneratorService` é um serviço que fornece geração automática de có
 
 ### 1. Acessar o Serviço
 
-O serviço está registrado no `AppInjection` e pode ser acessado de várias formas:
+O serviço está registrado no **GetIt** (`appInjection`) após `setupAppInjection()` e pode ser acessado de várias formas:
 
-#### Opção A: Diretamente via AppInjection
+#### Opção A: Diretamente via GetIt
 ```dart
-import 'package:system_loja/screens/injection/app_injection.dart';
+import 'package:system_loja/aplication/app_injection.dart';
+import 'package:system_loja/domain/code_generator_service.dart';
 
-final codeGenerator = AppInjection.instance.codeGeneratorService;
+final codeGenerator = appInjection.get<CodeGeneratorService>();
 ```
 
 #### Opção B: Via ProductRepository
 ```dart
-import 'package:system_loja/screens/injection/app_injection.dart';
+import 'package:system_loja/aplication/app_injection.dart';
+import 'package:system_loja/core/interface/i_product_repository.dart';
 
-final productRepository = AppInjection.instance.productRepository;
+final productRepository = appInjection.get<IProductRepository>();
 
 // Gerar código
 final code = await productRepository.generateProductCode();
@@ -57,9 +59,10 @@ final validationResult = await productRepository.validateProductCode('MEU-CODIGO
 
 #### Opção C: Via SalesRepository
 ```dart
-import 'package:system_loja/screens/injection/app_injection.dart';
+import 'package:system_loja/aplication/app_injection.dart';
+import 'package:system_loja/core/interface/i_sales_repository.dart';
 
-final salesRepository = AppInjection.instance.salesRepository;
+final salesRepository = appInjection.get<ISalesRepository>();
 
 // Gerar número de nota
 final invoiceNumber = await salesRepository.generateInvoiceNumber();
@@ -71,8 +74,11 @@ final validationResult = await salesRepository.validateInvoiceNumber('NF-CUSTOM-
 ### 2. Gerar Código de Produto Automaticamente
 
 ```dart
+import 'package:system_loja/aplication/app_injection.dart';
+import 'package:system_loja/core/interface/i_product_repository.dart';
+
 // Via repositório (recomendado)
-final productRepository = AppInjection.instance.productRepository;
+final productRepository = appInjection.get<IProductRepository>();
 final code = await productRepository.generateProductCode();
 
 // Criar produto com o código gerado
@@ -91,7 +97,7 @@ await productRepository.salvarProduto(product);
 ### 3. Usar Código Personalizado para Produto
 
 ```dart
-final productRepository = AppInjection.instance.productRepository;
+final productRepository = appInjection.get<IProductRepository>();
 
 // Código fornecido pelo usuário
 final customCode = 'NOTEBOOK-DELL-001';
@@ -121,7 +127,7 @@ if (validation.isSuccessful) {
 ### 4. Gerar Número de Nota Fiscal Automaticamente
 
 ```dart
-final salesRepository = AppInjection.instance.salesRepository;
+final salesRepository = appInjection.get<ISalesRepository>();
 
 // Gerar número de nota automaticamente
 final invoiceNumber = await salesRepository.generateInvoiceNumber();
@@ -152,7 +158,7 @@ await salesRepository.saveSale(invoice);
 ### 5. Usar Número Personalizado para Nota Fiscal
 
 ```dart
-final salesRepository = AppInjection.instance.salesRepository;
+final salesRepository = appInjection.get<ISalesRepository>();
 
 // Número fornecido pelo usuário
 final customNumber = 'NF-VENDA-ESPECIAL-001';
@@ -202,7 +208,7 @@ class ProductRegistrationScreen extends StatefulWidget {
 
 class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   final _codeController = TextEditingController();
-  final _productRepository = AppInjection.instance.productRepository;
+  final _productRepository = appInjection.get<IProductRepository>();
   bool _useAutoCode = true;
   
   Future<void> _generateCode() async {
@@ -383,6 +389,7 @@ A coluna `code` em `ProductsRecords` possui constraint `UNIQUE`, garantindo inte
 ## Suporte
 
 Para dúvidas ou problemas, consulte:
-- Código fonte: `lib/core/services/code_generator_service.dart`
+- Código fonte: `lib/domain/code_generator_service.dart`
+- DI: `lib/aplication/app_injection.dart`
 - Testes: `test/code_generator_service_test.dart`
-- Repositórios: `lib/core/repository/product_repository.dart` e `lib/core/repository/sales_repository.dart`
+- Repositórios: `lib/domain/repository/product_repository.dart` e `lib/domain/repository/sales_repository.dart`

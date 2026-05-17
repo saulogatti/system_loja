@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/models/default/authorization_level.dart';
 import 'package:system_loja/core/models/extensions/nivel_permissao_extension.dart';
 import 'package:system_loja/core/models/user.dart';
 
@@ -12,7 +13,11 @@ class UsuarioListItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const UsuarioListItem({
-    required this.usuario, required this.onEdit, required this.onDelete, required this.onTap, super.key,
+    required this.usuario,
+    required this.onEdit,
+    required this.onDelete,
+    required this.onTap,
+    super.key,
   });
 
   @override
@@ -50,10 +55,12 @@ class UsuarioListItem extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit, color: Colors.blue),
               onPressed: onEdit,
+              tooltip: 'Editar ${usuario.name}',
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: onDelete,
+              tooltip: 'Excluir ${usuario.name}',
             ),
           ],
         ),

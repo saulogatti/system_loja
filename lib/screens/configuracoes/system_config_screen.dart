@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:system_loja/app_injection.dart';
+import 'package:system_loja/aplication/app_injection.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
@@ -43,11 +43,6 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
         listener: (context, state) {
           if (state is SystemConfigStateLoaded) {
             _applyLoadedData(state.data);
-            if (state.feedbackMessage != null) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.feedbackMessage!), backgroundColor: Colors.green));
-            }
             setState(() {});
           } else if (state is SystemConfigStateError) {
             ScaffoldMessenger.of(
@@ -116,9 +111,9 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     _measurementUnits = List<String>.from(data.priceConfiguration.measurementUnits, growable: true);
 
     final reportConfiguration = data.priceConfiguration.reportConfiguration;
-    _enableSalesByPeriod = reportConfiguration.enableSalesByPeriod;
-    _enableTopProducts = reportConfiguration.enableTopProducts;
-    _defaultPeriodController.text = reportConfiguration.defaultPeriodInDays.toString();
+    _enableSalesByPeriod = reportConfiguration?.enableSalesByPeriod ?? false;
+    _enableTopProducts = reportConfiguration?.enableTopProducts ?? false;
+    _defaultPeriodController.text = reportConfiguration?.defaultPeriodInDays.toString() ?? '0';
   }
 
   Widget _buildActions(BuildContext context) {
@@ -188,11 +183,17 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
                 Expanded(
                   child: TextField(
                     controller: _measurementUnitController,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => _addMeasurementUnit(),
                     decoration: const InputDecoration(hintText: 'Ex.: UN, KG, CX'),
                   ),
                 ),
                 const SizedBox(width: 8),
-                IconButton.filled(onPressed: _addMeasurementUnit, icon: const Icon(Icons.add)),
+                IconButton.filled(
+                  onPressed: _addMeasurementUnit,
+                  icon: const Icon(Icons.add),
+                  tooltip: 'Adicionar unidade',
+                ),
               ],
             ),
             const SizedBox(height: 8),

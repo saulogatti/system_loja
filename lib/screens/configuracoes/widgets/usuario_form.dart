@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/models/default/authorization_level.dart';
 import 'package:system_loja/core/models/user.dart';
-import 'package:system_loja/core/utils/string_extensions.dart';
-import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/utils/string_extensions.dart';
+import 'package:system_loja/screens/utils/validators.dart';
 
 /// Widget do formulário de cadastro e edição de usuário
 ///
@@ -18,7 +19,15 @@ class UsuarioForm extends StatefulWidget {
   final ValueChanged<AuthorizationLevel> onPermissaoChanged;
 
   const UsuarioForm({
-    required this.formKey, required this.nomeController, required this.emailController, required this.senhaController, required this.nivelPermissaoSelecionado, required this.usuarioEditando, required this.onSubmit, required this.onPermissaoChanged, super.key,
+    required this.formKey,
+    required this.nomeController,
+    required this.emailController,
+    required this.senhaController,
+    required this.nivelPermissaoSelecionado,
+    required this.usuarioEditando,
+    required this.onSubmit,
+    required this.onPermissaoChanged,
+    super.key,
     this.onCancel,
   });
 
@@ -43,6 +52,9 @@ class _UsuarioFormState extends State<UsuarioForm> {
           const SizedBox(height: 20),
           TextFormField(
             controller: widget.nomeController,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.next,
+            autofillHints: const [AutofillHints.name],
             decoration: const InputDecoration(
               labelText: 'Nome *',
               border: OutlineInputBorder(),
@@ -56,12 +68,14 @@ class _UsuarioFormState extends State<UsuarioForm> {
           const SizedBox(height: 16),
           TextFormField(
             controller: widget.emailController,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            autofillHints: const [AutofillHints.email],
             decoration: const InputDecoration(
               labelText: 'Email *',
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.email),
             ),
-            keyboardType: TextInputType.emailAddress,
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
                 return 'Email é obrigatório';
@@ -75,6 +89,9 @@ class _UsuarioFormState extends State<UsuarioForm> {
           const SizedBox(height: 16),
           TextFormField(
             controller: widget.senhaController,
+            keyboardType: TextInputType.visiblePassword,
+            textInputAction: TextInputAction.done,
+            autofillHints: const [AutofillHints.newPassword],
             decoration: InputDecoration(
               labelText: widget.usuarioEditando == null
                   ? 'Senha *'
@@ -82,6 +99,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
               border: const OutlineInputBorder(),
               prefixIcon: const Icon(Icons.lock),
               suffixIcon: IconButton(
+                tooltip: _senhaVisivel ? 'Ocultar senha' : 'Mostrar senha',
                 icon: Icon(
                   _senhaVisivel ? Icons.visibility_off : Icons.visibility,
                 ),
@@ -96,6 +114,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
               helperMaxLines: 2,
             ),
             obscureText: !_senhaVisivel,
+            onFieldSubmitted: (_) => widget.onSubmit(),
             validator: (value) {
               // Se está editando e senha está vazia, não valida
               if (widget.usuarioEditando != null &&
@@ -110,8 +129,8 @@ class _UsuarioFormState extends State<UsuarioForm> {
               // Valida força da senha
               if (value != null &&
                   value.isNotEmpty &&
-                  value.validarSenha() != null) {
-                return value.validarSenha();
+                  value.validatePassword() != null) {
+                return value.validatePassword();
               }
               return null;
             },

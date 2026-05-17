@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/utils/text_formatters.dart';
+import 'package:system_loja/screens/utils/text_formatters.dart';
 
 class AddressForm extends StatelessWidget {
   /// Lista de estados brasileiros (UF)
@@ -11,7 +11,12 @@ class AddressForm extends StatelessWidget {
   final TextEditingController stateController;
 
   const AddressForm({
-    required this.streetController, required this.zipCodeController, required this.neighborhoodController, required this.cityController, required this.stateController, super.key,
+    required this.streetController,
+    required this.zipCodeController,
+    required this.neighborhoodController,
+    required this.cityController,
+    required this.stateController,
+    super.key,
   });
 
   @override
@@ -30,6 +35,9 @@ class AddressForm extends StatelessWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.location_on),
           ),
+          keyboardType: TextInputType.streetAddress,
+          autofillHints: const [AutofillHints.streetAddressLine1],
+          textInputAction: TextInputAction.next,
         ),
         const SizedBox(height: 16),
         Row(
@@ -44,6 +52,8 @@ class AddressForm extends StatelessWidget {
                   hintText: '00000-000',
                 ),
                 keyboardType: TextInputType.number,
+                autofillHints: const [AutofillHints.postalCode],
+                textInputAction: TextInputAction.next,
                 inputFormatters: [CepTextInputFormatter()],
               ),
             ),
@@ -56,6 +66,8 @@ class AddressForm extends StatelessWidget {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.map),
                 ),
+                autofillHints: const [AutofillHints.sublocality],
+                textInputAction: TextInputAction.next,
               ),
             ),
           ],
@@ -68,6 +80,8 @@ class AddressForm extends StatelessWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.location_city),
           ),
+          autofillHints: const [AutofillHints.addressCity],
+          textInputAction: TextInputAction.next,
         ),
         const SizedBox(height: 16),
         DropdownButtonFormField<BrazilianState>(

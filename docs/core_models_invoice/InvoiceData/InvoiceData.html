@@ -55,12 +55,14 @@
     <section class="multi-line-signature">
       
       <span class="name ">InvoiceData</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-invoiceNumber"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">invoiceNumber</span>, </span></li>
+<li><span class="parameter" id="-param-items"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_invoice_item/InvoiceItem-class.html">InvoiceItem</a></span>&gt;</span></span> <span class="parameter-name">items</span>, </span></li>
+<li><span class="parameter" id="-param-paymentMethod"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">paymentMethod</span>, </span></li>
 <li><span class="parameter" id="-param-customerId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">customerId</span>, </span></li>
 <li><span class="parameter" id="-param-customerName"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">customerName</span>, </span></li>
 <li><span class="parameter" id="-param-customerCpf"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">customerCpf</span>, </span></li>
 <li><span class="parameter" id="-param-companyId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">companyId</span>, </span></li>
-<li><span class="parameter" id="-param-items"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_models_invoice_item/InvoiceItem-class.html">InvoiceItem</a></span>&gt;</span></span> <span class="parameter-name">items</span>, </span></li>
-<li><span class="parameter" id="-param-paymentMethod"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">paymentMethod</span>, </span></li>
+<li><span class="parameter" id="-param-companyName"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">companyName</span>, </span></li>
+<li><span class="parameter" id="-param-companyCnpj"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">companyCnpj</span>, </span></li>
 <li><span class="parameter" id="-param-issueDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">issueDate</span>, </span></li>
 <li><span class="parameter" id="-param-type"><span class="type-annotation"><a href="../../core_models_invoice_type/InvoiceType.html">InvoiceType</a></span> <span class="parameter-name">type</span> = <span class="default-value">InvoiceType.exit</span>, </span></li>
 </ol>})
@@ -73,12 +75,14 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">InvoiceData({
   required this.invoiceNumber,
+  required this.items,
+  required this.paymentMethod,
   this.customerId,
   this.customerName,
   this.customerCpf,
   this.companyId,
-  required this.items,
-  required this.paymentMethod,
+  this.companyName,
+  this.companyCnpj,
   DateTime? issueDate,
   this.type = InvoiceType.exit,
 }) : totalValue = items.fold(0.0, (sum, item) =&gt; sum + item.totalValue),

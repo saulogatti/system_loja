@@ -62,15 +62,20 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Busca um log de atividade pelo <code>id</code>.</p>
+<p>Retorna null se o registro não for encontrado.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;ActivityLog?&gt; load(int id) {
-  return (select(
+  <pre class="language-dart"><code class="language-dart">Future&lt;ActivityLog?&gt; load(int id) async {
+  final row = await (select(
     logsRecords,
   )..where((tbl) =&gt; tbl.id.equals(id))).getSingleOrNull();
+  return row?.toDomain();
 }</code></pre>
 </section>
 

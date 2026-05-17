@@ -1,6 +1,3 @@
 {
-    "markdown.validate.enabled": false,
-    "chat.tools.terminal.autoApprove": {
-        "dart": true
-    }
+    "markdown.validate.enabled": false
 }

@@ -1,19 +1,11 @@
 ---
 name: Test Specialist
 description: Especialista em testes para Flutter/Dart no System Loja
-target: github-copilot
 tools:
   - read
   - edit
-  - create
-  - bash
-  - grep
-  - glob
-infer: false
-metadata:
-  domain: testing
-  language: dart
-  framework: flutter
+  - execute
+  - search
 ---
 
 # Test Specialist Agent

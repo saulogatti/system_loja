@@ -37,7 +37,6 @@ typedef CacheableFactory<T extends Cacheable> =
 /// ```
 class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// Instância única do [CacheManager].
-  static final CacheManager instance = CacheManager._privateConstructor();
 
   /// Cache em memória para acesso rápido.
   ///
@@ -52,7 +51,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   ///
   /// Inicializa o sistema de arquivos através do [FileStorageUtility]
   /// chamando [_initializeDirectory] para preparar o ambiente de cache.
-  CacheManager._privateConstructor();
+  CacheManager();
 
   /// Limpa todo o cache da aplicação.
   ///

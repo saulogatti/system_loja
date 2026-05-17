@@ -67,15 +67,20 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; updateUser(User user) {
-  return update(usersRecords).replace(UsersRecordsCompanion(
-    id: Value(user.id),
-    email: Value(user.email),
-    name: Value(user.name),
-    passwordHash: Value(user.passwordHash),
-    permission: Value(user.permission),
-    lastUpdatedDate: Value(DateTime.now()),
-  ));
+  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; updateUser(User user) async {
+  final userEntry = UserEntry.fromUser(user);
+  final result = await update(usersRecords).replace(
+    UsersRecordsCompanion(
+      id: Value(userEntry.id),
+      email: Value(userEntry.email),
+      name: Value(userEntry.name),
+      passwordHash: Value(userEntry.passwordHash),
+      permission: Value(userEntry.permission),
+      lastUpdatedDate: Value(DateTime.now()),
+      registrationDate: Value(userEntry.registrationDate),
+    ),
+  );
+  return result;
 }</code></pre>
 </section>
 

@@ -1,27 +1,24 @@
-import 'package:drift/drift.dart' as drift;
-import 'package:json_annotation/json_annotation.dart';
-
-part 'address.g.dart';
-
-@JsonSerializable(explicitToJson: true)
+/// Endereço (domínio). Serialização em [AddressData] na camada `data`.
+///
+/// Todos os campos são opcionais e têm valor padrão de string vazia,
+/// permitindo criação de endereços parciais.
 class Address {
-  static drift.JsonTypeConverter2<Address, String, Object?> converter =
-      drift.TypeConverter.json2(
-        fromJson: (json) => Address.fromJson(json as Map<String, Object?>),
-        toJson: (address) => address.toJson(),
-      );
-  @JsonKey(defaultValue: '')
+  /// Logradouro (nome da rua, avenida, etc.).
   final String street;
-  @JsonKey(defaultValue: '')
+
+  /// CEP no formato com ou sem máscara.
   final String zipCode;
-  @JsonKey(defaultValue: '')
+
+  /// Bairro.
   final String neighborhood;
-  @JsonKey(defaultValue: '')
+
+  /// Cidade.
   final String city;
-  @JsonKey(defaultValue: '')
+
+  /// Estado (sigla de 2 letras, ex.: SP, RJ).
   final String state;
 
-  Address({
+  const Address({
     this.street = '',
     this.zipCode = '',
     this.neighborhood = '',
@@ -29,10 +26,6 @@ class Address {
     this.state = '',
   });
 
-  factory Address.fromJson(Map<String, dynamic> json) =>
-      _$AddressFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AddressToJson(this);
   @override
   String toString() =>
       'Address(street: $street, zipCode: $zipCode, neighborhood: $neighborhood, city: $city, state: $state)';

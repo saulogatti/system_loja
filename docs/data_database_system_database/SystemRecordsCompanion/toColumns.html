@@ -88,9 +88,6 @@ Map&lt;String, Expression&gt; toColumns(bool nullToAbsent) {
   if (id.present) {
     map[&#39;id&#39;] = Variable&lt;int&gt;(id.value);
   }
-  if (registrationDate.present) {
-    map[&#39;registration_date&#39;] = Variable&lt;DateTime&gt;(registrationDate.value);
-  }
   if (lastUpdatedDate.present) {
     map[&#39;last_updated_date&#39;] = Variable&lt;DateTime&gt;(lastUpdatedDate.value);
   }
@@ -98,6 +95,16 @@ Map&lt;String, Expression&gt; toColumns(bool nullToAbsent) {
     map[&#39;price_configuration&#39;] = Variable&lt;String&gt;(
       $SystemRecordsTable.$converterpriceConfiguration.toSql(
         priceConfiguration.value,
+      ),
+    );
+  }
+  if (registrationDate.present) {
+    map[&#39;registration_date&#39;] = Variable&lt;DateTime&gt;(registrationDate.value);
+  }
+  if (systemUserData.present) {
+    map[&#39;system_user_data&#39;] = Variable&lt;String&gt;(
+      $SystemRecordsTable.$convertersystemUserData.toSql(
+        systemUserData.value,
       ),
     );
   }

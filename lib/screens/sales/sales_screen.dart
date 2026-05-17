@@ -9,6 +9,7 @@ import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_card.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
@@ -22,14 +23,28 @@ class SalesView extends StatefulWidget {
   State<SalesView> createState() => _SalesViewState();
 }
 
+class _SalesLoadedAllViewData {
+  final List<Product> products;
+  final List<PaymentMethodType> paymentMethods;
+  final Map<int, Customer> customers;
+  final Map<int, Company> companies;
+
+  const _SalesLoadedAllViewData({
+    required this.products,
+    required this.paymentMethods,
+    required this.customers,
+    required this.companies,
+  });
+}
+
 class _SalesViewState extends State<SalesView> {
-  List<Product> _productList = [];
-  List<PaymentMethodType> _paymentMethods = [];
-
-  Map<int, Invoice> _mapToNotaFiscal = {};
-
-  Map<int, Customer> _mapCustomers = {};
-  Map<int, Company> _mapCompanies = {};
+  static const SliverGridDelegateWithMaxCrossAxisExtent _invoiceGridDelegate =
+      SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 350,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        mainAxisExtent: 188,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -60,26 +75,12 @@ class _SalesViewState extends State<SalesView> {
                 ),
               );
               break;
-            case SalesLoaded():
-              setState(() {
-                _mapToNotaFiscal = state.items;
-              });
-
-              break;
-            case SalesLoadedCustomers():
-              _mapCustomers = state.customers;
-            case SalesLoadedAll():
-              _productList = state.products;
-              _mapCustomers = state.customers;
-              _mapCompanies = state.companies;
-              _mapToNotaFiscal = state.invoices;
-              _paymentMethods = state.paymentMethods;
+            case SalesLoaded() || SalesLoadedCustomers() || SalesLoadedAll():
               break;
             case SalesLoading():
               // Loading overlay é exibido através do builder
               break;
             case SalesSaved():
-              _mapToNotaFiscal = state.items;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
@@ -88,6 +89,7 @@ class _SalesViewState extends State<SalesView> {
                   backgroundColor: Colors.green,
                 ),
               );
+              salesCubit.loadProducts();
               // CORRIGIDO: Usar AutoRouter
               context.router.maybePop(true);
               break;
@@ -97,8 +99,11 @@ class _SalesViewState extends State<SalesView> {
           }
         },
         builder: (context, state) {
-          final invoices = _mapToNotaFiscal.values.toList(growable: false);
-          final totalValue = invoices.fold<double>(0.0, (sum, invoice) => sum + invoice.data.totalValue);
+          final invoices = _extractInvoices(state);
+          final totalValue = invoices.fold<double>(
+            0.0,
+            (sum, invoice) => sum + invoice.data.totalValue,
+          );
 
           return Stack(
             children: [
@@ -168,38 +173,20 @@ class _SalesViewState extends State<SalesView> {
                     ),
                   Expanded(
                     child: invoices.isEmpty
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.receipt_long,
-                                  size: 80,
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  'Nenhuma nota fiscal cadastrada',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ],
-                            ),
+                        ? const EmptyWidget(
+                            message: 'Nenhuma nota fiscal cadastrada',
+                            icon: Icons.receipt_long,
                           )
                         : GridView.builder(
-                            padding: const EdgeInsets.all(10),
-                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 350,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10,
-                              childAspectRatio: 1.3,
-                            ),
+                            padding: const EdgeInsets.all(12),
+                            gridDelegate: _invoiceGridDelegate,
                             itemCount: invoices.length,
                             itemBuilder: (context, index) {
                               final nf = invoices[index];
-                              return InvoiceCard(invoice: nf, onTap: () => _mostrarDetalhesNota(nf));
+                              return InvoiceCard(
+                                invoice: nf,
+                                onTap: () => _mostrarDetalhesNota(nf),
+                              );
                             },
                           ),
                   ),
@@ -232,14 +219,23 @@ class _SalesViewState extends State<SalesView> {
     // Usar o cubit do contexto após o primeiro frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final salesCubit = context.read<SalesCubit>();
-      salesCubit.loadAllCustomers();
-      salesCubit.loadSales();
       salesCubit.loadProducts();
     });
   }
 
   Future<void> _adicionarNotaFiscal(SalesCubit salesCubit) async {
-    if (_mapCustomers.isEmpty && _mapCompanies.isEmpty) {
+    final viewData = _extractLoadedAll(salesCubit.state);
+    if (viewData == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Aguarde o carregamento completo dos dados para continuar.'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+      return;
+    }
+
+    if (viewData.customers.isEmpty && viewData.companies.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Erro: Nenhum cliente ou empresa cadastrada!'),
@@ -249,7 +245,7 @@ class _SalesViewState extends State<SalesView> {
       return;
     }
 
-    if (_productList.isEmpty) {
+    if (viewData.products.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Erro: Nenhum produto cadastrado!'),
@@ -261,17 +257,38 @@ class _SalesViewState extends State<SalesView> {
 
     final result = await context.router.root.push(
       SalesInvoiceRoute(
-        paymentMethods: _paymentMethods,
-        products: _productList,
+        paymentMethods: viewData.paymentMethods,
+        products: viewData.products,
         salesCubit: salesCubit,
-        customers: _mapCustomers,
-        companies: _mapCompanies,
+        customers: viewData.customers,
+        companies: viewData.companies,
       ),
     );
 
     if (result == true) {
-      setState(() {});
+      await salesCubit.loadProducts();
     }
+  }
+
+  List<Invoice> _extractInvoices(SalesState state) {
+    return switch (state) {
+      SalesLoadedAll(:final invoices) => invoices.values.toList(growable: false),
+      SalesLoaded(:final items) || SalesSaved(:final items) => items.values.toList(growable: false),
+      _ => const <Invoice>[],
+    };
+  }
+
+  _SalesLoadedAllViewData? _extractLoadedAll(SalesState state) {
+    return switch (state) {
+      SalesLoadedAll(:final products, :final paymentMethods, :final customers, :final companies) =>
+        _SalesLoadedAllViewData(
+          products: products,
+          paymentMethods: paymentMethods,
+          customers: customers,
+          companies: companies,
+        ),
+      _ => null,
+    };
   }
 
   void _mostrarDetalhesNota(Invoice nf) {

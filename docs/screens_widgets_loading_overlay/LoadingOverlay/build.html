@@ -109,7 +109,8 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  final indicatorColor = progressIndicatorColor ?? Theme.of(context).colorScheme.primary;
+  final indicatorColor =
+      progressIndicatorColor ?? Theme.of(context).colorScheme.primary;
   final colorAnimation = AlwaysStoppedAnimation&lt;Color&gt;(indicatorColor);
 
   return Stack(

@@ -65,17 +65,17 @@
       
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static _i19.PageInfo page = _i19.PageInfo(
+  <pre class="language-dart"><code class="language-dart">static _i20.PageInfo page = _i20.PageInfo(
   name,
   builder: (data) {
     final args = data.argsAs&lt;SalesInvoiceRouteArgs&gt;();
     return _i14.SalesInvoiceScreen(
-      key: args.key,
       paymentMethods: args.paymentMethods,
       customers: args.customers,
       companies: args.companies,
       salesCubit: args.salesCubit,
       products: args.products,
+      key: args.key,
     );
   },
 );</code></pre>

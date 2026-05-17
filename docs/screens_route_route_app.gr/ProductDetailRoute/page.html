@@ -65,14 +65,14 @@
       
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static _i19.PageInfo page = _i19.PageInfo(
+  <pre class="language-dart"><code class="language-dart">static _i20.PageInfo page = _i20.PageInfo(
   name,
   builder: (data) {
     final args = data.argsAs&lt;ProductDetailRouteArgs&gt;();
-    return _i19.WrappedRoute(
+    return _i20.WrappedRoute(
       child: _i11.ProductDetailScreen(
-        key: args.key,
         product: args.product,
+        key: args.key,
         productList: args.productList,
       ),
     );

@@ -97,6 +97,12 @@ Map&lt;String, Expression&gt; toColumns(bool nullToAbsent) {
   if (!nullToAbsent || companyId != null) {
     map[&#39;empresa_id&#39;] = Variable&lt;int&gt;(companyId);
   }
+  if (!nullToAbsent || companyName != null) {
+    map[&#39;empresa_nome&#39;] = Variable&lt;String&gt;(companyName);
+  }
+  if (!nullToAbsent || companyCnpj != null) {
+    map[&#39;empresa_cnpj&#39;] = Variable&lt;String&gt;(companyCnpj);
+  }
   map[&#39;id&#39;] = Variable&lt;int&gt;(id);
   map[&#39;numero_nota&#39;] = Variable&lt;String&gt;(invoiceNumber);
   map[&#39;data_emissao&#39;] = Variable&lt;DateTime&gt;(issueDate);

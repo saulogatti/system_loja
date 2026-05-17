@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/screens/configuracoes/settings_screen.dart';
 
 /// Widget da seção de configurações de aparência/tema
 class ThemeSettings extends StatelessWidget {
@@ -13,7 +14,10 @@ class ThemeSettings extends StatelessWidget {
   final VoidCallback onMostrarSeletorCor;
 
   const ThemeSettings({
-    required this.config, required this.onConfigChanged, required this.onMostrarSeletorCor, super.key,
+    required this.config,
+    required this.onConfigChanged,
+    required this.onMostrarSeletorCor,
+    super.key,
   });
 
   @override

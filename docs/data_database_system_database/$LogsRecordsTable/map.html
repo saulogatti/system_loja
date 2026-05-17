@@ -59,7 +59,7 @@
         <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-<span class="returntype"><a href="../../core_models_activity_log/ActivityLog-class.html">ActivityLog</a></span>
+<span class="returntype"><a href="../../data_database_system_database/LogsRecord-class.html">LogsRecord</a></span>
 <span class="name ">map</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="map-param-data"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">data</span>, {</span></li>
 <li><span class="parameter" id="map-param-tablePrefix"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">tablePrefix</span>, </span></li>
 </ol>})
@@ -77,32 +77,26 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-ActivityLog map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
+LogsRecord map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
   final effectivePrefix = tablePrefix != null ? &#39;$tablePrefix.&#39; : &#39;&#39;;
-  return ActivityLog(
-    id: attachedDatabase.typeMapping.read(
-      DriftSqlType.int,
-      data[&#39;${effectivePrefix}id&#39;],
+  return LogsRecord(
+    actionType: $LogsRecordsTable.$converteractionType.fromSql(
+      attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data[&#39;${effectivePrefix}action_type&#39;],
+      )!,
+    ),
+    details: attachedDatabase.typeMapping.read(
+      DriftSqlType.string,
+      data[&#39;${effectivePrefix}details&#39;],
     )!,
     entity: attachedDatabase.typeMapping.read(
       DriftSqlType.string,
       data[&#39;${effectivePrefix}entity&#39;],
     )!,
-    userId: attachedDatabase.typeMapping.read(
+    id: attachedDatabase.typeMapping.read(
       DriftSqlType.int,
-      data[&#39;${effectivePrefix}user_id&#39;],
-    )!,
-    userName: attachedDatabase.typeMapping.read(
-      DriftSqlType.string,
-      data[&#39;${effectivePrefix}user_name&#39;],
-    )!,
-    timestamp: attachedDatabase.typeMapping.read(
-      DriftSqlType.dateTime,
-      data[&#39;${effectivePrefix}timestamp&#39;],
-    )!,
-    details: attachedDatabase.typeMapping.read(
-      DriftSqlType.string,
-      data[&#39;${effectivePrefix}details&#39;],
+      data[&#39;${effectivePrefix}id&#39;],
     )!,
     lastUpdatedDate: attachedDatabase.typeMapping.read(
       DriftSqlType.dateTime,
@@ -111,6 +105,18 @@ ActivityLog map(Map&lt;String, dynamic&gt; data, {String? tablePrefix}) {
     registrationDate: attachedDatabase.typeMapping.read(
       DriftSqlType.dateTime,
       data[&#39;${effectivePrefix}registration_date&#39;],
+    )!,
+    timestamp: attachedDatabase.typeMapping.read(
+      DriftSqlType.dateTime,
+      data[&#39;${effectivePrefix}timestamp&#39;],
+    )!,
+    userId: attachedDatabase.typeMapping.read(
+      DriftSqlType.int,
+      data[&#39;${effectivePrefix}user_id&#39;],
+    )!,
+    userName: attachedDatabase.typeMapping.read(
+      DriftSqlType.string,
+      data[&#39;${effectivePrefix}user_name&#39;],
     )!,
   );
 }</code></pre>

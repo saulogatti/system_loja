@@ -68,20 +68,23 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; resetToDefaultConfiguration() async {
   emit(SystemConfigState.loading());
-  final defaultData = _createDefaultConfiguration();
 
-  try {
-    await _systemRepository.saveSystemConfiguration(defaultData);
-    emit(
-      SystemConfigState.loaded(
-        defaultData,
-        feedbackMessage: &#39;Configurações restauradas para os valores padrão do sistema.&#39;,
-        feedbackType: SystemConfigFeedbackType.reset,
-      ),
-    );
-  } catch (e) {
-    emit(SystemConfigState.error(e.toString()));
-  }
+  final result = await _systemRepository.resetToDefaultConfiguration();
+  result.when(
+    onSuccess: (defaultConfiguration) {
+      emit(
+        SystemConfigState.loaded(
+          defaultConfiguration,
+          feedbackMessage:
+              &#39;Configurações restauradas para os valores padrão do sistema.&#39;,
+          feedbackType: SystemConfigFeedbackType.reset,
+        ),
+      );
+    },
+    onError: (message) {
+      emit(SystemConfigState.error(message));
+    },
+  );
 }</code></pre>
 </section>
 

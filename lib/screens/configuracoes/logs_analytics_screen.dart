@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_state_cubit.dart';
+
 @RoutePage()
 class LogsAnalyticsScreen extends StatefulWidget {
   const LogsAnalyticsScreen({super.key});

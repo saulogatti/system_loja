@@ -55,9 +55,10 @@
     <section class="multi-line-signature">
       
       <span class="name ">SystemRecordsCompanion.insert</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="insert-param-id"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.32.0/drift/Value-class.html">Value</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">id</span> = <span class="default-value">const Value.absent()</span>, </span></li>
-<li><span class="parameter" id="insert-param-registrationDate"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span> <span class="parameter-name">registrationDate</span>, </span></li>
 <li><span class="parameter" id="insert-param-lastUpdatedDate"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span> <span class="parameter-name">lastUpdatedDate</span>, </span></li>
 <li><span class="parameter" id="insert-param-priceConfiguration"><span>required</span> <span class="type-annotation"><a href="../../core_models_system_config_price_configuration/PriceConfiguration-class.html">PriceConfiguration</a></span> <span class="parameter-name">priceConfiguration</span>, </span></li>
+<li><span class="parameter" id="insert-param-registrationDate"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span> <span class="parameter-name">registrationDate</span>, </span></li>
+<li><span class="parameter" id="insert-param-systemUserData"><span>required</span> <span class="type-annotation"><a href="../../data_entry_system_user_data_entry/SystemUserDataEntry-class.html">SystemUserDataEntry</a></span> <span class="parameter-name">systemUserData</span>, </span></li>
 </ol>})
     </section>
     
@@ -68,12 +69,14 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">SystemRecordsCompanion.insert({
   this.id = const Value.absent(),
-  required DateTime registrationDate,
   required DateTime lastUpdatedDate,
   required PriceConfiguration priceConfiguration,
-}) : registrationDate = Value(registrationDate),
-     lastUpdatedDate = Value(lastUpdatedDate),
-     priceConfiguration = Value(priceConfiguration);</code></pre>
+  required DateTime registrationDate,
+  required SystemUserDataEntry systemUserData,
+}) : lastUpdatedDate = Value(lastUpdatedDate),
+     priceConfiguration = Value(priceConfiguration),
+     registrationDate = Value(registrationDate),
+     systemUserData = Value(systemUserData);</code></pre>
 </section>
 
 
