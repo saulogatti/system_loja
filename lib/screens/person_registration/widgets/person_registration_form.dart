@@ -24,7 +24,20 @@ class PersonRegistrationForm extends StatelessWidget {
   final VoidCallback onSubmit;
 
   const PersonRegistrationForm({
-    required this.formKey, required this.selectedPersonType, required this.onPersonTypeChanged, required this.nameController, required this.documentController, required this.emailController, required this.phoneController, required this.streetController, required this.zipCodeController, required this.neighborhoodController, required this.cityController, required this.stateController, required this.onSubmit, super.key,
+    required this.formKey,
+    required this.selectedPersonType,
+    required this.onPersonTypeChanged,
+    required this.nameController,
+    required this.documentController,
+    required this.emailController,
+    required this.phoneController,
+    required this.streetController,
+    required this.zipCodeController,
+    required this.neighborhoodController,
+    required this.cityController,
+    required this.stateController,
+    required this.onSubmit,
+    super.key,
   });
 
   @override
@@ -38,7 +51,10 @@ class PersonRegistrationForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Cadastro de Pessoa', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          Text(
+            'Cadastro de Pessoa',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 20),
           SegmentedButton<PersonType>(
             segments: PersonType.values
@@ -46,7 +62,11 @@ class PersonRegistrationForm extends StatelessWidget {
                   (type) => ButtonSegment<PersonType>(
                     value: type,
                     label: Text(type.displayName),
-                    icon: Icon(type == PersonType.individual ? Icons.person : Icons.business),
+                    icon: Icon(
+                      type == PersonType.individual
+                          ? Icons.person
+                          : Icons.business,
+                    ),
                   ),
                 )
                 .toList(),
@@ -58,7 +78,9 @@ class PersonRegistrationForm extends StatelessWidget {
           const SizedBox(height: 16),
           TextFormField(
             controller: nameController,
-            decoration: InputDecoration(labelText: '${selectedPersonType.nameLabel} *'),
+            decoration: InputDecoration(
+              labelText: '${selectedPersonType.nameLabel} *',
+            ),
             validator: (value) => combineValidators([
               (v) => validateRequired(v, selectedPersonType.nameLabel),
               (v) => validateMinLength(v, 3, selectedPersonType.nameLabel),
@@ -76,12 +98,16 @@ class PersonRegistrationForm extends StatelessWidget {
             ),
             keyboardType: TextInputType.number,
             inputFormatters: _documentInputFormatters(selectedPersonType),
-            validator: (value) => selectedPersonType.validateDocument(value: value),
+            validator: (value) =>
+                selectedPersonType.validateDocument(value: value),
           ),
           const SizedBox(height: 16),
           TextFormFieldEmail(emailController: emailController, isEditing: true),
           const SizedBox(height: 16),
-          TextFormFieldPhone(telefoneController: phoneController, isEditing: true),
+          TextFormFieldPhone(
+            telefoneController: phoneController,
+            isEditing: true,
+          ),
           const SizedBox(height: 16),
           AddressForm(
             streetController: streetController,

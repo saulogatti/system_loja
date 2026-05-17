@@ -45,9 +45,4 @@ class _CadastroGroupScreenState extends State<CadastroGroupScreen> {
       },
     );
   }
-
-  @override
-  void initState() {
-    super.initState();
-  }
 }

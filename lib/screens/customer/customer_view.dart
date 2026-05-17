@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/screens/person_registration/models/person_registration_form_data.dart';
+import 'package:system_loja/screens/person_registration/widgets/person_registration_form.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
 
 import '../../core/models/address.dart';
@@ -163,18 +165,23 @@ class _CustomerViewState extends State<CustomerView> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Formulário de cadastro
-                  CustomerForm(
+                   PersonRegistrationForm(
                     formKey: _formKey,
-                    nomeController: _nomeController,
-                    cpfController: _cpfController,
+                    nameController: _nomeController,
+                    documentController: _cpfController,
                     emailController: _emailController,
-                    telefoneController: _telefoneController,
+                    phoneController: _telefoneController,
                     streetController: _streetController,
                     zipCodeController: _zipCodeController,
                     neighborhoodController: _neighborhoodController,
                     cityController: _cityController,
                     stateController: _stateController,
                     onSubmit: _adicionarCliente,
+                    selectedPersonType: PersonType.individual,
+                     onPersonTypeChanged: (personType) {  
+                        // Não permite mudar o tipo de pessoa no cadastro de cliente
+                        // Apenas mantém como individual
+                      },
                   ),
                   const SizedBox(height: 32),
                   const Divider(),
@@ -201,26 +208,29 @@ class _CustomerViewState extends State<CustomerView> {
   /// Constrói a view de edição de cliente
   Widget _buildEditView(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Editar Cliente: ${widget.customer!.name}'), leading: AutoLeadingButton()),
+      appBar: AppBar(
+        title: Text('Editar Cliente: ${widget.customer!.name}'),
+        leading: AutoLeadingButton(),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CustomerForm(
+            PersonRegistrationForm(
               formKey: _formKey,
-              nomeController: _nomeController,
-              cpfController: _cpfController,
+              nameController: _nomeController,
+              documentController: _cpfController,
               emailController: _emailController,
-              telefoneController: _telefoneController,
+              phoneController: _telefoneController,
               streetController: _streetController,
               zipCodeController: _zipCodeController,
               neighborhoodController: _neighborhoodController,
               cityController: _cityController,
               stateController: _stateController,
               onSubmit: _salvarAlteracoes,
-              isEditMode: true,
-              onCancel: _cancelarEdicao,
+              selectedPersonType: PersonType.individual,
+              onPersonTypeChanged: _cancelarEdicao,
             ),
             const SizedBox(height: 24),
             // Card com informações do sistema
@@ -233,12 +243,21 @@ class _CustomerViewState extends State<CustomerView> {
                   children: [
                     const Text(
                       'Informações do Sistema',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     _buildInfoRow('ID', widget.customer!.id.toString()),
-                    _buildInfoRow('Data de Cadastro', widget.customer!.registrationDate.toFormattedDate()),
-                    _buildInfoRow('Última Atualização', widget.customer!.lastUpdatedDate.toFormattedDate()),
+                    _buildInfoRow(
+                      'Data de Cadastro',
+                      widget.customer!.registrationDate.toFormattedDate(),
+                    ),
+                    _buildInfoRow(
+                      'Última Atualização',
+                      widget.customer!.lastUpdatedDate.toFormattedDate(),
+                    ),
                   ],
                 ),
               ),
@@ -273,10 +292,12 @@ class _CustomerViewState extends State<CustomerView> {
       return;
     }
 
-    context.read<CustomerBloc>().add(CustomerBlocEvent.findCustomerByCpf(cpf: cpf));
+    context.read<CustomerBloc>().add(
+      CustomerBlocEvent.findCustomerByCpf(cpf: cpf),
+    );
   }
 
-  void _cancelarEdicao() {
+  void _cancelarEdicao(PersonType? personType) {
     // Restaura os valores originais do cliente
     if (_isEditMode) {
       AutoRouter.of(context).pop();
@@ -317,7 +338,9 @@ class _CustomerViewState extends State<CustomerView> {
         lastUpdatedDate: widget.customer!.lastUpdatedDate,
       );
 
-      context.read<CustomerBloc>().add(CustomerBlocEvent.updateCustomer(customer: updatedCustomer));
+      context.read<CustomerBloc>().add(
+        CustomerBlocEvent.updateCustomer(customer: updatedCustomer),
+      );
     }
   }
 }
