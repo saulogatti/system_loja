@@ -218,9 +218,6 @@ extension FileNameStringExtensions on String {
 
 extension ValidateDataCustomer on String {
   static const int senhaMinLength = 8;
-  static const int _iterations = 600000;
-  static const int _saltSize = 16;
-  static const int _keyLength = 32;
 
   /// Gera um hash seguro usando PBKDF2 com HMAC-SHA256.
   ///
