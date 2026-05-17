@@ -24,7 +24,10 @@ class CompanyEditView extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(create: (_) => CompanyEditCubit(appInjection.get<ICompanyRepository>()), child: this);
+    return BlocProvider(
+      create: (_) => CompanyEditCubit(appInjection.get<ICompanyRepository>()),
+      child: this,
+    );
   }
 }
 
@@ -51,7 +54,11 @@ class _CompanyEditViewState extends State<CompanyEditView> {
           title: const Text('Editar Pessoa Jurídica'),
           leading: const AutoLeadingButton(),
           actions: [
-            IconButton(tooltip: 'Excluir', onPressed: _confirmDelete, icon: const Icon(Icons.delete)),
+            IconButton(
+              tooltip: 'Excluir',
+              onPressed: _confirmDelete,
+              icon: const Icon(Icons.delete),
+            ),
           ],
         ),
         body: SingleChildScrollView(
@@ -64,6 +71,9 @@ class _CompanyEditViewState extends State<CompanyEditView> {
               children: [
                 TextFormField(
                   controller: _nameController,
+                  keyboardType: TextInputType.name,
+                  autofillHints: const [AutofillHints.organizationName],
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     labelText: 'Razão Social *',
                     border: OutlineInputBorder(),
@@ -85,9 +95,15 @@ class _CompanyEditViewState extends State<CompanyEditView> {
                   enabled: false,
                 ),
                 const SizedBox(height: 16),
-                TextFormFieldEmail(emailController: _emailController, isEditing: true),
+                TextFormFieldEmail(
+                  emailController: _emailController,
+                  isEditing: true,
+                ),
                 const SizedBox(height: 16),
-                TextFormFieldPhone(telefoneController: _phoneController, isEditing: true),
+                TextFormFieldPhone(
+                  telefoneController: _phoneController,
+                  isEditing: true,
+                ),
                 const SizedBox(height: 16),
                 AddressForm(
                   streetController: _streetController,
@@ -117,7 +133,10 @@ class _CompanyEditViewState extends State<CompanyEditView> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: ElevatedButton(onPressed: _saveChanges, child: const Text('Salvar Alterações')),
+                      child: ElevatedButton(
+                        onPressed: _saveChanges,
+                        child: const Text('Salvar Alterações'),
+                      ),
                     ),
                   ],
                 ),
@@ -153,7 +172,9 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     _phoneController = TextEditingController(text: company.phone ?? '');
     _streetController = TextEditingController(text: company.address.street);
     _zipCodeController = TextEditingController(text: company.address.zipCode);
-    _neighborhoodController = TextEditingController(text: company.address.neighborhood);
+    _neighborhoodController = TextEditingController(
+      text: company.address.neighborhood,
+    );
     _cityController = TextEditingController(text: company.address.city);
     _stateController = TextEditingController(text: company.address.state);
   }
@@ -184,7 +205,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     }
 
     if (shouldDelete == true) {
-      context.read<CompanyEditCubit>().deleteCompany(widget.company.id);
+      await context.read<CompanyEditCubit>().deleteCompany(widget.company.id);
     }
   }
 
@@ -213,19 +234,25 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     _hideLoadingIfNeeded();
 
     if (state is CompanyEditSaved) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(state.message)));
       context.router.maybePop(true);
       return;
     }
 
     if (state is CompanyEditDeleted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(state.message)));
       context.router.maybePop(true);
       return;
     }
 
     if (state is CompanyEditError) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(state.message)));
     }
   }
 
@@ -266,7 +293,10 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     );
   }
 
-  Widget _buildReadOnlyDateField({required String label, required String value}) {
+  Widget _buildReadOnlyDateField({
+    required String label,
+    required String value,
+  }) {
     return TextFormField(
       initialValue: value,
       decoration: InputDecoration(

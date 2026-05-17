@@ -24,14 +24,10 @@ class InvoiceLineTile extends StatelessWidget {
         subtitle: Text(
           '${entry.quantity}x R\$ ${product.price.toStringAsFixed(2)}',
         ),
-        trailing: Semantics(
-          button: true,
-          label: 'Remover ${product.name}',
-          child: IconButton(
-            tooltip: 'Remover ${product.name}',
-            icon: const Icon(Icons.delete, color: Colors.red),
-            onPressed: onDelete,
-          ),
+        trailing: IconButton(
+          tooltip: 'Remover ${product.name}',
+          icon: const Icon(Icons.delete, color: Colors.red),
+          onPressed: onDelete,
         ),
       ),
     );

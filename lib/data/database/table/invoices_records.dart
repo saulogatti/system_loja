@@ -39,11 +39,13 @@ class InvoicesRecords extends Table {
   TextColumn get paymentMethod => text()();
 
   /// Data de cadastro no sistema.
-  DateTimeColumn get registrationDate => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get registrationDate =>
+      dateTime().withDefault(currentDateAndTime)();
 
   /// Valor total da nota fiscal.
   RealColumn get totalValue => real()();
 
   /// Tipo da nota fiscal (entrada ou saída). Padrão: saída.
-  TextColumn get type => textEnum<InvoiceType>().withDefault(const Constant('exit'))();
+  TextColumn get type =>
+      textEnum<InvoiceType>().withDefault(const Constant('exit'))();
 }

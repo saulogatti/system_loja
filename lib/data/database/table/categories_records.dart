@@ -19,5 +19,6 @@ class CategoriesRecords extends Table {
   TextColumn get name => text().unique()();
 
   /// Data de criação do registro
-  DateTimeColumn get registrationDate => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get registrationDate =>
+      dateTime().withDefault(currentDateAndTime)();
 }

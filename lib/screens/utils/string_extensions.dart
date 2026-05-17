@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'dart:math';
-import 'dart:typed_data';
-
-import 'package:crypto/crypto.dart';
+import 'package:bcrypt/bcrypt.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_loja/core/constants/app_constants.dart';
 
@@ -172,10 +168,9 @@ extension FileNameStringExtensions on String {
   /// 'CON.txt'.toSafeFileName(addTimestamp: true); // 'con_1701979200000.txt'
   /// ```
   String toSafeFileName({int maxLength = 200, bool addTimestamp = false}) {
-    String safeName = sanitizeFileName()
-        .toAsciiFileName()
-        .normalizeFileName()
-        .truncateFileName(maxLength: maxLength);
+    String safeName = sanitizeFileName().toAsciiFileName().normalizeFileName().truncateFileName(
+      maxLength: maxLength,
+    );
 
     // Se for nome reservado, adiciona sufixo
     if (safeName.isReservedFileName()) {
@@ -223,93 +218,12 @@ extension FileNameStringExtensions on String {
 
 extension ValidateDataCustomer on String {
   static const int senhaMinLength = 8;
-  static const int _pbkdf2Iterations = 600000;
-  static const int _saltBytes = 16;
 
   /// Gera um hash seguro usando PBKDF2 com HMAC-SHA256.
   ///
   /// Retorna uma string no formato: `iterations$salt$hash` (todos em hexadecimal).
   String hashPassword() {
-    final salt = _generateSalt(_saltBytes);
-    final hash = _pbkdf2(this, salt, _pbkdf2Iterations);
-
-    return '$_pbkdf2Iterations\$${_toHex(salt)}\$${_toHex(hash)}';
-  }
-
-  /// Verifica se a senha fornecida corresponde ao hash armazenado.
-  ///
-  /// Suporta o novo formato PBKDF2 (`iterations$salt$hash`) e o
-  /// formato legado SHA-256 simples.
-  bool verifyPassword(String storedHash) {
-    if (storedHash.contains('\$')) {
-      final parts = storedHash.split('\$');
-      if (parts.length != 3) return false;
-
-      final iterations = int.tryParse(parts[0]);
-      final salt = _fromHex(parts[1]);
-      final hash = parts[2];
-
-      if (iterations == null) return false;
-
-      final calculatedHash = _pbkdf2(this, salt, iterations);
-      return _toHex(calculatedHash) == hash;
-    } else {
-      // Fallback para legado SHA-256 sem salt
-      final bytes = utf8.encode(this);
-      final digest = sha256.convert(bytes);
-      return digest.toString() == storedHash;
-    }
-  }
-
-  /// Implementação manual de PBKDF2 com HMAC-SHA256.
-  Uint8List _pbkdf2(String password, Uint8List salt, int iterations) {
-    final hmac = Hmac(sha256, utf8.encode(password));
-    final out = Uint8List(32); // SHA-256 output size
-
-    // PBKDF2 para uma única iteração de bloco (DK = T1)
-    // Para senhas curtas e um único bloco de 32 bytes (SHA-256),
-    // DK = T1 = U1 ^ U2 ^ ... ^ Uc
-    // U1 = PRF(P, S || INT(1))
-
-    final b = Uint8List(salt.length + 4);
-    b.setAll(0, salt);
-    b[salt.length] = 0;
-    b[salt.length + 1] = 0;
-    b[salt.length + 2] = 0;
-    b[salt.length + 3] = 1;
-
-    var u = hmac.convert(b).bytes;
-    for (var i = 0; i < 32; i++) {
-      out[i] = u[i];
-    }
-
-    for (var i = 1; i < iterations; i++) {
-      u = hmac.convert(u).bytes;
-      for (var j = 0; j < 32; j++) {
-        out[j] ^= u[j];
-      }
-    }
-
-    return out;
-  }
-
-  Uint8List _generateSalt(int length) {
-    final random = Random.secure();
-    return Uint8List.fromList(
-      List<int>.generate(length, (i) => random.nextInt(256)),
-    );
-  }
-
-  String _toHex(Uint8List bytes) {
-    return bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
-  }
-
-  Uint8List _fromHex(String hex) {
-    final bytes = Uint8List(hex.length ~/ 2);
-    for (var i = 0; i < bytes.length; i++) {
-      bytes[i] = int.parse(hex.substring(i * 2, i * 2 + 2), radix: 16);
-    }
-    return bytes;
+    return BCrypt.hashpw(this, BCrypt.gensalt());
   }
 
   /// Valida se a string é um CPF válido.

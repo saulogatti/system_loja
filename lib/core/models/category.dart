@@ -11,5 +11,11 @@ class Category extends DefaultObject {
   /// Descrição opcional da categoria.
   final String? description;
 
-  Category({required this.name, this.description, super.registrationDate, super.lastUpdatedDate, super.id});
+  Category({
+    required this.name,
+    this.description,
+    super.registrationDate,
+    super.lastUpdatedDate,
+    super.id,
+  });
 }

@@ -37,7 +37,9 @@ class _LoadedBodyState extends State<LoadedBody> {
         return ak.compareTo(bk);
       });
     } else {
-      points.sort((a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()));
+      points.sort(
+        (a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()),
+      );
     }
 
     if (_sortOrder == GridSortOrder.recentes) {
@@ -64,7 +66,9 @@ class _LoadedBodyState extends State<LoadedBody> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<SalesPurchaseAnalyticsBloc>().add(ChangeSalesPurchaseGrouping(state.grouping));
+        context.read<SalesPurchaseAnalyticsBloc>().add(
+          ChangeSalesPurchaseGrouping(state.grouping),
+        );
       },
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -72,7 +76,9 @@ class _LoadedBodyState extends State<LoadedBody> {
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverToBoxAdapter(child: GroupingSegmentedControl(current: state.grouping)),
+            sliver: SliverToBoxAdapter(
+              child: GroupingSegmentedControl(current: state.grouping),
+            ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverPadding(
@@ -102,8 +108,12 @@ class _LoadedBodyState extends State<LoadedBody> {
                 builder: (context, constraints) {
                   final isWide = constraints.maxWidth >= 760;
                   final tiles = <Widget>[
-                    SalesPurchaseDonutCard(totalSales: state.totalSales, totalPurchases: state.totalPurchases),
-                    if (state.grouping == SalesPurchaseGrouping.byDate) ProductsCountChartCard(points: state.points),
+                    SalesPurchaseDonutCard(
+                      totalSales: state.totalSales,
+                      totalPurchases: state.totalPurchases,
+                    ),
+                    if (state.grouping == SalesPurchaseGrouping.byDate)
+                      ProductsCountChartCard(points: state.points),
                   ];
 
                   if (tiles.isEmpty) {
@@ -123,7 +133,10 @@ class _LoadedBodyState extends State<LoadedBody> {
 
                   return Column(
                     children: [
-                      for (final tile in tiles) ...[tile, const SizedBox(height: 12)],
+                      for (final tile in tiles) ...[
+                        tile,
+                        const SizedBox(height: 12),
+                      ],
                     ],
                   );
                 },
@@ -145,13 +158,13 @@ class _LoadedBodyState extends State<LoadedBody> {
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
               ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final point = sortedPoints[index];
-                  return ComparisonBarTile(point: point, maxValue: state.maxValue);
-                },
-                childCount: sortedPoints.length,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final point = sortedPoints[index];
+                return ComparisonBarTile(
+                  point: point,
+                  maxValue: state.maxValue,
+                );
+              }, childCount: sortedPoints.length),
             ),
           ),
         ],
@@ -159,4 +172,3 @@ class _LoadedBodyState extends State<LoadedBody> {
     );
   }
 }
-
