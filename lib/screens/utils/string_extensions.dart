@@ -168,10 +168,9 @@ extension FileNameStringExtensions on String {
   /// 'CON.txt'.toSafeFileName(addTimestamp: true); // 'con_1701979200000.txt'
   /// ```
   String toSafeFileName({int maxLength = 200, bool addTimestamp = false}) {
-    String safeName = sanitizeFileName()
-        .toAsciiFileName()
-        .normalizeFileName()
-        .truncateFileName(maxLength: maxLength);
+    String safeName = sanitizeFileName().toAsciiFileName().normalizeFileName().truncateFileName(
+      maxLength: maxLength,
+    );
 
     // Se for nome reservado, adiciona sufixo
     if (safeName.isReservedFileName()) {
@@ -220,12 +219,14 @@ extension FileNameStringExtensions on String {
 extension ValidateDataCustomer on String {
   static const int senhaMinLength = 8;
 
-  /// Gera hash seguro da senha usando BCrypt
+  /// Gera um hash seguro usando PBKDF2 com HMAC-SHA256.
+  ///
+  /// Retorna uma string no formato: `iterations$salt$hash` (todos em hexadecimal).
   String hashPassword() {
     return BCrypt.hashpw(this, BCrypt.gensalt());
   }
 
-   /// Valida se a string é um CPF válido.
+  /// Valida se a string é um CPF válido.
   ///
   /// Verifica o formato e os dígitos verificadores do CPF.
   ///
