@@ -30,6 +30,14 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
     return row?.toDomain();
   }
 
+  /// Busca múltiplos produtos pelos seus IDs.
+  Future<List<Product>> getByIds(List<int> ids) async {
+    final rows = await (select(productsRecords)
+          ..where((t) => t.id.isIn(ids)))
+        .get();
+    return rows.map((e) => e.toDomain()).toList();
+  }
+
   /// Insere um novo produto no banco de dados.
   ///
   /// Usa `insertOrAbort` com `DoNothing` em conflito para evitar duplicatas.
