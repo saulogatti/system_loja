@@ -54,9 +54,9 @@
 
     <section class="multi-line-signature">
       const
-      <span class="name ">InvoiceCard</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
-<li><span class="parameter" id="-param-invoice"><span>required</span> <span class="type-annotation"><a href="../../core_models_invoice/Invoice-class.html">Invoice</a></span> <span class="parameter-name">invoice</span>, </span></li>
+      <span class="name ">InvoiceCard</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-invoice"><span>required</span> <span class="type-annotation"><a href="../../core_models_invoice/Invoice-class.html">Invoice</a></span> <span class="parameter-name">invoice</span>, </span></li>
 <li><span class="parameter" id="-param-onTap"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/VoidCallback.html">VoidCallback</a></span> <span class="parameter-name">onTap</span>, </span></li>
+<li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
 </ol>})
     </section>
     
@@ -65,7 +65,7 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">const InvoiceCard({super.key, required this.invoice, required this.onTap});</code></pre>
+  <pre class="language-dart"><code class="language-dart">const InvoiceCard({required this.invoice, required this.onTap, super.key});</code></pre>
 </section>
 
 

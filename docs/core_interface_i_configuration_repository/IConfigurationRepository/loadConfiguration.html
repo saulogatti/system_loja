@@ -54,7 +54,7 @@
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_settings_app_settings/AppSettings-class.html">AppSettings</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
 <span class="name ">loadConfiguration</span>(<wbr>)
 
       
@@ -66,7 +66,7 @@
 <p>Se nenhuma configuração existir, retorna configurações padrão.</p>
 <p>Retorna:</p>
 <ul>
-<li><a href="../../core_settings_app_settings/AppSettings-class.html">AppSettings</a> com as configurações carregadas</li>
+<li><a href="../../core_utils_command_result/ResultStatus-class.html">ResultStatus</a> com <a href="../../core_settings_app_settings/AppSettings-class.html">AppSettings</a> carregado</li>
 </ul>
 </section>
 
@@ -74,7 +74,7 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;AppSettings&gt; loadConfiguration();</code></pre>
+  <pre class="language-dart"><code class="language-dart">Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; loadConfiguration();</code></pre>
 </section>
 
 

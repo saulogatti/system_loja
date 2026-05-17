@@ -1,54 +1,34 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/default/default_object.dart';
 
-part 'activity_log.g.dart';
+/// Tipos de ação registrados no log de auditoria.
+enum ActionType { criar, ler, atualizar, deletar }
 
-/// Tipos de ação que podem ser registradas no log
-enum ActionType {
-  /// Criação de um novo registro
-  @JsonValue('CRIAR')
-  criar,
-
-  /// Leitura/consulta de um registro
-  @JsonValue('LER')
-  ler,
-
-  /// Atualização de um registro
-  @JsonValue('ATUALIZAR')
-  atualizar,
-
-  /// Exclusão de um registro
-  @JsonValue('DELETAR')
-  deletar,
-}
-
-/// Modelo de dados para Log de Atividade
+/// Log de atividade (domínio). Serialização em `activity_log_data.dart`.
 ///
-/// Registra as atividades realizadas no sistema para fins de auditoria.
-/// Armazena informações sobre qual ação foi realizada, por qual usuário,
-/// quando e detalhes adicionais sobre a operação.
-@JsonSerializable(explicitToJson: true)
+/// Registra ações dos usuários para fins de auditoria (criação, leitura,
+/// atualização e exclusão de entidades do sistema).
 class ActivityLog extends DefaultObject {
-  @JsonKey(name: 'tipo_acao')
-  ActionType actionType;
+  /// Tipo de ação realizada (criar, ler, atualizar, deletar).
+  final ActionType actionType;
 
-  @JsonKey(name: 'entidade')
+  /// Nome da entidade afetada (ex.: Customer, Product, Invoice).
   final String entity;
 
-  @JsonKey(name: 'usuario_id')
+  /// ID do usuário que realizou a ação.
   final int userId;
 
-  @JsonKey(name: 'usuario_nome')
+  /// Nome do usuário que realizou a ação.
   final String userName;
 
-  @JsonKey(name: 'data_hora')
+  /// Data e hora exata em que a ação foi realizada.
   final DateTime timestamp;
 
+  /// Detalhes adicionais sobre a ação (opcional).
   final String details;
 
   ActivityLog({
-    required super.id,
+    required this.actionType,
     required this.entity,
     required this.userId,
     required this.userName,
@@ -56,21 +36,11 @@ class ActivityLog extends DefaultObject {
     this.details = '',
     super.lastUpdatedDate,
     super.registrationDate,
-    String? action,
-  }) : timestamp = timestamp ?? DateTime.now(),
-       actionType = ActionType.values.firstWhere(
-         (e) => e.name == action,
-         orElse: () => ActionType.ler,
-       );
+    super.id,
+  }) : timestamp = timestamp ?? DateTime.now();
 
-  /// Cria um objeto a partir de JSON
-  factory ActivityLog.fromJson(Map<String, dynamic> json) =>
-      _$ActivityLogFromJson(json);
+  /// Nome do tipo de ação como string (ex.: "criar", "deletar").
   String get action => actionType.name;
-
-  /// Converte o objeto para JSON
-  @override
-  Map<String, dynamic> toJson() => _$ActivityLogToJson(this);
 
   @override
   String toString() {

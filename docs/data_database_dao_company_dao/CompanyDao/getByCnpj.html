@@ -72,10 +72,10 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;Company?&gt; getByCnpj(String cnpj) async {
-  final record = await (select(companyRecords)
-        ..where((t) =&gt; t.cnpj.equals(cnpj)))
-      .getSingleOrNull();
-  return record;
+  final record = await (select(
+    companyRecords,
+  )..where((t) =&gt; t.cnpj.equals(cnpj))).getSingleOrNull();
+  return record?.toDomain();
 }</code></pre>
 </section>
 

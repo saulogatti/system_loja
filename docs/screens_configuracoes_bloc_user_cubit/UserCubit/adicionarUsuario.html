@@ -58,7 +58,7 @@
 <span class="name ">adicionarUsuario</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="adicionarUsuario-param-nome"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">nome</span>, </span></li>
 <li><span class="parameter" id="adicionarUsuario-param-email"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">email</span>, </span></li>
 <li><span class="parameter" id="adicionarUsuario-param-senha"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">senha</span>, </span></li>
-<li><span class="parameter" id="adicionarUsuario-param-nivelPermissao"><span>required</span> <span class="type-annotation"><a href="../../core_models_user/AuthorizationLevel.html">AuthorizationLevel</a></span> <span class="parameter-name">nivelPermissao</span>, </span></li>
+<li><span class="parameter" id="adicionarUsuario-param-nivelPermissao"><span>required</span> <span class="type-annotation"><a href="../../core_models_default_authorization_level/AuthorizationLevel.html">AuthorizationLevel</a></span> <span class="parameter-name">nivelPermissao</span>, </span></li>
 </ol>})
 
       
@@ -76,33 +76,31 @@
   required String senha,
   required AuthorizationLevel nivelPermissao,
 }) async {
-  &#47;&#47; Lógica para adicionar usuário
-  try {
-    &#47;&#47; Exemplo de ID
-    final usuario = User(
-      id: 0,
-      name: nome,
-      email: email,
-      passwordHash: senha.hashSenha(),
+  final usuario = User(
+    name: nome,
+    email: email,
+    passwordHash: senha.hashPassword(),
+    permission: nivelPermissao.value,
+  );
 
-      permission: nivelPermissao.value,
-    );
-
-    final ResultStatus&lt;bool, String&gt; executionResult = await _userRepository
-        .adicionarUsuario(usuario);
-    executionResult.when(
-      onSuccess: (sucess) {
+  final ResultStatus&lt;bool, String&gt; executionResult = await _userRepository
+      .adicionarUsuario(usuario);
+  executionResult.when(
+    onSuccess: (sucesso) {
+      if (sucesso) {
         emit(UsuarioState.usuarioAdicionado(usuario, true));
-      },
-      onError: (resultError) {
-        emit(UsuarioState.loadFailure(errorMessage: resultError));
-      },
-    );
-  } catch (e) {
-    emit(
-      UsuarioState.loadFailure(errorMessage: &#39;Erro ao adicionar usuário: $e&#39;),
-    );
-  }
+      } else {
+        emit(
+          UsuarioState.loadFailure(
+            errorMessage: &#39;Não foi possível adicionar o usuário.&#39;,
+          ),
+        );
+      }
+    },
+    onError: (resultError) {
+      emit(UsuarioState.loadFailure(errorMessage: resultError));
+    },
+  );
 }</code></pre>
 </section>
 

@@ -54,10 +54,9 @@
 
     
 <section class="desc markdown">
-  <p>Modelo de domínio para categorias de produtos.</p>
-<p>Representa uma categoria que pode ser associada a múltiplos produtos.
-Categorias são gerenciadas de forma independente na tabela categories_records
-e referenciadas pelos produtos através de categoryId.</p>
+  <p>Categoria de produtos (domínio). Serialização em <code>category_data.dart</code>.</p>
+<p>Agrupa produtos por tipo (ex.: Eletrônicos, Vestuário).
+Utilizada como chave estrangeira em <a href="../core_models_product/Product/categoryId.html">Product.categoryId</a>.</p>
 </section>
 
 
@@ -79,12 +78,6 @@ e referenciadas pelos produtos através de categoryId.</p>
 
         
         
-  <dt>Annotations</dt>
-  <dd>
-    <ul class="annotation-list clazz-relationships">
-        <li>@<a href="https://pub.dev/documentation/json_annotation/4.11.0/json_annotation/JsonSerializable/JsonSerializable.html">JsonSerializable</a>()</li>
-    </ul>
-  </dd>
 
 
       </dl>
@@ -95,17 +88,10 @@ e referenciadas pelos produtos através de categoryId.</p>
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="Category.new" class="callable">
-          <span class="name"><a href="../core_models_category/Category/Category.html">Category</a></span><span class="signature">({<span class="parameter" id="-param-name"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, </span><span class="parameter" id="-param-description"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">description</span>, </span><span class="parameter" id="-param-lastUpdatedDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">lastUpdatedDate</span>, </span><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span></span>})</span>
+          <span class="name"><a href="../core_models_category/Category/Category.html">Category</a></span><span class="signature">({<span class="parameter" id="-param-name"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">name</span>, </span><span class="parameter" id="-param-description"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">description</span>, </span><span class="parameter" id="-param-registrationDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">registrationDate</span>, </span><span class="parameter" id="-param-lastUpdatedDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">lastUpdatedDate</span>, </span><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span></span>})</span>
         </dt>
         <dd>
           
-        </dd>
-        <dt id="Category.fromJson" class="callable">
-          <span class="name"><a href="../core_models_category/Category/Category.fromJson.html">Category.fromJson</a></span><span class="signature">(<span class="parameter" id="fromJson-param-json"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">json</span></span>)</span>
-        </dt>
-        <dd>
-          
-            <div class="constructor-modifier features">factory</div>
         </dd>
     </dl>
   </section>
@@ -122,7 +108,7 @@ e referenciadas pelos produtos através de categoryId.</p>
 
 </dt>
 <dd>
-  Descrição opcional da categoria
+  Descrição opcional da categoria.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -146,20 +132,20 @@ e referenciadas pelos produtos através de categoryId.</p>
 
 </dt>
 <dd class="inherited">
-  
+  Identificador único da entidade. Valor padrão -1 indica objeto não persistido.
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
 
         <dt id="lastUpdatedDate" class="property inherited">
   <span class="name"><a href="../core_models_default_default_object/DefaultObject/lastUpdatedDate.html">lastUpdatedDate</a></span>
-  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>
   
 
 </dt>
 <dd class="inherited">
-  
-  <div class="features"><span class="feature">getter/setter pair</span><span class="feature">inherited</span></div>
+  Data e hora da última atualização do registro.
+  <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -170,7 +156,7 @@ e referenciadas pelos produtos através de categoryId.</p>
 
 </dt>
 <dd>
-  Nome da categoria
+  Nome da categoria. Deve ser único no sistema.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -182,7 +168,7 @@ e referenciadas pelos produtos através de categoryId.</p>
 
 </dt>
 <dd class="inherited">
-  
+  Data e hora em que o registro foi criado.
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
@@ -204,7 +190,7 @@ e referenciadas pelos produtos através de categoryId.</p>
 
     
   <section
-      class="summary offset-anchor"
+      class="summary offset-anchor inherited"
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
@@ -218,19 +204,6 @@ e referenciadas pelos produtos através de categoryId.</p>
 <dd class="inherited">
   Invoked when a nonexistent method or property is accessed.
   <div class="features"><span class="feature">inherited</span></div>
-
-</dd>
-
-        <dt id="toJson" class="callable">
-  <span class="name"><a href="../core_models_category/Category/toJson.html">toJson</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
-  </span>
-  
-
-</dt>
-<dd>
-  
-  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 

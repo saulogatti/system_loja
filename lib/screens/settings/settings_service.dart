@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/interface/i_settings_service.dart';
-import 'package:system_loja/core/settings/app_theme.dart';
-import 'package:system_loja/core/settings/app_theme_settings.dart';
+import 'package:system_loja/screens/settings/app_theme.dart';
+import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
+import 'package:system_loja/screens/configuracoes/settings_screen.dart';
 
 class SettingsService implements ISettingsService {
   ValueNotifier<ThemeData> currentThemeNotifier = ValueNotifier<ThemeData>(

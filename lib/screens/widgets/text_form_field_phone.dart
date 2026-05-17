@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/utils/text_formatters.dart';
+import 'package:system_loja/screens/utils/text_formatters.dart';
 
 class TextFormFieldPhone extends StatelessWidget {
   const TextFormFieldPhone({
-    required this.telefoneController, required this.isEditing, super.key,
+    required this.telefoneController,
+    required this.isEditing,
+    super.key,
   });
 
   final TextEditingController telefoneController;
@@ -20,6 +22,8 @@ class TextFormFieldPhone extends StatelessWidget {
       ),
       enabled: isEditing,
       keyboardType: TextInputType.phone,
+      autofillHints: const [AutofillHints.telephoneNumber],
+      textInputAction: TextInputAction.next,
       inputFormatters: [PhoneTextInputFormatter()],
     );
   }

@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/dao/category_dao.dart';
 
+import 'support/test_app_database.dart';
+
 /// Testes para o CategoryDao.
 ///
 /// Verifica operações CRUD de categorias e validações de duplicidade.
@@ -10,7 +12,10 @@ void main() {
   late CategoryDao categoryDao;
 
   setUp(() {
-    database = AppDatabase();
+    database = AppDatabase(
+      applicationSupportDirectory: testApplicationSupportDirectory,
+      tempDirectoryPath: testSqliteTempDirectoryPath,
+    );
     categoryDao = database.categoryDao;
   });
 
@@ -33,7 +38,7 @@ void main() {
 
         // Assert
         expect(id, greaterThan(0));
-        
+
         final category = await categoryDao.getById(id);
         expect(category, isNotNull);
         expect(category!.name, name);
@@ -49,7 +54,7 @@ void main() {
 
         // Assert
         expect(id, greaterThan(0));
-        
+
         final category = await categoryDao.getById(id);
         expect(category, isNotNull);
         expect(category!.name, name);
@@ -123,7 +128,7 @@ void main() {
 
         // Assert
         expect(success, isTrue);
-        
+
         final category = await categoryDao.getById(id);
         expect(category!.name, 'Nome Novo');
         expect(category.description, 'Descrição nova');
@@ -140,7 +145,7 @@ void main() {
 
         // Assert
         expect(success, isTrue);
-        
+
         final category = await categoryDao.getById(id);
         expect(category, isNull);
       });

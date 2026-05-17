@@ -119,7 +119,9 @@ Widget build(BuildContext context) {
     enabled: isEditing,
     keyboardType: TextInputType.emailAddress,
     inputFormatters: [
-      FilteringTextInputFormatter.deny(RegExp(r&#39;\s&#39;)), &#47;&#47; Remove espaços
+      FilteringTextInputFormatter.deny(
+        Constants.oneOrMoreWhitespaceRegExp,
+      ), &#47;&#47; Remove espaços
       FilteringTextInputFormatter.deny(Constants.accentedCharsRegExp),
     ],
     validator: (value) {

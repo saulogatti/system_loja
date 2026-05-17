@@ -1,4 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:meta/meta.dart';
 
 /// Representa um resultado que contém um erro.
 ///

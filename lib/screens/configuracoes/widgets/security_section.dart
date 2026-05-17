@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/core/models/system_config/system_configuration.dart';
 
 /// Widget da seção de configurações de segurança
 class SecuritySection extends StatelessWidget {
   /// Configuração atual do sistema
-  final AppSettings config;
+  final SystemConfiguration config;
 
   /// Callback para atualizar a configuração
-  final Function(AppSettings) onConfigChanged;
+  final Function(SystemConfiguration) onConfigChanged;
 
-  const SecuritySection({
-    required this.config, required this.onConfigChanged, super.key,
-  });
+  const SecuritySection({required this.config, required this.onConfigChanged, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +21,7 @@ class SecuritySection extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.security,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                Icon(Icons.security, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
                 const Text(
                   'Segurança',
@@ -38,36 +33,32 @@ class SecuritySection extends StatelessWidget {
             SwitchListTile(
               title: const Text('Exigir senha'),
               subtitle: const Text('Solicitar senha ao abrir o aplicativo'),
-              value: config.exigirSenha,
+              value: config.isPasswordRequired,
               onChanged: (value) {
-                onConfigChanged(config.copyWith(exigirSenha: value));
+                onConfigChanged(config.copyWith(isPasswordRequired: value));
               },
             ),
-            if (config.exigirSenha)
+            if (config.isPasswordRequired)
               ListTile(
                 title: const Text('Tempo de bloqueio'),
                 subtitle: Slider(
-                  value: config.tempoBloqueioMinutos.toDouble(),
+                  value: config.lockTimeoutMinutes.toDouble(),
                   min: 1,
                   max: 60,
                   divisions: 59,
-                  label: '${config.tempoBloqueioMinutos} min',
+                  label: '${config.lockTimeoutMinutes} min',
                   onChanged: (value) {
-                    onConfigChanged(
-                      config.copyWith(tempoBloqueioMinutos: value.toInt()),
-                    );
+                    onConfigChanged(config.copyWith(lockTimeoutMinutes: value.toInt()));
                   },
                 ),
-                trailing: Text('${config.tempoBloqueioMinutos} min'),
+                trailing: Text('${config.lockTimeoutMinutes} min'),
               ),
             SwitchListTile(
               title: const Text('Permitir múltiplos usuários'),
               subtitle: const Text('Habilitar gestão de usuários'),
-              value: config.permitirMultiplosUsuarios,
+              value: config.isMultiUserEnabled,
               onChanged: (value) {
-                onConfigChanged(
-                  config.copyWith(permitirMultiplosUsuarios: value),
-                );
+                onConfigChanged(config.copyWith(isMultiUserEnabled: value));
               },
             ),
           ],

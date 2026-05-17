@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:system_loja/core/utils/text_formatters.dart';
-import 'package:system_loja/core/utils/validators.dart';
+import 'package:system_loja/screens/utils/text_formatters.dart';
+import 'package:system_loja/screens/utils/validators.dart';
 import 'package:system_loja/screens/person_registration/models/person_registration_form_data.dart';
 import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
@@ -78,6 +78,14 @@ class PersonRegistrationForm extends StatelessWidget {
           const SizedBox(height: 16),
           TextFormField(
             controller: nameController,
+            keyboardType: TextInputType.name,
+            autofillHints: [
+              switch (selectedPersonType) {
+                PersonType.individual => AutofillHints.name,
+                _ => AutofillHints.organizationName,
+              }
+            ],
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
               labelText: '${selectedPersonType.nameLabel} *',
             ),
@@ -90,13 +98,14 @@ class PersonRegistrationForm extends StatelessWidget {
           TextFormField(
             key: ValueKey<PersonType>(selectedPersonType),
             controller: documentController,
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
               labelText: '$documentLabel *',
               border: const OutlineInputBorder(),
               prefixIcon: const Icon(Icons.badge),
               hintText: isIndividual ? '000.000.000-00' : '00.000.000/0000-00',
             ),
-            keyboardType: TextInputType.number,
             inputFormatters: _documentInputFormatters(selectedPersonType),
             validator: (value) =>
                 selectedPersonType.validateDocument(value: value),

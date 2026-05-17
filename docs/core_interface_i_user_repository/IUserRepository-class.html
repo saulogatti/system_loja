@@ -95,7 +95,7 @@ if (repository.validarEmail('teste@example.com')) {
 
           <dt>Implementers</dt>
           <dd><ul class="comma-separated clazz-relationships">
-              <li><a href="../core_repository_system_user_repository/UserRepository-class.html">UserRepository</a></li>
+              <li><a href="../domain_repository_system_user_repository/UserRepository-class.html">UserRepository</a></li>
           </ul></dd>
 
         
@@ -186,7 +186,7 @@ if (repository.validarEmail('teste@example.com')) {
 
         <dt id="obterTodosUsuarios" class="callable">
   <span class="name"><a href="../core_interface_i_user_repository/IUserRepository/obterTodosUsuarios.html">obterTodosUsuarios</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a></span>&gt;</span></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a></span>&gt;</span></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -199,7 +199,7 @@ if (repository.validarEmail('teste@example.com')) {
 
         <dt id="obterUsuarioPorEmail" class="callable">
   <span class="name"><a href="../core_interface_i_user_repository/IUserRepository/obterUsuarioPorEmail.html">obterUsuarioPorEmail</a></span><span class="signature">(<wbr><span class="parameter" id="obterUsuarioPorEmail-param-email"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">email</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a>?</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a>?</span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -212,7 +212,7 @@ if (repository.validarEmail('teste@example.com')) {
 
         <dt id="obterUsuarioPorId" class="callable">
   <span class="name"><a href="../core_interface_i_user_repository/IUserRepository/obterUsuarioPorId.html">obterUsuarioPorId</a></span><span class="signature">(<wbr><span class="parameter" id="obterUsuarioPorId-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a>?</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_models_user/User-class.html">User</a>?</span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -225,7 +225,7 @@ if (repository.validarEmail('teste@example.com')) {
 
         <dt id="removerUsuario" class="callable">
   <span class="name"><a href="../core_interface_i_user_repository/IUserRepository/removerUsuario.html">removerUsuario</a></span><span class="signature">(<wbr><span class="parameter" id="removerUsuario-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../core_utils_command_result/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
   </span>
   
 
@@ -246,19 +246,6 @@ if (repository.validarEmail('teste@example.com')) {
 <dd class="inherited">
   A string representation of this object.
   <div class="features"><span class="feature">inherited</span></div>
-
-</dd>
-
-        <dt id="validarEmail" class="callable">
-  <span class="name"><a href="../core_interface_i_user_repository/IUserRepository/validarEmail.html">validarEmail</a></span><span class="signature">(<wbr><span class="parameter" id="validarEmail-param-email"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">email</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Valida se um endereço de email está no formato correto.
-  
 
 </dd>
 

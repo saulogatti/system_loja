@@ -16,13 +16,13 @@ import 'package:system_loja/core/utils/command_result.dart';
 /// Exemplo de uso:
 /// ```dart
 /// final repository = appInjection.get<UserRepository>();
-/// 
+///
 /// // Buscar usuário por email
 /// final user = await repository.obterUsuarioPorEmail('admin@system.com');
 /// if (user != null) {
 ///   print('Usuário: ${user.name}');
 /// }
-/// 
+///
 /// // Validar email
 /// if (repository.validarEmail('teste@example.com')) {
 ///   print('Email válido');
@@ -58,8 +58,8 @@ abstract interface class IUserRepository {
   /// Retorna todos os usuários cadastrados no sistema.
   ///
   /// Retorna:
-  /// - Lista de usuários (vazia se não houver usuários)
-  Future<List<User>> obterTodosUsuarios();
+  /// - [ResultStatus] com lista de usuários (vazia se não houver usuários)
+  Future<ResultStatus<List<User>, String>> obterTodosUsuarios();
 
   /// Busca um usuário pelo endereço de email.
   ///
@@ -69,8 +69,8 @@ abstract interface class IUserRepository {
   /// - [email]: Email do usuário a ser buscado
   ///
   /// Retorna:
-  /// - Objeto [User] se encontrado ou null se não existir
-  Future<User?> obterUsuarioPorEmail(String email);
+  /// - [ResultStatus] com [User] encontrado ou null se não existir
+  Future<ResultStatus<User?, String>> obterUsuarioPorEmail(String email);
 
   /// Busca um usuário específico pelo ID.
   ///
@@ -78,8 +78,8 @@ abstract interface class IUserRepository {
   /// - [id]: ID único do usuário
   ///
   /// Retorna:
-  /// - Objeto [User] se encontrado ou null se não existir
-  Future<User?> obterUsuarioPorId(int id);
+  /// - [ResultStatus] com [User] encontrado ou null se não existir
+  Future<ResultStatus<User?, String>> obterUsuarioPorId(int id);
 
   /// Remove um usuário do sistema pelo ID.
   ///
@@ -89,17 +89,6 @@ abstract interface class IUserRepository {
   /// - [id]: ID único do usuário a ser removido
   ///
   /// Retorna:
-  /// - true se removido com sucesso, false em caso de erro
-  Future<bool> removerUsuario(int id);
-
-  /// Valida se um endereço de email está no formato correto.
-  ///
-  /// Verifica formato básico e regras como ausência de acentos.
-  ///
-  /// Parâmetros:
-  /// - [email]: Email a ser validado
-  ///
-  /// Retorna:
-  /// - true se o email é válido, false caso contrário
-  bool validarEmail(String email);
+  /// - [ResultStatus] com true se removido com sucesso
+  Future<ResultStatus<bool, String>> removerUsuario(int id);
 }

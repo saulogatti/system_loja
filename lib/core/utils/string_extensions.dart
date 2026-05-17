@@ -1,8 +1,6 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
+import 'package:bcrypt/bcrypt.dart';
 import 'package:path/path.dart' as p;
-import 'package:system_loja/screens/utils/constants.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
 
 /// Extensões para manipulação segura de strings em nomes de arquivos.
 ///
@@ -123,7 +121,8 @@ extension FileNameStringExtensions on String {
   /// 'Nome  com   espaços'.sanitizeFileName(); // 'Nome_com_espaços'
   /// ```
   String sanitizeFileName() {
-    return replaceAll(Constants.invalidFileNameCharsRegExp, '_')
+    return toLowerCase()
+        .replaceAll(Constants.invalidFileNameCharsRegExp, '_')
         .replaceAll(Constants.oneOrMoreWhitespaceRegExp, '_')
         .replaceAll(Constants.oneOrMoreUnderscoreRegExp, '_')
         .trim();
@@ -169,10 +168,9 @@ extension FileNameStringExtensions on String {
   /// 'CON.txt'.toSafeFileName(addTimestamp: true); // 'con_1701979200000.txt'
   /// ```
   String toSafeFileName({int maxLength = 200, bool addTimestamp = false}) {
-    String safeName = sanitizeFileName()
-        .toAsciiFileName()
-        .normalizeFileName()
-        .truncateFileName(maxLength: maxLength);
+    String safeName = sanitizeFileName().toAsciiFileName().normalizeFileName().truncateFileName(
+      maxLength: maxLength,
+    );
 
     // Se for nome reservado, adiciona sufixo
     if (safeName.isReservedFileName()) {
@@ -221,14 +219,11 @@ extension FileNameStringExtensions on String {
 extension ValidateDataCustomer on String {
   static const int senhaMinLength = 8;
 
-  /// Gera hash SHA-256 da senha
-  String hashSenha() {
-    // TODO(security): Vulnerabilidade de hash fraco (SHA-256 sem salt).
-    // Usar um algoritmo moderno como Argon2 ou bcrypt com salt único
-    // durante a próxima migração do banco de dados.
-    final bytes = utf8.encode(this);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
+  /// Gera um hash seguro usando PBKDF2 com HMAC-SHA256.
+  ///
+  /// Retorna uma string no formato: `iterations$salt$hash` (todos em hexadecimal).
+  String hashPassword() {
+    return BCrypt.hashpw(this, BCrypt.gensalt());
   }
 
   /// Valida se a string é um CPF válido.
@@ -241,7 +236,7 @@ extension ValidateDataCustomer on String {
   /// ```dart
   /// '123.456.789-09'.isValidCPF(); // true ou false
   /// ```
-  bool isValidCPF() {
+  bool isValidCpf() {
     final String cpf = replaceAll(Constants.nonNumericRegExp, '');
 
     if (cpf.length != 11 || Constants.cpfSameDigitRegExp.hasMatch(cpf)) {
@@ -291,7 +286,7 @@ extension ValidateDataCustomer on String {
   /// Retorna uma mensagem de erro se a senha for inválida, ou null se for válida.
   /// Regras: mínimo [senhaMinLength] caracteres, pelo menos uma letra maiúscula,
   /// uma letra minúscula e um número.
-  String? validarSenha() {
+  String? validatePassword() {
     final String senha = this;
     if (senha.isEmpty) {
       return 'Senha é obrigatória';

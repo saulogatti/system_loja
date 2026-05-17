@@ -73,9 +73,9 @@ Retorna o número de linhas removidas.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; deleteByInvoiceId(int invoiceId) {
-  return (delete(invoiceItemsRecords)
-        ..where((t) =&gt; t.invoiceId.equals(invoiceId)))
-      .go();
+  return (delete(
+    invoiceItemsRecords,
+  )..where((t) =&gt; t.invoiceId.equals(invoiceId))).go();
 }</code></pre>
 </section>
 

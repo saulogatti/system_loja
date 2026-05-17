@@ -1,10 +1,9 @@
 import 'package:drift/drift.dart';
-import 'package:system_loja/core/models/address.dart';
-import 'package:system_loja/core/models/customer.dart';
+import 'package:system_loja/data/converter/address_codec.dart';
 
-@UseRowClass(Customer)
 class CustomerRecords extends Table {
-  TextColumn get address => text().map(Address.converter).nullable()();
+  TextColumn get address =>
+      text().map(AddressCodec.driftConverter).nullable()();
   TextColumn get cpf => text().unique()();
   TextColumn get email => text().nullable()();
   IntColumn get id => integer().autoIncrement()();

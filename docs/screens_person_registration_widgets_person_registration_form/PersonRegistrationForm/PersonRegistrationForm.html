@@ -54,8 +54,7 @@
 
     <section class="multi-line-signature">
       const
-      <span class="name ">PersonRegistrationForm</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
-<li><span class="parameter" id="-param-formKey"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/GlobalKey-class.html">GlobalKey</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/widgets/FormState-class.html">FormState</a></span>&gt;</span></span> <span class="parameter-name">formKey</span>, </span></li>
+      <span class="name ">PersonRegistrationForm</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-formKey"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/GlobalKey-class.html">GlobalKey</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/widgets/FormState-class.html">FormState</a></span>&gt;</span></span> <span class="parameter-name">formKey</span>, </span></li>
 <li><span class="parameter" id="-param-selectedPersonType"><span>required</span> <span class="type-annotation"><a href="../../screens_person_registration_models_person_registration_form_data/PersonType.html">PersonType</a></span> <span class="parameter-name">selectedPersonType</span>, </span></li>
 <li><span class="parameter" id="-param-onPersonTypeChanged"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/ValueChanged.html">ValueChanged</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../screens_person_registration_models_person_registration_form_data/PersonType.html">PersonType</a>?</span>&gt;</span></span> <span class="parameter-name">onPersonTypeChanged</span>, </span></li>
 <li><span class="parameter" id="-param-nameController"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/TextEditingController-class.html">TextEditingController</a></span> <span class="parameter-name">nameController</span>, </span></li>
@@ -68,6 +67,7 @@
 <li><span class="parameter" id="-param-cityController"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/TextEditingController-class.html">TextEditingController</a></span> <span class="parameter-name">cityController</span>, </span></li>
 <li><span class="parameter" id="-param-stateController"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/TextEditingController-class.html">TextEditingController</a></span> <span class="parameter-name">stateController</span>, </span></li>
 <li><span class="parameter" id="-param-onSubmit"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/VoidCallback.html">VoidCallback</a></span> <span class="parameter-name">onSubmit</span>, </span></li>
+<li><span class="parameter" id="-param-key"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
 </ol>})
     </section>
     
@@ -77,7 +77,6 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">const PersonRegistrationForm({
-  super.key,
   required this.formKey,
   required this.selectedPersonType,
   required this.onPersonTypeChanged,
@@ -91,6 +90,7 @@
   required this.cityController,
   required this.stateController,
   required this.onSubmit,
+  super.key,
 });</code></pre>
 </section>
 

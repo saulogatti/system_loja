@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/utils_extensions.dart';
 import 'package:system_loja/screens/widgets/card_list_item.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Widget da lista de produtos cadastrados
 ///
@@ -9,12 +10,21 @@ import 'package:system_loja/screens/widgets/card_list_item.dart';
 class ProductList extends StatelessWidget {
   /// Espaçamento padrão entre título e lista
   static const double _defaultSpacing = 16.0;
+  static const SliverGridDelegateWithMaxCrossAxisExtent _gridDelegate =
+      SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 350,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        mainAxisExtent: 132,
+      );
 
   final List<Product> products;
   final Function(Product) onProductTap;
 
   const ProductList({
-    required this.products, required this.onProductTap, super.key,
+    required this.products,
+    required this.onProductTap,
+    super.key,
   });
 
   @override
@@ -28,30 +38,31 @@ class ProductList extends StatelessWidget {
         ),
         const SizedBox(height: _defaultSpacing),
         if (products.isEmpty)
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Text(
-                'Nenhum produto cadastrado',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-            ),
+          const EmptyWidget(
+            message: 'Nenhum produto cadastrado',
+            subMessage: 'Lista de produtos vazia.',
+            icon: Icons.inventory_2_outlined,
+            semanticLabel:
+                'Lista de produtos vazia. Nenhum produto cadastrado.',
           )
         else
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return CardListItem(
-                colorAvatar: Colors.green,
-                title: product.name,
-                subTitle:
-                    'Código: ${product.code}\n${product.price.toFormattedPrice()} - Estoque: ${product.stockQuantity}',
-                onTap: () => onProductTap(product),
-              );
-            },
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.only(bottom: 16),
+              gridDelegate: _gridDelegate,
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return CardListItem(
+                  colorAvatar: Colors.green,
+                  title: product.name,
+                  subTitle:
+                      'Código: ${product.code}\n${product.price.toFormattedPrice()} - Estoque: ${product.stockQuantity}',
+                  margin: EdgeInsets.zero,
+                  onTap: () => onProductTap(product),
+                );
+              },
+            ),
           ),
       ],
     );

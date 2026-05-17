@@ -75,7 +75,7 @@
   final record = await (select(
     customerRecords,
   )..where((t) =&gt; t.id.equals(id))).getSingleOrNull();
-  return record;
+  return record?.toDomain();
 }</code></pre>
 </section>
 

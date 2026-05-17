@@ -81,6 +81,12 @@
     companyId: companyId == null &amp;&amp; nullToAbsent
         ? const Value.absent()
         : Value(companyId),
+    companyName: companyName == null &amp;&amp; nullToAbsent
+        ? const Value.absent()
+        : Value(companyName),
+    companyCnpj: companyCnpj == null &amp;&amp; nullToAbsent
+        ? const Value.absent()
+        : Value(companyCnpj),
     id: Value(id),
     invoiceNumber: Value(invoiceNumber),
     issueDate: Value(issueDate),

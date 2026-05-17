@@ -13,7 +13,7 @@ Desenvolvedor especializado em Flutter/Dart focado na implementação de feature
 - Refatorar código existente
 - Migrar código JSON legacy para Drift ORM
 
-**Ferramentas:** read, edit, create, bash, grep, glob
+**Ferramentas:** execute, read, edit, search, web, agent, dart-sdk-mcp-server/*, dart-code.dart-code/get_dtd_uri, dart-code.dart-code/dart_format, dart-code.dart-code/dart_fix, memory, todo
 
 ---
 
@@ -26,7 +26,7 @@ Especialista em testes para Flutter/Dart, focado em garantir qualidade do códig
 - Revisar cobertura de testes
 - Corrigir testes quebrados
 
-**Ferramentas:** read, edit, create, bash, grep, glob
+**Ferramentas:** read, edit, execute, search
 
 ---
 
@@ -39,7 +39,7 @@ Especialista em documentação técnica para manter docs/, README e doc comments
 - Atualizar README.md
 - Criar guias para contribuidores
 
-**Ferramentas:** read, edit, create, grep, glob
+**Ferramentas:** read, edit, search
 
 ---
 
@@ -56,27 +56,24 @@ Especialista em documentação técnica para manter docs/, README e doc comments
    ```
    Implement customer registration form with validation
    ```
-   (Copilot escolherá o agente apropriado se `infer: false`)
+  (Copilot pode delegar para o agente com base na descrição e no contexto)
 
 ### Especificidade dos Agentes
 
-Cada agente tem `infer: false`, o que significa que você deve invocá-los explicitamente quando quiser usá-los, ou o Copilot usará as instruções gerais.
+As descrições dos agentes funcionam como superfície de descoberta para delegação automática. Para casos críticos, prefira invocação explícita.
 
 ## Estrutura de um Agent File
 
 ```yaml
 ---
 name: Agent Name
-description: Short description of the agent's expertise
-target: github-copilot
+description: "Use when... trigger phrases for discovery"
 tools:
+  - execute
   - read
   - edit
-  - create
-  - bash
-infer: false
-metadata:
-  domain: development|testing|documentation
+  - search
+user-invocable: true
 ---
 
 # Agent Instructions
@@ -90,7 +87,7 @@ Detailed instructions for the agent...
 
 1. Crie arquivo `.agent.md` neste diretório
 2. Siga a estrutura YAML + Markdown
-3. Defina `infer: false` para controle manual
+3. Escreva uma `description` específica, com palavras-chave de descoberta
 4. Liste ferramentas necessárias em `tools:`
 5. Atualize este README
 

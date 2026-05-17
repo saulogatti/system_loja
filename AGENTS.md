@@ -1,35 +1,29 @@
 # AGENTS.md
 
-## Cursor Cloud specific instructions
+## Instrucoes do ambiente (Cursor Cloud)
 
-### Canonical workspace instructions
+As instrucoes canônicas do workspace ficam em `.github/copilot-instructions.md`.
+Este arquivo permanece apenas como complemento de ambiente para execução em Linux no Cursor Cloud.
 
-As instrucoes gerais do projeto ficam em `.github/copilot-instructions.md`.
-Este arquivo existe apenas para complementar o ambiente Cursor Cloud.
+## Pre-requisitos do snapshot
 
-### Prerequisites (already installed in snapshot)
+- Flutter 3.41.2 (Dart 3.11.0) em `/opt/flutter/bin` (no `PATH` via `~/.bashrc`).
+- Dependencias Linux desktop: `libgtk-3-dev`, `ninja-build`, `libsqlite3-dev`, `clang`, `cmake`, `pkg-config`.
 
-- **Flutter 3.41.2** (Dart 3.11.0) at `/opt/flutter/bin` (added to `PATH` via `~/.bashrc`)
-- **Linux desktop deps**: `libgtk-3-dev`, `ninja-build`, `libsqlite3-dev`, `clang`, `cmake`, `pkg-config`
+## Comandos rapidos
 
-### Key commands
+- Instalar dependencias: `flutter pub get`
+- Codegen: `dart run build_runner build --delete-conflicting-outputs`
+- Lint: `dart analyze`
+- Verificar formatacao: `dart format --set-exit-if-changed .`
+- Testes: `flutter test`
+- Run web server: `flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0`
+- Run linux: `flutter run -d linux`
+- Listar devices: `flutter devices`
 
-| Action | Command |
-|---|---|
-| Install deps | `flutter pub get` |
-| Code generation | `dart run build_runner build --delete-conflicting-outputs` |
-| Lint | `dart analyze` |
-| Format check | `dart format --set-exit-if-changed .` |
-| Tests | `flutter test` |
-| Run (web) | `flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0` |
-| Run (linux desktop) | `flutter run -d linux` |
-| List devices | `flutter devices` |
+## Referencias
 
-### Non-obvious caveats
-
-- **Code generation is mandatory** after modifying models, BLoC events/states, Drift tables, or AutoRoute definitions.
-- **Some tests have pre-existing failures** (missing `main` methods, uninitialized `WidgetsFlutterBinding`, unregistered `LogPrinterService`). The `validators_test.dart` suite (35 tests) passes cleanly.
-- **Web platform** requires `web/sqlite3.wasm` and `web/drift_worker.js` for Drift ORM to work.
-- The `pubspec.yaml` has `sdk: ">=3.11.0"` — Flutter 3.41+ is required.
-- **No external services** (no Docker, no backend API, no external database). SQLite is embedded via Drift.
-- **Documentation and comments must be in Portuguese** per project convention.
+- Regras gerais de arquitetura e convencoes: `.github/copilot-instructions.md`
+- Guia de contribuicao: `CONTRIBUTING.md`
+- Visao geral e comandos: `README.md`
+- Padrões Dart por arquivo: `.github/instructions/dartcode.instructions.md`

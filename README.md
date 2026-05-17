@@ -1,21 +1,24 @@
 # System Loja
 
-Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, vendas/notas, empresa, categorias e configuracoes), com persistencia principal em SQLite via Drift.
+Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, categorias, empresa e notas/vendas), com persistencia local em SQLite via Drift e fluxo legado em JSON ainda ativo em partes especificas.
 
-## Visao Geral
+## Visao geral
 
-- UI em `lib/screens/` com `flutter_bloc` (BLoC/Cubit)
-- Fluxo principal: Screen -> Interface -> Repository -> DAO Drift -> SQLite
-- Navegacao com `auto_route`
-- Injecao de dependencia com `GetIt` em `setupAppInjection()`
-- Resultado de operacoes com `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`)
+- UI em `lib/screens/`, com BLoC/Cubit (`flutter_bloc`).
+- Fluxo principal: **Screen** → **Interface** (`lib/core/interface/`) → **Repository** (`lib/domain/repository/`) → **DAO Drift** (`lib/data/database/dao/`) → SQLite.
+- DI com `GetIt` via `setupAppInjection()` em `lib/aplication/app_injection.dart`.
+- Navegacao com `auto_route` em `lib/screens/route/route_app.dart`.
+- Padrao de retorno entre camadas: `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`, usa `package:meta`).
+- Repositorios usam `try/catch` internamente e retornam `ResultStatus.error(...)` com mensagens amigaveis via `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`). A camada de apresentacao **nao** envolve chamadas ao repositorio em `try/catch`; usa `when` ou `switch` em `ResultStatus`.
+- Camada **data** (`lib/data/`): Drift, DTOs/entries JSON, conversores, cache e mapeamento para modelos de `lib/core/models/` — **sem** depender de `lib/domain/` ou `lib/aplication/` (constantes compartilhadas ficam em `lib/core/` quando necessario).
+- `CacheManager` registrado via `GetIt` (injecao de dependencia) — **nao** usar `CacheManager.instance`.
 
 ## Requisitos
 
-- Flutter 3.41.2 ou superior
-- Dart >= 3.11.0 (`pubspec.yaml`)
+- Flutter 3.41.2 ou superior.
+- Dart SDK `>=3.11.0`.
 
-## Setup Rapido
+## Setup rapido
 
 ```bash
 git clone https://github.com/saulogatti/system_loja.git
@@ -24,7 +27,7 @@ flutter pub get
 dart run build_runner build --delete-conflicting-outputs
 ```
 
-## Executar
+## Executar o app
 
 ```bash
 # Windows
@@ -33,17 +36,17 @@ flutter run -d windows
 # Linux
 flutter run -d linux
 
-# Web (chrome)
+# Web (Chrome)
 flutter run -d chrome
 
 # Web (servidor local)
 flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0
 ```
 
-## Comandos Uteis
+## Comandos de qualidade
 
 ```bash
-# Gerar codigo (obrigatorio quando alterar Freezed/JsonSerializable/Drift/AutoRoute)
+# Codegen (obrigatorio apos alterar Freezed/JsonSerializable/Drift/AutoRoute)
 dart run build_runner build --delete-conflicting-outputs
 
 # Analise estatica
@@ -61,58 +64,68 @@ flutter test test/<arquivo>_test.dart
 
 ### Bancos Drift
 
-- `AppDatabase` em `lib/data/database/app_database.dart` (schemaVersion `11`)
-- `SystemDatabase` em `lib/data/database/system_database.dart` (schemaVersion `2`)
+- `AppDatabase` (`lib/data/database/app_database.dart`) com `schemaVersion => 12`.
+- `SystemDatabase` (`lib/data/database/system_database.dart`) com `schemaVersion => 1`.
 
-### Persistencia Legacy
+### Legado JSON
 
-Parte do projeto ainda utiliza JSON e codigo legado em `lib/core/managers/` e `data/`. Nao remover esse fluxo sem validar impacto.
+Ha codigo legado em `lib/core/managers/` e fluxos em JSON ainda usados em cenarios pontuais. Nao remover sem validar impacto; o fluxo principal da loja e **SQLite via Drift**. Os arquivos de dados estaticos anteriores (`data/*.json`) foram removidos.
 
-### Convencoes Importantes
+### Convencoes importantes
 
-- Usar `ResultStatus<R, E>` para retorno de operacoes, sem propagar excecoes entre camadas.
-- Em Drift, seguir convencao: tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`.
+- Nao propagar excecoes entre Interface/Repository; retornar `ResultStatus`. Repositorios capturam excecoes internamente (`try/catch`) e devolvem `ResultStatus.error(mensagemErroRepositorio(...))`. A camada de apresentacao nao usa `try/catch` para chamadas ao repositorio.
+- Drift: tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`. Linhas Drift **nao** usam `@UseRowClass` com entidades de `lib/core/`; o mapeamento para dominio fica em extensoes/helpers (ex.: `lib/data/database/mapper/`) ou nos DAOs/repositorios, conforme o padrao do projeto.
+- DTOs serializaveis (JSON) em `lib/data/entry/` e afins; modelos de negocio em `lib/core/models/`.
 - Codigo em ingles; documentacao e comentarios (`///`) em portugues.
+- `SystemDatabase` aceita `QueryExecutor` opcional no construtor para facilitar testes com banco em memoria.
 
-## Estrutura (Resumo)
+## Estrutura resumida
 
 ```text
 lib/
-  app_injection.dart
+  main.dart
+  aplication/
+    app_injection.dart   # GetIt / setupAppInjection()
   core/
-    interface/
-    repository/
-    managers/           # legado ainda em uso pontual
-    models/
-    utils/
+    interface/           # contratos (ex.: I*Repository)
+    constants/
+    managers/            # legado em uso pontual
+    models/              # entidades de dominio
+    utils/               # ResultStatus, repository_error_mapper, extensoes
+  domain/
+    repository/          # implementacoes dos repositorios
+    *.dart               # servicos de dominio (ex.: geracao de codigo)
   data/
     database/
       dao/
       table/
       extension/
+      mapper/            # XxxRecord -> modelo de dominio
+    entry/               # DTOs JSON (json_serializable)
+    cache/
+    converter/
+    models/              # modelos de persistencia auxiliares
   screens/
     route/
-    widgets/
 test/
+  support/               # helpers (ex.: AppDatabase em teste sem path_provider)
 docs/
 ```
 
-## Observacoes Web
+## Observacoes importantes
 
-Para Drift no Web funcionar, os arquivos `web/sqlite3.wasm` e `web/drift_worker.js` devem estar presentes.
+- No Web, Drift depende de `web/sqlite3.wasm` e `web/drift_worker.js`.
+- Existem testes com falhas pre-existentes no repositorio; valide primeiro o escopo alterado antes de tratar falhas fora da tarefa.
+- Testes que instanciam `AppDatabase` na VM podem usar `applicationSupportDirectory` e `tempDirectoryPath` (ver `test/support/test_app_database.dart`) para evitar `path_provider` / `MissingPluginException`.
 
-## Contribuicao
-
-- Leia `CONTRIBUTING.md`
-- Para agentes/copilot, consulte `.github/copilot-instructions.md` e `AGENTS.md`
-- Sempre rode build_runner quando alterar anotacoes de geracao
-
-## Documentacao
+## Documentacao principal
 
 - `CONTRIBUTING.md`
 - `.github/copilot-instructions.md`
 - `.github/instructions/dartcode.instructions.md`
+- `AGENTS.md`
+- `docs/BUILD_INSTRUCTIONS.md`
 - `docs/DRIFT_ARCHITECTURE.md`
 - `docs/DRIFT_MIGRATION.md`
+- `docs/INTERFACES_ARCHITECTURE.md`
 - `docs/VALIDATION_SYSTEM.md`
-- `docs/`
