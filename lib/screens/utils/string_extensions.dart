@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:bcrypt/bcrypt.dart';
-import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_loja/core/constants/app_constants.dart';
 
@@ -230,7 +227,7 @@ extension ValidateDataCustomer on String {
 
   /// Verifica se a senha corresponde ao hash fornecido.
   ///
-  /// Suporta tanto o novo formato BCrypt quanto o antigo SHA-256 para migração.
+  /// Suporta o formato BCrypt.
   bool verifyPassword(String hashedPassword) {
     try {
       if (hashedPassword.startsWith(r'$2b$') ||
@@ -243,10 +240,7 @@ extension ValidateDataCustomer on String {
       return false;
     }
 
-    // Fallback para SHA-256 (legado)
-    final bytes = utf8.encode(this);
-    final digest = sha256.convert(bytes);
-    return digest.toString() == hashedPassword;
+    return false;
   }
 
   /// Valida se a string é um CPF válido.
