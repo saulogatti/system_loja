@@ -77,8 +77,8 @@ Retorna o ID da categoria criada.</p>
   <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; insertCategory({
   required String name,
   String? description,
-}) async {
-  return await into(categoriesRecords).insert(
+}) {
+  return into(categoriesRecords).insert(
     CategoriesRecordsCompanion.insert(
       name: name,
       description: Value(description),

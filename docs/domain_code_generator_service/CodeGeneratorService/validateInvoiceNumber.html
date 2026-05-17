@@ -78,15 +78,10 @@ Retorna um <a href="../../domain_code_generator_service/CodeValidationResult-cla
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;CodeValidationResult&gt; validateInvoiceNumber(
-  String invoiceNumber,
-) async {
+  <pre class="language-dart"><code class="language-dart">Future&lt;CodeValidationResult&gt; validateInvoiceNumber(String invoiceNumber) async {
   &#47;&#47; Verifica se está vazio
   if (invoiceNumber.trim().isEmpty) {
-    return CodeValidationResult(
-      isValid: false,
-      message: &#39;Número da nota não pode ser vazio&#39;,
-    );
+    return CodeValidationResult(isValid: false, message: &#39;Número da nota não pode ser vazio&#39;);
   }
 
   &#47;&#47; Verifica tamanho
@@ -113,10 +108,7 @@ Retorna um <a href="../../domain_code_generator_service/CodeValidationResult-cla
     );
   }
 
-  return CodeValidationResult(
-    isValid: true,
-    message: &#39;Número da nota válido&#39;,
-  );
+  return CodeValidationResult(isValid: true, message: &#39;Número da nota válido&#39;);
 }</code></pre>
 </section>
 

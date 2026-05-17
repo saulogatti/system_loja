@@ -87,7 +87,7 @@ Importação/exportação JSON: <code>SystemConfigurationCodec</code> em <code>l
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="SystemConfiguration.new" class="callable">
-          <span class="name"><a href="../core_models_system_config_system_configuration/SystemConfiguration/SystemConfiguration.html">SystemConfiguration</a></span><span class="signature">({<span class="parameter" id="-param-priceConfiguration"><span class="type-annotation"><a href="../core_models_system_config_price_configuration/PriceConfiguration-class.html">PriceConfiguration</a>?</span> <span class="parameter-name">priceConfiguration</span>, </span><span class="parameter" id="-param-productCategories"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">productCategories</span>, </span><span class="parameter" id="-param-lastUpdatedDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">lastUpdatedDate</span>, </span><span class="parameter" id="-param-registrationDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">registrationDate</span>, </span><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span><span class="parameter" id="-param-systemUserData"><span class="type-annotation"><a href="../core_models_system_config_system_user_data/SystemUserData-class.html">SystemUserData</a>?</span> <span class="parameter-name">systemUserData</span></span>})</span>
+          <span class="name"><a href="../core_models_system_config_system_configuration/SystemConfiguration/SystemConfiguration.html">SystemConfiguration</a></span><span class="signature">({<span class="parameter" id="-param-priceConfiguration"><span class="type-annotation"><a href="../core_models_system_config_price_configuration/PriceConfiguration-class.html">PriceConfiguration</a>?</span> <span class="parameter-name">priceConfiguration</span>, </span><span class="parameter" id="-param-productCategories"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">productCategories</span>, </span><span class="parameter" id="-param-lastUpdatedDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">lastUpdatedDate</span>, </span><span class="parameter" id="-param-registrationDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">registrationDate</span>, </span><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span><span class="parameter" id="-param-systemUserData"><span class="type-annotation"><a href="../core_models_system_config_system_user_data/SystemUserData-class.html">SystemUserData</a>?</span> <span class="parameter-name">systemUserData</span>, </span><span class="parameter" id="-param-isAutoCleanEnabled"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isAutoCleanEnabled</span> = <span class="default-value">false</span>, </span><span class="parameter" id="-param-logRetentionDays"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">logRetentionDays</span> = <span class="default-value">90</span>, </span><span class="parameter" id="-param-isPasswordRequired"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isPasswordRequired</span> = <span class="default-value">false</span>, </span><span class="parameter" id="-param-lockTimeoutMinutes"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">lockTimeoutMinutes</span> = <span class="default-value">15</span>, </span><span class="parameter" id="-param-isMultiUserEnabled"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isMultiUserEnabled</span> = <span class="default-value">false</span></span>})</span>
         </dt>
         <dd>
           
@@ -124,6 +124,42 @@ Importação/exportação JSON: <code>SystemConfigurationCodec</code> em <code>l
 
 </dd>
 
+        <dt id="isAutoCleanEnabled" class="property">
+  <span class="name"><a href="../core_models_system_config_system_configuration/SystemConfiguration/isAutoCleanEnabled.html">isAutoCleanEnabled</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Define se a limpeza automática de logs antigos está habilitada
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="isMultiUserEnabled" class="property">
+  <span class="name"><a href="../core_models_system_config_system_configuration/SystemConfiguration/isMultiUserEnabled.html">isMultiUserEnabled</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Define se o sistema permite gestão de múltiplos usuários
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="isPasswordRequired" class="property">
+  <span class="name"><a href="../core_models_system_config_system_configuration/SystemConfiguration/isPasswordRequired.html">isPasswordRequired</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Define se o sistema deve exigir senha ao ser aberto
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
         <dt id="lastUpdatedDate" class="property inherited">
   <span class="name"><a href="../core_models_default_default_object/DefaultObject/lastUpdatedDate.html">lastUpdatedDate</a></span>
   <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>
@@ -133,6 +169,30 @@ Importação/exportação JSON: <code>SystemConfigurationCodec</code> em <code>l
 <dd class="inherited">
   Data e hora da última atualização do registro.
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="lockTimeoutMinutes" class="property">
+  <span class="name"><a href="../core_models_system_config_system_configuration/SystemConfiguration/lockTimeoutMinutes.html">lockTimeoutMinutes</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  Tempo em minutos de inatividade antes de solicitar senha novamente (1-60)
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="logRetentionDays" class="property">
+  <span class="name"><a href="../core_models_system_config_system_configuration/SystemConfiguration/logRetentionDays.html">logRetentionDays</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  Número de dias para manter logs no sistema antes da limpeza (7-365)
+  <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
@@ -201,10 +261,23 @@ Importação/exportação JSON: <code>SystemConfigurationCodec</code> em <code>l
 
     
   <section
-      class="summary offset-anchor inherited"
+      class="summary offset-anchor"
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
+        <dt id="copyWith" class="callable">
+  <span class="name"><a href="../core_models_system_config_system_configuration/SystemConfiguration/copyWith.html">copyWith</a></span><span class="signature">(<wbr>{<span class="parameter" id="copyWith-param-isAutoCleanEnabled"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">isAutoCleanEnabled</span>, </span><span class="parameter" id="copyWith-param-priceConfiguration"><span class="type-annotation"><a href="../core_models_system_config_price_configuration/PriceConfiguration-class.html">PriceConfiguration</a>?</span> <span class="parameter-name">priceConfiguration</span>, </span><span class="parameter" id="copyWith-param-logRetentionDays"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">logRetentionDays</span>, </span><span class="parameter" id="copyWith-param-isPasswordRequired"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">isPasswordRequired</span>, </span><span class="parameter" id="copyWith-param-lockTimeoutMinutes"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">lockTimeoutMinutes</span>, </span><span class="parameter" id="copyWith-param-isMultiUserEnabled"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">isMultiUserEnabled</span>, </span><span class="parameter" id="copyWith-param-productCategories"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">productCategories</span>, </span><span class="parameter" id="copyWith-param-systemUserData"><span class="type-annotation"><a href="../core_models_system_config_system_user_data/SystemUserData-class.html">SystemUserData</a>?</span> <span class="parameter-name">systemUserData</span></span>})
+    <span class="returntype parameter">&#8594; <a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
         <dt id="noSuchMethod" class="callable inherited">
   <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
     <span class="returntype parameter">&#8594; dynamic</span>

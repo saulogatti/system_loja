@@ -97,10 +97,7 @@ do mesmo tipo (determinado pelo primeiro item da lista).</p>
     await _saveTypeCache(type);
   } catch (e) {
     if (e is CacheException) rethrow;
-    throw CacheWriteException(
-      &#39;Falha ao armazenar múltiplos itens no cache&#39;,
-      e,
-    );
+    throw CacheWriteException(&#39;Falha ao armazenar múltiplos itens no cache&#39;, e);
   }
 }</code></pre>
 </section>

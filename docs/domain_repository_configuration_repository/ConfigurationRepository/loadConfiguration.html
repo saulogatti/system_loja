@@ -80,7 +80,7 @@ Também aplica tema (cor e modo escuro) via <a href="../../core_interface_i_sett
 Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; loadConfiguration() async {
   try {
     await _carregarDados();
-    return ResultStatus.success(_configuracao);
+    return ResultStatus.success(_configuration);
   } catch (e, stackTrace) {
     logError(&#39;Erro ao carregar configurações: $e&#39;, stackTrace);
     return ResultStatus.error(&#39;Erro ao carregar configurações do sistema.&#39;);

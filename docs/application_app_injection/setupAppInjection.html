@@ -74,18 +74,14 @@ Para acessar as dependências, use o <code>appInjection.get&lt;T&gt;()</code> on
   <pre class="language-dart"><code class="language-dart">void setupAppInjection() {
   printerLog = registerLogPrinterColor(
     config: ConfigLog(enableLog: kDebugMode),
-    cacheFilePath: p.join(Directory.current.path, &#39;system_loja_cache&#39;),
+    &#47;&#47; cacheFilePath: p.join(Directory.current.path, &#39;system_loja_cache&#39;),
   );
   appInjection.registerSingleton&lt;RouteApp&gt;(RouteApp());
-  appInjection.registerSingleton&lt;ProductMovementReportService&gt;(
-    ProductMovementReportService(),
-  );
-  appInjection.registerSingleton&lt;RelatorioOverviewService&gt;(
-    RelatorioOverviewService(),
-  );
+  appInjection.registerSingleton&lt;ProductMovementReportService&gt;(ProductMovementReportService());
+  appInjection.registerSingleton&lt;RelatorioOverviewService&gt;(RelatorioOverviewService());
   appInjection.registerSingleton&lt;AppDatabase&gt;(AppDatabase());
   appInjection.registerSingleton&lt;SystemDatabase&gt;(SystemDatabase());
-  appInjection.registerSingleton&lt;ISystemErrorManager&gt;(SystemErrorManager());
+  appInjection.registerLazySingleton&lt;ISystemErrorManager&gt;(SystemErrorManager.new);
   appInjection.registerSingleton&lt;CacheManager&gt;(CacheManager());
   appInjection.registerSingleton&lt;CodeGeneratorService&gt;(
     CodeGeneratorService(
@@ -112,7 +108,6 @@ Para acessar as dependências, use o <code>appInjection.get&lt;T&gt;()</code> on
   appInjection.registerSingleton&lt;SettingsService&gt;(SettingsService.injection());
   appInjection.registerSingleton&lt;IConfigurationRepository&gt;(
     ConfigurationRepository(
-      logRepository: appInjection.get&lt;ILogRepository&gt;(),
       settingsService: appInjection.get&lt;SettingsService&gt;(),
       cache: appInjection.get&lt;CacheManager&gt;(),
     ),
@@ -138,13 +133,14 @@ Para acessar as dependências, use o <code>appInjection.get&lt;T&gt;()</code> on
     ),
   );
   appInjection.registerSingleton&lt;ISystemRepository&gt;(
-    SystemRepository(systemDao: appInjection.get&lt;SystemDatabase&gt;().systemDao),
+    SystemRepository(
+      systemDao: appInjection.get&lt;SystemDatabase&gt;().systemDao,
+      logRepository: appInjection.get&lt;ILogRepository&gt;(),
+    ),
   );
 
   appInjection.registerSingleton&lt;ICategoryRepository&gt;(
-    CategoryRepository(
-      categoryDao: appInjection.get&lt;AppDatabase&gt;().categoryDao,
-    ),
+    CategoryRepository(categoryDao: appInjection.get&lt;AppDatabase&gt;().categoryDao),
   );
   appInjection.registerSingleton&lt;IAnalyticsRepository&gt;(
     AnalyticsRepository(invoiceDao: appInjection.get&lt;AppDatabase&gt;().invoiceDao),

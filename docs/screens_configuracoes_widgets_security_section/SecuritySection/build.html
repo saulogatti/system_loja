@@ -117,10 +117,7 @@ Widget build(BuildContext context) {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.security,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              Icon(Icons.security, color: Theme.of(context).colorScheme.primary),
               const SizedBox(width: 8),
               const Text(
                 &#39;Segurança&#39;,
@@ -132,36 +129,32 @@ Widget build(BuildContext context) {
           SwitchListTile(
             title: const Text(&#39;Exigir senha&#39;),
             subtitle: const Text(&#39;Solicitar senha ao abrir o aplicativo&#39;),
-            value: config.exigirSenha,
+            value: config.isPasswordRequired,
             onChanged: (value) {
-              onConfigChanged(config.copyWith(exigirSenha: value));
+              onConfigChanged(config.copyWith(isPasswordRequired: value));
             },
           ),
-          if (config.exigirSenha)
+          if (config.isPasswordRequired)
             ListTile(
               title: const Text(&#39;Tempo de bloqueio&#39;),
               subtitle: Slider(
-                value: config.tempoBloqueioMinutos.toDouble(),
+                value: config.lockTimeoutMinutes.toDouble(),
                 min: 1,
                 max: 60,
                 divisions: 59,
-                label: &#39;${config.tempoBloqueioMinutos} min&#39;,
+                label: &#39;${config.lockTimeoutMinutes} min&#39;,
                 onChanged: (value) {
-                  onConfigChanged(
-                    config.copyWith(tempoBloqueioMinutos: value.toInt()),
-                  );
+                  onConfigChanged(config.copyWith(lockTimeoutMinutes: value.toInt()));
                 },
               ),
-              trailing: Text(&#39;${config.tempoBloqueioMinutos} min&#39;),
+              trailing: Text(&#39;${config.lockTimeoutMinutes} min&#39;),
             ),
           SwitchListTile(
             title: const Text(&#39;Permitir múltiplos usuários&#39;),
             subtitle: const Text(&#39;Habilitar gestão de usuários&#39;),
-            value: config.permitirMultiplosUsuarios,
+            value: config.isMultiUserEnabled,
             onChanged: (value) {
-              onConfigChanged(
-                config.copyWith(permitirMultiplosUsuarios: value),
-              );
+              onConfigChanged(config.copyWith(isMultiUserEnabled: value));
             },
           ),
         ],

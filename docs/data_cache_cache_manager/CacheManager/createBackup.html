@@ -77,9 +77,7 @@ com timestamp.</p>
     final arquivosCopiados = await backup(localBackup);
     &#47;&#47; Lista de arquivos para backup
 
-    logInfo(
-      &#39;Backup realizado com sucesso: $arquivosCopiados arquivos copiados&#39;,
-    );
+    logInfo(&#39;Backup realizado com sucesso: $arquivosCopiados arquivos copiados&#39;);
     return true;
   } catch (e, stackTrace) {
     logError(&#39;Erro ao realizar backup: $e&#39;, stackTrace);

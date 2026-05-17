@@ -72,16 +72,13 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Future&lt;ResultStatus&lt;SystemConfiguration, String&gt;&gt;
-exportConfigurationToJson() async {
+Future&lt;ResultStatus&lt;SystemConfiguration, String&gt;&gt; exportConfigurationToJson() async {
   try {
     final systemConfiguration = await getSystemConfiguration();
     if (systemConfiguration.hasError) {
       return ResultStatus.error(systemConfiguration.asError);
     }
-    await SelectorFileService().saveSystemConfiguration(
-      systemConfiguration.asSuccess,
-    );
+    await SelectorFileService().saveSystemConfiguration(systemConfiguration.asSuccess);
     return ResultStatus.success(systemConfiguration.asSuccess);
   } catch (e) {
     return ResultStatus.error(

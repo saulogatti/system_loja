@@ -63,11 +63,6 @@
 <li><span class="parameter" id="copyWith-param-backupAutomatico"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">backupAutomatico</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-frequenciaBackup"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">frequenciaBackup</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-localBackup"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">localBackup</span>, </span></li>
-<li><span class="parameter" id="copyWith-param-limpezaAutomatica"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">limpezaAutomatica</span>, </span></li>
-<li><span class="parameter" id="copyWith-param-diasManterLogs"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">diasManterLogs</span>, </span></li>
-<li><span class="parameter" id="copyWith-param-exigirSenha"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">exigirSenha</span>, </span></li>
-<li><span class="parameter" id="copyWith-param-tempoBloqueioMinutos"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">tempoBloqueioMinutos</span>, </span></li>
-<li><span class="parameter" id="copyWith-param-permitirMultiplosUsuarios"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">permitirMultiplosUsuarios</span>, </span></li>
 <li><span class="parameter" id="copyWith-param-corPrimaria"><span class="type-annotation"><a href="../../core_settings_enum_color_app_theme_settings/EnumColorAppThemeSettings.html">EnumColorAppThemeSettings</a>?</span> <span class="parameter-name">corPrimaria</span>, </span></li>
 </ol>})
 
@@ -92,29 +87,18 @@
   bool? backupAutomatico,
   String? frequenciaBackup,
   String? localBackup,
-  bool? limpezaAutomatica,
-  int? diasManterLogs,
-  bool? exigirSenha,
-  int? tempoBloqueioMinutos,
-  bool? permitirMultiplosUsuarios,
+
   EnumColorAppThemeSettings? corPrimaria,
 }) {
   return AppSettings(
     notificacoesAtivadas: notificacoesAtivadas ?? this.notificacoesAtivadas,
     notificarVendas: notificarVendas ?? this.notificarVendas,
-    notificarEstoqueBaixo:
-        notificarEstoqueBaixo ?? this.notificarEstoqueBaixo,
+    notificarEstoqueBaixo: notificarEstoqueBaixo ?? this.notificarEstoqueBaixo,
     limiteEstoqueBaixo: limiteEstoqueBaixo ?? this.limiteEstoqueBaixo,
     temaEscuro: temaEscuro ?? this.temaEscuro,
     backupAutomatico: backupAutomatico ?? this.backupAutomatico,
     frequenciaBackup: frequenciaBackup ?? this.frequenciaBackup,
     localBackup: localBackup ?? this.localBackup,
-    limpezaAutomatica: limpezaAutomatica ?? this.limpezaAutomatica,
-    diasManterLogs: diasManterLogs ?? this.diasManterLogs,
-    exigirSenha: exigirSenha ?? this.exigirSenha,
-    tempoBloqueioMinutos: tempoBloqueioMinutos ?? this.tempoBloqueioMinutos,
-    permitirMultiplosUsuarios:
-        permitirMultiplosUsuarios ?? this.permitirMultiplosUsuarios,
     corPrimaria: corPrimaria ?? this.corPrimaria,
   );
 }</code></pre>

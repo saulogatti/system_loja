@@ -78,18 +78,13 @@ para atualizar cor primária e modo escuro em toda a UI.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; updateAppSettings(
-  AppSettings novaConfiguracao,
-) async {
+Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; updateAppSettings(AppSettings novaConfiguracao) async {
   try {
-    _configuracao = novaConfiguracao;
+    _configuration = novaConfiguracao;
     await _salvarDados();
-    _settingsService.updateSettings(
-      novaConfiguracao.corPrimaria,
-      novaConfiguracao.temaEscuro,
-    );
+    _settingsService.updateSettings(novaConfiguracao.corPrimaria, novaConfiguracao.temaEscuro);
     logInfo(&#39;Configuração atualizada com sucesso&#39;);
-    return ResultStatus.success(_configuracao);
+    return ResultStatus.success(_configuration);
   } catch (e, stackTrace) {
     logError(&#39;Erro ao atualizar configurações: $e&#39;, stackTrace);
     return ResultStatus.error(&#39;Erro ao salvar configurações.&#39;);

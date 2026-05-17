@@ -81,10 +81,7 @@ Retorna um <a href="../../domain_code_generator_service/CodeValidationResult-cla
   <pre class="language-dart"><code class="language-dart">Future&lt;CodeValidationResult&gt; validateProductCode(String code) async {
   &#47;&#47; Verifica se está vazio
   if (code.trim().isEmpty) {
-    return CodeValidationResult(
-      isValid: false,
-      message: &#39;Código não pode ser vazio&#39;,
-    );
+    return CodeValidationResult(isValid: false, message: &#39;Código não pode ser vazio&#39;);
   }
 
   &#47;&#47; Verifica tamanho
@@ -105,10 +102,7 @@ Retorna um <a href="../../domain_code_generator_service/CodeValidationResult-cla
   &#47;&#47; Verifica se já existe
   final exists = await checkProductCodeExists(code);
   if (exists) {
-    return CodeValidationResult(
-      isValid: false,
-      message: &#39;Código já existe no banco de dados&#39;,
-    );
+    return CodeValidationResult(isValid: false, message: &#39;Código já existe no banco de dados&#39;);
   }
 
   return CodeValidationResult(isValid: true, message: &#39;Código válido&#39;);

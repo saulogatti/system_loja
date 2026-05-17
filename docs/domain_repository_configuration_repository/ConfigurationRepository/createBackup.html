@@ -78,19 +78,15 @@ com timestamp.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; createBackup(
-  String directoryPath,
-) async {
+Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; createBackup(String directoryPath) async {
   try {
     final backupFiles = await _cache.createBackup(directoryPath);
     if (!backupFiles) {
-      return ResultStatus.error(
-        &#39;Não foi possível concluir o backup no diretório selecionado.&#39;,
-      );
+      return ResultStatus.error(&#39;Não foi possível concluir o backup no diretório selecionado.&#39;);
     }
 
     logInfo(&#39;Backup realizado com sucesso: diretório $directoryPath&#39;);
-    return ResultStatus.success(_configuracao);
+    return ResultStatus.success(_configuration);
   } catch (e, stackTrace) {
     logError(&#39;Erro ao realizar backup: $e&#39;, stackTrace);
     return ResultStatus.error(&#39;Erro ao realizar backup.&#39;);

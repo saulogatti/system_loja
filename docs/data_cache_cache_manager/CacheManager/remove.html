@@ -87,8 +87,7 @@ Lança <a href="../../data_cache_exceptions_cache_exception/CacheWriteException-
 
     var removed = false;
     await _memoryLock.synchronized(() {
-      if (_memoryCache.containsKey(type) &amp;&amp;
-          _memoryCache[type]!.containsKey(key)) {
+      if (_memoryCache.containsKey(type) &amp;&amp; _memoryCache[type]!.containsKey(key)) {
         _memoryCache[type]!.remove(key);
         removed = true;
       }

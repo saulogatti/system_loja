@@ -78,8 +78,8 @@ Retorna true se a categoria está em uso.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Future&lt;bool&gt; isCategoryInUse(int categoryId) async {
-  return await _categoryDao.hasProducts(categoryId);
+Future&lt;bool&gt; isCategoryInUse(int categoryId) {
+  return _categoryDao.hasProducts(categoryId);
 }</code></pre>
 </section>
 

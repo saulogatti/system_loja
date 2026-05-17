@@ -78,10 +78,10 @@
   <pre class="language-dart"><code class="language-dart">@override
 Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; resetToDefaults() async {
   try {
-    _configuracao = AppSettings.createDefaultSettings();
+    _configuration = AppSettings.createDefaultSettings();
     await _salvarDados();
     logInfo(&#39;Configurações restauradas para padrão&#39;);
-    return ResultStatus.success(_configuracao);
+    return ResultStatus.success(_configuration);
   } catch (e, stackTrace) {
     logError(&#39;Erro ao restaurar configurações padrão: $e&#39;, stackTrace);
     return ResultStatus.error(&#39;Erro ao restaurar configurações padrão.&#39;);

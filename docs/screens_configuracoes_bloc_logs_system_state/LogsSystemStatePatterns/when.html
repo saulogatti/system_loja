@@ -66,6 +66,7 @@
 </ol>), </span></li>
 <li><span class="parameter" id="when-param-error"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">error</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-message"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">message</span></span></li>
 </ol>), </span></li>
+<li><span class="parameter" id="when-param-deleted"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">deleted</span>(), </span></li>
 </ol>})
 
       
@@ -89,13 +90,14 @@ It is equivalent to doing:</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult when&lt;TResult extends Object?&gt;({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List&lt;SystemError&gt; logs)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult when&lt;TResult extends Object?&gt;({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List&lt;SystemError&gt; logs)  loaded,required TResult Function( String message)  error,required TResult Function()  deleted,}) {final _that = this;
 switch (_that) {
 case LogsSystemInitial():
 return initial();case LogsSystemLoading():
 return loading();case LogsSystemLoaded():
 return loaded(_that.logs);case LogsSystemError():
-return error(_that.message);}
+return error(_that.message);case LogsSystemDeleted():
+return deleted();}
 }</code></pre>
 </section>
 

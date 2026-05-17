@@ -75,8 +75,7 @@ Se existir, incrementa o contador até encontrar um número disponível.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;String&gt; generateInvoiceNumber() async {
   final now = DateTime.now();
-  final datePrefix =
-      &#39;NF-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}&#39;;
+  final datePrefix = &#39;NF-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}&#39;;
 
   int counter = 1;
   String invoiceNumber;

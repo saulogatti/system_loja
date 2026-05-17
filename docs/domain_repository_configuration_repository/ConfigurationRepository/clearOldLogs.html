@@ -68,7 +68,7 @@
     
 <section class="desc markdown">
   <p>Remove logs anteriores ao período de retenção definido nas configurações.</p>
-<p>Usa <a href="../../core_settings_app_settings/AppSettings/diasManterLogs.html">AppSettings.diasManterLogs</a> para calcular a data de corte.
+<p>Usa <code>AppSettings.diasManterLogs</code> para calcular a data de corte.
 Se o valor for 0, nenhum log é removido.
 Retorna <a href="../../core_utils_result_status/ResultStatus-class.html">ResultStatus</a> com <a href="../../core_settings_app_settings/AppSettings-class.html">AppSettings</a> atualizado.</p>
 </section>
@@ -80,18 +80,18 @@ Retorna <a href="../../core_utils_result_status/ResultStatus-class.html">ResultS
   <pre class="language-dart"><code class="language-dart">@override
 Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; clearOldLogs() async {
   try {
-    final int diasManterLogs = _configuracao.diasManterLogs;
-    if (diasManterLogs &gt; 0) {
-      final DateTime dataLimite = DateTime.now().subtract(
-        Duration(days: diasManterLogs),
-      );
-      final logResult = await _logRepository.clearOldLogs(dataLimite);
-      if (logResult.hasError) {
-        return ResultStatus.error(logResult.asError);
-      }
-    }
+    &#47;&#47; final int diasManterLogs = _configuration.diasManterLogs;
+    &#47;&#47; if (diasManterLogs &gt; 0) {
+    &#47;&#47;   final DateTime dataLimite = DateTime.now().subtract(
+    &#47;&#47;     Duration(days: diasManterLogs),
+    &#47;&#47;   );
+    &#47;&#47;   final logResult = await _logRepository.clearOldLogs(dataLimite);
+    &#47;&#47;   if (logResult.hasError) {
+    &#47;&#47;     return ResultStatus.error(logResult.asError);
+    &#47;&#47;   }
+    &#47;&#47; }
     await _salvarDados();
-    return ResultStatus.success(_configuracao);
+    return ResultStatus.success(_configuration);
   } catch (e, stackTrace) {
     logError(&#39;Erro ao limpar logs antigos: $e&#39;, stackTrace);
     return ResultStatus.error(&#39;Erro ao limpar logs antigos.&#39;);

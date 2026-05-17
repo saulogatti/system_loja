@@ -68,6 +68,8 @@
 </ol>), </span></li>
 <li><span class="parameter" id="map-param-error"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">error</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">LogsSystemError</span> <span class="parameter-name">value</span></span></li>
 </ol>), </span></li>
+<li><span class="parameter" id="map-param-deleted"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">deleted</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">LogsSystemDeleted</span> <span class="parameter-name">value</span></span></li>
+</ol>), </span></li>
 </ol>})
 
       
@@ -91,14 +93,15 @@ It is equivalent to doing:</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult map&lt;TResult extends Object?&gt;({required TResult Function( LogsSystemInitial value)  initial,required TResult Function( LogsSystemLoading value)  loading,required TResult Function( LogsSystemLoaded value)  loaded,required TResult Function( LogsSystemError value)  error,}){
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult map&lt;TResult extends Object?&gt;({required TResult Function( LogsSystemInitial value)  initial,required TResult Function( LogsSystemLoading value)  loading,required TResult Function( LogsSystemLoaded value)  loaded,required TResult Function( LogsSystemError value)  error,required TResult Function( LogsSystemDeleted value)  deleted,}){
 final _that = this;
 switch (_that) {
 case LogsSystemInitial():
 return initial(_that);case LogsSystemLoading():
 return loading(_that);case LogsSystemLoaded():
 return loaded(_that);case LogsSystemError():
-return error(_that);}
+return error(_that);case LogsSystemDeleted():
+return deleted(_that);}
 }</code></pre>
 </section>
 

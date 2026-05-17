@@ -82,7 +82,7 @@ Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; clearAllData() async {
     await _cache.clearAll();
     logInfo(&#39;Todos os dados foram limpos com sucesso&#39;);
     await _salvarDados();
-    return ResultStatus.success(_configuracao);
+    return ResultStatus.success(_configuration);
   } catch (e, stackTrace) {
     logError(&#39;Erro ao limpar dados: $e&#39;, stackTrace);
     return ResultStatus.error(&#39;Erro ao limpar todos os dados do sistema.&#39;);

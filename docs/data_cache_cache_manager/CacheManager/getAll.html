@@ -79,9 +79,7 @@ Lança <a href="../../data_cache_exceptions_cache_exception/CacheSerializationEx
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;T&gt;&gt; getAll&lt;T extends Cacheable&gt;(
-  CacheableFactory&lt;T&gt; factory,
-) async {
+  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;T&gt;&gt; getAll&lt;T extends Cacheable&gt;(CacheableFactory&lt;T&gt; factory) async {
   final type = _findType&lt;T&gt;();
 
   try {
@@ -91,9 +89,7 @@ Lança <a href="../../data_cache_exceptions_cache_exception/CacheSerializationEx
     final entries = await _memoryLock.synchronized(() {
       final stored = _memoryCache[type];
       if (stored == null) return null;
-      return stored.map(
-        (key, value) =&gt; MapEntry(key, Map&lt;String, dynamic&gt;.from(value)),
-      );
+      return stored.map((key, value) =&gt; MapEntry(key, Map&lt;String, dynamic&gt;.from(value)));
     });
 
     if (entries == null) {
@@ -103,10 +99,7 @@ Lança <a href="../../data_cache_exceptions_cache_exception/CacheSerializationEx
     return entries.values.map((json) =&gt; factory(json)).toList();
   } catch (e) {
     if (e is CacheException) rethrow;
-    throw CacheSerializationException(
-      &#39;Falha ao deserializar objetos do cache do tipo: $type&#39;,
-      e,
-    );
+    throw CacheSerializationException(&#39;Falha ao deserializar objetos do cache do tipo: $type&#39;, e);
   }
 }</code></pre>
 </section>

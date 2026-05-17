@@ -77,8 +77,7 @@ Em caso de falha, retorna <a href="../../core_utils_result_status/ResultStatus/R
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Future&lt;ResultStatus&lt;SystemConfiguration, String&gt;&gt;
-importConfigurationFromJson() async {
+Future&lt;ResultStatus&lt;SystemConfiguration, String&gt;&gt; importConfigurationFromJson() async {
   try {
     final jsonContent = await SelectorFileService().getSystemConfiguration();
     if (jsonContent == null) {
@@ -90,8 +89,7 @@ importConfigurationFromJson() async {
     final validationError = _validateConfigurationData(
       paymentMethods: importedData.priceConfiguration.types,
       measurementUnits: importedData.priceConfiguration.measurementUnits,
-      reportConfiguration:
-          importedData.priceConfiguration.reportConfiguration,
+      reportConfiguration: importedData.priceConfiguration.reportConfiguration,
     );
     if (validationError != null) {
       return ResultStatus.error(validationError);
@@ -103,11 +101,8 @@ importConfigurationFromJson() async {
       productCategories: List&lt;String&gt;.from(importedData.productCategories),
       priceConfiguration: PriceConfiguration(
         types: importedData.priceConfiguration.types.toSet().toList(),
-        measurementUnits: _normalizeUnits(
-          importedData.priceConfiguration.measurementUnits,
-        ),
-        reportConfiguration:
-            importedData.priceConfiguration.reportConfiguration,
+        measurementUnits: _normalizeUnits(importedData.priceConfiguration.measurementUnits),
+        reportConfiguration: importedData.priceConfiguration.reportConfiguration,
       ),
       systemUserData: importedData.systemUserData,
     );

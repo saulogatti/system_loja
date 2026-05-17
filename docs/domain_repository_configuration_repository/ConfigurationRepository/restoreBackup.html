@@ -79,14 +79,12 @@ camada de apresentação tratar de forma padronizada.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; restoreBackup(
-  String direBackup,
-) async {
+Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; restoreBackup(String direBackup) async {
   try {
     await _cache.restoreBackupFrom(direBackup);
     await _carregarDados();
     logInfo(&#39;Restauração de backup realizada com sucesso&#39;);
-    return ResultStatus.success(_configuracao);
+    return ResultStatus.success(_configuration);
   } catch (e, stackTrace) {
     logError(&#39;Erro ao restaurar backup: $e&#39;, stackTrace);
     return ResultStatus.error(&#39;Erro ao restaurar backup.&#39;);

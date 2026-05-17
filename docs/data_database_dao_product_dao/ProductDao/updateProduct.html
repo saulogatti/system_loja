@@ -71,8 +71,8 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; updateProduct(Product data) async {
-  return await update(productsRecords).replace(
+  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; updateProduct(Product data) {
+  return update(productsRecords).replace(
     ProductsRecordsCompanion(
       id: Value(data.id),
       code: Value(data.code),

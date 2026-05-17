@@ -145,6 +145,14 @@ Widget build(BuildContext context) {
         const SizedBox(height: 16),
         TextFormField(
           controller: nameController,
+          keyboardType: TextInputType.name,
+          autofillHints: [
+            switch (selectedPersonType) {
+              PersonType.individual =&gt; AutofillHints.name,
+              _ =&gt; AutofillHints.organizationName,
+            }
+          ],
+          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
             labelText: &#39;${selectedPersonType.nameLabel} *&#39;,
           ),
@@ -157,13 +165,14 @@ Widget build(BuildContext context) {
         TextFormField(
           key: ValueKey&lt;PersonType&gt;(selectedPersonType),
           controller: documentController,
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
             labelText: &#39;$documentLabel *&#39;,
             border: const OutlineInputBorder(),
             prefixIcon: const Icon(Icons.badge),
             hintText: isIndividual ? &#39;000.000.000-00&#39; : &#39;00.000.000&#47;0000-00&#39;,
           ),
-          keyboardType: TextInputType.number,
           inputFormatters: _documentInputFormatters(selectedPersonType),
           validator: (value) =&gt;
               selectedPersonType.validateDocument(value: value),

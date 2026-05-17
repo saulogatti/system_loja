@@ -83,10 +83,7 @@ if (cliente != null) {
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;T?&gt; get&lt;T extends Cacheable&gt;(
-  String key,
-  CacheableFactory&lt;T&gt; factory,
-) async {
+  <pre class="language-dart"><code class="language-dart">Future&lt;T?&gt; get&lt;T extends Cacheable&gt;(String key, CacheableFactory&lt;T&gt; factory) async {
   assert(key.isNotEmpty, &#39;A chave de cache não pode ser vazia&#39;);
 
   final type = _findType&lt;T&gt;();
@@ -109,10 +106,7 @@ if (cliente != null) {
     return null;
   } catch (e) {
     if (e is CacheException) rethrow;
-    throw CacheSerializationException(
-      &#39;Falha ao deserializar objeto do cache: $key&#39;,
-      e,
-    );
+    throw CacheSerializationException(&#39;Falha ao deserializar objeto do cache: $key&#39;, e);
   }
 }</code></pre>
 </section>

@@ -77,18 +77,14 @@ e persiste o resultado.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Future&lt;ResultStatus&lt;SystemConfiguration, String&gt;&gt;
-resetToDefaultConfiguration() async {
+Future&lt;ResultStatus&lt;SystemConfiguration, String&gt;&gt; resetToDefaultConfiguration() async {
   try {
     final defaultConfiguration = _createDefaultConfiguration();
     await _systemDao.saveSystemConfiguration(defaultConfiguration);
     return ResultStatus.success(defaultConfiguration);
   } catch (e) {
     return ResultStatus.error(
-      mensagemErroRepositorio(
-        e,
-        contexto: &#39;Falha ao restaurar configuração padrão&#39;,
-      ),
+      mensagemErroRepositorio(e, contexto: &#39;Falha ao restaurar configuração padrão&#39;),
     );
   }
 }</code></pre>

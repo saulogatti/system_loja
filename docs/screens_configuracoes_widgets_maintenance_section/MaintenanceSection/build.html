@@ -117,10 +117,7 @@ Widget build(BuildContext context) {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.cleaning_services,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              Icon(Icons.cleaning_services, color: Theme.of(context).colorScheme.primary),
               const SizedBox(width: 8),
               const Text(
                 &#39;Limpeza de Dados&#39;,
@@ -132,27 +129,25 @@ Widget build(BuildContext context) {
           SwitchListTile(
             title: const Text(&#39;Limpeza automática de logs&#39;),
             subtitle: const Text(&#39;Remover logs antigos automaticamente&#39;),
-            value: config.limpezaAutomatica,
+            value: config.isAutoCleanEnabled,
             onChanged: (value) {
-              onConfigChanged(config.copyWith(limpezaAutomatica: value));
+              onConfigChanged(config.copyWith(isAutoCleanEnabled: value));
             },
           ),
-          if (config.limpezaAutomatica)
+          if (config.isAutoCleanEnabled)
             ListTile(
               title: const Text(&#39;Dias para manter logs&#39;),
               subtitle: Slider(
-                value: config.diasManterLogs.toDouble(),
+                value: config.logRetentionDays.toDouble(),
                 min: 7,
                 max: 365,
-                divisions: 51,
-                label: &#39;${config.diasManterLogs} dias&#39;,
+                divisions: 358,
+                label: &#39;${config.logRetentionDays} dias&#39;,
                 onChanged: (value) {
-                  onConfigChanged(
-                    config.copyWith(diasManterLogs: value.toInt()),
-                  );
+                  onConfigChanged(config.copyWith(logRetentionDays: value.toInt()));
                 },
               ),
-              trailing: Text(&#39;${config.diasManterLogs}&#39;),
+              trailing: Text(&#39;${config.logRetentionDays}&#39;),
             ),
           ListTile(
             title: const Text(&#39;Analisar logs do sistema&#39;),
@@ -167,10 +162,7 @@ Widget build(BuildContext context) {
             onTap: onLimparLogsAntigos,
           ),
           ListTile(
-            title: const Text(
-              &#39;Limpar todos os dados&#39;,
-              style: TextStyle(color: Colors.red),
-            ),
+            title: const Text(&#39;Limpar todos os dados&#39;, style: TextStyle(color: Colors.red)),
             subtitle: const Text(&#39;Remover TODOS os dados do sistema&#39;),
             leading: const Icon(Icons.warning, color: Colors.red),
             onTap: onLimparTodosDados,

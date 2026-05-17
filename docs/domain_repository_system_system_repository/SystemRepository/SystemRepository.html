@@ -55,6 +55,7 @@
     <section class="multi-line-signature">
       
       <span class="name ">SystemRepository</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-systemDao"><span>required</span> <span class="type-annotation"><a href="../../data_database_dao_system_dao/SystemDao-class.html">SystemDao</a></span> <span class="parameter-name">systemDao</span>, </span></li>
+<li><span class="parameter" id="-param-logRepository"><span>required</span> <span class="type-annotation"><a href="../../core_interface_i_log_repository/ILogRepository-class.html">ILogRepository</a></span> <span class="parameter-name">logRepository</span>, </span></li>
 </ol>})
     </section>
     
@@ -63,7 +64,9 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">SystemRepository({required SystemDao systemDao}) : _systemDao = systemDao;</code></pre>
+  <pre class="language-dart"><code class="language-dart">SystemRepository({required SystemDao systemDao, required ILogRepository logRepository})
+  : _systemDao = systemDao,
+    _logRepository = logRepository;</code></pre>
 </section>
 
 

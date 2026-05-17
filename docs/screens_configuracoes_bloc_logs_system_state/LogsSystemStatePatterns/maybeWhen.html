@@ -66,6 +66,7 @@
 </ol>)?, </span></li>
 <li><span class="parameter" id="maybeWhen-param-error"><span class="type-annotation">TResult</span> <span class="parameter-name">error</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-message"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">message</span></span></li>
 </ol>)?, </span></li>
+<li><span class="parameter" id="maybeWhen-param-deleted"><span class="type-annotation">TResult</span> <span class="parameter-name">deleted</span>()?, </span></li>
 <li><span class="parameter" id="maybeWhen-param-orElse"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">orElse</span>(), </span></li>
 </ol>})
 
@@ -89,13 +90,14 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult maybeWhen&lt;TResult extends Object?&gt;({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List&lt;SystemError&gt; logs)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult maybeWhen&lt;TResult extends Object?&gt;({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List&lt;SystemError&gt; logs)?  loaded,TResult Function( String message)?  error,TResult Function()?  deleted,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case LogsSystemInitial() when initial != null:
 return initial();case LogsSystemLoading() when loading != null:
 return loading();case LogsSystemLoaded() when loaded != null:
 return loaded(_that.logs);case LogsSystemError() when error != null:
-return error(_that.message);case _:
+return error(_that.message);case LogsSystemDeleted() when deleted != null:
+return deleted();case _:
   return orElse();
 
 }

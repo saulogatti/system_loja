@@ -68,6 +68,8 @@
 </ol>)?, </span></li>
 <li><span class="parameter" id="maybeMap-param-error"><span class="type-annotation">TResult</span> <span class="parameter-name">error</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">LogsSystemError</span> <span class="parameter-name">value</span></span></li>
 </ol>)?, </span></li>
+<li><span class="parameter" id="maybeMap-param-deleted"><span class="type-annotation">TResult</span> <span class="parameter-name">deleted</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">LogsSystemDeleted</span> <span class="parameter-name">value</span></span></li>
+</ol>)?, </span></li>
 <li><span class="parameter" id="maybeMap-param-orElse"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">orElse</span>(), </span></li>
 </ol>})
 
@@ -91,14 +93,15 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult maybeMap&lt;TResult extends Object?&gt;({TResult Function( LogsSystemInitial value)?  initial,TResult Function( LogsSystemLoading value)?  loading,TResult Function( LogsSystemLoaded value)?  loaded,TResult Function( LogsSystemError value)?  error,required TResult orElse(),}){
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult maybeMap&lt;TResult extends Object?&gt;({TResult Function( LogsSystemInitial value)?  initial,TResult Function( LogsSystemLoading value)?  loading,TResult Function( LogsSystemLoaded value)?  loaded,TResult Function( LogsSystemError value)?  error,TResult Function( LogsSystemDeleted value)?  deleted,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case LogsSystemInitial() when initial != null:
 return initial(_that);case LogsSystemLoading() when loading != null:
 return loading(_that);case LogsSystemLoaded() when loaded != null:
 return loaded(_that);case LogsSystemError() when error != null:
-return error(_that);case _:
+return error(_that);case LogsSystemDeleted() when deleted != null:
+return deleted(_that);case _:
   return orElse();
 
 }

@@ -81,7 +81,7 @@ A validação de estoque negativo fica na camada de domínio (<a href="../../dom
 
   final newQuantity = product.stockQuantity + quantityChange;
 
-  return await update(productsRecords).replace(
+  return update(productsRecords).replace(
     ProductsRecordsCompanion(
       id: Value(productId),
       code: Value(product.code),
