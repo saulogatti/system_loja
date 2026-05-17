@@ -77,7 +77,6 @@ void setupAppInjection() {
   appInjection.registerSingleton<SettingsService>(SettingsService.injection());
   appInjection.registerSingleton<IConfigurationRepository>(
     ConfigurationRepository(
-      logRepository: appInjection.get<ILogRepository>(),
       settingsService: appInjection.get<SettingsService>(),
       cache: appInjection.get<CacheManager>(),
     ),
@@ -103,7 +102,10 @@ void setupAppInjection() {
     ),
   );
   appInjection.registerSingleton<ISystemRepository>(
-    SystemRepository(systemDao: appInjection.get<SystemDatabase>().systemDao),
+    SystemRepository(
+      systemDao: appInjection.get<SystemDatabase>().systemDao,
+      logRepository: appInjection.get<ILogRepository>(),
+    ),
   );
 
   appInjection.registerSingleton<ICategoryRepository>(

@@ -17,6 +17,21 @@ class PriceConfiguration extends DefaultObject {
     super.registrationDate,
   });
 
+  PriceConfiguration copyWith({
+    List<PaymentMethodType>? types,
+    List<String>? measurementUnits,
+    ReportConfiguration? reportConfiguration,
+  }) {
+    return PriceConfiguration(
+      types: types ?? this.types,
+      measurementUnits: measurementUnits ?? this.measurementUnits,
+      reportConfiguration: reportConfiguration ?? this.reportConfiguration,
+      id: id,
+      lastUpdatedDate: lastUpdatedDate,
+      registrationDate: registrationDate,
+    );
+  }
+
   static PriceConfiguration defaultConfiguration() {
     return PriceConfiguration(
       types: [],
