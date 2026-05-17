@@ -48,9 +48,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
           case HomeError(:final message):
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(
-                  'Erro ao salvar dados da empresa emitente: $message',
-                ),
+                content: Text('Erro ao salvar dados da empresa emitente: $message'),
                 backgroundColor: Theme.of(context).colorScheme.error,
               ),
             );
@@ -59,25 +57,24 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Empresa Emitente'),
-          leading: const AutoLeadingButton(),
-        ),
+        appBar: AppBar(title: const Text('Empresa Emitente'), leading: const AutoLeadingButton()),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildLogoSection(context),
-                const SizedBox(height: 24),
-                _buildInfoSection(context),
-                const SizedBox(height: 24),
-                _buildAccessKeySection(context),
-                const SizedBox(height: 32),
-                _buildSaveButton(context),
-              ],
+          child: AutofillGroup(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildLogoSection(context),
+                  const SizedBox(height: 24),
+                  _buildInfoSection(context),
+                  const SizedBox(height: 24),
+                  _buildAccessKeySection(context),
+                  const SizedBox(height: 32),
+                  _buildSaveButton(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -123,10 +120,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.vpn_key,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                Icon(Icons.vpn_key, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
                 const Text(
                   'Acesso ao Sistema',
@@ -137,10 +131,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
             const SizedBox(height: 4),
             Text(
               'Reservado para futura validação de chave de acesso',
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -176,10 +167,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.business,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                Icon(Icons.business, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
                 const Text(
                   'Dados da Empresa',
@@ -190,6 +178,9 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
             const SizedBox(height: 16),
             TextFormField(
               controller: _fantasyNameController,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.organizationName],
               decoration: const InputDecoration(
                 labelText: 'Nome Fantasia *',
                 hintText: 'Ex.: Minha Loja',
@@ -210,6 +201,9 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
             const SizedBox(height: 16),
             TextFormField(
               controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.email],
               decoration: const InputDecoration(
                 labelText: 'Email',
                 hintText: 'Ex.: contato@minhaloja.com',
@@ -226,6 +220,9 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
             const SizedBox(height: 16),
             TextFormField(
               controller: _phoneController,
+              keyboardType: TextInputType.phone,
+              textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.telephoneNumber],
               decoration: const InputDecoration(
                 labelText: 'Telefone',
                 hintText: 'Ex.: (11) 99999-9999',
@@ -243,6 +240,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
             TextFormField(
               controller: _cnpjController,
               keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
               inputFormatters: [CnpjTextInputFormatter()],
               decoration: const InputDecoration(
                 labelText: 'CNPJ',
@@ -262,8 +260,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
               controller: _descriptionController,
               decoration: const InputDecoration(
                 labelText: 'Descrição',
-                hintText:
-                    'Descreva brevemente a empresa ou os produtos/serviços oferecidos',
+                hintText: 'Descreva brevemente a empresa ou os produtos/serviços oferecidos',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.description),
                 alignLabelWithHint: true,
@@ -290,10 +287,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
               children: [
                 Icon(Icons.image, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
-                const Text(
-                  'Logotipo',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                const Text('Logotipo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 16),
@@ -304,14 +298,9 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
                     width: 120,
                     height: 120,
                     decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHighest,
+                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.outline,
-                        width: 1,
-                      ),
+                      border: Border.all(color: Theme.of(context).colorScheme.outline, width: 1),
                     ),
                     child: Icon(
                       Icons.add_photo_alternate_outlined,
