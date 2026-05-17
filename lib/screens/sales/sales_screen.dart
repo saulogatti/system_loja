@@ -266,7 +266,7 @@ class _SalesViewState extends State<SalesView> {
     );
 
     if (result == true) {
-      salesCubit.loadProducts();
+      await salesCubit.loadProducts();
     }
   }
 

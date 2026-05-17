@@ -197,7 +197,7 @@ class _CustomerEditViewState extends State<CustomerEditView> {
     }
 
     if (shouldDelete == true) {
-      context.read<CustomerEditCubit>().deleteCustomer(widget.customer.id);
+      await context.read<CustomerEditCubit>().deleteCustomer(widget.customer.id);
     }
   }
 
