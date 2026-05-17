@@ -390,7 +390,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     );
 
     if (confirmado == true && context.mounted) {
-      context.read<SystemConfigCubit>().clearOldLogs();
+      await context.read<SystemConfigCubit>().clearOldLogs();
     }
   }
 
@@ -421,7 +421,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     );
 
     if (confirmado == true && context.mounted) {
-      context.read<SystemConfigCubit>().clearAllData();
+      await context.read<SystemConfigCubit>().clearAllData();
     }
   }
 
