@@ -111,3 +111,7 @@
 ## 07-05-2025 - Loading State in Forms
 **Learning:** Adding a boolean `isLoading` flag to forms with explicit visual dimming via `enabled: false` on inputs and a `CircularProgressIndicator` on the submit button significantly improves perceived responsiveness and prevents duplicate submissions during asynchronous operations.
 **Action:** When creating or updating form widgets that trigger database or API calls, always verify if `BlocBuilder` can be used to pass a loading state into the form to disable fields and show visual feedback on the main action button.
+
+## 25-05-2024 - [Disabling Autocorrect on System Keys]
+**Learning:** Text fields intended for exact alphanumeric codes (like license keys or activation tokens) can become highly frustrating if the OS keyboard attempts to autocorrect or suggest dictionary words, potentially altering a valid code right before submission.
+**Action:** Always apply `autocorrect: false` and `enableSuggestions: false` to `TextField` or `TextFormField` inputs that handle system keys, tokens, or exact codes.
