@@ -189,7 +189,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
     );
 
     if (confirmed == true && mounted) {
-      context.read<CategoryCubit>().deleteCategory(category.id);
+      await context.read<CategoryCubit>().deleteCategory(category.id);
     }
   }
 

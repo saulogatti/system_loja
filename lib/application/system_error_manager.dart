@@ -41,8 +41,8 @@ class SystemErrorManager implements ISystemErrorManager {
     return list;
   }
 
-  Future<List<SystemErrorModel>> getErrorsByCode(int code) async {
-    return await _cacheManager.retrieveErrorsByCode(code);
+  Future<List<SystemErrorModel>> getErrorsByCode(int code) {
+    return _cacheManager.retrieveErrorsByCode(code);
   }
 
   Future<void> saveErrorToCache(SystemErrorModel error) async {

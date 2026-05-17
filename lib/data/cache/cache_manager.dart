@@ -13,8 +13,7 @@ import 'package:system_loja/data/files_utility/file_storage_utility.dart';
 ///
 /// Esta função é usada pelo [CacheManager] para deserializar objetos
 /// armazenados em cache de volta para seus tipos originais.
-typedef CacheableFactory<T extends Cacheable> =
-    T Function(Map<String, dynamic> json);
+typedef CacheableFactory<T extends Cacheable> = T Function(Map<String, dynamic> json);
 
 /// Gerencia o cache de dados da aplicação.
 ///
@@ -87,9 +86,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
       final arquivosCopiados = await backup(localBackup);
       // Lista de arquivos para backup
 
-      logInfo(
-        'Backup realizado com sucesso: $arquivosCopiados arquivos copiados',
-      );
+      logInfo('Backup realizado com sucesso: $arquivosCopiados arquivos copiados');
       return true;
     } catch (e, stackTrace) {
       logError('Erro ao realizar backup: $e', stackTrace);
@@ -115,10 +112,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   ///   // Usar objeto
   /// }
   /// ```
-  Future<T?> get<T extends Cacheable>(
-    String key,
-    CacheableFactory<T> factory,
-  ) async {
+  Future<T?> get<T extends Cacheable>(String key, CacheableFactory<T> factory) async {
     assert(key.isNotEmpty, 'A chave de cache não pode ser vazia');
 
     final type = _findType<T>();
@@ -141,10 +135,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
       return null;
     } catch (e) {
       if (e is CacheException) rethrow;
-      throw CacheSerializationException(
-        'Falha ao deserializar objeto do cache: $key',
-        e,
-      );
+      throw CacheSerializationException('Falha ao deserializar objeto do cache: $key', e);
     }
   }
 
@@ -163,9 +154,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// ```dart
   /// final clientes = await cache.getAll<Cliente>(Cliente.fromJson);
   /// ```
-  Future<List<T>> getAll<T extends Cacheable>(
-    CacheableFactory<T> factory,
-  ) async {
+  Future<List<T>> getAll<T extends Cacheable>(CacheableFactory<T> factory) async {
     final type = _findType<T>();
 
     try {
@@ -175,9 +164,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
       final entries = await _memoryLock.synchronized(() {
         final stored = _memoryCache[type];
         if (stored == null) return null;
-        return stored.map(
-          (key, value) => MapEntry(key, Map<String, dynamic>.from(value)),
-        );
+        return stored.map((key, value) => MapEntry(key, Map<String, dynamic>.from(value)));
       });
 
       if (entries == null) {
@@ -187,10 +174,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
       return entries.values.map((json) => factory(json)).toList();
     } catch (e) {
       if (e is CacheException) rethrow;
-      throw CacheSerializationException(
-        'Falha ao deserializar objetos do cache do tipo: $type',
-        e,
-      );
+      throw CacheSerializationException('Falha ao deserializar objetos do cache do tipo: $type', e);
     }
   }
 
@@ -234,8 +218,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
 
       var removed = false;
       await _memoryLock.synchronized(() {
-        if (_memoryCache.containsKey(type) &&
-            _memoryCache[type]!.containsKey(key)) {
+        if (_memoryCache.containsKey(type) && _memoryCache[type]!.containsKey(key)) {
           _memoryCache[type]!.remove(key);
           removed = true;
         }
@@ -340,10 +323,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
       await _saveTypeCache(type);
     } catch (e) {
       if (e is CacheException) rethrow;
-      throw CacheWriteException(
-        'Falha ao armazenar múltiplos itens no cache',
-        e,
-      );
+      throw CacheWriteException('Falha ao armazenar múltiplos itens no cache', e);
     }
   }
 
@@ -411,10 +391,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     try {
       final Map<String, dynamic> jsonData = parseData(dataString!);
       final loadedData = jsonData.map(
-        (key, value) => MapEntry(
-          key,
-          Map<String, dynamic>.from(value as Map<String, dynamic>),
-        ),
+        (key, value) => MapEntry(key, Map<String, dynamic>.from(value as Map<String, dynamic>)),
       );
       await _memoryLock.synchronized(() {
         _memoryCache[type] = loadedData;
@@ -456,15 +433,10 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
       try {
         final isSaveSuccessful = await saveData(filePath, snapshot!);
         if (!isSaveSuccessful) {
-          throw CacheWriteException(
-            'Falha ao salvar dados no arquivo de cache: $filePath',
-          );
+          throw CacheWriteException('Falha ao salvar dados no arquivo de cache: $filePath');
         }
       } on FileSystemException catch (e) {
-        throw CacheWriteException(
-          'Erro ao escrever arquivo de cache: $filePath',
-          e,
-        );
+        throw CacheWriteException('Erro ao escrever arquivo de cache: $filePath', e);
       }
     });
   }

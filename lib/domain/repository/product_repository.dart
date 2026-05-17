@@ -85,8 +85,8 @@ class ProductRepository implements IProductRepository {
   ///
   /// Retorna um código no formato PRD-YYYYMMDD-NNNN que não existe no banco.
   @override
-  Future<String> generateProductCode() async {
-    return await _codeGeneratorService.generateProductCode();
+  Future<String> generateProductCode() {
+    return _codeGeneratorService.generateProductCode();
   }
 
   /// Salva um produto no banco de dados.

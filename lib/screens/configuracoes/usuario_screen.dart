@@ -234,7 +234,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   }
 
   Future<void> _excluirUsuario(User usuario) async {
-    context.read<UserCubit>().removerUsuario(usuario.id);
+    await context.read<UserCubit>().removerUsuario(usuario.id);
 
     // Se estava editando o usuário excluído, cancela a edição
     if (_usuarioEditando?.id == usuario.id) {

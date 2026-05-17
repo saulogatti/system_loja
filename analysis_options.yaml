@@ -14,7 +14,7 @@ analyzer:
     avoid_void_async: error
     avoid_dynamic_calls: error
     return_without_value: error
-
+    deprecated_member_use: warning
 linter:
   rules:
     camel_case_types: true
@@ -52,3 +52,7 @@ linter:
     await_only_futures: true
     avoid_void_async: true
     always_put_required_named_parameters_first: true
+    no_duplicate_case_values: true
+    unnecessary_overrides: true
+    unawaited_futures: true
+    unnecessary_await_in_return: true

@@ -24,6 +24,10 @@ import 'package:system_loja/core/utils/result_status.dart';
 /// - [SystemConfiguration] - modelo de configuração do sistema
 /// - [IConfigurationRepository] - para configurações de usuário
 abstract interface class ISystemRepository {
+  Future<ResultStatus<SystemConfiguration, String>> clearAllData();
+
+  Future<ResultStatus<SystemConfiguration, String>> clearOldLogs();
+
   Future<ResultStatus<SystemConfiguration, String>> exportConfigurationToJson();
 
   /// Retorna as configurações atuais do sistema.
@@ -38,15 +42,13 @@ abstract interface class ISystemRepository {
   ///
   /// Faz parse, valida, normaliza e salva.
   /// Em caso de falha, retorna [ResultStatus.error] com mensagem amigável.
-  Future<ResultStatus<SystemConfiguration, String>>
-  importConfigurationFromJson();
+  Future<ResultStatus<SystemConfiguration, String>> importConfigurationFromJson();
 
   /// Redefine as configurações do sistema para os valores padrão.
   ///
   /// Sobrescreve a configuração existente com os valores padrão do sistema
   /// e persiste o resultado.
-  Future<ResultStatus<SystemConfiguration, String>>
-  resetToDefaultConfiguration();
+  Future<ResultStatus<SystemConfiguration, String>> resetToDefaultConfiguration();
 
   /// Salva as configurações do sistema.
   ///
@@ -54,7 +56,5 @@ abstract interface class ISystemRepository {
   ///
   /// Parâmetros:
   /// - [data]: Objeto SystemConfiguration com as configurações a serem salvas
-  Future<ResultStatus<bool, String>> saveSystemConfiguration(
-    SystemConfiguration data,
-  );
+  Future<ResultStatus<SystemConfiguration, String>> saveSystemConfiguration(SystemConfiguration data);
 }

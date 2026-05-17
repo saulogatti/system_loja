@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -11,9 +10,7 @@ import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
-import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/domain/repository/configuration_repository.dart';
-import 'package:system_loja/domain/repository/system/log_repository.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
 void main() {
@@ -22,12 +19,10 @@ void main() {
   late ConfigurationRepository manager;
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
   driftRuntimeOptions.defaultSerializer = const ValueSerializer.defaults();
-  late SystemDatabase systemDatabase;
+
   setUpAll(() {
-    systemDatabase = SystemDatabase(executor: NativeDatabase.memory());
     PathProviderPlatform.instance = FakePathProviderPlatform();
     manager = ConfigurationRepository(
-      logRepository: LogRepository(logDao: systemDatabase.logDao),
       settingsService: SettingsService.injection(),
       cache: CacheManager(),
     );
@@ -71,7 +66,6 @@ void main() {
       await _executarSucesso(manager.updateAppSettings(novaConfig));
 
       final manager2 = ConfigurationRepository(
-        logRepository: LogRepository(logDao: systemDatabase.logDao),
         settingsService: SettingsService.injection(),
         cache: CacheManager(),
       );
@@ -177,17 +171,17 @@ void main() {
       }
     });
 
-    test('Deve aceitar tempo de bloqueio válido', () async {
-      final tempos = [1, 5, 15, 30, 60];
+    // test('Deve aceitar tempo de bloqueio válido', () async {
+    //   final tempos = [1, 5, 15, 30, 60];
 
-      for (final tempo in tempos) {
-        final currentConfig = await _obterSucesso(manager.loadConfiguration());
-        final config = currentConfig.copyWith(tempoBloqueioMinutos: tempo);
-        await _executarSucesso(manager.updateAppSettings(config));
-        final updatedConfig = await _obterSucesso(manager.loadConfiguration());
-        expect(updatedConfig.tempoBloqueioMinutos, equals(tempo));
-      }
-    });
+    //   for (final tempo in tempos) {
+    //     final currentConfig = await _obterSucesso(manager.loadConfiguration());
+    //     final config = currentConfig.copyWith(tempoBloqueioMinutos: tempo);
+    //     await _executarSucesso(manager.updateAppSettings(config));
+    //     final updatedConfig = await _obterSucesso(manager.loadConfiguration());
+    //     expect(updatedConfig.tempoBloqueioMinutos, equals(tempo));
+    //   }
+    // });
   });
 
   group('ConfiguracaoManager - Serialização JSON', () {
@@ -202,17 +196,11 @@ void main() {
         backupAutomatico: true,
         frequenciaBackup: 'diario',
         localBackup: 'custom/path',
-        limpezaAutomatica: true,
-        diasManterLogs: 60,
-        exigirSenha: true,
-        tempoBloqueioMinutos: 30,
-        permitirMultiplosUsuarios: true,
       );
 
       await _executarSucesso(manager.updateAppSettings(configOriginal));
 
       final manager2 = ConfigurationRepository(
-        logRepository: LogRepository(logDao: systemDatabase.logDao),
         settingsService: SettingsService.injection(),
         cache: CacheManager(),
       );

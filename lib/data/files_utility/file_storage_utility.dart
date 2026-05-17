@@ -379,9 +379,9 @@ mixin FileStorageUtility {
   ///
   /// Lança [CacheException] se ocorrer um erro durante a inicialização.
   /// Obs: Este método é utilizado internamente pelo mixin. Deixar publico expoe o caminho do diretório. --- IGNORE ---
-  Future<String> _initializeDirectory() async {
+  Future<String> _initializeDirectory() {
     if (_asyncAccess.hasRun) return _asyncAccess.future;
-    return await _asyncAccess.runOnce(() async {
+    return _asyncAccess.runOnce(() async {
       try {
         //DEBUG ///Users/saulogatti-pessoal/Library/Containers/com.example.systemLoja/Data/Library/Application%20Support/com.example.systemLoja/json_data_storage/
         final directory = await getApplicationSupportDirectory();

@@ -4,10 +4,11 @@ version: 0.0.1
 publish_to: "none"
 
 environment:
-  sdk: ">=3.11.0"
+  sdk: ">=3.11.5 <4.0.0"
+  flutter: ">=3.41.9 <4.0.0"
 
 dependencies:
-  log_custom_printer: ^3.0.0
+  log_custom_printer: ^3.0.2
 
   flutter:
     sdk: flutter
@@ -16,13 +17,13 @@ dependencies:
   synchronized: ^3.4.0+1
   path: ^1.9.1
   bcrypt: ^1.2.0
-  json_annotation: ^4.11.0
+  json_annotation: ^4.12.0
 
   async: ^2.13.1
   meta: ^1.17.0
   crypto: ^3.0.7
   flutter_bloc: ^9.1.1
-  bloc: ^9.2.0
+  bloc: ^9.2.1
   freezed_annotation: ^3.1.0
 
   plugin_platform_interface: ^2.1.8
@@ -38,14 +39,13 @@ dependencies:
   get_it: ^9.2.1
 
 dev_dependencies:
-
   freezed: ^3.2.5
   bloc_lint: ^0.4.1
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
   build_runner: ^2.15.0
-  json_serializable: ^6.13.2
+  json_serializable: ^6.14.0
   drift_dev: ^2.33.0
   auto_route_generator: ^10.5.0
   mockito: ^5.6.4

@@ -62,9 +62,7 @@ class _SalesViewState extends State<SalesView> {
             case SalesError():
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                    'Erro ao carregar notas fiscais! ${state.message}',
-                  ),
+                  content: Text('Erro ao carregar notas fiscais! ${state.message}'),
                   backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
@@ -126,9 +124,7 @@ class _SalesViewState extends State<SalesView> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Theme.of(
-                              context,
-                            ).shadowColor.withValues(alpha: 0.1),
+                            color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -150,9 +146,7 @@ class _SalesViewState extends State<SalesView> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                 ),
                               ),
                             ],
@@ -171,9 +165,7 @@ class _SalesViewState extends State<SalesView> {
                             '${invoices.length} ${invoices.length == 1 ? 'nota fiscal' : 'notas fiscais'}',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onPrimary.withValues(alpha: 0.9),
+                              color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.9),
                             ),
                           ),
                         ],
@@ -236,9 +228,7 @@ class _SalesViewState extends State<SalesView> {
     if (viewData == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text(
-            'Aguarde o carregamento completo dos dados para continuar.',
-          ),
+          content: const Text('Aguarde o carregamento completo dos dados para continuar.'),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
@@ -276,29 +266,21 @@ class _SalesViewState extends State<SalesView> {
     );
 
     if (result == true) {
-      salesCubit.loadProducts();
+      await salesCubit.loadProducts();
     }
   }
 
   List<Invoice> _extractInvoices(SalesState state) {
     return switch (state) {
-      SalesLoadedAll(:final invoices) => invoices.values.toList(
-        growable: false,
-      ),
-      SalesLoaded(:final items) ||
-      SalesSaved(:final items) => items.values.toList(growable: false),
+      SalesLoadedAll(:final invoices) => invoices.values.toList(growable: false),
+      SalesLoaded(:final items) || SalesSaved(:final items) => items.values.toList(growable: false),
       _ => const <Invoice>[],
     };
   }
 
   _SalesLoadedAllViewData? _extractLoadedAll(SalesState state) {
     return switch (state) {
-      SalesLoadedAll(
-        :final products,
-        :final paymentMethods,
-        :final customers,
-        :final companies,
-      ) =>
+      SalesLoadedAll(:final products, :final paymentMethods, :final customers, :final companies) =>
         _SalesLoadedAllViewData(
           products: products,
           paymentMethods: paymentMethods,
