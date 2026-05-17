@@ -5,14 +5,13 @@ import 'package:system_loja/screens/configuracoes/bloc/logs_system_state.dart';
 class LogsSystemCubit extends Cubit<LogsSystemState> {
   final ISystemErrorManager _systemErrorManager;
 
-  LogsSystemCubit(this._systemErrorManager)
-    : super(const LogsSystemState.initial());
+  LogsSystemCubit(this._systemErrorManager) : super(const LogsSystemState.initial());
 
   Future<void> clearLogs() async {
     emit(const LogsSystemState.loading());
     try {
       await _systemErrorManager.clearAllErrors();
-      emit(const LogsSystemState.loaded([]));
+      emit(const LogsSystemState.deleted());
     } catch (_) {
       emit(const LogsSystemState.error('Falha ao limpar logs do sistema.'));
     }

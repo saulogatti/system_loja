@@ -55,14 +55,15 @@ extension LogsSystemStatePatterns on LogsSystemState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LogsSystemInitial value)?  initial,TResult Function( LogsSystemLoading value)?  loading,TResult Function( LogsSystemLoaded value)?  loaded,TResult Function( LogsSystemError value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LogsSystemInitial value)?  initial,TResult Function( LogsSystemLoading value)?  loading,TResult Function( LogsSystemLoaded value)?  loaded,TResult Function( LogsSystemError value)?  error,TResult Function( LogsSystemDeleted value)?  deleted,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case LogsSystemInitial() when initial != null:
 return initial(_that);case LogsSystemLoading() when loading != null:
 return loading(_that);case LogsSystemLoaded() when loaded != null:
 return loaded(_that);case LogsSystemError() when error != null:
-return error(_that);case _:
+return error(_that);case LogsSystemDeleted() when deleted != null:
+return deleted(_that);case _:
   return orElse();
 
 }
@@ -80,14 +81,15 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LogsSystemInitial value)  initial,required TResult Function( LogsSystemLoading value)  loading,required TResult Function( LogsSystemLoaded value)  loaded,required TResult Function( LogsSystemError value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LogsSystemInitial value)  initial,required TResult Function( LogsSystemLoading value)  loading,required TResult Function( LogsSystemLoaded value)  loaded,required TResult Function( LogsSystemError value)  error,required TResult Function( LogsSystemDeleted value)  deleted,}){
 final _that = this;
 switch (_that) {
 case LogsSystemInitial():
 return initial(_that);case LogsSystemLoading():
 return loading(_that);case LogsSystemLoaded():
 return loaded(_that);case LogsSystemError():
-return error(_that);}
+return error(_that);case LogsSystemDeleted():
+return deleted(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -101,14 +103,15 @@ return error(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LogsSystemInitial value)?  initial,TResult? Function( LogsSystemLoading value)?  loading,TResult? Function( LogsSystemLoaded value)?  loaded,TResult? Function( LogsSystemError value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LogsSystemInitial value)?  initial,TResult? Function( LogsSystemLoading value)?  loading,TResult? Function( LogsSystemLoaded value)?  loaded,TResult? Function( LogsSystemError value)?  error,TResult? Function( LogsSystemDeleted value)?  deleted,}){
 final _that = this;
 switch (_that) {
 case LogsSystemInitial() when initial != null:
 return initial(_that);case LogsSystemLoading() when loading != null:
 return loading(_that);case LogsSystemLoaded() when loaded != null:
 return loaded(_that);case LogsSystemError() when error != null:
-return error(_that);case _:
+return error(_that);case LogsSystemDeleted() when deleted != null:
+return deleted(_that);case _:
   return null;
 
 }
@@ -125,13 +128,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<SystemError> logs)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<SystemError> logs)?  loaded,TResult Function( String message)?  error,TResult Function()?  deleted,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case LogsSystemInitial() when initial != null:
 return initial();case LogsSystemLoading() when loading != null:
 return loading();case LogsSystemLoaded() when loaded != null:
 return loaded(_that.logs);case LogsSystemError() when error != null:
-return error(_that.message);case _:
+return error(_that.message);case LogsSystemDeleted() when deleted != null:
+return deleted();case _:
   return orElse();
 
 }
@@ -149,13 +153,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<SystemError> logs)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<SystemError> logs)  loaded,required TResult Function( String message)  error,required TResult Function()  deleted,}) {final _that = this;
 switch (_that) {
 case LogsSystemInitial():
 return initial();case LogsSystemLoading():
 return loading();case LogsSystemLoaded():
 return loaded(_that.logs);case LogsSystemError():
-return error(_that.message);}
+return error(_that.message);case LogsSystemDeleted():
+return deleted();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -169,13 +174,14 @@ return error(_that.message);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<SystemError> logs)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<SystemError> logs)?  loaded,TResult? Function( String message)?  error,TResult? Function()?  deleted,}) {final _that = this;
 switch (_that) {
 case LogsSystemInitial() when initial != null:
 return initial();case LogsSystemLoading() when loading != null:
 return loading();case LogsSystemLoaded() when loaded != null:
 return loaded(_that.logs);case LogsSystemError() when error != null:
-return error(_that.message);case _:
+return error(_that.message);case LogsSystemDeleted() when deleted != null:
+return deleted();case _:
   return null;
 
 }
@@ -384,5 +390,37 @@ as String,
 
 
 }
+
+/// @nodoc
+
+
+class LogsSystemDeleted implements LogsSystemState {
+  const LogsSystemDeleted();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemDeleted);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'LogsSystemState.deleted()';
+}
+
+
+}
+
+
+
 
 // dart format on
