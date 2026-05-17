@@ -225,25 +225,7 @@ extension ValidateDataCustomer on String {
     return BCrypt.hashpw(this, BCrypt.gensalt());
   }
 
-  /// Verifica se a senha corresponde ao hash fornecido.
-  ///
-  /// Suporta o formato BCrypt.
-  bool verifyPassword(String hashedPassword) {
-    try {
-      if (hashedPassword.startsWith(r'$2b$') ||
-          hashedPassword.startsWith(r'$2a$') ||
-          hashedPassword.startsWith(r'$2y$')) {
-        return BCrypt.checkpw(this, hashedPassword);
-      }
-    } catch (_) {
-      // Trata hashes malformados como falha na verificação
-      return false;
-    }
-
-    return false;
-  }
-
-  /// Valida se a string é um CPF válido.
+   /// Valida se a string é um CPF válido.
   ///
   /// Verifica o formato e os dígitos verificadores do CPF.
   ///
