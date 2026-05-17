@@ -98,14 +98,34 @@ void main() {
   });
 
   group('ValidateDataCustomer', () {
-    test('hashSenha generates sha256 hash', () {
+    test('hashPassword generates PBKDF2 hash with salt', () {
+      final password = 'Password123';
+      final hash = password.hashPassword();
+
+      expect(hash, contains('\$'));
+      final parts = hash.split('\$');
+      expect(parts.length, equals(3));
+      expect(parts[0], equals('600000'));
+      expect(parts[1].length, equals(32)); // 16 bytes = 32 hex chars
+      expect(parts[2].length, equals(64)); // SHA-256 = 32 bytes = 64 hex chars
+    });
+
+    test('verifyPassword validates new PBKDF2 hashes', () {
+      final password = 'Password123';
+      final hash = password.hashPassword();
+
+      expect(password.verifyPassword(hash), isTrue);
+      expect('WrongPassword'.verifyPassword(hash), isFalse);
+    });
+
+    test('verifyPassword validates legacy SHA-256 hashes', () {
+      final password = '123456';
       // hash of "123456" is 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
-      expect(
-        '123456'.hashPassword(),
-        equals(
-          '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',
-        ),
-      );
+      final legacyHash =
+          '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92';
+
+      expect(password.verifyPassword(legacyHash), isTrue);
+      expect('WrongPassword'.verifyPassword(legacyHash), isFalse);
     });
 
     test('isValidCpf correctly validates CPF', () {
