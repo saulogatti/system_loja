@@ -126,8 +126,8 @@ class CategoryRepository implements ICategoryRepository {
   /// [categoryId] ID da categoria a ser verificada.
   /// Retorna true se a categoria está em uso.
   @override
-  Future<bool> isCategoryInUse(int categoryId) async {
-    return await _categoryDao.hasProducts(categoryId);
+  Future<bool> isCategoryInUse(int categoryId) {
+    return _categoryDao.hasProducts(categoryId);
   }
 
   /// Atualiza uma categoria existente.

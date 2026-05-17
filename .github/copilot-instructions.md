@@ -4,7 +4,7 @@ Instrucoes gerais para o agente no workspace.
 
 ## Build and Test
 - Instalar dependencias: `flutter pub get`.
-- Rodar codegen quando houver alteracao em `@freezed`, `@JsonSerializable`, Drift (`@DriftDatabase`, `@DriftAccessor`, tabelas/DAOs) ou `auto_route` (`@RoutePage`):
+- Rodar codegen quando houver alteracao estrutural (campos, tipos, anotacoes, tabelas, DAOs, rotas geradas), e nao apenas formatacao/comentarios, em `@freezed`, `@JsonSerializable`, Drift (`@DriftDatabase`, `@DriftAccessor`, tabelas/DAOs) ou `auto_route` (`@RoutePage`):
   - `dart run build_runner build --delete-conflicting-outputs`
 - Executar app: `flutter run -d windows`, `flutter run -d chrome` ou `flutter run -d linux`.
 - Testes: `flutter test` e `flutter test test/<arquivo>_test.dart`.
@@ -19,15 +19,20 @@ Instrucoes gerais para o agente no workspace.
   - `SystemDatabase` (`lib/data/database/system_database.dart`) com `schemaVersion => 1`.
 
 ## Conventions
-- Seguir Clean Architecture com fronteiras de camada explicitas.
-- Domínio/core (`lib/core/`): modelos de negocio e contratos.
-- Dados (`lib/data/`): Drift, DAOs, DTOs e mapeamento. Nao importar `lib/domain/` nem `lib/aplication/` a partir de `lib/data/`.
-- Apresentacao (`lib/screens/`): nao envolver chamadas ao repositorio em `try/catch`; tratar `ResultStatus` com `when`/`switch`.
-- Retornar `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`); repositorios usam `try/catch` interno e retornam `ResultStatus.error(mensagemErroRepositorio(...))`.
-- `CacheManager` via DI (GetIt); nao usar singleton global.
-- Drift: tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`; nao usar `@UseRowClass` com entidades de `lib/core/models/`.
-- Codigo em ingles; documentacao e comentarios `///` em portugues.
-- Commit: `<tipo>: <descricao concisa>` com tipos `feat`, `fix`, `docs`, `style`, `refactor`, `test`; mensagem em portugues.
+- Seguir Clean Architecture com fronteiras explicitas entre camadas.
+- Camadas:
+  - Dominio/core (`lib/core/`): modelos de negocio e contratos.
+  - Dados (`lib/data/`): Drift, DAOs, DTOs e mapeamento; nao importar `lib/domain/` nem `lib/aplication/`.
+  - Apresentacao (`lib/screens/`): nao envolver chamadas ao repositorio em `try/catch`; tratar `ResultStatus` com `when`/`switch`.
+- Resultado e erros:
+  - Retornar `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`).
+  - Repositorios usam `try/catch` interno e retornam `ResultStatus.error(mensagemErroRepositorio(...))`.
+- Persistencia e DI:
+  - `CacheManager` via DI (GetIt); nao usar singleton global.
+  - Drift: tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`; nao usar `@UseRowClass` com entidades de `lib/core/models/`.
+- Linguagem e commit:
+  - Codigo em ingles; documentacao e comentarios `///` em portugues.
+  - Commit: `<tipo>: <descricao concisa>` com tipos `feat`, `fix`, `docs`, `style`, `refactor`, `test`; mensagem em portugues.
 
 ## Pitfalls
 - O projeto esta em desenvolvimento: nao ha obrigacao de compatibilidade retroativa de JSON/modelos/schemas.

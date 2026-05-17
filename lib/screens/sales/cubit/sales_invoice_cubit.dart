@@ -15,13 +15,19 @@ import 'package:system_loja/screens/sales/models/person_selection_invoice_mappin
 class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
   final SalesCubit _salesCubit;
 
-  SalesInvoiceCubit({required SalesCubit salesCubit, required List<PaymentMethodType> paymentMethods})
-    : _salesCubit = salesCubit,
-      super(
-        SalesInvoiceState.editing(
-          form: SalesInvoiceFormData(paymentMethod: paymentMethods.isEmpty ? null : paymentMethods.first),
-        ),
-      );
+  SalesInvoiceCubit({
+    required SalesCubit salesCubit,
+    required List<PaymentMethodType> paymentMethods,
+  }) : _salesCubit = salesCubit,
+       super(
+         SalesInvoiceState.editing(
+           form: SalesInvoiceFormData(
+             paymentMethod: paymentMethods.isEmpty
+                 ? null
+                 : paymentMethods.first,
+           ),
+         ),
+       );
 
   /// Adiciona ou soma quantidade; em falta de estoque (saída), emite [SalesInvoiceState.feedback].
   void addOrMergeLine(Product product, int quantityToAdd) {
@@ -31,20 +37,28 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
     final existing = form.linesByProductId[product.id];
     final mergedQty = (existing?.quantity ?? 0) + quantityToAdd;
 
-    if (form.invoiceType == InvoiceType.exit && mergedQty > product.stockQuantity) {
-      _emitFeedback('Estoque insuficiente! Disponível: ${product.stockQuantity}');
+    if (form.invoiceType == InvoiceType.exit &&
+        mergedQty > product.stockQuantity) {
+      _emitFeedback(
+        'Estoque insuficiente! Disponível: ${product.stockQuantity}',
+      );
       return;
     }
 
     final nextMap = Map<int, InvoiceLineEntry>.from(form.linesByProductId);
-    nextMap[product.id] = InvoiceLineEntry(product: product, quantity: mergedQty);
+    nextMap[product.id] = InvoiceLineEntry(
+      product: product,
+      quantity: mergedQty,
+    );
 
     final nextOrder = List<int>.from(form.orderedProductIds);
     if (!nextOrder.contains(product.id)) {
       nextOrder.add(product.id);
     }
 
-    _emitEditing(form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder));
+    _emitEditing(
+      form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder),
+    );
   }
 
   /// Volta para [SalesInvoiceEditing] após exibir o SnackBar (transição por tipo, sem campo solto).
@@ -59,9 +73,14 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
 
   void removeLine(int productId) {
     final form = state.form;
-    final nextMap = Map<int, InvoiceLineEntry>.from(form.linesByProductId)..remove(productId);
-    final nextOrder = form.orderedProductIds.where((id) => id != productId).toList();
-    _emitEditing(form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder));
+    final nextMap = Map<int, InvoiceLineEntry>.from(form.linesByProductId)
+      ..remove(productId);
+    final nextOrder = form.orderedProductIds
+        .where((id) => id != productId)
+        .toList();
+    _emitEditing(
+      form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder),
+    );
   }
 
   void setInvoiceType(InvoiceType type) {
@@ -133,7 +152,12 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
   void toggleAutoInvoiceNumber() {
     final form = state.form;
     final next = !form.enableCodeGeneration;
-    _emitEditing(form.copyWith(enableCodeGeneration: next, invoiceNumber: next ? kStringGenerate : ''));
+    _emitEditing(
+      form.copyWith(
+        enableCodeGeneration: next,
+        invoiceNumber: next ? kStringGenerate : '',
+      ),
+    );
   }
 
   void updateInvoiceNumber(String value) {

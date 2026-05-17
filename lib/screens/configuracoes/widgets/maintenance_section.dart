@@ -1,15 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:system_loja/core/settings/app_settings.dart';
+import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 
 /// Widget da seção de configurações de limpeza de dados
 class MaintenanceSection extends StatelessWidget {
   /// Configuração atual do sistema
-  final AppSettings config;
+  final SystemConfiguration config;
 
   /// Callback para atualizar a configuração
-  final Function(AppSettings) onConfigChanged;
+  final Function(SystemConfiguration) onConfigChanged;
 
   /// Callback para limpar logs antigos
   final VoidCallback onLimparLogsAntigos;
@@ -35,10 +35,7 @@ class MaintenanceSection extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.cleaning_services,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                Icon(Icons.cleaning_services, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
                 const Text(
                   'Limpeza de Dados',
@@ -50,27 +47,25 @@ class MaintenanceSection extends StatelessWidget {
             SwitchListTile(
               title: const Text('Limpeza automática de logs'),
               subtitle: const Text('Remover logs antigos automaticamente'),
-              value: config.limpezaAutomatica,
+              value: config.isAutoCleanEnabled,
               onChanged: (value) {
-                onConfigChanged(config.copyWith(limpezaAutomatica: value));
+                onConfigChanged(config.copyWith(isAutoCleanEnabled: value));
               },
             ),
-            if (config.limpezaAutomatica)
+            if (config.isAutoCleanEnabled)
               ListTile(
                 title: const Text('Dias para manter logs'),
                 subtitle: Slider(
-                  value: config.diasManterLogs.toDouble(),
+                  value: config.logRetentionDays.toDouble(),
                   min: 7,
                   max: 365,
-                  divisions: 51,
-                  label: '${config.diasManterLogs} dias',
+                  divisions: 358,
+                  label: '${config.logRetentionDays} dias',
                   onChanged: (value) {
-                    onConfigChanged(
-                      config.copyWith(diasManterLogs: value.toInt()),
-                    );
+                    onConfigChanged(config.copyWith(logRetentionDays: value.toInt()));
                   },
                 ),
-                trailing: Text('${config.diasManterLogs}'),
+                trailing: Text('${config.logRetentionDays}'),
               ),
             ListTile(
               title: const Text('Analisar logs do sistema'),
@@ -85,10 +80,7 @@ class MaintenanceSection extends StatelessWidget {
               onTap: onLimparLogsAntigos,
             ),
             ListTile(
-              title: const Text(
-                'Limpar todos os dados',
-                style: TextStyle(color: Colors.red),
-              ),
+              title: const Text('Limpar todos os dados', style: TextStyle(color: Colors.red)),
               subtitle: const Text('Remover TODOS os dados do sistema'),
               leading: const Icon(Icons.warning, color: Colors.red),
               onTap: onLimparTodosDados,

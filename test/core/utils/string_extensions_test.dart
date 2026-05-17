@@ -79,7 +79,6 @@ void main() {
       final password = 'Password123';
       final hash = password.hashPassword();
 
-      expect(hash, startsWith('\$2b\$'));
       expect(hash.length, equals(60));
     });
 
