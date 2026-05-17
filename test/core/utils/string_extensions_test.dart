@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:system_loja/screens/utils/string_extensions.dart';
+import 'package:system_loja/core/utils/string_extensions.dart';
 
 void main() {
   group('FileNameStringExtensions', () {
@@ -98,14 +98,36 @@ void main() {
   });
 
   group('ValidateDataCustomer', () {
-    test('hashSenha generates sha256 hash', () {
+    test('hashPassword generates PBKDF2 hash', () {
+      final password = 'password123';
+      final hash = password.hashPassword();
+
+      expect(hash, contains('\$'));
+      final parts = hash.split('\$');
+      expect(parts.length, equals(3));
+      expect(parts[0], equals('600000'));
+    });
+
+    test('verifyPassword validates correct password', () {
+      final password = 'securePassword123';
+      final hash = password.hashPassword();
+
+      expect(password.verifyPassword(hash), isTrue);
+    });
+
+    test('verifyPassword rejects incorrect password', () {
+      final password = 'securePassword123';
+      final hash = password.hashPassword();
+
+      expect('wrongPassword'.verifyPassword(hash), isFalse);
+    });
+
+    test('verifyPassword supports legacy SHA-256 hash', () {
       // hash of "123456" is 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
-      expect(
-        '123456'.hashPassword(),
-        equals(
-          '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',
-        ),
-      );
+      final legacyHash =
+          '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92';
+      expect('123456'.verifyPassword(legacyHash), isTrue);
+      expect('wrong'.verifyPassword(legacyHash), isFalse);
     });
 
     test('isValidCpf correctly validates CPF', () {
