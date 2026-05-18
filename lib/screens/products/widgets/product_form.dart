@@ -148,6 +148,8 @@ class _ProductFormState extends State<ProductForm> {
           TextFormField(
             enabled: !widget.isLoading,
             controller: widget.descricaoController,
+            keyboardType: TextInputType.multiline,
+            maxLength: 500,
             decoration: const InputDecoration(
               labelText: 'Descrição',
               border: OutlineInputBorder(),

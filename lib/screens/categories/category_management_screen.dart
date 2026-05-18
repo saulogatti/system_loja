@@ -228,6 +228,8 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: descriptionController,
+                keyboardType: TextInputType.multiline,
+                maxLength: 500,
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                   border: OutlineInputBorder(),
