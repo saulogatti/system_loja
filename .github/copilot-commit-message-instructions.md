@@ -1,14 +1,26 @@
+## Commit message padrao
 
+Use sempre o formato:
 
-## Commit message padrão
-- Formato: `<tipo>: <descrição concisa>`
-- Tipos comuns:
-  - `feat`: Nova funcionalidade
-  - `fix`: Correção de bug
-  - `docs`: Atualização de documentação
-  - `style`: Formatação/correção de estilo (sem alteração de lógica)
-  - `refactor`: Refatoração de código (sem alteração de funcionalidade)
-  - `test`: Adição ou correção de testes
-- Mensagem clara e em português.
-- Adicionar na mensagem o nome das classes alteradas, se possível.
-- Exemplo: `fix: Corrigir bug na navegação do menu (MenuNavigator)`
+`<tipo>: <descricao concisa>`
+
+### Tipos aceitos
+
+- `feat`: nova funcionalidade
+- `fix`: correcao de bug
+- `docs`: documentacao
+- `style`: mudanca de estilo/formatacao sem alterar logica
+- `refactor`: refatoracao sem mudar comportamento
+- `test`: criacao/ajuste de testes
+
+### Regras
+
+- Mensagem em portugues.
+- Descricao curta, objetiva e orientada ao impacto.
+- Quando fizer sentido, incluir nome da classe/modulo alterado.
+
+### Exemplos
+
+- `fix: corrigir validacao de estoque em InvoiceRepository`
+- `feat: adicionar filtro por categoria na ProductScreen`
+- `docs: atualizar fluxo de build no README`

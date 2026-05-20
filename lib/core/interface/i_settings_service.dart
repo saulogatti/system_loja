@@ -1,4 +1,4 @@
-import 'package:system_loja/core/settings/app_theme_settings.dart';
+import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 
 /// Interface que define o contrato para serviço de configurações de tema.
 ///
@@ -11,7 +11,7 @@ import 'package:system_loja/core/settings/app_theme_settings.dart';
 /// Exemplo de uso:
 /// ```dart
 /// final service = appInjection.get<SettingsService>();
-/// 
+///
 /// // Atualizar para tema escuro com cor azul
 /// service.updateSettings(
 ///   EnumColorAppThemeSettings.blue,

@@ -1,33 +1,26 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/default/default_object.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 
-part 'invoice.g.dart';
-
-/// Modelo de dados para Nota Fiscal.
-@JsonSerializable(explicitToJson: true)
+/// Nota fiscal (domínio). Serialização em `lib/data/models/invoice_export_data.dart`.
+///
+/// Representa uma nota fiscal de entrada ([InvoiceType.entry]) ou saída
+/// ([InvoiceType.exit]). Os dados da nota estão encapsulados em [InvoiceData].
 class Invoice extends DefaultObject {
+  /// Dados da nota fiscal (número, tipo, itens, valores, etc.).
   final InvoiceData data;
 
   Invoice({
-    required this.data, super.id,
+    required this.data,
     super.registrationDate,
     super.lastUpdatedDate,
+    super.id,
   });
-
-  /// Cria um objeto a partir de JSON.
-  factory Invoice.fromJson(Map<String, dynamic> json) =>
-      _$InvoiceFromJson(json);
-
-  /// Converte o objeto para JSON.
-  @override
-  Map<String, dynamic> toJson() => _$InvoiceToJson(this);
 
   @override
   String toString() {
     final buffer = StringBuffer();
-    buffer.writeln('ID: $id');
+
     buffer.writeln('Invoice Number: ${data.invoiceNumber}');
     buffer.writeln('Type: ${data.type.name}');
     if (data.customerId != null) {
@@ -36,7 +29,9 @@ class Invoice extends DefaultObject {
       );
     }
     if (data.companyId != null) {
-      buffer.writeln('Company ID: ${data.companyId}');
+      buffer.writeln(
+        'Company: ${data.companyName} (CNPJ: ${data.companyCnpj})',
+      );
     }
     buffer.writeln('Total Value: R\$ ${data.totalValue.toStringAsFixed(2)}');
     buffer.writeln('Payment Method: ${data.paymentMethod}');
@@ -55,48 +50,66 @@ class Invoice extends DefaultObject {
   }
 }
 
-/// Dados de uma nota fiscal.
+/// Dados da nota fiscal.
 ///
-/// Regra exclusiva: exatamente um de [customerId] ou [companyId] deve ser
-/// informado, independente do [type].
-@JsonSerializable()
+/// Exatamente um de [customerId] ou [companyId] deve ser informado.
+/// Notas de saída ([InvoiceType.exit]) vinculam a clientes; notas de entrada
+/// ([InvoiceType.entry]) vinculam a empresas.
+///
+/// O [totalValue] é calculado automaticamente a partir da soma dos [items].
 class InvoiceData {
-  @JsonKey(name: 'numero_nota')
+  /// Número único da nota fiscal (ex.: NF-20260123-0001).
   String invoiceNumber;
 
-  /// ID do cliente quando a nota estiver vinculada a um cliente.
-  @JsonKey(name: 'cliente_id')
+  /// ID do cliente vinculado (mutuamente exclusivo com [companyId]).
   final int? customerId;
 
-  /// Nome do cliente (desnormalizado).
-  @JsonKey(name: 'cliente_nome')
+  /// Nome do cliente para exibição (desnormalizado).
   final String? customerName;
 
-  /// CPF do cliente (desnormalizado).
-  @JsonKey(name: 'cliente_cpf')
+  /// CPF do cliente para exibição (desnormalizado).
   final String? customerCpf;
 
-  /// ID da empresa vinculada à nota.
-  @JsonKey(name: 'empresa_id')
+  /// ID da empresa vinculada (mutuamente exclusivo com [customerId]).
   final int? companyId;
 
+  /// Nome da empresa para exibição (desnormalizado).
+  final String? companyName;
+
+  /// CNPJ da empresa para exibição (desnormalizado).
+  final String? companyCnpj;
+
+  /// Itens da nota fiscal.
   final List<InvoiceItem> items;
-  @JsonKey(name: 'valor_total')
+
+  /// Valor total calculado automaticamente a partir dos [items].
   final double totalValue;
-  @JsonKey(name: 'forma_pagamento')
+
+  /// Forma de pagamento utilizada.
   final String paymentMethod;
-  @JsonKey(name: 'data_emissao')
+
+  /// Data de emissão da nota. Padrão: data/hora atual.
   final DateTime issueDate;
 
-  /// Tipo da nota fiscal. Padrão: saída ([InvoiceType.exit]).
+  /// Tipo da nota: entrada ([InvoiceType.entry]) ou saída ([InvoiceType.exit]).
   final InvoiceType type;
+
+  /// Nome de exibição unificado (cliente ou empresa).
+  String get personDisplayName => customerName ?? companyName ?? '';
+
+  /// Documento de exibição unificado (CPF ou CNPJ).
+  String get personDocument => customerCpf ?? companyCnpj ?? '';
 
   InvoiceData({
     required this.invoiceNumber,
-    required this.items, required this.paymentMethod, this.customerId,
+    required this.items,
+    required this.paymentMethod,
+    this.customerId,
     this.customerName,
     this.customerCpf,
     this.companyId,
+    this.companyName,
+    this.companyCnpj,
     DateTime? issueDate,
     this.type = InvoiceType.exit,
   }) : totalValue = items.fold(0.0, (sum, item) => sum + item.totalValue),
@@ -109,8 +122,4 @@ class InvoiceData {
       );
     }
   }
-
-  factory InvoiceData.fromJson(Map<String, dynamic> json) =>
-      _$InvoiceDataFromJson(json);
-  Map<String, dynamic> toJson() => _$InvoiceDataToJson(this);
 }

@@ -24,5 +24,8 @@ Você é um revisor de código sênior extremamente rigoroso e focado em qualida
 
 ## 5. Boas Práticas e Clean Code
 * Evite "Magic Numbers" e "Magic Strings". Se uma string ou número se repete, crie uma constante.
-* O código deve ser em inglês (variáveis, métodos, classes). Apenas textos exibidos ao usuário podem ser em português.
-* Trate exceções adequadamente nas camadas de `data` e retorne `Failures` ou `Exceptions` mapeadas para o `domain`. Não engula erros com `catch (e) { print(e); }`.
+* O código deve ser em inglês (variáveis, métodos, classes). Apenas textos exibidos ao usuário e documentação `///` devem ser em português.
+* Repositórios (`lib/domain/repository/`) usam `try/catch` internamente e retornam `ResultStatus.error(mensagemErroRepositorio(erro, contexto: '...'))` com mensagens amigáveis para a UI (ver `lib/core/utils/repository_error_mapper.dart`). **Nunca** relançar exceções para BLoC/Cubit e **nunca** engolir erros com `catch (e) { print(e); }`.
+* A camada de apresentação **não** envolve chamadas ao repositório em `try/catch`; usa `when`/`switch` no `ResultStatus`.
+* `CacheManager` é registrado via `GetIt` (DI); não usar `CacheManager.instance`.
+* Comentarios do code review devem ser em português.

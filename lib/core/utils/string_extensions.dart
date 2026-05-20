@@ -1,10 +1,9 @@
 import 'dart:convert';
-import 'dart:math';
-import 'dart:typed_data';
 
+import 'package:bcrypt/bcrypt.dart';
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
-import 'package:system_loja/screens/utils/constants.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
 
 /// Extensões para manipulação segura de strings em nomes de arquivos.
 ///
@@ -125,7 +124,8 @@ extension FileNameStringExtensions on String {
   /// 'Nome  com   espaços'.sanitizeFileName(); // 'Nome_com_espaços'
   /// ```
   String sanitizeFileName() {
-    return replaceAll(Constants.invalidFileNameCharsRegExp, '_')
+    return toLowerCase()
+        .replaceAll(Constants.invalidFileNameCharsRegExp, '_')
         .replaceAll(Constants.oneOrMoreWhitespaceRegExp, '_')
         .replaceAll(Constants.oneOrMoreUnderscoreRegExp, '_')
         .trim();
@@ -171,10 +171,9 @@ extension FileNameStringExtensions on String {
   /// 'CON.txt'.toSafeFileName(addTimestamp: true); // 'con_1701979200000.txt'
   /// ```
   String toSafeFileName({int maxLength = 200, bool addTimestamp = false}) {
-    String safeName = sanitizeFileName()
-        .toAsciiFileName()
-        .normalizeFileName()
-        .truncateFileName(maxLength: maxLength);
+    String safeName = sanitizeFileName().toAsciiFileName().normalizeFileName().truncateFileName(
+      maxLength: maxLength,
+    );
 
     // Se for nome reservado, adiciona sufixo
     if (safeName.isReservedFileName()) {
@@ -226,88 +225,11 @@ extension ValidateDataCustomer on String {
   static const int _saltLength = 16;
   static const int _keyLength = 32;
 
-  /// Gera hash seguro da senha usando PBKDF2 com HMAC-SHA256.
+  /// Gera um hash seguro usando PBKDF2 com HMAC-SHA256.
   ///
-  /// O formato de saída é: iterations$salt$hash (salt e hash em Base64).
-  String hashSenha() {
-    final random = Random.secure();
-    final salt = Uint8List(_saltLength);
-    for (var i = 0; i < _saltLength; i++) {
-      salt[i] = random.nextInt(256);
-    }
-
-    final derivedKey = _pbkdf2(this, salt, _iterations, _keyLength);
-
-    final saltBase64 = base64.encode(salt);
-    final hashBase64 = base64.encode(derivedKey);
-
-    return '$_iterations\$$saltBase64\$$hashBase64';
-  }
-
-  /// Verifica se a senha corresponde ao hash fornecido.
-  ///
-  /// Suporta o novo formato PBKDF2 (iterations$salt$hash) e
-  /// o formato legado SHA-256 (hexadecimal).
-  bool verifySenha(String storedHash) {
-    final parts = storedHash.split('\$');
-
-    // Novo formato: iterations$salt$hash
-    if (parts.length == 3) {
-      final iterations = int.tryParse(parts[0]);
-      if (iterations == null) return false;
-
-      final salt = base64.decode(parts[1]);
-      final expectedHash = parts[2];
-
-      final derivedKey = _pbkdf2(this, salt, iterations, _keyLength);
-      final actualHash = base64.encode(derivedKey);
-
-      return actualHash == expectedHash;
-    }
-
-    // Formato legado: SHA-256 (hex)
-    final bytes = utf8.encode(this);
-    final digest = sha256.convert(bytes);
-    return digest.toString() == storedHash;
-  }
-
-  /// Implementação interna do PBKDF2 com HMAC-SHA256.
-  Uint8List _pbkdf2(String password, List<int> salt, int iterations, int keyLength) {
-    final passwordBytes = utf8.encode(password);
-    final hmac = Hmac(sha256, passwordBytes);
-    final out = Uint8List(keyLength);
-    final hLen = 32; // SHA-256 output length
-    final numBlocks = (keyLength + hLen - 1) ~/ hLen;
-
-    for (var i = 1; i <= numBlocks; i++) {
-      final block = _processBlock(hmac, salt, iterations, i, hLen);
-      final offset = (i - 1) * hLen;
-      final len = min(hLen, keyLength - offset);
-      out.setRange(offset, offset + len, block.sublist(0, len));
-    }
-
-    return out;
-  }
-
-  Uint8List _processBlock(Hmac hmac, List<int> salt, int iterations, int blockIndex, int hLen) {
-    final blockIndexBytes = Uint8List(4);
-    ByteData.view(blockIndexBytes.buffer).setUint32(0, blockIndex, Endian.big);
-
-    final saltWithIndex = Uint8List(salt.length + 4);
-    saltWithIndex.setAll(0, salt);
-    saltWithIndex.setAll(salt.length, blockIndexBytes);
-
-    var u = Uint8List.fromList(hmac.convert(saltWithIndex).bytes);
-    final res = Uint8List.fromList(u);
-
-    for (var i = 1; i < iterations; i++) {
-      u = Uint8List.fromList(hmac.convert(u).bytes);
-      for (var j = 0; j < hLen; j++) {
-        res[j] ^= u[j];
-      }
-    }
-
-    return res;
+  /// Retorna uma string no formato: `iterations$salt$hash` (todos em hexadecimal).
+  String hashPassword() {
+    return BCrypt.hashpw(this, BCrypt.gensalt());
   }
 
   /// Valida se a string é um CPF válido.
@@ -320,7 +242,7 @@ extension ValidateDataCustomer on String {
   /// ```dart
   /// '123.456.789-09'.isValidCPF(); // true ou false
   /// ```
-  bool isValidCPF() {
+  bool isValidCpf() {
     final String cpf = replaceAll(Constants.nonNumericRegExp, '');
 
     if (cpf.length != 11 || Constants.cpfSameDigitRegExp.hasMatch(cpf)) {
@@ -370,7 +292,7 @@ extension ValidateDataCustomer on String {
   /// Retorna uma mensagem de erro se a senha for inválida, ou null se for válida.
   /// Regras: mínimo [senhaMinLength] caracteres, pelo menos uma letra maiúscula,
   /// uma letra minúscula e um número.
-  String? validarSenha() {
+  String? validatePassword() {
     final String senha = this;
     if (senha.isEmpty) {
       return 'Senha é obrigatória';

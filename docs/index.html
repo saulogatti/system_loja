@@ -44,384 +44,117 @@
       
 <section class="desc markdown">
   <h1 id="system-loja">System Loja</h1>
-<p>Sistema de gerenciamento de loja desenvolvido em Flutter com arquitetura moderna e persistência de dados dual (JSON + SQLite).</p>
-<blockquote>
-<p><strong>🤖 Usando GitHub Copilot?</strong> Leia o <a href="CONTRIBUTING.md">Guia de Contribuição</a> e <a href=".github/copilot-instructions.md">.github/copilot-instructions.md</a> para obter os melhores resultados!</p>
-</blockquote>
-<h2 id="-ndice">📚 Índice</h2>
+<p>Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, categorias, empresa e notas/vendas), com persistencia local em SQLite via Drift e fluxo legado em JSON ainda ativo em partes especificas.</p>
+<h2 id="visao-geral">Visao geral</h2>
 <ul>
-<li><a href="#descri%C3%A7%C3%A3o">Descrição</a></li>
-<li><a href="#funcionalidades">Funcionalidades</a></li>
-<li><a href="#requisitos">Requisitos</a></li>
-<li><a href="#como-executar">Como Executar</a></li>
-<li><a href="#estrutura-do-projeto">Estrutura do Projeto</a></li>
-<li><a href="#contribuindo">Contribuindo</a></li>
-<li><a href="#documenta%C3%A7%C3%A3o">Documentação</a></li>
+<li>UI em <code>lib/screens/</code>, com BLoC/Cubit (<code>flutter_bloc</code>).</li>
+<li>Fluxo principal: <strong>Screen</strong> → <strong>Interface</strong> (<code>lib/core/interface/</code>) → <strong>Repository</strong> (<code>lib/domain/repository/</code>) → <strong>DAO Drift</strong> (<code>lib/data/database/dao/</code>) → SQLite.</li>
+<li>DI com <code>GetIt</code> via <code>setupAppInjection()</code> em <code>lib/aplication/app_injection.dart</code>.</li>
+<li>Navegacao com <code>auto_route</code> em <code>lib/screens/route/route_app.dart</code>.</li>
+<li>Padrao de retorno entre camadas: <code>ResultStatus&lt;R, E&gt;</code> (<code>lib/core/utils/command_result.dart</code>, usa <code>package:meta</code>).</li>
+<li>Repositorios usam <code>try/catch</code> internamente e retornam <code>ResultStatus.error(...)</code> com mensagens amigaveis via <code>mensagemErroRepositorio()</code> (<code>lib/core/utils/repository_error_mapper.dart</code>). A camada de apresentacao <strong>nao</strong> envolve chamadas ao repositorio em <code>try/catch</code>; usa <code>when</code> ou <code>switch</code> em <code>ResultStatus</code>.</li>
+<li>Camada <strong>data</strong> (<code>lib/data/</code>): Drift, DTOs/entries JSON, conversores, cache e mapeamento para modelos de <code>lib/core/models/</code> — <strong>sem</strong> depender de <code>lib/domain/</code> ou <code>lib/aplication/</code> (constantes compartilhadas ficam em <code>lib/core/</code> quando necessario).</li>
+<li><code>CacheManager</code> registrado via <code>GetIt</code> (injecao de dependencia) — <strong>nao</strong> usar <code>CacheManager.instance</code>.</li>
 </ul>
-<h2 id="descrio">Descrição</h2>
-<p>Aplicação Flutter <strong>multiplataforma</strong> (Windows, macOS, iOS, Android) para gerenciamento de loja com arquitetura moderna:</p>
-<ul>
-<li><strong>State Management</strong>: BLoC com <code>flutter_bloc</code> e <code>freezed</code></li>
-<li><strong>Persistência</strong>: Drift ORM (SQLite type-safe) + JSON (legacy)</li>
-<li><strong>Code Generation</strong>: <code>drift</code>, <code>json_serializable</code>, <code>freezed</code>, <code>build_runner</code></li>
-<li><strong>Padrões</strong>: Repository Pattern, Manager Pattern, OperationResult</li>
-<li><strong>Navegação</strong>: Auto Route para navegação declarativa</li>
-<li><strong>Material Design 3</strong>: Interface moderna e responsiva</li>
-</ul>
-<h3 id="funcionalidades">Funcionalidades</h3>
-<ol>
-<li>
-<p><strong>Cadastro de Cliente</strong></p>
-<ul>
-<li>Adicionar novos clientes</li>
-<li>Listar todos os clientes</li>
-<li>Buscar cliente por CPF</li>
-<li>Dados: Nome, CPF, Email, Telefone, Endereço</li>
-</ul>
-</li>
-<li>
-<p><strong>Cadastro de Produto</strong></p>
-<ul>
-<li>Adicionar novos produtos</li>
-<li>Listar todos os produtos</li>
-<li>Buscar produto por código</li>
-<li>Dados: Nome, Código, Preço, Estoque, Descrição, Categoria</li>
-</ul>
-</li>
-<li>
-<p><strong>Cadastro de Nota Fiscal de Compra</strong></p>
-<ul>
-<li>Criar notas fiscais vinculadas a clientes</li>
-<li>Adicionar múltiplos itens (produtos) por nota</li>
-<li>Listar todas as notas fiscais</li>
-<li>Buscar nota fiscal por número</li>
-<li>Dados: Número, Cliente, Itens, Valor Total, Forma de Pagamento</li>
-</ul>
-</li>
-<li>
-<p><strong>Cadastro de Empresa</strong></p>
-<ul>
-<li>Dados da empresa (razão social, CNPJ, endereço, contato)</li>
-<li>Visualização e edição com formulário dedicado</li>
-</ul>
-</li>
-<li>
-<p><strong>Categorias de Produto</strong></p>
-<ul>
-<li>Gestão de categorias para organização dos produtos</li>
-<li>Tela de gerenciamento de categorias (CRUD)</li>
-</ul>
-</li>
-<li>
-<p><strong>Configurações</strong></p>
-<ul>
-<li>Usuários e permissões</li>
-<li>Configurações do sistema (banco de dados, backup, notificações, tema)</li>
-<li>Logs do sistema e análise de atividades</li>
-</ul>
-</li>
-</ol>
 <h2 id="requisitos">Requisitos</h2>
 <ul>
-<li>Flutter SDK 3.38 ou superior</li>
-<li>Dart SDK 3.10.8 ou superior (incluído no Flutter, conforme <code>pubspec.yaml</code>)</li>
-<li>SQLite (incluído no Flutter desktop)</li>
+<li>Flutter 3.41.2 ou superior.</li>
+<li>Dart SDK <code>&gt;=3.11.0</code>.</li>
 </ul>
-<h2 id="como-instalar-o-flutter">Como Instalar o Flutter</h2>
-<h3 id="linuxmacos">Linux/macOS</h3>
-<pre class="language-bash"><code class="language-bash"># Baixe o Flutter SDK (versão 3.38 ou superior)
-wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.38.0-stable.tar.xz
-tar xf flutter_linux_3.38.0-stable.tar.xz
-export PATH="$PATH:`pwd`/flutter/bin"
-
-# Verifique a instalação
-flutter doctor
-</code></pre>
-<h3 id="windows">Windows</h3>
-<p>Baixe o instalador em: <a href="https://flutter.dev/docs/get-started/install/windows">https://flutter.dev/docs/get-started/install/windows</a></p>
-<h2 id="como-executar">Como Executar</h2>
-<ol>
-<li>Clone o repositório:</li>
-</ol>
+<h2 id="setup-rapido">Setup rapido</h2>
 <pre class="language-bash"><code class="language-bash">git clone https://github.com/saulogatti/system_loja.git
 cd system_loja
-</code></pre>
-<ol start="2">
-<li>Instale as dependências:</li>
-</ol>
-<pre class="language-bash"><code class="language-bash">flutter pub get
-</code></pre>
-<ol start="3">
-<li>Gere o código necessário (models, BLoC):</li>
-</ol>
-<pre class="language-bash"><code class="language-bash">dart run build_runner build --delete-conflicting-outputs
-</code></pre>
-<ol start="4">
-<li>Execute o aplicativo:</li>
-</ol>
-<pre class="language-bash"><code class="language-bash"># Para executar no Chrome (Web)
-flutter run -d chrome
-
-# Para executar no Windows
-flutter run -d windows
-
-# Para executar no Linux
-flutter run -d linux
-
-# Para executar no Android/iOS (com emulador/dispositivo conectado)
-flutter run
-</code></pre>
-<h2 id="estrutura-de-dados">Estrutura de Dados</h2>
-<p>O projeto utiliza <strong>persistência dual</strong>:</p>
-<h3 id="sistema-principal-drift-orm">Sistema Principal (Drift ORM)</h3>
-<ul>
-<li><strong>ORM Type-Safe</strong>: Drift para SQLite com validações em tempo de compilação</li>
-<li><strong>Banco</strong>: <code>system_loja.db</code> (criado automaticamente)</li>
-<li><strong>Tabelas</strong>: clientes, produtos, categorias, empresas, endereços, notas fiscais, itens de nota, usuários, logs do sistema</li>
-<li><strong>DAOs</strong>: Data Access Objects em <code>lib/data/database/dao/</code> (customer_dao, product_dao, category_dao, company_dao, address_dao, invoice_dao, invoice_item_dao, users_dao, log_dao, system_dao, sales_dao)</li>
-<li><strong>Migrations</strong>: Versionamento de schema com drift_dev</li>
-<li><strong>Suporte</strong>: Transações, relacionamentos, queries type-safe</li>
-</ul>
-<h3 id="sistema-legacy-json---descontinuado">Sistema Legacy (JSON - Descontinuado)</h3>
-<ul>
-<li><code>data/clientes.json</code> - Dados dos clientes</li>
-<li><code>data/produtos.json</code> - Dados dos produtos</li>
-<li><code>data/notas_fiscais.json</code> - Dados das notas fiscais</li>
-<li>Managers em <code>lib/core/managers/</code> (em processo de migração)</li>
-</ul>
-<h2 id="estrutura-do-projeto">Estrutura do Projeto</h2>
-<pre class="language-dart"><code>system_loja/
-├── lib/
-│   ├── main.dart                 # Ponto de entrada com Material 3
-│   ├── app_injection.dart        # Dependency Injection (GetIt)
-│   ├── colors.dart               # Cores Material Design
-│   ├── core/
-│   │   ├── models/               # Modelos com @JsonSerializable
-│   │   │   ├── customer.dart     # Customer (Cliente)
-│   │   │   ├── product.dart      # Product (Produto)
-│   │   │   ├── category.dart     # Category (Categoria)
-│   │   │   ├── company.dart      # Company (Empresa)
-│   │   │   ├── address.dart      # Endereço
-│   │   │   ├── invoice.dart      # Invoice (Nota Fiscal)
-│   │   │   ├── invoice_item.dart
-│   │   │   ├── user.dart         # User (Usuário)
-│   │   │   ├── activity_log.dart  # Log de atividades
-│   │   │   └── system_config/    # Configurações do sistema
-│   │   ├── interface/            # Contratos (repositórios, serviços)
-│   │   ├── repository/           # Repositories (Repository Pattern)
-│   │   │   ├── customer_repository.dart
-│   │   │   ├── product_repository.dart
-│   │   │   ├── category_repository.dart
-│   │   │   ├── company_repository.dart
-│   │   │   ├── sales_repository.dart
-│   │   │   └── system/           # log, system, user_repository
-│   │   ├── managers/             # Configuração, cache, erros
-│   │   ├── services/             # Code generator, etc.
-│   │   ├── settings/             # App settings, tema
-│   │   ├── exceptions/           # Exceções de negócio
-│   │   └── utils/
-│   │       ├── command_result.dart     # OperationResult pattern
-│   │       ├── string_extensions.dart  # File name safety
-│   │       ├── validators.dart         # Validações
-│   │       └── input_formatters.dart   # Formatadores de entrada
-│   ├── data/
-│   │   ├── database/             # Drift ORM (principal)
-│   │   │   ├── app_database.dart
-│   │   │   ├── system_database.dart
-│   │   │   ├── table/            # Tabelas Drift (customers, products, categories, company, invoices, users, logs...)
-│   │   │   ├── dao/              # Data Access Objects
-│   │   │   └── extension/       # Companions para persistência
-│   │   ├── cache/                # Cache (system_cache_manager)
-│   │   └── files_utility/       # Utilitários de arquivo
-│   └── screens/
-│       ├── home/                 # Tela principal
-│       ├── customer/             # Módulo de clientes (BLoC)
-│       ├── products/             # Módulo de produtos (Cubit)
-│       ├── sales/                # Módulo de vendas (Cubit)
-│       ├── company/              # Cadastro de empresa (BLoC)
-│       ├── categories/           # Gestão de categorias (Cubit)
-│       ├── configuracoes/        # Configurações, usuários, logs, tema
-│       ├── settings/             # Settings service
-│       ├── route/                # Auto Route (route_app.dart)
-│       ├── utils/                # Constantes
-│       └── widgets/              # Widgets compartilhados (address_form, loading_overlay, etc.)
-├── test/                        # Testes unitários e integração
-├── docs/                        # Documentação detalhada
-├── pubspec.yaml
-└── README.md
-</code></pre>
-<h2 id="funcionalidades-da-interface">Funcionalidades da Interface</h2>
-<h3 id="tela-inicial">Tela Inicial</h3>
-<ul>
-<li>Menu principal com acesso às 3 funcionalidades</li>
-<li>Cards interativos com ícones e cores diferenciadas</li>
-</ul>
-<h3 id="tela-de-clientes">Tela de Clientes</h3>
-<ul>
-<li>Formulário para cadastro de novos clientes</li>
-<li>Lista de clientes cadastrados</li>
-<li>Detalhes do cliente em modal</li>
-</ul>
-<h3 id="tela-de-produtos">Tela de Produtos</h3>
-<ul>
-<li>Formulário para cadastro de novos produtos</li>
-<li>Lista de produtos cadastrados</li>
-<li>Detalhes do produto em modal</li>
-<li>Controle de estoque</li>
-</ul>
-<h3 id="tela-de-notas-fiscais">Tela de Notas Fiscais</h3>
-<ul>
-<li>Listagem de todas as notas fiscais</li>
-<li>Botão flutuante para criar nova nota</li>
-<li>Formulário com seleção de cliente</li>
-<li>Adição de múltiplos produtos</li>
-<li>Cálculo automático do valor total</li>
-<li>Detalhes da nota em modal</li>
-</ul>
-<h3 id="tela-de-empresa">Tela de Empresa</h3>
-<ul>
-<li>Visualização e edição dos dados da empresa (razão social, CNPJ, endereço, contato)</li>
-</ul>
-<h3 id="tela-de-categorias">Tela de Categorias</h3>
-<ul>
-<li>Gerenciamento de categorias de produtos (CRUD)</li>
-</ul>
-<h3 id="configuraes">Configurações</h3>
-<ul>
-<li>Usuários, permissões e tema</li>
-<li>Backup, banco de dados, notificações</li>
-<li>Logs do sistema e análise de atividades</li>
-</ul>
-<h2 id="tecnologias">Tecnologias</h2>
-<h3 id="core">Core</h3>
-<ul>
-<li><strong>Flutter</strong>: Framework de UI multiplataforma</li>
-<li><strong>Dart 3.10.8+</strong>: Linguagem com null safety e pattern matching (conforme <code>environment.sdk</code> no pubspec)</li>
-<li><strong>Material Design 3</strong>: Sistema de design moderno</li>
-</ul>
-<h3 id="state-management">State Management</h3>
-<ul>
-<li><strong>flutter_bloc</strong>: Gerenciamento de estado reativo</li>
-<li><strong>freezed</strong>: Classes imutáveis para eventos/states</li>
-</ul>
-<h3 id="persistncia">Persistência</h3>
-<ul>
-<li><strong>drift</strong>: ORM type-safe para SQLite com queries reativas</li>
-<li><strong>drift_flutter</strong>: Integração Drift com Flutter</li>
-<li><strong>drift_dev</strong>: Code generation para Drift</li>
-<li><strong>sqlite3_flutter_libs</strong>: Bibliotecas SQLite nativas</li>
-<li><strong>json_serializable</strong>: Serialização automática JSON (legacy)</li>
-<li><strong>synchronized</strong>: Controle de concorrência para JSON (legacy)</li>
-</ul>
-<h3 id="utilities">Utilities</h3>
-<ul>
-<li><strong>get_it</strong>: Injeção de dependências (AppInjection)</li>
-<li><strong>auto_route</strong>: Navegação declarativa type-safe</li>
-<li><strong>intl</strong>: Internacionalização e formatação de datas/números</li>
-<li><strong>path_provider</strong>: Acesso a diretórios da aplicação</li>
-<li><strong>path</strong>: Manipulação de caminhos de arquivos</li>
-<li><strong>async</strong>: AsyncMemoizer para inicialização única</li>
-<li><strong>crypto</strong>: Funções criptográficas</li>
-<li><strong>log_custom_printer</strong>: Log customizado (repositório Git)</li>
-</ul>
-<h2 id="-arquitetura">🏗️ Arquitetura</h2>
-<h3 id="padres-de-design">Padrões de Design</h3>
-<ol>
-<li><strong>BLoC Pattern</strong>: Separação clara entre UI e lógica de negócio</li>
-<li><strong>Repository Pattern</strong>: Abstração da camada de dados com repositórios</li>
-<li><strong>DAO Pattern</strong>: Data Access Objects para acesso ao banco Drift</li>
-<li><strong>Dependency Injection</strong>: Gerenciamento de dependências com AppInjection</li>
-<li><strong>OperationResult Pattern</strong>: Tratamento type-safe de erros</li>
-<li><strong>Interface/Repository</strong>: Contratos em <code>core/interface/</code> e implementações em <code>core/repository/</code></li>
-<li><strong>Manager Pattern</strong>: Configuração, cache e erros (legacy JSON descontinuado)</li>
-</ol>
-<h3 id="code-generation">Code Generation</h3>
-<p>O projeto usa <strong>build_runner</strong> para gerar código automaticamente:</p>
-<pre class="language-bash"><code class="language-bash"># Após modificar models, BLoC ou tabelas Drift
+flutter pub get
 dart run build_runner build --delete-conflicting-outputs
 </code></pre>
-<p>Gera:</p>
-<ul>
-<li><code>.g.dart</code> - Serialização JSON (@JsonSerializable) e tabelas Drift (@DriftDatabase)</li>
-<li><code>.freezed.dart</code> - Classes imutáveis (@freezed)</li>
-<li><code>*.drift.dart</code> - Queries SQL type-safe do Drift</li>
-</ul>
-<h3 id="tratamento-de-erros">Tratamento de Erros</h3>
-<pre class="language-dart"><code class="language-dart">OperationResult&lt;Cliente, String&gt; resultado = await manager.salvar(cliente);
+<h2 id="executar-o-app">Executar o app</h2>
+<pre class="language-bash"><code class="language-bash"># Windows
+flutter run -d windows
 
-if (resultado.isSuccessful) {
-  final cliente = resultado.asSuccess;
-  print('Salvo: ${cliente.name}');
-} else {
-  final erro = resultado.asError;
-  print('Erro: $erro');
-}
-</code></pre>
-<h3 id="file-name-safety">File Name Safety</h3>
-<p>Todos os arquivos salvos usam <code>toSafeFileName()</code> para garantir compatibilidade cross-platform:</p>
-<pre class="language-dart"><code class="language-dart">import 'package:system_loja/core/utils/string_extensions.dart';
+# Linux
+flutter run -d linux
 
-final safeFileName = 'Cliente #123.json'.toSafeFileName();
-// Resultado: 'Cliente_123.json'
+# Web (Chrome)
+flutter run -d chrome
+
+# Web (servidor local)
+flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0
 </code></pre>
-<hr>
-<h2 id="-contribuindo">🤝 Contribuindo</h2>
-<p>Contribuições são bem-vindas! Por favor, leia o <a href="CONTRIBUTING.md">Guia de Contribuição</a> antes de começar.</p>
-<h3 id="para-desenvolvedores">Para Desenvolvedores</h3>
-<ol>
-<li>Fork o repositório</li>
-<li>Crie uma branch: <code>git checkout -b feature/minha-feature</code></li>
-<li>Commit suas mudanças: <code>git commit -m 'feat: adiciona nova feature'</code></li>
-<li>Push para a branch: <code>git push origin feature/minha-feature</code></li>
-<li>Abra um Pull Request</li>
-</ol>
-<h3 id="para-github-copilot-coding-agent">Para GitHub Copilot Coding Agent</h3>
-<p>O projeto está configurado para trabalhar efetivamente com o GitHub Copilot Coding Agent. Consulte:</p>
+<h2 id="comandos-de-qualidade">Comandos de qualidade</h2>
+<pre class="language-bash"><code class="language-bash"># Codegen (obrigatorio apos alterar Freezed/JsonSerializable/Drift/AutoRoute)
+dart run build_runner build --delete-conflicting-outputs
+
+# Analise estatica
+dart analyze
+
+# Formatacao
+dart format --set-exit-if-changed .
+
+# Testes
+flutter test
+flutter test test/&lt;arquivo&gt;_test.dart
+</code></pre>
+<h2 id="arquitetura">Arquitetura</h2>
+<h3 id="bancos-drift">Bancos Drift</h3>
 <ul>
-<li><a href="CONTRIBUTING.md">CONTRIBUTING.md</a> - Guia completo de contribuição</li>
-<li><a href=".github/copilot-instructions.md">.github/copilot-instructions.md</a> - Instruções técnicas</li>
-<li><a href=".github/agents/">.github/agents/</a> - Custom agents especializados (Flutter Developer, Test Specialist, Documentation Specialist)</li>
-<li><a href="SETUP_MCP.md">SETUP_MCP.md</a> - Configuração de servidores MCP (futuro)</li>
+<li><code>AppDatabase</code> (<code>lib/data/database/app_database.dart</code>) com <code>schemaVersion =&gt; 12</code>.</li>
+<li><code>SystemDatabase</code> (<code>lib/data/database/system_database.dart</code>) com <code>schemaVersion =&gt; 1</code>.</li>
 </ul>
-<h3 id="criando-issues">Criando Issues</h3>
-<p>Use os templates disponíveis:</p>
+<h3 id="legado-json">Legado JSON</h3>
+<p>Ha codigo legado em <code>lib/core/managers/</code> e fluxos em JSON ainda usados em cenarios pontuais. Nao remover sem validar impacto; o fluxo principal da loja e <strong>SQLite via Drift</strong>. Os arquivos de dados estaticos anteriores (<code>data/*.json</code>) foram removidos.</p>
+<h3 id="convencoes-importantes">Convencoes importantes</h3>
 <ul>
-<li><strong>Bug Report</strong>: Para reportar problemas</li>
-<li><strong>Feature Request</strong>: Para sugerir melhorias</li>
+<li>Nao propagar excecoes entre Interface/Repository; retornar <code>ResultStatus</code>. Repositorios capturam excecoes internamente (<code>try/catch</code>) e devolvem <code>ResultStatus.error(mensagemErroRepositorio(...))</code>. A camada de apresentacao nao usa <code>try/catch</code> para chamadas ao repositorio.</li>
+<li>Drift: tabela <code>XxxRecords</code>, linha gerada <code>XxxRecord</code>, DAO <code>XxxDao</code>. Linhas Drift <strong>nao</strong> usam <code>@UseRowClass</code> com entidades de <code>lib/core/</code>; o mapeamento para dominio fica em extensoes/helpers (ex.: <code>lib/data/database/mapper/</code>) ou nos DAOs/repositorios, conforme o padrao do projeto.</li>
+<li>DTOs serializaveis (JSON) em <code>lib/data/entry/</code> e afins; modelos de negocio em <code>lib/core/models/</code>.</li>
+<li>Codigo em ingles; documentacao e comentarios (<code>///</code>) em portugues.</li>
+<li><code>SystemDatabase</code> aceita <code>QueryExecutor</code> opcional no construtor para facilitar testes com banco em memoria.</li>
 </ul>
-<p>Inclua sempre <strong>critérios de aceitação</strong> claros para facilitar o trabalho do Copilot Agent.</p>
-<hr>
-<h2 id="-documentao">📖 Documentação</h2>
-<h3 id="guias-principais">Guias Principais</h3>
+<h2 id="estrutura-resumida">Estrutura resumida</h2>
+<pre class="language-text"><code class="language-text">lib/
+  main.dart
+  aplication/
+    app_injection.dart   # GetIt / setupAppInjection()
+  core/
+    interface/           # contratos (ex.: I*Repository)
+    constants/
+    managers/            # legado em uso pontual
+    models/              # entidades de dominio
+    utils/               # ResultStatus, repository_error_mapper, extensoes
+  domain/
+    repository/          # implementacoes dos repositorios
+    *.dart               # servicos de dominio (ex.: geracao de codigo)
+  data/
+    database/
+      dao/
+      table/
+      extension/
+      mapper/            # XxxRecord -&gt; modelo de dominio
+    entry/               # DTOs JSON (json_serializable)
+    cache/
+    converter/
+    models/              # modelos de persistencia auxiliares
+  screens/
+    route/
+test/
+  support/               # helpers (ex.: AppDatabase em teste sem path_provider)
+docs/
+</code></pre>
+<h2 id="observacoes-importantes">Observacoes importantes</h2>
 <ul>
-<li><strong><a href="CONTRIBUTING.md">CONTRIBUTING.md</a></strong> - Guia de contribuição detalhado</li>
-<li><strong><a href=".github/copilot-instructions.md">.github/copilot-instructions.md</a></strong> - Instruções para Copilot Agent</li>
-<li><strong><a href=".github/agents/">.github/agents/</a></strong> - Custom agents (Flutter Developer, Test Specialist, Documentation Specialist)</li>
-<li><strong><a href=".github/instructions/dartcode.instructions.md">.github/instructions/dartcode.instructions.md</a></strong> - Padrões de código Dart</li>
-<li><strong><a href="SETUP_MCP.md">SETUP_MCP.md</a></strong> - Informações sobre servidores MCP</li>
+<li>No Web, Drift depende de <code>web/sqlite3.wasm</code> e <code>web/drift_worker.js</code>.</li>
+<li>Existem testes com falhas pre-existentes no repositorio; valide primeiro o escopo alterado antes de tratar falhas fora da tarefa.</li>
+<li>Testes que instanciam <code>AppDatabase</code> na VM podem usar <code>applicationSupportDirectory</code> e <code>tempDirectoryPath</code> (ver <code>test/support/test_app_database.dart</code>) para evitar <code>path_provider</code> / <code>MissingPluginException</code>.</li>
 </ul>
-<h3 id="documentao-tcnica">Documentação Técnica</h3>
+<h2 id="documentacao-principal">Documentacao principal</h2>
 <ul>
-<li><strong><a href="docs/DRIFT_ARCHITECTURE.md">docs/DRIFT_ARCHITECTURE.md</a></strong> - Arquitetura Drift ORM</li>
-<li><strong><a href="docs/DRIFT_MIGRATION.md">docs/DRIFT_MIGRATION.md</a></strong> - Guia de migração para Drift</li>
-<li><strong><a href="docs/DATABASE_NORMALIZATION.md">docs/DATABASE_NORMALIZATION.md</a></strong> - Normalização do banco de dados</li>
-<li><strong><a href="docs/VALIDATION_SYSTEM.md">docs/VALIDATION_SYSTEM.md</a></strong> - Sistema de validações</li>
-<li><strong><a href="docs/REFACTORING_BLOC.md">docs/REFACTORING_BLOC.md</a></strong> - Refatoração BLoC</li>
-<li><strong><a href="docs/COMPANY_FEATURE.md">docs/COMPANY_FEATURE.md</a></strong> - Funcionalidade de cadastro de empresa</li>
-<li><strong><a href="docs/CATEGORY_FEATURE_SUMMARY.md">docs/CATEGORY_FEATURE_SUMMARY.md</a></strong> - Resumo da funcionalidade de categorias</li>
-<li><strong><a href="docs/CONFIGURACOES_SCREEN.md">docs/CONFIGURACOES_SCREEN.md</a></strong> - Tela de configurações</li>
-<li><strong><a href="docs/">docs/</a></strong> - Documentação adicional do projeto</li>
-</ul>
-<hr>
-<h2 id="-licena">📄 Licença</h2>
-<p>Este projeto é de código aberto. Consulte o arquivo LICENSE para mais detalhes.</p>
-<hr>
-<h2 id="-suporte">🆘 Suporte</h2>
-<p>Precisa de ajuda?</p>
-<ul>
-<li>Abra uma <a href="https://github.com/saulogatti/system_loja/issues">issue</a> com a label <code>question</code></li>
-<li>Consulte a <a href=".github/copilot-instructions.md">documentação</a></li>
-<li>Revise o <a href="CONTRIBUTING.md">guia de contribuição</a></li>
+<li><code>CONTRIBUTING.md</code></li>
+<li><code>.github/copilot-instructions.md</code></li>
+<li><code>.github/instructions/dartcode.instructions.md</code></li>
+<li><code>AGENTS.md</code></li>
+<li><code>docs/DRIFT_ARCHITECTURE.md</code></li>
+<li><code>docs/DRIFT_MIGRATION.md</code></li>
+<li><code>docs/VALIDATION_SYSTEM.md</code></li>
 </ul>
 </section>
 
@@ -430,7 +163,35 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
           <h2>Libraries</h2>
         <dl>
           <dt id="app_injection">
-  <span class="name"><a href="app_injection/">app_injection</a></span> 
+  <span class="name"><a href="aplication_app_injection/">aplication\app_injection</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_error_manager">
+  <span class="name"><a href="aplication_system_error_manager/">aplication\system_error_manager</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="constants">
+  <span class="name"><a href="aplication_utils_constants/">aplication\utils\constants</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cache_keys">
+  <span class="name"><a href="core_constants_cache_keys/">core\constants\cache_keys</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="document_exception">
+  <span class="name"><a href="core_exceptions_document_exception/">core\exceptions\document_exception</a></span> 
 
 </dt>
 <dd>
@@ -520,34 +281,6 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
-          <dt id="configuration_repository">
-  <span class="name"><a href="core_managers_configuration_repository/">core\managers\configuration_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="configuration_repository_cache">
-  <span class="name"><a href="core_managers_configuration_repository_cache/">core\managers\configuration_repository_cache</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="customer_exception">
-  <span class="name"><a href="core_managers_exceptions_customer_exception/">core\managers\exceptions\customer_exception</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="system_error_manager">
-  <span class="name"><a href="core_managers_system_error_manager/">core\managers\system_error_manager</a></span> 
-
-</dt>
-<dd>
-</dd>
-
           <dt id="activity_log">
   <span class="name"><a href="core_models_activity_log/">core\models\activity_log</a></span> 
 
@@ -583,6 +316,13 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
+          <dt id="authorization_level">
+  <span class="name"><a href="core_models_default_authorization_level/">core\models\default\authorization_level</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="default_object">
   <span class="name"><a href="core_models_default_default_object/">core\models\default\default_object</a></span> 
 
@@ -592,6 +332,27 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 
           <dt id="people_data">
   <span class="name"><a href="core_models_default_people_data/">core\models\default\people_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cnpj">
+  <span class="name"><a href="core_models_document_cnpj/">core\models\document\cnpj</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cpf">
+  <span class="name"><a href="core_models_document_cpf/">core\models\document\cpf</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="document">
+  <span class="name"><a href="core_models_document_document/">core\models\document\document</a></span> 
 
 </dt>
 <dd>
@@ -632,6 +393,13 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
+          <dt id="person">
+  <span class="name"><a href="core_models_person_person/">core\models\person\person</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="product">
   <span class="name"><a href="core_models_product/">core\models\product</a></span> 
 
@@ -660,6 +428,13 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
+          <dt id="system_user_data">
+  <span class="name"><a href="core_models_system_config_system_user_data/">core\models\system_config\system_user_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="system_error">
   <span class="name"><a href="core_models_system_errors_system_error/">core\models\system_errors\system_error</a></span> 
 
@@ -674,69 +449,6 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
-          <dt id="category_repository">
-  <span class="name"><a href="core_repository_category_repository/">core\repository\category_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="company_repository">
-  <span class="name"><a href="core_repository_company_repository/">core\repository\company_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="customer_repository">
-  <span class="name"><a href="core_repository_customer_repository/">core\repository\customer_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="product_repository">
-  <span class="name"><a href="core_repository_product_repository/">core\repository\product_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="sales_repository">
-  <span class="name"><a href="core_repository_sales_repository/">core\repository\sales_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="log_repository">
-  <span class="name"><a href="core_repository_system_log_repository/">core\repository\system\log_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="system_repository">
-  <span class="name"><a href="core_repository_system_system_repository/">core\repository\system\system_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="user_repository">
-  <span class="name"><a href="core_repository_system_user_repository/">core\repository\system\user_repository</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="code_generator_service">
-  <span class="name"><a href="core_services_code_generator_service/">core\services\code_generator_service</a></span> 
-
-</dt>
-<dd>
-</dd>
-
           <dt id="app_settings">
   <span class="name"><a href="core_settings_app_settings/">core\settings\app_settings</a></span> 
 
@@ -744,15 +456,8 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
-          <dt id="app_theme">
-  <span class="name"><a href="core_settings_app_theme/">core\settings\app_theme</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="app_theme_settings">
-  <span class="name"><a href="core_settings_app_theme_settings/">core\settings\app_theme_settings</a></span> 
+          <dt id="enum_color_app_theme_settings">
+  <span class="name"><a href="core_settings_enum_color_app_theme_settings/">core\settings\enum_color_app_theme_settings</a></span> 
 
 </dt>
 <dd>
@@ -765,29 +470,8 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
-          <dt id="documents">
-  <span class="name"><a href="core_utils_documents/">core\utils\documents</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="input_formatters">
-  <span class="name"><a href="core_utils_input_formatters/">core\utils\input_formatters</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="string_extensions">
-  <span class="name"><a href="core_utils_string_extensions/">core\utils\string_extensions</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="text_formatters">
-  <span class="name"><a href="core_utils_text_formatters/">core\utils\text_formatters</a></span> 
+          <dt id="repository_error_mapper">
+  <span class="name"><a href="core_utils_repository_error_mapper/">core\utils\repository_error_mapper</a></span> 
 
 </dt>
 <dd>
@@ -798,13 +482,6 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 
 </dt>
 <dd>
-</dd>
-
-          <dt id="validators">
-  <span class="name"><a href="core_utils_validators/">core\utils\validators</a></span> 
-
-</dt>
-<dd>Utilitários de validação para formulários.
 </dd>
 
           <dt id="cache_manager">
@@ -837,6 +514,41 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 
           <dt id="system_cache_manager">
   <span class="name"><a href="data_cache_system_cache_manager/">data\cache\system_cache_manager</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="address_codec">
+  <span class="name"><a href="data_converter_address_codec/">data\converter\address_codec</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="cpf_cnpj_json_converters">
+  <span class="name"><a href="data_converter_cpf_cnpj_json_converters/">data\converter\cpf_cnpj_json_converters</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="document_converter">
+  <span class="name"><a href="data_converter_document_converter/">data\converter\document_converter</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="price_configuration_codec">
+  <span class="name"><a href="data_converter_price_configuration_codec/">data\converter\price_configuration_codec</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_configuration_codec">
+  <span class="name"><a href="data_converter_system_configuration_codec/">data\converter\system_configuration_codec</a></span> 
 
 </dt>
 <dd>
@@ -954,6 +666,13 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
+          <dt id="drift_to_domain">
+  <span class="name"><a href="data_database_mapper_drift_to_domain/">data\database\mapper\drift_to_domain</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="system_database">
   <span class="name"><a href="data_database_system_database/">data\database\system_database</a></span> 
 
@@ -1003,20 +722,6 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
-          <dt id="nota_itens_table">
-  <span class="name"><a href="data_database_table_nota_itens_table/">data\database\table\nota_itens_table</a></span> 
-
-</dt>
-<dd>
-</dd>
-
-          <dt id="notas_table">
-  <span class="name"><a href="data_database_table_notas_table/">data\database\table\notas_table</a></span> 
-
-</dt>
-<dd>
-</dd>
-
           <dt id="products_records">
   <span class="name"><a href="data_database_table_products_records/">data\database\table\products_records</a></span> 
 
@@ -1045,8 +750,204 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
+          <dt id="app_settings_entry">
+  <span class="name"><a href="data_entry_app_settings_entry/">data\entry\app_settings_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="configuration_cache_entry">
+  <span class="name"><a href="data_entry_configuration_cache_entry/">data\entry\configuration_cache_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="individual_entry">
+  <span class="name"><a href="data_entry_individual_entry/">data\entry\individual_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="price_configuration_entry">
+  <span class="name"><a href="data_entry_price_configuration_entry/">data\entry\price_configuration_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="report_configuration_entry">
+  <span class="name"><a href="data_entry_report_configuration_entry/">data\entry\report_configuration_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_configuration_entry">
+  <span class="name"><a href="data_entry_system_configuration_entry/">data\entry\system_configuration_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_user_data_entry">
+  <span class="name"><a href="data_entry_system_user_data_entry/">data\entry\system_user_data_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="user_entry">
+  <span class="name"><a href="data_entry_user_entry/">data\entry\user_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="file_storage_utility">
   <span class="name"><a href="data_files_utility_file_storage_utility/">data\files_utility\file_storage_utility</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="activity_log_data">
+  <span class="name"><a href="data_models_activity_log_data/">data\models\activity_log_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="address_data">
+  <span class="name"><a href="data_models_address_data/">data\models\address_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="category_data">
+  <span class="name"><a href="data_models_category_data/">data\models\category_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_data">
+  <span class="name"><a href="data_models_company_data/">data\models\company_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_data">
+  <span class="name"><a href="data_models_customer_data/">data\models\customer_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_export_data">
+  <span class="name"><a href="data_models_invoice_export_data/">data\models\invoice_export_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_item_data">
+  <span class="name"><a href="data_models_invoice_item_data/">data\models\invoice_item_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_data">
+  <span class="name"><a href="data_models_product_data/">data\models\product_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_configuration_data">
+  <span class="name"><a href="data_models_system_configuration_data/">data\models\system_configuration_data</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="code_generator_service">
+  <span class="name"><a href="domain_code_generator_service/">domain\code_generator_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="category_repository">
+  <span class="name"><a href="domain_repository_category_repository/">domain\repository\category_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="company_repository">
+  <span class="name"><a href="domain_repository_company_repository/">domain\repository\company_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="configuration_repository">
+  <span class="name"><a href="domain_repository_configuration_repository/">domain\repository\configuration_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_repository">
+  <span class="name"><a href="domain_repository_customer_repository/">domain\repository\customer_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="customer_exception">
+  <span class="name"><a href="domain_repository_exceptions_customer_exception/">domain\repository\exceptions\customer_exception</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="product_repository">
+  <span class="name"><a href="domain_repository_product_repository/">domain\repository\product_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_repository">
+  <span class="name"><a href="domain_repository_sales_repository/">domain\repository\sales_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="log_repository">
+  <span class="name"><a href="domain_repository_system_log_repository/">domain\repository\system\log_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="system_repository">
+  <span class="name"><a href="domain_repository_system_system_repository/">domain\repository\system\system_repository</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="user_repository">
+  <span class="name"><a href="domain_repository_system_user_repository/">domain\repository\system\user_repository</a></span> 
 
 </dt>
 <dd>
@@ -1374,6 +1275,13 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
+          <dt id="home_bloc">
+  <span class="name"><a href="screens_home_bloc_home_bloc/">screens\home\bloc\home_bloc</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="home_screen">
   <span class="name"><a href="screens_home_home_screen/">screens\home\home_screen</a></span> 
 
@@ -1521,6 +1429,34 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
+          <dt id="sales_purchase_analytics_bloc">
+  <span class="name"><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_bloc/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_bloc</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_purchase_analytics_event">
+  <span class="name"><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_event/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_event</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_purchase_analytics_state">
+  <span class="name"><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_state/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_purchase_analytics_screen">
+  <span class="name"><a href="screens_relatorios_sales_purchase_analytics_sales_purchase_analytics_screen/">screens\relatorios\sales_purchase_analytics\sales_purchase_analytics_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="route_app">
   <span class="name"><a href="screens_route_route_app/">screens\route\route_app</a></span> 
 
@@ -1542,6 +1478,20 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
+          <dt id="sales_invoice_cubit">
+  <span class="name"><a href="screens_sales_cubit_sales_invoice_cubit/">screens\sales\cubit\sales_invoice_cubit</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sales_invoice_state">
+  <span class="name"><a href="screens_sales_cubit_sales_invoice_state/">screens\sales\cubit\sales_invoice_state</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="sales_state">
   <span class="name"><a href="screens_sales_cubit_sales_state/">screens\sales\cubit\sales_state</a></span> 
 
@@ -1549,8 +1499,22 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
-          <dt id="route_sales">
-  <span class="name"><a href="screens_sales_route_route_sales/">screens\sales\route\route_sales</a></span> 
+          <dt id="invoice_line_entry">
+  <span class="name"><a href="screens_sales_models_invoice_line_entry/">screens\sales\models\invoice_line_entry</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="person_selection">
+  <span class="name"><a href="screens_sales_models_person_selection/">screens\sales\models\person_selection</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="person_selection_invoice_mapping">
+  <span class="name"><a href="screens_sales_models_person_selection_invoice_mapping/">screens\sales\models\person_selection_invoice_mapping</a></span> 
 
 </dt>
 <dd>
@@ -1584,6 +1548,55 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
+          <dt id="invoice_line_tile">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_invoice_line_tile/">screens\sales\widgets\sales_invoice\invoice_line_tile</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_number_field">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_invoice_number_field/">screens\sales\widgets\sales_invoice\invoice_number_field</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_quantity_dialog">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_invoice_quantity_dialog/">screens\sales\widgets\sales_invoice\invoice_quantity_dialog</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_total_bar">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_invoice_total_bar/">screens\sales\widgets\sales_invoice\invoice_total_bar</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="invoice_type_segmented">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_invoice_type_segmented/">screens\sales\widgets\sales_invoice\invoice_type_segmented</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="select_product_dialog">
+  <span class="name"><a href="screens_sales_widgets_sales_invoice_select_product_dialog/">screens\sales\widgets\sales_invoice\select_product_dialog</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="app_theme">
+  <span class="name"><a href="screens_settings_app_theme/">screens\settings\app_theme</a></span> 
+
+</dt>
+<dd>
+</dd>
+
           <dt id="settings_service">
   <span class="name"><a href="screens_settings_settings_service/">screens\settings\settings_service</a></span> 
 
@@ -1591,15 +1604,36 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
 <dd>
 </dd>
 
-          <dt id="constants">
-  <span class="name"><a href="screens_utils_constants/">screens\utils\constants</a></span> 
+          <dt id="extension_date_time">
+  <span class="name"><a href="screens_utils_extension_date_time/">screens\utils\extension_date_time</a></span> 
 
 </dt>
 <dd>
 </dd>
 
-          <dt id="extension_date_time">
-  <span class="name"><a href="screens_utils_extension_date_time/">screens\utils\extension_date_time</a></span> 
+          <dt id="input_formatters">
+  <span class="name"><a href="screens_utils_input_formatters/">screens\utils\input_formatters</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="string_extensions">
+  <span class="name"><a href="screens_utils_string_extensions/">screens\utils\string_extensions</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="text_formatters">
+  <span class="name"><a href="screens_utils_text_formatters/">screens\utils\text_formatters</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="validators">
+  <span class="name"><a href="screens_utils_validators/">screens\utils\validators</a></span> 
 
 </dt>
 <dd>
@@ -1671,7 +1705,11 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
     <h5 class="hidden-xs"><span class="package-name">system_loja</span> <span class="package-kind">package</span></h5>
     <ol>
       <li class="section-title">Libraries</li>
-      <li><a href="app_injection/">app_injection</a></li>
+      <li><a href="aplication_app_injection/">aplication\app_injection</a></li>
+      <li><a href="aplication_system_error_manager/">aplication\system_error_manager</a></li>
+      <li><a href="aplication_utils_constants/">aplication\utils\constants</a></li>
+      <li><a href="core_constants_cache_keys/">core\constants\cache_keys</a></li>
+      <li><a href="core_exceptions_document_exception/">core\exceptions\document_exception</a></li>
       <li><a href="core_exceptions_product_exception/">core\exceptions\product_exception</a></li>
       <li><a href="core_exceptions_validation_exception/">core\exceptions\validation_exception</a></li>
       <li><a href="core_interface_i_category_repository/">core\interface\i_category_repository</a></li>
@@ -1684,52 +1722,45 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
       <li><a href="core_interface_i_settings_service/">core\interface\i_settings_service</a></li>
       <li><a href="core_interface_i_system_repository/">core\interface\i_system_repository</a></li>
       <li><a href="core_interface_i_user_repository/">core\interface\i_user_repository</a></li>
-      <li><a href="core_managers_configuration_repository/">core\managers\configuration_repository</a></li>
-      <li><a href="core_managers_configuration_repository_cache/">core\managers\configuration_repository_cache</a></li>
-      <li><a href="core_managers_exceptions_customer_exception/">core\managers\exceptions\customer_exception</a></li>
-      <li><a href="core_managers_system_error_manager/">core\managers\system_error_manager</a></li>
       <li><a href="core_models_activity_log/">core\models\activity_log</a></li>
       <li><a href="core_models_address/">core\models\address</a></li>
       <li><a href="core_models_category/">core\models\category</a></li>
       <li><a href="core_models_company/">core\models\company</a></li>
       <li><a href="core_models_customer/">core\models\customer</a></li>
+      <li><a href="core_models_default_authorization_level/">core\models\default\authorization_level</a></li>
       <li><a href="core_models_default_default_object/">core\models\default\default_object</a></li>
       <li><a href="core_models_default_people_data/">core\models\default\people_data</a></li>
+      <li><a href="core_models_document_cnpj/">core\models\document\cnpj</a></li>
+      <li><a href="core_models_document_cpf/">core\models\document\cpf</a></li>
+      <li><a href="core_models_document_document/">core\models\document\document</a></li>
       <li><a href="core_models_extensions_nivel_permissao_extension/">core\models\extensions\nivel_permissao_extension</a></li>
       <li><a href="core_models_extensions_tipo_acao_extension/">core\models\extensions\tipo_acao_extension</a></li>
       <li><a href="core_models_invoice/">core\models\invoice</a></li>
       <li><a href="core_models_invoice_item/">core\models\invoice_item</a></li>
       <li><a href="core_models_invoice_type/">core\models\invoice_type</a></li>
+      <li><a href="core_models_person_person/">core\models\person\person</a></li>
       <li><a href="core_models_product/">core\models\product</a></li>
       <li><a href="core_models_system_config_price_configuration/">core\models\system_config\price_configuration</a></li>
       <li><a href="core_models_system_config_report_configuration/">core\models\system_config\report_configuration</a></li>
       <li><a href="core_models_system_config_system_configuration/">core\models\system_config\system_configuration</a></li>
+      <li><a href="core_models_system_config_system_user_data/">core\models\system_config\system_user_data</a></li>
       <li><a href="core_models_system_errors_system_error/">core\models\system_errors\system_error</a></li>
       <li><a href="core_models_user/">core\models\user</a></li>
-      <li><a href="core_repository_category_repository/">core\repository\category_repository</a></li>
-      <li><a href="core_repository_company_repository/">core\repository\company_repository</a></li>
-      <li><a href="core_repository_customer_repository/">core\repository\customer_repository</a></li>
-      <li><a href="core_repository_product_repository/">core\repository\product_repository</a></li>
-      <li><a href="core_repository_sales_repository/">core\repository\sales_repository</a></li>
-      <li><a href="core_repository_system_log_repository/">core\repository\system\log_repository</a></li>
-      <li><a href="core_repository_system_system_repository/">core\repository\system\system_repository</a></li>
-      <li><a href="core_repository_system_user_repository/">core\repository\system\user_repository</a></li>
-      <li><a href="core_services_code_generator_service/">core\services\code_generator_service</a></li>
       <li><a href="core_settings_app_settings/">core\settings\app_settings</a></li>
-      <li><a href="core_settings_app_theme/">core\settings\app_theme</a></li>
-      <li><a href="core_settings_app_theme_settings/">core\settings\app_theme_settings</a></li>
+      <li><a href="core_settings_enum_color_app_theme_settings/">core\settings\enum_color_app_theme_settings</a></li>
       <li><a href="core_utils_command_result/">core\utils\command_result</a></li>
-      <li><a href="core_utils_documents/">core\utils\documents</a></li>
-      <li><a href="core_utils_input_formatters/">core\utils\input_formatters</a></li>
-      <li><a href="core_utils_string_extensions/">core\utils\string_extensions</a></li>
-      <li><a href="core_utils_text_formatters/">core\utils\text_formatters</a></li>
+      <li><a href="core_utils_repository_error_mapper/">core\utils\repository_error_mapper</a></li>
       <li><a href="core_utils_utils_extensions/">core\utils\utils_extensions</a></li>
-      <li><a href="core_utils_validators/">core\utils\validators</a></li>
       <li><a href="data_cache_cache_manager/">data\cache\cache_manager</a></li>
       <li><a href="data_cache_exceptions_cache_exception/">data\cache\exceptions\cache_exception</a></li>
       <li><a href="data_cache_models_cacheable/">data\cache\models\cacheable</a></li>
       <li><a href="data_cache_models_system_model_system_error_model/">data\cache\models\system_model\system_error_model</a></li>
       <li><a href="data_cache_system_cache_manager/">data\cache\system_cache_manager</a></li>
+      <li><a href="data_converter_address_codec/">data\converter\address_codec</a></li>
+      <li><a href="data_converter_cpf_cnpj_json_converters/">data\converter\cpf_cnpj_json_converters</a></li>
+      <li><a href="data_converter_document_converter/">data\converter\document_converter</a></li>
+      <li><a href="data_converter_price_configuration_codec/">data\converter\price_configuration_codec</a></li>
+      <li><a href="data_converter_system_configuration_codec/">data\converter\system_configuration_codec</a></li>
       <li><a href="data_database_app_database/">data\database\app_database</a></li>
       <li><a href="data_database_dao_address_dao/">data\database\dao\address_dao</a></li>
       <li><a href="data_database_dao_category_dao/">data\database\dao\category_dao</a></li>
@@ -1746,6 +1777,7 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
       <li><a href="data_database_extension_customer_to_companion/">data\database\extension\customer_to_companion</a></li>
       <li><a href="data_database_extension_invoice_to_companion/">data\database\extension\invoice_to_companion</a></li>
       <li><a href="data_database_extension_log_to_companion/">data\database\extension\log_to_companion</a></li>
+      <li><a href="data_database_mapper_drift_to_domain/">data\database\mapper\drift_to_domain</a></li>
       <li><a href="data_database_system_database/">data\database\system_database</a></li>
       <li><a href="data_database_table_address_records/">data\database\table\address_records</a></li>
       <li><a href="data_database_table_categories_records/">data\database\table\categories_records</a></li>
@@ -1753,13 +1785,39 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
       <li><a href="data_database_table_customer_records/">data\database\table\customer_records</a></li>
       <li><a href="data_database_table_invoice_items_records/">data\database\table\invoice_items_records</a></li>
       <li><a href="data_database_table_invoices_records/">data\database\table\invoices_records</a></li>
-      <li><a href="data_database_table_nota_itens_table/">data\database\table\nota_itens_table</a></li>
-      <li><a href="data_database_table_notas_table/">data\database\table\notas_table</a></li>
       <li><a href="data_database_table_products_records/">data\database\table\products_records</a></li>
       <li><a href="data_database_table_system_logs_records/">data\database\table\system\logs_records</a></li>
       <li><a href="data_database_table_system_system_records/">data\database\table\system\system_records</a></li>
       <li><a href="data_database_table_system_users_records/">data\database\table\system\users_records</a></li>
+      <li><a href="data_entry_app_settings_entry/">data\entry\app_settings_entry</a></li>
+      <li><a href="data_entry_configuration_cache_entry/">data\entry\configuration_cache_entry</a></li>
+      <li><a href="data_entry_individual_entry/">data\entry\individual_entry</a></li>
+      <li><a href="data_entry_price_configuration_entry/">data\entry\price_configuration_entry</a></li>
+      <li><a href="data_entry_report_configuration_entry/">data\entry\report_configuration_entry</a></li>
+      <li><a href="data_entry_system_configuration_entry/">data\entry\system_configuration_entry</a></li>
+      <li><a href="data_entry_system_user_data_entry/">data\entry\system_user_data_entry</a></li>
+      <li><a href="data_entry_user_entry/">data\entry\user_entry</a></li>
       <li><a href="data_files_utility_file_storage_utility/">data\files_utility\file_storage_utility</a></li>
+      <li><a href="data_models_activity_log_data/">data\models\activity_log_data</a></li>
+      <li><a href="data_models_address_data/">data\models\address_data</a></li>
+      <li><a href="data_models_category_data/">data\models\category_data</a></li>
+      <li><a href="data_models_company_data/">data\models\company_data</a></li>
+      <li><a href="data_models_customer_data/">data\models\customer_data</a></li>
+      <li><a href="data_models_invoice_export_data/">data\models\invoice_export_data</a></li>
+      <li><a href="data_models_invoice_item_data/">data\models\invoice_item_data</a></li>
+      <li><a href="data_models_product_data/">data\models\product_data</a></li>
+      <li><a href="data_models_system_configuration_data/">data\models\system_configuration_data</a></li>
+      <li><a href="domain_code_generator_service/">domain\code_generator_service</a></li>
+      <li><a href="domain_repository_category_repository/">domain\repository\category_repository</a></li>
+      <li><a href="domain_repository_company_repository/">domain\repository\company_repository</a></li>
+      <li><a href="domain_repository_configuration_repository/">domain\repository\configuration_repository</a></li>
+      <li><a href="domain_repository_customer_repository/">domain\repository\customer_repository</a></li>
+      <li><a href="domain_repository_exceptions_customer_exception/">domain\repository\exceptions\customer_exception</a></li>
+      <li><a href="domain_repository_product_repository/">domain\repository\product_repository</a></li>
+      <li><a href="domain_repository_sales_repository/">domain\repository\sales_repository</a></li>
+      <li><a href="domain_repository_system_log_repository/">domain\repository\system\log_repository</a></li>
+      <li><a href="domain_repository_system_system_repository/">domain\repository\system\system_repository</a></li>
+      <li><a href="domain_repository_system_user_repository/">domain\repository\system\user_repository</a></li>
       <li><a href="main/">main</a></li>
       <li><a href="screens_categories_category_management_screen/">screens\categories\category_management_screen</a></li>
       <li><a href="screens_categories_cubit_category_cubit/">screens\categories\cubit\category_cubit</a></li>
@@ -1806,6 +1864,7 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
       <li><a href="screens_customer_widgets_customer_list/">screens\customer\widgets\customer_list</a></li>
       <li><a href="screens_customer_widgets_customer_overview_bottom_sheet/">screens\customer\widgets\customer_overview_bottom_sheet</a></li>
       <li><a href="screens_customer_widgets_customer_search_section/">screens\customer\widgets\customer_search_section</a></li>
+      <li><a href="screens_home_bloc_home_bloc/">screens\home\bloc\home_bloc</a></li>
       <li><a href="screens_home_home_screen/">screens\home\home_screen</a></li>
       <li><a href="screens_host_cadastro_group_screen/">screens\host\cadastro_group_screen</a></li>
       <li><a href="screens_host_host_screen/">screens\host\host_screen</a></li>
@@ -1827,18 +1886,36 @@ final safeFileName = 'Cliente #123.json'.toSafeFileName();
       <li><a href="screens_relatorios_cubit_relatorio_cubit/">screens\relatorios\cubit\relatorio_cubit</a></li>
       <li><a href="screens_relatorios_cubit_relatorio_state/">screens\relatorios\cubit\relatorio_state</a></li>
       <li><a href="screens_relatorios_relatorio_screen/">screens\relatorios\relatorio_screen</a></li>
+      <li><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_bloc/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_bloc</a></li>
+      <li><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_event/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_event</a></li>
+      <li><a href="screens_relatorios_sales_purchase_analytics_bloc_sales_purchase_analytics_state/">screens\relatorios\sales_purchase_analytics\bloc\sales_purchase_analytics_state</a></li>
+      <li><a href="screens_relatorios_sales_purchase_analytics_sales_purchase_analytics_screen/">screens\relatorios\sales_purchase_analytics\sales_purchase_analytics_screen</a></li>
       <li><a href="screens_route_route_app/">screens\route\route_app</a></li>
       <li><a href="screens_route_route_app.gr/">screens\route\route_app.gr</a></li>
       <li><a href="screens_sales_cubit_sales_cubit/">screens\sales\cubit\sales_cubit</a></li>
+      <li><a href="screens_sales_cubit_sales_invoice_cubit/">screens\sales\cubit\sales_invoice_cubit</a></li>
+      <li><a href="screens_sales_cubit_sales_invoice_state/">screens\sales\cubit\sales_invoice_state</a></li>
       <li><a href="screens_sales_cubit_sales_state/">screens\sales\cubit\sales_state</a></li>
-      <li><a href="screens_sales_route_route_sales/">screens\sales\route\route_sales</a></li>
+      <li><a href="screens_sales_models_invoice_line_entry/">screens\sales\models\invoice_line_entry</a></li>
+      <li><a href="screens_sales_models_person_selection/">screens\sales\models\person_selection</a></li>
+      <li><a href="screens_sales_models_person_selection_invoice_mapping/">screens\sales\models\person_selection_invoice_mapping</a></li>
       <li><a href="screens_sales_sales_invoice_screen/">screens\sales\sales_invoice_screen</a></li>
       <li><a href="screens_sales_sales_screen/">screens\sales\sales_screen</a></li>
       <li><a href="screens_sales_widgets_invoice_card/">screens\sales\widgets\invoice_card</a></li>
       <li><a href="screens_sales_widgets_invoice_overview_bottom_sheet/">screens\sales\widgets\invoice_overview_bottom_sheet</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_invoice_line_tile/">screens\sales\widgets\sales_invoice\invoice_line_tile</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_invoice_number_field/">screens\sales\widgets\sales_invoice\invoice_number_field</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_invoice_quantity_dialog/">screens\sales\widgets\sales_invoice\invoice_quantity_dialog</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_invoice_total_bar/">screens\sales\widgets\sales_invoice\invoice_total_bar</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_invoice_type_segmented/">screens\sales\widgets\sales_invoice\invoice_type_segmented</a></li>
+      <li><a href="screens_sales_widgets_sales_invoice_select_product_dialog/">screens\sales\widgets\sales_invoice\select_product_dialog</a></li>
+      <li><a href="screens_settings_app_theme/">screens\settings\app_theme</a></li>
       <li><a href="screens_settings_settings_service/">screens\settings\settings_service</a></li>
-      <li><a href="screens_utils_constants/">screens\utils\constants</a></li>
       <li><a href="screens_utils_extension_date_time/">screens\utils\extension_date_time</a></li>
+      <li><a href="screens_utils_input_formatters/">screens\utils\input_formatters</a></li>
+      <li><a href="screens_utils_string_extensions/">screens\utils\string_extensions</a></li>
+      <li><a href="screens_utils_text_formatters/">screens\utils\text_formatters</a></li>
+      <li><a href="screens_utils_validators/">screens\utils\validators</a></li>
       <li><a href="screens_widgets_address_form/">screens\widgets\address_form</a></li>
       <li><a href="screens_widgets_card_list_item/">screens\widgets\card_list_item</a></li>
       <li><a href="screens_widgets_loading_overlay/">screens\widgets\loading_overlay</a></li>

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_list_item.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Widget da lista de usuários cadastrados
 ///
@@ -12,7 +13,11 @@ class UsuarioList extends StatelessWidget {
   final Function(User) onTap;
 
   const UsuarioList({
-    required this.usuarios, required this.onEdit, required this.onDelete, required this.onTap, super.key,
+    required this.usuarios,
+    required this.onEdit,
+    required this.onDelete,
+    required this.onTap,
+    super.key,
   });
 
   @override
@@ -26,14 +31,10 @@ class UsuarioList extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         if (usuarios.isEmpty)
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Text(
-                'Nenhum usuário cadastrado',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-            ),
+          const EmptyWidget(
+            message: 'Nenhum usuário cadastrado',
+            icon: Icons.people_outline,
+            subMessage: 'Lista de usuários vazia.',
           )
         else
           ListView.builder(

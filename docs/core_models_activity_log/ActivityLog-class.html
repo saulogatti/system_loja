@@ -54,10 +54,9 @@
 
     
 <section class="desc markdown">
-  <p>Modelo de dados para Log de Atividade</p>
-<p>Registra as atividades realizadas no sistema para fins de auditoria.
-Armazena informações sobre qual ação foi realizada, por qual usuário,
-quando e detalhes adicionais sobre a operação.</p>
+  <p>Log de atividade (domínio). Serialização em <code>activity_log_data.dart</code>.</p>
+<p>Registra ações dos usuários para fins de auditoria (criação, leitura,
+atualização e exclusão de entidades do sistema).</p>
 </section>
 
 
@@ -83,12 +82,6 @@ quando e detalhes adicionais sobre a operação.</p>
       <li><a href="../data_database_extension_log_to_companion/LogToCompanion.html">LogToCompanion</a></li>
   </ul></dd>
         
-  <dt>Annotations</dt>
-  <dd>
-    <ul class="annotation-list clazz-relationships">
-        <li>@<a href="https://pub.dev/documentation/json_annotation/4.11.0/json_annotation/JsonSerializable/JsonSerializable.html">JsonSerializable</a>(explicitToJson: true)</li>
-    </ul>
-  </dd>
 
 
       </dl>
@@ -99,17 +92,10 @@ quando e detalhes adicionais sobre a operação.</p>
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="ActivityLog.new" class="callable">
-          <span class="name"><a href="../core_models_activity_log/ActivityLog/ActivityLog.html">ActivityLog</a></span><span class="signature">({<span class="parameter" id="-param-id"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span><span class="parameter" id="-param-entity"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">entity</span>, </span><span class="parameter" id="-param-userId"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">userId</span>, </span><span class="parameter" id="-param-userName"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">userName</span>, </span><span class="parameter" id="-param-timestamp"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">timestamp</span>, </span><span class="parameter" id="-param-details"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">details</span> = <span class="default-value">&#39;&#39;</span>, </span><span class="parameter" id="-param-lastUpdatedDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">lastUpdatedDate</span>, </span><span class="parameter" id="-param-registrationDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">registrationDate</span>, </span><span class="parameter" id="-param-action"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">action</span></span>})</span>
+          <span class="name"><a href="../core_models_activity_log/ActivityLog/ActivityLog.html">ActivityLog</a></span><span class="signature">({<span class="parameter" id="-param-actionType"><span>required</span> <span class="type-annotation"><a href="../core_models_activity_log/ActionType.html">ActionType</a></span> <span class="parameter-name">actionType</span>, </span><span class="parameter" id="-param-entity"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">entity</span>, </span><span class="parameter" id="-param-userId"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">userId</span>, </span><span class="parameter" id="-param-userName"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">userName</span>, </span><span class="parameter" id="-param-timestamp"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">timestamp</span>, </span><span class="parameter" id="-param-details"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">details</span> = <span class="default-value">&#39;&#39;</span>, </span><span class="parameter" id="-param-lastUpdatedDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">lastUpdatedDate</span>, </span><span class="parameter" id="-param-registrationDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">registrationDate</span>, </span><span class="parameter" id="-param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span></span>})</span>
         </dt>
         <dd>
           
-        </dd>
-        <dt id="ActivityLog.fromJson" class="callable">
-          <span class="name"><a href="../core_models_activity_log/ActivityLog/ActivityLog.fromJson.html">ActivityLog.fromJson</a></span><span class="signature">(<span class="parameter" id="fromJson-param-json"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">json</span></span>)</span>
-        </dt>
-        <dd>
-          Cria um objeto a partir de JSON
-            <div class="constructor-modifier features">factory</div>
         </dd>
     </dl>
   </section>
@@ -126,20 +112,20 @@ quando e detalhes adicionais sobre a operação.</p>
 
 </dt>
 <dd>
-  
+  Nome do tipo de ação como string (ex.: "criar", "deletar").
   <div class="features"><span class="feature">no setter</span></div>
 
 </dd>
 
         <dt id="actionType" class="property">
   <span class="name"><a href="../core_models_activity_log/ActivityLog/actionType.html">actionType</a></span>
-  <span class="signature">&#8596; <a href="../core_models_activity_log/ActionType.html">ActionType</a></span>
+  <span class="signature">&#8594; <a href="../core_models_activity_log/ActionType.html">ActionType</a></span>
   
 
 </dt>
 <dd>
-  
-  <div class="features"><span class="feature">getter/setter pair</span></div>
+  Tipo de ação realizada (criar, ler, atualizar, deletar).
+  <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
@@ -150,7 +136,7 @@ quando e detalhes adicionais sobre a operação.</p>
 
 </dt>
 <dd>
-  
+  Detalhes adicionais sobre a ação (opcional).
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -162,7 +148,7 @@ quando e detalhes adicionais sobre a operação.</p>
 
 </dt>
 <dd>
-  
+  Nome da entidade afetada (ex.: Customer, Product, Invoice).
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -186,20 +172,20 @@ quando e detalhes adicionais sobre a operação.</p>
 
 </dt>
 <dd class="inherited">
-  
+  Identificador único da entidade. Valor padrão -1 indica objeto não persistido.
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
 
         <dt id="lastUpdatedDate" class="property inherited">
   <span class="name"><a href="../core_models_default_default_object/DefaultObject/lastUpdatedDate.html">lastUpdatedDate</a></span>
-  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>
   
 
 </dt>
 <dd class="inherited">
-  
-  <div class="features"><span class="feature">getter/setter pair</span><span class="feature">inherited</span></div>
+  Data e hora da última atualização do registro.
+  <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
 
@@ -210,7 +196,7 @@ quando e detalhes adicionais sobre a operação.</p>
 
 </dt>
 <dd class="inherited">
-  
+  Data e hora em que o registro foi criado.
   <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
 
 </dd>
@@ -234,7 +220,7 @@ quando e detalhes adicionais sobre a operação.</p>
 
 </dt>
 <dd>
-  
+  Data e hora exata em que a ação foi realizada.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -246,7 +232,7 @@ quando e detalhes adicionais sobre a operação.</p>
 
 </dt>
 <dd>
-  
+  ID do usuário que realizou a ação.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -258,7 +244,7 @@ quando e detalhes adicionais sobre a operação.</p>
 
 </dt>
 <dd>
-  
+  Nome do usuário que realizou a ação.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
@@ -299,19 +285,6 @@ quando e detalhes adicionais sobre a operação.</p>
       </p>
   Converte um modelo de domínio ActivityLog para Companion usado em insert.
   
-
-</dd>
-
-        <dt id="toJson" class="callable">
-  <span class="name"><a href="../core_models_activity_log/ActivityLog/toJson.html">toJson</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Converte o objeto para JSON
-  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 

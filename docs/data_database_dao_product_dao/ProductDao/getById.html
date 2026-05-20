@@ -62,15 +62,20 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Busca um produto pelo ID.</p>
+<p>Retorna null se o produto não for encontrado.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;Product?&gt; getById(int id) {
-  return (select(
+  <pre class="language-dart"><code class="language-dart">Future&lt;Product?&gt; getById(int id) async {
+  final row = await (select(
     productsRecords,
   )..where((t) =&gt; t.id.equals(id))).getSingleOrNull();
+  return row?.toDomain();
 }</code></pre>
 </section>
 

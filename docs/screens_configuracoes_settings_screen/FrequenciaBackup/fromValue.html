@@ -68,7 +68,10 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">static FrequenciaBackup fromValue(String value) {
-  return FrequenciaBackup.values.firstWhere((e) =&gt; e.value == value, orElse: () =&gt; FrequenciaBackup.diario);
+  return FrequenciaBackup.values.firstWhere(
+    (e) =&gt; e.value == value,
+    orElse: () =&gt; FrequenciaBackup.diario,
+  );
 }</code></pre>
 </section>
 

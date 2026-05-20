@@ -1,8 +1,7 @@
 ---
-description: Effective Dart - estilo, ordem de imports, formatação, doc comments
-globs: "**/*.dart"
+globs: *.dart
+alwaysApply: false
 ---
-
 # Padrões de Codificação
 
 Siga as diretrizes do **Effective Dart** para garantir **Documentação e

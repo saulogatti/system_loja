@@ -13,17 +13,17 @@ import 'package:system_loja/core/utils/command_result.dart';
 /// Exemplo de uso:
 /// ```dart
 /// final repository = appInjection.get<ProductRepository>();
-/// 
+///
 /// // Gerar código automático
 /// final codigo = await repository.generateProductCode();
-/// 
+///
 /// // Criar produto
 /// final produto = Product(
 ///   code: codigo,
 ///   name: 'Notebook Dell',
 ///   price: 3500.00,
 /// );
-/// 
+///
 /// final resultado = await repository.saveProduct(produto);
 /// if (resultado.isSuccessful) {
 ///   print('Produto salvo com sucesso');

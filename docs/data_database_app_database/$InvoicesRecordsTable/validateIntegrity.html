@@ -114,6 +114,24 @@ VerificationContext validateIntegrity(
       companyId.isAcceptableOrUnknown(data[&#39;empresa_id&#39;]!, _companyIdMeta),
     );
   }
+  if (data.containsKey(&#39;empresa_nome&#39;)) {
+    context.handle(
+      _companyNameMeta,
+      companyName.isAcceptableOrUnknown(
+        data[&#39;empresa_nome&#39;]!,
+        _companyNameMeta,
+      ),
+    );
+  }
+  if (data.containsKey(&#39;empresa_cnpj&#39;)) {
+    context.handle(
+      _companyCnpjMeta,
+      companyCnpj.isAcceptableOrUnknown(
+        data[&#39;empresa_cnpj&#39;]!,
+        _companyCnpjMeta,
+      ),
+    );
+  }
   if (data.containsKey(&#39;id&#39;)) {
     context.handle(_idMeta, id.isAcceptableOrUnknown(data[&#39;id&#39;]!, _idMeta));
   }

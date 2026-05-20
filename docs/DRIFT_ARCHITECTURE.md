@@ -1,193 +1,97 @@
-# Drift Database Architecture
+# Arquitetura Drift no System Loja
 
-## 📁 File Structure
+## Índice
 
-```
+- [Visão Geral](#visão-geral)
+- [Estrutura de Arquivos](#estrutura-de-arquivos)
+- [Fluxo de Camadas](#fluxo-de-camadas)
+- [Padrões Arquiteturais](#padrões-arquiteturais)
+- [Versionamento de Schema](#versionamento-de-schema)
+- [Boas Práticas](#boas-práticas)
+- [Referências](#referências)
+
+## Visão Geral
+
+O projeto usa Drift como camada principal de persistência local em SQLite.
+O fluxo recomendado é: Screen (BLoC/Cubit) -> Interface -> Repository -> DAO Drift -> Banco.
+
+Há dois bancos principais:
+
+- `AppDatabase` para dados de negócio (clientes, produtos, categorias, empresa, notas e itens).
+- `SystemDatabase` para dados de sistema (usuários, logs e configurações).
+
+## Estrutura de Arquivos
+
+```text
 lib/data/database/
-├── app_database.dart              # Main database configuration
-├── app_database.g.dart            # Generated: table implementations
-│
-├── table/                         # Table definitions (schema)
-│   ├── clientes_records.dart     # Customer table
-│   ├── products_records.dart     # Product table
-│   ├── invoices_records.dart     # Invoice table
-│   └── invoice_items_records.dart # Invoice items table
-│
-├── extension/                     # Domain ↔ Drift converters
-│   ├── cliente_to_companion.dart # Customer conversions
-│   └── invoice_to_companion.dart # Invoice & InvoiceItem conversions
-│
-└── *_dao.dart                     # Data Access Objects
-    ├── cliente_dao.dart           # Customer CRUD
-    ├── product_dao.dart           # Product CRUD
-    ├── invoice_dao.dart           # Invoice CRUD (with transactions)
-    └── invoice_item_dao.dart      # Invoice item CRUD
+├── app_database.dart              # Banco principal, schema e migrações
+├── app_database.g.dart            # Gerado pelo Drift
+├── system_database.dart           # Banco de sistema
+├── system_database.g.dart         # Gerado pelo Drift
+├── dao/                           # DAOs (XxxDao)
+├── table/                         # Tabelas Drift (XxxRecords)
+│   └── system/                    # Tabelas do banco de sistema
+├── extension/                     # Conversões para Companions
+└── mapper/                        # Conversões XxxRecord -> domínio
 ```
 
-## 🔄 Data Flow
+## Fluxo de Camadas
 
-```
-┌─────────────────┐
-│  Domain Models  │  (Customer, Invoice, Product)
-│  lib/core/      │  Pure business logic
-└────────┬────────┘
-         │ uses
-         ▼
-┌─────────────────┐
-│   Extensions    │  toCompanion() / toDomain()
-│  lib/data/      │  Type conversions
-│  database/      │
-│  extension/     │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│      DAOs       │  CRUD operations
-│   *_dao.dart    │  Query builders
-└────────┬────────┘
-         │ operates on
-         ▼
-┌─────────────────┐
-│  Drift Tables   │  Table definitions
-│  table/*.dart   │  Column types & constraints
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   AppDatabase   │  Coordination layer
-│app_database.dart│  Schema version, migrations
-└─────────────────┘
+```text
+Screen (BLoC/Cubit)
+  -> Interface (lib/core/interface/)
+  -> Repository (lib/domain/repository/)
+  -> DAO (lib/data/database/dao/)
+  -> Tables/AppDatabase/SystemDatabase
+  -> SQLite
 ```
 
-## 🎯 Key Patterns
+## Padrões Arquiteturais
 
-### 1. Repository Pattern
-Each entity has a DAO that acts as a repository:
-```dart
-class ClienteDao {
-  Future<List<Customer>> getAll() { ... }
-  Future<Customer?> getById(int id) { ... }
-  Future<int> insertCliente(Customer customer) { ... }
-  Future<int> updateCliente(Customer customer) { ... }
-  Future<int> deleteCliente(int id) { ... }
-}
-```
+### Repository + DAO
 
-### 2. Domain Separation
-- **Domain Models** (`Customer`, `Invoice`): No database dependencies
-- **Drift Records** (`ClientesRecord`): Generated database types
-- **Extensions**: Bridge between the two
+- A UI depende de interfaces em `lib/core/interface/`.
+- Repositórios em `lib/domain/repository/` coordenam DAOs e regras de negócio.
+- DAOs em `lib/data/database/dao/` executam operações de persistência e consultas.
+- Transações de múltiplas entidades ficam no repositório, não no DAO.
 
-### 3. Transaction Support
-Complex operations use transactions:
-```dart
-Future<int> insertInvoiceWithItems(Invoice invoice) async {
-  return await transaction(() async {
-    final invoiceId = await insertInvoice(invoice);
-    for (final item in invoice.data.items) {
-      await invoiceItemDao.insertInvoiceItem(item, invoiceId: invoiceId);
-    }
-    return invoiceId;
-  });
-}
-```
+### Separação de Domínio
 
-### 4. Denormalization for Performance
-Foreign key data is denormalized:
-- `InvoicesRecords` stores `customer_name` and `customer_cpf`
-- `InvoiceItemsRecords` stores `product_name` and `product_code`
+- Modelos de domínio em `lib/core/models/` não dependem de Drift.
+- Registros gerados (`XxxRecord`) representam o schema físico.
+- Conversão entre domínio e persistência é feita por `mapper/` e `extension/`.
+- Não usar `@UseRowClass` com entidades de domínio.
 
-This avoids joins in common queries while maintaining referential integrity via IDs.
+### Tratamento de Erros
 
-## 📊 Entity Relationships
+- Repositórios capturam exceções internamente e retornam `ResultStatus.error(...)`.
+- A camada de apresentação não envolve chamadas de repositório em `try/catch`.
 
-```
-┌─────────────┐
-│  Customer   │
-│  (Cliente)  │
-└──────┬──────┘
-       │ 1
-       │
-       │ N
-       ▼
-┌─────────────┐
-│   Invoice   │──┐
-│   (Nota)    │  │ 1
-└─────────────┘  │
-                 │ N
-                 ▼
-            ┌────────────────┐
-            │  InvoiceItem   │──┐
-            │ (Item da Nota) │  │ N
-            └────────────────┘  │
-                                │ 1
-                                ▼
-                           ┌─────────┐
-                           │ Product │
-                           └─────────┘
-```
+## Versionamento de Schema
 
-## 🔧 Schema Version: 2
+Estado atual dos bancos:
 
-### Version 1 (Initial)
-- Customers (clientes_records)
-- Products (products_records)
+- `AppDatabase`: `schemaVersion => 12`
+- `SystemDatabase`: `schemaVersion => 1`
 
-### Version 2 (Current)
-- Added: Invoices (invoices_records)
-- Added: Invoice Items (invoice_items_records)
+Ao alterar tabelas, DAOs ou tipos persistidos:
 
-## 💡 Best Practices
+1. Atualize o schema no banco correto.
+2. Implemente/ajuste a estratégia de migração.
+3. Gere código com `dart run build_runner build --delete-conflicting-outputs`.
+4. Valide com `dart analyze` e `flutter test`.
 
-### When to Use Extensions
-- Always use `toCompanion()` when inserting/updating
-- Always use `toDomain()` when reading from database
-- Keep extensions pure (no business logic)
+## Boas Práticas
 
-### Transaction Guidelines
-- Use for multi-table operations (invoice + items)
-- Use for operations that must be atomic
-- Avoid for single-table operations
+- Mantenha migrações pequenas, explícitas e incrementais.
+- Centralize lógica de negócio no repositório.
+- Evite expor detalhes de persistência para camadas superiores.
+- Use nomes consistentes: tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`.
+- Preserve dados quando aplicável; em cenários pré-produção, mudanças incompatíveis podem ser aceitas quando alinhadas com o time.
 
-### Error Handling
-```dart
-try {
-  final id = await dao.insertCliente(customer);
-  print('Inserted with ID: $id');
-} on SqliteException catch (e) {
-  if (e.extendedResultCode == 2067) {
-    // UNIQUE constraint failed
-    print('CPF already exists');
-  }
-}
-```
+## Referências
 
-## 🚀 Next Steps After Build Runner
-
-1. **Test Individual DAOs**
-   ```dart
-   final db = AppDatabase();
-   final customer = await db.clienteDao.getAll();
-   ```
-
-2. **Test Relationships**
-   ```dart
-   final invoice = await db.invoiceDao.getById(1);
-   print('Invoice has ${invoice?.data.items.length} items');
-   ```
-
-3. **Test Transactions**
-   ```dart
-   final id = await db.invoiceDao.insertInvoiceWithItems(invoice);
-   ```
-
-4. **Integration Tests**
-   - Create test suite for each DAO
-   - Test error conditions (unique constraints, etc.)
-   - Test transaction rollback scenarios
-
----
-
-**Status**: ✅ Implementation complete  
-**Pending**: Build runner execution  
-**Schema**: Version 2
+- `README.md`
+- `docs/DRIFT_MIGRATION.md`
+- `docs/INTERFACES_ARCHITECTURE.md`
+- `.github/copilot-instructions.md`

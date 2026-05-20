@@ -1,13 +1,12 @@
+import 'dart:developer' as developer;
+
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:system_loja/core/managers/system_error_manager.dart';
 import 'package:system_loja/core/models/address.dart';
-import 'package:system_loja/core/models/category.dart';
-import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
-import 'package:system_loja/core/models/product.dart';
+import 'package:system_loja/data/converter/address_codec.dart';
 import 'package:system_loja/data/database/dao/address_dao.dart';
 import 'package:system_loja/data/database/dao/category_dao.dart';
 import 'package:system_loja/data/database/dao/company_dao.dart';
@@ -28,7 +27,14 @@ part 'app_database.g.dart';
 
 /// Banco de dados principal da aplicação usando Drift.
 ///
-/// Gerencia todas as tabelas e DAOs do sistema de loja.
+/// Gerencia todas as tabelas e DAOs do sistema de loja:
+/// clientes, produtos, categorias, empresas, notas fiscais e endereços.
+///
+/// O [applicationSupportDirectory] permite injetar onde o SQLite é gravado
+/// (útil em testes sem plugin `path_provider`).
+///
+/// Veja também:
+/// - [SystemDatabase] - banco secundário para usuários, logs e configurações do sistema
 @DriftDatabase(
   tables: [
     CategoriesRecords,
@@ -39,12 +45,35 @@ part 'app_database.g.dart';
     InvoiceItemsRecords,
     AddressRecords,
   ],
-  daos: [CategoryDao, CompanyDao, CustomerDao, ProductDao, InvoiceDao, InvoiceItemDao, AddressDao],
+  daos: [
+    CategoryDao,
+    CompanyDao,
+    CustomerDao,
+    ProductDao,
+    InvoiceDao,
+    InvoiceItemDao,
+    AddressDao,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   static final _nameBd = 'system_loja';
 
-  AppDatabase() : super(_openConnection(getApplicationSupportDirectory));
+  /// Cria uma instância do banco de dados principal.
+  ///
+  /// [applicationSupportDirectory] permite injetar onde o SQLite é gravado
+  /// (útil em testes sem plugin `path_provider`).
+  ///
+  /// [tempDirectoryPath] evita `getTemporaryDirectory()` do `path_provider`
+  /// (usado pelo Drift para `sqlite3.tempDirectory`); necessário em testes VM.
+  AppDatabase({
+    Future<Object> Function()? applicationSupportDirectory,
+    Future<String?> Function()? tempDirectoryPath,
+  }) : super(
+         _openConnection(
+           applicationSupportDirectory ?? getApplicationSupportDirectory,
+           tempDirectoryPath: tempDirectoryPath,
+         ),
+       );
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -83,17 +112,17 @@ class AppDatabase extends _$AppDatabase {
     },
   );
   @override
-  int get schemaVersion => 11;
+  int get schemaVersion => 12;
   // Dentro da sua classe de banco (Database)
   /// Cria um backup manual do banco de dados usando o comando `VACUUM INTO`.
   ///
-  /// Escapa aspas simples no [backupFile] para evitar erros de SQL e reduzir
-  /// a superfície de injeção caso o caminho não seja totalmente confiável.
+  /// O comando VACUUM INTO cria um backup consistente "a quente".
+  /// Por segurança, o caminho do arquivo é passado como parâmetro para evitar
+  /// injeção de SQL.
   Future<void> manualBackup(String backupFile) async {
-    final sanitizedBackupFile = backupFile.replaceAll("'", "''");
-
     // O comando VACUUM INTO cria um backup consistente "a quente"
-    await customStatement("VACUUM INTO '$sanitizedBackupFile'");
+    // Usamos parâmetros (?) para evitar SQL Injection
+    await customStatement('VACUUM INTO ?', [backupFile]);
   }
 
   /// Migrar Endereços de Empresas e Clientes para AddressRecords
@@ -101,10 +130,12 @@ class AppDatabase extends _$AppDatabase {
     final companyRows = await companyRecords.select().get();
     final customerRows = await customerRecords.select().get();
     for (final company in companyRows) {
-      await into(addressRecords).insert(company.address.toCompanion());
+      final addr = company.address ?? const Address();
+      await into(addressRecords).insert(addr.toAddressInsertCompanion());
     }
     for (final customer in customerRows) {
-      await into(addressRecords).insert(customer.address.toCompanion());
+      final addr = customer.address ?? const Address();
+      await into(addressRecords).insert(addr.toAddressInsertCompanion());
     }
   }
 
@@ -149,10 +180,14 @@ class AppDatabase extends _$AppDatabase {
             state: row.data['state'] as String? ?? '',
           ),
           registrationDate: (row.data['registration_date'] as int) != 0
-              ? DateTime.fromMillisecondsSinceEpoch((row.data['registration_date'] as int) * 1000)
+              ? DateTime.fromMillisecondsSinceEpoch(
+                  (row.data['registration_date'] as int) * 1000,
+                )
               : DateTime.now(),
           lastUpdatedDate: (row.data['last_updated_date'] as int?) != null
-              ? DateTime.fromMillisecondsSinceEpoch((row.data['last_updated_date'] as int) * 1000)
+              ? DateTime.fromMillisecondsSinceEpoch(
+                  (row.data['last_updated_date'] as int) * 1000,
+                )
               : null,
         );
 
@@ -161,32 +196,44 @@ class AppDatabase extends _$AppDatabase {
       // Após a migração, você pode optar por remover a tabela ClientesRecords
       await customStatement('DROP TABLE IF EXISTS clientes_records;');
     } catch (e, stackTrace) {
-      reportError(e, stackTrace);
-      // Trate erros de migração aqui, se necessário
+      developer.log(
+        'Falha na migração clientes_records → customer_records: $e',
+        name: 'AppDatabase',
+        error: e,
+        stackTrace: stackTrace,
+      );
     }
   }
 
-  static QueryExecutor _openConnection(Future<Object> Function()? applicationSupportDirectory) {
+  static QueryExecutor _openConnection(
+    Future<Object> Function()? applicationSupportDirectory, {
+    Future<String?> Function()? tempDirectoryPath,
+  }) {
     return driftDatabase(
       name: _nameBd,
-      web: DriftWebOptions(sqlite3Wasm: Uri.parse('sqlite3.wasm'), driftWorker: Uri.parse('drift_worker.js')),
+      web: DriftWebOptions(
+        sqlite3Wasm: Uri.parse('sqlite3.wasm'),
+        driftWorker: Uri.parse('drift_worker.js'),
+      ),
       native: DriftNativeOptions(
         // By default, `driftDatabase` from `package:drift_flutter` stores the
         // database files in `getApplicationDocumentsDirectory()`.
         databaseDirectory: applicationSupportDirectory,
+        tempDirectoryPath: tempDirectoryPath,
       ),
     );
   }
 }
 
 extension on Address {
-  Insertable<Address> toCompanion() {
-    return AddressRecordsCompanion(
-      city: Value(city),
-      neighborhood: Value(neighborhood),
-      state: Value(state),
-      street: Value(street),
-      zipCode: Value(zipCode),
+  /// Converte endereço de domínio para insert em [AddressRecords].
+  AddressRecordsCompanion toAddressInsertCompanion() {
+    return AddressRecordsCompanion.insert(
+      city: city,
+      neighborhood: neighborhood,
+      state: state,
+      street: street,
+      zipCode: zipCode,
     );
   }
 }

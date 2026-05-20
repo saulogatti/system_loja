@@ -28,8 +28,8 @@ O GitHub Copilot Coding Agent pode ajudar a automatizar tarefas de desenvolvimen
    - Este arquivo (`CONTRIBUTING.md`) - Guia de contribuição geral
 
 2. **Verifique as convenções do projeto**:
-   - Padrão Manager para lógica de negócio
-   - Persistência em JSON (sem banco de dados externo)
+   - **Clean Architecture**: UI → interfaces em `lib/core/interface/` → repositórios em `lib/domain/repository/` → `lib/data/` (Drift, DTOs, mapeadores)
+   - Persistência principal: **SQLite via Drift** (sem backend externo); JSON/managers em `lib/core/managers/` só onde ainda for legado pontual
    - Documentação em português usando comentários `///`
    - Material Design 3 para interface
 
@@ -133,35 +133,21 @@ class ClienteManager {
 
 ### Padrões Arquiteturais
 
-#### Manager Pattern
-Cada entidade segue este padrão:
+#### Camadas (atual)
 
-```dart
-class XManager {
-  List<X> items = [];
-  
-  void _carregarDados() // Carrega do JSON
-  void _salvarDados()   // Salva no JSON
-  
-  bool adicionar(X item)
-  X? buscarPorId(int id)
-  List<X> listarTodos()
-  bool atualizar(X item)
-  bool remover(int id)
-}
-```
+- **Interface + ResultStatus**: operações expostas à UI retornam `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`, usa `package:meta`); não propagar exceções através de repositório/interface.
+- **Repositórios** (`lib/domain/repository/`): orquestram DAOs e regras; usam `try/catch` internamente e retornam `ResultStatus.error(mensagemErroRepositorio(...))` com mensagens amigáveis (`lib/core/utils/repository_error_mapper.dart`). Dependem de interfaces e de tipos de `lib/core/models/`.
+- **Apresentação** (`lib/screens/`): **não** envolve chamadas ao repositório em `try/catch`; usa `when`/`switch` no `ResultStatus` e emite estado de erro com a mensagem já tratada.
+- **Dados** (`lib/data/`): tabelas/DAOs Drift, DTOs em `entry/` etc., mapeamento registro → domínio; **sem** imports de `domain/` ou `aplication/`. `CacheManager` é registrado via `GetIt` (DI) — não usar `CacheManager.instance`.
 
-#### Geração de IDs
-Sempre use este padrão para IDs auto-incrementais:
+#### Legado: Manager + JSON
 
-```dart
-id: items.map((i) => i.id!).fold(0, (max, current) => max > current ? max : current) + 1
-```
+Onde ainda existir `lib/core/managers/`, o padrão histórico foi carregar/salvar JSON local. **Novas features** devem seguir Drift + repositórios; não expandir o legado sem necessidade.
 
-#### Persistência JSON
-- Arquivos em `data/` (criado automaticamente)
-- Modelos devem ter `toJson()` e `fromJson()`
-- Usar `dart:convert` para serialização
+#### Persistência
+
+- **Principal**: Drift (`AppDatabase` / `SystemDatabase`); IDs auto-incrementais onde a tabela usar `autoIncrement()`. `SystemDatabase` aceita `QueryExecutor` opcional no construtor para testes com banco em memória.
+- **JSON legado**: apenas nos fluxos que ainda usam managers (os arquivos de dados estáticos `data/*.json` foram removidos).
 
 ### Flutter UI
 
@@ -337,38 +323,32 @@ system_loja/
 │   ├── instructions/
 │   │   └── dartcode.instructions.md     # Padrões de código Dart
 │   └── ISSUE_TEMPLATE/
-│       ├── bug_report.md                # Template para bugs
-│       └── feature_request.md           # Template para features
+│       ├── bug_report.md
+│       └── feature_request.md
 ├── lib/
-│   ├── main.dart                        # Entry point
+│   ├── main.dart
+│   ├── aplication/
+│   │   └── app_injection.dart           # DI (GetIt)
 │   ├── core/
-│   │   ├── models/                      # Modelos de dados
-│   │   │   ├── cliente.dart
-│   │   │   ├── produto.dart
-│   │   │   └── nota_fiscal.dart
-│   │   └── managers/                    # Lógica de negócio
-│   │       ├── cliente_manager.dart
-│   │       ├── produto_manager.dart
-│   │       └── nota_fiscal_manager.dart
-│   ├── screens/                         # Telas Flutter
-│   │   ├── home_screen.dart
-│   │   ├── cliente_screen.dart
-│   │   ├── produto_screen.dart
-│   │   └── nota_fiscal_screen.dart
+│   │   ├── interface/                   # Contratos (ex.: ICustomerRepository)
+│   │   ├── models/                      # Entidades de domínio
+│   │   ├── managers/                    # Legado JSON (pontual)
+│   │   └── utils/                       # ResultStatus, helpers
+│   ├── domain/
+│   │   └── repository/                  # Implementações de repositório
 │   ├── data/
-│   │   ├── database/                    # SQL managers (alternativo)
-│   │   ├── cache/                       # Sistema de cache
-│   │   └── files_system/                # Gerenciamento de arquivos
-│   └── utils/                           # Utilitários
-├── data/                                # Dados JSON (criado em runtime)
-│   ├── clientes.json
-│   ├── produtos.json
-│   └── notas_fiscais.json
-├── test/                                # Testes unitários
-├── docs/                                # Documentação adicional
-├── CONTRIBUTING.md                      # Este arquivo
-└── README.md                            # Documentação principal
+│   │   ├── database/                    # Drift: DAOs, tabelas, mapper/, extension/
+│   │   ├── entry/                       # DTOs JSON
+│   │   ├── cache/, converter/, models/
+│   └── screens/                         # UI, BLoC/Cubit, rotas
+├── test/
+│   └── support/                         # Helpers (ex.: AppDatabase em teste)
+├── docs/
+├── CONTRIBUTING.md
+└── README.md
 ```
+
+Arquivos JSON em disco podem existir em runtime apenas nos fluxos legados; o fluxo principal da aplicação usa SQLite embutido.
 
 ---
 

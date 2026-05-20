@@ -5,13 +5,13 @@
 class ValidationException implements Exception {
   /// Mensagem principal descrevendo o erro de validação
   final String message;
-  
+
   /// Campo que falhou na validação (opcional)
   final String? field;
-  
+
   /// Sugestão de como corrigir o erro (opcional)
   final String? suggestion;
-  
+
   /// Valor inválido que causou o erro (opcional)
   final dynamic invalidValue;
 
@@ -32,30 +32,30 @@ class ValidationException implements Exception {
   @override
   String toString() {
     final buffer = StringBuffer('ValidationException: $message');
-    
+
     if (field != null) {
       buffer.write(' (campo: $field)');
     }
-    
+
     if (invalidValue != null) {
       buffer.write(' [valor: $invalidValue]');
     }
-    
+
     if (suggestion != null) {
       buffer.write('\nSugestão: $suggestion');
     }
-    
+
     return buffer.toString();
   }
 
   /// Retorna uma mensagem formatada para exibição ao usuário.
   String get userMessage {
     final buffer = StringBuffer(message);
-    
+
     if (suggestion != null) {
       buffer.write('\n\n💡 $suggestion');
     }
-    
+
     return buffer.toString();
   }
 }

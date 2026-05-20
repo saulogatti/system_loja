@@ -5,16 +5,6 @@ class BackupSettingsEvent extends SettingsEvent {
   const BackupSettingsEvent();
 }
 
-/// Evento para limpar todos os dados do sistema
-class ClearAllDataEvent extends SettingsEvent {
-  const ClearAllDataEvent();
-}
-
-/// Evento para limpar logs antigos
-class ClearOldLogsEvent extends SettingsEvent {
-  const ClearOldLogsEvent();
-}
-
 /// Evento para carregar as configurações iniciais
 class LoadSettingsEvent extends SettingsEvent {
   const LoadSettingsEvent();
@@ -29,6 +19,7 @@ class ResetDefaultSettingsEvent extends SettingsEvent {
 class RestoreBackupEvent extends SettingsEvent {
   const RestoreBackupEvent();
 }
+
 /// Eventos do BLoC de Configurações
 abstract class SettingsEvent {
   const SettingsEvent();

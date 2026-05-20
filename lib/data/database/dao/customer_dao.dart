@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/extension/customer_to_companion.dart';
+import 'package:system_loja/data/database/mapper/drift_to_domain.dart';
 import 'package:system_loja/data/database/table/customer_records.dart';
 
 part 'customer_dao.g.dart';
@@ -35,7 +36,7 @@ class CustomerDao extends DatabaseAccessor<AppDatabase>
   /// Retorna todos os clientes como objetos de domínio Customer.
   Future<List<Customer>> getAll() async {
     final records = await select(customerRecords).get();
-    return records;
+    return records.map((e) => e.toDomain()).toList();
   }
 
   /// Busca um cliente pelo ID.
@@ -45,7 +46,17 @@ class CustomerDao extends DatabaseAccessor<AppDatabase>
     final record = await (select(
       customerRecords,
     )..where((t) => t.id.equals(id))).getSingleOrNull();
-    return record;
+    return record?.toDomain();
+  }
+
+  /// Busca um cliente pelo CPF.
+  ///
+  /// Retorna null se o cliente não for encontrado.
+  Future<Customer?> getByCpf(String cpf) async {
+    final record = await (select(
+      customerRecords,
+    )..where((t) => t.cpf.equals(cpf))).getSingleOrNull();
+    return record?.toDomain();
   }
 
   /// Atualiza um cliente existente no banco de dados.
