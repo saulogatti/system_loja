@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/aplication/app_injection.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/models/default/authorization_level.dart';
-import 'package:system_loja/screens/utils/string_extensions.dart';
+import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/user_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_delete_confirm_dialog.dart';
@@ -234,7 +234,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   }
 
   Future<void> _excluirUsuario(User usuario) async {
-    context.read<UserCubit>().removerUsuario(usuario.id);
+    await context.read<UserCubit>().removerUsuario(usuario.id);
 
     // Se estava editando o usuário excluído, cancela a edição
     if (_usuarioEditando?.id == usuario.id) {

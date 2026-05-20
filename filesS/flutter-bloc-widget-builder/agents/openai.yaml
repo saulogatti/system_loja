@@ -1,4 +1,0 @@
-interface:
-  display_name: "Flutter BLoC Widgets"
-  short_description: "Widgets Flutter com BLoC e clean architecture"
-  default_prompt: "Use $flutter-bloc-widget-builder para implementar ou refatorar widgets Flutter com BLoC, arquitetura limpa e componentes pequenos."

@@ -35,19 +35,22 @@ import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
 final appInjection = GetIt.instance;
-late LoggerCacheRepository printerLog;
+late LoggerPersistenceService printerLog;
 
 /// Configura as dependências da aplicação.
 /// Isso é usado no main.dart para configurar as dependências da aplicação.
 /// Para acessar as dependências, use o `appInjection.get<T>()` onde T é o tipo da dependência.
 void setupAppInjection() {
-  printerLog = registerLogPrinterColor(config: ConfigLog(enableLog: kDebugMode));
+  printerLog = registerLogPrinterColor(
+    config: ConfigLog(enableLog: kDebugMode),
+    // cacheFilePath: p.join(Directory.current.path, 'system_loja_cache'),
+  );
   appInjection.registerSingleton<RouteApp>(RouteApp());
   appInjection.registerSingleton<ProductMovementReportService>(ProductMovementReportService());
   appInjection.registerSingleton<RelatorioOverviewService>(RelatorioOverviewService());
   appInjection.registerSingleton<AppDatabase>(AppDatabase());
   appInjection.registerSingleton<SystemDatabase>(SystemDatabase());
-  appInjection.registerSingleton<ISystemErrorManager>(SystemErrorManager());
+  appInjection.registerLazySingleton<ISystemErrorManager>(SystemErrorManager.new);
   appInjection.registerSingleton<CacheManager>(CacheManager());
   appInjection.registerSingleton<CodeGeneratorService>(
     CodeGeneratorService(
@@ -74,7 +77,6 @@ void setupAppInjection() {
   appInjection.registerSingleton<SettingsService>(SettingsService.injection());
   appInjection.registerSingleton<IConfigurationRepository>(
     ConfigurationRepository(
-      logRepository: appInjection.get<ILogRepository>(),
       settingsService: appInjection.get<SettingsService>(),
       cache: appInjection.get<CacheManager>(),
     ),
@@ -100,7 +102,10 @@ void setupAppInjection() {
     ),
   );
   appInjection.registerSingleton<ISystemRepository>(
-    SystemRepository(systemDao: appInjection.get<SystemDatabase>().systemDao),
+    SystemRepository(
+      systemDao: appInjection.get<SystemDatabase>().systemDao,
+      logRepository: appInjection.get<ILogRepository>(),
+    ),
   );
 
   appInjection.registerSingleton<ICategoryRepository>(

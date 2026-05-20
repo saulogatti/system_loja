@@ -25,7 +25,10 @@ class SalesPurchaseAnalyticsLoaded extends SalesPurchaseAnalyticsState {
   final SalesPurchaseGrouping grouping;
   final List<AnalyticsPoint> points;
 
-  const SalesPurchaseAnalyticsLoaded({required this.grouping, required this.points});
+  const SalesPurchaseAnalyticsLoaded({
+    required this.grouping,
+    required this.points,
+  });
 
   double get maxValue {
     if (points.isEmpty) {
@@ -36,15 +39,20 @@ class SalesPurchaseAnalyticsLoaded extends SalesPurchaseAnalyticsState {
       0,
       (currentMax, point) => point.salesValue > currentMax
           ? point.salesValue
-          : (point.purchaseValue > currentMax ? point.purchaseValue : currentMax),
+          : (point.purchaseValue > currentMax
+                ? point.purchaseValue
+                : currentMax),
     );
   }
 
-  int get totalProducts => points.fold<int>(0, (sum, point) => sum + point.productsCount);
+  int get totalProducts =>
+      points.fold<int>(0, (sum, point) => sum + point.productsCount);
 
-  double get totalPurchases => points.fold<double>(0, (sum, point) => sum + point.purchaseValue);
+  double get totalPurchases =>
+      points.fold<double>(0, (sum, point) => sum + point.purchaseValue);
 
-  double get totalSales => points.fold<double>(0, (sum, point) => sum + point.salesValue);
+  double get totalSales =>
+      points.fold<double>(0, (sum, point) => sum + point.salesValue);
 }
 
 class SalesPurchaseAnalyticsLoading extends SalesPurchaseAnalyticsState {
