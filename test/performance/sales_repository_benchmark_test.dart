@@ -1,11 +1,13 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/data/database/app_database.dart';
-import 'package:system_loja/domain/repository/sales_repository.dart';
 import 'package:system_loja/domain/code_generator_service.dart';
+import 'package:system_loja/domain/repository/sales_repository.dart';
 
 import '../support/test_app_database.dart';
 
@@ -75,17 +77,12 @@ void main() {
       ),
     );
 
-    // Warm up
-    await salesRepository.saveSale(invoice.copyWith(
-      data: invoice.data.copyWith(invoiceNumber: 'NF-WARMUP'),
-    ));
-
     // Measurement
     final stopwatch = Stopwatch()..start();
     final result = await salesRepository.saveSale(invoice);
     stopwatch.stop();
 
-    expect(result.isSuccess, isTrue);
+    expect(result.isSuccessful, isTrue);
     print('Benchmark (saveSale with $itemCount items): ${stopwatch.elapsedMilliseconds}ms');
   });
 }

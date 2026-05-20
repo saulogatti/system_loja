@@ -10,12 +10,7 @@ class Invoice extends DefaultObject {
   /// Dados da nota fiscal (número, tipo, itens, valores, etc.).
   final InvoiceData data;
 
-  Invoice({
-    required this.data,
-    super.registrationDate,
-    super.lastUpdatedDate,
-    super.id,
-  });
+  Invoice({required this.data, super.registrationDate, super.lastUpdatedDate, super.id});
 
   @override
   String toString() {
@@ -24,14 +19,10 @@ class Invoice extends DefaultObject {
     buffer.writeln('Invoice Number: ${data.invoiceNumber}');
     buffer.writeln('Type: ${data.type.name}');
     if (data.customerId != null) {
-      buffer.writeln(
-        'Customer: ${data.customerName} (CPF: ${data.customerCpf})',
-      );
+      buffer.writeln('Customer: ${data.customerName} (CPF: ${data.customerCpf})');
     }
     if (data.companyId != null) {
-      buffer.writeln(
-        'Company: ${data.companyName} (CNPJ: ${data.companyCnpj})',
-      );
+      buffer.writeln('Company: ${data.companyName} (CNPJ: ${data.companyCnpj})');
     }
     buffer.writeln('Total Value: R\$ ${data.totalValue.toStringAsFixed(2)}');
     buffer.writeln('Payment Method: ${data.paymentMethod}');
@@ -40,12 +31,8 @@ class Invoice extends DefaultObject {
     for (var item in data.items) {
       buffer.writeln(item.toString());
     }
-    buffer.writeln(
-      'Data de Cadastro: ${registrationDate.toString().split('.')[0]}',
-    );
-    buffer.writeln(
-      'Data de Atualização: ${lastUpdatedDate.toString().split('.')[0]}',
-    );
+    buffer.writeln('Data de Cadastro: ${registrationDate.toString().split('.')[0]}');
+    buffer.writeln('Data de Atualização: ${lastUpdatedDate.toString().split('.')[0]}');
     return buffer.toString();
   }
 }
@@ -94,12 +81,6 @@ class InvoiceData {
   /// Tipo da nota: entrada ([InvoiceType.entry]) ou saída ([InvoiceType.exit]).
   final InvoiceType type;
 
-  /// Nome de exibição unificado (cliente ou empresa).
-  String get personDisplayName => customerName ?? companyName ?? '';
-
-  /// Documento de exibição unificado (CPF ou CNPJ).
-  String get personDocument => customerCpf ?? companyCnpj ?? '';
-
   InvoiceData({
     required this.invoiceNumber,
     required this.items,
@@ -117,9 +98,13 @@ class InvoiceData {
     final withoutLink = customerId == null && companyId == null;
     final withBothLinks = customerId != null && companyId != null;
     if (withoutLink || withBothLinks) {
-      throw ArgumentError(
-        'Informe exatamente um vínculo: customerId ou companyId.',
-      );
+      throw ArgumentError('Informe exatamente um vínculo: customerId ou companyId.');
     }
   }
+
+  /// Nome de exibição unificado (cliente ou empresa).
+  String get personDisplayName => customerName ?? companyName ?? '';
+
+  /// Documento de exibição unificado (CPF ou CNPJ).
+  String get personDocument => customerCpf ?? companyCnpj ?? '';
 }
