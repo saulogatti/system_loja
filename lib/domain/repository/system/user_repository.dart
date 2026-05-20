@@ -118,10 +118,7 @@ class UserRepository with LoggerClassMixin implements IUserRepository {
       return ResultStatus.success(null);
     } catch (e) {
       return ResultStatus.error(
-        mensagemErroRepositorio(
-          e,
-          contexto: 'Falha ao buscar usuário por id',
-        ),
+        mensagemErroRepositorio(e, contexto: 'Falha ao buscar usuário por id'),
       );
     }
   }

@@ -16,6 +16,6 @@ class Category extends DefaultObject {
     this.description,
     super.registrationDate,
     super.lastUpdatedDate,
-    int? id,
+    super.id,
   });
 }

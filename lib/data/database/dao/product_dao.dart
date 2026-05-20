@@ -30,20 +30,12 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
     return row?.toDomain();
   }
 
-  /// Busca múltiplos produtos pelos seus IDs.
-  Future<List<Product>> getByIds(List<int> ids) async {
-    final rows = await (select(productsRecords)
-          ..where((t) => t.id.isIn(ids)))
-        .get();
-    return rows.map((e) => e.toDomain()).toList();
-  }
-
   /// Insere um novo produto no banco de dados.
   ///
   /// Usa `insertOrAbort` com `DoNothing` em conflito para evitar duplicatas.
   /// Retorna o ID gerado automaticamente, ou 0 em caso de conflito.
-  Future<int> insertProduct(Product data) async {
-    return await into(productsRecords).insert(
+  Future<int> insertProduct(Product data) {
+    return into(productsRecords).insert(
       ProductsRecordsCompanion.insert(
         code: data.code,
         categoryId: Value(data.categoryId),
@@ -68,8 +60,8 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   /// Atualiza os dados de um produto existente.
   ///
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
-  Future<bool> updateProduct(Product data) async {
-    return await update(productsRecords).replace(
+  Future<bool> updateProduct(Product data) {
+    return update(productsRecords).replace(
       ProductsRecordsCompanion(
         id: Value(data.id),
         code: Value(data.code),
@@ -79,6 +71,7 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
         price: Value(data.price),
         stockQuantity: Value(data.stockQuantity),
         lastUpdatedDate: Value(data.lastUpdatedDate),
+        registrationDate: Value(data.registrationDate),
       ),
     );
   }
@@ -114,7 +107,7 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
 
     final newQuantity = product.stockQuantity + quantityChange;
 
-    return await update(productsRecords).replace(
+    return update(productsRecords).replace(
       ProductsRecordsCompanion(
         id: Value(productId),
         code: Value(product.code),

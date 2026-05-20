@@ -1,50 +1,65 @@
 # System Loja - Copilot Instructions
 
-## Build and Test
-- Instalar dependências: `flutter pub get`.
-- Rodar codegen quando houver alteração em `@freezed`, `@JsonSerializable`, Drift (`@DriftDatabase`, `@DriftAccessor`, tabelas/DAOs) ou `auto_route` (`@RoutePage`):
+Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, `README_TESTING.md`, `AGENTS.md` e aos arquivos em `.github/instructions/`.
+
+## Build, test and lint
+
+- Instalar dependencias: `flutter pub get`
+- Rodar o app:
+  - Windows: `flutter run -d windows`
+  - Linux: `flutter run -d linux`
+  - Chrome: `flutter run -d chrome`
+  - Web server: `flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0`
+- Gerar codigo quando houver alteracao estrutural em `@freezed`, `@JsonSerializable`, Drift (`@DriftDatabase`, `@DriftAccessor`, tabelas/DAOs) ou `auto_route`:
   - `dart run build_runner build --delete-conflicting-outputs`
-- Executar app: `flutter run -d windows`, `flutter run -d chrome` ou `flutter run -d linux`.
-- Testes: `flutter test` e `flutter test test/<arquivo>_test.dart`.
-- Qualidade: `dart analyze` e `dart format --set-exit-if-changed .`.
+- Analise estatica: `dart analyze`
+- Verificacao de formatacao: `dart format --set-exit-if-changed .`
+- Suite completa de testes: `flutter test`
+- Um arquivo de teste: `flutter test test/<arquivo>_test.dart`
+- Um teste especifico por nome: `flutter test test/<arquivo>_test.dart --plain-name "nome do teste"`
+- Testes por area, quando ajudar na iteracao: `flutter test test/screens/` ou `flutter test test/core/`
 
-## Architecture
-- App Flutter multiplataforma com UI em `lib/screens/`.
-- Fluxo principal: **Screen (Bloc/Cubit)** → **Interface** (`lib/core/interface/`) → **Repository** (`lib/domain/repository/`) → **DAO Drift** (`lib/data/database/dao/`) → SQLite.
-- DI com `GetIt` via `setupAppInjection()` em `lib/aplication/app_injection.dart` (chamado no `main()`).
-- Navegação com `auto_route` em `lib/screens/route/route_app.dart` (gerado em `route_app.gr.dart`).
-- Existem dois bancos Drift:
-  - `AppDatabase` (`lib/data/database/app_database.dart`) com `schemaVersion => 11`.
-  - `SystemDatabase` (`lib/data/database/system_database.dart`) com `schemaVersion => 1`.
+## High-level architecture
 
-## Arquitetura limpa (obrigatório)
-O código deve seguir **Clean Architecture** de forma consistente. Isso explica refactors maiores quando se desacoplam camadas (por exemplo: entidades de domínio em `lib/core/` sem serialização; DTOs, codecs e Drift em `lib/data/`; contratos em `lib/core/interface/`).
+- O app sobe em `lib/main.dart`: chama `setupAppInjection()`, registra dependencias no `GetIt` e monta um `MaterialApp.router` com `RouteApp`.
+- `setupAppInjection()` em `lib/aplication/app_injection.dart` e o ponto central de wiring: registra bancos Drift, repositories, services, cache, router e o carregamento inicial de configuracoes via `IConfigurationRepository`.
+- A UI fica em `lib/screens/` e usa `flutter_bloc` com BLoCs/Cubits injetados no topo do app. A navegacao e declarada em `lib/screens/route/route_app.dart` com `auto_route` e nested routes sob `HostRoute`.
+- O fluxo principal do projeto e: **Screen/BLoC/Cubit -> interfaces em `lib/core/interface/` -> repositories em `lib/domain/repository/` -> DAOs Drift em `lib/data/database/dao/` -> SQLite**.
+- A persistencia e dividida em dois bancos:
+  - `AppDatabase` (`lib/data/database/app_database.dart`): dados de negocio como clientes, produtos, categorias, empresa, notas e itens.
+  - `SystemDatabase` (`lib/data/database/system_database.dart`): usuarios, logs e configuracoes de sistema.
+- `lib/data/` concentra persistencia e adaptacao: tabelas Drift, DAOs, `entry/` para DTOs serializaveis, `converter/`, `cache/` e `mapper/` para transformar `XxxRecord` em modelos de `lib/core/models/`.
+- Ha codigo legado em `lib/core/managers/` e alguns fluxos JSON antigos. O caminho preferencial para novas features e manter o fluxo atual baseado em Drift + repository.
 
-- **Domínio / core** (`lib/core/`): modelos de negócio, regras e interfaces de repositório. Evitar dependências da camada de dados (pacote `data`, `json_serializable` em entidades puras, Drift) quando o objetivo for manter o núcleo independente.
-- **Dados** (`lib/data/`): persistência (Drift), DAOs, conversores, DTOs/entries com `json_serializable`/`build_runner`, cache e mapeamento para o domínio. **Não importar** `lib/domain/` nem `lib/aplication/` a partir de `lib/data/`.
-- **Apresentação** (`lib/screens/`): UI, BLoC/Cubit, roteamento. Depende de interfaces e casos de uso, não de implementações concretas de banco.
-- **Domínio / aplicação** (`lib/domain/`): implementações de repositórios que orquestram DAOs e regras.
+## Key conventions
 
-Priorizar fronteiras claras mesmo que o diff seja grande; a manutenção e os testes compensam.
+- Codigo em ingles; comentarios e documentacao `///` em portugues.
+- A UI nao deve chamar DAOs diretamente nem depender de implementacoes concretas de repository; ela consome interfaces de `lib/core/interface/`.
+- Operacoes de repository retornam `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`). Repositories capturam excecoes internamente e retornam `ResultStatus.error(...)`; a camada de apresentacao trata o resultado com `when` ou `switch`, sem `try/catch` em chamadas de repository.
+- `try/catch` na UI fica restrito a operacoes locais que nao passam por repository, como seletores de arquivo ou I/O direto.
+- `lib/data/` nao deve importar `lib/domain/` nem `lib/aplication/`; mantenha detalhes de persistencia abaixo das interfaces e repositories.
+- Drift segue a convencao: tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`. Nao use `@UseRowClass` com entidades de `lib/core/models/`; faca o mapeamento em `mapper/`, `extension/`, DAO ou repository.
+- Ao alterar schema Drift, atualize o `schemaVersion` e a `MigrationStrategy` no banco correto. Estado atual:
+  - `AppDatabase`: `schemaVersion => 12`
+  - `SystemDatabase`: `schemaVersion => 1`
+- `CacheManager` e outros servicos compartilhados entram por DI (`GetIt`); nao introduza singletons globais paralelos.
+- Em testes de VM que instanciam `AppDatabase`, reutilize os helpers de `test/support/test_app_database.dart` para evitar dependencia de `path_provider`.
+- No Web, Drift depende de `web/sqlite3.wasm` e `web/drift_worker.js`; nao remova esses arquivos ao mexer em build web.
+- Commits seguem o formato `<tipo>: <descricao concisa>` com tipos como `feat`, `fix`, `docs`, `refactor` e `test`, em portugues.
 
-## Compatibilidade com versões anteriores
-O projeto **ainda está em desenvolvimento**. **Não é necessário** preservar compatibilidade com formatos antigos de JSON, estruturas de modelo legadas ou schemas de banco anteriores só por compatibilidade retroativa. Pode-se alterar contratos e migrações quando a arquitetura limpa ou o modelo de domínio exigirem — desde que o código gerado (`build_runner`) e os testes do escopo alterado sejam atualizados.
+## MCP servers
 
-## Conventions
-- Retorno de operações usa `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`, usa `package:meta`) com `isSuccessful`, `hasError`, `asSuccess`, `asError` e `when(...)`.
-- Não propagar exceções entre camadas de interface/repositório; retornar `ResultStatus`. Repositórios usam `try/catch` internamente e devolvem `ResultStatus.error(mensagemErroRepositorio(erro, contexto: '...'))` com mensagens de texto amigáveis (ver `lib/core/utils/repository_error_mapper.dart`).
-- A camada de apresentação (BLoC/Cubit/Screen) **não** envolve chamadas ao repositório em `try/catch`; usa `when` / `switch` no `ResultStatus` e emite estado de erro com a mensagem já tratada. `try/catch` na UI fica reservado a operações locais (seletor de arquivo, escrita em `File`) que não passam pelo contrato do repositório.
-- `CacheManager` é registrado via `GetIt` (DI); **não** usar `CacheManager.instance` — repositórios o recebem por injeção de construtor.
-- Drift: convenção tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`.
-- **Não** usar `@UseRowClass` apontando para entidades de `lib/core/models/`; manter linhas Drift como dados de persistência e mapear para domínio em `lib/data/database/mapper/` (ou política equivalente nos DAOs/repositórios).
-- `SystemDatabase` aceita `QueryExecutor` opcional no construtor para facilitar testes com banco em memória.
-- Código em inglês; documentação e comentários com `///` em português.
-- Formato de commit: `<tipo>: <descrição concisa>`.
-- Tipos de commit: `feat`, `fix`, `docs`, `style`, `refactor`, `test`.
-- Mensagem de commit em português; incluir nome da classe alterada quando fizer sentido.
+- Para fluxos web (`flutter run -d chrome` ou `flutter run -d web-server`), prefira usar um MCP do Playwright quando estiver disponivel para validar navegacao, estados de UI, formularios e regressao visual.
+- Use o MCP para validar comportamento de tela no navegador; continue usando `flutter test` para cobertura automatizada do repositorio.
 
-## Pitfalls
-- Há código legado em `lib/core/managers/` e configuração em JSON ainda em uso pontual; refatorar em direção à arquitetura limpa tem prioridade sobre manter comportamento legado, salvo risco claro ao fluxo atual. Os arquivos de dados estáticos anteriores (`data/*.json`) foram removidos.
-- Em mudanças de schema Drift, atualizar `schemaVersion` e estratégia de migração no banco correto (não é obrigatório manter dados antigos compatíveis — ver seção **Compatibilidade com versões anteriores**).
-- No Web, Drift depende de `web/sqlite3.wasm` e `web/drift_worker.js`.
-- Existem alguns testes com falhas pré-existentes no repositório; valide o escopo alterado antes de tratar falhas fora da tarefa.
+## References
+
+- `README.md`
+- `CONTRIBUTING.md`
+- `README_TESTING.md`
+- `AGENTS.md`
+- `.github/instructions/dartcode.instructions.md`
+- `.github/instructions/dart-n-flutter.instructions.md`
+- `docs/BUILD_INSTRUCTIONS.md`
+- `docs/DRIFT_ARCHITECTURE.md`
+- `docs/INTERFACES_ARCHITECTURE.md`

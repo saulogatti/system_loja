@@ -148,7 +148,7 @@ class SalesRepository implements ISalesRepository {
   Future<ResultStatus<bool, String>> saveSale(Invoice invoice) async {
     try {
       if (invoice.data.type == InvoiceType.exit) {
-        final productIds = invoice.data.items.map((e) => e.productId).toList();
+        final productIds = invoice.data.items.map((i) => i.productId).toList();
         final products = await _productDao.getByIds(productIds);
         final productMap = {for (final p in products) p.id: p};
 

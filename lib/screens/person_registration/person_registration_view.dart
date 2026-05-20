@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
 import 'package:system_loja/screens/person_registration/bloc/person_bloc.dart';
 import 'package:system_loja/screens/person_registration/bloc/person_event.dart';
 import 'package:system_loja/screens/person_registration/bloc/person_state.dart';
 import 'package:system_loja/screens/person_registration/models/person_registration_form_data.dart';
 import 'package:system_loja/screens/person_registration/widgets/person_registration_form.dart';
-import 'package:system_loja/aplication/utils/constants.dart';
 
 /// Exibe a tela de cadastro unificado para pessoa física e jurídica.
 ///
@@ -46,10 +46,11 @@ class _PersonRegistrationViewState extends State<PersonRegistrationView> {
             builder: (_) => const Center(child: CircularProgressIndicator()),
           ),
           success: () {
+            Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Cadastro realizado com sucesso!')),
             );
-            context.router.pop(); // Volta para a tela anteriorF
+            context.router.maybePop(true);
           },
           failure: (error) {
             Navigator.of(context).pop(); // Fecha o dialog de loading
