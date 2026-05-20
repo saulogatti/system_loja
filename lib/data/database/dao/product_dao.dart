@@ -34,6 +34,7 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   ///
   /// Retorna uma lista de produtos encontrados.
   Future<List<Product>> getByIds(List<int> ids) async {
+    if (ids.isEmpty) return [];
     final rows = await (select(productsRecords)
           ..where((t) => t.id.isIn(ids)))
         .get();

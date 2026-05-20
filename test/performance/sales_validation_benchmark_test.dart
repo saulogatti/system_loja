@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
@@ -12,7 +14,7 @@ void main() {
   late AppDatabase database;
   late ProductDao productDao;
 
-  setUp(() async {
+  setUp(() {
     database = AppDatabase(
       applicationSupportDirectory: testApplicationSupportDirectory,
       tempDirectoryPath: testSqliteTempDirectoryPath,
@@ -46,13 +48,17 @@ void main() {
       data: InvoiceData(
         invoiceNumber: 'NF-BENCH-${DateTime.now().microsecondsSinceEpoch}',
         type: InvoiceType.exit,
-        items: productIds.map((id) => InvoiceItem(
-          productId: id,
-          productName: 'Produto $id',
-          productCode: 'PROD-$id',
-          quantity: quantityPerItem,
-          unitPrice: 10.0,
-        )).toList(),
+        items: productIds
+            .map(
+              (id) => InvoiceItem(
+                productId: id,
+                productName: 'Produto $id',
+                productCode: 'PROD-$id',
+                quantity: quantityPerItem,
+                unitPrice: 10.0,
+              ),
+            )
+            .toList(),
         paymentMethod: 'Dinheiro',
       ),
     );
@@ -72,7 +78,9 @@ void main() {
       }
     }
     stopwatchN1.stop();
-    print('BENCHMARK_RESULT: N+1 Query validation took: ${stopwatchN1.elapsedMilliseconds}ms for $itemCount items');
+    print(
+      'BENCHMARK_RESULT: N+1 Query validation took: ${stopwatchN1.elapsedMilliseconds}ms for $itemCount items',
+    );
 
     // 2. Optimized: Using the new getByIds
     final stopwatchBatch = Stopwatch()..start();
@@ -87,7 +95,9 @@ void main() {
       }
     }
     stopwatchBatch.stop();
-    print('BENCHMARK_RESULT: Batch validation took: ${stopwatchBatch.elapsedMilliseconds}ms for $itemCount items');
+    print(
+      'BENCHMARK_RESULT: Batch validation took: ${stopwatchBatch.elapsedMilliseconds}ms for $itemCount items',
+    );
 
     expect(stopwatchBatch.elapsedMilliseconds, lessThanOrEqualTo(stopwatchN1.elapsedMilliseconds));
   });
