@@ -86,9 +86,8 @@ class _ProductCategoryState extends State<ProductCategory> {
             }).toList(),
             onChanged: widget.enabled
                 ? (value) {
-                    setState(() {
-                      _selectedCategoryId = value;
-                    });
+                    _selectedCategoryId = value;
+
                     widget.onChanged?.call(value);
                   }
                 : null,

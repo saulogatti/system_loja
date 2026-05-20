@@ -29,18 +29,14 @@ O arquivo `lib/screens/route/route_app.gr.dart` é gerado automaticamente pelo `
 No diretório raiz do projeto, execute:
 
 ```bash
-# Usando dart (recomendado)
 dart run build_runner build --delete-conflicting-outputs
-
-# Ou usando flutter
-flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
 ## O que esperar
 
 Após executar, você verá mensagens como:
 
-```
+```text
 [INFO] Generating build script completed, took 234ms
 [INFO] Creating build script snapshot... completed, took 8.7s
 [INFO] Building new asset graph completed, took 1.2s
