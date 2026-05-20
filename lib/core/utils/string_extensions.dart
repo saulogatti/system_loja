@@ -219,9 +219,9 @@ extension FileNameStringExtensions on String {
 extension ValidateDataCustomer on String {
   static const int minPasswordLength = 8;
 
-  /// Gera um hash seguro usando PBKDF2 com HMAC-SHA256.
+  /// Gera um hash seguro usando BCrypt com salt aleatorio.
   ///
-  /// Retorna uma string no formato: `iterations$salt$hash` (todos em hexadecimal).
+  /// Retorna o hash no formato BCrypt (`$2a$`, `$2b$` ou `$2y$`).
   String hashPassword() {
     return BCrypt.hashpw(this, BCrypt.gensalt());
   }
