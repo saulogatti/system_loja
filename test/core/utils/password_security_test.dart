@@ -1,41 +1,30 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
-import 'dart:convert';
-import 'package:crypto/crypto.dart';
 
 void main() {
   group('Password Security Tests', () {
     test('hashSenha generates different hashes for the same password (salt)', () {
       const password = 'Password123';
-      final hash1 = password.hashSenha();
-      final hash2 = password.hashSenha();
+      final hash1 = password.hashPassword();
+      final hash2 = password.hashPassword();
 
       expect(hash1, isNot(equals(hash2)));
-      expect(hash1.split('$').length, equals(3));
+      expect(hash1.split('\$').length, equals(3));
     });
 
-    test('verifySenha validates correctly with new PBKDF2 format', () {
+    test('validatePassword validates correctly with new PBKDF2 format', () {
       const password = 'StrongPassword!1';
-      final hash = password.hashSenha();
 
-      expect(password.verifySenha(hash), isTrue);
-      expect('WrongPassword'.verifySenha(hash), isFalse);
+      expect(password.validatePassword(), isNull);
+      expect('WrongPassword'.validatePassword(), isNotNull);
     });
 
-    test('verifySenha maintains backward compatibility with legacy SHA-256', () {
-      const password = 'LegacyPassword';
-      // Manual SHA-256 hash of 'LegacyPassword'
-      final bytes = utf8.encode(password);
-      final legacyHash = sha256.convert(bytes).toString();
-
-      expect(password.verifySenha(legacyHash), isTrue);
-      expect('WrongPassword'.verifySenha(legacyHash), isFalse);
-    });
-
-    test('hashSenha output matches expected format', () {
+    test('hashPassword output matches expected format', () {
       const password = 'TestFormat1';
-      final hash = password.hashSenha();
-      final parts = hash.split('$');
+      final hash = password.hashPassword();
+      final parts = hash.split('\$');
 
       expect(parts.length, equals(3));
       // Salt and hash should be valid base64

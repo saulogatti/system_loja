@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:bcrypt/bcrypt.dart';
-import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_loja/core/constants/app_constants.dart';
 
@@ -220,10 +217,7 @@ extension FileNameStringExtensions on String {
 }
 
 extension ValidateDataCustomer on String {
-  static const int senhaMinLength = 8;
-  static const int _iterations = 600000;
-  static const int _saltLength = 16;
-  static const int _keyLength = 32;
+  static const int minPasswordLength = 8;
 
   /// Gera um hash seguro usando PBKDF2 com HMAC-SHA256.
   ///
@@ -290,23 +284,23 @@ extension ValidateDataCustomer on String {
   /// Valida a força da senha
   ///
   /// Retorna uma mensagem de erro se a senha for inválida, ou null se for válida.
-  /// Regras: mínimo [senhaMinLength] caracteres, pelo menos uma letra maiúscula,
+  /// Regras: mínimo [minPasswordLength] caracteres, pelo menos uma letra maiúscula,
   /// uma letra minúscula e um número.
   String? validatePassword() {
-    final String senha = this;
-    if (senha.isEmpty) {
+    final String password = this;
+    if (password.isEmpty) {
       return 'Senha é obrigatória';
     }
-    if (senha.length < senhaMinLength) {
-      return 'Senha deve ter no mínimo $senhaMinLength caracteres';
+    if (password.length < minPasswordLength) {
+      return 'Senha deve ter no mínimo $minPasswordLength caracteres';
     }
-    if (!senha.contains(Constants.uppercaseLetterRegExp)) {
+    if (!password.contains(Constants.uppercaseLetterRegExp)) {
       return 'Senha deve conter pelo menos uma letra maiúscula';
     }
-    if (!senha.contains(Constants.lowercaseLetterRegExp)) {
+    if (!password.contains(Constants.lowercaseLetterRegExp)) {
       return 'Senha deve conter pelo menos uma letra minúscula';
     }
-    if (!senha.contains(Constants.digitRegExp)) {
+    if (!password.contains(Constants.digitRegExp)) {
       return 'Senha deve conter pelo menos um número';
     }
     return null;
