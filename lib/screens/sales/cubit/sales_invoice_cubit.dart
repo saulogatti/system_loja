@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
-import 'package:system_loja/aplication/utils/constants.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_invoice_state.dart';
+import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/models/invoice_line_entry.dart';
 import 'package:system_loja/screens/sales/models/person_selection.dart';
 import 'package:system_loja/screens/sales/models/person_selection_invoice_mapping.dart';
@@ -14,13 +15,19 @@ import 'package:system_loja/screens/sales/models/person_selection_invoice_mappin
 class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
   final SalesCubit _salesCubit;
 
-  SalesInvoiceCubit({required SalesCubit salesCubit, required List<PaymentMethodType> paymentMethods})
-    : _salesCubit = salesCubit,
-      super(
-        SalesInvoiceState.editing(
-          form: SalesInvoiceFormData(paymentMethod: paymentMethods.isEmpty ? null : paymentMethods.first),
-        ),
-      );
+  SalesInvoiceCubit({
+    required SalesCubit salesCubit,
+    required List<PaymentMethodType> paymentMethods,
+  }) : _salesCubit = salesCubit,
+       super(
+         SalesInvoiceState.editing(
+           form: SalesInvoiceFormData(
+             paymentMethod: paymentMethods.isEmpty
+                 ? null
+                 : paymentMethods.first,
+           ),
+         ),
+       );
 
   /// Adiciona ou soma quantidade; em falta de estoque (saída), emite [SalesInvoiceState.feedback].
   void addOrMergeLine(Product product, int quantityToAdd) {
@@ -30,20 +37,28 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
     final existing = form.linesByProductId[product.id];
     final mergedQty = (existing?.quantity ?? 0) + quantityToAdd;
 
-    if (form.invoiceType == InvoiceType.exit && mergedQty > product.stockQuantity) {
-      _emitFeedback('Estoque insuficiente! Disponível: ${product.stockQuantity}');
+    if (form.invoiceType == InvoiceType.exit &&
+        mergedQty > product.stockQuantity) {
+      _emitFeedback(
+        'Estoque insuficiente! Disponível: ${product.stockQuantity}',
+      );
       return;
     }
 
     final nextMap = Map<int, InvoiceLineEntry>.from(form.linesByProductId);
-    nextMap[product.id] = InvoiceLineEntry(product: product, quantity: mergedQty);
+    nextMap[product.id] = InvoiceLineEntry(
+      product: product,
+      quantity: mergedQty,
+    );
 
     final nextOrder = List<int>.from(form.orderedProductIds);
     if (!nextOrder.contains(product.id)) {
       nextOrder.add(product.id);
     }
 
-    _emitEditing(form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder));
+    _emitEditing(
+      form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder),
+    );
   }
 
   /// Volta para [SalesInvoiceEditing] após exibir o SnackBar (transição por tipo, sem campo solto).
@@ -58,9 +73,14 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
 
   void removeLine(int productId) {
     final form = state.form;
-    final nextMap = Map<int, InvoiceLineEntry>.from(form.linesByProductId)..remove(productId);
-    final nextOrder = form.orderedProductIds.where((id) => id != productId).toList();
-    _emitEditing(form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder));
+    final nextMap = Map<int, InvoiceLineEntry>.from(form.linesByProductId)
+      ..remove(productId);
+    final nextOrder = form.orderedProductIds
+        .where((id) => id != productId)
+        .toList();
+    _emitEditing(
+      form.copyWith(linesByProductId: nextMap, orderedProductIds: nextOrder),
+    );
   }
 
   void setInvoiceType(InvoiceType type) {
@@ -112,10 +132,16 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
 
     _emitEditing(form.copyWith(isSubmitting: true));
     try {
-      // TODO: A chamada a `registerSale` não propaga o resultado de sucesso/erro.
-      // É necessário um mecanismo para que este Cubit saiba se a operação falhou
-      // e possa notificar o usuário (ex: retornando um Result do método ou ouvindo o stream do SalesCubit).
+      final registerFlow = _salesCubit.stream.firstWhere(
+        (state) => state is SalesSaved || state is SalesError,
+      );
+
       await _salesCubit.registerSale(notaFiscal, form.enableCodeGeneration);
+      final registerResult = await registerFlow;
+
+      if (registerResult case SalesError(:final message)) {
+        _emitFeedback(message);
+      }
     } finally {
       if (!isClosed) {
         _emitEditing(state.form.copyWith(isSubmitting: false));
@@ -126,7 +152,12 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
   void toggleAutoInvoiceNumber() {
     final form = state.form;
     final next = !form.enableCodeGeneration;
-    _emitEditing(form.copyWith(enableCodeGeneration: next, invoiceNumber: next ? kStringGenerate : ''));
+    _emitEditing(
+      form.copyWith(
+        enableCodeGeneration: next,
+        invoiceNumber: next ? kStringGenerate : '',
+      ),
+    );
   }
 
   void updateInvoiceNumber(String value) {

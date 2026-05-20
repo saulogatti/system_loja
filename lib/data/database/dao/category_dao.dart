@@ -69,8 +69,8 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
   Future<int> insertCategory({
     required String name,
     String? description,
-  }) async {
-    return await into(categoriesRecords).insert(
+  }) {
+    return into(categoriesRecords).insert(
       CategoriesRecordsCompanion.insert(
         name: name,
         description: Value(description),
@@ -110,8 +110,9 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
     required int id,
     required String name,
     String? description,
-  }) async {
-    return await update(categoriesRecords).replace(
+  }) {
+    assert(id > 0, 'ID da categoria deve ser maior que zero');
+    return update(categoriesRecords).replace(
       CategoriesRecordsCompanion(
         id: Value(id),
         name: Value(name),
