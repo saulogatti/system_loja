@@ -11,7 +11,7 @@ class LogsSystemCubit extends Cubit<LogsSystemState> {
     emit(const LogsSystemState.loading());
     try {
       await _systemErrorManager.clearAllErrors();
-      emit(const LogsSystemState.loaded([]));
+      emit(const LogsSystemState.deleted());
     } catch (_) {
       emit(const LogsSystemState.error('Falha ao limpar logs do sistema.'));
     }

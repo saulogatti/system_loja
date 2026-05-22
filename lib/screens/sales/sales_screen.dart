@@ -9,6 +9,7 @@ import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/sales/cubit/sales_state.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_card.dart';
 import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 import '../../core/models/customer.dart';
@@ -99,7 +100,10 @@ class _SalesViewState extends State<SalesView> {
         },
         builder: (context, state) {
           final invoices = _extractInvoices(state);
-          final totalValue = invoices.fold<double>(0.0, (sum, invoice) => sum + invoice.data.totalValue);
+          final totalValue = invoices.fold<double>(
+            0.0,
+            (sum, invoice) => sum + invoice.data.totalValue,
+          );
 
           return Stack(
             children: [
@@ -169,25 +173,9 @@ class _SalesViewState extends State<SalesView> {
                     ),
                   Expanded(
                     child: invoices.isEmpty
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.receipt_long,
-                                  size: 80,
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  'Nenhuma nota fiscal cadastrada',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ],
-                            ),
+                        ? const EmptyWidget(
+                            message: 'Nenhuma nota fiscal cadastrada',
+                            icon: Icons.receipt_long,
                           )
                         : GridView.builder(
                             padding: const EdgeInsets.all(12),
@@ -195,7 +183,10 @@ class _SalesViewState extends State<SalesView> {
                             itemCount: invoices.length,
                             itemBuilder: (context, index) {
                               final nf = invoices[index];
-                              return InvoiceCard(invoice: nf, onTap: () => _mostrarDetalhesNota(nf));
+                              return InvoiceCard(
+                                invoice: nf,
+                                onTap: () => _mostrarDetalhesNota(nf),
+                              );
                             },
                           ),
                   ),
@@ -275,7 +266,7 @@ class _SalesViewState extends State<SalesView> {
     );
 
     if (result == true) {
-      salesCubit.loadProducts();
+      await salesCubit.loadProducts();
     }
   }
 

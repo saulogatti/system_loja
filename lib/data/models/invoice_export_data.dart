@@ -57,7 +57,8 @@ class InvoiceDataExport {
     type: value.type,
   );
 
-  factory InvoiceDataExport.fromJson(Map<String, dynamic> json) => _$InvoiceDataExportFromJson(json);
+  factory InvoiceDataExport.fromJson(Map<String, dynamic> json) =>
+      _$InvoiceDataExportFromJson(json);
 
   InvoiceData toDomain() => InvoiceData(
     invoiceNumber: invoiceNumber,
@@ -75,7 +76,8 @@ class InvoiceDataExport {
 
   Map<String, dynamic> toJson() => _$InvoiceDataExportToJson(this);
 
-  static InvoiceType _invoiceTypeFromJson(Object? json) => InvoiceType.values.byName(json as String);
+  static InvoiceType _invoiceTypeFromJson(Object? json) =>
+      InvoiceType.values.byName(json as String);
 
   static String _invoiceTypeToJson(InvoiceType value) => value.name;
 }
@@ -102,7 +104,8 @@ class InvoiceExportData {
     data: InvoiceDataExport.fromDomain(value.data),
   );
 
-  factory InvoiceExportData.fromJson(Map<String, dynamic> json) => _$InvoiceExportDataFromJson(json);
+  factory InvoiceExportData.fromJson(Map<String, dynamic> json) =>
+      _$InvoiceExportDataFromJson(json);
 
   Invoice toDomain() => Invoice(
     id: id,

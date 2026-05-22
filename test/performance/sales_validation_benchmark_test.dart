@@ -12,7 +12,7 @@ void main() {
   late AppDatabase database;
   late ProductDao productDao;
 
-  setUp(() async {
+  setUp(() {
     database = AppDatabase(
       applicationSupportDirectory: testApplicationSupportDirectory,
       tempDirectoryPath: testSqliteTempDirectoryPath,

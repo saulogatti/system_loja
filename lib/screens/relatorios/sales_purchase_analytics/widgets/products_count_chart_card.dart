@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../bloc/sales_purchase_analytics_state.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 class ProductsCountChartCard extends StatelessWidget {
   final List<AnalyticsPoint> points;
@@ -9,7 +10,10 @@ class ProductsCountChartCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxCount = points.fold<int>(0, (m, p) => p.productsCount > m ? p.productsCount : m);
+    final maxCount = points.fold<int>(
+      0,
+      (m, p) => p.productsCount > m ? p.productsCount : m,
+    );
 
     return Card(
       child: Padding(
@@ -19,21 +23,24 @@ class ProductsCountChartCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.stacked_bar_chart, color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  Icons.stacked_bar_chart,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 const Expanded(
-                  child: Text('Itens movimentados por data', style: TextStyle(fontWeight: FontWeight.w700)),
+                  child: Text(
+                    'Itens movimentados por data',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
             if (points.isEmpty || maxCount <= 0)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  'Sem dados para exibir.',
-                  style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
-                ),
+              const EmptyWidget(
+                message: 'Sem dados para exibir.',
+                icon: Icons.bar_chart_outlined,
               )
             else
               SizedBox(
@@ -67,7 +74,12 @@ class _MiniBar extends StatelessWidget {
   final int max;
   final Color color;
 
-  const _MiniBar({required this.label, required this.value, required this.max, required this.color});
+  const _MiniBar({
+    required this.label,
+    required this.value,
+    required this.max,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +94,10 @@ class _MiniBar extends StatelessWidget {
         children: [
           Text(
             '$value',
-            style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            style: TextStyle(
+              fontSize: 11,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 6),
           Container(
@@ -99,7 +114,10 @@ class _MiniBar extends StatelessWidget {
             child: Text(
               labelText,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              style: TextStyle(
+                fontSize: 11,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -109,4 +127,3 @@ class _MiniBar extends StatelessWidget {
     );
   }
 }
-

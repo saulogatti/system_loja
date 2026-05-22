@@ -44,8 +44,8 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   ///
   /// Usa `insertOrAbort` com `DoNothing` em conflito para evitar duplicatas.
   /// Retorna o ID gerado automaticamente, ou 0 em caso de conflito.
-  Future<int> insertProduct(Product data) async {
-    return await into(productsRecords).insert(
+  Future<int> insertProduct(Product data) {
+    return into(productsRecords).insert(
       ProductsRecordsCompanion.insert(
         code: data.code,
         categoryId: Value(data.categoryId),
@@ -70,8 +70,8 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   /// Atualiza os dados de um produto existente.
   ///
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
-  Future<bool> updateProduct(Product data) async {
-    return await update(productsRecords).replace(
+  Future<bool> updateProduct(Product data) {
+    return update(productsRecords).replace(
       ProductsRecordsCompanion(
         id: Value(data.id),
         code: Value(data.code),
@@ -117,7 +117,7 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
 
     final newQuantity = product.stockQuantity + quantityChange;
 
-    return await update(productsRecords).replace(
+    return update(productsRecords).replace(
       ProductsRecordsCompanion(
         id: Value(productId),
         code: Value(product.code),

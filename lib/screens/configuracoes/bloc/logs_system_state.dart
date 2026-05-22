@@ -9,4 +9,5 @@ sealed class LogsSystemState with _$LogsSystemState {
   const factory LogsSystemState.loaded(List<SystemError> logs) =
       LogsSystemLoaded;
   const factory LogsSystemState.error(String message) = LogsSystemError;
+    const factory LogsSystemState.deleted() = LogsSystemDeleted;
 }
