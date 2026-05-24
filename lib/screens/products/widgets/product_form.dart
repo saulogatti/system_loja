@@ -74,6 +74,8 @@ class _ProductFormState extends State<ProductForm> {
             textInputAction: TextInputAction.next,
             autocorrect: false,
             enableSuggestions: false,
+            textCapitalization: TextCapitalization.characters,
+            inputFormatters: [ProductCodeInputFormatter()],
             decoration: InputDecoration(
               labelText: 'Código *',
               border: const OutlineInputBorder(),
