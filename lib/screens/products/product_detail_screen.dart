@@ -206,6 +206,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _descricaoController,
+                            keyboardType: TextInputType.multiline,
+                            maxLength: 500,
                             decoration: const InputDecoration(
                               labelText: 'Descrição',
                               border: OutlineInputBorder(),
