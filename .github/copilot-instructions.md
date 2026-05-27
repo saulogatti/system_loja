@@ -1,6 +1,6 @@
 # System Loja - Copilot Instructions
 
-Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, `README_TESTING.md`, `AGENTS.md` e aos arquivos em `.github/instructions/`.
+Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, `README_TESTING.md`, `AGENTS.md` e aos arquivos em `.github/instructions/`. Olhar os detalhes de `styleguide.md` que tem algumas regras e convencoes importantes para o projeto. Se tiver duvidas, consulte os arquivos de documentacao ou pergunte a um humano.
 
 ## Build, test and lint
 
@@ -10,9 +10,8 @@ Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, 
   - Linux: `flutter run -d linux`
   - Chrome: `flutter run -d chrome`
   - Web server: `flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0`
-- Gerar codigo quando houver alteracao estrutural em `@freezed`, `@JsonSerializable`, Drift (`@DriftDatabase`, `@DriftAccessor`, tabelas/DAOs) ou `auto_route`:
-  - `dart run build_runner build --delete-conflicting-outputs`
-- Analise estatica: `dart analyze`
+- Rodar `dart run build_runner build` após fazer alteracao em classes que tenham annotations: `@freezed`, `@JsonSerializable`, Drift (`@DriftDatabase`, `@DriftAccessor`, tabelas/DAOs) ou `auto_route`:
+ - Analise estatica: `dart analyze`
 - Verificacao de formatacao: `dart format --set-exit-if-changed .`
 - Suite completa de testes: `flutter test`
 - Um arquivo de teste: `flutter test test/<arquivo>_test.dart`
@@ -39,9 +38,7 @@ Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, 
 - `try/catch` na UI fica restrito a operacoes locais que nao passam por repository, como seletores de arquivo ou I/O direto.
 - `lib/data/` nao deve importar `lib/domain/` nem `lib/aplication/`; mantenha detalhes de persistencia abaixo das interfaces e repositories.
 - Drift segue a convencao: tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`. Nao use `@UseRowClass` com entidades de `lib/core/models/`; faca o mapeamento em `mapper/`, `extension/`, DAO ou repository.
-- Ao alterar schema Drift, atualize o `schemaVersion` e a `MigrationStrategy` no banco correto. Estado atual:
-  - `AppDatabase`: `schemaVersion => 12`
-  - `SystemDatabase`: `schemaVersion => 1`
+- See `docs/DRIFT_ARCHITECTURE.md` for the step-by-step migration pattern. At minimum, add a `from-to` step in `MigrationStrategy.onUpgrade` and a corresponding schema snapshot under `drift_schemas/
 - `CacheManager` e outros servicos compartilhados entram por DI (`GetIt`); nao introduza singletons globais paralelos.
 - Em testes de VM que instanciam `AppDatabase`, reutilize os helpers de `test/support/test_app_database.dart` para evitar dependencia de `path_provider`.
 - No Web, Drift depende de `web/sqlite3.wasm` e `web/drift_worker.js`; nao remova esses arquivos ao mexer em build web.
