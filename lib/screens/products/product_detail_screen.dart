@@ -207,7 +207,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           TextFormField(
                             controller: _descricaoController,
                             keyboardType: TextInputType.multiline,
-                            maxLength: 500,
+                            maxLength: Product.descriptionMaxLength,
                             decoration: const InputDecoration(
                               labelText: 'Descrição',
                               border: OutlineInputBorder(),

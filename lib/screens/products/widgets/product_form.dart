@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:system_loja/screens/utils/input_formatters.dart';
 import 'package:system_loja/screens/utils/validators.dart';
+import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/products/widgets/product_category.dart';
 import 'package:system_loja/core/constants/app_constants.dart';
 
@@ -157,7 +158,7 @@ class _ProductFormState extends State<ProductForm> {
             enabled: !widget.isLoading,
             controller: widget.descricaoController,
             keyboardType: TextInputType.multiline,
-            maxLength: 500,
+            maxLength: Product.descriptionMaxLength,
             decoration: const InputDecoration(
               labelText: 'Descrição',
               border: OutlineInputBorder(),
