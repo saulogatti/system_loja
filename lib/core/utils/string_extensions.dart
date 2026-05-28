@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:bcrypt/bcrypt.dart';
-import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_loja/core/constants/app_constants.dart';
 
@@ -171,10 +168,9 @@ extension FileNameStringExtensions on String {
   /// 'CON.txt'.toSafeFileName(addTimestamp: true); // 'con_1701979200000.txt'
   /// ```
   String toSafeFileName({int maxLength = 200, bool addTimestamp = false}) {
-    String safeName = sanitizeFileName()
-        .toAsciiFileName()
-        .normalizeFileName()
-        .truncateFileName(maxLength: maxLength);
+    String safeName = sanitizeFileName().toAsciiFileName().normalizeFileName().truncateFileName(
+      maxLength: maxLength,
+    );
 
     // Se for nome reservado, adiciona sufixo
     if (safeName.isReservedFileName()) {
@@ -221,32 +217,13 @@ extension FileNameStringExtensions on String {
 }
 
 extension ValidateDataCustomer on String {
-  static const int senhaMinLength = 8;
+  static const int minPasswordLength = 8;
 
-  /// Gera hash seguro da senha usando BCrypt
+  /// Gera um hash seguro usando BCrypt com salt aleatorio.
+  ///
+  /// Retorna o hash no formato BCrypt (`$2a$`, `$2b$` ou `$2y$`).
   String hashPassword() {
     return BCrypt.hashpw(this, BCrypt.gensalt());
-  }
-
-  /// Verifica se a senha corresponde ao hash fornecido.
-  ///
-  /// Suporta tanto o novo formato BCrypt quanto o antigo SHA-256 para migração.
-  bool verifyPassword(String hashedPassword) {
-    try {
-      if (hashedPassword.startsWith(r'$2b$') ||
-          hashedPassword.startsWith(r'$2a$') ||
-          hashedPassword.startsWith(r'$2y$')) {
-        return BCrypt.checkpw(this, hashedPassword);
-      }
-    } catch (_) {
-      // Trata hashes malformados como falha na verificação
-      return false;
-    }
-
-    // Fallback para SHA-256 (legado)
-    final bytes = utf8.encode(this);
-    final digest = sha256.convert(bytes);
-    return digest.toString() == hashedPassword;
   }
 
   /// Valida se a string é um CPF válido.
@@ -307,23 +284,23 @@ extension ValidateDataCustomer on String {
   /// Valida a força da senha
   ///
   /// Retorna uma mensagem de erro se a senha for inválida, ou null se for válida.
-  /// Regras: mínimo [senhaMinLength] caracteres, pelo menos uma letra maiúscula,
+  /// Regras: mínimo [minPasswordLength] caracteres, pelo menos uma letra maiúscula,
   /// uma letra minúscula e um número.
   String? validatePassword() {
-    final String senha = this;
-    if (senha.isEmpty) {
+    final String password = this;
+    if (password.isEmpty) {
       return 'Senha é obrigatória';
     }
-    if (senha.length < senhaMinLength) {
-      return 'Senha deve ter no mínimo $senhaMinLength caracteres';
+    if (password.length < minPasswordLength) {
+      return 'Senha deve ter no mínimo $minPasswordLength caracteres';
     }
-    if (!senha.contains(Constants.uppercaseLetterRegExp)) {
+    if (!password.contains(Constants.uppercaseLetterRegExp)) {
       return 'Senha deve conter pelo menos uma letra maiúscula';
     }
-    if (!senha.contains(Constants.lowercaseLetterRegExp)) {
+    if (!password.contains(Constants.lowercaseLetterRegExp)) {
       return 'Senha deve conter pelo menos uma letra minúscula';
     }
-    if (!senha.contains(Constants.digitRegExp)) {
+    if (!password.contains(Constants.digitRegExp)) {
       return 'Senha deve conter pelo menos um número';
     }
     return null;

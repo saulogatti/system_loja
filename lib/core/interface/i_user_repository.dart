@@ -10,9 +10,6 @@ import 'package:system_loja/core/utils/command_result.dart';
 /// Inclui operações de autenticação, validação de email e gerenciamento
 /// completo de usuários do sistema.
 ///
-/// **Nota**: Alguns métodos desta interface usam nomenclatura em português
-/// mantendo compatibilidade com código legado.
-///
 /// Exemplo de uso:
 /// ```dart
 /// final repository = appInjection.get<UserRepository>();
