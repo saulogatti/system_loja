@@ -12,6 +12,7 @@ import 'package:system_loja/screens/configs/system/log_error_system_section.dart
 import 'package:system_loja/screens/configuracoes/widgets/maintenance_section.dart';
 import 'package:system_loja/screens/configuracoes/widgets/security_section.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Tela para configurar dados padrão e parâmetros técnicos do sistema.
 @RoutePage()
@@ -211,7 +212,10 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
             ),
             const SizedBox(height: 8),
             if (_measurementUnits.isEmpty)
-              const Text('Nenhuma unidade adicionada.', style: TextStyle(color: Colors.grey))
+              const EmptyWidget(
+                message: 'Nenhuma unidade adicionada.',
+                icon: Icons.straighten_outlined,
+              )
             else
               Wrap(
                 spacing: 8,
