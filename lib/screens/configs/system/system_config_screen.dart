@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/aplication/app_injection.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
@@ -192,23 +193,20 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
           children: [
             const Text('Unidades de medida padrão'),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _measurementUnitController,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (_) => _addMeasurementUnit(),
-                    decoration: const InputDecoration(hintText: 'Ex.: UN, KG, CX'),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                IconButton.filled(
+            TextField(
+              controller: _measurementUnitController,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) => _addMeasurementUnit(),
+              decoration: InputDecoration(
+                hintText: 'Ex.: UN, KG, CX',
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
                   onPressed: _addMeasurementUnit,
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(Icons.add_circle),
+                  color: Theme.of(context).colorScheme.primary,
                   tooltip: 'Adicionar unidade',
                 ),
-              ],
+              ),
             ),
             const SizedBox(height: 8),
             if (_measurementUnits.isEmpty)
@@ -304,8 +302,13 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
             TextField(
               controller: _defaultPeriodController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Período padrão (dias)'),
-            ),
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              textInputAction: TextInputAction.done,
+              decoration: const InputDecoration(
+                labelText: 'Período padrão (dias)',
+                border: OutlineInputBorder(),
+              ),
+            )
           ],
         ),
       ),
