@@ -21,10 +21,7 @@ class CardListItem extends StatelessWidget {
     super.key,
     this.onDelete,
     this.margin = const EdgeInsets.only(bottom: 12),
-    this.contentPadding = const EdgeInsets.symmetric(
-      horizontal: 16,
-      vertical: 8,
-    ),
+    this.contentPadding = const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     this.titleMaxLines = 2,
     this.subTitleMaxLines = 2,
   });
@@ -54,18 +51,14 @@ class CardListItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          subtitle: Text(
-            subTitle,
-            maxLines: subTitleMaxLines,
-            overflow: TextOverflow.ellipsis,
-          ),
+          subtitle: Text(subTitle, maxLines: subTitleMaxLines, overflow: TextOverflow.ellipsis),
           isThreeLine: subTitleMaxLines > 1,
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               if (onDelete != null)
                 IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
+                  icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
                   onPressed: onDelete,
                   tooltip: 'Excluir $title',
                 ),
