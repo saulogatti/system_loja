@@ -116,6 +116,9 @@
 **Learning:** Text fields intended for exact alphanumeric codes (like license keys or activation tokens) can become highly frustrating if the OS keyboard attempts to autocorrect or suggest dictionary words, potentially altering a valid code right before submission.
 **Action:** Always apply `autocorrect: false` and `enableSuggestions: false` to `TextField` or `TextFormField` inputs that handle system keys, tokens, or exact codes.
 
-## $(date +%d-%m-%Y) - Multiline Text Fields Input Constraints
+## 31-05-2026 - Multiline Text Fields Input Constraints
 **Learning:** For multiline text fields like descriptions, always use `keyboardType: TextInputType.multiline` to provide proper native keyboard behavior. Without it, the OS keyboard may not show a proper return key or optimize for long-form text entry. Adding a character limit (e.g., `maxLength: 500`) also automatically provides users with a character counter below the field, improving the UX without breaking existing validation logic. Note that missing `maxLines: null` or setting it incorrectly can limit the multiline UX.
 **Action:** When updating or creating multiline text fields, ensure both `keyboardType: TextInputType.multiline` and a relevant `maxLength` are set to maximize native keyboard capability and visual feedback.
+## 12-06-2024 - Semantic Colors for Destructive Actions
+**Learning:** Hardcoded colors like `Colors.red` for delete actions violate theme support (especially dark mode) and standard accessibility patterns.
+**Action:** Always use `Theme.of(context).colorScheme.error` for destructive actions and `Theme.of(context).colorScheme.primary` for standard actions to ensure consistent, theme-aware visual feedback.
