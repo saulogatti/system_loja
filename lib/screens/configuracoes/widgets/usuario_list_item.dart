@@ -30,9 +30,10 @@ class UsuarioListItem extends StatelessWidget {
         minVerticalPadding: 0,
         titleAlignment: ListTileTitleAlignment.center,
         leading: CircleAvatar(
-          backgroundColor: usuario.permission == AuthorizationLevel.administrador.value
-              ? Colors.purple
-              : Colors.blue,
+          backgroundColor: switch (usuario.permission) {
+            _ when usuario.permission == AuthorizationLevel.administrador.value => Theme.of(context).colorScheme.secondary,
+            _ => Theme.of(context).colorScheme.primary,
+          },
           child: Icon(
             usuario.permission == AuthorizationLevel.administrador.value
                 ? Icons.admin_panel_settings
