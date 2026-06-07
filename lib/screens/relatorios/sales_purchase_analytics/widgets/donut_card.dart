@@ -20,6 +20,7 @@ class SalesPurchaseDonutCard extends StatelessWidget {
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Semantics(
+        button: true,
         hint: 'Ampliar gráfico de distribuição',
         child: Tooltip(
           message: 'Ampliar gráfico de distribuição',
