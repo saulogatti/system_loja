@@ -51,20 +51,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         switch (state) {
           case ProductStateUpdateSuccess():
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Produto atualizado com sucesso!'), backgroundColor: Colors.green),
+              const SnackBar(
+                content: Text('Produto atualizado com sucesso!'),
+                backgroundColor: Colors.green,
+              ),
             );
             ProductListScreen.requestReload();
             context.router.maybePop(true);
           case ProductStateDeleteSuccess():
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Produto deletado com sucesso!'), backgroundColor: Colors.green),
+              const SnackBar(
+                content: Text('Produto deletado com sucesso!'),
+                backgroundColor: Colors.green,
+              ),
             );
             ProductListScreen.requestReload();
             context.router.maybePop(true);
           case ProductStateError(:final message):
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(message),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
           default:
             break;
         }
@@ -76,8 +85,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             actions: [
               IconButton(
                 icon: isLoading
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Icon(Icons.delete),
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
                 onPressed: isLoading ? null : _confirmarExclusao,
                 tooltip: 'Deletar ${widget.product.name}',
               ),
@@ -152,13 +165,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     border: OutlineInputBorder(),
                                     prefixIcon: Icon(Icons.attach_money),
                                   ),
-                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  keyboardType: const TextInputType.numberWithOptions(
+                                    decimal: true,
+                                  ),
                                   enabled: !isLoading,
                                   validator: (value) {
                                     if (value == null || value.trim().isEmpty) {
                                       return 'Preço é obrigatório';
                                     }
-                                    final preco = double.tryParse(value.trim().replaceAll(',', '.'));
+                                    final preco = double.tryParse(
+                                      value.trim().replaceAll(',', '.'),
+                                    );
                                     if (preco == null || preco < 0) {
                                       return 'Preço inválido';
                                     }
@@ -321,7 +338,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               children: [
                 Text(
                   label,
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600], fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
@@ -338,7 +359,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Confirmar Exclusão'),
-        content: TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
+        content: TextButton(
+          onPressed: () => context.router.maybePop(),
+          child: const Text('Cancelar'),
+        ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
           ElevatedButton(
