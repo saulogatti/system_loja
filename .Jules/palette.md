@@ -125,3 +125,6 @@
 ## 06-06-2026 - Explicit Semantics for InkWell widgets
 **Learning:** Custom interactive widgets built directly with InkWell or GestureDetector may not implicitly expose themselves as buttons to screen readers, especially when other widgets (like Tooltip) try to exclude semantics. Relying entirely on inner hints or implicit states can lead to incomplete accessibility contexts.
 **Action:** Always verify that interactive container widgets like InkWell are properly wrapped in Semantics with `button: true` explicitly set, particularly when complex widget trees or semantic exclusions are involved.
+## 15-06-2026 - Button Contrast with Semantic Backgrounds
+**Learning:** When explicitly setting `backgroundColor` on buttons like `ElevatedButton` to semantic colors (e.g. `Theme.of(context).colorScheme.error`), the button text might lack sufficient contrast if the `foregroundColor` isn't updated simultaneously.
+**Action:** Always provide the corresponding `foregroundColor` (e.g. `Theme.of(context).colorScheme.onError`) when overriding a button's `backgroundColor` to maintain accessible text contrast.

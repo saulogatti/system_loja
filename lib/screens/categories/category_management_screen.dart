@@ -13,19 +13,16 @@ import 'package:system_loja/screens/widgets/empty_widget.dart';
 /// Permite visualizar, criar, editar e excluir categorias.
 /// Acessível através das configurações da aplicação.
 @RoutePage()
-class CategoryManagementScreen extends StatefulWidget
-    implements AutoRouteWrapper {
+class CategoryManagementScreen extends StatefulWidget implements AutoRouteWrapper {
   const CategoryManagementScreen({super.key});
 
   @override
-  State<CategoryManagementScreen> createState() =>
-      _CategoryManagementScreenState();
+  State<CategoryManagementScreen> createState() => _CategoryManagementScreenState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider<CategoryCubit>(
-      create: (_) =>
-          CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
+      create: (_) => CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
       child: this,
     );
   }
@@ -67,9 +64,9 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
               );
             },
             error: (message) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(message), backgroundColor: Colors.red),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
             },
           );
         },
@@ -111,19 +108,17 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           child: ListTile(
             leading: const Icon(Icons.category),
             title: Text(category.name),
-            subtitle: category.description != null
-                ? Text(category.description!)
-                : null,
+            subtitle: category.description != null ? Text(category.description!) : null,
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.edit),
+                  icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
                   onPressed: () => _showCategoryDialog(category: category),
                   tooltip: 'Editar ${category.name}',
                 ),
                 IconButton(
-                  icon: const Icon(Icons.delete),
+                  icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
                   onPressed: () => _confirmDeleteCategory(category),
                   tooltip: 'Excluir ${category.name}',
                 ),
@@ -140,16 +135,9 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 64,
-            color: Theme.of(context).colorScheme.error,
-          ),
+          Icon(Icons.error_outline, size: 64, color: Theme.of(context).colorScheme.error),
           const SizedBox(height: 16),
-          Text(
-            'Erro ao carregar categorias',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          Text('Erro ao carregar categorias', style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 8),
           Text(message),
           const SizedBox(height: 16),
@@ -181,6 +169,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
             onPressed: () => Navigator.of(dialogContext).pop(true),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
             ),
             child: const Text('Excluir'),
           ),
@@ -195,9 +184,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
   Future<void> _showCategoryDialog({Category? category}) async {
     final nameController = TextEditingController(text: category?.name ?? '');
-    final descriptionController = TextEditingController(
-      text: category?.description ?? '',
-    );
+    final descriptionController = TextEditingController(text: category?.description ?? '');
     final formKey = GlobalKey<FormState>();
     final isEdit = category != null;
 
