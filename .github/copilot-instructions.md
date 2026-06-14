@@ -10,13 +10,15 @@ Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, 
   - Linux: `flutter run -d linux`
   - Chrome: `flutter run -d chrome`
   - Web server: `flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0`
-- Rodar `dart run build_runner build` após fazer alteracao em classes que tenham annotations: `@freezed`, `@JsonSerializable`, Drift (`@DriftDatabase`, `@DriftAccessor`, tabelas/DAOs) ou `auto_route`:
- - Analise estatica: `dart analyze`
+- Rodar `dart run build_runner build --delete-conflicting-outputs` após fazer alteracao em classes que tenham annotations: `@freezed`, `@JsonSerializable`, Drift (`@DriftDatabase`, `@DriftAccessor`, tabelas/DAOs) ou `auto_route`.
+- Se houver conflito com arquivos gerados, executar: `dart run build_runner clean` e depois `dart run build_runner build --delete-conflicting-outputs`.
+- Analise estatica: `dart analyze`
 - Verificacao de formatacao: `dart format --set-exit-if-changed .`
 - Suite completa de testes: `flutter test`
 - Um arquivo de teste: `flutter test test/<arquivo>_test.dart`
 - Um teste especifico por nome: `flutter test test/<arquivo>_test.dart --plain-name "nome do teste"`
 - Testes por area, quando ajudar na iteracao: `flutter test test/screens/` ou `flutter test test/core/`
+- Se houver falhas legadas fora do escopo, validar primeiro os testes do escopo alterado antes da suite completa.
 
 ## High-level architecture
 
@@ -38,7 +40,7 @@ Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, 
 - `try/catch` na UI fica restrito a operacoes locais que nao passam por repository, como seletores de arquivo ou I/O direto.
 - `lib/data/` nao deve importar `lib/domain/` nem `lib/aplication/`; mantenha detalhes de persistencia abaixo das interfaces e repositories.
 - Drift segue a convencao: tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`. Nao use `@UseRowClass` com entidades de `lib/core/models/`; faca o mapeamento em `mapper/`, `extension/`, DAO ou repository.
-- See `docs/DRIFT_ARCHITECTURE.md` for the step-by-step migration pattern. At minimum, add a `from-to` step in `MigrationStrategy.onUpgrade` and a corresponding schema snapshot under `drift_schemas/
+- See `docs/DRIFT_ARCHITECTURE.md` for the step-by-step migration pattern. At minimum, add a `from-to` step in `MigrationStrategy.onUpgrade` and a corresponding schema snapshot under `drift_schemas/`.
 - `CacheManager` e outros servicos compartilhados entram por DI (`GetIt`); nao introduza singletons globais paralelos.
 - Em testes de VM que instanciam `AppDatabase`, reutilize os helpers de `test/support/test_app_database.dart` para evitar dependencia de `path_provider`.
 - No Web, Drift depende de `web/sqlite3.wasm` e `web/drift_worker.js`; nao remova esses arquivos ao mexer em build web.
