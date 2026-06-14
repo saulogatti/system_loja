@@ -3845,10 +3845,7 @@ final class $$CategoriesRecordsTableReferences
   static MultiTypedResultKey<$ProductsRecordsTable, List<ProductsRecord>>
   _productsRecordsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.productsRecords,
-    aliasName: $_aliasNameGenerator(
-      db.categoriesRecords.id,
-      db.productsRecords.categoryId,
-    ),
+    aliasName: 'categories_records__id__products_records__category_id',
   );
 
   $$ProductsRecordsTableProcessedTableManager get productsRecordsRefs {
@@ -4669,13 +4666,9 @@ final class $$ProductsRecordsTableReferences
     super.$_typedResult,
   );
 
-  static $CategoriesRecordsTable _categoryIdTable(_$AppDatabase db) =>
-      db.categoriesRecords.createAlias(
-        $_aliasNameGenerator(
-          db.productsRecords.categoryId,
-          db.categoriesRecords.id,
-        ),
-      );
+  static $CategoriesRecordsTable _categoryIdTable(_$AppDatabase db) => db
+      .categoriesRecords
+      .createAlias('products_records__category_id__categories_records__id');
 
   $$CategoriesRecordsTableProcessedTableManager? get categoryId {
     final $_column = $_itemColumn<int>('category_id');
