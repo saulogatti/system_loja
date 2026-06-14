@@ -170,7 +170,11 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           ),
           ElevatedButton(
             onPressed: () => dialogContext.router.maybePop(true),
-            style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.error),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+
             child: const Text('Excluir'),
           ),
         ],
