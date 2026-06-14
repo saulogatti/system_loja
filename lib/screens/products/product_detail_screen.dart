@@ -359,12 +359,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Confirmar Exclusão'),
-        content: TextButton(
-          onPressed: () => context.router.maybePop(),
-          child: const Text('Cancelar'),
-        ),
+        content: const Text('Tem certeza que deseja excluir este produto?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => context.router.maybePop(),
+            child: const Text('Cancelar'),
+          ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context); // Fecha o diálogo
