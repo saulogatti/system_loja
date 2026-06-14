@@ -64,9 +64,12 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
               );
             },
             error: (message) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(message),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+              );
             },
           );
         },
@@ -166,11 +169,12 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
             child: const Text('Cancelar'),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
+            onPressed: () => dialogContext.router.maybePop(true),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,
               foregroundColor: Theme.of(context).colorScheme.onError,
             ),
+
             child: const Text('Excluir'),
           ),
         ],
