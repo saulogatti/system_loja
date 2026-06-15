@@ -39,7 +39,10 @@ class ProductListScreenState extends State<ProductListScreen> {
       listener: (context, state) {
         if (state is ProductStateError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
           );
         }
       },
@@ -52,10 +55,7 @@ class ProductListScreenState extends State<ProductListScreen> {
           final produtos = _extractProducts(state);
           return Padding(
             padding: const EdgeInsets.all(16),
-            child: ProductList(
-              products: produtos,
-              onProductTap: _abrirEdicaoProduto,
-            ),
+            child: ProductList(products: produtos, onProductTap: _abrirEdicaoProduto),
           );
         },
       ),
@@ -75,9 +75,7 @@ class ProductListScreenState extends State<ProductListScreen> {
   }
 
   Future<void> _abrirEdicaoProduto(Product produto) async {
-    final changed = await context.router.push<bool>(
-      ProductDetailRoute(product: produto),
-    );
+    final changed = await context.router.push<bool>(ProductDetailRoute(product: produto));
 
     if (changed == true && mounted) {
       _reloadProducts();
