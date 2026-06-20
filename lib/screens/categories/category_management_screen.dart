@@ -109,8 +109,11 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         final category = categories[index];
         return Card(
           child: ListTile(
-            leading: const Icon(Icons.category),
-            title: Text(category.name),
+            leading: CircleAvatar(
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              child: Icon(Icons.category, color: Theme.of(context).colorScheme.onPrimaryContainer),
+            ),
+            title: Text(category.name, style: const TextStyle(fontWeight: FontWeight.bold)),
             subtitle: category.description != null ? Text(category.description!) : null,
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -204,6 +207,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
               TextFormField(
                 controller: nameController,
                 textInputAction: TextInputAction.next,
+                textCapitalization: TextCapitalization.words,
                 decoration: const InputDecoration(
                   labelText: 'Nome *',
                   border: OutlineInputBorder(),
@@ -220,6 +224,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
               TextFormField(
                 controller: descriptionController,
                 keyboardType: TextInputType.multiline,
+                textCapitalization: TextCapitalization.sentences,
                 maxLength: 500,
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
