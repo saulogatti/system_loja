@@ -42,8 +42,7 @@ class _ProductCategoryState extends State<ProductCategory> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
+      create: (_) => CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
       child: BlocBuilder<CategoryCubit, CategoryState>(
         builder: (context, state) {
           return state.when(
@@ -79,10 +78,7 @@ class _ProductCategoryState extends State<ProductCategory> {
               prefixIcon: const Icon(Icons.category),
             ),
             items: categories.map((category) {
-              return DropdownMenuItem<int>(
-                value: category.id,
-                child: Text(category.name),
-              );
+              return DropdownMenuItem<int>(value: category.id, child: Text(category.name));
             }).toList(),
             onChanged: widget.enabled
                 ? (value) {
@@ -103,9 +99,7 @@ class _ProductCategoryState extends State<ProductCategory> {
         ),
         const SizedBox(width: 8),
         IconButton(
-          onPressed: widget.enabled
-              ? () => _showCreateCategoryDialog(context)
-              : null,
+          onPressed: widget.enabled ? () => _showCreateCategoryDialog(context) : null,
           icon: const Icon(Icons.add),
           tooltip: 'Adicionar nova categoria',
         ),
@@ -147,6 +141,8 @@ class _ProductCategoryState extends State<ProductCategory> {
             children: [
               TextFormField(
                 controller: nameController,
+                textInputAction: TextInputAction.next,
+                textCapitalization: TextCapitalization.words,
                 decoration: const InputDecoration(
                   labelText: 'Nome *',
                   border: OutlineInputBorder(),
@@ -161,6 +157,9 @@ class _ProductCategoryState extends State<ProductCategory> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: descriptionController,
+                keyboardType: TextInputType.multiline,
+                textCapitalization: TextCapitalization.sentences,
+                maxLength: 500,
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                   border: OutlineInputBorder(),
@@ -171,10 +170,7 @@ class _ProductCategoryState extends State<ProductCategory> {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancelar'),
-          ),
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancelar')),
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState!.validate()) {
@@ -193,11 +189,9 @@ class _ProductCategoryState extends State<ProductCategory> {
                   Navigator.of(context).pop();
 
                   if (currentState is CategoryCreated) {
-                    ScaffoldMessenger.of(parentContext).showSnackBar(
-                      const SnackBar(
-                        content: Text('Categoria criada com sucesso'),
-                      ),
-                    );
+                    ScaffoldMessenger.of(
+                      parentContext,
+                    ).showSnackBar(const SnackBar(content: Text('Categoria criada com sucesso')));
                   }
                 }
               }
