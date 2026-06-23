@@ -204,6 +204,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
               TextFormField(
                 controller: nameController,
                 textInputAction: TextInputAction.next,
+                textCapitalization: TextCapitalization.words,
                 decoration: const InputDecoration(
                   labelText: 'Nome *',
                   border: OutlineInputBorder(),
@@ -221,12 +222,14 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                 controller: descriptionController,
                 keyboardType: TextInputType.multiline,
                 maxLength: 500,
+                textCapitalization: TextCapitalization.sentences,
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.description),
                 ),
-                maxLines: 3,
+                minLines: 3,
+                maxLines: null,
               ),
             ],
           ),

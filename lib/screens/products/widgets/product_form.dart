@@ -55,6 +55,7 @@ class _ProductFormState extends State<ProductForm> {
             enabled: !widget.isLoading,
             controller: widget.nomeController,
             textInputAction: TextInputAction.next,
+            textCapitalization: TextCapitalization.words,
             decoration: const InputDecoration(
               labelText: 'Nome do Produto *',
               border: OutlineInputBorder(),
@@ -159,12 +160,14 @@ class _ProductFormState extends State<ProductForm> {
             controller: widget.descricaoController,
             keyboardType: TextInputType.multiline,
             maxLength: Product.descriptionMaxLength,
+            textCapitalization: TextCapitalization.sentences,
             decoration: const InputDecoration(
               labelText: 'Descrição',
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.description),
             ),
-            maxLines: 3,
+            minLines: 3,
+            maxLines: null,
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
