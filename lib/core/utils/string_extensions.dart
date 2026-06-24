@@ -1,6 +1,19 @@
 import 'package:bcrypt/bcrypt.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_loja/core/constants/app_constants.dart';
+import 'package:system_loja/core/models/document/cnpj.dart';
+
+int _calculateCnpjDigit(String value, List<int> weights) {
+  int sum = 0;
+
+  for (int i = 0; i < value.length; i++) {
+    final charValue = value.codeUnitAt(i) - 48;
+    sum += charValue * weights[i];
+  }
+
+  final remainder = sum % 11;
+  return remainder < 2 ? 0 : 11 - remainder;
+}
 
 /// Extensões para manipulação segura de strings em nomes de arquivos.
 ///
@@ -196,7 +209,7 @@ extension FileNameStringExtensions on String {
   /// Exemplo:
   /// ```dart
   /// 'nome_muito_longo_para_arquivo.json'.truncateFileName(20);
-  /// // 'nome_muito_long.json'
+  ///  'nome_muito_long.json'
   /// ```
   String truncateFileName({int maxLength = 255}) {
     if (length <= maxLength) return this;
@@ -218,12 +231,43 @@ extension FileNameStringExtensions on String {
 
 extension ValidateDataCustomer on String {
   static const int minPasswordLength = 8;
+  static final RegExp _cnpjAllZerosRegExp = RegExp(r'^0+$');
+  static final RegExp _cnpjCleanRegExp = RegExp(r'^[A-Z\d]{12}\d{2}$');
+  static final RegExp _cnpjFormattingCharsRegExp = RegExp(r'[./-]');
 
   /// Gera um hash seguro usando BCrypt com salt aleatorio.
   ///
   /// Retorna o hash no formato BCrypt (`$2a$`, `$2b$` ou `$2y$`).
   String hashPassword() {
     return BCrypt.hashpw(this, BCrypt.gensalt());
+  }
+
+  /// Valida se a string é um CNPJ válido.
+  ///
+  /// Verifica o formato e os dígitos verificadores do CNPJ.
+  ///
+  /// Retorna `true` se o CNPJ for válido, `false` caso contrário.
+  ///
+  /// Exemplo:
+  /// ```dart
+  /// '00.000.000/0001-91'.isValidCnpj(); // true
+  /// ```
+  bool isValidCnpj() {
+    final String cnpj = trim().toUpperCase().replaceAll(_cnpjFormattingCharsRegExp, '');
+
+    if (!_cnpjCleanRegExp.hasMatch(cnpj) || _cnpjAllZerosRegExp.hasMatch(cnpj)) {
+      return false;
+    }
+
+    final base = cnpj.substring(0, 12);
+    final informedDigit1 = int.parse(cnpj.substring(12, 13));
+    final informedDigit2 = int.parse(cnpj.substring(13, 14));
+
+    final calculatedDigit1 = _calculateCnpjDigit(base, firstWeights);
+    if (calculatedDigit1 != informedDigit1) return false;
+
+    final calculatedDigit2 = _calculateCnpjDigit('$base$calculatedDigit1', secondWeights);
+    return calculatedDigit2 == informedDigit2;
   }
 
   /// Valida se a string é um CPF válido.
@@ -259,58 +303,10 @@ extension ValidateDataCustomer on String {
     return true;
   }
 
-  /// Valida se a string é um CNPJ válido.
-  ///
-  /// Verifica o formato e os dígitos verificadores do CNPJ.
-  ///
-  /// Retorna `true` se o CNPJ for válido, `false` caso contrário.
-  ///
-  /// Exemplo:
-  /// ```dart
-  /// '00.000.000/0001-91'.isValidCnpj(); // true
-  /// ```
-  bool isValidCnpj() {
-    final String cnpj = replaceAll(Constants.nonNumericRegExp, '');
-
-    if (cnpj.length != 14 || Constants.cpfSameDigitRegExp.hasMatch(cnpj)) {
-      return false;
-    }
-
-    final List<int> digits = cnpj.split('').map(int.parse).toList();
-
-    // Validação do primeiro dígito verificador
-    final firstWeights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-    int sum1 = 0;
-    for (int i = 0; i < 12; i++) {
-      sum1 += digits[i] * firstWeights[i];
-    }
-    final remainder1 = sum1 % 11;
-    final checkDigit1 = remainder1 < 2 ? 0 : 11 - remainder1;
-
-    if (checkDigit1 != digits[12]) {
-      return false;
-    }
-
-    // Validação do segundo dígito verificador
-    final secondWeights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-    int sum2 = 0;
-    for (int i = 0; i < 13; i++) {
-      sum2 += digits[i] * secondWeights[i];
-    }
-    final remainder2 = sum2 % 11;
-    final checkDigit2 = remainder2 < 2 ? 0 : 11 - remainder2;
-
-    if (checkDigit2 != digits[13]) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /// Valuida se a string é um email válido.
+  /// Valida se a string é um email válido.
   /// Verifica o formato básico de um email.
-  ///  Retorna `true` se o email for válido, `false` caso contrário.
-  ///  Exemplo:
+  /// Retorna `true` se o email for válido, `false` caso contrário.
+  /// Exemplo:
   /// ```dart
   /// 'example@example.com'.isValidEmail(); // true ou false
   /// ```
