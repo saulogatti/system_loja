@@ -226,7 +226,6 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,
                 maxLength: 500,
-                textCapitalization: TextCapitalization.sentences,
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                   border: OutlineInputBorder(),
