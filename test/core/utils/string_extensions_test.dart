@@ -110,6 +110,18 @@ void main() {
       expect('123'.isValidCpf(), isFalse); // Too short
     });
 
+    test('isValidCnpj correctly validates CNPJ', () {
+      expect('00.000.000/0001-91'.isValidCnpj(), isTrue);
+      expect('00000000000191'.isValidCnpj(), isTrue);
+      expect('00.000.000/0001-92'.isValidCnpj(), isFalse); // Invalid digit
+      expect('MD.FZA.N8D/0LB7-97'.isValidCnpj(), isTrue);
+      expect('md.fza.n8d/0lb7-97'.isValidCnpj(), isTrue);
+      expect('MDFZAN8D0LB797'.isValidCnpj(), isTrue);
+      expect('MD.FZA.N8D/0LB7-98'.isValidCnpj(), isFalse); // Invalid digit
+      expect('00.000.000/0000-00'.isValidCnpj(), isFalse); // All zeros
+      expect('123'.isValidCnpj(), isFalse); // Too short
+    });
+
     test('isValidEmail correctly validates emails', () {
       expect('example@example.com'.isValidEmail(), isTrue);
       expect('user.name_tag@domain.co.uk'.isValidEmail(), isTrue);
