@@ -100,36 +100,29 @@ class _UsuarioFormState extends State<UsuarioForm> {
               prefixIcon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 tooltip: _senhaVisivel ? 'Ocultar senha' : 'Mostrar senha',
-                icon: Icon(
-                  _senhaVisivel ? Icons.visibility_off : Icons.visibility,
-                ),
+                icon: Icon(_senhaVisivel ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
                   setState(() {
                     _senhaVisivel = !_senhaVisivel;
                   });
                 },
               ),
-              helperText:
-                  'Mínimo 8 caracteres, com maiúscula, minúscula e número',
+              helperText: 'Mínimo 8 caracteres, com maiúscula, minúscula e número',
               helperMaxLines: 2,
             ),
             obscureText: !_senhaVisivel,
             onFieldSubmitted: (_) => widget.onSubmit(),
             validator: (value) {
               // Se está editando e senha está vazia, não valida
-              if (widget.usuarioEditando != null &&
-                  (value == null || value.isEmpty)) {
+              if (widget.usuarioEditando != null && (value == null || value.isEmpty)) {
                 return null;
               }
               // Se está criando novo usuário, senha é obrigatória
-              if (widget.usuarioEditando == null &&
-                  (value == null || value.isEmpty)) {
+              if (widget.usuarioEditando == null && (value == null || value.isEmpty)) {
                 return 'Senha é obrigatória';
               }
               // Valida força da senha
-              if (value != null &&
-                  value.isNotEmpty &&
-                  value.validatePassword() != null) {
+              if (value != null && value.isNotEmpty && value.validatePassword() != null) {
                 return value.validatePassword();
               }
               return null;
@@ -165,13 +158,9 @@ class _UsuarioFormState extends State<UsuarioForm> {
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: widget.onSubmit,
-                  icon: Icon(
-                    widget.usuarioEditando == null ? Icons.add : Icons.save,
-                  ),
+                  icon: Icon(widget.usuarioEditando == null ? Icons.add : Icons.save),
                   label: Text(
-                    widget.usuarioEditando == null
-                        ? 'Adicionar Usuário'
-                        : 'Salvar Alterações',
+                    widget.usuarioEditando == null ? 'Adicionar Usuário' : 'Salvar Alterações',
                   ),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(16),
@@ -179,16 +168,17 @@ class _UsuarioFormState extends State<UsuarioForm> {
                   ),
                 ),
               ),
-              if (widget.usuarioEditando != null &&
-                  widget.onCancel != null) ...[
+              if (widget.usuarioEditando != null && widget.onCancel != null) ...[
                 const SizedBox(width: 8),
-                ElevatedButton.icon(
-                  onPressed: widget.onCancel,
-                  icon: const Icon(Icons.cancel),
-                  label: const Text('Cancelar'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(16),
-                    backgroundColor: Colors.grey,
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: widget.onCancel,
+                    icon: const Icon(Icons.cancel),
+                    label: const Text('Cancelar'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.all(16),
+                      textStyle: const TextStyle(fontSize: 16),
+                    ),
                   ),
                 ),
               ],

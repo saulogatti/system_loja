@@ -21,37 +21,33 @@ class UsuarioDetailsDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildDetailRow('ID', usuario.id.toString()),
-            _buildDetailRow('Email', usuario.email ?? 'N/A'),
+            _buildDetailRow(context, 'ID', usuario.id.toString()),
+            _buildDetailRow(context, 'Email', usuario.email ?? 'N/A'),
             _buildDetailRow(
+              context,
               'Nível de Permissão',
               AuthorizationLevel.values
                   .firstWhere((level) => level.value == usuario.permission)
                   .toDisplayName(),
             ),
             _buildDetailRow(
+              context,
               'Data de Cadastro',
-              DateFormat(
-                'dd/MM/yyyy HH:mm:ss',
-              ).format(usuario.registrationDate),
+              DateFormat('dd/MM/yyyy HH:mm:ss').format(usuario.registrationDate),
             ),
             _buildDetailRow(
+              context,
               'Última Atualização',
               DateFormat('dd/MM/yyyy HH:mm:ss').format(usuario.lastUpdatedDate),
             ),
           ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Fechar'),
-        ),
-      ],
+      actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(BuildContext context, String label, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Column(
@@ -59,9 +55,9 @@ class UsuarioDetailsDialog extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.grey,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
               fontSize: 12,
             ),
           ),
