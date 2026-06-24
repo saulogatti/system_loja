@@ -110,6 +110,14 @@ void main() {
       expect('123'.isValidCpf(), isFalse); // Too short
     });
 
+    test('isValidCnpj correctly validates CNPJ', () {
+      expect('00.000.000/0001-91'.isValidCnpj(), isTrue);
+      expect('00000000000191'.isValidCnpj(), isTrue);
+      expect('11.111.111/1111-11'.isValidCnpj(), isFalse); // Repeated digits
+      expect('00.000.000/0001-92'.isValidCnpj(), isFalse); // Invalid digit
+      expect('123'.isValidCnpj(), isFalse); // Too short
+    });
+
     test('isValidEmail correctly validates emails', () {
       expect('example@example.com'.isValidEmail(), isTrue);
       expect('user.name_tag@domain.co.uk'.isValidEmail(), isTrue);
