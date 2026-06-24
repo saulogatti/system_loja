@@ -142,3 +142,6 @@
 ## 18-06-2026 - [Merge Semantics for Complex Analytics Cards]
 **Learning:** Complex layout elements presenting statistical data, like summary cards or custom bar charts built with primitive widgets (Columns, Texts, CustomPaints), cause screen readers to read scattered, individual pieces of text and formatting out of context.
 **Action:** Use `Semantics(container: true, excludeSemantics: true, label: '[Cohesive summary]')` to merge multi-widget components into a single, cohesive, properly contextualized accessibility node.
+## 24-06-2026 - Enhancing Form Field UX with TextCapitalization
+**Learning:** Text inputs capturing user names or multi-line descriptions often require manual capitalization, increasing typing friction and hindering the user flow. Using native keyboard support to auto-capitalize correctly enhances the feeling of polish.
+**Action:** Always provide `textCapitalization: TextCapitalization.words` for proper nouns (like item names, categories, and people) and `textCapitalization: TextCapitalization.sentences` for multiline descriptions or notes, letting the system keyboard do the heavy lifting automatically.

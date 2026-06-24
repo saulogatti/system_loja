@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:system_loja/screens/utils/input_formatters.dart';
-import 'package:system_loja/screens/utils/validators.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/products/widgets/product_category.dart';
-import 'package:system_loja/core/constants/app_constants.dart';
+import 'package:system_loja/screens/utils/input_formatters.dart';
+import 'package:system_loja/screens/utils/validators.dart';
 
 /// Widget do formulário de cadastro de produto
 ///
@@ -166,7 +166,8 @@ class _ProductFormState extends State<ProductForm> {
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.description),
             ),
-            maxLines: 3,
+            minLines: 3,
+            maxLines: null,
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
