@@ -129,6 +129,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           TextFormField(
                             controller: _nomeController,
                             textInputAction: TextInputAction.next,
+                            textCapitalization: TextCapitalization.words,
                             decoration: const InputDecoration(
                               labelText: 'Nome *',
                               border: OutlineInputBorder(),
@@ -224,6 +225,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           TextFormField(
                             controller: _descricaoController,
                             keyboardType: TextInputType.multiline,
+                            textCapitalization: TextCapitalization.sentences,
                             maxLength: Product.descriptionMaxLength,
                             decoration: const InputDecoration(
                               labelText: 'Descrição',
@@ -361,10 +363,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         title: const Text('Confirmar Exclusão'),
         content: const Text('Tem certeza que deseja excluir este produto?'),
         actions: [
-          TextButton(
-            onPressed: () => context.router.maybePop(),
-            child: const Text('Cancelar'),
-          ),
+          TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context); // Fecha o diálogo
