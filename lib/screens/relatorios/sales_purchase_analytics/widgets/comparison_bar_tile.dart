@@ -8,11 +8,7 @@ class ComparisonBarTile extends StatelessWidget {
   final AnalyticsPoint point;
   final double maxValue;
 
-  const ComparisonBarTile({
-    required this.point,
-    required this.maxValue,
-    super.key,
-  });
+  const ComparisonBarTile({required this.point, required this.maxValue, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,64 +16,67 @@ class ComparisonBarTile extends StatelessWidget {
     final salesFactor = point.salesValue / safeMax;
     final purchaseFactor = point.purchaseValue / safeMax;
 
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    point.label,
-                    style: const TextStyle(fontWeight: FontWeight.w700),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Icon(
-                  Icons.bar_chart,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 190,
-              child: Row(
+    return Semantics(
+      container: true,
+      excludeSemantics: true,
+      label:
+          'Data: ${point.label}. Vendas: R\$ ${point.salesValue.toStringAsFixed(2)}. Compras: R\$ ${point.purchaseValue.toStringAsFixed(2)}. Produtos movimentados: ${point.productsCount}',
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
                   Expanded(
-                    child: _VerticalValueBar(
-                      title: 'Venda',
-                      value: point.salesValue,
-                      factor: salesFactor,
-                      color: Colors.green,
+                    child: Text(
+                      point.label,
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _VerticalValueBar(
-                      title: 'Compra',
-                      value: point.purchaseValue,
-                      factor: purchaseFactor,
-                      color: Colors.orange,
-                    ),
-                  ),
+                  const SizedBox(width: 8),
+                  Icon(Icons.bar_chart, color: Theme.of(context).colorScheme.onSurfaceVariant),
                 ],
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Produtos movimentados: ${point.productsCount}',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontSize: 12,
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 190,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _VerticalValueBar(
+                        title: 'Venda',
+                        value: point.salesValue,
+                        factor: salesFactor,
+                        color: Colors.green,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _VerticalValueBar(
+                        title: 'Compra',
+                        value: point.purchaseValue,
+                        factor: purchaseFactor,
+                        color: Colors.orange,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              Text(
+                'Produtos movimentados: ${point.productsCount}',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -105,10 +104,7 @@ class _VerticalValueBar extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12),
-        ),
+        Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
         const SizedBox(height: 6),
         Expanded(
           child: Align(
@@ -116,21 +112,14 @@ class _VerticalValueBar extends StatelessWidget {
             child: Container(
               width: 26,
               height: math.max(6.0, 140.0 * safeFactor),
-              decoration: BoxDecoration(
-                color: barColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
+              decoration: BoxDecoration(color: barColor, borderRadius: BorderRadius.circular(10)),
             ),
           ),
         ),
         const SizedBox(height: 8),
         Text(
           'R\$ ${value.toStringAsFixed(2)}',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: color,
-            fontSize: 12,
-          ),
+          style: TextStyle(fontWeight: FontWeight.w700, color: color, fontSize: 12),
           textAlign: TextAlign.center,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

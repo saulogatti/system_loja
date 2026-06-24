@@ -159,6 +159,7 @@ class _ProductFormState extends State<ProductForm> {
             enabled: !widget.isLoading,
             controller: widget.descricaoController,
             keyboardType: TextInputType.multiline,
+            textCapitalization: TextCapitalization.sentences,
             maxLength: Product.descriptionMaxLength,
             textCapitalization: TextCapitalization.sentences,
             decoration: const InputDecoration(

@@ -1,5 +1,13 @@
 # Palette of Accessibility Learnings and Actions
 
+## 20-06-2024 - Form Text Capitalization Defaults
+**Learning:** Forgetting to set `textCapitalization` in form fields leads to unnecessary friction for mobile users filling out names or descriptions.
+**Action:** Always set `textCapitalization: TextCapitalization.words` for names/titles and `TextCapitalization.sentences` for multiline descriptions in `TextFormField` to utilize the native OS keyboard's auto-capitalization features.
+
+## 16-06-2024 - Auto-capitalization in Flutter text fields
+**Learning:** `textCapitalization` is an excellent, frequently overlooked micro-UX property in Flutter for mobile devices. Using `TextCapitalization.words` for names/titles and `TextCapitalization.sentences` for multiline descriptions significantly reduces friction by displaying the correct OS keyboard layout automatically, instead of requiring the user to manually trigger the shift key.
+**Action:** When implementing or reviewing `TextFormField` widgets, default to applying the appropriate `textCapitalization` based on the context of the field (words for names, sentences for descriptions, characters for codes/acronyms).
+
 ## 24-05-2024 - Adding Context to Destructive Actions in Lists
 
 **Learning:** Screen readers reading raw `IconButton` widgets within lists (like `InvoiceLineTile`) often lack context, simply announcing "button" or repeating an unclear label. Users need to know exactly *what* item is being deleted, not just that a delete button exists.
@@ -128,6 +136,12 @@
 ## 15-06-2026 - Button Contrast with Semantic Backgrounds
 **Learning:** When explicitly setting `backgroundColor` on buttons like `ElevatedButton` to semantic colors (e.g. `Theme.of(context).colorScheme.error`), the button text might lack sufficient contrast if the `foregroundColor` isn't updated simultaneously.
 **Action:** Always provide the corresponding `foregroundColor` (e.g. `Theme.of(context).colorScheme.onError`) when overriding a button's `backgroundColor` to maintain accessible text contrast.
+## 22-06-2026 - Auto-capitalization for Names and Descriptions
+**Learning:** Setting `textCapitalization: TextCapitalization.words` on name fields and `textCapitalization: TextCapitalization.sentences` on descriptions reduces friction by automatically capitalizing inputs, while correctly setting `keyboardType: TextInputType.multiline` improves the native keyboard interface for long-form inputs.
+**Action:** Always include appropriate `textCapitalization` alongside `keyboardType` properties (like `TextInputType.multiline`) for text fields dealing with proper nouns or natural language.
+## 18-06-2026 - [Merge Semantics for Complex Analytics Cards]
+**Learning:** Complex layout elements presenting statistical data, like summary cards or custom bar charts built with primitive widgets (Columns, Texts, CustomPaints), cause screen readers to read scattered, individual pieces of text and formatting out of context.
+**Action:** Use `Semantics(container: true, excludeSemantics: true, label: '[Cohesive summary]')` to merge multi-widget components into a single, cohesive, properly contextualized accessibility node.
 ## 24-06-2026 - Enhancing Form Field UX with TextCapitalization
 **Learning:** Text inputs capturing user names or multi-line descriptions often require manual capitalization, increasing typing friction and hindering the user flow. Using native keyboard support to auto-capitalize correctly enhances the feeling of polish.
 **Action:** Always provide `textCapitalization: TextCapitalization.words` for proper nouns (like item names, categories, and people) and `textCapitalization: TextCapitalization.sentences` for multiline descriptions or notes, letting the system keyboard do the heavy lifting automatically.
