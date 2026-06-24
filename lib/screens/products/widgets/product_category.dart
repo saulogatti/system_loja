@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/aplication/app_injection.dart';
@@ -141,8 +142,9 @@ class _ProductCategoryState extends State<ProductCategory> {
             children: [
               TextFormField(
                 controller: nameController,
-                textInputAction: TextInputAction.next,
+                autofocus: true,
                 textCapitalization: TextCapitalization.words,
+                textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                   labelText: 'Nome *',
                   border: OutlineInputBorder(),
@@ -170,7 +172,7 @@ class _ProductCategoryState extends State<ProductCategory> {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancelar')),
+          TextButton(onPressed: () => context.router.pop(), child: const Text('Cancelar')),
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState!.validate()) {
@@ -186,7 +188,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                 // Check if successful before showing message
                 if (context.mounted) {
                   final currentState = cubit.state;
-                  Navigator.of(context).pop();
+                  context.router.pop();
 
                   if (currentState is CategoryCreated) {
                     ScaffoldMessenger.of(

@@ -38,10 +38,7 @@ mixin FileStorageUtility {
   ///
   /// Retorna o número de arquivos copiados com sucesso.
   /// Em caso de erro, registra via `logError` e retorna 0.
-  Future<int> backup([
-    String localBackup = '',
-    List<String> excludeDirectories = const [],
-  ]) async {
+  Future<int> backup([String localBackup = '', List<String> excludeDirectories = const []]) async {
     try {
       // Obtém o diretório principal do app (não o subdiretório específico)
       final appDocDir = await getApplicationSupportDirectory();
@@ -67,9 +64,7 @@ mixin FileStorageUtility {
 
         // Ignora diretórios excluídos (ex: banco de dados SQLite/Drift)
         if (entity is Directory && excludeDirectories.contains(basename)) {
-          logDebug(
-            'Diretório "$basename" excluído do backup (requer mecanismo transacional)',
-          );
+          logDebug('Diretório "$basename" excluído do backup (requer mecanismo transacional)');
           continue;
         }
 
@@ -83,16 +78,11 @@ mixin FileStorageUtility {
           // Copia diretórios recursivamente (ex: system_loja_cache)
           final nomeDiretorio = basename;
           final destinoDir = Directory(p.join(backupDir.path, nomeDiretorio));
-          arquivosCopiados += await _copyDirectoryRecursively(
-            entity,
-            destinoDir,
-          );
+          arquivosCopiados += await _copyDirectoryRecursively(entity, destinoDir);
         }
       }
 
-      logDebug(
-        'Backup realizado com sucesso: $arquivosCopiados arquivos copiados',
-      );
+      logDebug('Backup realizado com sucesso: $arquivosCopiados arquivos copiados');
       return arquivosCopiados;
     } catch (e, stackTrace) {
       logError('Erro ao realizar backup: $e', stackTrace);
@@ -184,9 +174,7 @@ mixin FileStorageUtility {
   /// final data = jsonDecode(content);
   /// ```
   @protected
-  Future<ResultStatus<String, String>> fetchDataFromFile(
-    String fileName,
-  ) async {
+  Future<ResultStatus<String, String>> fetchDataFromFile(String fileName) async {
     if (fileName.isEmpty || p.extension(fileName).isEmpty) {
       throw ArgumentError(
         'O nome do arquivo não pode ser vazio e deve conter uma extensão (ex: .json, .txt)',
@@ -265,10 +253,7 @@ mixin FileStorageUtility {
           // Restaura diretórios recursivamente
           final nomeDiretorio = p.basename(entity.path);
           final destinoDir = Directory(p.join(appDocDir.path, nomeDiretorio));
-          arquivosRestaurados += await _copyDirectoryRecursively(
-            entity,
-            destinoDir,
-          );
+          arquivosRestaurados += await _copyDirectoryRecursively(entity, destinoDir);
         }
       }
 
@@ -342,10 +327,7 @@ mixin FileStorageUtility {
   /// [destination] é o diretório de destino onde os arquivos serão copiados.
   ///
   /// Retorna o número de arquivos copiados.
-  Future<int> _copyDirectoryRecursively(
-    Directory source,
-    Directory destination,
-  ) async {
+  Future<int> _copyDirectoryRecursively(Directory source, Directory destination) async {
     var filesCopied = 0;
     if (!await destination.exists()) {
       await destination.create(recursive: true);
@@ -385,10 +367,7 @@ mixin FileStorageUtility {
       try {
         //DEBUG ///Users/saulogatti-pessoal/Library/Containers/com.example.systemLoja/Data/Library/Application%20Support/com.example.systemLoja/json_data_storage/
         final directory = await getApplicationSupportDirectory();
-        final String cacheDirectory = p.join(
-          directory.path,
-          retrieveDirectoryName(),
-        );
+        final String cacheDirectory = p.join(directory.path, retrieveDirectoryName());
         final cacheDir = Directory(cacheDirectory);
 
         if (!await cacheDir.exists()) {
@@ -399,10 +378,7 @@ mixin FileStorageUtility {
           final String ext = p.extension(element.path).toLowerCase();
           if (ext == '.bak') {
             // bak vai subistituir o original
-            final originalPath = element.path.substring(
-              0,
-              element.path.length - ext.length,
-            );
+            final originalPath = element.path.substring(0, element.path.length - ext.length);
             final originalFile = File(originalPath);
             if (await originalFile.exists()) {
               await originalFile.delete();
