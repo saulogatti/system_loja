@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/aplication/app_injection.dart';
@@ -42,8 +43,7 @@ class _ProductCategoryState extends State<ProductCategory> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
+      create: (_) => CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
       child: BlocBuilder<CategoryCubit, CategoryState>(
         builder: (context, state) {
           return state.when(
@@ -79,10 +79,7 @@ class _ProductCategoryState extends State<ProductCategory> {
               prefixIcon: const Icon(Icons.category),
             ),
             items: categories.map((category) {
-              return DropdownMenuItem<int>(
-                value: category.id,
-                child: Text(category.name),
-              );
+              return DropdownMenuItem<int>(value: category.id, child: Text(category.name));
             }).toList(),
             onChanged: widget.enabled
                 ? (value) {
@@ -103,9 +100,7 @@ class _ProductCategoryState extends State<ProductCategory> {
         ),
         const SizedBox(width: 8),
         IconButton(
-          onPressed: widget.enabled
-              ? () => _showCreateCategoryDialog(context)
-              : null,
+          onPressed: widget.enabled ? () => _showCreateCategoryDialog(context) : null,
           icon: const Icon(Icons.add),
           tooltip: 'Adicionar nova categoria',
         ),
@@ -147,6 +142,9 @@ class _ProductCategoryState extends State<ProductCategory> {
             children: [
               TextFormField(
                 controller: nameController,
+                autofocus: true,
+                textCapitalization: TextCapitalization.words,
+                textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                   labelText: 'Nome *',
                   border: OutlineInputBorder(),
@@ -161,6 +159,9 @@ class _ProductCategoryState extends State<ProductCategory> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: descriptionController,
+                keyboardType: TextInputType.multiline,
+                textCapitalization: TextCapitalization.sentences,
+                maxLength: 200,
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                   border: OutlineInputBorder(),
@@ -171,10 +172,7 @@ class _ProductCategoryState extends State<ProductCategory> {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancelar'),
-          ),
+          TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState!.validate()) {
@@ -190,14 +188,12 @@ class _ProductCategoryState extends State<ProductCategory> {
                 // Check if successful before showing message
                 if (context.mounted) {
                   final currentState = cubit.state;
-                  Navigator.of(context).pop();
+                  context.router.pop();
 
                   if (currentState is CategoryCreated) {
-                    ScaffoldMessenger.of(parentContext).showSnackBar(
-                      const SnackBar(
-                        content: Text('Categoria criada com sucesso'),
-                      ),
-                    );
+                    ScaffoldMessenger.of(
+                      parentContext,
+                    ).showSnackBar(const SnackBar(content: Text('Categoria criada com sucesso')));
                   }
                 }
               }
