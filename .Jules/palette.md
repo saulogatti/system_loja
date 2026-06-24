@@ -1,5 +1,9 @@
 # Palette of Accessibility Learnings and Actions
 
+## 16-06-2024 - Auto-capitalization in Flutter text fields
+**Learning:** `textCapitalization` is an excellent, frequently overlooked micro-UX property in Flutter for mobile devices. Using `TextCapitalization.words` for names/titles and `TextCapitalization.sentences` for multiline descriptions significantly reduces friction by displaying the correct OS keyboard layout automatically, instead of requiring the user to manually trigger the shift key.
+**Action:** When implementing or reviewing `TextFormField` widgets, default to applying the appropriate `textCapitalization` based on the context of the field (words for names, sentences for descriptions, characters for codes/acronyms).
+
 ## 24-05-2024 - Adding Context to Destructive Actions in Lists
 
 **Learning:** Screen readers reading raw `IconButton` widgets within lists (like `InvoiceLineTile`) often lack context, simply announcing "button" or repeating an unclear label. Users need to know exactly *what* item is being deleted, not just that a delete button exists.
