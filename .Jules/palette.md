@@ -136,6 +136,9 @@
 ## 15-06-2026 - Button Contrast with Semantic Backgrounds
 **Learning:** When explicitly setting `backgroundColor` on buttons like `ElevatedButton` to semantic colors (e.g. `Theme.of(context).colorScheme.error`), the button text might lack sufficient contrast if the `foregroundColor` isn't updated simultaneously.
 **Action:** Always provide the corresponding `foregroundColor` (e.g. `Theme.of(context).colorScheme.onError`) when overriding a button's `backgroundColor` to maintain accessible text contrast.
+## 22-06-2026 - Auto-capitalization for Names and Descriptions
+**Learning:** Setting `textCapitalization: TextCapitalization.words` on name fields and `textCapitalization: TextCapitalization.sentences` on descriptions reduces friction by automatically capitalizing inputs, while correctly setting `keyboardType: TextInputType.multiline` improves the native keyboard interface for long-form inputs.
+**Action:** Always include appropriate `textCapitalization` alongside `keyboardType` properties (like `TextInputType.multiline`) for text fields dealing with proper nouns or natural language.
 ## 18-06-2026 - [Merge Semantics for Complex Analytics Cards]
 **Learning:** Complex layout elements presenting statistical data, like summary cards or custom bar charts built with primitive widgets (Columns, Texts, CustomPaints), cause screen readers to read scattered, individual pieces of text and formatting out of context.
 **Action:** Use `Semantics(container: true, excludeSemantics: true, label: '[Cohesive summary]')` to merge multi-widget components into a single, cohesive, properly contextualized accessibility node.

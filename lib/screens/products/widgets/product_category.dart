@@ -44,7 +44,16 @@ class _ProductCategoryState extends State<ProductCategory> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => CategoryCubit(repository: appInjection.get<ICategoryRepository>()),
-      child: BlocBuilder<CategoryCubit, CategoryState>(
+      child: BlocConsumer<CategoryCubit, CategoryState>(
+        listener: (context, state) {
+          state.mapOrNull(
+            created: (createdState) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Categoria criada com sucesso')));
+            },
+          );
+        },
         builder: (context, state) {
           return state.when(
             initial: () => const CircularProgressIndicator(),
@@ -161,7 +170,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                 controller: descriptionController,
                 keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.sentences,
-                maxLength: 200,
+                maxLength: 500,
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                   border: OutlineInputBorder(),
@@ -172,7 +181,7 @@ class _ProductCategoryState extends State<ProductCategory> {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
+          TextButton(onPressed: () => context.router.pop(), child: const Text('Cancelar')),
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState!.validate()) {
@@ -185,16 +194,8 @@ class _ProductCategoryState extends State<ProductCategory> {
                       : descriptionController.text.trim(),
                 );
 
-                // Check if successful before showing message
                 if (context.mounted) {
-                  final currentState = cubit.state;
                   context.router.pop();
-
-                  if (currentState is CategoryCreated) {
-                    ScaffoldMessenger.of(
-                      parentContext,
-                    ).showSnackBar(const SnackBar(content: Text('Categoria criada com sucesso')));
-                  }
                 }
               }
             },
