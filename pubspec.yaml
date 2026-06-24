@@ -40,7 +40,7 @@ dependencies:
   archive: ^4.0.9
 
 dev_dependencies:
-  freezed: ^3.2.5
+  freezed: ^4.0.0-dev.3
 
   flutter_test:
     sdk: flutter

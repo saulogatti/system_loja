@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'relatorio_state.dart';
@@ -9,6 +9,7 @@ part of 'relatorio_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -285,7 +286,7 @@ String toString() {
 
 
 class RelatorioLoaded implements RelatorioState {
-   RelatorioLoaded({required final  Map<int, String> categoryNamesById, required final  Map<int, Invoice> entryInvoices, required final  Map<int, Invoice> exitInvoices, required final  List<Product> products, required this.estoqueOverview, required this.notasOverview, this.selectedProductDetails}): _categoryNamesById = categoryNamesById,_entryInvoices = entryInvoices,_exitInvoices = exitInvoices,_products = products;
+   RelatorioLoaded({required  Map<int, String> categoryNamesById, required  Map<int, Invoice> entryInvoices, required  Map<int, Invoice> exitInvoices, required  List<Product> products, required this.estoqueOverview, required this.notasOverview, this.selectedProductDetails}): _categoryNamesById = categoryNamesById,_entryInvoices = entryInvoices,_exitInvoices = exitInvoices,_products = products;
   
 
  final  Map<int, String> _categoryNamesById;
