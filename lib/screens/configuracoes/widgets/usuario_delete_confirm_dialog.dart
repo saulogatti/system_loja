@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/user.dart';
 
@@ -16,7 +17,7 @@ class UsuarioDeleteConfirmDialog extends StatelessWidget {
       title: const Text('Confirmar Exclusão'),
       content: Text('Deseja realmente excluir o usuário "${usuario.name}"?'),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+        TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
         TextButton(
           onPressed: () {
             Navigator.pop(context);

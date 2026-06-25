@@ -122,8 +122,11 @@ class _UsuarioFormState extends State<UsuarioForm> {
                 return 'Senha é obrigatória';
               }
               // Valida força da senha
-              if (value != null && value.isNotEmpty && value.validatePassword() != null) {
-                return value.validatePassword();
+              if (value != null && value.isNotEmpty) {
+                final passwordError = value.validatePassword();
+                if (passwordError != null) {
+                  return passwordError;
+                }
               }
               return null;
             },

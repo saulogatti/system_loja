@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:system_loja/core/models/default/authorization_level.dart';
@@ -43,7 +44,7 @@ class UsuarioDetailsDialog extends StatelessWidget {
           ],
         ),
       ),
-      actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar'))],
+      actions: [TextButton(onPressed: () => context.router.maybePop(), child: const Text('Fechar'))],
     );
   }
 
