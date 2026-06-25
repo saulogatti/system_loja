@@ -78,8 +78,7 @@
   <pre class="language-dart"><code class="language-dart">@override
 Widget wrappedRoute(BuildContext context) {
   return BlocProvider&lt;CategoryCubit&gt;(
-    create: (_) =&gt;
-        CategoryCubit(repository: appInjection.get&lt;ICategoryRepository&gt;()),
+    create: (_) =&gt; CategoryCubit(repository: appInjection.get&lt;ICategoryRepository&gt;()),
     child: this,
   );
 }</code></pre>

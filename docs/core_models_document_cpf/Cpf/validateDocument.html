@@ -77,39 +77,14 @@ String? validateDocument() {
   if (valueCheck == &#39;123.456.789-09&#39;) {
     return null;
   }
+
   if (!_cpfRegExp.hasMatch(valueCheck) &amp;&amp;
       !_cpfCleanRegExp.hasMatch(valueCheck)) {
-    return (&#39;CPF deve estar no formato XXX.XXX.XXX-XX ou conter apenas 11 dígitos&#39;);
-  }
-  final cleanedValue = value.replaceAll(RegExp(r&#39;\D&#39;), &#39;&#39;);
-
-  if (cleanedValue.length != 11 ||
-      RegExp(r&#39;^(\d)\1{10}$&#39;).hasMatch(cleanedValue)) {
-    return &#39;CPF inválido - deve conter 11 dígitos e não pode ser uma sequência de números repetidos&#39;;
+    return &#39;CPF deve estar no formato XXX.XXX.XXX-XX ou conter apenas 11 dígitos&#39;;
   }
 
-  final digits = cleanedValue.split(&#39;&#39;).map(int.parse).toList();
-
-  &#47;&#47; Validação do primeiro dígito verificador
-  final sum1 = List.generate(
-    9,
-    (i) =&gt; digits[i] * (10 - i),
-  ).reduce((a, b) =&gt; a + b);
-  final checkDigit1 = (sum1 * 10 % 11) % 10;
-
-  if (checkDigit1 != digits[9]) {
-    return &#39;CPF inválido - primeiro dígito verificador incorreto&#39;;
-  }
-
-  &#47;&#47; Validação do segundo dígito verificador
-  final sum2 = List.generate(
-    10,
-    (i) =&gt; digits[i] * (11 - i),
-  ).reduce((a, b) =&gt; a + b);
-  final checkDigit2 = (sum2 * 10 % 11) % 10;
-
-  if (checkDigit2 != digits[10]) {
-    return &#39;CPF inválido - segundo dígito verificador incorreto&#39;;
+  if (!valueCheck.isValidCpf()) {
+    return &#39;CPF inválido - dígitos verificadores incorretos ou sequência repetida&#39;;
   }
 
   return null;

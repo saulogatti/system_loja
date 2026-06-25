@@ -22,6 +22,8 @@ class Product extends DefaultObject {
   /// Código único do produto (ex.: PRD-20260123-0001).
   final String code;
 
+  static const int descriptionMaxLength = 500;
+
   Product({
     required this.name,
     required this.description,

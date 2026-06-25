@@ -764,9 +764,7 @@ _lazyRootDelegate is only built one time
 
 </dt>
 <dd class="inherited">
-  Discards any resources used by the object. After this is called, the
-object is not in a usable state and should be discarded (calls to
-<a href="https://api.flutter.dev/flutter/foundation/ChangeNotifier/addListener.html">addListener</a> will throw after the object is disposed).
+  Discards any resources used by the object.
   <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
@@ -787,7 +785,7 @@ and casts it to <code>T</code>
 
         <dt id="insert" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/insert.html">insert</a></span><span class="signature">(<wbr><span class="parameter" id="insert-param-route"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span> <span class="parameter-name">route</span>, {</span><span class="parameter" id="insert-param-index"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">index</span> = <span class="default-value">0</span>, </span><span class="parameter" id="insert-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
   </span>
   
 
@@ -866,7 +864,7 @@ See <code>RouteMatcher.matchByRoute</code>
 
         <dt id="maybePop" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/maybePop.html">maybePop</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span><span class="signature">(<wbr>[<span class="parameter" id="maybePop-param-result"><span class="type-annotation">T?</span> <span class="parameter-name">result</span></span>])
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
   </span>
   
 
@@ -880,7 +878,7 @@ or defer the call to a parent controller
 
         <dt id="maybePopTop" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/RoutingController/maybePopTop.html">maybePopTop</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span><span class="signature">(<wbr>[<span class="parameter" id="maybePopTop-param-result"><span class="type-annotation">T?</span> <span class="parameter-name">result</span></span>])
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
   </span>
   
 
@@ -893,7 +891,7 @@ or defer the call to a parent controller
 
         <dt id="navigate" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/RoutingController/navigate.html">navigate</a></span><span class="signature">(<wbr><span class="parameter" id="navigate-param-route"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span> <span class="parameter-name">route</span>, {</span><span class="parameter" id="navigate-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a></span>
   </span>
   
 
@@ -907,7 +905,7 @@ otherwise adds it to the stack (good for web Apps and to avoid duplicate entries
 
         <dt id="navigateAll" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/navigateAll.html">navigateAll</a></span><span class="signature">(<wbr><span class="parameter" id="navigateAll-param-routes"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/RouteMatch-class.html">RouteMatch</a></span>&gt;</span></span> <span class="parameter-name">routes</span>, {</span><span class="parameter" id="navigateAll-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
   </span>
   
 
@@ -921,7 +919,7 @@ then pushes all <code>routes</code>
 
         <dt id="navigatePath" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/RoutingController/navigatePath.html">navigatePath</a></span><span class="signature">(<wbr><span class="parameter" id="navigatePath-param-path"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, {</span><span class="parameter" id="navigatePath-param-includePrefixMatches"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">includePrefixMatches</span> = <span class="default-value">false</span>, </span><span class="parameter" id="navigatePath-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
   </span>
   
 
@@ -1031,7 +1029,7 @@ see <a href="https://api.flutter.dev/flutter/widgets/Navigator/pop.html">Navigat
 
         <dt id="popAndPush" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/popAndPush.html">popAndPush</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>, <span class="type-parameter">TO extends <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="popAndPush-param-route"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span> <span class="parameter-name">route</span>, {</span><span class="parameter" id="popAndPush-param-result"><span class="type-annotation">TO?</span> <span class="parameter-name">result</span>, </span><span class="parameter" id="popAndPush-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
   </span>
   
 
@@ -1044,7 +1042,7 @@ see <a href="https://api.flutter.dev/flutter/widgets/Navigator/pop.html">Navigat
 
         <dt id="popAndPushAll" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/popAndPushAll.html">popAndPushAll</a></span><span class="signature">(<wbr><span class="parameter" id="popAndPushAll-param-routes"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span>&gt;</span></span> <span class="parameter-name">routes</span>, {</span><span class="parameter" id="popAndPushAll-param-onFailure"><span class="type-annotation">dynamic</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
   </span>
   
 
@@ -1124,7 +1122,7 @@ see <a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRou
 
         <dt id="push" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/push.html">push</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="push-param-route"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span> <span class="parameter-name">route</span>, {</span><span class="parameter" id="push-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
   </span>
   
 
@@ -1137,7 +1135,7 @@ see <a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRou
 
         <dt id="pushAll" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/pushAll.html">pushAll</a></span><span class="signature">(<wbr><span class="parameter" id="pushAll-param-routes"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span>&gt;</span></span> <span class="parameter-name">routes</span>, {</span><span class="parameter" id="pushAll-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
   </span>
   
 
@@ -1150,7 +1148,7 @@ see <a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRou
 
         <dt id="pushAndPopUntil" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/pushAndPopUntil.html">pushAndPopUntil</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="pushAndPopUntil-param-route"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span> <span class="parameter-name">route</span>, {</span><span class="parameter" id="pushAndPopUntil-param-predicate"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/RoutePredicate.html">RoutePredicate</a></span> <span class="parameter-name">predicate</span>, </span><span class="parameter" id="pushAndPopUntil-param-scopedPopUntil"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">scopedPopUntil</span> = <span class="default-value">true</span>, </span><span class="parameter" id="pushAndPopUntil-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
   </span>
   
 
@@ -1164,7 +1162,7 @@ routes until the <code>predicate</code> returns true.
 
         <dt id="pushNativeRoute" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/pushNativeRoute.html">pushNativeRoute</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="pushNativeRoute-param-route"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/Route-class.html">Route</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> <span class="parameter-name">route</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
   </span>
   
 
@@ -1177,7 +1175,7 @@ routes until the <code>predicate</code> returns true.
 
         <dt id="pushPath" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/pushPath.html">pushPath</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="pushPath-param-path"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, {</span><span class="parameter" id="pushPath-param-includePrefixMatches"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">includePrefixMatches</span> = <span class="default-value">false</span>, </span><span class="parameter" id="pushPath-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
   </span>
   
 
@@ -1203,7 +1201,7 @@ routes until the <code>predicate</code> returns true.
 
         <dt id="pushWidget" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/pushWidget.html">pushWidget</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="pushWidget-param-widget"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a></span> <span class="parameter-name">widget</span>, {</span><span class="parameter" id="pushWidget-param-transitionBuilder"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/RouteTransitionsBuilder.html">RouteTransitionsBuilder</a>?</span> <span class="parameter-name">transitionBuilder</span>, </span><span class="parameter" id="pushWidget-param-fullscreenDialog"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">fullscreenDialog</span> = <span class="default-value">false</span>, </span><span class="parameter" id="pushWidget-param-transitionDuration"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Duration-class.html">Duration</a></span> <span class="parameter-name">transitionDuration</span> = <span class="default-value">const Duration(milliseconds: 300)</span>, </span><span class="parameter" id="pushWidget-param-opaque"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">opaque</span> = <span class="default-value">true</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
   </span>
   
 
@@ -1216,7 +1214,7 @@ routes until the <code>predicate</code> returns true.
 
         <dt id="reevaluateGuards" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/reevaluateGuards.html">reevaluateGuards</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
   </span>
   
 
@@ -1309,7 +1307,7 @@ notified when the object changes.
 
         <dt id="replace" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/replace.html">replace</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="replace-param-route"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span> <span class="parameter-name">route</span>, {</span><span class="parameter" id="replace-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
   </span>
   
 
@@ -1323,7 +1321,7 @@ if last entry == <code>route</code> page will just be updated
 
         <dt id="replaceAll" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/replaceAll.html">replaceAll</a></span><span class="signature">(<wbr><span class="parameter" id="replaceAll-param-routes"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/PageRouteInfo-class.html">PageRouteInfo</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span>&gt;</span></span> <span class="parameter-name">routes</span>, {</span><span class="parameter" id="replaceAll-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span>, </span><span class="parameter" id="replaceAll-param-updateExistingRoutes"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">updateExistingRoutes</span> = <span class="default-value">true</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
   </span>
   
 
@@ -1336,7 +1334,7 @@ if last entry == <code>route</code> page will just be updated
 
         <dt id="replacePath" class="callable inherited">
   <span class="name"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/StackRouter/replacePath.html">replacePath</a></span><span class="signature">&lt;<wbr><span class="type-parameter">T extends <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a>?</span>&gt;</span><span class="signature">(<wbr><span class="parameter" id="replacePath-param-path"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, {</span><span class="parameter" id="replacePath-param-includePrefixMatches"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">includePrefixMatches</span> = <span class="default-value">false</span>, </span><span class="parameter" id="replacePath-param-onFailure"><span class="type-annotation"><a href="https://pub.dev/documentation/auto_route/11.1.0/auto_route/OnNavigationFailure.html">OnNavigationFailure</a>?</span> <span class="parameter-name">onFailure</span></span>})
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">T?</span>&gt;</span></span>
   </span>
   
 

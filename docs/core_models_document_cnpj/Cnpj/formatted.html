@@ -77,7 +77,8 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 String get formatted {
-  final d = value.replaceAll(RegExp(r&#39;\D&#39;), &#39;&#39;);
+  final d = value.trim().toUpperCase().replaceAll(_cnpjFormattingCharsRegExp, &#39;&#39;);
+  if (d.length != 14) return value;
   return &#39;${d.substring(0, 2)}.${d.substring(2, 5)}.${d.substring(5, 8)}&#47;${d.substring(8, 12)}-${d.substring(12)}&#39;;
 }</code></pre>
 </section>

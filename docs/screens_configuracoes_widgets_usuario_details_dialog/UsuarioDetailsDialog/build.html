@@ -116,33 +116,29 @@ Widget build(BuildContext context) {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildDetailRow(&#39;ID&#39;, usuario.id.toString()),
-          _buildDetailRow(&#39;Email&#39;, usuario.email ?? &#39;N&#47;A&#39;),
+          _buildDetailRow(context, &#39;ID&#39;, usuario.id.toString()),
+          _buildDetailRow(context, &#39;Email&#39;, usuario.email ?? &#39;N&#47;A&#39;),
           _buildDetailRow(
+            context,
             &#39;Nível de Permissão&#39;,
             AuthorizationLevel.values
                 .firstWhere((level) =&gt; level.value == usuario.permission)
                 .toDisplayName(),
           ),
           _buildDetailRow(
+            context,
             &#39;Data de Cadastro&#39;,
-            DateFormat(
-              &#39;dd&#47;MM&#47;yyyy HH:mm:ss&#39;,
-            ).format(usuario.registrationDate),
+            DateFormat(&#39;dd&#47;MM&#47;yyyy HH:mm:ss&#39;).format(usuario.registrationDate),
           ),
           _buildDetailRow(
+            context,
             &#39;Última Atualização&#39;,
             DateFormat(&#39;dd&#47;MM&#47;yyyy HH:mm:ss&#39;).format(usuario.lastUpdatedDate),
           ),
         ],
       ),
     ),
-    actions: [
-      TextButton(
-        onPressed: () =&gt; Navigator.pop(context),
-        child: const Text(&#39;Fechar&#39;),
-      ),
-    ],
+    actions: [TextButton(onPressed: () =&gt; context.router.maybePop(), child: const Text(&#39;Fechar&#39;))],
   );
 }</code></pre>
 </section>

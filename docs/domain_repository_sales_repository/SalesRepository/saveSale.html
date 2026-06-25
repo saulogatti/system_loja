@@ -59,7 +59,7 @@
         <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../core_utils_result_status/ResultStatus-class.html">ResultStatus</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>&gt;</span></span>
 <span class="name ">saveSale</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="saveSale-param-invoice"><span class="type-annotation"><a href="../../core_models_invoice/Invoice-class.html">Invoice</a></span> <span class="parameter-name">invoice</span></span></li>
 </ol>)
 
@@ -80,15 +80,18 @@
 Future&lt;ResultStatus&lt;bool, String&gt;&gt; saveSale(Invoice invoice) async {
   try {
     if (invoice.data.type == InvoiceType.exit) {
+      final productIds =
+          invoice.data.items.map((i) =&gt; i.productId).toSet().toList();
+      final products = await _productDao.getByIds(productIds);
+      final productMap = {for (final p in products) p.id: p};
+
       for (final item in invoice.data.items) {
-        final product = await _productDao.getById(item.productId);
+        final product = productMap[item.productId];
         if (product == null) {
           return ResultError(&#39;Produto id ${item.productId} não encontrado.&#39;);
         }
         if (product.stockQuantity &lt; item.quantity) {
-          return ResultError(
-            &#39;Estoque insuficiente para o produto ${product.name}.&#39;,
-          );
+          return ResultError(&#39;Estoque insuficiente para o produto ${product.name}.&#39;);
         }
       }
     }
@@ -100,14 +103,9 @@ Future&lt;ResultStatus&lt;bool, String&gt;&gt; saveSale(Invoice invoice) async {
         final quantityChange = invoice.data.type == InvoiceType.entry
             ? item.quantity
             : -item.quantity;
-        final ok = await _productDao.updateStockQuantity(
-          item.productId,
-          quantityChange,
-        );
+        final ok = await _productDao.updateStockQuantity(item.productId, quantityChange);
         if (!ok) {
-          throw StateError(
-            &#39;Falha ao atualizar estoque do produto ${item.productId}.&#39;,
-          );
+          throw StateError(&#39;Falha ao atualizar estoque do produto ${item.productId}.&#39;);
         }
       }
     });

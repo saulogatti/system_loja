@@ -90,14 +90,10 @@ String toString() {
   buffer.writeln(&#39;Invoice Number: ${data.invoiceNumber}&#39;);
   buffer.writeln(&#39;Type: ${data.type.name}&#39;);
   if (data.customerId != null) {
-    buffer.writeln(
-      &#39;Customer: ${data.customerName} (CPF: ${data.customerCpf})&#39;,
-    );
+    buffer.writeln(&#39;Customer: ${data.customerName} (CPF: ${data.customerCpf})&#39;);
   }
   if (data.companyId != null) {
-    buffer.writeln(
-      &#39;Company: ${data.companyName} (CNPJ: ${data.companyCnpj})&#39;,
-    );
+    buffer.writeln(&#39;Company: ${data.companyName} (CNPJ: ${data.companyCnpj})&#39;);
   }
   buffer.writeln(&#39;Total Value: R\$ ${data.totalValue.toStringAsFixed(2)}&#39;);
   buffer.writeln(&#39;Payment Method: ${data.paymentMethod}&#39;);
@@ -106,12 +102,8 @@ String toString() {
   for (var item in data.items) {
     buffer.writeln(item.toString());
   }
-  buffer.writeln(
-    &#39;Data de Cadastro: ${registrationDate.toString().split(&#39;.&#39;)[0]}&#39;,
-  );
-  buffer.writeln(
-    &#39;Data de Atualização: ${lastUpdatedDate.toString().split(&#39;.&#39;)[0]}&#39;,
-  );
+  buffer.writeln(&#39;Data de Cadastro: ${registrationDate.toString().split(&#39;.&#39;)[0]}&#39;);
+  buffer.writeln(&#39;Data de Atualização: ${lastUpdatedDate.toString().split(&#39;.&#39;)[0]}&#39;);
   return buffer.toString();
 }</code></pre>
 </section>

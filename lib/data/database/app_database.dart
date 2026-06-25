@@ -116,12 +116,13 @@ class AppDatabase extends _$AppDatabase {
   // Dentro da sua classe de banco (Database)
   /// Cria um backup manual do banco de dados usando o comando `VACUUM INTO`.
   ///
-  /// Escapa aspas simples no [backupFile] para evitar erros de SQL e reduzir
-  /// a superfície de injeção caso o caminho não seja totalmente confiável.
+  /// O comando VACUUM INTO cria um backup consistente "a quente".
+  /// Por segurança, o caminho do arquivo é passado como parâmetro para evitar
+  /// injeção de SQL.
   Future<void> manualBackup(String backupFile) async {
     // O comando VACUUM INTO cria um backup consistente "a quente"
-    final sanitizedBackupFile = backupFile.replaceAll("'", "''");
-    await customStatement("VACUUM INTO '$sanitizedBackupFile'");
+    // Usamos parâmetros (?) para evitar SQL Injection
+    await customStatement('VACUUM INTO ?', [backupFile]);
   }
 
   /// Migrar Endereços de Empresas e Clientes para AddressRecords

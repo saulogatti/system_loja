@@ -54,7 +54,7 @@
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>&gt;</span></span>
 <span class="name ">backup</span>(<wbr>[<ol class="parameter-list single-line"> <li><span class="parameter" id="backup-param-localBackup"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">localBackup</span> = <span class="default-value">&#39;&#39;</span>, </span></li>
 <li><span class="parameter" id="backup-param-excludeDirectories"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">excludeDirectories</span> = <span class="default-value">const []</span></span></li>
 </ol>])
@@ -80,10 +80,7 @@ Em caso de erro, registra via <code>logError</code> e retorna 0.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; backup([
-  String localBackup = &#39;&#39;,
-  List&lt;String&gt; excludeDirectories = const [],
-]) async {
+  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; backup([String localBackup = &#39;&#39;, List&lt;String&gt; excludeDirectories = const []]) async {
   try {
     &#47;&#47; Obtém o diretório principal do app (não o subdiretório específico)
     final appDocDir = await getApplicationSupportDirectory();
@@ -109,9 +106,7 @@ Em caso de erro, registra via <code>logError</code> e retorna 0.</p>
 
       &#47;&#47; Ignora diretórios excluídos (ex: banco de dados SQLite&#47;Drift)
       if (entity is Directory &amp;&amp; excludeDirectories.contains(basename)) {
-        logDebug(
-          &#39;Diretório &quot;$basename&quot; excluído do backup (requer mecanismo transacional)&#39;,
-        );
+        logDebug(&#39;Diretório &quot;$basename&quot; excluído do backup (requer mecanismo transacional)&#39;);
         continue;
       }
 
@@ -125,16 +120,11 @@ Em caso de erro, registra via <code>logError</code> e retorna 0.</p>
         &#47;&#47; Copia diretórios recursivamente (ex: system_loja_cache)
         final nomeDiretorio = basename;
         final destinoDir = Directory(p.join(backupDir.path, nomeDiretorio));
-        arquivosCopiados += await _copyDirectoryRecursively(
-          entity,
-          destinoDir,
-        );
+        arquivosCopiados += await _copyDirectoryRecursively(entity, destinoDir);
       }
     }
 
-    logDebug(
-      &#39;Backup realizado com sucesso: $arquivosCopiados arquivos copiados&#39;,
-    );
+    logDebug(&#39;Backup realizado com sucesso: $arquivosCopiados arquivos copiados&#39;);
     return arquivosCopiados;
   } catch (e, stackTrace) {
     logError(&#39;Erro ao realizar backup: $e&#39;, stackTrace);

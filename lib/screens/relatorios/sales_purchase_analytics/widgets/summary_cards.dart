@@ -66,21 +66,26 @@ class _SummaryCard extends StatelessWidget {
         ? '$suffix ${value.toStringAsFixed(2)}'
         : value.toStringAsFixed(0);
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: color),
-            const SizedBox(height: 8),
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-            const SizedBox(height: 4),
-            Text(
-              textValue,
-              style: TextStyle(fontWeight: FontWeight.bold, color: color),
-            ),
-          ],
+    return Semantics(
+      container: true,
+      excludeSemantics: true,
+      label: '$title: $textValue',
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, color: color),
+              const SizedBox(height: 8),
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+              const SizedBox(height: 4),
+              Text(
+                textValue,
+                style: TextStyle(fontWeight: FontWeight.bold, color: color),
+              ),
+            ],
+          ),
         ),
       ),
     );

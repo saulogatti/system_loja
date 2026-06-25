@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'sales_invoice_state.dart';
@@ -9,6 +9,7 @@ part of 'sales_invoice_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -63,7 +64,7 @@ class _$SalesInvoiceFormDataCopyWithImpl<$Res>
 /// Create a copy of SalesInvoiceFormData
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? invoiceType = null,Object? paymentMethod = freezed,Object? person = freezed,Object? linesByProductId = null,Object? orderedProductIds = null,Object? enableCodeGeneration = null,Object? invoiceNumber = null,Object? isSubmitting = null,}) {
-  return _then(_self.copyWith(
+  return _then(SalesInvoiceFormData(
 invoiceType: null == invoiceType ? _self.invoiceType : invoiceType // ignore: cast_nullable_to_non_nullable
 as InvoiceType,paymentMethod: freezed == paymentMethod ? _self.paymentMethod : paymentMethod // ignore: cast_nullable_to_non_nullable
 as PaymentMethodType?,person: freezed == person ? _self.person : person // ignore: cast_nullable_to_non_nullable
@@ -213,7 +214,7 @@ return $default(_that.invoiceType,_that.paymentMethod,_that.person,_that.linesBy
 
 
 class _SalesInvoiceFormData implements SalesInvoiceFormData {
-  const _SalesInvoiceFormData({this.invoiceType = InvoiceType.exit, this.paymentMethod, this.person, final  Map<int, InvoiceLineEntry> linesByProductId = const {}, final  List<int> orderedProductIds = const [], this.enableCodeGeneration = false, this.invoiceNumber = '', this.isSubmitting = false}): _linesByProductId = linesByProductId,_orderedProductIds = orderedProductIds;
+  const _SalesInvoiceFormData({this.invoiceType = InvoiceType.exit, this.paymentMethod, this.person,  Map<int, InvoiceLineEntry> linesByProductId = const {},  List<int> orderedProductIds = const [], this.enableCodeGeneration = false, this.invoiceNumber = '', this.isSubmitting = false}): _linesByProductId = linesByProductId,_orderedProductIds = orderedProductIds;
   
 
 @override@JsonKey() final  InvoiceType invoiceType;

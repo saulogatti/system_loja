@@ -117,10 +117,10 @@ Widget build(BuildContext context) {
       minVerticalPadding: 0,
       titleAlignment: ListTileTitleAlignment.center,
       leading: CircleAvatar(
-        backgroundColor:
-            usuario.permission == AuthorizationLevel.administrador.value
-            ? Colors.purple
-            : Colors.blue,
+        backgroundColor: switch (usuario.permission) {
+          _ when usuario.permission == AuthorizationLevel.administrador.value =&gt; Theme.of(context).colorScheme.secondary,
+          _ =&gt; Theme.of(context).colorScheme.primary,
+        },
         child: Icon(
           usuario.permission == AuthorizationLevel.administrador.value
               ? Icons.admin_panel_settings
@@ -128,10 +128,7 @@ Widget build(BuildContext context) {
           color: Colors.white,
         ),
       ),
-      title: Text(
-        usuario.name,
-        style: const TextStyle(fontWeight: FontWeight.bold),
-      ),
+      title: Text(usuario.name, style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Text(
         &#39;${usuario.email}\n${AuthorizationLevel.values.firstWhere((level) =&gt; level.value == usuario.permission).toDisplayName()}&#39;,
       ),
@@ -140,12 +137,12 @@ Widget build(BuildContext context) {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: const Icon(Icons.edit, color: Colors.blue),
+            icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
             onPressed: onEdit,
             tooltip: &#39;Editar ${usuario.name}&#39;,
           ),
           IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red),
+            icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
             onPressed: onDelete,
             tooltip: &#39;Excluir ${usuario.name}&#39;,
           ),

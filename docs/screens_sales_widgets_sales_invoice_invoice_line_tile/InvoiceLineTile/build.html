@@ -114,12 +114,10 @@ Widget build(BuildContext context) {
     margin: const EdgeInsets.only(bottom: 8),
     child: ListTile(
       title: Text(product.name),
-      subtitle: Text(
-        &#39;${entry.quantity}x R\$ ${product.price.toStringAsFixed(2)}&#39;,
-      ),
+      subtitle: Text(&#39;${entry.quantity}x R\$ ${product.price.toStringAsFixed(2)}&#39;),
       trailing: IconButton(
         tooltip: &#39;Remover ${product.name}&#39;,
-        icon: const Icon(Icons.delete, color: Colors.red),
+        icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
         onPressed: onDelete,
       ),
     ),

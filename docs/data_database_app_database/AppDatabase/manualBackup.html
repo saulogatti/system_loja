@@ -54,7 +54,7 @@
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">manualBackup</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="manualBackup-param-backupFile"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">backupFile</span></span></li>
 </ol>)
 
@@ -64,8 +64,9 @@
     
 <section class="desc markdown">
   <p>Cria um backup manual do banco de dados usando o comando <code>VACUUM INTO</code>.</p>
-<p>Escapa aspas simples no <code>backupFile</code> para evitar erros de SQL e reduzir
-a superfície de injeção caso o caminho não seja totalmente confiável.</p>
+<p>O comando VACUUM INTO cria um backup consistente "a quente".
+Por segurança, o caminho do arquivo é passado como parâmetro para evitar
+injeção de SQL.</p>
 </section>
 
 
@@ -74,8 +75,8 @@ a superfície de injeção caso o caminho não seja totalmente confiável.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; manualBackup(String backupFile) async {
   &#47;&#47; O comando VACUUM INTO cria um backup consistente &quot;a quente&quot;
-  final sanitizedBackupFile = backupFile.replaceAll(&quot;&#39;&quot;, &quot;&#39;&#39;&quot;);
-  await customStatement(&quot;VACUUM INTO &#39;$sanitizedBackupFile&#39;&quot;);
+  &#47;&#47; Usamos parâmetros (?) para evitar SQL Injection
+  await customStatement(&#39;VACUUM INTO ?&#39;, [backupFile]);
 }</code></pre>
 </section>
 

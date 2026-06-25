@@ -109,10 +109,7 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  final maxCount = points.fold&lt;int&gt;(
-    0,
-    (m, p) =&gt; p.productsCount &gt; m ? p.productsCount : m,
-  );
+  final maxCount = points.fold&lt;int&gt;(0, (m, p) =&gt; p.productsCount &gt; m ? p.productsCount : m);
 
   return Card(
     child: Padding(
@@ -122,10 +119,7 @@ Widget build(BuildContext context) {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.stacked_bar_chart,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              Icon(Icons.stacked_bar_chart, color: Theme.of(context).colorScheme.primary),
               const SizedBox(width: 8),
               const Expanded(
                 child: Text(
@@ -137,10 +131,7 @@ Widget build(BuildContext context) {
           ),
           const SizedBox(height: 12),
           if (points.isEmpty || maxCount &lt;= 0)
-            const EmptyWidget(
-              message: &#39;Sem dados para exibir.&#39;,
-              icon: Icons.bar_chart_outlined,
-            )
+            const EmptyWidget(message: &#39;Sem dados para exibir.&#39;, icon: Icons.bar_chart_outlined)
           else
             SizedBox(
               height: 170,

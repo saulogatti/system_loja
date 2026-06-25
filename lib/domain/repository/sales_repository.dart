@@ -148,15 +148,18 @@ class SalesRepository implements ISalesRepository {
   Future<ResultStatus<bool, String>> saveSale(Invoice invoice) async {
     try {
       if (invoice.data.type == InvoiceType.exit) {
+        final productIds =
+            invoice.data.items.map((i) => i.productId).toSet().toList();
+        final products = await _productDao.getByIds(productIds);
+        final productMap = {for (final p in products) p.id: p};
+
         for (final item in invoice.data.items) {
-          final product = await _productDao.getById(item.productId);
+          final product = productMap[item.productId];
           if (product == null) {
             return ResultError('Produto id ${item.productId} não encontrado.');
           }
           if (product.stockQuantity < item.quantity) {
-            return ResultError(
-              'Estoque insuficiente para o produto ${product.name}.',
-            );
+            return ResultError('Estoque insuficiente para o produto ${product.name}.');
           }
         }
       }
@@ -168,14 +171,9 @@ class SalesRepository implements ISalesRepository {
           final quantityChange = invoice.data.type == InvoiceType.entry
               ? item.quantity
               : -item.quantity;
-          final ok = await _productDao.updateStockQuantity(
-            item.productId,
-            quantityChange,
-          );
+          final ok = await _productDao.updateStockQuantity(item.productId, quantityChange);
           if (!ok) {
-            throw StateError(
-              'Falha ao atualizar estoque do produto ${item.productId}.',
-            );
+            throw StateError('Falha ao atualizar estoque do produto ${item.productId}.');
           }
         }
       });
@@ -214,12 +212,9 @@ class SalesRepository implements ISalesRepository {
   /// [invoiceNumber] Número da nota a ser validado.
   /// Retorna sucesso se válido ou erro com mensagem descritiva.
   @override
-  Future<ResultStatus<bool, String>> validateInvoiceNumber(
-    String invoiceNumber,
-  ) async {
+  Future<ResultStatus<bool, String>> validateInvoiceNumber(String invoiceNumber) async {
     try {
-      final validationResult = await _codeGeneratorService
-          .validateInvoiceNumber(invoiceNumber);
+      final validationResult = await _codeGeneratorService.validateInvoiceNumber(invoiceNumber);
 
       if (validationResult.isValid) {
         return ResultSuccess(true);

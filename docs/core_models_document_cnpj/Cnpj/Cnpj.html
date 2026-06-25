@@ -54,32 +54,20 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">Cnpj</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="-param-value"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">value</span></span></li>
+      <span class="name ">Cnpj</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">value</span></span></li>
 </ol>)
     </section>
     
 <section class="desc markdown">
   <p>Cria uma instância de <a href="../../core_models_document_cnpj/Cnpj-class.html">Cnpj</a> com o valor informado.</p>
-<p>Lança <a href="../../core_exceptions_validation_exception/ValidationException-class.html">ValidationException</a> se o formato for inválido.</p>
+<p>Lança <a href="../../core_exceptions_validation_exception/ValidationException-class.html">ValidationException</a> se o formato ou os dígitos forem inválidos.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Cnpj(super.value) {
-  final valueCheck = super.value.trim();
-  if (!_cnpjRegExp.hasMatch(valueCheck) &amp;&amp;
-      !_cnpjCleanRegExp.hasMatch(valueCheck)) {
-    throw ValidationException(
-      &#39;CNPJ deve estar no formato XX.XXX.XXX&#47;XXXX-XX ou conter apenas 14 dígitos&#39;,
-      field: &#39;CNPJ&#39;,
-      suggestion:
-          &#39;Use o formato XX.XXX.XXX&#47;XXXX-XX ou apenas os 14 dígitos numéricos&#39;,
-      invalidValue: valueCheck,
-    );
-  }
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">Cnpj(super.value);</code></pre>
 </section>
 
 

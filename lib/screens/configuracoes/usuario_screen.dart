@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/models/default/authorization_level.dart';
-import 'package:system_loja/screens/utils/string_extensions.dart';
+import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/user_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_delete_confirm_dialog.dart';
@@ -44,8 +44,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
-  AuthorizationLevel _nivelPermissaoSelecionado =
-      AuthorizationLevel.usuarioComum;
+  AuthorizationLevel _nivelPermissaoSelecionado = AuthorizationLevel.usuarioComum;
   User? _usuarioEditando;
   final OverlayApp _overlayLoader = OverlayApp();
   List<User> _usuarios = List.empty(growable: true);
@@ -67,7 +66,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Erro ao carregar usuários: $errorMessage'),
-                  backgroundColor: Colors.red,
+                  backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
             },
@@ -89,18 +88,17 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
             },
             senhaInvalida: (mensagem) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(mensagem), backgroundColor: Colors.red),
+                SnackBar(
+                  content: Text(mensagem),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
               );
             },
             usuarioRemovido: (id) {
-              final usuario = _usuarios.firstWhere(
-                (usuario) => usuario.id == id,
-              );
+              final usuario = _usuarios.firstWhere((usuario) => usuario.id == id);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                    'Usuário "${usuario.name}" excluído com sucesso!',
-                  ),
+                  content: Text('Usuário "${usuario.name}" excluído com sucesso!'),
                   backgroundColor: Colors.orange,
                 ),
               );
@@ -143,9 +141,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(
-                  parent: BouncingScrollPhysics(),
-                ),
+                physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -204,11 +200,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   }
 
   void _confirmarExclusao(User usuario) {
-    UsuarioDeleteConfirmDialog.show(
-      context,
-      usuario,
-      () => _excluirUsuario(usuario),
-    );
+    UsuarioDeleteConfirmDialog.show(context, usuario, () => _excluirUsuario(usuario));
   }
 
   void _editarUsuario(User usuario) {
@@ -277,9 +269,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
 
           permission: _nivelPermissaoSelecionado.value,
         );
-        await context.read<UserCubit>().atualizarUsuario(
-          usuarioAtualizado: user,
-        );
+        await context.read<UserCubit>().atualizarUsuario(usuarioAtualizado: user);
       }
     }
   }

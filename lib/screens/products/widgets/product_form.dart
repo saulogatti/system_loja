@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:system_loja/core/constants/app_constants.dart';
+import 'package:system_loja/core/models/product.dart';
+import 'package:system_loja/screens/products/widgets/product_category.dart';
 import 'package:system_loja/screens/utils/input_formatters.dart';
 import 'package:system_loja/screens/utils/validators.dart';
-import 'package:system_loja/screens/products/widgets/product_category.dart';
-import 'package:system_loja/core/constants/app_constants.dart';
 
 /// Widget do formulário de cadastro de produto
 ///
@@ -54,6 +55,7 @@ class _ProductFormState extends State<ProductForm> {
             enabled: !widget.isLoading,
             controller: widget.nomeController,
             textInputAction: TextInputAction.next,
+            textCapitalization: TextCapitalization.words,
             decoration: const InputDecoration(
               labelText: 'Nome do Produto *',
               border: OutlineInputBorder(),
@@ -72,21 +74,29 @@ class _ProductFormState extends State<ProductForm> {
             readOnly: _generatedCode,
             controller: widget.codigoController,
             textInputAction: TextInputAction.next,
+            autocorrect: false,
+            enableSuggestions: false,
+            textCapitalization: TextCapitalization.characters,
+            inputFormatters: [ProductCodeInputFormatter()],
             decoration: InputDecoration(
               labelText: 'Código *',
               border: const OutlineInputBorder(),
               prefixIcon: const Icon(Icons.qr_code),
               suffixIcon: IconButton(
-                tooltip: _generatedCode ? 'Desativar geração automática' : 'Gerar código automaticamente',
-                onPressed: widget.isLoading ? null : () {
-                  setState(() {
-                    _generatedCode = !_generatedCode;
-                    widget.codigoController.text = switch (_generatedCode) {
-                      true => kStringGenerate,
-                      _ => '',
-                    };
-                  });
-                },
+                tooltip: _generatedCode
+                    ? 'Desativar geração automática'
+                    : 'Gerar código automaticamente',
+                onPressed: widget.isLoading
+                    ? null
+                    : () {
+                        setState(() {
+                          _generatedCode = !_generatedCode;
+                          widget.codigoController.text = switch (_generatedCode) {
+                            true => kStringGenerate,
+                            _ => '',
+                          };
+                        });
+                      },
                 icon: Icon(
                   Icons.generating_tokens_outlined,
                   color: _generatedCode ? Theme.of(context).colorScheme.primary : null,
@@ -148,18 +158,26 @@ class _ProductFormState extends State<ProductForm> {
           TextFormField(
             enabled: !widget.isLoading,
             controller: widget.descricaoController,
+            keyboardType: TextInputType.multiline,
+            textCapitalization: TextCapitalization.sentences,
+            maxLength: Product.descriptionMaxLength,
             decoration: const InputDecoration(
               labelText: 'Descrição',
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.description),
             ),
-            maxLines: 3,
+            minLines: 3,
+            maxLines: null,
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: widget.isLoading ? null : () => widget.onSubmit(_generatedCode),
             icon: widget.isLoading
-                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : const Icon(Icons.add),
             label: Text(widget.isLoading ? 'Adicionando...' : 'Adicionar Produto'),
             style: ElevatedButton.styleFrom(

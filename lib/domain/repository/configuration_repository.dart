@@ -48,7 +48,6 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
 
   /// Remove logs anteriores ao período de retenção definido nas configurações.
   ///
-  /// Usa [AppSettings.diasManterLogs] para calcular a data de corte.
   /// Se o valor for 0, nenhum log é removido.
   /// Retorna [ResultStatus] com [AppSettings] atualizado.
   @override

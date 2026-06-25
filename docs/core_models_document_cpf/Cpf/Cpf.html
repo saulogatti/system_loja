@@ -54,26 +54,20 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">Cpf</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="-param-value"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">value</span></span></li>
+      <span class="name ">Cpf</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">value</span></span></li>
 </ol>)
     </section>
     
+<section class="desc markdown">
+  <p>Cria uma instância de <a href="../../core_models_document_cpf/Cpf-class.html">Cpf</a> com o valor informado.</p>
+<p>Lança <a href="../../core_exceptions_validation_exception/ValidationException-class.html">ValidationException</a> se o formato ou os dígitos forem inválidos.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Cpf(super.value) {
-  if (validateDocument() != null) {
-    throw ValidationException(
-      &#39;CPF deve estar no formato XXX.XXX.XXX-XX ou conter apenas 11 dígitos&#39;,
-      field: &#39;CPF&#39;,
-      suggestion:
-          &#39;Use o formato XXX.XXX.XXX-XX ou apenas os 11 dígitos numéricos&#39;,
-      invalidValue: value,
-    );
-  }
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">Cpf(super.value);</code></pre>
 </section>
 
 

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
@@ -12,6 +13,7 @@ import 'package:system_loja/screens/configs/system/log_error_system_section.dart
 import 'package:system_loja/screens/configuracoes/widgets/maintenance_section.dart';
 import 'package:system_loja/screens/configuracoes/widgets/security_section.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
+import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Tela para configurar dados padrão e parâmetros técnicos do sistema.
 @RoutePage()
@@ -191,27 +193,27 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
           children: [
             const Text('Unidades de medida padrão'),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _measurementUnitController,
-                    textInputAction: TextInputAction.done,
-                    onSubmitted: (_) => _addMeasurementUnit(),
-                    decoration: const InputDecoration(hintText: 'Ex.: UN, KG, CX'),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                IconButton.filled(
+            TextField(
+              controller: _measurementUnitController,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) => _addMeasurementUnit(),
+              decoration: InputDecoration(
+                hintText: 'Ex.: UN, KG, CX',
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
                   onPressed: _addMeasurementUnit,
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(Icons.add_circle),
+                  color: Theme.of(context).colorScheme.primary,
                   tooltip: 'Adicionar unidade',
                 ),
-              ],
+              ),
             ),
             const SizedBox(height: 8),
             if (_measurementUnits.isEmpty)
-              const Text('Nenhuma unidade adicionada.', style: TextStyle(color: Colors.grey))
+              const EmptyWidget(
+                message: 'Nenhuma unidade adicionada.',
+                icon: Icons.straighten_outlined,
+              )
             else
               Wrap(
                 spacing: 8,
@@ -300,8 +302,13 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
             TextField(
               controller: _defaultPeriodController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Período padrão (dias)'),
-            ),
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              textInputAction: TextInputAction.done,
+              decoration: const InputDecoration(
+                labelText: 'Período padrão (dias)',
+                border: OutlineInputBorder(),
+              ),
+            )
           ],
         ),
       ),

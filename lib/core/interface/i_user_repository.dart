@@ -10,8 +10,6 @@ import 'package:system_loja/core/utils/result_status.dart';
 /// Inclui operações de autenticação, validação de email e gerenciamento
 /// completo de usuários do sistema.
 ///
-/// mantendo compatibilidade com código legado.
-///
 /// Exemplo de uso:
 /// ```dart
 /// final repository = appInjection.get<UserRepository>();

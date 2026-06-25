@@ -50,7 +50,10 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Cadastro de Produto'), leading: const AutoLeadingButton()),
+        appBar: AppBar(
+          title: const Text('Cadastro de Produto'),
+          leading: const AutoLeadingButton(),
+        ),
         body: BlocBuilder<ProductCubit, ProductState>(
           builder: (context, state) {
             final isLoading = state is ProductStateLoading;
@@ -123,9 +126,9 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
 
   /// Exibe mensagem de erro em SnackBar.
   void _mostrarErro(String mensagem) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.red));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(mensagem), backgroundColor: Theme.of(context).colorScheme.error),
+    );
   }
 
   /// Exibe mensagem de sucesso em SnackBar.

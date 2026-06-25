@@ -113,16 +113,13 @@ Widget build(BuildContext context) {
     title: const Text(&#39;Confirmar Exclusão&#39;),
     content: Text(&#39;Deseja realmente excluir o usuário &quot;${usuario.name}&quot;?&#39;),
     actions: [
-      TextButton(
-        onPressed: () =&gt; Navigator.pop(context),
-        child: const Text(&#39;Cancelar&#39;),
-      ),
+      TextButton(onPressed: () =&gt; context.router.maybePop(), child: const Text(&#39;Cancelar&#39;)),
       TextButton(
         onPressed: () {
           Navigator.pop(context);
           onConfirm();
         },
-        style: TextButton.styleFrom(foregroundColor: Colors.red),
+        style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
         child: const Text(&#39;Excluir&#39;),
       ),
     ],

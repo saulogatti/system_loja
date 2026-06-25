@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'sales_state.dart';
@@ -9,6 +9,7 @@ part of 'sales_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -315,7 +316,7 @@ String toString() {
 
 
 class SalesLoaded implements SalesState {
-   SalesLoaded({required final  Map<int, Invoice> items}): _items = items;
+   SalesLoaded({required  Map<int, Invoice> items}): _items = items;
   
 
  final  Map<int, Invoice> _items;
@@ -387,7 +388,7 @@ as Map<int, Invoice>,
 
 
 class SalesLoadedAll implements SalesState {
-   SalesLoadedAll({required final  List<Product> products, required final  List<PaymentMethodType> paymentMethods, required final  Map<int, Customer> customers, required final  Map<int, Company> companies, required final  Map<int, Invoice> invoices}): _products = products,_paymentMethods = paymentMethods,_customers = customers,_companies = companies,_invoices = invoices;
+   SalesLoadedAll({required  List<Product> products, required  List<PaymentMethodType> paymentMethods, required  Map<int, Customer> customers, required  Map<int, Company> companies, required  Map<int, Invoice> invoices}): _products = products,_paymentMethods = paymentMethods,_customers = customers,_companies = companies,_invoices = invoices;
   
 
  final  List<Product> _products;
@@ -491,7 +492,7 @@ as Map<int, Invoice>,
 
 
 class SalesLoadedCustomers implements SalesState {
-   SalesLoadedCustomers({required final  Map<int, Customer> customers}): _customers = customers;
+   SalesLoadedCustomers({required  Map<int, Customer> customers}): _customers = customers;
   
 
  final  Map<int, Customer> _customers;
@@ -693,7 +694,7 @@ as String,
 
 
 class SalesSaved implements SalesState {
-   SalesSaved({required final  Map<int, Invoice> items}): _items = items;
+   SalesSaved({required  Map<int, Invoice> items}): _items = items;
   
 
  final  Map<int, Invoice> _items;

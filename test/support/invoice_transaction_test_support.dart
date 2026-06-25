@@ -22,8 +22,12 @@ Future<int> insertInvoiceWithItemsLikeRepository(
   Invoice invoice,
 ) async {
   if (invoice.data.type == InvoiceType.exit) {
+    final productIds = invoice.data.items.map((i) => i.productId).toList();
+    final products = await database.productDao.getByIds(productIds);
+    final productMap = {for (final p in products) p.id: p};
+
     for (final item in invoice.data.items) {
-      final product = await database.productDao.getById(item.productId);
+      final product = productMap[item.productId];
       if (product == null || product.stockQuantity < item.quantity) {
         throw StateError('Estoque insuficiente');
       }

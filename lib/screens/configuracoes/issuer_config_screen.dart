@@ -258,6 +258,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
             const SizedBox(height: 16),
             TextFormField(
               controller: _descriptionController,
+              keyboardType: TextInputType.multiline,
               decoration: const InputDecoration(
                 labelText: 'Descrição',
                 hintText: 'Descreva brevemente a empresa ou os produtos/serviços oferecidos',

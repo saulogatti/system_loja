@@ -78,6 +78,7 @@
   <pre class="language-dart"><code class="language-dart">@override
 String get formatted {
   final d = value.replaceAll(RegExp(r&#39;\D&#39;), &#39;&#39;);
+  if (d.length != 11) return value;
   return &#39;${d.substring(0, 3)}.${d.substring(3, 6)}.${d.substring(6, 9)}-${d.substring(9)}&#39;;
 }</code></pre>
 </section>

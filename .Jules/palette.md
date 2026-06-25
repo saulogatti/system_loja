@@ -1,5 +1,13 @@
 # Palette of Accessibility Learnings and Actions
 
+## 20-06-2024 - Form Text Capitalization Defaults
+**Learning:** Forgetting to set `textCapitalization` in form fields leads to unnecessary friction for mobile users filling out names or descriptions.
+**Action:** Always set `textCapitalization: TextCapitalization.words` for names/titles and `TextCapitalization.sentences` for multiline descriptions in `TextFormField` to utilize the native OS keyboard's auto-capitalization features.
+
+## 16-06-2024 - Auto-capitalization in Flutter text fields
+**Learning:** `textCapitalization` is an excellent, frequently overlooked micro-UX property in Flutter for mobile devices. Using `TextCapitalization.words` for names/titles and `TextCapitalization.sentences` for multiline descriptions significantly reduces friction by displaying the correct OS keyboard layout automatically, instead of requiring the user to manually trigger the shift key.
+**Action:** When implementing or reviewing `TextFormField` widgets, default to applying the appropriate `textCapitalization` based on the context of the field (words for names, sentences for descriptions, characters for codes/acronyms).
+
 ## 24-05-2024 - Adding Context to Destructive Actions in Lists
 
 **Learning:** Screen readers reading raw `IconButton` widgets within lists (like `InvoiceLineTile`) often lack context, simply announcing "button" or repeating an unclear label. Users need to know exactly *what* item is being deleted, not just that a delete button exists.
@@ -115,3 +123,26 @@
 ## 25-05-2024 - [Disabling Autocorrect on System Keys]
 **Learning:** Text fields intended for exact alphanumeric codes (like license keys or activation tokens) can become highly frustrating if the OS keyboard attempts to autocorrect or suggest dictionary words, potentially altering a valid code right before submission.
 **Action:** Always apply `autocorrect: false` and `enableSuggestions: false` to `TextField` or `TextFormField` inputs that handle system keys, tokens, or exact codes.
+
+## 31-05-2026 - Multiline Text Fields Input Constraints
+**Learning:** For multiline text fields like descriptions, always use `keyboardType: TextInputType.multiline` to provide proper native keyboard behavior. Without it, the OS keyboard may not show a proper return key or optimize for long-form text entry. Adding a character limit (e.g., `maxLength: 500`) also automatically provides users with a character counter below the field, improving the UX without breaking existing validation logic. Note that missing `maxLines: null` or setting it incorrectly can limit the multiline UX.
+**Action:** When updating or creating multiline text fields, ensure both `keyboardType: TextInputType.multiline` and a relevant `maxLength` are set to maximize native keyboard capability and visual feedback.
+## 12-06-2024 - Semantic Colors for Destructive Actions
+**Learning:** Hardcoded colors like `Colors.red` for delete actions violate theme support (especially dark mode) and standard accessibility patterns.
+**Action:** Always use `Theme.of(context).colorScheme.error` for destructive actions and `Theme.of(context).colorScheme.primary` for standard actions to ensure consistent, theme-aware visual feedback.
+## 06-06-2026 - Explicit Semantics for InkWell widgets
+**Learning:** Custom interactive widgets built directly with InkWell or GestureDetector may not implicitly expose themselves as buttons to screen readers, especially when other widgets (like Tooltip) try to exclude semantics. Relying entirely on inner hints or implicit states can lead to incomplete accessibility contexts.
+**Action:** Always verify that interactive container widgets like InkWell are properly wrapped in Semantics with `button: true` explicitly set, particularly when complex widget trees or semantic exclusions are involved.
+## 15-06-2026 - Button Contrast with Semantic Backgrounds
+**Learning:** When explicitly setting `backgroundColor` on buttons like `ElevatedButton` to semantic colors (e.g. `Theme.of(context).colorScheme.error`), the button text might lack sufficient contrast if the `foregroundColor` isn't updated simultaneously.
+**Action:** Always provide the corresponding `foregroundColor` (e.g. `Theme.of(context).colorScheme.onError`) when overriding a button's `backgroundColor` to maintain accessible text contrast.
+## 22-06-2026 - Auto-capitalization for Names and Descriptions
+**Learning:** Setting `textCapitalization: TextCapitalization.words` on name fields and `textCapitalization: TextCapitalization.sentences` on descriptions reduces friction by automatically capitalizing inputs, while correctly setting `keyboardType: TextInputType.multiline` improves the native keyboard interface for long-form inputs.
+**Action:** Always include appropriate `textCapitalization` alongside `keyboardType` properties (like `TextInputType.multiline`) for text fields dealing with proper nouns or natural language.
+## 18-06-2026 - [Merge Semantics for Complex Analytics Cards]
+**Learning:** Complex layout elements presenting statistical data, like summary cards or custom bar charts built with primitive widgets (Columns, Texts, CustomPaints), cause screen readers to read scattered, individual pieces of text and formatting out of context.
+**Action:** Use `Semantics(container: true, excludeSemantics: true, label: '[Cohesive summary]')` to merge multi-widget components into a single, cohesive, properly contextualized accessibility node.
+## 24-06-2026 - Enhancing Form Field UX with TextCapitalization
+**Learning:** Text inputs capturing user names or multi-line descriptions often require manual capitalization, increasing typing friction and hindering the user flow. Using native keyboard support to auto-capitalize correctly enhances the feeling of polish.
+**Action:** Always provide `textCapitalization: TextCapitalization.words` for proper nouns (like item names, categories, and people) and `textCapitalization: TextCapitalization.sentences` for multiline descriptions or notes, letting the system keyboard do the heavy lifting automatically.
+## 24-06-2026 - Balanced Form Actions and Secondary Button Styling\n**Learning:** Hardcoding `ElevatedButton` with a grey background for secondary actions like "Cancelar" creates visual imbalance and violates standard Material guidelines. Furthermore, when form footers lack equal spacing (e.g. not wrapping actions in `Expanded`), it breaks the aesthetic rhythm of the form.\n**Action:** Use `OutlinedButton` for secondary/cancel actions. Always wrap grouped form actions (like Save and Cancel) in `Expanded` widgets within a `Row` to ensure equal width distribution, resulting in a cleaner and more professional UI.

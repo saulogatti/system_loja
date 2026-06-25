@@ -73,39 +73,19 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 String? validateDocument() {
-  final cleanedValue = value.replaceAll(RegExp(r&#39;\D&#39;), &#39;&#39;);
+  final valueCheck = value.trim().toUpperCase();
+  final compactValue = valueCheck.replaceAll(_cnpjFormattingCharsRegExp, &#39;&#39;);
 
-  if (cleanedValue.length != 14 ||
-      RegExp(r&#39;^(\d)\1{13}$&#39;).hasMatch(cleanedValue)) {
-    return &#39;CNPJ inválido - deve conter 14 dígitos e não pode ser uma sequência de números repetidos&#39;;
+  if (!_cnpjRegExp.hasMatch(valueCheck) &amp;&amp; !_cnpjCleanRegExp.hasMatch(valueCheck)) {
+    return &#39;CNPJ deve estar no formato XX.XXX.XXX&#47;XXXX-XX com base alfanumérica ou conter 14 caracteres (12 alfanuméricos + 2 dígitos)&#39;;
   }
 
-  final digits = cleanedValue.split(&#39;&#39;).map(int.parse).toList();
-
-  &#47;&#47; Validação do primeiro dígito verificador
-  final firstWeights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-  final sum1 = List.generate(
-    12,
-    (i) =&gt; digits[i] * firstWeights[i],
-  ).reduce((a, b) =&gt; a + b);
-  final remainder1 = sum1 % 11;
-  final checkDigit1 = remainder1 &lt; 2 ? 0 : 11 - remainder1;
-
-  if (checkDigit1 != digits[12]) {
-    return &#39;CNPJ inválido - primeiro dígito verificador incorreto&#39;;
+  if (_cnpjAllZerosRegExp.hasMatch(compactValue)) {
+    return &#39;CNPJ inválido - sequência zerada não é permitida&#39;;
   }
 
-  &#47;&#47; Validação do segundo dígito verificador
-  final secondWeights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-  final sum2 = List.generate(
-    13,
-    (i) =&gt; digits[i] * secondWeights[i],
-  ).reduce((a, b) =&gt; a + b);
-  final remainder2 = sum2 % 11;
-  final checkDigit2 = remainder2 &lt; 2 ? 0 : 11 - remainder2;
-
-  if (checkDigit2 != digits[13]) {
-    return &#39;CNPJ inválido - segundo dígito verificador incorreto&#39;;
+  if (!valueCheck.isValidCnpj()) {
+    return &#39;CNPJ inválido - dígitos verificadores incorretos&#39;;
   }
 
   return null;

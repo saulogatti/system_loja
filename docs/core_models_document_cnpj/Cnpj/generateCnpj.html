@@ -27,7 +27,7 @@
     <li><a href="../../index.html">system_loja</a></li>
     <li><a href="../../core_models_document_cnpj/">core\models\document\cnpj.dart</a></li>
     <li><a href="../../core_models_document_cnpj/Cnpj-class.html">Cnpj</a></li>
-    <li class="self-crumb">generateCnpj method</li>
+    <li class="self-crumb">generateCnpj static method</li>
   </ol>
   <div class="self-name">generateCnpj</div>
   <form class="search navbar-right" role="search">
@@ -49,7 +49,7 @@
     data-above-sidebar="core_models_document_cnpj&#47;Cnpj-class-sidebar.html"
     data-below-sidebar="">
     <div>
-<h1><span class="kind-method">generateCnpj</span> method 
+<h1><span class="kind-method">generateCnpj</span> static method 
 </h1></div>
 
     <section class="multi-line-signature">
@@ -61,13 +61,33 @@
 
     </section>
     
+<section class="desc markdown">
+  <p>Gera um CNPJ matematicamente válido.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">String generateCnpj() {
-  return Random().nextInt(100000000000000).toString().padLeft(14, &#39;0&#39;);
+  <pre class="language-dart"><code class="language-dart">static String generateCnpj() {
+  final random = Random();
+  final digits = List.generate(12, (_) =&gt; random.nextInt(10));
+
+  int sum1 = 0;
+  for (int i = 0; i &lt; 12; i++) {
+    sum1 += digits[i] * firstWeights[i];
+  }
+  final remainder1 = sum1 % 11;
+  digits.add(remainder1 &lt; 2 ? 0 : 11 - remainder1);
+
+  int sum2 = 0;
+  for (int i = 0; i &lt; 13; i++) {
+    sum2 += digits[i] * secondWeights[i];
+  }
+  final remainder2 = sum2 % 11;
+  digits.add(remainder2 &lt; 2 ? 0 : 11 - remainder2);
+
+  return digits.join();
 }</code></pre>
 </section>
 
@@ -84,7 +104,7 @@
     <li><a href="../../index.html">system_loja</a></li>
     <li><a href="../../core_models_document_cnpj/">cnpj</a></li>
     <li><a href="../../core_models_document_cnpj/Cnpj-class.html">Cnpj</a></li>
-    <li class="self-crumb">generateCnpj method</li>
+    <li class="self-crumb">generateCnpj static method</li>
 </ol>
 
     <h5>Cnpj class</h5>
