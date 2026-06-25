@@ -83,8 +83,8 @@ Para que o Agent trabalhe efetivamente, suas issues devem ser:
 4. **Fornecer contexto necessário**:
    ```markdown
    **Contexto:**
-   Este campo é necessário para validar a maioridade do cliente antes de 
-   permitir compras. O formato deve ser DD/MM/AAAA no formulário, mas 
+   Este campo é necessário para validar a maioridade do cliente antes de
+   permitir compras. O formato deve ser DD/MM/AAAA no formulário, mas
    armazenado como ISO 8601 no JSON.
    ```
 
@@ -135,10 +135,10 @@ class ClienteManager {
 
 #### Camadas (atual)
 
-- **Interface + ResultStatus**: operações expostas à UI retornam `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`, usa `package:meta`); não propagar exceções através de repositório/interface.
+- **Interface + ResultStatus**: operações expostas à UI retornam `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, usa `package:meta`); não propagar exceções através de repositório/interface.
 - **Repositórios** (`lib/domain/repository/`): orquestram DAOs e regras; usam `try/catch` internamente e retornam `ResultStatus.error(mensagemErroRepositorio(...))` com mensagens amigáveis (`lib/core/utils/repository_error_mapper.dart`). Dependem de interfaces e de tipos de `lib/core/models/`.
 - **Apresentação** (`lib/screens/`): **não** envolve chamadas ao repositório em `try/catch`; usa `when`/`switch` no `ResultStatus` e emite estado de erro com a mensagem já tratada.
-- **Dados** (`lib/data/`): tabelas/DAOs Drift, DTOs em `entry/` etc., mapeamento registro → domínio; **sem** imports de `domain/` ou `aplication/`. `CacheManager` é registrado via `GetIt` (DI) — não usar `CacheManager.instance`.
+- **Dados** (`lib/data/`): tabelas/DAOs Drift, DTOs em `entry/` etc., mapeamento registro → domínio; **sem** imports de `domain/` ou `application/`. `CacheManager` é registrado via `GetIt` (DI) — não usar `CacheManager.instance`.
 
 #### Legado: Manager + JSON
 
@@ -170,7 +170,7 @@ Onde ainda existir `lib/core/managers/`, o padrão histórico foi carregar/salva
 5. **Execute o linter**: `dart analyze`
 6. **Formate o código**: `dart format .`
 7. **Push** para seu fork: `git push origin feature/minha-feature`
-8. **Abra um Pull Request** para o branch `develop`
+8. **Abra um Pull Request** para o branch `main`
 
 ### Para o Copilot Coding Agent
 
@@ -207,7 +207,7 @@ Toda issue deve conter:
 # Adicionar Validação de Email no Cadastro de Clientes
 
 ## Descrição
-Atualmente o campo de email aceita qualquer texto. Precisamos validar 
+Atualmente o campo de email aceita qualquer texto. Precisamos validar
 se o email está em formato válido antes de salvar.
 
 ## Critérios de Aceitação
@@ -327,7 +327,7 @@ system_loja/
 │       └── feature_request.md
 ├── lib/
 │   ├── main.dart
-│   ├── aplication/
+│   ├── application/
 │   │   └── app_injection.dart           # DI (GetIt)
 │   ├── core/
 │   │   ├── interface/                   # Contratos (ex.: ICustomerRepository)

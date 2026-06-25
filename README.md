@@ -6,11 +6,11 @@ Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produto
 
 - UI em `lib/screens/`, com BLoC/Cubit (`flutter_bloc`).
 - Fluxo principal: **Screen** → **Interface** (`lib/core/interface/`) → **Repository** (`lib/domain/repository/`) → **DAO Drift** (`lib/data/database/dao/`) → SQLite.
-- DI com `GetIt` via `setupAppInjection()` em `lib/aplication/app_injection.dart`.
+- DI com `GetIt` via `setupAppInjection()` em `lib/application/app_injection.dart`.
 - Navegacao com `auto_route` em `lib/screens/route/route_app.dart`.
-- Padrao de retorno entre camadas: `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`, usa `package:meta`).
+- Padrao de retorno entre camadas: `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, usa `package:meta`).
 - Repositorios usam `try/catch` internamente e retornam `ResultStatus.error(...)` com mensagens amigaveis via `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`). A camada de apresentacao **nao** envolve chamadas ao repositorio em `try/catch`; usa `when` ou `switch` em `ResultStatus`.
-- Camada **data** (`lib/data/`): Drift, DTOs/entries JSON, conversores, cache e mapeamento para modelos de `lib/core/models/` — **sem** depender de `lib/domain/` ou `lib/aplication/` (constantes compartilhadas ficam em `lib/core/` quando necessario).
+- Camada **data** (`lib/data/`): Drift, DTOs/entries JSON, conversores, cache e mapeamento para modelos de `lib/core/models/` — **sem** depender de `lib/domain/` ou `lib/application/` (constantes compartilhadas ficam em `lib/core/` quando necessario).
 - `CacheManager` registrado via `GetIt` (injecao de dependencia) — **nao** usar `CacheManager.instance`.
 
 ## Requisitos
@@ -84,7 +84,7 @@ Ha codigo legado em `lib/core/managers/` e fluxos em JSON ainda usados em cenari
 ```text
 lib/
   main.dart
-  aplication/
+  application/
     app_injection.dart   # GetIt / setupAppInjection()
   core/
     interface/           # contratos (ex.: I*Repository)

@@ -28,7 +28,7 @@ Screen -> Interface -> Repository -> DAO Drift -> SQLite.
 ### Repositorio
 
 - Implementacao: `lib/domain/repository/company_repository.dart`
-- Registro em DI: `setupAppInjection()` em `lib/aplication/app_injection.dart`
+- Registro em DI: `setupAppInjection()` em `lib/application/app_injection.dart`
 
 ### Apresentacao
 

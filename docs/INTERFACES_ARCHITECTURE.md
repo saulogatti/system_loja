@@ -52,7 +52,7 @@ result.when(
 
 ## Registro no GetIt
 
-As dependencias sao registradas em `setupAppInjection()` no arquivo `lib/aplication/app_injection.dart`.
+As dependencias sao registradas em `setupAppInjection()` no arquivo `lib/application/app_injection.dart`.
 
 Exemplo:
 
@@ -78,4 +78,4 @@ appInjection.registerSingleton<ICustomerRepository>(
 - `README.md`
 - `.github/copilot-instructions.md`
 - `docs/DRIFT_ARCHITECTURE.md`
-- `lib/aplication/app_injection.dart`
+- `lib/application/app_injection.dart`

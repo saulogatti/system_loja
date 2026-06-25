@@ -37,7 +37,7 @@ O serviço está registrado no **GetIt** (`appInjection`) após `setupAppInjecti
 
 #### Opção A: Diretamente via GetIt
 ```dart
-import 'package:system_loja/aplication/app_injection.dart';
+import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/domain/code_generator_service.dart';
 
 final codeGenerator = appInjection.get<CodeGeneratorService>();
@@ -45,7 +45,7 @@ final codeGenerator = appInjection.get<CodeGeneratorService>();
 
 #### Opção B: Via ProductRepository
 ```dart
-import 'package:system_loja/aplication/app_injection.dart';
+import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 
 final productRepository = appInjection.get<IProductRepository>();
@@ -59,13 +59,18 @@ final validationResult = await productRepository.validateProductCode('MEU-CODIGO
 
 #### Opção C: Via SalesRepository
 ```dart
-import 'package:system_loja/aplication/app_injection.dart';
+import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
 
 final salesRepository = appInjection.get<ISalesRepository>();
 
 // Gerar número de nota
-final invoiceNumber = await salesRepository.generateInvoiceNumber();
+final invoiceNumberResult = await salesRepository.generateInvoiceNumber();
+if (invoiceNumberResult.isSuccessful) {
+  print('Número gerado: ${invoiceNumberResult.asSuccess}');
+} else {
+  print('Erro ao gerar número: ${invoiceNumberResult.asError}');
+}
 
 // Validar número customizado
 final validationResult = await salesRepository.validateInvoiceNumber('NF-CUSTOM-001');
@@ -74,7 +79,7 @@ final validationResult = await salesRepository.validateInvoiceNumber('NF-CUSTOM-
 ### 2. Gerar Código de Produto Automaticamente
 
 ```dart
-import 'package:system_loja/aplication/app_injection.dart';
+import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 
 // Via repositório (recomendado)
@@ -87,11 +92,11 @@ final product = Product(
   description: 'Notebook Dell Inspiron 15',
   price: 3500.00,
   stockQuantity: 10,
-  category: 'Eletrônicos',
+  categoryId: 1,
   code: code, // Usar o código gerado
 );
 
-await productRepository.salvarProduto(product);
+await productRepository.saveProduct(product);
 ```
 
 ### 3. Usar Código Personalizado para Produto
@@ -112,11 +117,11 @@ if (validation.isSuccessful) {
     description: 'Notebook Dell Inspiron 15',
     price: 3500.00,
     stockQuantity: 10,
-    category: 'Eletrônicos',
+    categoryId: 1,
     code: customCode,
   );
-  
-  await productRepository.salvarProduto(product);
+
+  await productRepository.saveProduct(product);
 } else {
   // Código inválido, mostrar erro ao usuário
   print('Erro: ${validation.asError}');
@@ -130,7 +135,12 @@ if (validation.isSuccessful) {
 final salesRepository = appInjection.get<ISalesRepository>();
 
 // Gerar número de nota automaticamente
-final invoiceNumber = await salesRepository.generateInvoiceNumber();
+final invoiceNumberResult = await salesRepository.generateInvoiceNumber();
+if (invoiceNumberResult.hasError) {
+  print('Erro: ${invoiceNumberResult.asError}');
+  return;
+}
+final invoiceNumber = invoiceNumberResult.asSuccess;
 
 // Criar nota fiscal com o número gerado
 final invoice = Invoice(
@@ -142,6 +152,7 @@ final invoice = Invoice(
     customerCpf: '12345678900',
     items: [
       InvoiceItem(
+        productId: 1,
         productCode: 'PRD-20260123-0001',
         productName: 'Notebook Dell',
         quantity: 1,
@@ -166,7 +177,7 @@ final customNumber = 'NF-VENDA-ESPECIAL-001';
 // Validar o número antes de usar
 final validation = await salesRepository.validateInvoiceNumber(customNumber);
 
-if (validation.isValid) {
+if (validation.isSuccessful) {
   // Número válido, pode usar
   final invoice = Invoice(
     id: -1,
@@ -177,6 +188,7 @@ if (validation.isValid) {
       customerCpf: '12345678900',
       items: [
         InvoiceItem(
+          productId: 1,
           productCode: 'PRD-20260123-0001',
           productName: 'Notebook Dell',
           quantity: 1,
@@ -186,11 +198,11 @@ if (validation.isValid) {
       paymentMethod: 'Cartão de Crédito',
     ),
   );
-  
+
   await salesRepository.saveSale(invoice);
 } else {
   // Número inválido, mostrar erro ao usuário
-  print('Erro: ${validation.message}');
+  print('Erro: ${validation.asError}');
   // Exemplo: "Número da nota já existe no banco de dados"
 }
 ```
@@ -202,7 +214,7 @@ if (validation.isValid) {
 ```dart
 class ProductRegistrationScreen extends StatefulWidget {
   @override
-  _ProductRegistrationScreenState createState() => 
+  _ProductRegistrationScreenState createState() =>
       _ProductRegistrationScreenState();
 }
 
@@ -210,17 +222,17 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   final _codeController = TextEditingController();
   final _productRepository = appInjection.get<IProductRepository>();
   bool _useAutoCode = true;
-  
+
   Future<void> _generateCode() async {
     final code = await _productRepository.generateProductCode();
     setState(() {
       _codeController.text = code;
     });
   }
-  
+
   Future<void> _saveProduct() async {
     String code;
-    
+
     if (_useAutoCode) {
       // Usar código gerado automaticamente
       code = await _productRepository.generateProductCode();
@@ -229,35 +241,35 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       final validation = await _productRepository.validateProductCode(
         _codeController.text,
       );
-      
+
       if (!validation.isSuccessful) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erro: ${validation.asError}')),
         );
         return;
       }
-      
+
       code = _codeController.text;
     }
-    
+
     // Criar e salvar produto com o código validado
     final product = Product(
       name: _nameController.text,
       description: _descriptionController.text,
       price: double.parse(_priceController.text),
       stockQuantity: int.parse(_stockController.text),
-      category: _categoryController.text,
+      categoryId: int.tryParse(_categoryIdController.text),
       code: code,
     );
-    
-    await _productRepository.salvarProduto(product);
-    
+
+    await _productRepository.saveProduct(product);
+
     // Mostrar sucesso
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Produto salvo com sucesso!')),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -281,14 +293,14 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
                 });
               },
             ),
-            
+
             // Campo de código (desabilitado se auto)
             TextField(
               controller: _codeController,
               enabled: !_useAutoCode,
               decoration: InputDecoration(
                 labelText: 'Código do Produto',
-                suffixIcon: _useAutoCode 
+                suffixIcon: _useAutoCode
                   ? Icon(Icons.lock)
                   : IconButton(
                       icon: Icon(Icons.refresh),
@@ -296,9 +308,9 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
                     ),
               ),
             ),
-            
+
             // ... outros campos ...
-            
+
             ElevatedButton(
               onPressed: _saveProduct,
               child: Text('Salvar Produto'),
@@ -390,6 +402,6 @@ A coluna `code` em `ProductsRecords` possui constraint `UNIQUE`, garantindo inte
 
 Para dúvidas ou problemas, consulte:
 - Código fonte: `lib/domain/code_generator_service.dart`
-- DI: `lib/aplication/app_injection.dart`
+- DI: `lib/application/app_injection.dart`
 - Testes: `test/code_generator_service_test.dart`
 - Repositórios: `lib/domain/repository/product_repository.dart` e `lib/domain/repository/sales_repository.dart`

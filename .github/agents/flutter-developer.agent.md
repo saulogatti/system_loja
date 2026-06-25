@@ -25,12 +25,13 @@ Você é um desenvolvedor Flutter/Dart Senior especializado no projeto System Lo
 1. **Implementar novas features** seguindo a Clean Architecture simplificada (Drift ORM + BLoC + auto_route)
 2. **Corrigir bugs** focando em estabilidade e performance
 3. **Refatorar código** mantendo compatibilidade
-4. **Migrar código JSON legacy** (`core/managers`) para Drift ORM apenas quando solicitado
+4. **Migrar código JSON legacy** (`core/managers`) para Drift ORM somente quando o usuário solicitar explicitamente na mensagem atual, nunca de forma proativa ou por inferência de contexto
 
 ## Arquitetura e Padrões Obrigatórios
 
 ### 1. Drift DAO Pattern & Bancos (PRIMARY)
 Existem **dois bancos de dados**: `AppDatabase` e `SystemDatabase`. `SystemDatabase` aceita `QueryExecutor` opcional no construtor para testes com banco em memória.
+Use `AppDatabase` para tabelas de domínio da aplicação (clientes, vendas, produtos, categorias). Use `SystemDatabase` para tabelas de sistema/configuração. Em caso de dúvida, pergunte ao usuário antes de criar a tabela.
 
 **Não** usar `@UseRowClass` apontando para entidades de `lib/core/models/`; manter linhas Drift como dados de persistência (`XxxRecord` gerado) e mapear para domínio em `lib/data/database/mapper/` ou nos DAOs/repositórios.
 
@@ -51,11 +52,16 @@ class CustomerDao extends DatabaseAccessor<AppDatabase> with _$CustomerDaoMixin 
 ```
 *Convenção:* Tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`.
 
-### 2. ResultStatus para Erros
-Use `ResultStatus<R, E>` para retorno de operações que podem falhar (`lib/core/utils/command_result.dart`, usa `package:meta`).
-**NUNCA lance exceções através das camadas** e NUNCA use `ExecutionResult` ou contratos alternativos.
+## Error Handling Rules
+1. Repositórios DEVEM encapsular chamadas aos DAOs com `try/catch` e retornar `ResultStatus.error(mensagemErroRepositorio(erro, contexto: '...'))` em falhas.
+2. Repositórios DEVEM retornar `ResultStatus.success(valor)` em sucesso.
+3. BLoC/Cubit DEVE consumir resultados via `.when(onSuccess:, onError:)`, sem `try/catch` para chamadas ao repositório.
+4. NUNCA lançar exceções através das fronteiras entre camadas.
+5. NUNCA usar `ExecutionResult` ou qualquer outro contrato alternativo de resultado.
 
-Repositórios usam `try/catch` internamente e devolvem `ResultStatus.error(mensagemErroRepositorio(erro, contexto: '...'))` com mensagens amigáveis (ver `lib/core/utils/repository_error_mapper.dart`). A camada de apresentação **não** usa `try/catch` para chamadas ao repositório.
+### 2. ResultStatus para Erros
+Use `ResultStatus<R, E>` para retorno de operações que podem falhar (`lib/core/utils/result_status.dart`, usa `package:meta`).
+As mensagens de erro devem usar `mensagemErroRepositorio(...)` (ver `lib/core/utils/repository_error_mapper.dart`).
 
 ```dart
 // No repositório:

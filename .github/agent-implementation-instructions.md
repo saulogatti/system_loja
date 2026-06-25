@@ -17,7 +17,7 @@ Este arquivo define o comportamento esperado para implementacoes, correcoes e re
 
 ## 2) Persistencia e compatibilidade
 
-- Banco principal: `AppDatabase` com `schemaVersion => 11`.
+- Banco principal: `AppDatabase` com `schemaVersion => 12`.
 - Banco de sistema: `SystemDatabase` com `schemaVersion => 1`.
 - Existe codigo legado em `lib/core/managers/` e JSON em partes do sistema; a direcao preferida e refatorar em direcao a arquitetura limpa, nao congelar formato antigo.
 
@@ -28,7 +28,7 @@ Regras:
 
 ## 3) Tratamento de erros e contratos
 
-- O padrao oficial de retorno e `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`, usa `package:meta`).
+- O padrao oficial de retorno e `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, usa `package:meta`).
 - Nao introduzir `OperationResult`, `Either` ou contratos alternativos sem alinhamento previo.
 - Nao propagar excecoes entre Interface e Repository; retornar `ResultStatus`. Repositorios usam `try/catch` internamente e retornam `ResultStatus.error(mensagemErroRepositorio(erro, contexto: '...'))` com mensagens amigaveis (ver `lib/core/utils/repository_error_mapper.dart`).
 - A camada de apresentacao (BLoC/Cubit/Screen) **nao** envolve chamadas ao repositorio em `try/catch`; usa `when` ou `switch` no `ResultStatus`. `try/catch` na UI fica reservado a operacoes locais (seletor de arquivo, escrita em `File`) que nao passam pelo contrato do repositorio.

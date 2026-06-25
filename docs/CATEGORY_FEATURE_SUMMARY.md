@@ -61,13 +61,13 @@ This PR successfully implements a separate category management system for produc
      - Creates default "Sem Categoria" category
 
 ### Business Logic Layer
-1. **CategoryRepository** (`lib/core/repository/category_repository.dart`)
+1. **CategoryRepository** (`lib/domain/repository/category_repository.dart`)
    - Wraps CategoryDao with business logic
    - Returns `ResultStatus<T, String>` for error handling
    - Validates operations (e.g., duplicate names, products in use)
    - Methods: getAllCategories, getCategoryById, getCategoryByName, createCategory, updateCategory, deleteCategory, isCategoryInUse
 
-2. **AppInjection** (`lib/screens/injection/app_injection.dart`)
+2. **AppInjection** (`lib/application/app_injection.dart`)
    - Added `categoryRepository` singleton
 
 ### Presentation Layer
@@ -118,7 +118,7 @@ Modified (16 files):
 - lib/data/database/table/products_records.dart
 - lib/data/database/dao/product_dao.dart
 - lib/data/database/app_database.dart
-- lib/screens/injection/app_injection.dart
+- lib/application/app_injection.dart
 - lib/screens/products/cubit/product_cubit.dart
 - lib/screens/products/widgets/product_category.dart
 - lib/screens/products/widgets/product_form.dart
@@ -132,7 +132,7 @@ Created (10 files):
 - lib/data/database/dao/category_dao.dart
 - lib/data/database/dao/category_dao.g.dart
 - lib/data/database/extension/category_extension.dart
-- lib/core/repository/category_repository.dart
+- lib/domain/repository/category_repository.dart
 - lib/screens/categories/cubit/category_cubit.dart
 - lib/screens/categories/cubit/category_state.dart
 - lib/screens/categories/cubit/category_state.freezed.dart
@@ -162,7 +162,7 @@ Created (10 files):
    ```
    This generates:
    - `category.g.dart` - JSON serialization
-   - `category_dao.g.dart` - Drift DAO implementation  
+   - `category_dao.g.dart` - Drift DAO implementation
    - `category_state.freezed.dart` - Complete freezed state classes
    - Updates to `app_database.g.dart` - New table registration
    - Updates to `product.g.dart` - New categoryId field
@@ -172,7 +172,7 @@ Created (10 files):
    - Option 1: Add to settings menu
    - Option 2: Add to main navigation
    - Option 3: Add as a button in product management screen
-   
+
    Example (add to settings):
    ```dart
    ListTile(

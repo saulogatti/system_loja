@@ -34,25 +34,25 @@ Future<bool> invoiceNumberExists(String invoiceNumber)     // Verificar se núme
 
 ### 3. Métodos nos Repositórios
 
-#### ProductRepository (`lib/core/repository/product_repository.dart`)
+#### ProductRepository (`lib/domain/repository/product_repository.dart`)
 ```dart
 Future<String> generateProductCode()                              // Gerar código automático
 Future<ResultStatus<bool, String>> validateProductCode(String)    // Validar código customizado
 ```
 
-#### SalesRepository (`lib/core/repository/sales_repository.dart`)
+#### SalesRepository (`lib/domain/repository/sales_repository.dart`)
 ```dart
-Future<String> generateInvoiceNumber()                     // Gerar número automático
-Future<ValidationResult> validateInvoiceNumber(String)     // Validar número customizado
+Future<ResultStatus<String, String>> generateInvoiceNumber()                 // Gerar número automático
+Future<ResultStatus<bool, String>> validateInvoiceNumber(String)             // Validar número customizado
 ```
 
 ### 4. Injeção de Dependências
 
-**Arquivo**: `lib/screens/injection/app_injection.dart`
+**Arquivo**: `lib/application/app_injection.dart`
 
 O `CodeGeneratorService` foi registrado e está disponível globalmente:
 ```dart
-final codeGenerator = AppInjection.instance.codeGeneratorService;
+final codeGenerator = appInjection.get<CodeGeneratorService>();
 ```
 
 ### 5. Testes Completos
@@ -102,7 +102,7 @@ Cobertura de testes:
 ### Caso de Uso 1: Produto com Código Automático
 
 ```dart
-final productRepository = AppInjection.instance.productRepository;
+final productRepository = appInjection.get<IProductRepository>();
 
 // Gerar código automático
 final code = await productRepository.generateProductCode();
@@ -116,13 +116,13 @@ final product = Product(
   // ... outros campos
 );
 
-await productRepository.salvarProduto(product);
+await productRepository.saveProduct(product);
 ```
 
 ### Caso de Uso 2: Produto com Código Personalizado
 
 ```dart
-final productRepository = AppInjection.instance.productRepository;
+final productRepository = appInjection.get<IProductRepository>();
 
 // Validar código fornecido pelo usuário
 final validation = await productRepository.validateProductCode('MEU-CODIGO-001');
@@ -134,7 +134,7 @@ if (validation.isSuccessful) {
     code: 'MEU-CODIGO-001',
     // ...
   );
-  await productRepository.salvarProduto(product);
+  await productRepository.saveProduct(product);
 } else {
   // Mostrar erro: validation.asError
   print('Erro: ${validation.asError}');
@@ -144,10 +144,15 @@ if (validation.isSuccessful) {
 ### Caso de Uso 3: Nota Fiscal com Número Automático
 
 ```dart
-final salesRepository = AppInjection.instance.salesRepository;
+final salesRepository = appInjection.get<ISalesRepository>();
 
 // Gerar número automático
-final invoiceNumber = await salesRepository.generateInvoiceNumber();
+final invoiceNumberResult = await salesRepository.generateInvoiceNumber();
+if (invoiceNumberResult.hasError) {
+  print('Erro: ${invoiceNumberResult.asError}');
+  return;
+}
+final invoiceNumber = invoiceNumberResult.asSuccess;
 // Retorna: "NF-20260123-0001"
 
 // Criar nota fiscal
@@ -172,13 +177,13 @@ class ProductFormWidget extends StatefulWidget {
 class _ProductFormWidgetState extends State<ProductFormWidget> {
   final _codeController = TextEditingController();
   bool _useAutoCode = true;
-  
+
   Future<void> _generateCode() async {
-    final repo = AppInjection.instance.productRepository;
+    final repo = appInjection.get<IProductRepository>();
     final code = await repo.generateProductCode();
     setState(() => _codeController.text = code);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -194,14 +199,14 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
             });
           },
         ),
-        
+
         // Campo de código (desabilitado se auto)
         TextField(
           controller: _codeController,
           enabled: !_useAutoCode,
           decoration: InputDecoration(
             labelText: 'Código do Produto',
-            suffixIcon: !_useAutoCode 
+            suffixIcon: !_useAutoCode
               ? IconButton(
                   icon: Icon(Icons.refresh),
                   onPressed: _generateCode,

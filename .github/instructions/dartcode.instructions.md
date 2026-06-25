@@ -17,9 +17,9 @@ applyTo: '**/*.dart'
 - Codigo em ingles.
 - Comentarios e documentacao `///` em portugues.
 - Fluxo de camadas: Screen -> Interface (`lib/core/interface/`) -> Repository (`lib/domain/repository/`) -> DAO Drift (`lib/data/database/dao/`).
-- `lib/data/` nao deve importar `lib/domain/` nem `lib/aplication/`.
+- `lib/data/` nao deve importar `lib/domain/` nem `lib/application/`.
 - Nao propagar excecoes entre Interface e Repository. Repositorios usam `try/catch` internamente e retornam `ResultStatus.error(mensagemErroRepositorio(...))` com mensagens amigaveis (`lib/core/utils/repository_error_mapper.dart`). A camada de apresentacao nao usa `try/catch` para chamadas ao repositorio.
-- Retornar `ResultStatus<R, E>` (`lib/core/utils/command_result.dart`, usa `package:meta`).
+- Retornar `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, usa `package:meta`).
 - `CacheManager` registrado via `GetIt` (DI); nao usar `CacheManager.instance`.
 
 ## Drift
