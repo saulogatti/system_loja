@@ -176,7 +176,7 @@ class _ProductCategoryState extends State<ProductCategory> {
                   border: OutlineInputBorder(),
                 ),
                 minLines: 3,
-                maxLines: 5,
+                maxLines: null,
               ),
             ],
           ),
