@@ -143,6 +143,7 @@ class _ProductCategoryState extends State<ProductCategory> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        scrollable: true,
         title: const Text('Nova Categoria'),
         content: Form(
           key: formKey,
