@@ -150,3 +150,6 @@
 
 **Learning:** Forcing multiline fields like "descriptions" to a fixed `maxLines` limits the input area and forces users to scroll within a small box. Using `minLines` together with `maxLines: null` makes the field auto-expand gracefully as the user types, improving native-like form usability.
 **Action:** When working with description fields or similar multiline inputs, pair `keyboardType: TextInputType.multiline` with `minLines: 3` and `maxLines: null` for a better typing experience without eating up screen space when empty.
+## 29-06-2026 - Missing Interactive Actions in Semantics
+**Learning:** When wrapping interactive widgets (like `ListTile` with `onTap`) in a `Semantics` widget and using `excludeSemantics: true` to provide a consolidated accessibility label, the semantic actions (like the tap action) of the child are stripped from the accessibility tree. This breaks screen reader interaction and keyboard navigation (Tab/Enter) on Flutter Web/Desktop.
+**Action:** Always redefine interaction properties (e.g., `onTap`, `onTapHint`, `onLongPress`) directly on the `Semantics` widget when using `excludeSemantics: true` around interactive child widgets.

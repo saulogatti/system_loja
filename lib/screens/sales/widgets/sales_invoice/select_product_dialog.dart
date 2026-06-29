@@ -26,25 +26,42 @@ class SelectProductDialog extends StatelessWidget {
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   final product = products[index];
-                  return ListTile(
-                    title: Text(product.name),
-                    subtitle: Text(
-                      'R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}',
-                    ),
-                    trailing: Icon(
-                      Icons.add_circle_outline,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+
+                  final Color stockColor;
+                  final IconData stockIcon;
+
+                  if (product.stockQuantity == 0) {
+                    stockColor = Theme.of(context).colorScheme.error;
+                    stockIcon = Icons.remove_shopping_cart;
+                  } else if (product.stockQuantity <= 5) {
+                    stockColor = Colors.orange;
+                    stockIcon = Icons.warning_amber;
+                  } else {
+                    stockColor = Theme.of(context).colorScheme.primary;
+                    stockIcon = Icons.add_circle_outline;
+                  }
+
+                  return Semantics(
+                    button: true,
+                    label:
+                        'Adicionar produto: ${product.name}, preço: R\$ ${product.price.toStringAsFixed(2)}, estoque: ${product.stockQuantity}',
+                    onTapHint: 'Adicionar produto à nota',
                     onTap: () => context.router.maybePop(product),
+                    excludeSemantics: true,
+                    child: ListTile(
+                      title: Text(product.name),
+                      subtitle: Text(
+                        'R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}',
+                      ),
+                      trailing: Icon(stockIcon, color: stockColor),
+                      onTap: () => context.router.maybePop(product),
+                    ),
                   );
                 },
               ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => context.router.maybePop(),
-          child: const Text('Cancelar'),
-        ),
+        TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
       ],
     );
   }
