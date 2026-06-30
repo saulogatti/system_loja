@@ -34,7 +34,7 @@ class SelectProductDialog extends StatelessWidget {
                     stockColor = Theme.of(context).colorScheme.error;
                     stockIcon = Icons.remove_shopping_cart;
                   } else if (product.stockQuantity <= 5) {
-                    stockColor = Colors.orange;
+                    stockColor = Theme.of(context).colorScheme.secondary;
                     stockIcon = Icons.warning_amber;
                   } else {
                     stockColor = Theme.of(context).colorScheme.primary;
