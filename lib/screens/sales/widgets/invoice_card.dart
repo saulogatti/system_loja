@@ -21,15 +21,16 @@ class InvoiceCard extends StatelessWidget {
 
     return Card(
       elevation: 2,
-      child: InkWell(
+      child: Semantics(
+        container: true,
+        button: true,
+        label: semanticLabel,
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Semantics(
-          button: true,
-          label: semanticLabel,
+        onTapHint: 'Ver detalhes da nota fiscal',
+        excludeSemantics: true,
+        child: InkWell(
           onTap: onTap,
-          onTapHint: 'Ver detalhes da nota fiscal',
-          excludeSemantics: true,
+          borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
