@@ -21,13 +21,16 @@ class InvoiceCard extends StatelessWidget {
 
     return Card(
       elevation: 2,
-      child: InkWell(
+      child: Semantics(
+        container: true,
+        button: true,
+        label: semanticLabel,
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Semantics(
-          button: true,
-          label: semanticLabel,
-          excludeSemantics: true,
+        onTapHint: 'Ver detalhes da nota fiscal',
+        excludeSemantics: true,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
@@ -45,9 +48,7 @@ class InvoiceCard extends StatelessWidget {
                       child: Icon(
                         Icons.receipt_long,
                         size: 28,
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSecondaryContainer,
+                        color: Theme.of(context).colorScheme.onSecondaryContainer,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -57,19 +58,14 @@ class InvoiceCard extends StatelessWidget {
                         children: [
                           Text(
                             'NF ${invoice.data.invoiceNumber}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             'ID: ${invoice.id}',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -94,10 +90,7 @@ class InvoiceCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             invoice.data.personDisplayName,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                           ),
@@ -106,10 +99,7 @@ class InvoiceCard extends StatelessWidget {
                     ),
                     Text(
                       invoice.registrationDate.toFormattedDate(),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
@@ -122,18 +112,14 @@ class InvoiceCard extends StatelessWidget {
                             Icon(
                               Icons.shopping_cart_outlined,
                               size: 16,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               '${invoice.data.items.length} ${invoice.data.items.length == 1 ? 'item' : 'itens'}',
                               style: TextStyle(
                                 fontSize: 13,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -141,14 +127,9 @@ class InvoiceCard extends StatelessWidget {
                           ],
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 6,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primaryContainer,
+                            color: Theme.of(context).colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -158,9 +139,7 @@ class InvoiceCard extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onPrimaryContainer,
+                              color: Theme.of(context).colorScheme.onPrimaryContainer,
                             ),
                           ),
                         ),
