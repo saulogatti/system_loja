@@ -26,7 +26,12 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
   final ICategoryRepository? categoryRepository;
 
   /// Cria uma instância de [RelatoriosScreen].
-  const RelatoriosScreen({super.key, this.salesRepository, this.productRepository, this.categoryRepository});
+  const RelatoriosScreen({
+    super.key,
+    this.salesRepository,
+    this.productRepository,
+    this.categoryRepository,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +55,11 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.error_outline, size: 64, color: Theme.of(context).colorScheme.error),
+                        Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
                         const SizedBox(height: 16),
                         Text(
                           message,
@@ -126,7 +135,11 @@ class _EstoqueTab extends StatelessWidget {
   final List<Product> products;
   final RelatorioEstoqueOverviewData estoqueOverview;
 
-  const _EstoqueTab({required this.categoryNamesById, required this.products, required this.estoqueOverview});
+  const _EstoqueTab({
+    required this.categoryNamesById,
+    required this.products,
+    required this.estoqueOverview,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +171,10 @@ class _EstoqueTab extends StatelessWidget {
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                     children: const [
-                      EmptyWidget(message: 'Nenhum produto cadastrado', icon: Icons.inventory_2_outlined),
+                      EmptyWidget(
+                        message: 'Nenhum produto cadastrado',
+                        icon: Icons.inventory_2_outlined,
+                      ),
                     ],
                   )
                 : GridView.builder(
@@ -235,6 +251,8 @@ class _InvoiceTile extends StatelessWidget {
       child: Semantics(
         button: true,
         label: semanticLabel,
+        onTap: () => InvoiceOverviewBottomSheet.show(context, invoice),
+        onTapHint: 'Ver detalhes da nota fiscal',
         excludeSemantics: true,
         child: InkWell(
           onTap: () => InvoiceOverviewBottomSheet.show(context, invoice),
@@ -262,7 +280,10 @@ class _InvoiceTile extends StatelessWidget {
                       Text(destino, maxLines: 1, overflow: TextOverflow.ellipsis),
                       Text(
                         data.issueDate.toFormattedDate(),
-                        style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -376,7 +397,8 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
   @override
   Widget build(BuildContext context) {
     final isShowingEntries = _selectedFilter == _InvoiceFilterType.entrada;
-    final invoices = (isShowingEntries ? widget.entryInvoices.values : widget.exitInvoices.values).toList();
+    final invoices = (isShowingEntries ? widget.entryInvoices.values : widget.exitInvoices.values)
+        .toList();
 
     final sectionTitle = isShowingEntries
         ? 'Notas de Entrada (${widget.entryInvoices.length})'
@@ -446,7 +468,9 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
                 ? ListView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    children: [EmptyWidget(message: emptyMessage, icon: Icons.receipt_long_outlined)],
+                    children: [
+                      EmptyWidget(message: emptyMessage, icon: Icons.receipt_long_outlined),
+                    ],
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -512,7 +536,11 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
               const SizedBox(height: 12),
               _ProductMovementSummaryCard(summary: summary),
               const SizedBox(height: 16),
-              _MovementSection(title: 'Entradas do produto', color: Colors.green, movements: entries),
+              _MovementSection(
+                title: 'Entradas do produto',
+                color: Colors.green,
+                movements: entries,
+              ),
               const SizedBox(height: 12),
               _MovementSection(title: 'Saídas do produto', color: Colors.orange, movements: exits),
             ],
@@ -533,7 +561,9 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       builder: (_) => _ProductDetailsBottomSheet(
         product: product,
         categoryName: categoryName,
@@ -643,7 +673,10 @@ class _ProdutoTile extends StatelessWidget {
               ),
               Text(
                 'R\$ ${product.price.toStringAsFixed(2)}',
-                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),
@@ -750,7 +783,11 @@ class _ResumoEstoqueRow extends StatelessWidget {
   final int semEstoque;
   final int estoqueBaixo;
 
-  const _ResumoEstoqueRow({required this.total, required this.semEstoque, required this.estoqueBaixo});
+  const _ResumoEstoqueRow({
+    required this.total,
+    required this.semEstoque,
+    required this.estoqueBaixo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -870,6 +907,8 @@ class _SectionHeader extends StatelessWidget {
       button: true,
       label: 'Filtro: $title',
       selected: isSelected,
+      onTap: onTap,
+      onTapHint: 'Aplicar filtro',
       excludeSemantics: true,
       child: InkWell(
         onTap: onTap,
