@@ -117,27 +117,36 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                   itemCount: logs.length,
                   itemBuilder: (context, index) {
                     final log = logs[index];
-                    return ListTile(
-                      title: Text('Código do Erro: ${log.code}'),
-                      subtitle: Text(log.message),
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            scrollable: true,
-                            title: const Text('Detalhes do Erro'),
-                            content: Text(
-                              'Código: ${log.code}\nMensagem: ${log.message}\nDetalhes: ${log.stackTrace}',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: const Text('Fechar'),
-                              ),
-                            ],
+                    void showLogDialog() {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          scrollable: true,
+                          title: const Text('Detalhes do Erro'),
+                          content: Text(
+                            'Código: ${log.code}\nMensagem: ${log.message}\nDetalhes: ${log.stackTrace}',
                           ),
-                        );
-                      },
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('Fechar'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    return Semantics(
+                      button: true,
+                      excludeSemantics: true,
+                      label: 'Erro código ${log.code}. Mensagem: ${log.message}',
+                      onTapHint: 'Ver detalhes do erro',
+                      onTap: showLogDialog,
+                      child: ListTile(
+                        title: Text('Código do Erro: ${log.code}'),
+                        subtitle: Text(log.message),
+                        onTap: showLogDialog,
+                      ),
                     );
                   },
                 );
