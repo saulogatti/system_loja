@@ -247,6 +247,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ListTile(
               leading: const Icon(Icons.restore),
               title: const Text('Restaurar Configurações Padrão'),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.pop(buildContext);
                 _confirmarRestaurarPadrao(context);
@@ -255,6 +256,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ListTile(
               leading: const Icon(Icons.backup),
               title: const Text('Restaurar de Backup'),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.pop(buildContext);
                 context.read<SettingsBloc>().add(const RestoreBackupEvent());
