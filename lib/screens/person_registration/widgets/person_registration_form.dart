@@ -51,7 +51,7 @@ class PersonRegistrationForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Cadastro de Pessoa', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          Text('Cadastro de Pessoa', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 20),
           SegmentedButton<PersonType>(
             segments: PersonType.values
