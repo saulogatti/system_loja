@@ -153,6 +153,9 @@
 ## 29-06-2026 - Missing Interactive Actions in Semantics
 **Learning:** When wrapping interactive widgets (like `ListTile` with `onTap`) in a `Semantics` widget and using `excludeSemantics: true` to provide a consolidated accessibility label, the semantic actions (like the tap action) of the child are stripped from the accessibility tree. This breaks screen reader interaction and keyboard navigation (Tab/Enter) on Flutter Web/Desktop.
 **Action:** Always redefine interaction properties (e.g., `onTap`, `onTapHint`, `onLongPress`) directly on the `Semantics` widget when using `excludeSemantics: true` around interactive child widgets.
+## 12-07-2026 - Standardizing Semantics for Interactive List Items
+**Learning:** Wrapping interactive list items (like logs with an `onTap` dialog) inside `Semantics(excludeSemantics: true)` consolidates screen reader reading, but it strips the inner `onTap` from the accessibility tree, breaking screen reader interactivity if the callback is not explicitly provided to the `Semantics` node.
+**Action:** Always extract the interaction logic (e.g., a local function `showDialog`) and assign it to BOTH the inner widget's `onTap` and the parent `Semantics` widget's `onTap` property. Ensure `button: true` and a helpful `onTapHint` are also defined on the `Semantics` node.
 ## 03-07-2024 - Semantic Wrapper Interaction Fix
 **Learning:** When using `Semantics(excludeSemantics: true)` around an interactive composite widget (like `Card` containing an `InkWell`), any native semantic actions are dropped. To preserve accessibility, `onTap` and `onTapHint` must be explicitly declared directly on the `Semantics` widget itself.
 **Action:** Always replicate `onTap` functionality and provide a clear `onTapHint` in the `Semantics` properties when wrapping custom clickable widgets to ensure full screen reader support.
