@@ -156,3 +156,6 @@
 ## 12-07-2026 - Standardizing Semantics for Interactive List Items
 **Learning:** Wrapping interactive list items (like logs with an `onTap` dialog) inside `Semantics(excludeSemantics: true)` consolidates screen reader reading, but it strips the inner `onTap` from the accessibility tree, breaking screen reader interactivity if the callback is not explicitly provided to the `Semantics` node.
 **Action:** Always extract the interaction logic (e.g., a local function `showDialog`) and assign it to BOTH the inner widget's `onTap` and the parent `Semantics` widget's `onTap` property. Ensure `button: true` and a helpful `onTapHint` are also defined on the `Semantics` node.
+## 03-07-2024 - Semantic Wrapper Interaction Fix
+**Learning:** When using `Semantics(excludeSemantics: true)` around an interactive composite widget (like `Card` containing an `InkWell`), any native semantic actions are dropped. To preserve accessibility, `onTap` and `onTapHint` must be explicitly declared directly on the `Semantics` widget itself.
+**Action:** Always replicate `onTap` functionality and provide a clear `onTapHint` in the `Semantics` properties when wrapping custom clickable widgets to ensure full screen reader support.
