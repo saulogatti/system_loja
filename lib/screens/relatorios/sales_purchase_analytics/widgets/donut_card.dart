@@ -22,6 +22,8 @@ class SalesPurchaseDonutCard extends StatelessWidget {
       child: Semantics(
         button: true,
         hint: 'Ampliar gráfico de distribuição',
+        onTap: () => _openZoom(context),
+        onTapHint: 'Ampliar gráfico de distribuição',
         child: Tooltip(
           message: 'Ampliar gráfico de distribuição',
           excludeFromSemantics: true,
@@ -120,7 +122,8 @@ class SalesPurchaseDonutCard extends StatelessWidget {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
-      builder: (context) => _DonutZoomDialog(totalSales: totalSales, totalPurchases: totalPurchases),
+      builder: (context) =>
+          _DonutZoomDialog(totalSales: totalSales, totalPurchases: totalPurchases),
     );
   }
 }
@@ -159,7 +162,10 @@ class _DonutLegendLine extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 'R\$ ${value.toStringAsFixed(2)} • $pctText%',
-                style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 12),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 12,
+                ),
               ),
             ],
           ),
@@ -329,7 +335,12 @@ class _DonutZoomDialog extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                _DonutLegendLine(color: Colors.green, title: 'Vendas', value: totalSales, percent: salesPct),
+                _DonutLegendLine(
+                  color: Colors.green,
+                  title: 'Vendas',
+                  value: totalSales,
+                  percent: salesPct,
+                ),
                 const SizedBox(height: 10),
                 _DonutLegendLine(
                   color: Colors.orange,
