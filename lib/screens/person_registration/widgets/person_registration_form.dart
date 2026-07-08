@@ -51,7 +51,12 @@ class PersonRegistrationForm extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Cadastro de Pessoa', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            'Cadastro de Pessoa',
+            style: Theme.of(
+              context,
+            ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 20),
           SegmentedButton<PersonType>(
             segments: PersonType.values
@@ -72,6 +77,7 @@ class PersonRegistrationForm extends StatelessWidget {
           TextFormField(
             controller: nameController,
             keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.words,
             autofillHints: [
               switch (selectedPersonType) {
                 PersonType.individual => AutofillHints.name,
