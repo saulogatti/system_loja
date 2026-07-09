@@ -23,10 +23,7 @@ class AddressForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          'Endereço',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
+        Text('Endereço', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
         TextFormField(
           controller: streetController,
@@ -36,6 +33,7 @@ class AddressForm extends StatelessWidget {
             prefixIcon: Icon(Icons.location_on),
           ),
           keyboardType: TextInputType.streetAddress,
+          textCapitalization: TextCapitalization.words,
           autofillHints: const [AutofillHints.streetAddressLine1],
           textInputAction: TextInputAction.next,
         ),
@@ -66,6 +64,7 @@ class AddressForm extends StatelessWidget {
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.map),
                 ),
+                textCapitalization: TextCapitalization.words,
                 autofillHints: const [AutofillHints.sublocality],
                 textInputAction: TextInputAction.next,
               ),
@@ -80,6 +79,7 @@ class AddressForm extends StatelessWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.location_city),
           ),
+          textCapitalization: TextCapitalization.words,
           autofillHints: const [AutofillHints.addressCity],
           textInputAction: TextInputAction.next,
         ),
@@ -98,10 +98,7 @@ class AddressForm extends StatelessWidget {
             prefixIcon: Icon(Icons.map),
           ),
           items: brazilianStates.map((BrazilianState state) {
-            return DropdownMenuItem<BrazilianState>(
-              value: state,
-              child: Text(state.displayName),
-            );
+            return DropdownMenuItem<BrazilianState>(value: state, child: Text(state.displayName));
           }).toList(),
           onChanged: (BrazilianState? newValue) {
             if (newValue != null) {

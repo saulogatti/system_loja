@@ -72,6 +72,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
                 TextFormField(
                   controller: _nameController,
                   keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.words,
                   autofillHints: const [AutofillHints.organizationName],
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
@@ -95,15 +96,9 @@ class _CompanyEditViewState extends State<CompanyEditView> {
                   enabled: false,
                 ),
                 const SizedBox(height: 16),
-                TextFormFieldEmail(
-                  emailController: _emailController,
-                  isEditing: true,
-                ),
+                TextFormFieldEmail(emailController: _emailController, isEditing: true),
                 const SizedBox(height: 16),
-                TextFormFieldPhone(
-                  telefoneController: _phoneController,
-                  isEditing: true,
-                ),
+                TextFormFieldPhone(telefoneController: _phoneController, isEditing: true),
                 const SizedBox(height: 16),
                 AddressForm(
                   streetController: _streetController,
@@ -172,9 +167,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     _phoneController = TextEditingController(text: company.phone ?? '');
     _streetController = TextEditingController(text: company.address.street);
     _zipCodeController = TextEditingController(text: company.address.zipCode);
-    _neighborhoodController = TextEditingController(
-      text: company.address.neighborhood,
-    );
+    _neighborhoodController = TextEditingController(text: company.address.neighborhood);
     _cityController = TextEditingController(text: company.address.city);
     _stateController = TextEditingController(text: company.address.state);
   }
@@ -234,25 +227,19 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     _hideLoadingIfNeeded();
 
     if (state is CompanyEditSaved) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(state.message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
       context.router.maybePop(true);
       return;
     }
 
     if (state is CompanyEditDeleted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(state.message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
       context.router.maybePop(true);
       return;
     }
 
     if (state is CompanyEditError) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(state.message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
     }
   }
 
@@ -293,10 +280,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     );
   }
 
-  Widget _buildReadOnlyDateField({
-    required String label,
-    required String value,
-  }) {
+  Widget _buildReadOnlyDateField({required String label, required String value}) {
     return TextFormField(
       initialValue: value,
       decoration: InputDecoration(
