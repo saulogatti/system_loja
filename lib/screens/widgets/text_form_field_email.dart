@@ -6,11 +6,7 @@ class TextFormFieldEmail extends StatelessWidget {
   final TextEditingController emailController;
 
   final bool isEditing;
-  const TextFormFieldEmail({
-    required this.emailController,
-    required this.isEditing,
-    super.key,
-  });
+  const TextFormFieldEmail({required this.emailController, required this.isEditing, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +19,12 @@ class TextFormFieldEmail extends StatelessWidget {
       ),
       enabled: isEditing,
       keyboardType: TextInputType.emailAddress,
+      autocorrect: false,
+      enableSuggestions: false,
       autofillHints: const [AutofillHints.email],
       textInputAction: TextInputAction.next,
       inputFormatters: [
-        FilteringTextInputFormatter.deny(
-          Constants.oneOrMoreWhitespaceRegExp,
-        ), // Remove espaços
+        FilteringTextInputFormatter.deny(Constants.oneOrMoreWhitespaceRegExp), // Remove espaços
         FilteringTextInputFormatter.deny(Constants.accentedCharsRegExp),
       ],
       validator: (value) {

@@ -73,6 +73,7 @@ class _CustomerEditViewState extends State<CustomerEditView> {
                 TextFormField(
                   controller: _nameController,
                   keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.words,
                   autofillHints: const [AutofillHints.name],
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
@@ -87,15 +88,9 @@ class _CustomerEditViewState extends State<CustomerEditView> {
                 const SizedBox(height: 16),
                 TextFormFieldCpf(cpfController: _cpfController, enable: false),
                 const SizedBox(height: 16),
-                TextFormFieldEmail(
-                  emailController: _emailController,
-                  isEditing: true,
-                ),
+                TextFormFieldEmail(emailController: _emailController, isEditing: true),
                 const SizedBox(height: 16),
-                TextFormFieldPhone(
-                  telefoneController: _phoneController,
-                  isEditing: true,
-                ),
+                TextFormFieldPhone(telefoneController: _phoneController, isEditing: true),
                 const SizedBox(height: 16),
                 AddressForm(
                   streetController: _streetController,
@@ -164,9 +159,7 @@ class _CustomerEditViewState extends State<CustomerEditView> {
     _phoneController = TextEditingController(text: customer.phone ?? '');
     _streetController = TextEditingController(text: customer.address.street);
     _zipCodeController = TextEditingController(text: customer.address.zipCode);
-    _neighborhoodController = TextEditingController(
-      text: customer.address.neighborhood,
-    );
+    _neighborhoodController = TextEditingController(text: customer.address.neighborhood);
     _cityController = TextEditingController(text: customer.address.city);
     _stateController = TextEditingController(text: customer.address.state);
   }
@@ -226,25 +219,19 @@ class _CustomerEditViewState extends State<CustomerEditView> {
     _hideLoadingIfNeeded();
 
     if (state is CustomerEditSaved) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(state.message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
       context.router.maybePop(true);
       return;
     }
 
     if (state is CustomerEditDeleted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(state.message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
       context.router.maybePop(true);
       return;
     }
 
     if (state is CustomerEditError) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(state.message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
     }
   }
 
@@ -285,10 +272,7 @@ class _CustomerEditViewState extends State<CustomerEditView> {
     );
   }
 
-  Widget _buildReadOnlyDateField({
-    required String label,
-    required String value,
-  }) {
+  Widget _buildReadOnlyDateField({required String label, required String value}) {
     return TextFormField(
       initialValue: value,
       decoration: InputDecoration(
