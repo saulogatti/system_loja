@@ -202,6 +202,8 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
             TextFormField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
+              autocorrect: false,
+              enableSuggestions: false,
               textInputAction: TextInputAction.next,
               autofillHints: const [AutofillHints.email],
               decoration: const InputDecoration(

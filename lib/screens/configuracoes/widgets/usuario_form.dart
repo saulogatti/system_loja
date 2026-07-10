@@ -53,6 +53,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
           TextFormField(
             controller: widget.nomeController,
             keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.words,
             textInputAction: TextInputAction.next,
             autofillHints: const [AutofillHints.name],
             decoration: const InputDecoration(
@@ -69,6 +70,8 @@ class _UsuarioFormState extends State<UsuarioForm> {
           TextFormField(
             controller: widget.emailController,
             keyboardType: TextInputType.emailAddress,
+            autocorrect: false,
+            enableSuggestions: false,
             textInputAction: TextInputAction.next,
             autofillHints: const [AutofillHints.email],
             decoration: const InputDecoration(
