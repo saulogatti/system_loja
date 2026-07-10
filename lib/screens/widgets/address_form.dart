@@ -88,7 +88,7 @@ class AddressForm extends StatelessWidget {
           initialValue: stateController.text.isEmpty
               ? null
               : BrazilianState.values.firstWhere(
-                  (state) => state.displayName == stateController.text,
+                  (state) => state.displayName.toLowerCase() == stateController.text.toLowerCase(),
                   orElse: () => BrazilianState.values.first,
                 ),
 
