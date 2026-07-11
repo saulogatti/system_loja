@@ -663,7 +663,7 @@ class _ProdutoTile extends StatelessWidget {
     }
 
     final semanticLabel =
-        'Produto: ${product.name}, Código: ${product.code}, Categoria: $categoryName, Estoque: ${product.stockQuantity} unidades, Preço: R\$ ${product.price.toStringAsFixed(2)}';
+        'Produto: ${product.name}, Código: ${product.code}, Categoria: $categoryName, Estoque: ${product.stockQuantity} ${product.stockQuantity == 1 ? 'unidade' : 'unidades'}, Preço: R\$ ${product.price.toStringAsFixed(2)}';
 
     return Card(
       margin: EdgeInsets.zero,
