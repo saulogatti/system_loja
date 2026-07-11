@@ -159,3 +159,6 @@
 ## 03-07-2024 - Semantic Wrapper Interaction Fix
 **Learning:** When using `Semantics(excludeSemantics: true)` around an interactive composite widget (like `Card` containing an `InkWell`), any native semantic actions are dropped. To preserve accessibility, `onTap` and `onTapHint` must be explicitly declared directly on the `Semantics` widget itself.
 **Action:** Always replicate `onTap` functionality and provide a clear `onTapHint` in the `Semantics` properties when wrapping custom clickable widgets to ensure full screen reader support.
+## 25-07-2024 - [Visual Affordance on Interactive List Items]
+**Learning:** When using `ListTile` widgets for interactive elements (e.g., selection dialogs, navigation, or opening bottom sheets), relying solely on the `onTap` property and implicit interaction (like Ink ripples) may not be enough visual affordance for users to realize the entire row is tappable.
+**Action:** Always add a trailing icon (like `Icons.add_circle_outline` for selection or `Icons.chevron_right` for details/navigation) to provide clear visual affordance indicating the row is tappable.

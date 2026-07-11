@@ -340,24 +340,44 @@ class _MovementSection extends StatelessWidget {
               ...movements.map((movement) {
                 final invoice = movement.invoice;
                 final item = movement.item;
-                return ListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    'NF ${invoice.data.invoiceNumber} • ${invoice.data.personDisplayName}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                final onTap = () => InvoiceOverviewBottomSheet.show(context, invoice);
+                final semanticLabel =
+                    'Nota Fiscal ${invoice.data.invoiceNumber}, Cliente ${invoice.data.personDisplayName}, Data ${invoice.data.issueDate.toFormattedDate()}, Quantidade ${item.quantity}, Preço unitário R\$ ${item.unitPrice.toStringAsFixed(2)}, Valor total R\$ ${item.totalValue.toStringAsFixed(2)}';
+                return Semantics(
+                  button: true,
+                  label: semanticLabel,
+                  excludeSemantics: true,
+                  onTap: onTap,
+                  onTapHint: 'Ver detalhes da nota fiscal',
+                  child: ListTile(
+                    dense: true,
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      'NF ${invoice.data.invoiceNumber} • ${invoice.data.personDisplayName}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(
+                      '${invoice.data.issueDate.toFormattedDate()} • Qtd: ${item.quantity} • Unit: R\$ ${item.unitPrice.toStringAsFixed(2)}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'R\$ ${item.totalValue.toStringAsFixed(2)}',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    onTap: onTap,
                   ),
-                  subtitle: Text(
-                    '${invoice.data.issueDate.toFormattedDate()} • Qtd: ${item.quantity} • Unit: R\$ ${item.unitPrice.toStringAsFixed(2)}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing: Text(
-                    'R\$ ${item.totalValue.toStringAsFixed(2)}',
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  onTap: () => InvoiceOverviewBottomSheet.show(context, invoice),
                 );
               }),
           ],
@@ -642,43 +662,64 @@ class _ProdutoTile extends StatelessWidget {
       stockIcon = Icons.check_circle_outline;
     }
 
+    final semanticLabel =
+        'Produto: ${product.name}, Código: ${product.code}, Categoria: $categoryName, Estoque: ${product.stockQuantity} unidades, Preço: R\$ ${product.price.toStringAsFixed(2)}';
+
     return Card(
       margin: EdgeInsets.zero,
       child: Center(
-        child: ListTile(
+        child: Semantics(
+          button: true,
+          label: semanticLabel,
+          excludeSemantics: true,
           onTap: onTap,
-          leading: CircleAvatar(
-            backgroundColor: stockColor.withValues(alpha: 0.15),
-            child: Icon(stockIcon, color: stockColor, size: 20),
-          ),
-          title: Text(
-            product.name,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: Text(
-            'Código: ${product.code}\nCategoria: $categoryName',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          isThreeLine: true,
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '${product.stockQuantity} un.',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: stockColor),
-              ),
-              Text(
-                'R\$ ${product.price.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+          onTapHint: 'Ver detalhes do produto',
+          child: ListTile(
+            onTap: onTap,
+            leading: CircleAvatar(
+              backgroundColor: stockColor.withValues(alpha: 0.15),
+              child: Icon(stockIcon, color: stockColor, size: 20),
+            ),
+            title: Text(
+              product.name,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            subtitle: Text(
+              'Código: ${product.code}\nCategoria: $categoryName',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            isThreeLine: true,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      '${product.stockQuantity} un.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: stockColor,
+                      ),
+                    ),
+                    Text(
+                      'R\$ ${product.price.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+                const SizedBox(width: 8),
+                Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              ],
+            ),
           ),
         ),
       ),
