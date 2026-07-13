@@ -364,17 +364,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         title: const Text('Confirmar Exclusão'),
         content: const Text('Tem certeza que deseja excluir este produto?'),
         actions: [
-          TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context); // Fecha o diálogo
-              context.read<ProductCubit>().deleteProduct(widget.product.id);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
-              foregroundColor: Theme.of(context).colorScheme.onError,
+          SizedBox(
+            width: double.maxFinite,
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => context.router.maybePop(),
+                    child: const Text('Cancelar'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Fecha o diálogo
+                      context.read<ProductCubit>().deleteProduct(widget.product.id);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Theme.of(context).colorScheme.onError,
+                    ),
+                    child: const Text('Deletar'),
+                  ),
+                ),
+              ],
             ),
-            child: const Text('Deletar'),
           ),
         ],
       ),
