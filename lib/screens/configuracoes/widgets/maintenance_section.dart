@@ -71,6 +71,7 @@ class MaintenanceSection extends StatelessWidget {
               title: const Text('Analisar logs do sistema'),
               subtitle: const Text('Abrir análise detalhada dos logs'),
               leading: const Icon(Icons.analytics),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () => onOpenLogsAnalysis(context),
             ),
             ListTile(
