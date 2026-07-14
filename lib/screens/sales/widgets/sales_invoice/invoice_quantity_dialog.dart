@@ -76,7 +76,7 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       final qtd = int.parse(_controller.text.trim());
-                      Navigator.pop(context, qtd);
+                      context.router.maybePop(qtd);
                     }
                   },
                   child: const Text('OK'),
