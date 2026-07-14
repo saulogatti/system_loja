@@ -10,11 +10,7 @@ class InvoiceQuantityDialog extends StatefulWidget {
   final Product product;
 
   final InvoiceType invoiceType;
-  const InvoiceQuantityDialog({
-    required this.product,
-    required this.invoiceType,
-    super.key,
-  });
+  const InvoiceQuantityDialog({required this.product, required this.invoiceType, super.key});
 
   @override
   State<InvoiceQuantityDialog> createState() => _InvoiceQuantityDialogState();
@@ -55,8 +51,7 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
             if (error != null) return error;
 
             final qtd = int.parse(value!.trim());
-            if (widget.invoiceType == InvoiceType.exit &&
-                qtd > product.stockQuantity) {
+            if (widget.invoiceType == InvoiceType.exit && qtd > product.stockQuantity) {
               return 'Quantidade maior que o estoque disponível';
             }
 
@@ -65,18 +60,30 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => context.router.maybePop(),
-          child: const Text('Cancelar'),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              final qtd = int.parse(_controller.text.trim());
-              Navigator.pop(context, qtd);
-            }
-          },
-          child: const Text('OK'),
+        SizedBox(
+          width: double.maxFinite,
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => context.router.maybePop(),
+                  child: const Text('Cancelar'),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      final qtd = int.parse(_controller.text.trim());
+                      context.router.maybePop(qtd);
+                    }
+                  },
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

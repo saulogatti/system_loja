@@ -162,3 +162,6 @@
 ## 25-07-2024 - [Visual Affordance on Interactive List Items]
 **Learning:** When using `ListTile` widgets for interactive elements (e.g., selection dialogs, navigation, or opening bottom sheets), relying solely on the `onTap` property and implicit interaction (like Ink ripples) may not be enough visual affordance for users to realize the entire row is tappable.
 **Action:** Always add a trailing icon (like `Icons.add_circle_outline` for selection or `Icons.chevron_right` for details/navigation) to provide clear visual affordance indicating the row is tappable.
+## 12-05-2024 - [Symmetrical Dialog Actions Constraints]
+**Learning:** When arranging action buttons symmetrically inside a Flutter `AlertDialog`'s `actions` list using a `Row` and `Expanded` widgets, a `RenderFlex` exception can occur. This is because the default `OverflowBar` used internally for actions lacks explicit width constraints.
+**Action:** Always wrap the `Row` containing the `Expanded` buttons in a `SizedBox(width: double.maxFinite)` to provide the necessary constraints and prevent the exception.

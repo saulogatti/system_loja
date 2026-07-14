@@ -17,14 +17,32 @@ class UsuarioDeleteConfirmDialog extends StatelessWidget {
       title: const Text('Confirmar Exclusão'),
       content: Text('Deseja realmente excluir o usuário "${usuario.name}"?'),
       actions: [
-        TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-            onConfirm();
-          },
-          style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.error),
-          child: const Text('Excluir'),
+        SizedBox(
+          width: double.maxFinite,
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => context.router.maybePop(),
+                  child: const Text('Cancelar'),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    onConfirm();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    foregroundColor: Theme.of(context).colorScheme.onError,
+                  ),
+                  child: const Text('Excluir'),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
