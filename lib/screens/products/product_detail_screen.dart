@@ -378,7 +378,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context); // Fecha o diálogo
+                      context.router.maybePop(); // Fecha o diálogo
                       context.read<ProductCubit>().deleteProduct(widget.product.id);
                     },
                     style: ElevatedButton.styleFrom(
