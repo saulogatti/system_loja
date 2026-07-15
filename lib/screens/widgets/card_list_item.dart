@@ -28,7 +28,7 @@ class CardListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final semanticLabel = '$title, $subTitle';
+    final semanticLabel = subTitle.isNotEmpty ? '$title, $subTitle' : title;
 
     return Card(
       elevation: 2,
