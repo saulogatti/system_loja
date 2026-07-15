@@ -28,6 +28,8 @@ class CardListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final semanticLabel = subTitle.isNotEmpty ? '$title, $subTitle' : title;
+
     return Card(
       elevation: 2,
       margin: margin,
@@ -38,20 +40,27 @@ class CardListItem extends StatelessWidget {
           minVerticalPadding: 4,
           titleAlignment: ListTileTitleAlignment.center,
 
-          leading: CircleAvatar(
-            backgroundColor: colorAvatar,
-            child: Text(switch (title.isNotEmpty) {
-              true => title[0].toUpperCase(),
-              _ => '',
-            }, style: const TextStyle(color: Colors.white)),
+          leading: ExcludeSemantics(
+            child: CircleAvatar(
+              backgroundColor: colorAvatar,
+              child: Text(switch (title.isNotEmpty) {
+                true => title[0].toUpperCase(),
+                _ => '',
+              }, style: const TextStyle(color: Colors.white)),
+            ),
           ),
-          title: Text(
-            title,
-            maxLines: titleMaxLines,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+          title: Semantics(
+            label: semanticLabel,
+            child: Text(
+              title,
+              maxLines: titleMaxLines,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
-          subtitle: Text(subTitle, maxLines: subTitleMaxLines, overflow: TextOverflow.ellipsis),
+          subtitle: ExcludeSemantics(
+            child: Text(subTitle, maxLines: subTitleMaxLines, overflow: TextOverflow.ellipsis),
+          ),
           isThreeLine: subTitleMaxLines > 1,
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
