@@ -183,25 +183,40 @@ class _ProductCategoryState extends State<ProductCategory> {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => context.router.pop(), child: const Text('Cancelar')),
-          ElevatedButton(
-            onPressed: () async {
-              if (formKey.currentState!.validate()) {
-                // Use parent context to access the cubit
-                final cubit = parentContext.read<CategoryCubit>();
-                await cubit.createCategory(
-                  name: nameController.text.trim(),
-                  description: descriptionController.text.trim().isEmpty
-                      ? null
-                      : descriptionController.text.trim(),
-                );
+          SizedBox(
+            width: double.maxFinite,
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => context.router.pop(),
+                    child: const Text('Cancelar'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (formKey.currentState!.validate()) {
+                        // Use parent context to access the cubit
+                        final cubit = parentContext.read<CategoryCubit>();
+                        await cubit.createCategory(
+                          name: nameController.text.trim(),
+                          description: descriptionController.text.trim().isEmpty
+                              ? null
+                              : descriptionController.text.trim(),
+                        );
 
-                if (context.mounted) {
-                  context.router.pop();
-                }
-              }
-            },
-            child: const Text('Criar'),
+                        if (context.mounted) {
+                          context.router.pop();
+                        }
+                      }
+                    },
+                    child: const Text('Criar'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
