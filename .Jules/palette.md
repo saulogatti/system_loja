@@ -165,3 +165,15 @@
 ## 12-05-2024 - [Symmetrical Dialog Actions Constraints]
 **Learning:** When arranging action buttons symmetrically inside a Flutter `AlertDialog`'s `actions` list using a `Row` and `Expanded` widgets, a `RenderFlex` exception can occur. This is because the default `OverflowBar` used internally for actions lacks explicit width constraints.
 **Action:** Always wrap the `Row` containing the `Expanded` buttons in a `SizedBox(width: double.maxFinite)` to provide the necessary constraints and prevent the exception.
+
+## 25-10-2023 - CardListItem Accessibility
+**Learning:** Reusable card list items built around `ListTile` often cause disjointed reading experiences for screen reader users because the title and subtitle are read separately, and the touch target doesn't clearly convey its action.
+**Action:** When wrapping a `ListTile` with `Semantics` to consolidate information using `excludeSemantics: true`, always extract the interaction callback (`onTap`) and assign it to BOTH the `Semantics` node and the inner `ListTile` to ensure the action is accessible while preserving native visual feedback (InkWell ripple). Use a descriptive `label` that combines the relevant text fields, set `button: true`, and provide an `onTapHint`.
+
+## 25-10-2023 - Interactive Semantics with Trailing Actions
+**Learning:** Using `excludeSemantics: true` on a parent `Semantics` widget effectively hides all inner semantics. If the widget contains multiple distinct semantic actions (e.g., a tap for details, and a trailing `IconButton` for deletion), the `excludeSemantics: true` approach breaks the secondary actions.
+**Action:** When a composite widget needs to consolidate some text but preserve independent inner actions (like an `IconButton`), do not use `excludeSemantics: true` on the parent. Instead, use `MergeSemantics` at the root, provide the primary `label` and `onTap` on the main `Semantics` node, and selectively wrap the text elements in `ExcludeSemantics` while leaving the trailing interactive elements (like buttons) untouched.
+
+## 25-10-2023 - Semantics Targeting in ListTiles
+**Learning:** Wrapping a `ListTile` completely in `MergeSemantics` or `excludeSemantics` can inadvertently break independent interactive elements within the tile (like a trailing delete button).
+**Action:** When a `ListTile` needs its text consolidated for screen readers but also contains independent actions (like an `IconButton`), do not wrap the entire tile in `Semantics`. Instead, wrap the primary text (usually the `title`) in `Semantics(label: ...)` to provide the full context, and wrap the auxiliary text (`subtitle`, `leading`) in `ExcludeSemantics`. This keeps the tile's main tap area and trailing buttons accessible and independent.
