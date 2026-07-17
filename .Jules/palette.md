@@ -177,3 +177,6 @@
 ## 25-10-2023 - Semantics Targeting in ListTiles
 **Learning:** Wrapping a `ListTile` completely in `MergeSemantics` or `excludeSemantics` can inadvertently break independent interactive elements within the tile (like a trailing delete button).
 **Action:** When a `ListTile` needs its text consolidated for screen readers but also contains independent actions (like an `IconButton`), do not wrap the entire tile in `Semantics`. Instead, wrap the primary text (usually the `title`) in `Semantics(label: ...)` to provide the full context, and wrap the auxiliary text (`subtitle`, `leading`) in `ExcludeSemantics`. This keeps the tile's main tap area and trailing buttons accessible and independent.
+## 17-07-2024 - Active state feedback in selection dialogs
+**Learning:** When users make a selection in dialogs, relying only on changing the internal state without clear visual feedback in the dialog itself makes it hard to remember the current selection, and missing `selected: true` in semantics hides this from screen readers.
+**Action:** Always wrap `SimpleDialogOption` in `Semantics(selected: isSelected)` and add visual cues like bold text, active border colors, and a trailing checkmark for the currently selected item.

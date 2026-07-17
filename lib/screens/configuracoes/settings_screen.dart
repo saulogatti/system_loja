@@ -203,22 +203,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (dialogContext) => SimpleDialog(
         title: const Text('Escolher Cor'),
         children: EnumColorAppThemeSettings.values.map((entry) {
-          return SimpleDialogOption(
-            onPressed: () => Navigator.pop(dialogContext, entry),
-            child: Row(
-              children: [
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: entry.color,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: Colors.grey),
+          final isSelected = config.corPrimaria == entry;
+          return Semantics(
+            selected: isSelected,
+            child: SimpleDialogOption(
+              onPressed: () => Navigator.pop(dialogContext, entry),
+              child: Row(
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: entry.color,
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey,
+                        width: isSelected ? 2.0 : 1.0,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                Text(entry.name, style: TextStyle(fontWeight: FontWeight.normal)),
-              ],
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      entry.name,
+                      style: TextStyle(
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                  if (isSelected) Icon(Icons.check, color: Theme.of(context).colorScheme.primary),
+                ],
+              ),
             ),
           );
         }).toList(),
@@ -275,14 +290,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (dialogContext) => SimpleDialog(
         title: const Text('Frequência de Backup'),
         children: FrequenciaBackup.values.map((opcao) {
-          return SimpleDialogOption(
-            onPressed: () => Navigator.pop(dialogContext, opcao),
-            child: Text(
-              opcao.label,
-              style: TextStyle(
-                fontWeight: config.frequenciaBackup == opcao.value
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+          final isSelected = config.frequenciaBackup == opcao.value;
+          return Semantics(
+            selected: isSelected,
+            child: SimpleDialogOption(
+              onPressed: () => Navigator.pop(dialogContext, opcao),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      opcao.label,
+                      style: TextStyle(
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                  if (isSelected) Icon(Icons.check, color: Theme.of(context).colorScheme.primary),
+                ],
               ),
             ),
           );
