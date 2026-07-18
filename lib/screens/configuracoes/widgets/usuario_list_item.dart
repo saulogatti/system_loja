@@ -22,6 +22,13 @@ class UsuarioListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final permissionName = AuthorizationLevel.values
+        .firstWhere((level) => level.value == usuario.permission)
+        .toDisplayName();
+    final semanticLabel = usuario.email != null && usuario.email!.isNotEmpty
+        ? '${usuario.name}, ${usuario.email}, $permissionName'
+        : '${usuario.name}, $permissionName';
+
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
@@ -29,22 +36,27 @@ class UsuarioListItem extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
         minVerticalPadding: 0,
         titleAlignment: ListTileTitleAlignment.center,
-        leading: CircleAvatar(
-          backgroundColor: switch (usuario.permission) {
-            _ when usuario.permission == AuthorizationLevel.administrador.value => Theme.of(context).colorScheme.secondary,
-            _ => Theme.of(context).colorScheme.primary,
-          },
-          child: Icon(
-            usuario.permission == AuthorizationLevel.administrador.value
-                ? Icons.admin_panel_settings
-                : Icons.person,
-            color: Colors.white,
+        leading: ExcludeSemantics(
+          child: CircleAvatar(
+            backgroundColor: switch (usuario.permission) {
+              _ when usuario.permission == AuthorizationLevel.administrador.value => Theme.of(
+                context,
+              ).colorScheme.secondary,
+              _ => Theme.of(context).colorScheme.primary,
+            },
+            child: Icon(
+              usuario.permission == AuthorizationLevel.administrador.value
+                  ? Icons.admin_panel_settings
+                  : Icons.person,
+              color: Colors.white,
+            ),
           ),
         ),
-        title: Text(usuario.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(
-          '${usuario.email}\n${AuthorizationLevel.values.firstWhere((level) => level.value == usuario.permission).toDisplayName()}',
+        title: Semantics(
+          label: semanticLabel,
+          child: Text(usuario.name, style: const TextStyle(fontWeight: FontWeight.bold)),
         ),
+        subtitle: ExcludeSemantics(child: Text('${usuario.email ?? ''}\n$permissionName'.trim())),
         isThreeLine: true,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
