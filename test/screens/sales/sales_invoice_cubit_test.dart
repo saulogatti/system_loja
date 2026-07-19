@@ -14,13 +14,13 @@ void main() {
   late _FakeSalesCubit salesCubit;
 
   Product product({required int id, int stock = 100, double price = 10}) => Product(
-      name: 'P$id',
-      description: '',
-      price: price,
-      stockQuantity: stock,
-      code: 'C$id',
-      id: id,
-    );
+    name: 'P$id',
+    description: '',
+    price: price,
+    stockQuantity: stock,
+    code: 'C$id',
+    id: id,
+  );
 
   Customer customer({int id = 1}) => Customer(name: 'João', cpf: '00000000000', id: id);
 
@@ -41,22 +41,16 @@ void main() {
       expect(cubit.state.form.computeTotal(), 10 * 2 + 5 * 3);
     });
 
-    test(
-      'saída com quantidade acima do estoque emite SalesInvoiceFeedback',
-      () {
-        final cubit = SalesInvoiceCubit(
-          salesCubit: salesCubit,
-          paymentMethods: [PaymentMethodType.pix],
-        );
-        final p = product(id: 1, stock: 5);
-        cubit.addOrMergeLine(p, 10);
-        expect(cubit.state, isA<SalesInvoiceFeedback>());
-        expect(
-          (cubit.state as SalesInvoiceFeedback).message,
-          contains('Estoque insuficiente'),
-        );
-      },
-    );
+    test('saída com quantidade acima do estoque emite SalesInvoiceFeedback', () {
+      final cubit = SalesInvoiceCubit(
+        salesCubit: salesCubit,
+        paymentMethods: [PaymentMethodType.pix],
+      );
+      final p = product(id: 1, stock: 5);
+      cubit.addOrMergeLine(p, 10);
+      expect(cubit.state, isA<SalesInvoiceFeedback>());
+      expect((cubit.state as SalesInvoiceFeedback).message, contains('Estoque insuficiente'));
+    });
 
     test('entrada permite quantidade acima do estoque', () {
       final cubit = SalesInvoiceCubit(
@@ -130,10 +124,7 @@ class _FakeSalesCubit extends Fake implements SalesCubit {
   Stream<SalesState> get stream => Stream.value(SalesSaved(items: const {}));
 
   @override
-  Future<void> registerSale(
-    InvoiceData invoiceData,
-    bool enableCodeGeneration,
-  ) async {
+  Future<void> registerSale(InvoiceData invoiceData, {bool enableCodeGeneration = false}) async {
     registerSaleCalls++;
   }
 }

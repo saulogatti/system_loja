@@ -13,7 +13,7 @@ sealed class UsuarioState with _$UsuarioState {
 
   const factory UsuarioState.loadSuccess({required List<User> usuarios}) = UsuarioStateLoadSuccess;
   const factory UsuarioState.senhaInvalida(String mensagem) = UsuarioStateSenhaInvalida;
-  const factory UsuarioState.usuarioAdicionado(User usuario, bool novoUsuario) =
+  const factory UsuarioState.usuarioAdicionado(User usuario, {required bool novoUsuario}) =
       UsuarioStateUsuarioAdicionado;
   const factory UsuarioState.usuarioRemovido(int id) = UsuarioStateUsuarioRemovido;
 }

@@ -6,7 +6,6 @@ import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 
 class UserCubit extends Cubit<UsuarioState> {
-
   UserCubit(this._userRepository) : super(UsuarioState.initial());
   final IUserRepository _userRepository;
 
@@ -27,9 +26,11 @@ class UserCubit extends Cubit<UsuarioState> {
     executionResult.when(
       onSuccess: (sucesso) {
         if (sucesso) {
-          emit(UsuarioState.usuarioAdicionado(usuario, true));
+          emit(UsuarioState.usuarioAdicionado(usuario, novoUsuario: true));
         } else {
-          emit(const UsuarioState.loadFailure(errorMessage: 'Não foi possível adicionar o usuário.'));
+          emit(
+            const UsuarioState.loadFailure(errorMessage: 'Não foi possível adicionar o usuário.'),
+          );
         }
       },
       onError: (resultError) {
@@ -43,7 +44,7 @@ class UserCubit extends Cubit<UsuarioState> {
     resultAdd.when(
       onSuccess: (sucesso) {
         if (sucesso) {
-          emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
+          emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, novoUsuario: false));
         } else {
           emit(const UsuarioState.loadFailure(errorMessage: 'Falha ao atualizar usuário.'));
         }

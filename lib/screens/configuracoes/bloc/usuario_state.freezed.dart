@@ -474,7 +474,7 @@ as String,
 
 
 class UsuarioStateUsuarioAdicionado implements UsuarioState {
-  const UsuarioStateUsuarioAdicionado(this.usuario, this.novoUsuario);
+  const UsuarioStateUsuarioAdicionado(this.usuario, {required this.novoUsuario});
   
 
  final  User usuario;
@@ -530,7 +530,7 @@ class _$UsuarioStateUsuarioAdicionadoCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? usuario = null,Object? novoUsuario = null,}) {
   return _then(UsuarioStateUsuarioAdicionado(
 null == usuario ? _self.usuario : usuario // ignore: cast_nullable_to_non_nullable
-as User,null == novoUsuario ? _self.novoUsuario : novoUsuario // ignore: cast_nullable_to_non_nullable
+as User,novoUsuario: null == novoUsuario ? _self.novoUsuario : novoUsuario // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

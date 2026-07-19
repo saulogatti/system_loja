@@ -148,7 +148,10 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
     try {
       _configuration = novaConfiguracao;
       await _salvarDados();
-      _settingsService.updateSettings(novaConfiguracao.corPrimaria, novaConfiguracao.temaEscuro);
+      _settingsService.updateSettings(
+        novaConfiguracao.corPrimaria,
+        temaEscuro: novaConfiguracao.temaEscuro,
+      );
       logInfo('Configuração atualizada com sucesso');
       return ResultStatus.success(_configuration);
     } catch (e, stackTrace) {
@@ -169,7 +172,10 @@ class ConfigurationRepository with LoggerClassMixin implements IConfigurationRep
     } else {
       _configuration = AppSettings.createDefaultSettings();
     }
-    _settingsService.updateSettings(_configuration.corPrimaria, _configuration.temaEscuro);
+    _settingsService.updateSettings(
+      _configuration.corPrimaria,
+      temaEscuro: _configuration.temaEscuro,
+    );
   }
 
   Future<void> _salvarDados() async {

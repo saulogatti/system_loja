@@ -14,7 +14,7 @@ class SettingsService implements ISettingsService {
   ThemeData get currentTheme => currentThemeNotifier.value;
   bool get temaEscuro => _temaEscuro;
   @override
-  void updateSettings(EnumColorAppThemeSettings corPrimaria, bool temaEscuro) {
+  void updateSettings(EnumColorAppThemeSettings corPrimaria, {bool temaEscuro = false}) {
     if (temaEscuro) {
       _appTheme = AppTheme.dark(seedColor: corPrimaria.color);
     } else {
