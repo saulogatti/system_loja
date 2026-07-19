@@ -17,8 +17,13 @@ class InvoiceLineTile extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
-        title: Text(product.name),
-        subtitle: Text('${entry.quantity}x R\$ ${product.price.toStringAsFixed(2)}'),
+        title: Semantics(
+          label: '${product.name}, ${entry.quantity} vezes R\$ ${product.price.toStringAsFixed(2)}',
+          child: Text(product.name),
+        ),
+        subtitle: ExcludeSemantics(
+          child: Text('${entry.quantity}x R\$ ${product.price.toStringAsFixed(2)}'),
+        ),
         trailing: IconButton(
           tooltip: 'Remover ${product.name}',
           icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
