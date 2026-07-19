@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/constants/app_constants.dart';
 import 'package:system_loja/core/models/product.dart';
-import 'package:system_loja/screens/products/widgets/product_category.dart';
+import 'package:system_loja/screens/products/widgets/product_category_widget.dart';
 import 'package:system_loja/screens/utils/input_formatters.dart';
 import 'package:system_loja/screens/utils/validators.dart';
 
@@ -9,17 +10,6 @@ import 'package:system_loja/screens/utils/validators.dart';
 ///
 /// Encapsula os campos de entrada e validações para criação de novos produtos.
 class ProductForm extends StatefulWidget {
-  final GlobalKey<FormState> formKey;
-  final TextEditingController nomeController;
-  final TextEditingController codigoController;
-  final TextEditingController precoController;
-  final TextEditingController estoqueController;
-  final TextEditingController descricaoController;
-  final ValueChanged<bool> onSubmit;
-  final int? selectedCategoryId;
-  final ValueChanged<int?> onCategoryChanged;
-  final bool isLoading;
-
   const ProductForm({
     required this.formKey,
     required this.nomeController,
@@ -33,160 +23,191 @@ class ProductForm extends StatefulWidget {
     this.selectedCategoryId,
     this.isLoading = false,
   });
+  final GlobalKey<FormState> formKey;
+  final TextEditingController nomeController;
+  final TextEditingController codigoController;
+  final TextEditingController precoController;
+  final TextEditingController estoqueController;
+  final TextEditingController descricaoController;
+  final ValueChanged<bool> onSubmit;
+  final int? selectedCategoryId;
+  final ValueChanged<int?> onCategoryChanged;
+  final bool isLoading;
 
   @override
   State<ProductForm> createState() => _ProductFormState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<GlobalKey<FormState>>('formKey', formKey));
+    properties.add(DiagnosticsProperty<TextEditingController>('nomeController', nomeController));
+    properties.add(
+      DiagnosticsProperty<TextEditingController>('codigoController', codigoController),
+    );
+    properties.add(DiagnosticsProperty<TextEditingController>('precoController', precoController));
+    properties.add(
+      DiagnosticsProperty<TextEditingController>('estoqueController', estoqueController),
+    );
+    properties.add(
+      DiagnosticsProperty<TextEditingController>('descricaoController', descricaoController),
+    );
+    properties.add(ObjectFlagProperty<ValueChanged<bool>>.has('onSubmit', onSubmit));
+    properties.add(IntProperty('selectedCategoryId', selectedCategoryId));
+    properties.add(
+      ObjectFlagProperty<ValueChanged<int?>>.has('onCategoryChanged', onCategoryChanged),
+    );
+    properties.add(DiagnosticsProperty<bool>('isLoading', isLoading));
+  }
 }
 
 class _ProductFormState extends State<ProductForm> {
   bool _generatedCode = false;
 
   @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: widget.formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text('Novo Produto', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 20),
-          TextFormField(
-            enabled: !widget.isLoading,
-            controller: widget.nomeController,
-            textInputAction: TextInputAction.next,
-            textCapitalization: TextCapitalization.words,
-            decoration: const InputDecoration(
-              labelText: 'Nome do Produto *',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.inventory_2),
-            ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Nome é obrigatório';
-              }
-              return null;
-            },
+  Widget build(BuildContext context) => Form(
+    key: widget.formKey,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Text('Novo Produto', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 20),
+        TextFormField(
+          enabled: !widget.isLoading,
+          controller: widget.nomeController,
+          textInputAction: TextInputAction.next,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            labelText: 'Nome do Produto *',
+            border: OutlineInputBorder(),
+            prefixIcon: Icon(Icons.inventory_2),
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            enabled: !widget.isLoading,
-            readOnly: _generatedCode,
-            controller: widget.codigoController,
-            textInputAction: TextInputAction.next,
-            autocorrect: false,
-            enableSuggestions: false,
-            textCapitalization: TextCapitalization.characters,
-            inputFormatters: [ProductCodeInputFormatter()],
-            decoration: InputDecoration(
-              labelText: 'Código *',
-              border: const OutlineInputBorder(),
-              prefixIcon: const Icon(Icons.qr_code),
-              suffixIcon: IconButton(
-                tooltip: _generatedCode
-                    ? 'Desativar geração automática'
-                    : 'Gerar código automaticamente',
-                onPressed: widget.isLoading
-                    ? null
-                    : () {
-                        setState(() {
-                          _generatedCode = !_generatedCode;
-                          widget.codigoController.text = switch (_generatedCode) {
-                            true => kStringGenerate,
-                            _ => '',
-                          };
-                        });
-                      },
-                icon: Icon(
-                  Icons.generating_tokens_outlined,
-                  color: _generatedCode ? Theme.of(context).colorScheme.primary : null,
-                ),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Nome é obrigatório';
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          enabled: !widget.isLoading,
+          readOnly: _generatedCode,
+          controller: widget.codigoController,
+          textInputAction: TextInputAction.next,
+          autocorrect: false,
+          enableSuggestions: false,
+          textCapitalization: TextCapitalization.characters,
+          inputFormatters: [ProductCodeInputFormatter()],
+          decoration: InputDecoration(
+            labelText: 'Código *',
+            border: const OutlineInputBorder(),
+            prefixIcon: const Icon(Icons.qr_code),
+            suffixIcon: IconButton(
+              tooltip: _generatedCode
+                  ? 'Desativar geração automática'
+                  : 'Gerar código automaticamente',
+              onPressed: widget.isLoading
+                  ? null
+                  : () {
+                      setState(() {
+                        _generatedCode = !_generatedCode;
+                        widget.codigoController.text = switch (_generatedCode) {
+                          true => kStringGenerate,
+                          _ => '',
+                        };
+                      });
+                    },
+              icon: Icon(
+                Icons.generating_tokens_outlined,
+                color: _generatedCode ? Theme.of(context).colorScheme.primary : null,
               ),
             ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Código é obrigatório';
-              }
-              return null;
-            },
           ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  enabled: !widget.isLoading,
-                  controller: widget.precoController,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: 'Preço *',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.attach_money),
-                    helperText: 'Ex: 10,50',
-                  ),
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [PriceInputFormatter()],
-                  validator: validatePrice,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Código é obrigatório';
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                enabled: !widget.isLoading,
+                controller: widget.precoController,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  labelText: 'Preço *',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.attach_money),
+                  helperText: 'Ex: 10,50',
                 ),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [PriceInputFormatter()],
+                validator: validatePrice,
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: TextFormField(
-                  enabled: !widget.isLoading,
-                  controller: widget.estoqueController,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: 'Estoque *',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.inventory),
-                    helperText: 'Ex: 10',
-                  ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [QuantityInputFormatter()],
-                  validator: validateStock,
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: TextFormField(
+                enabled: !widget.isLoading,
+                controller: widget.estoqueController,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  labelText: 'Estoque *',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.inventory),
+                  helperText: 'Ex: 10',
                 ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [QuantityInputFormatter()],
+                validator: validateStock,
               ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          ProductCategory(
-            selectedCategoryId: widget.selectedCategoryId,
-            onChanged: widget.onCategoryChanged,
-            enabled: !widget.isLoading,
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            enabled: !widget.isLoading,
-            controller: widget.descricaoController,
-            keyboardType: TextInputType.multiline,
-            textCapitalization: TextCapitalization.sentences,
-            maxLength: Product.descriptionMaxLength,
-            decoration: const InputDecoration(
-              labelText: 'Descrição',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.description),
             ),
-            minLines: 3,
-            maxLines: null,
+          ],
+        ),
+        const SizedBox(height: 16),
+        ProductCategoryWidget(
+          selectedCategoryId: widget.selectedCategoryId,
+          onChanged: widget.onCategoryChanged,
+          enabled: !widget.isLoading,
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          enabled: !widget.isLoading,
+          controller: widget.descricaoController,
+          keyboardType: TextInputType.multiline,
+          textCapitalization: TextCapitalization.sentences,
+          maxLength: Product.descriptionMaxLength,
+          decoration: const InputDecoration(
+            labelText: 'Descrição',
+            border: OutlineInputBorder(),
+            prefixIcon: Icon(Icons.description),
           ),
-          const SizedBox(height: 24),
-          ElevatedButton.icon(
-            onPressed: widget.isLoading ? null : () => widget.onSubmit(_generatedCode),
-            icon: widget.isLoading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.add),
-            label: Text(widget.isLoading ? 'Adicionando...' : 'Adicionar Produto'),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.all(16),
-              textStyle: const TextStyle(fontSize: 16),
-            ),
+          minLines: 3,
+          maxLines: null,
+        ),
+        const SizedBox(height: 24),
+        ElevatedButton.icon(
+          onPressed: widget.isLoading ? null : () => widget.onSubmit(_generatedCode),
+          icon: widget.isLoading
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : const Icon(Icons.add),
+          label: Text(widget.isLoading ? 'Adicionando...' : 'Adicionar Produto'),
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.all(16),
+            textStyle: const TextStyle(fontSize: 16),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 }

@@ -135,7 +135,7 @@ return updated(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( List<Category> categories)?  created,TResult Function( List<Category> categories)?  deleted,TResult Function( String message)?  error,TResult Function()?  initial,TResult Function( List<Category> categories)?  loaded,TResult Function()?  loading,TResult Function( List<Category> categories)?  updated,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( List<ProductCategory> categories)?  created,TResult Function( List<ProductCategory> categories)?  deleted,TResult Function( String message)?  error,TResult Function()?  initial,TResult Function( List<ProductCategory> categories)?  loaded,TResult Function()?  loading,TResult Function( List<ProductCategory> categories)?  updated,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case CategoryCreated() when created != null:
 return created(_that.categories);case CategoryDeleted() when deleted != null:
@@ -162,7 +162,7 @@ return updated(_that.categories);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( List<Category> categories)  created,required TResult Function( List<Category> categories)  deleted,required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( List<Category> categories)  loaded,required TResult Function()  loading,required TResult Function( List<Category> categories)  updated,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( List<ProductCategory> categories)  created,required TResult Function( List<ProductCategory> categories)  deleted,required TResult Function( String message)  error,required TResult Function()  initial,required TResult Function( List<ProductCategory> categories)  loaded,required TResult Function()  loading,required TResult Function( List<ProductCategory> categories)  updated,}) {final _that = this;
 switch (_that) {
 case CategoryCreated():
 return created(_that.categories);case CategoryDeleted():
@@ -185,7 +185,7 @@ return updated(_that.categories);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( List<Category> categories)?  created,TResult? Function( List<Category> categories)?  deleted,TResult? Function( String message)?  error,TResult? Function()?  initial,TResult? Function( List<Category> categories)?  loaded,TResult? Function()?  loading,TResult? Function( List<Category> categories)?  updated,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( List<ProductCategory> categories)?  created,TResult? Function( List<ProductCategory> categories)?  deleted,TResult? Function( String message)?  error,TResult? Function()?  initial,TResult? Function( List<ProductCategory> categories)?  loaded,TResult? Function()?  loading,TResult? Function( List<ProductCategory> categories)?  updated,}) {final _that = this;
 switch (_that) {
 case CategoryCreated() when created != null:
 return created(_that.categories);case CategoryDeleted() when deleted != null:
@@ -206,11 +206,11 @@ return updated(_that.categories);case _:
 
 
 class CategoryCreated implements CategoryState {
-  const CategoryCreated({required  List<Category> categories}): _categories = categories;
+  const CategoryCreated({required  List<ProductCategory> categories}): _categories = categories;
   
 
- final  List<Category> _categories;
- List<Category> get categories {
+ final  List<ProductCategory> _categories;
+ List<ProductCategory> get categories {
   if (_categories is EqualUnmodifiableListView) return _categories;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_categories);
@@ -247,7 +247,7 @@ abstract mixin class $CategoryCreatedCopyWith<$Res> implements $CategoryStateCop
   factory $CategoryCreatedCopyWith(CategoryCreated value, $Res Function(CategoryCreated) _then) = _$CategoryCreatedCopyWithImpl;
 @useResult
 $Res call({
- List<Category> categories
+ List<ProductCategory> categories
 });
 
 
@@ -267,7 +267,7 @@ class _$CategoryCreatedCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
   return _then(CategoryCreated(
 categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as List<Category>,
+as List<ProductCategory>,
   ));
 }
 
@@ -278,11 +278,11 @@ as List<Category>,
 
 
 class CategoryDeleted implements CategoryState {
-  const CategoryDeleted({required  List<Category> categories}): _categories = categories;
+  const CategoryDeleted({required  List<ProductCategory> categories}): _categories = categories;
   
 
- final  List<Category> _categories;
- List<Category> get categories {
+ final  List<ProductCategory> _categories;
+ List<ProductCategory> get categories {
   if (_categories is EqualUnmodifiableListView) return _categories;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_categories);
@@ -319,7 +319,7 @@ abstract mixin class $CategoryDeletedCopyWith<$Res> implements $CategoryStateCop
   factory $CategoryDeletedCopyWith(CategoryDeleted value, $Res Function(CategoryDeleted) _then) = _$CategoryDeletedCopyWithImpl;
 @useResult
 $Res call({
- List<Category> categories
+ List<ProductCategory> categories
 });
 
 
@@ -339,7 +339,7 @@ class _$CategoryDeletedCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
   return _then(CategoryDeleted(
 categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as List<Category>,
+as List<ProductCategory>,
   ));
 }
 
@@ -448,11 +448,11 @@ String toString() {
 
 
 class CategoryLoaded implements CategoryState {
-  const CategoryLoaded({required  List<Category> categories}): _categories = categories;
+  const CategoryLoaded({required  List<ProductCategory> categories}): _categories = categories;
   
 
- final  List<Category> _categories;
- List<Category> get categories {
+ final  List<ProductCategory> _categories;
+ List<ProductCategory> get categories {
   if (_categories is EqualUnmodifiableListView) return _categories;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_categories);
@@ -489,7 +489,7 @@ abstract mixin class $CategoryLoadedCopyWith<$Res> implements $CategoryStateCopy
   factory $CategoryLoadedCopyWith(CategoryLoaded value, $Res Function(CategoryLoaded) _then) = _$CategoryLoadedCopyWithImpl;
 @useResult
 $Res call({
- List<Category> categories
+ List<ProductCategory> categories
 });
 
 
@@ -509,7 +509,7 @@ class _$CategoryLoadedCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
   return _then(CategoryLoaded(
 categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as List<Category>,
+as List<ProductCategory>,
   ));
 }
 
@@ -552,11 +552,11 @@ String toString() {
 
 
 class CategoryUpdated implements CategoryState {
-  const CategoryUpdated({required  List<Category> categories}): _categories = categories;
+  const CategoryUpdated({required  List<ProductCategory> categories}): _categories = categories;
   
 
- final  List<Category> _categories;
- List<Category> get categories {
+ final  List<ProductCategory> _categories;
+ List<ProductCategory> get categories {
   if (_categories is EqualUnmodifiableListView) return _categories;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_categories);
@@ -593,7 +593,7 @@ abstract mixin class $CategoryUpdatedCopyWith<$Res> implements $CategoryStateCop
   factory $CategoryUpdatedCopyWith(CategoryUpdated value, $Res Function(CategoryUpdated) _then) = _$CategoryUpdatedCopyWithImpl;
 @useResult
 $Res call({
- List<Category> categories
+ List<ProductCategory> categories
 });
 
 
@@ -613,7 +613,7 @@ class _$CategoryUpdatedCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') $Res call({Object? categories = null,}) {
   return _then(CategoryUpdated(
 categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
-as List<Category>,
+as List<ProductCategory>,
   ));
 }
 

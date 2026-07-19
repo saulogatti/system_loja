@@ -1,10 +1,10 @@
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/data/database/app_database.dart';
+import 'package:system_loja/domain/repository/sales_repository.dart' show SalesRepository;
 
 /// Insere apenas cabeçalho + itens (sem movimentar estoque), para testes que usam itens fictícios.
-Future<int> insertInvoiceAndItemsOnly(AppDatabase database, Invoice invoice) {
-  return database.transaction(() async {
+Future<int> insertInvoiceAndItemsOnly(AppDatabase database, Invoice invoice) => database.transaction(() async {
     final invoiceId = await database.invoiceDao.insertInvoice(invoice);
     for (final item in invoice.data.items) {
       await database.invoiceItemDao.insertInvoiceItem(
@@ -14,7 +14,6 @@ Future<int> insertInvoiceAndItemsOnly(AppDatabase database, Invoice invoice) {
     }
     return invoiceId;
   });
-}
 
 /// Replica a orquestração de [SalesRepository.saveSale] para testes de integração DAO.
 Future<int> insertInvoiceWithItemsLikeRepository(

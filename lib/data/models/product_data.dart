@@ -6,15 +6,6 @@ part 'product_data.g.dart';
 /// JSON para [Product].
 @JsonSerializable()
 class ProductData {
-  final int id;
-  final String name;
-  final String description;
-  final double price;
-  final int stockQuantity;
-  final int? categoryId;
-  final String code;
-  final DateTime registrationDate;
-  final DateTime? lastUpdatedDate;
 
   const ProductData({
     required this.id,
@@ -31,8 +22,6 @@ class ProductData {
   factory ProductData.fromJson(Map<String, dynamic> json) =>
       _$ProductDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ProductDataToJson(this);
-
   factory ProductData.fromDomain(Product value) => ProductData(
     id: value.id,
     name: value.name,
@@ -44,6 +33,17 @@ class ProductData {
     registrationDate: value.registrationDate,
     lastUpdatedDate: value.lastUpdatedDate,
   );
+  final int id;
+  final String name;
+  final String description;
+  final double price;
+  final int stockQuantity;
+  final int? categoryId;
+  final String code;
+  final DateTime registrationDate;
+  final DateTime? lastUpdatedDate;
+
+  Map<String, dynamic> toJson() => _$ProductDataToJson(this);
 
   Product toDomain() => Product(
     id: id,

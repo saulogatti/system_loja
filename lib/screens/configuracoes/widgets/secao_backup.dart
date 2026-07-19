@@ -1,8 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Widget da seção de configurações de backup
 class SecaoBackup extends StatelessWidget {
+
+  const SecaoBackup({
+    required this.config,
+    required this.onConfigChanged,
+    required this.onRealizarBackup,
+    required this.onSelecionarFrequencia,
+    super.key,
+  });
   /// Configuração atual do sistema
   final AppSettings config;
 
@@ -15,19 +24,10 @@ class SecaoBackup extends StatelessWidget {
   /// Callback para selecionar frequência de backup
   final VoidCallback onSelecionarFrequencia;
 
-  const SecaoBackup({
-    required this.config,
-    required this.onConfigChanged,
-    required this.onRealizarBackup,
-    required this.onSelecionarFrequencia,
-    super.key,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return Card(
+  Widget build(BuildContext context) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -70,5 +70,13 @@ class SecaoBackup extends StatelessWidget {
         ),
       ),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<AppSettings>('config', config));
+    properties.add(ObjectFlagProperty<Function(AppSettings)>.has('onConfigChanged', onConfigChanged));
+    properties.add(ObjectFlagProperty<VoidCallback>.has('onRealizarBackup', onRealizarBackup));
+    properties.add(ObjectFlagProperty<VoidCallback>.has('onSelecionarFrequencia', onSelecionarFrequencia));
   }
 }

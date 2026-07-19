@@ -1,6 +1,6 @@
-import 'package:system_loja/core/interface/i_category_repository.dart';
 import 'package:system_loja/application/system_error_manager.dart';
-import 'package:system_loja/core/models/category.dart';
+import 'package:system_loja/core/interface/i_category_repository.dart';
+import 'package:system_loja/core/models/product_category.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/category_dao.dart';
 
@@ -9,10 +9,8 @@ import 'package:system_loja/data/database/dao/category_dao.dart';
 /// Fornece uma camada de abstração entre a UI e o acesso a dados,
 /// encapsulando a lógica de negócios relacionada às categorias.
 class CategoryRepository implements ICategoryRepository {
+  CategoryRepository({required CategoryDao categoryDao}) : _categoryDao = categoryDao;
   final CategoryDao _categoryDao;
-
-  CategoryRepository({required CategoryDao categoryDao})
-    : _categoryDao = categoryDao;
 
   /// Cria uma nova categoria.
   ///
@@ -31,10 +29,7 @@ class CategoryRepository implements ICategoryRepository {
         return ResultError('Já existe uma categoria com o nome "$name"');
       }
 
-      final id = await _categoryDao.insertCategory(
-        name: name,
-        description: description,
-      );
+      final id = await _categoryDao.insertCategory(name: name, description: description);
       return ResultSuccess(id);
     } catch (e, stackTrace) {
       await reportError(e, stackTrace);
@@ -74,7 +69,7 @@ class CategoryRepository implements ICategoryRepository {
   ///
   /// As categorias são ordenadas por nome.
   @override
-  Future<ResultStatus<List<Category>, String>> getAllCategories() async {
+  Future<ResultStatus<List<ProductCategory>, String>> getAllCategories() async {
     try {
       final records = await _categoryDao.getAll();
 
@@ -90,7 +85,7 @@ class CategoryRepository implements ICategoryRepository {
   /// [id] Identificador único da categoria.
   /// Retorna a categoria encontrada ou erro se não existir.
   @override
-  Future<ResultStatus<Category, String>> getCategoryById(int id) async {
+  Future<ResultStatus<ProductCategory, String>> getCategoryById(int id) async {
     try {
       final record = await _categoryDao.getById(id);
       if (record != null) {
@@ -108,7 +103,7 @@ class CategoryRepository implements ICategoryRepository {
   /// [name] Nome da categoria a ser buscada.
   /// Retorna a categoria encontrada ou erro se não existir.
   @override
-  Future<ResultStatus<Category, String>> getCategoryByName(String name) async {
+  Future<ResultStatus<ProductCategory, String>> getCategoryByName(String name) async {
     try {
       final record = await _categoryDao.getByName(name);
       if (record != null) {
@@ -126,9 +121,7 @@ class CategoryRepository implements ICategoryRepository {
   /// [categoryId] ID da categoria a ser verificada.
   /// Retorna true se a categoria está em uso.
   @override
-  Future<bool> isCategoryInUse(int categoryId) {
-    return _categoryDao.hasProducts(categoryId);
-  }
+  Future<bool> isCategoryInUse(int categoryId) => _categoryDao.hasProducts(categoryId);
 
   /// Atualiza uma categoria existente.
   ///

@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:system_loja/core/interface/i_analytics_repository.dart';
 
-import 'sales_purchase_analytics_event.dart';
-import 'sales_purchase_analytics_state.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/bloc/sales_purchase_analytics_event.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/bloc/sales_purchase_analytics_state.dart';
 
 /// BLoC da tela de analytics de vendas e compras.
 ///
@@ -10,7 +10,6 @@ import 'sales_purchase_analytics_state.dart';
 /// estados de UI para exibição em gráficos comparativos.
 class SalesPurchaseAnalyticsBloc
     extends Bloc<SalesPurchaseAnalyticsEvent, SalesPurchaseAnalyticsState> {
-  final IAnalyticsRepository _analyticsRepository;
 
   SalesPurchaseAnalyticsBloc({
     required IAnalyticsRepository analyticsRepository,
@@ -19,6 +18,7 @@ class SalesPurchaseAnalyticsBloc
     on<LoadSalesPurchaseAnalytics>(_onLoadAnalytics);
     on<ChangeSalesPurchaseGrouping>(_onChangeGrouping);
   }
+  final IAnalyticsRepository _analyticsRepository;
 
   Future<void> _onChangeGrouping(
     ChangeSalesPurchaseGrouping event,

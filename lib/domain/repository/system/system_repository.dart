@@ -7,8 +7,8 @@ import 'package:system_loja/core/models/system_config/report_configuration.dart'
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
 import 'package:system_loja/core/services/selector_file_service.dart';
-import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/core/utils/repository_error_mapper.dart';
+import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/converter/system_configuration_codec.dart';
 import 'package:system_loja/data/database/dao/system_dao.dart';
 
@@ -23,11 +23,11 @@ import 'package:system_loja/data/database/dao/system_dao.dart';
 /// - [ISystemRepository] - contrato da interface
 /// - [SystemDao] - DAO do Drift
 class SystemRepository implements ISystemRepository {
-  final SystemDao _systemDao;
-  final ILogRepository _logRepository;
   SystemRepository({required SystemDao systemDao, required ILogRepository logRepository})
     : _systemDao = systemDao,
       _logRepository = logRepository;
+  final SystemDao _systemDao;
+  final ILogRepository _logRepository;
 
   @override
   Future<ResultStatus<SystemConfiguration, String>> clearAllData() async {
@@ -79,7 +79,7 @@ class SystemRepository implements ISystemRepository {
   @override
   Future<ResultStatus<SystemConfiguration, String>> getSystemConfiguration() async {
     try {
-      SystemConfiguration? systemConfiguration = await _systemDao.getSystemConfiguration();
+      var systemConfiguration = await _systemDao.getSystemConfiguration();
       if (systemConfiguration == null) {
         systemConfiguration = _createDefaultConfiguration();
         await _systemDao.saveSystemConfiguration(systemConfiguration);
@@ -159,8 +159,7 @@ class SystemRepository implements ISystemRepository {
     }
   }
 
-  SystemConfiguration _createDefaultConfiguration() {
-    return SystemConfiguration(
+  SystemConfiguration _createDefaultConfiguration() => SystemConfiguration(
       priceConfiguration: PriceConfiguration(
         types: const [PaymentMethodType.cash, PaymentMethodType.pix],
         measurementUnits: const ['UN', 'KG'],
@@ -168,7 +167,6 @@ class SystemRepository implements ISystemRepository {
       ),
       systemUserData: SystemUserData.defaultObject(),
     );
-  }
 
   List<String> _normalizeUnits(List<String> measurementUnits) {
     final normalizedUnits = measurementUnits

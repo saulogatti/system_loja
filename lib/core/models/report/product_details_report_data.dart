@@ -3,10 +3,6 @@ import 'package:system_loja/core/models/report/product_movement_summary.dart';
 
 /// Dados prontos para renderizar o detalhe de produto no relatório.
 class ProductDetailsReportData {
-  final String categoryName;
-  final List<ProductInvoiceMovement> entries;
-  final List<ProductInvoiceMovement> exits;
-  final ProductMovementSummary summary;
 
   const ProductDetailsReportData({
     required this.categoryName,
@@ -14,4 +10,8 @@ class ProductDetailsReportData {
     required this.exits,
     required this.summary,
   });
+  final String categoryName;
+  final List<ProductInvoiceMovement> entries;
+  final List<ProductInvoiceMovement> exits;
+  final ProductMovementSummary summary;
 }

@@ -20,12 +20,12 @@ void main() {
       });
 
       test('deve formatar corretamente no primeiro dia do ano', () {
-        final dateTime = DateTime(2024, 1, 1, 0, 0);
+        final dateTime = DateTime(2024);
         expect(dateTime.toFormattedDate(), '01/01/2024 00:00');
       });
 
       test('deve formatar corretamente em ano bissexto', () {
-        final dateTime = DateTime(2024, 2, 29, 12, 0);
+        final dateTime = DateTime(2024, 2, 29, 12);
         expect(dateTime.toFormattedDate(), '29/02/2024 12:00');
       });
     });

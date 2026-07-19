@@ -21,9 +21,7 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   /// Nota: Os itens da nota devem ser removidos separadamente ou
   /// através de cascade delete se configurado.
   /// Retorna o número de linhas afetadas (normalmente 1 ou 0).
-  Future<int> deleteInvoice(int id) {
-    return (delete(invoicesRecords)..where((t) => t.id.equals(id))).go();
-  }
+  Future<int> deleteInvoice(int id) => (delete(invoicesRecords)..where((t) => t.id.equals(id))).go();
 
   /// Retorna todas as notas fiscais como objetos de domínio Invoice.
   ///
@@ -141,11 +139,9 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   /// Aceita um objeto Invoice do domínio e o converte para Companion.
   /// Os itens da nota devem ser inseridos separadamente usando InvoiceItemDao.
   /// Retorna o ID gerado automaticamente.
-  Future<int> insertInvoice(Invoice invoice) {
-    return into(
+  Future<int> insertInvoice(Invoice invoice) => into(
       invoicesRecords,
     ).insert(invoice.toCompanion(), mode: InsertMode.insertOrAbort);
-  }
 
   /// Verifica se um número de nota fiscal já existe no banco de dados.
   ///
@@ -161,9 +157,7 @@ class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   /// Nota: Os itens não são atualizados automaticamente.
   /// Use InvoiceItemDao para gerenciar os itens separadamente.
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
-  Future<bool> updateInvoice(Invoice invoice) {
-    return update(
+  Future<bool> updateInvoice(Invoice invoice) => update(
       invoicesRecords,
     ).replace(invoice.toCompanion(forUpdate: true));
-  }
 }

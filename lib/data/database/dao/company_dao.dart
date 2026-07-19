@@ -20,18 +20,14 @@ class CompanyDao extends DatabaseAccessor<AppDatabase> with _$CompanyDaoMixin {
   /// Aceita um objeto Company do domínio e o converte para Companion.
   /// Retorna o ID gerado automaticamente.
   /// Lança exceção se o CNPJ já existir (constraint UNIQUE).
-  Future<int> addCompany(Company company) {
-    return into(
+  Future<int> addCompany(Company company) => into(
       companyRecords,
     ).insert(company.toCompanion(), mode: InsertMode.insertOrAbort);
-  }
 
   /// Remove uma empresa do banco de dados pelo ID.
   ///
   /// Retorna o número de linhas afetadas (normalmente 1 ou 0).
-  Future<int> deleteCompany(int id) {
-    return (delete(companyRecords)..where((t) => t.id.equals(id))).go();
-  }
+  Future<int> deleteCompany(int id) => (delete(companyRecords)..where((t) => t.id.equals(id))).go();
 
   /// Retorna todas as empresas como objetos de domínio Company.
   Future<List<Company>> getAll() async {
@@ -62,7 +58,5 @@ class CompanyDao extends DatabaseAccessor<AppDatabase> with _$CompanyDaoMixin {
   /// Atualiza uma empresa existente no banco de dados.
   ///
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
-  Future<bool> updateCompany(Company company) {
-    return update(companyRecords).replace(company.toCompanion(forUpdate: true));
-  }
+  Future<bool> updateCompany(Company company) => update(companyRecords).replace(company.toCompanion(forUpdate: true));
 }

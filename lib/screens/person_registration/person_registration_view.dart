@@ -35,8 +35,7 @@ class _PersonRegistrationViewState extends State<PersonRegistrationView> {
   PersonType _selectedPersonType = PersonType.individual;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<PersonBloc, PersonState>(
+  Widget build(BuildContext context) => BlocListener<PersonBloc, PersonState>(
       listener: (context, state) {
         state.when(
           initial: () {},
@@ -85,7 +84,6 @@ class _PersonRegistrationViewState extends State<PersonRegistrationView> {
         ),
       ),
     );
-  }
 
   @override
   void dispose() {

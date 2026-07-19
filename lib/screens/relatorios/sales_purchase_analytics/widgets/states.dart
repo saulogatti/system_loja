@@ -1,14 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/bloc/sales_purchase_analytics_bloc.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/bloc/sales_purchase_analytics_event.dart';
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 
-import '../bloc/sales_purchase_analytics_bloc.dart';
-import '../bloc/sales_purchase_analytics_event.dart';
-
 class EmptyStateView extends StatelessWidget {
-  final SalesPurchaseGrouping grouping;
 
   const EmptyStateView({required this.grouping, super.key});
+  final SalesPurchaseGrouping grouping;
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +29,21 @@ class EmptyStateView extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(EnumProperty<SalesPurchaseGrouping>('grouping', grouping));
+  }
 }
 
 class ErrorStateView extends StatelessWidget {
-  final String message;
 
   const ErrorStateView({required this.message, super.key});
+  final String message;
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
+  Widget build(BuildContext context) => Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -63,5 +68,10 @@ class ErrorStateView extends StatelessWidget {
         ),
       ),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('message', message));
   }
 }

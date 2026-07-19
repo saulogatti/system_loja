@@ -3,17 +3,6 @@
 /// Esta classe representa erros específicos de operações com produtos,
 /// como duplicação de código, produto não encontrado, etc.
 class ProductException implements Exception {
-  /// Tipo de erro de produto
-  final ProductErrorType type;
-
-  /// Mensagem descrevendo o erro
-  final String message;
-
-  /// Detalhes adicionais sobre o erro (opcional)
-  final String? details;
-
-  /// Código do produto relacionado ao erro (opcional)
-  final String? productCode;
 
   /// Cria uma nova exceção de produto.
   ///
@@ -28,6 +17,66 @@ class ProductException implements Exception {
     this.details,
     this.productCode,
   });
+
+  /// Cria uma exceção para código duplicado.
+  factory ProductException.duplicateCode(String code) => ProductException(
+      type: ProductErrorType.duplicateCode,
+      message: 'Código de produto já existe',
+      details: 'Um produto com o código "$code" já está cadastrado no sistema.',
+      productCode: code,
+    );
+
+  /// Cria uma exceção para produto não encontrado.
+  factory ProductException.notFound(String code) => ProductException(
+      type: ProductErrorType.notFound,
+      message: 'Produto não encontrado',
+      details: 'Não foi possível encontrar um produto com o código "$code".',
+      productCode: code,
+    );
+
+  /// Cria uma exceção para estoque insuficiente.
+  factory ProductException.insufficientStock(
+    String code,
+    int available,
+    int requested,
+  ) => ProductException(
+      type: ProductErrorType.insufficientStock,
+      message: 'Estoque insuficiente',
+      details:
+          'Estoque disponível: $available. Quantidade solicitada: $requested.',
+      productCode: code,
+    );
+
+  /// Cria uma exceção para preço inválido.
+  factory ProductException.invalidPrice(String code, double price) => ProductException(
+      type: ProductErrorType.invalidPrice,
+      message: 'Preço inválido',
+      details:
+          'O preço R\$ ${price.toStringAsFixed(2)} não é válido. '
+          'O preço deve ser maior ou igual a zero.',
+      productCode: code,
+    );
+
+  /// Cria uma exceção para estoque inválido.
+  factory ProductException.invalidStock(String code, int stock) => ProductException(
+      type: ProductErrorType.invalidStock,
+      message: 'Estoque inválido',
+      details:
+          'O estoque $stock não é válido. '
+          'O estoque deve ser maior ou igual a zero.',
+      productCode: code,
+    );
+  /// Tipo de erro de produto
+  final ProductErrorType type;
+
+  /// Mensagem descrevendo o erro
+  final String message;
+
+  /// Detalhes adicionais sobre o erro (opcional)
+  final String? details;
+
+  /// Código do produto relacionado ao erro (opcional)
+  final String? productCode;
 
   @override
   String toString() {
@@ -53,65 +102,6 @@ class ProductException implements Exception {
     }
 
     return buffer.toString();
-  }
-
-  /// Cria uma exceção para código duplicado.
-  factory ProductException.duplicateCode(String code) {
-    return ProductException(
-      type: ProductErrorType.duplicateCode,
-      message: 'Código de produto já existe',
-      details: 'Um produto com o código "$code" já está cadastrado no sistema.',
-      productCode: code,
-    );
-  }
-
-  /// Cria uma exceção para produto não encontrado.
-  factory ProductException.notFound(String code) {
-    return ProductException(
-      type: ProductErrorType.notFound,
-      message: 'Produto não encontrado',
-      details: 'Não foi possível encontrar um produto com o código "$code".',
-      productCode: code,
-    );
-  }
-
-  /// Cria uma exceção para estoque insuficiente.
-  factory ProductException.insufficientStock(
-    String code,
-    int available,
-    int requested,
-  ) {
-    return ProductException(
-      type: ProductErrorType.insufficientStock,
-      message: 'Estoque insuficiente',
-      details:
-          'Estoque disponível: $available. Quantidade solicitada: $requested.',
-      productCode: code,
-    );
-  }
-
-  /// Cria uma exceção para preço inválido.
-  factory ProductException.invalidPrice(String code, double price) {
-    return ProductException(
-      type: ProductErrorType.invalidPrice,
-      message: 'Preço inválido',
-      details:
-          'O preço R\$ ${price.toStringAsFixed(2)} não é válido. '
-          'O preço deve ser maior ou igual a zero.',
-      productCode: code,
-    );
-  }
-
-  /// Cria uma exceção para estoque inválido.
-  factory ProductException.invalidStock(String code, int stock) {
-    return ProductException(
-      type: ProductErrorType.invalidStock,
-      message: 'Estoque inválido',
-      details:
-          'O estoque $stock não é válido. '
-          'O estoque deve ser maior ou igual a zero.',
-      productCode: code,
-    );
   }
 }
 

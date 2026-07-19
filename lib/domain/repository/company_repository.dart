@@ -1,6 +1,6 @@
+import 'package:system_loja/application/system_error_manager.dart';
 import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
-import 'package:system_loja/application/system_error_manager.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/utils/result_status.dart';
@@ -11,14 +11,14 @@ import 'package:system_loja/data/database/dao/company_dao.dart';
 /// Utiliza CompanyDao para acesso ao banco de dados e gerencia
 /// logs de atividades do sistema.
 class CompanyRepository implements ICompanyRepository {
-  final ILogRepository _logRepository;
-  final CompanyDao dao;
 
   CompanyRepository({
     required ILogRepository logRepository,
     required CompanyDao companyDao,
   }) : _logRepository = logRepository,
        dao = companyDao;
+  final ILogRepository _logRepository;
+  final CompanyDao dao;
 
   /// Deleta uma empresa pelo ID.
   ///
@@ -57,7 +57,7 @@ class CompanyRepository implements ICompanyRepository {
       final data = await dao.getAll();
       final companies = data;
       final mappedCompanies = {
-        for (var company in companies) company.id: company,
+        for (final company in companies) company.id: company,
       };
       return ResultStatus.success(mappedCompanies);
     } catch (e, stackTrace) {

@@ -1,4 +1,5 @@
 import 'package:system_loja/core/models/invoice.dart';
+import 'package:system_loja/core/models/invoice_type.dart' show InvoiceType;
 import 'package:system_loja/core/utils/result_status.dart';
 
 /// Interface que define o contrato para operações de repositório de vendas.

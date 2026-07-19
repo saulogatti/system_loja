@@ -6,11 +6,11 @@ import 'package:system_loja/core/models/system_config/system_configuration.dart'
 import 'package:system_loja/screens/configs/system/bloc/system_config_state.dart';
 
 class SystemConfigCubit extends Cubit<SystemConfigState> {
-  final ISystemRepository _systemRepository;
 
-  SystemConfigCubit(this._systemRepository) : super(SystemConfigState.initial()) {
+  SystemConfigCubit(this._systemRepository) : super(const SystemConfigState.initial()) {
     loadConfigurationData();
   }
+  final ISystemRepository _systemRepository;
 
   Future<void> clearAllData() async {
     final result = await _systemRepository.clearAllData();
@@ -90,7 +90,7 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
   }
 
   Future<void> loadConfigurationData() async {
-    emit(SystemConfigState.loading());
+    emit(const SystemConfigState.loading());
     final result = await _systemRepository.getSystemConfiguration();
     result.when(
       onSuccess: (configData) {
@@ -103,7 +103,7 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
   }
 
   Future<void> resetToDefaultConfiguration() async {
-    emit(SystemConfigState.loading());
+    emit(const SystemConfigState.loading());
 
     final result = await _systemRepository.resetToDefaultConfiguration();
     result.when(
@@ -137,7 +137,7 @@ class SystemConfigCubit extends Cubit<SystemConfigState> {
       return;
     }
 
-    emit(SystemConfigState.loading());
+    emit(const SystemConfigState.loading());
     final normalizedUnits = _normalizeUnits(measurementUnits);
     final systemConfiguration = await _obterConfiguracaoAtual();
     if (systemConfiguration == null) {

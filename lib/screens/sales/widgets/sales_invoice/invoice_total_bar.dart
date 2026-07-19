@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Faixa de destaque com o valor total da nota.
@@ -18,20 +19,19 @@ class InvoiceTotalBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'Valor Total:',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
+          const Text('Valor Total:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           Text(
             'R\$ ${total.toStringAsFixed(2)}',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: scheme.primary,
-            ),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: scheme.primary),
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DoubleProperty('total', total));
   }
 }

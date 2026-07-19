@@ -6,15 +6,15 @@ class PersonListInitial extends PersonListState {
 }
 
 class PersonListLoaded extends PersonListState {
-  final List<Customer> customers;
-  final List<Company> companies;
-  final String? errorMessage;
 
   const PersonListLoaded({
     required this.customers,
     required this.companies,
     this.errorMessage,
   });
+  final List<Customer> customers;
+  final List<Company> companies;
+  final String? errorMessage;
 }
 
 class PersonListLoading extends PersonListState {

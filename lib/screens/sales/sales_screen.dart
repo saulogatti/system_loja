@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/company.dart';
+import 'package:system_loja/core/models/customer.dart';
+import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
@@ -12,9 +14,6 @@ import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
-import '../../core/models/customer.dart';
-import '../../core/models/invoice.dart';
-
 @RoutePage()
 class SalesView extends StatefulWidget {
   const SalesView({super.key});
@@ -24,10 +23,6 @@ class SalesView extends StatefulWidget {
 }
 
 class _SalesLoadedAllViewData {
-  final List<Product> products;
-  final List<PaymentMethodType> paymentMethods;
-  final Map<int, Customer> customers;
-  final Map<int, Company> companies;
 
   const _SalesLoadedAllViewData({
     required this.products,
@@ -35,6 +30,10 @@ class _SalesLoadedAllViewData {
     required this.customers,
     required this.companies,
   });
+  final List<Product> products;
+  final List<PaymentMethodType> paymentMethods;
+  final Map<int, Customer> customers;
+  final Map<int, Company> companies;
 }
 
 class _SalesViewState extends State<SalesView> {
@@ -66,7 +65,6 @@ class _SalesViewState extends State<SalesView> {
                   backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
-              break;
             case SalesLoadProductsFailure():
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -74,7 +72,6 @@ class _SalesViewState extends State<SalesView> {
                   backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
-              break;
             case SalesLoaded() || SalesLoadedCustomers() || SalesLoadedAll():
               break;
             case SalesLoading():
@@ -92,7 +89,6 @@ class _SalesViewState extends State<SalesView> {
               salesCubit.loadProducts();
               // CORRIGIDO: Usar AutoRouter
               context.router.maybePop(true);
-              break;
             case SalesLoadingProducts():
               // Loading overlay é exibido através do builder
               break;
@@ -101,7 +97,7 @@ class _SalesViewState extends State<SalesView> {
         builder: (context, state) {
           final invoices = _extractInvoices(state);
           final totalValue = invoices.fold<double>(
-            0.0,
+            0,
             (sum, invoice) => sum + invoice.data.totalValue,
           );
 
@@ -270,16 +266,13 @@ class _SalesViewState extends State<SalesView> {
     }
   }
 
-  List<Invoice> _extractInvoices(SalesState state) {
-    return switch (state) {
+  List<Invoice> _extractInvoices(SalesState state) => switch (state) {
       SalesLoadedAll(:final invoices) => invoices.values.toList(growable: false),
       SalesLoaded(:final items) || SalesSaved(:final items) => items.values.toList(growable: false),
       _ => const <Invoice>[],
     };
-  }
 
-  _SalesLoadedAllViewData? _extractLoadedAll(SalesState state) {
-    return switch (state) {
+  _SalesLoadedAllViewData? _extractLoadedAll(SalesState state) => switch (state) {
       SalesLoadedAll(:final products, :final paymentMethods, :final customers, :final companies) =>
         _SalesLoadedAllViewData(
           products: products,
@@ -289,7 +282,6 @@ class _SalesViewState extends State<SalesView> {
         ),
       _ => null,
     };
-  }
 
   void _mostrarDetalhesNota(Invoice nf) {
     InvoiceOverviewBottomSheet.show(context, nf);

@@ -14,8 +14,8 @@ import 'package:system_loja/data/database/dao/log_dao.dart';
 /// - [ILogRepository] - contrato da interface
 /// - [LogDao] - DAO do Drift
 class LogRepository with LoggerClassMixin implements ILogRepository {
-  final LogDao _logDao;
   LogRepository({required LogDao logDao}) : _logDao = logDao;
+  final LogDao _logDao;
 
   /// Limpa logs antigos (opcional - para manutenção)
   ///

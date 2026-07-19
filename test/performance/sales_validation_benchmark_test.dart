@@ -3,7 +3,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
-import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
@@ -28,12 +27,12 @@ void main() {
 
   Future<List<int>> insertProducts(int count) async {
     final ids = <int>[];
-    for (int i = 0; i < count; i++) {
+    for (var i = 0; i < count; i++) {
       final id = await productDao.insertProduct(
         Product(
           name: 'Produto $i',
           description: 'Descrição $i',
-          price: 10.0,
+          price: 10,
           stockQuantity: 100,
           code: 'PROD-$i-${DateTime.now().microsecondsSinceEpoch}',
         ),
@@ -43,22 +42,19 @@ void main() {
     return ids;
   }
 
-  Invoice buildInvoice(List<int> productIds, int quantityPerItem) {
-    return Invoice(
+  Invoice buildInvoice(List<int> productIds, int quantityPerItem) => Invoice(
       data: InvoiceData(
         invoiceNumber: 'NF-BENCH-${DateTime.now().microsecondsSinceEpoch}',
-        type: InvoiceType.exit,
         items: productIds.map((id) => InvoiceItem(
           productId: id,
           productName: 'Produto $id',
           productCode: 'PROD-$id',
           quantity: quantityPerItem,
-          unitPrice: 10.0,
+          unitPrice: 10,
         )).toList(),
         paymentMethod: 'Dinheiro',
       ),
     );
-  }
 
   test('Benchmark N+1 Query vs Batch Fetching', () async {
     const itemCount = 50;
@@ -80,7 +76,7 @@ void main() {
     final stopwatchBatch = Stopwatch()..start();
     final ids = invoice.data.items.map((e) => e.productId).toList();
     final products = await productDao.getByIds(ids);
-    final productMap = {for (var p in products) p.id: p};
+    final productMap = {for (final p in products) p.id: p};
 
     for (final item in invoice.data.items) {
       final product = productMap[item.productId];

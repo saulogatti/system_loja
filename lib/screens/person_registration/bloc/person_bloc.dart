@@ -9,12 +9,12 @@ import 'package:system_loja/screens/person_registration/bloc/person_state.dart';
 import 'package:system_loja/screens/person_registration/models/person_registration_form_data.dart';
 
 class PersonBloc extends Bloc<PersonEvent, PersonState> {
-  final ICustomerRepository _customerRepository;
-  final ICompanyRepository _companyRepository;
   PersonBloc(this._customerRepository, this._companyRepository)
     : super(const PersonState.initial()) {
     on<PersonSubmit>(_onSubmit);
   }
+  final ICustomerRepository _customerRepository;
+  final ICompanyRepository _companyRepository;
 
   FutureOr<void> _onSubmit(
     PersonSubmit event,
@@ -40,7 +40,6 @@ class PersonBloc extends Bloc<PersonEvent, PersonState> {
           } else {
             emit(const PersonState.failure('Erro ao salvar cliente.'));
           }
-          break;
         case ResultError(:final resultError):
           emit(PersonState.failure(resultError));
           return;
@@ -62,7 +61,6 @@ class PersonBloc extends Bloc<PersonEvent, PersonState> {
           } else {
             emit(const PersonState.failure('Erro ao salvar empresa.'));
           }
-          break;
         case ResultError(:final resultError):
           emit(PersonState.failure(resultError));
           return;

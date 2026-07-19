@@ -1,6 +1,6 @@
 class CustomerException extends Error {
-  final String message;
   CustomerException(this.message);
+  final String message;
 
   @override
   String toString() => 'ClienteException: $message \n stackTrace: $stackTrace';

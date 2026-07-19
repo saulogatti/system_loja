@@ -4,6 +4,19 @@ import 'package:system_loja/core/models/customer.dart';
 
 /// Representa os dados digitados no formulário de cadastro de pessoa.
 class PersonRegistrationFormData {
+
+  const PersonRegistrationFormData({
+    required this.personType,
+    required this.name,
+    required this.document,
+    required this.email,
+    required this.phone,
+    required this.street,
+    required this.zipCode,
+    required this.neighborhood,
+    required this.city,
+    required this.state,
+  });
   /// Armazena o tipo de pessoa selecionado.
   final PersonType personType;
 
@@ -34,21 +47,7 @@ class PersonRegistrationFormData {
   /// Armazena o estado informado no endereço.
   final String state;
 
-  const PersonRegistrationFormData({
-    required this.personType,
-    required this.name,
-    required this.document,
-    required this.email,
-    required this.phone,
-    required this.street,
-    required this.zipCode,
-    required this.neighborhood,
-    required this.city,
-    required this.state,
-  });
-
-  Company retrieveCompany() {
-    return Company(
+  Company retrieveCompany() => Company(
       name: name,
       cnpj: document,
       email: email,
@@ -60,12 +59,9 @@ class PersonRegistrationFormData {
         city: city,
         state: state,
       ),
-      id: null,
     );
-  }
 
-  Customer retrieveCustomer() {
-    return Customer(
+  Customer retrieveCustomer() => Customer(
       name: name,
       cpf: document,
       email: email,
@@ -77,9 +73,7 @@ class PersonRegistrationFormData {
         city: city,
         state: state,
       ),
-      id: null,
     );
-  }
 }
 
 /// Define os tipos de pessoa suportados na tela de cadastro.

@@ -56,7 +56,7 @@ extension UsuarioStatePatterns on UsuarioState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( UsuarioStateInitial value)?  initial,TResult Function( UsuarioStateLoadFailure value)?  loadFailure,TResult Function( UsuarioStateLoading value)?  loading,TResult Function( UsuarioStateLoadSuccess value)?  loadSuccess,TResult Function( UsuarioStateSenhaInvalida value)?  senhaInvalida,TResult Function( UsuarioStateUsuarioRemovido value)?  usuarioRemovido,TResult Function( UsuarioStateUsuarioAdicionado value)?  usuarioAdicionado,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( UsuarioStateInitial value)?  initial,TResult Function( UsuarioStateLoadFailure value)?  loadFailure,TResult Function( UsuarioStateLoading value)?  loading,TResult Function( UsuarioStateLoadSuccess value)?  loadSuccess,TResult Function( UsuarioStateSenhaInvalida value)?  senhaInvalida,TResult Function( UsuarioStateUsuarioAdicionado value)?  usuarioAdicionado,TResult Function( UsuarioStateUsuarioRemovido value)?  usuarioRemovido,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case UsuarioStateInitial() when initial != null:
@@ -64,9 +64,9 @@ return initial(_that);case UsuarioStateLoadFailure() when loadFailure != null:
 return loadFailure(_that);case UsuarioStateLoading() when loading != null:
 return loading(_that);case UsuarioStateLoadSuccess() when loadSuccess != null:
 return loadSuccess(_that);case UsuarioStateSenhaInvalida() when senhaInvalida != null:
-return senhaInvalida(_that);case UsuarioStateUsuarioRemovido() when usuarioRemovido != null:
-return usuarioRemovido(_that);case UsuarioStateUsuarioAdicionado() when usuarioAdicionado != null:
-return usuarioAdicionado(_that);case _:
+return senhaInvalida(_that);case UsuarioStateUsuarioAdicionado() when usuarioAdicionado != null:
+return usuarioAdicionado(_that);case UsuarioStateUsuarioRemovido() when usuarioRemovido != null:
+return usuarioRemovido(_that);case _:
   return orElse();
 
 }
@@ -84,7 +84,7 @@ return usuarioAdicionado(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( UsuarioStateInitial value)  initial,required TResult Function( UsuarioStateLoadFailure value)  loadFailure,required TResult Function( UsuarioStateLoading value)  loading,required TResult Function( UsuarioStateLoadSuccess value)  loadSuccess,required TResult Function( UsuarioStateSenhaInvalida value)  senhaInvalida,required TResult Function( UsuarioStateUsuarioRemovido value)  usuarioRemovido,required TResult Function( UsuarioStateUsuarioAdicionado value)  usuarioAdicionado,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( UsuarioStateInitial value)  initial,required TResult Function( UsuarioStateLoadFailure value)  loadFailure,required TResult Function( UsuarioStateLoading value)  loading,required TResult Function( UsuarioStateLoadSuccess value)  loadSuccess,required TResult Function( UsuarioStateSenhaInvalida value)  senhaInvalida,required TResult Function( UsuarioStateUsuarioAdicionado value)  usuarioAdicionado,required TResult Function( UsuarioStateUsuarioRemovido value)  usuarioRemovido,}){
 final _that = this;
 switch (_that) {
 case UsuarioStateInitial():
@@ -92,9 +92,9 @@ return initial(_that);case UsuarioStateLoadFailure():
 return loadFailure(_that);case UsuarioStateLoading():
 return loading(_that);case UsuarioStateLoadSuccess():
 return loadSuccess(_that);case UsuarioStateSenhaInvalida():
-return senhaInvalida(_that);case UsuarioStateUsuarioRemovido():
-return usuarioRemovido(_that);case UsuarioStateUsuarioAdicionado():
-return usuarioAdicionado(_that);}
+return senhaInvalida(_that);case UsuarioStateUsuarioAdicionado():
+return usuarioAdicionado(_that);case UsuarioStateUsuarioRemovido():
+return usuarioRemovido(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -108,7 +108,7 @@ return usuarioAdicionado(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( UsuarioStateInitial value)?  initial,TResult? Function( UsuarioStateLoadFailure value)?  loadFailure,TResult? Function( UsuarioStateLoading value)?  loading,TResult? Function( UsuarioStateLoadSuccess value)?  loadSuccess,TResult? Function( UsuarioStateSenhaInvalida value)?  senhaInvalida,TResult? Function( UsuarioStateUsuarioRemovido value)?  usuarioRemovido,TResult? Function( UsuarioStateUsuarioAdicionado value)?  usuarioAdicionado,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( UsuarioStateInitial value)?  initial,TResult? Function( UsuarioStateLoadFailure value)?  loadFailure,TResult? Function( UsuarioStateLoading value)?  loading,TResult? Function( UsuarioStateLoadSuccess value)?  loadSuccess,TResult? Function( UsuarioStateSenhaInvalida value)?  senhaInvalida,TResult? Function( UsuarioStateUsuarioAdicionado value)?  usuarioAdicionado,TResult? Function( UsuarioStateUsuarioRemovido value)?  usuarioRemovido,}){
 final _that = this;
 switch (_that) {
 case UsuarioStateInitial() when initial != null:
@@ -116,9 +116,9 @@ return initial(_that);case UsuarioStateLoadFailure() when loadFailure != null:
 return loadFailure(_that);case UsuarioStateLoading() when loading != null:
 return loading(_that);case UsuarioStateLoadSuccess() when loadSuccess != null:
 return loadSuccess(_that);case UsuarioStateSenhaInvalida() when senhaInvalida != null:
-return senhaInvalida(_that);case UsuarioStateUsuarioRemovido() when usuarioRemovido != null:
-return usuarioRemovido(_that);case UsuarioStateUsuarioAdicionado() when usuarioAdicionado != null:
-return usuarioAdicionado(_that);case _:
+return senhaInvalida(_that);case UsuarioStateUsuarioAdicionado() when usuarioAdicionado != null:
+return usuarioAdicionado(_that);case UsuarioStateUsuarioRemovido() when usuarioRemovido != null:
+return usuarioRemovido(_that);case _:
   return null;
 
 }
@@ -135,16 +135,16 @@ return usuarioAdicionado(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( String errorMessage)?  loadFailure,TResult Function()?  loading,TResult Function( List<User> usuarios)?  loadSuccess,TResult Function( String mensagem)?  senhaInvalida,TResult Function( int id)?  usuarioRemovido,TResult Function( User usuario,  bool novoUsuario)?  usuarioAdicionado,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( String errorMessage)?  loadFailure,TResult Function()?  loading,TResult Function( List<User> usuarios)?  loadSuccess,TResult Function( String mensagem)?  senhaInvalida,TResult Function( User usuario,  bool novoUsuario)?  usuarioAdicionado,TResult Function( int id)?  usuarioRemovido,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case UsuarioStateInitial() when initial != null:
 return initial();case UsuarioStateLoadFailure() when loadFailure != null:
 return loadFailure(_that.errorMessage);case UsuarioStateLoading() when loading != null:
 return loading();case UsuarioStateLoadSuccess() when loadSuccess != null:
 return loadSuccess(_that.usuarios);case UsuarioStateSenhaInvalida() when senhaInvalida != null:
-return senhaInvalida(_that.mensagem);case UsuarioStateUsuarioRemovido() when usuarioRemovido != null:
-return usuarioRemovido(_that.id);case UsuarioStateUsuarioAdicionado() when usuarioAdicionado != null:
-return usuarioAdicionado(_that.usuario,_that.novoUsuario);case _:
+return senhaInvalida(_that.mensagem);case UsuarioStateUsuarioAdicionado() when usuarioAdicionado != null:
+return usuarioAdicionado(_that.usuario,_that.novoUsuario);case UsuarioStateUsuarioRemovido() when usuarioRemovido != null:
+return usuarioRemovido(_that.id);case _:
   return orElse();
 
 }
@@ -162,16 +162,16 @@ return usuarioAdicionado(_that.usuario,_that.novoUsuario);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( String errorMessage)  loadFailure,required TResult Function()  loading,required TResult Function( List<User> usuarios)  loadSuccess,required TResult Function( String mensagem)  senhaInvalida,required TResult Function( int id)  usuarioRemovido,required TResult Function( User usuario,  bool novoUsuario)  usuarioAdicionado,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( String errorMessage)  loadFailure,required TResult Function()  loading,required TResult Function( List<User> usuarios)  loadSuccess,required TResult Function( String mensagem)  senhaInvalida,required TResult Function( User usuario,  bool novoUsuario)  usuarioAdicionado,required TResult Function( int id)  usuarioRemovido,}) {final _that = this;
 switch (_that) {
 case UsuarioStateInitial():
 return initial();case UsuarioStateLoadFailure():
 return loadFailure(_that.errorMessage);case UsuarioStateLoading():
 return loading();case UsuarioStateLoadSuccess():
 return loadSuccess(_that.usuarios);case UsuarioStateSenhaInvalida():
-return senhaInvalida(_that.mensagem);case UsuarioStateUsuarioRemovido():
-return usuarioRemovido(_that.id);case UsuarioStateUsuarioAdicionado():
-return usuarioAdicionado(_that.usuario,_that.novoUsuario);}
+return senhaInvalida(_that.mensagem);case UsuarioStateUsuarioAdicionado():
+return usuarioAdicionado(_that.usuario,_that.novoUsuario);case UsuarioStateUsuarioRemovido():
+return usuarioRemovido(_that.id);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -185,16 +185,16 @@ return usuarioAdicionado(_that.usuario,_that.novoUsuario);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( String errorMessage)?  loadFailure,TResult? Function()?  loading,TResult? Function( List<User> usuarios)?  loadSuccess,TResult? Function( String mensagem)?  senhaInvalida,TResult? Function( int id)?  usuarioRemovido,TResult? Function( User usuario,  bool novoUsuario)?  usuarioAdicionado,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( String errorMessage)?  loadFailure,TResult? Function()?  loading,TResult? Function( List<User> usuarios)?  loadSuccess,TResult? Function( String mensagem)?  senhaInvalida,TResult? Function( User usuario,  bool novoUsuario)?  usuarioAdicionado,TResult? Function( int id)?  usuarioRemovido,}) {final _that = this;
 switch (_that) {
 case UsuarioStateInitial() when initial != null:
 return initial();case UsuarioStateLoadFailure() when loadFailure != null:
 return loadFailure(_that.errorMessage);case UsuarioStateLoading() when loading != null:
 return loading();case UsuarioStateLoadSuccess() when loadSuccess != null:
 return loadSuccess(_that.usuarios);case UsuarioStateSenhaInvalida() when senhaInvalida != null:
-return senhaInvalida(_that.mensagem);case UsuarioStateUsuarioRemovido() when usuarioRemovido != null:
-return usuarioRemovido(_that.id);case UsuarioStateUsuarioAdicionado() when usuarioAdicionado != null:
-return usuarioAdicionado(_that.usuario,_that.novoUsuario);case _:
+return senhaInvalida(_that.mensagem);case UsuarioStateUsuarioAdicionado() when usuarioAdicionado != null:
+return usuarioAdicionado(_that.usuario,_that.novoUsuario);case UsuarioStateUsuarioRemovido() when usuarioRemovido != null:
+return usuarioRemovido(_that.id);case _:
   return null;
 
 }
@@ -473,6 +473,74 @@ as String,
 /// @nodoc
 
 
+class UsuarioStateUsuarioAdicionado implements UsuarioState {
+  const UsuarioStateUsuarioAdicionado(this.usuario, {required this.novoUsuario});
+  
+
+ final  User usuario;
+ final  bool novoUsuario;
+
+/// Create a copy of UsuarioState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$UsuarioStateUsuarioAdicionadoCopyWith<UsuarioStateUsuarioAdicionado> get copyWith => _$UsuarioStateUsuarioAdicionadoCopyWithImpl<UsuarioStateUsuarioAdicionado>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateUsuarioAdicionado&&(identical(other.usuario, usuario) || other.usuario == usuario)&&(identical(other.novoUsuario, novoUsuario) || other.novoUsuario == novoUsuario));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,usuario,novoUsuario);
+
+@override
+String toString() {
+  return 'UsuarioState.usuarioAdicionado(usuario: $usuario, novoUsuario: $novoUsuario)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $UsuarioStateUsuarioAdicionadoCopyWith<$Res> implements $UsuarioStateCopyWith<$Res> {
+  factory $UsuarioStateUsuarioAdicionadoCopyWith(UsuarioStateUsuarioAdicionado value, $Res Function(UsuarioStateUsuarioAdicionado) _then) = _$UsuarioStateUsuarioAdicionadoCopyWithImpl;
+@useResult
+$Res call({
+ User usuario, bool novoUsuario
+});
+
+
+
+
+}
+/// @nodoc
+class _$UsuarioStateUsuarioAdicionadoCopyWithImpl<$Res>
+    implements $UsuarioStateUsuarioAdicionadoCopyWith<$Res> {
+  _$UsuarioStateUsuarioAdicionadoCopyWithImpl(this._self, this._then);
+
+  final UsuarioStateUsuarioAdicionado _self;
+  final $Res Function(UsuarioStateUsuarioAdicionado) _then;
+
+/// Create a copy of UsuarioState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? usuario = null,Object? novoUsuario = null,}) {
+  return _then(UsuarioStateUsuarioAdicionado(
+null == usuario ? _self.usuario : usuario // ignore: cast_nullable_to_non_nullable
+as User,novoUsuario: null == novoUsuario ? _self.novoUsuario : novoUsuario // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
 class UsuarioStateUsuarioRemovido implements UsuarioState {
   const UsuarioStateUsuarioRemovido(this.id);
   
@@ -530,74 +598,6 @@ class _$UsuarioStateUsuarioRemovidoCopyWithImpl<$Res>
   return _then(UsuarioStateUsuarioRemovido(
 null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class UsuarioStateUsuarioAdicionado implements UsuarioState {
-  const UsuarioStateUsuarioAdicionado(this.usuario, this.novoUsuario);
-  
-
- final  User usuario;
- final  bool novoUsuario;
-
-/// Create a copy of UsuarioState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$UsuarioStateUsuarioAdicionadoCopyWith<UsuarioStateUsuarioAdicionado> get copyWith => _$UsuarioStateUsuarioAdicionadoCopyWithImpl<UsuarioStateUsuarioAdicionado>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateUsuarioAdicionado&&(identical(other.usuario, usuario) || other.usuario == usuario)&&(identical(other.novoUsuario, novoUsuario) || other.novoUsuario == novoUsuario));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,usuario,novoUsuario);
-
-@override
-String toString() {
-  return 'UsuarioState.usuarioAdicionado(usuario: $usuario, novoUsuario: $novoUsuario)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $UsuarioStateUsuarioAdicionadoCopyWith<$Res> implements $UsuarioStateCopyWith<$Res> {
-  factory $UsuarioStateUsuarioAdicionadoCopyWith(UsuarioStateUsuarioAdicionado value, $Res Function(UsuarioStateUsuarioAdicionado) _then) = _$UsuarioStateUsuarioAdicionadoCopyWithImpl;
-@useResult
-$Res call({
- User usuario, bool novoUsuario
-});
-
-
-
-
-}
-/// @nodoc
-class _$UsuarioStateUsuarioAdicionadoCopyWithImpl<$Res>
-    implements $UsuarioStateUsuarioAdicionadoCopyWith<$Res> {
-  _$UsuarioStateUsuarioAdicionadoCopyWithImpl(this._self, this._then);
-
-  final UsuarioStateUsuarioAdicionado _self;
-  final $Res Function(UsuarioStateUsuarioAdicionado) _then;
-
-/// Create a copy of UsuarioState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? usuario = null,Object? novoUsuario = null,}) {
-  return _then(UsuarioStateUsuarioAdicionado(
-null == usuario ? _self.usuario : usuario // ignore: cast_nullable_to_non_nullable
-as User,null == novoUsuario ? _self.novoUsuario : novoUsuario // ignore: cast_nullable_to_non_nullable
-as bool,
   ));
 }
 

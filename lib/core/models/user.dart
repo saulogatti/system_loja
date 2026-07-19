@@ -5,11 +5,6 @@ import 'package:system_loja/core/models/default/people_data.dart';
 /// Herda dados comuns de [PersonDefault] (nome, e-mail).
 /// A senha é armazenada apenas como hash — nunca em texto plano.
 class User extends PersonDefault {
-  /// Hash da senha do usuário.
-  final String passwordHash;
-
-  /// Nível de permissão do usuário. Padrão 0 (sem privilégios especiais).
-  final int permission;
 
   User({
     required super.name,
@@ -20,6 +15,11 @@ class User extends PersonDefault {
     super.lastUpdatedDate,
     super.id,
   });
+  /// Hash da senha do usuário.
+  final String passwordHash;
+
+  /// Nível de permissão do usuário. Padrão 0 (sem privilégios especiais).
+  final int permission;
 
   /// Cria uma cópia do usuário com campos atualizados.
   ///
@@ -30,8 +30,7 @@ class User extends PersonDefault {
     String? email,
     String? passwordHash,
     int? permission,
-  }) {
-    return User(
+  }) => User(
       name: name ?? this.name,
       email: email ?? this.email,
       passwordHash: passwordHash ?? this.passwordHash,
@@ -39,10 +38,7 @@ class User extends PersonDefault {
       registrationDate: registrationDate,
       lastUpdatedDate: lastUpdatedDate,
     );
-  }
 
   @override
-  String toString() {
-    return 'User(name: $name, email: $email, passwordHash: $passwordHash, permission: $permission)';
-  }
+  String toString() => 'User(name: $name, email: $email, passwordHash: $passwordHash, permission: $permission)';
 }

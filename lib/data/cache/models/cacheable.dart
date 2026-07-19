@@ -1,3 +1,5 @@
+import 'package:system_loja/data/cache/cache_manager.dart' show CacheManager;
+
 /// Define o objeto que pode ser armazenado em cache.
 ///
 /// Esta interface define os métodos necessários para que um objeto

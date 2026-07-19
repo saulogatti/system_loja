@@ -8,13 +8,13 @@ import 'package:system_loja/screens/categories/cubit/category_state.dart';
 /// Este Cubit coordena operações de criação, leitura, atualização
 /// e exclusão de categorias através do CategoryRepository.
 class CategoryCubit extends Cubit<CategoryState> {
-  final ICategoryRepository _repository;
 
   CategoryCubit({required ICategoryRepository repository})
     : _repository = repository,
       super(const CategoryState.initial()) {
     loadCategories();
   }
+  final ICategoryRepository _repository;
 
   /// Cria uma nova categoria.
   ///

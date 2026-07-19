@@ -6,12 +6,6 @@ part 'report_configuration_entry.g.dart';
 /// DTO JSON para [ReportConfiguration] (sem herdar domínio).
 @JsonSerializable()
 class ReportConfigurationEntry {
-  final bool enableSalesByPeriod;
-  final bool enableTopProducts;
-  final int defaultPeriodInDays;
-  final int id;
-  final DateTime registrationDate;
-  final DateTime lastUpdatedDate;
 
   const ReportConfigurationEntry({
     required this.registrationDate,
@@ -27,8 +21,7 @@ class ReportConfigurationEntry {
 
   factory ReportConfigurationEntry.fromDomain(
     ReportConfiguration reportConfiguration,
-  ) {
-    return ReportConfigurationEntry(
+  ) => ReportConfigurationEntry(
       enableSalesByPeriod: reportConfiguration.enableSalesByPeriod,
       enableTopProducts: reportConfiguration.enableTopProducts,
       defaultPeriodInDays: reportConfiguration.defaultPeriodInDays,
@@ -36,7 +29,12 @@ class ReportConfigurationEntry {
       registrationDate: reportConfiguration.registrationDate,
       lastUpdatedDate: reportConfiguration.lastUpdatedDate,
     );
-  }
+  final bool enableSalesByPeriod;
+  final bool enableTopProducts;
+  final int defaultPeriodInDays;
+  final int id;
+  final DateTime registrationDate;
+  final DateTime lastUpdatedDate;
 
   Map<String, dynamic> toJson() => _$ReportConfigurationEntryToJson(this);
 

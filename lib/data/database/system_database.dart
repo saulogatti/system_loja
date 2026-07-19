@@ -32,27 +32,25 @@ part 'system_database.g.dart';
   daos: [UsersDao, LogDao, SystemDao],
 )
 class SystemDatabase extends _$SystemDatabase {
-  static final _nameBd = 'system_database';
   SystemDatabase({QueryExecutor? executor})
     : super(executor ?? _openConnection());
+  static const _nameBd = 'system_database';
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    onCreate: (Migrator m) => m.createAll(),
-    onUpgrade: (Migrator m, int from, int to) async {},
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {},
   );
   @override
   int get schemaVersion => 1;
 
-  static QueryExecutor _openConnection() {
-    return driftDatabase(
+  static QueryExecutor _openConnection() => driftDatabase(
       name: _nameBd,
       web: DriftWebOptions(
         sqlite3Wasm: Uri.parse('sqlite3.wasm'),
         driftWorker: Uri.parse('drift_worker.js'),
       ),
-      native: DriftNativeOptions(
+      native: const DriftNativeOptions(
         databaseDirectory: getApplicationSupportDirectory,
       ),
     );
-  }
 }

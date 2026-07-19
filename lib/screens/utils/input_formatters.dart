@@ -34,8 +34,7 @@ class PriceInputFormatter extends TextInputFormatter {
   ) {
     if (oldValue.text.length > newValue.text.length || newValue.text.isEmpty) {
       //Se o usuário está apagando e o campo está vazio, retorna vazio
-      return TextEditingValue(
-        text: '',
+      return const TextEditingValue(
         selection: TextSelection.collapsed(offset: 0),
       );
     }

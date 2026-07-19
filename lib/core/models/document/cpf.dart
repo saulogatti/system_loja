@@ -1,17 +1,18 @@
+import 'package:system_loja/core/exceptions/validation_exception.dart' show ValidationException;
 import 'package:system_loja/core/models/document/document.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 
 class Cpf extends Document {
-  /// Expressões regulares para validar o formato do CPF
-  /// - _cpfRegExp: Valida o formato XXX.XXX.XXX-XX
-  /// - _cpfCleanRegExp: Valida apenas os 11 dígitos numéricos
-  static final RegExp _cpfRegExp = RegExp(r'^\d{3}\.\d{3}\.\d{3}-\d{2}$');
-  static final RegExp _cpfCleanRegExp = RegExp(r'^\d{11}$');
 
   /// Cria uma instância de [Cpf] com o valor informado.
   ///
   /// Lança [ValidationException] se o formato ou os dígitos forem inválidos.
   Cpf(super.value);
+  /// Expressões regulares para validar o formato do CPF
+  /// - _cpfRegExp: Valida o formato XXX.XXX.XXX-XX
+  /// - _cpfCleanRegExp: Valida apenas os 11 dígitos numéricos
+  static final RegExp _cpfRegExp = RegExp(r'^\d{3}\.\d{3}\.\d{3}-\d{2}$');
+  static final RegExp _cpfCleanRegExp = RegExp(r'^\d{11}$');
 
   @override
   String get formatted {

@@ -7,14 +7,6 @@ part 'company_data.g.dart';
 /// JSON para [Company].
 @JsonSerializable(explicitToJson: true)
 class CompanyData {
-  final int id;
-  final String name;
-  final String cnpj;
-  final String? phone;
-  final String? email;
-  final AddressData address;
-  final DateTime registrationDate;
-  final DateTime? lastUpdatedDate;
 
   const CompanyData({
     required this.id,
@@ -30,8 +22,6 @@ class CompanyData {
   factory CompanyData.fromJson(Map<String, dynamic> json) =>
       _$CompanyDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CompanyDataToJson(this);
-
   factory CompanyData.fromDomain(Company value) => CompanyData(
     id: value.id,
     name: value.name,
@@ -42,6 +32,16 @@ class CompanyData {
     registrationDate: value.registrationDate,
     lastUpdatedDate: value.lastUpdatedDate,
   );
+  final int id;
+  final String name;
+  final String cnpj;
+  final String? phone;
+  final String? email;
+  final AddressData address;
+  final DateTime registrationDate;
+  final DateTime? lastUpdatedDate;
+
+  Map<String, dynamic> toJson() => _$CompanyDataToJson(this);
 
   Company toDomain() => Company(
     id: id,

@@ -33,7 +33,6 @@ void main() {
     test('deve aceitar empresa em nota de saída', () {
       final invoiceData = InvoiceData(
         invoiceNumber: 'NF-0002',
-        type: InvoiceType.exit,
         companyId: 2,
         companyName: 'Empresa Teste',
         companyCnpj: '00.000.000/0001-00',
@@ -125,7 +124,6 @@ void main() {
       expect(
         () => InvoiceData(
           invoiceNumber: 'NF-0004',
-          type: InvoiceType.exit,
           customerId: 1,
           customerName: 'Cliente Teste',
           customerCpf: '000.000.000-00',

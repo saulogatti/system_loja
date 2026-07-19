@@ -4,6 +4,18 @@ import 'package:system_loja/core/models/default/default_object.dart';
 ///
 /// Representa um item do catálogo da loja com preço, estoque e código único.
 class Product extends DefaultObject {
+
+  Product({
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.stockQuantity,
+    required this.code,
+    super.registrationDate,
+    super.lastUpdatedDate,
+    this.categoryId,
+    super.id,
+  });
   /// Nome do produto.
   final String name;
 
@@ -24,18 +36,6 @@ class Product extends DefaultObject {
 
   static const int descriptionMaxLength = 500;
 
-  Product({
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.stockQuantity,
-    required this.code,
-    super.registrationDate,
-    super.lastUpdatedDate,
-    this.categoryId,
-    super.id,
-  });
-
   Product copyWith({
     String? name,
     String? description,
@@ -44,8 +44,7 @@ class Product extends DefaultObject {
     int? categoryId,
 
     DateTime? lastUpdatedDate,
-  }) {
-    return Product(
+  }) => Product(
       name: name ?? this.name,
       description: description ?? this.description,
       price: price ?? this.price,
@@ -56,5 +55,4 @@ class Product extends DefaultObject {
       lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
       id: id,
     );
-  }
 }

@@ -1,7 +1,9 @@
 import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
-import 'package:system_loja/data/database/app_database.dart';
 import 'package:path/path.dart' as p;
+import 'package:system_loja/data/database/app_database.dart';
+
 import 'support/test_app_database.dart';
 
 void main() {

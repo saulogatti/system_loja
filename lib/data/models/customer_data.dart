@@ -7,14 +7,6 @@ part 'customer_data.g.dart';
 /// JSON para [Customer].
 @JsonSerializable(explicitToJson: true)
 class CustomerData {
-  final int id;
-  final String name;
-  final String cpf;
-  final String? phone;
-  final String? email;
-  final AddressData address;
-  final DateTime registrationDate;
-  final DateTime? lastUpdatedDate;
 
   const CustomerData({
     required this.id,
@@ -30,8 +22,6 @@ class CustomerData {
   factory CustomerData.fromJson(Map<String, dynamic> json) =>
       _$CustomerDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CustomerDataToJson(this);
-
   factory CustomerData.fromDomain(Customer value) => CustomerData(
     id: value.id,
     name: value.name,
@@ -42,6 +32,16 @@ class CustomerData {
     registrationDate: value.registrationDate,
     lastUpdatedDate: value.lastUpdatedDate,
   );
+  final int id;
+  final String name;
+  final String cpf;
+  final String? phone;
+  final String? email;
+  final AddressData address;
+  final DateTime registrationDate;
+  final DateTime? lastUpdatedDate;
+
+  Map<String, dynamic> toJson() => _$CustomerDataToJson(this);
 
   Customer toDomain() => Customer(
     id: id,

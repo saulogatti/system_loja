@@ -34,7 +34,7 @@ import 'package:system_loja/domain/repository/system/user_repository.dart';
 import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
-final appInjection = GetIt.instance;
+final GetIt appInjection = GetIt.instance;
 late LoggerPersistenceService printerLog;
 
 /// Configura as dependências da aplicação.
@@ -42,7 +42,7 @@ late LoggerPersistenceService printerLog;
 /// Para acessar as dependências, use o `appInjection.get<T>()` onde T é o tipo da dependência.
 void setupAppInjection() {
   printerLog = registerLogPrinterColor(
-    config: ConfigLog(enableLog: kDebugMode),
+    config: const ConfigLog(enableLog: kDebugMode),
     // cacheFilePath: p.join(Directory.current.path, 'system_loja_cache'),
   );
   appInjection.registerSingleton<RouteApp>(RouteApp());

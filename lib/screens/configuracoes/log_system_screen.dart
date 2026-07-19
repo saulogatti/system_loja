@@ -16,18 +16,15 @@ class LogSystemScreen extends StatefulWidget implements AutoRouteWrapper {
   State<LogSystemScreen> createState() => _LogSystemScreenState();
 
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(
+  Widget wrappedRoute(BuildContext context) => BlocProvider(
       create: (context) => LogsSystemCubit(appInjection.get<ISystemErrorManager>()),
       child: this,
     );
-  }
 }
 
 class _LogSystemScreenState extends State<LogSystemScreen> {
   @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<LogsSystemCubit, LogsSystemState>(
+  Widget build(BuildContext context) => BlocConsumer<LogsSystemCubit, LogsSystemState>(
       listener: (context, state) {
         state.whenOrNull(
           error: (message) {
@@ -157,7 +154,6 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
         );
       },
     );
-  }
 
   @override
   void initState() {

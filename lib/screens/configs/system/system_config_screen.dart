@@ -23,12 +23,10 @@ class SystemConfigScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   State<SystemConfigScreen> createState() => _SystemConfigScreenState();
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<SystemConfigCubit>(
+  Widget wrappedRoute(BuildContext context) => BlocProvider<SystemConfigCubit>(
       create: (_) => SystemConfigCubit(appInjection.get<ISystemRepository>()),
       child: this,
     );
-  }
 }
 
 class _SystemConfigScreenState extends State<SystemConfigScreen> {
@@ -43,8 +41,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
   SystemConfiguration _systemData = SystemConfiguration();
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(title: const Text('Configurações de Dados Padrão')),
       body: BlocConsumer<SystemConfigCubit, SystemConfigState>(
         listener: (context, state) {
@@ -85,7 +82,6 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
         },
       ),
     );
-  }
 
   @override
   void dispose() {
@@ -121,9 +117,8 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     _systemData = data;
     _selectedPaymentMethods = List<PaymentMethodType>.from(
       data.priceConfiguration.types,
-      growable: true,
     );
-    _measurementUnits = List<String>.from(data.priceConfiguration.measurementUnits, growable: true);
+    _measurementUnits = List<String>.from(data.priceConfiguration.measurementUnits);
 
     final reportConfiguration = data.priceConfiguration.reportConfiguration;
     _enableSalesByPeriod = reportConfiguration?.enableSalesByPeriod ?? false;
@@ -131,8 +126,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
     _defaultPeriodController.text = reportConfiguration?.defaultPeriodInDays.toString() ?? '0';
   }
 
-  Widget _buildActions(BuildContext context) {
-    return Card(
+  Widget _buildActions(BuildContext context) => Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Wrap(
@@ -165,10 +159,8 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
         ),
       ),
     );
-  }
 
-  Widget _buildCategoriesSection(BuildContext context) {
-    return Card(
+  Widget _buildCategoriesSection(BuildContext context) => Card(
       child: ListTile(
         title: const Text('Categorias de produtos'),
         subtitle: const Text(
@@ -182,10 +174,8 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
         ),
       ),
     );
-  }
 
-  Widget _buildMeasurementUnitsSection() {
-    return Card(
+  Widget _buildMeasurementUnitsSection() => Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -235,10 +225,8 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
         ),
       ),
     );
-  }
 
-  Widget _buildPaymentMethodsSection() {
-    return Card(
+  Widget _buildPaymentMethodsSection() => Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -268,10 +256,8 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
         ),
       ),
     );
-  }
 
-  Widget _buildReportsSection() {
-    return Card(
+  Widget _buildReportsSection() => Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -313,7 +299,6 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
         ),
       ),
     );
-  }
 
   Widget _buildSystemSection(BuildContext context) {
     final currentConfig = _systemData;
@@ -347,8 +332,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
   ) async {
     final shouldImport = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
+      builder: (dialogContext) => AlertDialog(
           title: const Text('Importar configurações'),
           content: const Text('Esta ação sobrescreve a configuração atual. Deseja continuar?'),
           actions: [
@@ -365,8 +349,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
               child: const Text('Importar'),
             ),
           ],
-        );
-      },
+        ),
     );
 
     if (shouldImport != true) {
@@ -438,8 +421,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
   ) async {
     final shouldReset = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
+      builder: (dialogContext) => AlertDialog(
           title: const Text('Restaurar padrão'),
           content: const Text('Deseja restaurar as configurações para os valores padrão?'),
           actions: [
@@ -456,8 +438,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
               child: const Text('Restaurar'),
             ),
           ],
-        );
-      },
+        ),
     );
 
     if (shouldReset != true) {

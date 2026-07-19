@@ -61,10 +61,8 @@ class SystemDao extends DatabaseAccessor<SystemDatabase> with _$SystemDaoMixin {
     });
   }
 
-  Future<SystemConfigurationEntry?> _getLatestConfiguration() {
-    return (select(systemRecords)
+  Future<SystemConfigurationEntry?> _getLatestConfiguration() => (select(systemRecords)
           ..orderBy([(table) => OrderingTerm.desc(table.id)])
           ..limit(1))
         .getSingleOrNull();
-  }
 }

@@ -8,9 +8,9 @@ import 'package:system_loja/core/models/default/people_data.dart';
 /// Permite um único dropdown em vez de dois separados, já que ambos
 /// extendem [PersonDefault] e exibem nome + documento.
 sealed class PersonSelection {
-  final PersonDefault person;
 
   const PersonSelection(this.person);
+  final PersonDefault person;
 
   String get displayName => person.name;
 

@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'dart:io' show File;
+
+import 'package:system_loja/core/utils/result_status.dart' show ResultStatus;
 
 /// Utilitário para mensagens de erro exibíveis na UI a partir de falhas
 /// capturadas nos repositórios.

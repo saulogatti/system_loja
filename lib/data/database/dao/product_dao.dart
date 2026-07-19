@@ -3,6 +3,7 @@ import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/mapper/drift_to_domain.dart';
 import 'package:system_loja/data/database/table/products_records.dart';
+import 'package:system_loja/domain/repository/sales_repository.dart' show SalesRepository;
 
 part 'product_dao.g.dart';
 
@@ -44,8 +45,7 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   ///
   /// Usa `insertOrAbort` com `DoNothing` em conflito para evitar duplicatas.
   /// Retorna o ID gerado automaticamente, ou 0 em caso de conflito.
-  Future<int> insertProduct(Product data) {
-    return into(productsRecords).insert(
+  Future<int> insertProduct(Product data) => into(productsRecords).insert(
       ProductsRecordsCompanion.insert(
         code: data.code,
         categoryId: Value(data.categoryId),
@@ -57,21 +57,17 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
       mode: InsertMode.insertOrAbort,
       onConflict: DoNothing(),
     );
-  }
 
   /// Remove um produto pelo ID.
   ///
   /// Retorna true se o produto foi removido, false se não encontrado.
-  Future<bool> remove(int id) async {
-    return await (delete(productsRecords)..where((t) => t.id.equals(id))).go() >
+  Future<bool> remove(int id) async => await (delete(productsRecords)..where((t) => t.id.equals(id))).go() >
         0;
-  }
 
   /// Atualiza os dados de um produto existente.
   ///
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
-  Future<bool> updateProduct(Product data) {
-    return update(productsRecords).replace(
+  Future<bool> updateProduct(Product data) => update(productsRecords).replace(
       ProductsRecordsCompanion(
         id: Value(data.id),
         code: Value(data.code),
@@ -84,7 +80,6 @@ class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
         registrationDate: Value(data.registrationDate),
       ),
     );
-  }
 
   /// Busca um produto pelo código.
   ///

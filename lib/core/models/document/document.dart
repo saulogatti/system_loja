@@ -1,7 +1,6 @@
 import 'package:system_loja/core/exceptions/validation_exception.dart';
 
 abstract class Document {
-  final String value;
 
   Document(this.value) {
     final validationError = validateDocument();
@@ -9,6 +8,7 @@ abstract class Document {
       throw ValidationException(validationError);
     }
   }
+  final String value;
 
   String get formatted;
   String? validateDocument();

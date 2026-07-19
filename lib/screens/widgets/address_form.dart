@@ -1,15 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/screens/utils/text_formatters.dart';
 
 class AddressForm extends StatelessWidget {
-  /// Lista de estados brasileiros (UF)
-  static const List<BrazilianState> brazilianStates = BrazilianState.values;
-  final TextEditingController streetController;
-  final TextEditingController zipCodeController;
-  final TextEditingController neighborhoodController;
-  final TextEditingController cityController;
-  final TextEditingController stateController;
-
   const AddressForm({
     required this.streetController,
     required this.zipCodeController,
@@ -19,95 +12,120 @@ class AddressForm extends StatelessWidget {
     super.key,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('Endereço', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 12),
-        TextFormField(
-          controller: streetController,
-          decoration: const InputDecoration(
-            labelText: 'Rua',
-            border: OutlineInputBorder(),
-            prefixIcon: Icon(Icons.location_on),
-          ),
-          keyboardType: TextInputType.streetAddress,
-          textCapitalization: TextCapitalization.words,
-          autofillHints: const [AutofillHints.streetAddressLine1],
-          textInputAction: TextInputAction.next,
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                controller: zipCodeController,
-                decoration: const InputDecoration(
-                  labelText: 'CEP',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.markunread_mailbox),
-                  hintText: '00000-000',
-                ),
-                keyboardType: TextInputType.number,
-                autofillHints: const [AutofillHints.postalCode],
-                textInputAction: TextInputAction.next,
-                inputFormatters: [CepTextInputFormatter()],
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: TextFormField(
-                controller: neighborhoodController,
-                decoration: const InputDecoration(
-                  labelText: 'Bairro',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.map),
-                ),
-                textCapitalization: TextCapitalization.words,
-                autofillHints: const [AutofillHints.sublocality],
-                textInputAction: TextInputAction.next,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        TextFormField(
-          controller: cityController,
-          decoration: const InputDecoration(
-            labelText: 'Cidade',
-            border: OutlineInputBorder(),
-            prefixIcon: Icon(Icons.location_city),
-          ),
-          textCapitalization: TextCapitalization.words,
-          autofillHints: const [AutofillHints.addressCity],
-          textInputAction: TextInputAction.next,
-        ),
-        const SizedBox(height: 16),
-        DropdownButtonFormField<BrazilianState>(
-          initialValue: stateController.text.isEmpty
-              ? null
-              : BrazilianState.values.firstWhere(
-                  (state) => state.displayName.toLowerCase() == stateController.text.toLowerCase(),
-                  orElse: () => BrazilianState.values.first,
-                ),
+  /// Lista de estados brasileiros (UF)
+  static const List<BrazilianState> brazilianStates = BrazilianState.values;
+  final TextEditingController streetController;
+  final TextEditingController zipCodeController;
+  final TextEditingController neighborhoodController;
+  final TextEditingController cityController;
+  final TextEditingController stateController;
 
-          decoration: const InputDecoration(
-            labelText: 'Estado',
-            border: OutlineInputBorder(),
-            prefixIcon: Icon(Icons.map),
-          ),
-          items: brazilianStates.map((BrazilianState state) {
-            return DropdownMenuItem<BrazilianState>(value: state, child: Text(state.displayName));
-          }).toList(),
-          onChanged: (BrazilianState? newValue) {
-            if (newValue != null) {
-              stateController.text = newValue.displayName;
-            }
-          },
+  @override
+  Widget build(BuildContext context) => Column(
+    children: [
+      const Text('Endereço', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      const SizedBox(height: 12),
+      TextFormField(
+        controller: streetController,
+        decoration: const InputDecoration(
+          labelText: 'Rua',
+          border: OutlineInputBorder(),
+          prefixIcon: Icon(Icons.location_on),
         ),
-      ],
+        keyboardType: TextInputType.streetAddress,
+        textCapitalization: TextCapitalization.words,
+        autofillHints: const [AutofillHints.streetAddressLine1],
+        textInputAction: TextInputAction.next,
+      ),
+      const SizedBox(height: 16),
+      Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: zipCodeController,
+              decoration: const InputDecoration(
+                labelText: 'CEP',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.markunread_mailbox),
+                hintText: '00000-000',
+              ),
+              keyboardType: TextInputType.number,
+              autofillHints: const [AutofillHints.postalCode],
+              textInputAction: TextInputAction.next,
+              inputFormatters: [CepTextInputFormatter()],
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: TextFormField(
+              controller: neighborhoodController,
+              decoration: const InputDecoration(
+                labelText: 'Bairro',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.map),
+              ),
+              textCapitalization: TextCapitalization.words,
+              autofillHints: const [AutofillHints.sublocality],
+              textInputAction: TextInputAction.next,
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 16),
+      TextFormField(
+        controller: cityController,
+        decoration: const InputDecoration(
+          labelText: 'Cidade',
+          border: OutlineInputBorder(),
+          prefixIcon: Icon(Icons.location_city),
+        ),
+        textCapitalization: TextCapitalization.words,
+        autofillHints: const [AutofillHints.addressCity],
+        textInputAction: TextInputAction.next,
+      ),
+      const SizedBox(height: 16),
+      DropdownButtonFormField<BrazilianState>(
+        initialValue: stateController.text.isEmpty
+            ? null
+            : BrazilianState.values.firstWhere(
+                (state) => state.displayName.toLowerCase() == stateController.text.toLowerCase(),
+                orElse: () => BrazilianState.values.first,
+              ),
+
+        decoration: const InputDecoration(
+          labelText: 'Estado',
+          border: OutlineInputBorder(),
+          prefixIcon: Icon(Icons.map),
+        ),
+        items: brazilianStates
+            .map(
+              (state) =>
+                  DropdownMenuItem<BrazilianState>(value: state, child: Text(state.displayName)),
+            )
+            .toList(),
+        onChanged: (newValue) {
+          if (newValue != null) {
+            stateController.text = newValue.displayName;
+          }
+        },
+      ),
+    ],
+  );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(
+      DiagnosticsProperty<TextEditingController>('streetController', streetController),
     );
+    properties.add(
+      DiagnosticsProperty<TextEditingController>('zipCodeController', zipCodeController),
+    );
+    properties.add(
+      DiagnosticsProperty<TextEditingController>('neighborhoodController', neighborhoodController),
+    );
+    properties.add(DiagnosticsProperty<TextEditingController>('cityController', cityController));
+    properties.add(DiagnosticsProperty<TextEditingController>('stateController', stateController));
   }
 }
 

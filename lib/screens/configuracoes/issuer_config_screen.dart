@@ -31,8 +31,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
   SystemUserData? _currentSystemUserData;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<HomeBloc, HomeState>(
+  Widget build(BuildContext context) => BlocListener<HomeBloc, HomeState>(
       listener: (context, state) {
         switch (state) {
           case HomeLoaded(:final systemUserData):
@@ -59,7 +58,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
       child: Scaffold(
         appBar: AppBar(title: const Text('Empresa Emitente'), leading: const AutoLeadingButton()),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: AutofillGroup(
             child: Form(
               key: _formKey,
@@ -80,7 +79,6 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
         ),
       ),
     );
-  }
 
   @override
   void dispose() {
@@ -111,10 +109,9 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
   }
 
   /// Constrói a seção de chave de acesso (reservada para futura implementação).
-  Widget _buildAccessKeySection(BuildContext context) {
-    return Card(
+  Widget _buildAccessKeySection(BuildContext context) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -138,12 +135,12 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
               controller: _accessKeyController,
               obscureText: true,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Chave de Acesso',
                 hintText: 'Disponível em breve',
-                border: const OutlineInputBorder(),
-                prefixIcon: const Icon(Icons.lock_outline),
-                suffixIcon: const IconButton(
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.lock_outline),
+                suffixIcon: IconButton(
                   tooltip: 'Visibilidade da chave de acesso indisponível',
                   icon: Icon(Icons.visibility_off),
                   onPressed: null,
@@ -155,13 +152,11 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
         ),
       ),
     );
-  }
 
   /// Constrói a seção de informações da empresa.
-  Widget _buildInfoSection(BuildContext context) {
-    return Card(
+  Widget _buildInfoSection(BuildContext context) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -277,13 +272,11 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
         ),
       ),
     );
-  }
 
   /// Constrói a seção do logotipo da empresa.
-  Widget _buildLogoSection(BuildContext context) {
-    return Card(
+  Widget _buildLogoSection(BuildContext context) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -304,7 +297,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Theme.of(context).colorScheme.outline, width: 1),
+                      border: Border.all(color: Theme.of(context).colorScheme.outline),
                     ),
                     child: Icon(
                       Icons.add_photo_alternate_outlined,
@@ -334,11 +327,9 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
         ),
       ),
     );
-  }
 
   /// Constrói o botão de salvar.
-  Widget _buildSaveButton(BuildContext context) {
-    return ElevatedButton.icon(
+  Widget _buildSaveButton(BuildContext context) => ElevatedButton.icon(
       onPressed: _salvarConfiguracoes,
       icon: const Icon(Icons.save),
       label: const Text('Salvar Configurações'),
@@ -347,7 +338,6 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
         textStyle: const TextStyle(fontSize: 16),
       ),
     );
-  }
 
   /// Salva as configurações da empresa emitente.
   void _salvarConfiguracoes() {

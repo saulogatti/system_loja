@@ -29,24 +29,21 @@ void main() {
     await database.close();
   });
 
-  Future<int> insertProduct({int stockQuantity = 10}) {
-    return productDao.insertProduct(
+  Future<int> insertProduct({int stockQuantity = 10}) => productDao.insertProduct(
       Product(
         name: 'Produto Teste',
         description: 'Descrição teste',
-        price: 5.0,
+        price: 5,
         stockQuantity: stockQuantity,
         code: 'PROD-${DateTime.now().microsecondsSinceEpoch}',
       ),
     );
-  }
 
   Invoice buildInvoice({
     required int productId,
     required int quantity,
     required InvoiceType type,
-  }) {
-    return Invoice(
+  }) => Invoice(
       data: InvoiceData(
         invoiceNumber: 'NF-${DateTime.now().microsecondsSinceEpoch}',
         companyId: type == InvoiceType.entry ? 1 : null,
@@ -62,13 +59,12 @@ void main() {
             productName: 'Produto Teste',
             productCode: 'PROD-001',
             quantity: quantity,
-            unitPrice: 5.0,
+            unitPrice: 5,
           ),
         ],
         paymentMethod: 'Dinheiro',
       ),
     );
-  }
 
   group('Orquestração nota + itens + estoque (espelho do SalesRepository)', () {
     group('nota de entrada', () {
@@ -76,7 +72,7 @@ void main() {
         // Arrange
         const initialStock = 10;
         const invoiceQuantity = 1;
-        final productId = await insertProduct(stockQuantity: initialStock);
+        final productId = await insertProduct();
 
         final invoice = buildInvoice(
           productId: productId,
@@ -123,7 +119,7 @@ void main() {
         // Arrange
         const initialStock = 10;
         const invoiceQuantity = 3;
-        final productId = await insertProduct(stockQuantity: initialStock);
+        final productId = await insertProduct();
 
         final invoice = buildInvoice(
           productId: productId,

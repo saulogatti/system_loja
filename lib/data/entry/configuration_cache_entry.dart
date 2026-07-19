@@ -7,10 +7,10 @@ part 'configuration_cache_entry.g.dart';
 
 @JsonSerializable()
 class ConfigurationCacheEntry extends Cacheable {
-  final AppSettingsEntry configuracao;
   ConfigurationCacheEntry({required this.configuracao});
   factory ConfigurationCacheEntry.fromJson(Map<String, dynamic> json) =>
       _$ConfigurationCacheEntryFromJson(json);
+  final AppSettingsEntry configuracao;
   @override
   String get cacheKey => keyConfigurationRepositoryCache;
   @override

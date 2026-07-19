@@ -20,9 +20,8 @@ class CadastroGroupScreen extends StatefulWidget {
 
 class _CadastroGroupScreenState extends State<CadastroGroupScreen> {
   @override
-  Widget build(BuildContext context) {
-    return AutoTabsRouter(
-      routes: [PersonListRoute(), ProductListRoute()],
+  Widget build(BuildContext context) => AutoTabsRouter(
+      routes: const [PersonListRoute(), ProductListRoute()],
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         final isPersonTab = tabsRouter.activeIndex == 0;
@@ -50,7 +49,6 @@ class _CadastroGroupScreenState extends State<CadastroGroupScreen> {
         );
       },
     );
-  }
 
   Future<void> _handleFabAction({required bool isPersonTab}) async {
     final rootRouter = context.router.root;

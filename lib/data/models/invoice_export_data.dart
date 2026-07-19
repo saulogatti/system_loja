@@ -7,27 +7,6 @@ part 'invoice_export_data.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class InvoiceDataExport {
-  final String invoiceNumber;
-
-  final int? customerId;
-
-  final String? customerName;
-
-  final String? customerCpf;
-
-  final int? companyId;
-
-  final String? companyName;
-
-  final String? companyCnpj;
-  final List<InvoiceItemData> items;
-
-  final String paymentMethod;
-
-  final DateTime issueDate;
-
-  @JsonKey(fromJson: _invoiceTypeFromJson, toJson: _invoiceTypeToJson)
-  final InvoiceType type;
 
   const InvoiceDataExport({
     required this.invoiceNumber,
@@ -59,6 +38,27 @@ class InvoiceDataExport {
 
   factory InvoiceDataExport.fromJson(Map<String, dynamic> json) =>
       _$InvoiceDataExportFromJson(json);
+  final String invoiceNumber;
+
+  final int? customerId;
+
+  final String? customerName;
+
+  final String? customerCpf;
+
+  final int? companyId;
+
+  final String? companyName;
+
+  final String? companyCnpj;
+  final List<InvoiceItemData> items;
+
+  final String paymentMethod;
+
+  final DateTime issueDate;
+
+  @JsonKey(fromJson: _invoiceTypeFromJson, toJson: _invoiceTypeToJson)
+  final InvoiceType type;
 
   InvoiceData toDomain() => InvoiceData(
     invoiceNumber: invoiceNumber,
@@ -77,7 +77,7 @@ class InvoiceDataExport {
   Map<String, dynamic> toJson() => _$InvoiceDataExportToJson(this);
 
   static InvoiceType _invoiceTypeFromJson(Object? json) =>
-      InvoiceType.values.byName(json as String);
+      InvoiceType.values.byName(json! as String);
 
   static String _invoiceTypeToJson(InvoiceType value) => value.name;
 }
@@ -85,10 +85,6 @@ class InvoiceDataExport {
 /// JSON para importação/exportação de [Invoice].
 @JsonSerializable(explicitToJson: true)
 class InvoiceExportData {
-  final int id;
-  final DateTime registrationDate;
-  final DateTime lastUpdatedDate;
-  final InvoiceDataExport data;
 
   const InvoiceExportData({
     required this.id,
@@ -106,6 +102,10 @@ class InvoiceExportData {
 
   factory InvoiceExportData.fromJson(Map<String, dynamic> json) =>
       _$InvoiceExportDataFromJson(json);
+  final int id;
+  final DateTime registrationDate;
+  final DateTime lastUpdatedDate;
+  final InvoiceDataExport data;
 
   Invoice toDomain() => Invoice(
     id: id,

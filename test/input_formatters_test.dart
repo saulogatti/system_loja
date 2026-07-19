@@ -15,15 +15,13 @@ void main() {
       formatter = PriceInputFormatter();
     });
 
-    TextEditingValue format(String text) {
-      return formatter.formatEditUpdate(
-        const TextEditingValue(),
-        TextEditingValue(
-          text: text,
-          selection: TextSelection.collapsed(offset: text.length),
-        ),
-      );
-    }
+    TextEditingValue format(String text) => formatter.formatEditUpdate(
+      TextEditingValue.empty,
+      TextEditingValue(
+        text: text,
+        selection: TextSelection.collapsed(offset: text.length),
+      ),
+    );
 
     test('deve aceitar números inteiros', () {
       final result = format('10');
@@ -41,7 +39,7 @@ void main() {
     });
 
     test('deve remover caracteres não numéricos', () {
-      final result = format('R\$ 10.50');
+      final result = format(r'R$ 10.50');
       expect(result.text, equals('10.50'));
     });
 
@@ -68,15 +66,13 @@ void main() {
       formatter = QuantityInputFormatter();
     });
 
-    TextEditingValue format(String text) {
-      return formatter.formatEditUpdate(
-        const TextEditingValue(),
-        TextEditingValue(
-          text: text,
-          selection: TextSelection.collapsed(offset: text.length),
-        ),
-      );
-    }
+    TextEditingValue format(String text) => formatter.formatEditUpdate(
+      TextEditingValue.empty,
+      TextEditingValue(
+        text: text,
+        selection: TextSelection.collapsed(offset: text.length),
+      ),
+    );
 
     test('deve aceitar números inteiros', () {
       final result = format('10');
@@ -131,15 +127,13 @@ void main() {
       formatter = ProductCodeInputFormatter();
     });
 
-    TextEditingValue format(String text) {
-      return formatter.formatEditUpdate(
-        const TextEditingValue(),
-        TextEditingValue(
-          text: text,
-          selection: TextSelection.collapsed(offset: text.length),
-        ),
-      );
-    }
+    TextEditingValue format(String text) => formatter.formatEditUpdate(
+      TextEditingValue.empty,
+      TextEditingValue(
+        text: text,
+        selection: TextSelection.collapsed(offset: text.length),
+      ),
+    );
 
     test('deve aceitar letras e números', () {
       final result = format('ABC123');
@@ -214,15 +208,13 @@ void main() {
       formatter = CepTextInputFormatter();
     });
 
-    TextEditingValue format(String text) {
-      return formatter.formatEditUpdate(
-        const TextEditingValue(),
-        TextEditingValue(
-          text: text,
-          selection: TextSelection.collapsed(offset: text.length),
-        ),
-      );
-    }
+    TextEditingValue format(String text) => formatter.formatEditUpdate(
+      TextEditingValue.empty,
+      TextEditingValue(
+        text: text,
+        selection: TextSelection.collapsed(offset: text.length),
+      ),
+    );
 
     test('deve formatar CEP com 8 dígitos', () {
       final result = format('12345678');

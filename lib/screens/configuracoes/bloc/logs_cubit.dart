@@ -4,8 +4,8 @@ import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_state_cubit.dart';
 
 class LogsCubit extends Cubit<LogsState> {
-  final ILogRepository _logRepository;
   LogsCubit(this._logRepository) : super(const LogsStateInitial());
+  final ILogRepository _logRepository;
 
   Future<void> fetchActivesLogs() async {
     final logs = await _logRepository.fetchAllLogs();

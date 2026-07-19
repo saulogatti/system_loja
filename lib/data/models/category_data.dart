@@ -1,17 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:system_loja/core/models/category.dart';
+import 'package:system_loja/core/models/product_category.dart';
 
 part 'category_data.g.dart';
 
-/// JSON para [Category].
+/// JSON para [ProductCategory].
 @JsonSerializable()
 class CategoryData {
-  final int id;
-  final String name;
-  final String? description;
-  final DateTime registrationDate;
-  final DateTime? lastUpdatedDate;
-
   const CategoryData({
     required this.id,
     required this.name,
@@ -20,12 +14,7 @@ class CategoryData {
     this.lastUpdatedDate,
   });
 
-  factory CategoryData.fromJson(Map<String, dynamic> json) =>
-      _$CategoryDataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$CategoryDataToJson(this);
-
-  factory CategoryData.fromDomain(Category value) => CategoryData(
+  factory CategoryData.fromDomain(ProductCategory value) => CategoryData(
     id: value.id,
     name: value.name,
     description: value.description,
@@ -33,11 +22,20 @@ class CategoryData {
     lastUpdatedDate: value.lastUpdatedDate,
   );
 
-  Category toDomain() => Category(
+  factory CategoryData.fromJson(Map<String, dynamic> json) => _$CategoryDataFromJson(json);
+  final int id;
+  final String name;
+  final String? description;
+  final DateTime registrationDate;
+  final DateTime? lastUpdatedDate;
+
+  ProductCategory toDomain() => ProductCategory(
     id: id,
     name: name,
     description: description,
     registrationDate: registrationDate,
     lastUpdatedDate: lastUpdatedDate,
   );
+
+  Map<String, dynamic> toJson() => _$CategoryDataToJson(this);
 }

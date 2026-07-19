@@ -6,12 +6,12 @@ import 'package:system_loja/data/database/dao/product_dao.dart';
 /// Este serviço fornece métodos para gerar códigos automáticos sequenciais
 /// ou validar códigos fornecidos pelo usuário, garantindo unicidade no banco.
 class CodeGeneratorService {
-  final ProductDao _productDao;
-  final InvoiceDao _invoiceDao;
 
   CodeGeneratorService({required ProductDao productDao, required InvoiceDao invoiceDao})
     : _productDao = productDao,
       _invoiceDao = invoiceDao;
+  final ProductDao _productDao;
+  final InvoiceDao _invoiceDao;
 
   /// Verifica se um número de nota fiscal já existe no banco de dados.
   ///
@@ -42,7 +42,7 @@ class CodeGeneratorService {
     final now = DateTime.now();
     final datePrefix = 'NF-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
 
-    int counter = 1;
+    var counter = 1;
     String invoiceNumber;
 
     do {
@@ -69,7 +69,7 @@ class CodeGeneratorService {
     final now = DateTime.now();
     final datePrefix = 'PRD-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}';
 
-    int counter = 1;
+    var counter = 1;
     String code;
 
     do {
@@ -167,18 +167,16 @@ class CodeGeneratorService {
   }
 
   /// Método auxiliar para adicionar zeros à esquerda.
-  String _padLeft(int value, [int width = 2]) {
-    return value.toString().padLeft(width, '0');
-  }
+  String _padLeft(int value, [int width = 2]) => value.toString().padLeft(width, '0');
 }
 
 /// Resultado da validação de código.
 class CodeValidationResult {
+
+  CodeValidationResult({required this.isValid, required this.message});
   /// Indica se o código é válido.
   final bool isValid;
 
   /// Mensagem descritiva do resultado da validação.
   final String message;
-
-  CodeValidationResult({required this.isValid, required this.message});
 }
