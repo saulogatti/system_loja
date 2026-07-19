@@ -30,5 +30,5 @@ abstract interface class ISettingsService {
   /// Parâmetros:
   /// - [corPrimaria]: Cor primária do tema (blue, green, red, etc.)
   /// - [temaEscuro]: Define se o tema escuro está ativo (true) ou tema claro (false)
-  void updateSettings(EnumColorAppThemeSettings corPrimaria, bool temaEscuro);
+  void updateSettings(EnumColorAppThemeSettings corPrimaria, {bool temaEscuro = false});
 }

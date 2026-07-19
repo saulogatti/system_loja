@@ -185,7 +185,7 @@ void main() {
         expect(exception.type, ProductErrorType.invalidPrice);
         expect(exception.message, 'Preço inválido');
         expect(exception.productCode, code);
-        expect(exception.details, contains('R\$'));
+        expect(exception.details, contains(r'R$'));
       });
 
       test('invalidStock deve criar exceção correta', () {

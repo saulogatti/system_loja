@@ -6,14 +6,6 @@ part 'user_entry.g.dart';
 /// Linha Drift / DTO JSON para usuário (sem herdar [User]).
 @JsonSerializable(explicitToJson: true)
 class UserEntry {
-  final int id;
-  final String name;
-  final String? email;
-  final String passwordHash;
-  @JsonKey(defaultValue: 0)
-  final int permission;
-  final DateTime registrationDate;
-  final DateTime? lastUpdatedDate;
 
   const UserEntry({
     required this.id,
@@ -28,8 +20,7 @@ class UserEntry {
   factory UserEntry.fromJson(Map<String, dynamic> json) =>
       _$UserEntryFromJson(json);
 
-  factory UserEntry.fromUser(User user) {
-    return UserEntry(
+  factory UserEntry.fromUser(User user) => UserEntry(
       id: user.id,
       name: user.name,
       passwordHash: user.passwordHash,
@@ -38,7 +29,14 @@ class UserEntry {
       permission: user.permission,
       lastUpdatedDate: user.lastUpdatedDate,
     );
-  }
+  final int id;
+  final String name;
+  final String? email;
+  final String passwordHash;
+  @JsonKey(defaultValue: 0)
+  final int permission;
+  final DateTime registrationDate;
+  final DateTime? lastUpdatedDate;
 
   Map<String, dynamic> toJson() => _$UserEntryToJson(this);
 

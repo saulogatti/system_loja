@@ -6,16 +6,6 @@ part 'invoice_item_data.g.dart';
 /// JSON para [InvoiceItem].
 @JsonSerializable()
 class InvoiceItemData {
-  @JsonKey(name: 'produto_id')
-  final int? productId;
-  @JsonKey(name: 'produto_nome')
-  final String productName;
-  @JsonKey(name: 'produto_codigo')
-  final String productCode;
-  @JsonKey(name: 'quantidade')
-  final int quantity;
-  @JsonKey(name: 'preco_unitario')
-  final double unitPrice;
 
   const InvoiceItemData({
     required this.productName,
@@ -28,8 +18,6 @@ class InvoiceItemData {
   factory InvoiceItemData.fromJson(Map<String, dynamic> json) =>
       _$InvoiceItemDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$InvoiceItemDataToJson(this);
-
   factory InvoiceItemData.fromDomain(InvoiceItem value) => InvoiceItemData(
     productId: value.productId == kInvalidId ? null : value.productId,
     productName: value.productName,
@@ -37,6 +25,18 @@ class InvoiceItemData {
     quantity: value.quantity,
     unitPrice: value.unitPrice,
   );
+  @JsonKey(name: 'produto_id')
+  final int? productId;
+  @JsonKey(name: 'produto_nome')
+  final String productName;
+  @JsonKey(name: 'produto_codigo')
+  final String productCode;
+  @JsonKey(name: 'quantidade')
+  final int quantity;
+  @JsonKey(name: 'preco_unitario')
+  final double unitPrice;
+
+  Map<String, dynamic> toJson() => _$InvoiceItemDataToJson(this);
 
   InvoiceItem toDomain() => InvoiceItem(
     productId: productId ?? kInvalidId,

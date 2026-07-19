@@ -122,7 +122,7 @@ mixin FileStorageUtility {
   @protected
   Future<bool> deleteFile(String fileName) async {
     try {
-      final File file = await _mountFileSystem(fileName);
+      final file = await _mountFileSystem(fileName);
       if (await file.exists()) {
         await file.delete();
         return true;
@@ -143,7 +143,7 @@ mixin FileStorageUtility {
       }
 
       final availableData = <String>[];
-      await for (var entity in cacheDir.list()) {
+      await for (final entity in cacheDir.list()) {
         if (entity is File) {
           final data = await entity.readAsString();
           availableData.add(data);
@@ -181,12 +181,12 @@ mixin FileStorageUtility {
       );
     }
 
-    final File file = await _mountFileSystem(fileName);
+    final file = await _mountFileSystem(fileName);
     if (!await file.exists()) {
       return ResultStatus.error('Arquivo $fileName não encontrado.');
     }
     try {
-      final String content = await file.readAsString();
+      final content = await file.readAsString();
 
       return ResultStatus.success(content);
     } catch (e, stackTrace) {
@@ -219,18 +219,17 @@ mixin FileStorageUtility {
   Future<int> restoreBackup(String direBackup) async {
     try {
       if (direBackup.isEmpty) {
-        throw CacheReadException('Caminho de backup não pode ser vazio', null);
+        throw const CacheReadException('Caminho de backup não pode ser vazio');
       }
       if (!direBackup.contains(_maskBackup)) {
-        throw CacheReadException(
+        throw const CacheReadException(
           'Diretório de backup inválido: nome não contém a máscara '
           '"$_maskBackup"',
-          null,
         );
       }
       final backupDir = Directory(direBackup);
       if (!await backupDir.exists()) {
-        throw CacheReadException('Diretório de backup não encontrado', null);
+        throw const CacheReadException('Diretório de backup não encontrado');
       }
 
       final appDocDir = await getApplicationSupportDirectory();
@@ -308,7 +307,7 @@ mixin FileStorageUtility {
     }
 
     try {
-      final File file = await _mountFileSystem(path);
+      final file = await _mountFileSystem(path);
       if (!await file.parent.exists()) {
         await file.parent.create(recursive: true);
       }
@@ -367,7 +366,7 @@ mixin FileStorageUtility {
       try {
         //DEBUG ///Users/saulogatti-pessoal/Library/Containers/com.example.systemLoja/Data/Library/Application%20Support/com.example.systemLoja/json_data_storage/
         final directory = await getApplicationSupportDirectory();
-        final String cacheDirectory = p.join(directory.path, retrieveDirectoryName());
+        final cacheDirectory = p.join(directory.path, retrieveDirectoryName());
         final cacheDir = Directory(cacheDirectory);
 
         if (!await cacheDir.exists()) {
@@ -375,7 +374,7 @@ mixin FileStorageUtility {
         }
         await for (final element in cacheDir.list()) {
           if (element is! File) continue;
-          final String ext = p.extension(element.path).toLowerCase();
+          final ext = p.extension(element.path).toLowerCase();
           if (ext == '.bak') {
             // bak vai subistituir o original
             final originalPath = element.path.substring(0, element.path.length - ext.length);
@@ -404,7 +403,7 @@ mixin FileStorageUtility {
   /// Este é um método privado utilizado internamente por [fetchDataFromFile]
   /// e [saveData].
   Future<File> _mountFileSystem(String path) async {
-    final String cacheDirectory = await _initializeDirectory();
+    final cacheDirectory = await _initializeDirectory();
     return File(p.join(cacheDirectory, path));
   }
 }

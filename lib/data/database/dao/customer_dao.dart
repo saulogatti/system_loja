@@ -14,24 +14,20 @@ part 'customer_dao.g.dart';
 @DriftAccessor(tables: [CustomerRecords])
 class CustomerDao extends DatabaseAccessor<AppDatabase>
     with _$CustomerDaoMixin {
-  CustomerDao(super.db);
+  CustomerDao(super.attachedDatabase);
 
   /// Insere um novo cliente no banco de dados.
   ///
   /// Aceita um objeto Customer do domínio e o converte para Companion.
   /// Retorna o ID gerado automaticamente.
-  Future<int> addCustomer(Customer customer) {
-    return into(
+  Future<int> addCustomer(Customer customer) => into(
       customerRecords,
     ).insert(customer.toCompanion(), mode: InsertMode.insertOrAbort);
-  }
 
   /// Remove um cliente do banco de dados pelo ID.
   ///
   /// Retorna o número de linhas afetadas (normalmente 1 ou 0).
-  Future<int> deleteCustomer(int id) {
-    return (delete(customerRecords)..where((t) => t.id.equals(id))).go();
-  }
+  Future<int> deleteCustomer(int id) => (delete(customerRecords)..where((t) => t.id.equals(id))).go();
 
   /// Retorna todos os clientes como objetos de domínio Customer.
   Future<List<Customer>> getAll() async {
@@ -62,9 +58,7 @@ class CustomerDao extends DatabaseAccessor<AppDatabase>
   /// Atualiza um cliente existente no banco de dados.
   ///
   /// Retorna true se a atualização foi bem-sucedida, false caso contrário.
-  Future<bool> updateCustomer(Customer customer) {
-    return update(
+  Future<bool> updateCustomer(Customer customer) => update(
       customerRecords,
     ).replace(customer.toCompanion(forUpdate: true));
-  }
 }

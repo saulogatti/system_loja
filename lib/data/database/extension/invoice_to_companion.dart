@@ -9,8 +9,7 @@ extension InvoiceFromData on InvoicesRecord {
   ///
   /// Nota: os itens da nota fiscal devem ser carregados separadamente
   /// usando `InvoiceItemDao.getByInvoiceId()`.
-  Invoice toDomain(List<InvoiceItem> items) {
-    return Invoice(
+  Invoice toDomain(List<InvoiceItem> items) => Invoice(
       id: id,
       data: InvoiceData(
         invoiceNumber: invoiceNumber,
@@ -28,7 +27,6 @@ extension InvoiceFromData on InvoicesRecord {
       registrationDate: registrationDate,
       lastUpdatedDate: lastUpdatedDate,
     );
-  }
 }
 
 /// Extensão para converter [Invoice] (domínio) para [InvoicesRecordsCompanion] (Drift).
@@ -76,15 +74,13 @@ extension InvoiceToCompanion on Invoice {
 /// Extensão para converter [InvoiceItemsRecord] (Drift) para [InvoiceItem] (domínio).
 extension InvoiceItemFromData on InvoiceItemsRecord {
   /// Converte um registro do banco de dados para o modelo de domínio [InvoiceItem].
-  InvoiceItem toDomain() {
-    return InvoiceItem(
+  InvoiceItem toDomain() => InvoiceItem(
       productId: productId,
       productName: productName,
       productCode: productCode,
       quantity: quantity,
       unitPrice: unitPrice,
     );
-  }
 }
 
 /// Extensão para converter [InvoiceItem] (domínio) para [InvoiceItemsRecordsCompanion] (Drift).

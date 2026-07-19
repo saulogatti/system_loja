@@ -7,15 +7,6 @@ part 'app_settings_entry.g.dart';
 /// DTO JSON para persistência de [AppSettings] (sem herdar modelo de domínio).
 @JsonSerializable()
 class AppSettingsEntry {
-  final bool notificacoesAtivadas;
-  final bool notificarVendas;
-  final bool notificarEstoqueBaixo;
-  final int limiteEstoqueBaixo;
-  final EnumColorAppThemeSettings corPrimaria;
-  final bool temaEscuro;
-  final bool backupAutomatico;
-  final String frequenciaBackup;
-  final String localBackup;
 
   const AppSettingsEntry({
     this.notificacoesAtivadas = true,
@@ -42,6 +33,15 @@ class AppSettingsEntry {
   );
 
   factory AppSettingsEntry.fromJson(Map<String, dynamic> json) => _$AppSettingsEntryFromJson(json);
+  final bool notificacoesAtivadas;
+  final bool notificarVendas;
+  final bool notificarEstoqueBaixo;
+  final int limiteEstoqueBaixo;
+  final EnumColorAppThemeSettings corPrimaria;
+  final bool temaEscuro;
+  final bool backupAutomatico;
+  final String frequenciaBackup;
+  final String localBackup;
 
   AppSettings toAppSettings() => AppSettings(
     notificacoesAtivadas: notificacoesAtivadas,

@@ -4,11 +4,6 @@ import 'package:system_loja/data/entry/system_user_data_entry.dart';
 
 /// Linha Drift / agregado persistido para configuração do sistema (sem herdar [SystemConfiguration]).
 class SystemConfigurationEntry {
-  final int id;
-  final DateTime registrationDate;
-  final DateTime lastUpdatedDate;
-  final PriceConfiguration priceConfiguration;
-  final SystemUserDataEntry systemUserData;
 
   SystemConfigurationEntry({
     required this.id,
@@ -20,8 +15,7 @@ class SystemConfigurationEntry {
 
   factory SystemConfigurationEntry.fromSystemConfiguration(
     SystemConfiguration systemConfiguration,
-  ) {
-    return SystemConfigurationEntry(
+  ) => SystemConfigurationEntry(
       id: systemConfiguration.id,
       priceConfiguration: systemConfiguration.priceConfiguration,
       systemUserData: SystemUserDataEntry.fromSystemUserData(
@@ -30,7 +24,11 @@ class SystemConfigurationEntry {
       registrationDate: systemConfiguration.registrationDate,
       lastUpdatedDate: systemConfiguration.lastUpdatedDate,
     );
-  }
+  final int id;
+  final DateTime registrationDate;
+  final DateTime lastUpdatedDate;
+  final PriceConfiguration priceConfiguration;
+  final SystemUserDataEntry systemUserData;
 
   /// Converte para domínio; categorias de produto não vêm da tabela `system_records`.
   SystemConfiguration toDomain() => SystemConfiguration(

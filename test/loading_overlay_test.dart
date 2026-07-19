@@ -9,7 +9,7 @@ import 'package:system_loja/screens/widgets/loading_overlay.dart';
 void main() {
   group('LoadingOverlay Widget Tests', () {
     testWidgets('deve exibir CircularProgressIndicator', (
-      WidgetTester tester,
+      tester,
     ) async {
       // Arrange & Act
       await tester.pumpWidget(
@@ -21,7 +21,7 @@ void main() {
     });
 
     testWidgets('deve exibir mensagem quando fornecida', (
-      WidgetTester tester,
+      tester,
     ) async {
       // Arrange
       const testMessage = 'Carregando dados...';
@@ -39,7 +39,7 @@ void main() {
     });
 
     testWidgets('não deve exibir mensagem quando não fornecida', (
-      WidgetTester tester,
+      tester,
     ) async {
       // Arrange & Act
       await tester.pumpWidget(
@@ -59,7 +59,7 @@ void main() {
     });
 
     testWidgets('deve bloquear interações com ModalBarrier', (
-      WidgetTester tester,
+      tester,
     ) async {
       // Arrange
       await tester.pumpWidget(

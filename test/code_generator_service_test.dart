@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/product.dart';
-import 'package:system_loja/domain/code_generator_service.dart';
 import 'package:system_loja/data/database/app_database.dart';
+import 'package:system_loja/domain/code_generator_service.dart';
 
 import 'support/invoice_transaction_test_support.dart';
 import 'support/test_app_database.dart';
@@ -59,7 +59,7 @@ void main() {
         final product1 = Product(
           name: 'Produto Teste 1',
           description: 'Descrição teste 1',
-          price: 10.0,
+          price: 10,
           stockQuantity: 5,
           categoryId: 1,
           code: code1,
@@ -87,11 +87,11 @@ void main() {
     test(
       'checkProductCodeExists deve retornar true para código existente',
       () async {
-        final code = 'PRD-TEST-0001';
+        const code = 'PRD-TEST-0001';
         final product = Product(
           name: 'Produto Teste',
           description: 'Descrição teste',
-          price: 10.0,
+          price: 10,
           stockQuantity: 5,
           categoryId: 1,
           code: code,
@@ -135,11 +135,11 @@ void main() {
     );
 
     test('validateProductCode deve rejeitar código já existente', () async {
-      final code = 'PRD-EXISTING-0001';
+      const code = 'PRD-EXISTING-0001';
       final product = Product(
         name: 'Produto Existente',
         description: 'Descrição',
-        price: 10.0,
+        price: 10,
         stockQuantity: 5,
         categoryId: 1,
         code: code,
@@ -201,11 +201,10 @@ void main() {
             customerCpf: '12345678900',
             items: [
               InvoiceItem(
-                productId: kInvalidId,
                 productCode: 'PRD-001',
                 productName: 'Produto 1',
                 quantity: 1,
-                unitPrice: 10.0,
+                unitPrice: 10,
               ),
             ],
             paymentMethod: 'Dinheiro',
@@ -235,7 +234,7 @@ void main() {
     test(
       'checkInvoiceNumberExists deve retornar true para número existente',
       () async {
-        final invoiceNumber = 'NF-TEST-0001';
+        const invoiceNumber = 'NF-TEST-0001';
         final invoice = Invoice(
           data: InvoiceData(
             invoiceNumber: invoiceNumber,
@@ -244,11 +243,10 @@ void main() {
             customerCpf: '12345678900',
             items: [
               InvoiceItem(
-                productId: kInvalidId,
                 productCode: 'PRD-001',
                 productName: 'Produto 1',
                 quantity: 1,
-                unitPrice: 10.0,
+                unitPrice: 10,
               ),
             ],
             paymentMethod: 'Dinheiro',
@@ -297,7 +295,7 @@ void main() {
     );
 
     test('validateInvoiceNumber deve rejeitar número já existente', () async {
-      final invoiceNumber = 'NF-EXISTING-0001';
+      const invoiceNumber = 'NF-EXISTING-0001';
       final invoice = Invoice(
         data: InvoiceData(
           invoiceNumber: invoiceNumber,
@@ -306,11 +304,10 @@ void main() {
           customerCpf: '12345678900',
           items: [
             InvoiceItem(
-              productId: kInvalidId,
               productCode: 'PRD-001',
               productName: 'Produto 1',
               quantity: 1,
-              unitPrice: 10.0,
+              unitPrice: 10,
             ),
           ],
           paymentMethod: 'Dinheiro',

@@ -12,7 +12,7 @@ class SystemRecords extends Table {
   TextColumn get priceConfiguration =>
       text().map(PriceConfigurationCodec.driftConverter)();
   DateTimeColumn get registrationDate => dateTime()();
-  TextColumn get systemUserData => text().map(SystemUserDataConverter())();
+  TextColumn get systemUserData => text().map(const SystemUserDataConverter())();
 }
 
 class SystemUserDataConverter

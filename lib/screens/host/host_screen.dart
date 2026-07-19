@@ -7,28 +7,22 @@ class HostScreen extends StatelessWidget {
   const HostScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return AutoTabsScaffold(
-      appBarBuilder: (context, tabsRouter) {
-        return AppBar(
+  Widget build(BuildContext context) => AutoTabsScaffold(
+      appBarBuilder: (context, tabsRouter) => AppBar(
           title: Text(tabsRouter.topRoute.title(context)),
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          leading: AutoLeadingButton(),
-        );
-      },
+          leading: const AutoLeadingButton(),
+        ),
       routes: [
-        SalesPurchaseAnalyticsRoute(),
-        CadastroGroupRoute(),
-        SalesRoute(),
+        const SalesPurchaseAnalyticsRoute(),
+        const CadastroGroupRoute(),
+        const SalesRoute(),
         RelatoriosRoute(),
-        SettingsRoute(),
+        const SettingsRoute(),
       ],
-      transitionBuilder: (context, child, animation) {
-        return FadeTransition(opacity: animation, child: child);
-      },
+      transitionBuilder: (context, child, animation) => FadeTransition(opacity: animation, child: child),
 
-      bottomNavigationBuilder: (context, tabsRouter) {
-        return BottomNavigationBar(
+      bottomNavigationBuilder: (context, tabsRouter) => BottomNavigationBar(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           showSelectedLabels: true,
           showUnselectedLabels: false,
@@ -39,7 +33,7 @@ class HostScreen extends StatelessWidget {
           onTap: (index) {
             tabsRouter.setActiveIndex(index);
           },
-          items: [
+          items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_add),
@@ -58,8 +52,6 @@ class HostScreen extends StatelessWidget {
               label: 'Configurações',
             ),
           ],
-        );
-      },
+        ),
     );
-  }
 }

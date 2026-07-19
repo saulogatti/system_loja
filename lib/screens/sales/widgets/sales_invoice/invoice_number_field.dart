@@ -29,8 +29,7 @@ class _InvoiceNumberFieldState extends State<InvoiceNumberField> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<SalesInvoiceCubit, SalesInvoiceState>(
+  Widget build(BuildContext context) => BlocConsumer<SalesInvoiceCubit, SalesInvoiceState>(
       listenWhen: (previous, current) =>
           previous.form.invoiceNumber != current.form.invoiceNumber ||
           previous.form.enableCodeGeneration !=
@@ -72,5 +71,4 @@ class _InvoiceNumberFieldState extends State<InvoiceNumberField> {
         );
       },
     );
-  }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/default/authorization_level.dart';
 import 'package:system_loja/core/models/user.dart';
@@ -8,15 +9,6 @@ import 'package:system_loja/screens/utils/validators.dart';
 ///
 /// Encapsula os campos de entrada e validações para criação e edição de usuários.
 class UsuarioForm extends StatefulWidget {
-  final GlobalKey<FormState> formKey;
-  final TextEditingController nomeController;
-  final TextEditingController emailController;
-  final TextEditingController senhaController;
-  final AuthorizationLevel nivelPermissaoSelecionado;
-  final User? usuarioEditando;
-  final VoidCallback onSubmit;
-  final VoidCallback? onCancel;
-  final ValueChanged<AuthorizationLevel> onPermissaoChanged;
 
   const UsuarioForm({
     required this.formKey,
@@ -30,17 +22,39 @@ class UsuarioForm extends StatefulWidget {
     super.key,
     this.onCancel,
   });
+  final GlobalKey<FormState> formKey;
+  final TextEditingController nomeController;
+  final TextEditingController emailController;
+  final TextEditingController senhaController;
+  final AuthorizationLevel nivelPermissaoSelecionado;
+  final User? usuarioEditando;
+  final VoidCallback onSubmit;
+  final VoidCallback? onCancel;
+  final ValueChanged<AuthorizationLevel> onPermissaoChanged;
 
   @override
   State<UsuarioForm> createState() => _UsuarioFormState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<GlobalKey<FormState>>('formKey', formKey));
+    properties.add(DiagnosticsProperty<TextEditingController>('nomeController', nomeController));
+    properties.add(DiagnosticsProperty<TextEditingController>('emailController', emailController));
+    properties.add(DiagnosticsProperty<TextEditingController>('senhaController', senhaController));
+    properties.add(EnumProperty<AuthorizationLevel>('nivelPermissaoSelecionado', nivelPermissaoSelecionado));
+    properties.add(DiagnosticsProperty<User?>('usuarioEditando', usuarioEditando));
+    properties.add(ObjectFlagProperty<VoidCallback>.has('onSubmit', onSubmit));
+    properties.add(ObjectFlagProperty<VoidCallback?>.has('onCancel', onCancel));
+    properties.add(ObjectFlagProperty<ValueChanged<AuthorizationLevel>>.has('onPermissaoChanged', onPermissaoChanged));
+  }
 }
 
 class _UsuarioFormState extends State<UsuarioForm> {
   bool _senhaVisivel = false;
 
   @override
-  Widget build(BuildContext context) {
-    return Form(
+  Widget build(BuildContext context) => Form(
       key: widget.formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -83,7 +97,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
               if (value == null || value.trim().isEmpty) {
                 return 'Email é obrigatório';
               }
-              if (value.trim().isValidEmail() == false) {
+              if (!value.trim().isValidEmail()) {
                 return 'Email inválido';
               }
               return null;
@@ -193,5 +207,4 @@ class _UsuarioFormState extends State<UsuarioForm> {
         ],
       ),
     );
-  }
 }

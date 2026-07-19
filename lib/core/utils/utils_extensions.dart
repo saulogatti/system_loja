@@ -10,7 +10,5 @@ extension MapId on Map<int, DefaultObject> {
 /// Extensão para formatação de preços
 extension PriceFormatter on double {
   /// Formata o preço no padrão brasileiro (R$ XX.XX)
-  String toFormattedPrice() {
-    return 'R\$ ${toStringAsFixed(2)}';
-  }
+  String toFormattedPrice() => 'R\$ ${toStringAsFixed(2)}';
 }

@@ -1,3 +1,4 @@
+import 'package:system_loja/core/interface/i_configuration_repository.dart' show IConfigurationRepository;
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 

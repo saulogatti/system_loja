@@ -28,7 +28,7 @@ sealed class SalesInvoiceState with _$SalesInvoiceState {
     required SalesInvoiceFormData form,
   }) = SalesInvoiceEditing;
 
-  /// Mensagem já tratada para exibir na UI; após o SnackBar, volta para [editing] com o mesmo [form].
+  /// Mensagem já tratada para exibir na UI; após o SnackBar, volta para [SalesInvoiceState.editing] com o mesmo [form].
   const factory SalesInvoiceState.feedback({
     required SalesInvoiceFormData form,
     required String message,
@@ -45,17 +45,13 @@ extension SalesInvoiceStateFormX on SalesInvoiceState {
 
 /// Totais e lista ordenada derivados do formulário (fora do Cubit, para respeitar o bloc_lint).
 extension SalesInvoiceFormDataTotals on SalesInvoiceFormData {
-  double computeTotal() {
-    return linesByProductId.values.fold<double>(
+  double computeTotal() => linesByProductId.values.fold<double>(
       0,
       (sum, line) => sum + line.product.price * line.quantity,
     );
-  }
 
-  List<InvoiceLineEntry> buildOrderedLines() {
-    return orderedProductIds
+  List<InvoiceLineEntry> buildOrderedLines() => orderedProductIds
         .map((id) => linesByProductId[id])
         .whereType<InvoiceLineEntry>()
         .toList(growable: false);
-  }
 }

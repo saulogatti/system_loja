@@ -14,7 +14,7 @@ class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
       logInfo('No errors to clear from cache.');
       return;
     }
-    for (var cacheKey in _fileStorageOptions.values) {
+    for (final cacheKey in _fileStorageOptions.values) {
       await deleteFile(cacheKey);
     }
     _fileStorageOptions.clear();
@@ -22,15 +22,15 @@ class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
   }
 
   Future<List<SystemErrorModel>> retrieveAllErrors() async {
-    final List<SystemErrorModel> errors = [];
+    final errors = <SystemErrorModel>[];
     try {
       final result = await fetchAllDataFiles();
       switch (result) {
         case ResultSuccess(result: final dataMap):
-          for (var dataString in dataMap) {
+          for (final dataString in dataMap) {
             final jsonData = jsonDecode(dataString);
             if (jsonData != null && jsonData is Map) {
-              final Map<String, dynamic> dataMap = Map.from(jsonData);
+              final dataMap = Map<String, dynamic>.from(jsonData);
               final errorModel = SystemErrorModel.fromJson(dataMap);
               errors.add(errorModel);
               _fileStorageOptions['${errorModel.code}_error'] =
@@ -49,15 +49,13 @@ class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
   }
 
   @override
-  String retrieveDirectoryName() {
-    return 'system_cache';
-  }
+  String retrieveDirectoryName() => 'system_cache';
 
   Future<List<SystemErrorModel>> retrieveErrorsByCode(int code) async {
-    final List<SystemErrorModel> errors = [];
+    final errors = <SystemErrorModel>[];
 
     try {
-      final String keyCode = '${code}_error';
+      final keyCode = '${code}_error';
       final cacheKey = _fileStorageOptions[keyCode];
       if (cacheKey != null) {
         final result = await fetchDataFromFile(cacheKey);
@@ -65,7 +63,7 @@ class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
           case ResultSuccess(result: final dataString):
             final jsonData = jsonDecode(dataString);
             if (jsonData != null && jsonData is Map) {
-              final Map<String, dynamic> dataMap = Map.from(jsonData);
+              final dataMap = Map<String, dynamic>.from(jsonData);
               final errorModel = SystemErrorModel.fromJson(dataMap);
               errors.add(errorModel);
             }
@@ -86,10 +84,10 @@ class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
     await saveErrorModel(SystemErrorModel.fromDomain(error));
   }
 
-  /// Persiste um [SystemErrorModel] já montado (ex.: vindo de [reportError]).
+  /// Persiste um [SystemErrorModel] já montado (ex.: vindo de reportError).
   Future<void> saveErrorModel(SystemErrorModel errorModel) async {
     try {
-      final String keyCode = '${errorModel.code}_error';
+      final keyCode = '${errorModel.code}_error';
       errorModel.cacheKey = '$keyCode.json';
       _fileStorageOptions[keyCode] = errorModel.cacheKey;
       final jsonData = jsonEncode(errorModel.toJson());

@@ -4,9 +4,9 @@ import 'package:system_loja/core/constants/app_constants.dart';
 import 'package:system_loja/core/models/document/cnpj.dart';
 
 int _calculateCnpjDigit(String value, List<int> weights) {
-  int sum = 0;
+  var sum = 0;
 
-  for (int i = 0; i < value.length; i++) {
+  for (var i = 0; i < value.length; i++) {
     final charValue = value.codeUnitAt(i) - 48;
     sum += charValue * weights[i];
   }
@@ -115,9 +115,7 @@ extension FileNameStringExtensions on String {
   /// ```dart
   /// 'MinhaFoto.JPG'.normalizeFileName(); // 'minhafoto.jpg'
   /// ```
-  String normalizeFileName() {
-    return toLowerCase();
-  }
+  String normalizeFileName() => toLowerCase();
 
   /// Sanitiza a string removendo caracteres inválidos para nomes de arquivo.
   ///
@@ -133,13 +131,11 @@ extension FileNameStringExtensions on String {
   /// 'Arquivo<teste>.txt'.sanitizeFileName(); // 'Arquivo_teste_.txt'
   /// 'Nome  com   espaços'.sanitizeFileName(); // 'Nome_com_espaços'
   /// ```
-  String sanitizeFileName() {
-    return toLowerCase()
+  String sanitizeFileName() => toLowerCase()
         .replaceAll(Constants.invalidFileNameCharsRegExp, '_')
         .replaceAll(Constants.oneOrMoreWhitespaceRegExp, '_')
         .replaceAll(Constants.oneOrMoreUnderscoreRegExp, '_')
         .trim();
-  }
 
   /// Converte caracteres acentuados para ASCII.
   ///
@@ -151,8 +147,7 @@ extension FileNameStringExtensions on String {
   /// 'relatório_ção.txt'.toAsciiFileName(); // 'relatorio_cao.txt'
   /// 'José_García.pdf'.toAsciiFileName(); // 'Jose_Garcia.pdf'
   /// ```
-  String toAsciiFileName() {
-    return replaceAll(Constants.accentARegExp, 'a')
+  String toAsciiFileName() => replaceAll(Constants.accentARegExp, 'a')
         .replaceAll(Constants.accentERegExp, 'e')
         .replaceAll(Constants.accentIRegExp, 'i')
         .replaceAll(Constants.accentORegExp, 'o')
@@ -160,7 +155,6 @@ extension FileNameStringExtensions on String {
         .replaceAll(Constants.cedillaRegExp, 'c')
         .replaceAll(Constants.tildeNRegExp, 'n')
         .replaceAll(Constants.yVariantsRegExp, 'y');
-  }
 
   /// Aplica todas as proteções recomendadas para nomes de arquivo.
   ///
@@ -181,7 +175,7 @@ extension FileNameStringExtensions on String {
   /// 'CON.txt'.toSafeFileName(addTimestamp: true); // 'con_1701979200000.txt'
   /// ```
   String toSafeFileName({int maxLength = 200, bool addTimestamp = false}) {
-    String safeName = sanitizeFileName().toAsciiFileName().normalizeFileName().truncateFileName(
+    var safeName = sanitizeFileName().toAsciiFileName().normalizeFileName().truncateFileName(
       maxLength: maxLength,
     );
 
@@ -233,14 +227,12 @@ extension ValidateDataCustomer on String {
   static const int minPasswordLength = 8;
   static final RegExp _cnpjAllZerosRegExp = RegExp(r'^0+$');
   static final RegExp _cnpjCleanRegExp = RegExp(r'^[A-Z\d]{12}\d{2}$');
-  static final RegExp _cnpjFormattingCharsRegExp = RegExp(r'[./-]');
+  static final RegExp _cnpjFormattingCharsRegExp = RegExp('[./-]');
 
   /// Gera um hash seguro usando BCrypt com salt aleatorio.
   ///
   /// Retorna o hash no formato BCrypt (`$2a$`, `$2b$` ou `$2y$`).
-  String hashPassword() {
-    return BCrypt.hashpw(this, BCrypt.gensalt());
-  }
+  String hashPassword() => BCrypt.hashpw(this, BCrypt.gensalt());
 
   /// Valida se a string é um CNPJ válido.
   ///
@@ -253,7 +245,7 @@ extension ValidateDataCustomer on String {
   /// '00.000.000/0001-91'.isValidCnpj(); // true
   /// ```
   bool isValidCnpj() {
-    final String cnpj = trim().toUpperCase().replaceAll(_cnpjFormattingCharsRegExp, '');
+    final cnpj = trim().toUpperCase().replaceAll(_cnpjFormattingCharsRegExp, '');
 
     if (!_cnpjCleanRegExp.hasMatch(cnpj) || _cnpjAllZerosRegExp.hasMatch(cnpj)) {
       return false;
@@ -281,20 +273,20 @@ extension ValidateDataCustomer on String {
   /// '123.456.789-09'.isValidCPF(); // true ou false
   /// ```
   bool isValidCpf() {
-    final String cpf = replaceAll(Constants.nonNumericRegExp, '');
+    final cpf = replaceAll(Constants.nonNumericRegExp, '');
 
     if (cpf.length != 11 || Constants.cpfSameDigitRegExp.hasMatch(cpf)) {
       return false;
     }
 
-    final List<int> digits = cpf.split('').map(int.parse).toList();
+    final digits = cpf.split('').map(int.parse).toList();
 
-    for (int j = 9; j < 11; j++) {
-      int sum = 0;
-      for (int i = 0; i < j; i++) {
+    for (var j = 9; j < 11; j++) {
+      var sum = 0;
+      for (var i = 0; i < j; i++) {
         sum += digits[i] * ((j + 1) - i);
       }
-      int mod = (sum * 10) % 11;
+      var mod = (sum * 10) % 11;
       if (mod == 10) mod = 0;
       if (mod != digits[j]) {
         return false;
@@ -310,9 +302,7 @@ extension ValidateDataCustomer on String {
   /// ```dart
   /// 'example@example.com'.isValidEmail(); // true ou false
   /// ```
-  bool isValidEmail() {
-    return Constants.emailRegExp.hasMatch(this);
-  }
+  bool isValidEmail() => Constants.emailRegExp.hasMatch(this);
 
   /// Valida se a string é um número de telefone válido.
   /// Verifica o formato básico de um número de telefone.
@@ -321,9 +311,7 @@ extension ValidateDataCustomer on String {
   /// ```dart
   /// '(11) 91234-5678'.isValidPhone(); // true ou false
   /// ```
-  bool isValidPhone() {
-    return Constants.phoneRegExp.hasMatch(this);
-  }
+  bool isValidPhone() => Constants.phoneRegExp.hasMatch(this);
 
   /// Valida a força da senha
   ///
@@ -331,7 +319,7 @@ extension ValidateDataCustomer on String {
   /// Regras: mínimo [minPasswordLength] caracteres, pelo menos uma letra maiúscula,
   /// uma letra minúscula e um número.
   String? validatePassword() {
-    final String password = this;
+    final password = this;
     if (password.isEmpty) {
       return 'Senha é obrigatória';
     }

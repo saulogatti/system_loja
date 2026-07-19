@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/utils_extensions.dart';
@@ -8,8 +9,14 @@ import 'package:system_loja/screens/widgets/empty_widget.dart';
 ///
 /// Exibe os produtos em formato de lista com cards ou mensagem quando vazio.
 class ProductList extends StatelessWidget {
+
+  const ProductList({
+    required this.products,
+    required this.onProductTap,
+    super.key,
+  });
   /// Espaçamento padrão entre título e lista
-  static const double _defaultSpacing = 16.0;
+  static const double _defaultSpacing = 16;
   static const SliverGridDelegateWithMaxCrossAxisExtent _gridDelegate =
       SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 350,
@@ -21,15 +28,8 @@ class ProductList extends StatelessWidget {
   final List<Product> products;
   final Function(Product) onProductTap;
 
-  const ProductList({
-    required this.products,
-    required this.onProductTap,
-    super.key,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Text(
@@ -66,5 +66,11 @@ class ProductList extends StatelessWidget {
           ),
       ],
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(IterableProperty<Product>('products', products));
+    properties.add(ObjectFlagProperty<Function(Product)>.has('onProductTap', onProductTap));
   }
 }

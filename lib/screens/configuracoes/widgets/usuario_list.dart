@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_list_item.dart';
@@ -7,10 +8,6 @@ import 'package:system_loja/screens/widgets/empty_widget.dart';
 ///
 /// Exibe os usuários em formato de lista com cards ou mensagem quando vazio.
 class UsuarioList extends StatelessWidget {
-  final List<User> usuarios;
-  final Function(User) onEdit;
-  final Function(User) onDelete;
-  final Function(User) onTap;
 
   const UsuarioList({
     required this.usuarios,
@@ -19,10 +16,13 @@ class UsuarioList extends StatelessWidget {
     required this.onTap,
     super.key,
   });
+  final List<User> usuarios;
+  final Function(User) onEdit;
+  final Function(User) onDelete;
+  final Function(User) onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Text(
@@ -53,5 +53,13 @@ class UsuarioList extends StatelessWidget {
           ),
       ],
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(IterableProperty<User>('usuarios', usuarios));
+    properties.add(ObjectFlagProperty<Function(User)>.has('onEdit', onEdit));
+    properties.add(ObjectFlagProperty<Function(User)>.has('onDelete', onDelete));
+    properties.add(ObjectFlagProperty<Function(User)>.has('onTap', onTap));
   }
 }

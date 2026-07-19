@@ -1,21 +1,21 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 
 /// Widget da seção de configurações de segurança
 class SecuritySection extends StatelessWidget {
+
+  const SecuritySection({required this.config, required this.onConfigChanged, super.key});
   /// Configuração atual do sistema
   final SystemConfiguration config;
 
   /// Callback para atualizar a configuração
   final Function(SystemConfiguration) onConfigChanged;
 
-  const SecuritySection({required this.config, required this.onConfigChanged, super.key});
-
   @override
-  Widget build(BuildContext context) {
-    return Card(
+  Widget build(BuildContext context) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -65,5 +65,11 @@ class SecuritySection extends StatelessWidget {
         ),
       ),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<SystemConfiguration>('config', config));
+    properties.add(ObjectFlagProperty<Function(SystemConfiguration)>.has('onConfigChanged', onConfigChanged));
   }
 }

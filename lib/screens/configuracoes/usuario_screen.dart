@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/models/default/authorization_level.dart';
+import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/user_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
@@ -12,8 +13,6 @@ import 'package:system_loja/screens/configuracoes/widgets/usuario_details_dialog
 import 'package:system_loja/screens/configuracoes/widgets/usuario_form.dart';
 import 'package:system_loja/screens/configuracoes/widgets/usuario_list.dart';
 import 'package:system_loja/screens/widgets/overlay_app_widget.dart';
-
-import '../../core/models/user.dart';
 
 /// Tela de gestão de usuários com listagem, adição, edição e exclusão.
 ///
@@ -31,12 +30,10 @@ class UsuarioScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   State<UsuarioScreen> createState() => _UsuarioScreenState();
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<UserCubit>(
-      create: (_) => UserCubit(appInjection.get<IUserRepository>()),
-      child: this,
-    );
-  }
+  Widget wrappedRoute(BuildContext context) => BlocProvider<UserCubit>(
+    create: (_) => UserCubit(appInjection.get<IUserRepository>()),
+    child: this,
+  );
 }
 
 class _UsuarioScreenState extends State<UsuarioScreen> {
@@ -50,133 +47,131 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
   List<User> _usuarios = List.empty(growable: true);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gestão de Usuários'),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        leading: const AutoLeadingButton(),
-      ),
-      body: BlocListener<UserCubit, UsuarioState>(
-        bloc: context.read<UserCubit>(),
-        listener: (context, state) {
-          state.when(
-            loadFailure: (errorMessage) {
-              _overlayLoader.removeHighlightOverlay();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Erro ao carregar usuários: $errorMessage'),
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                ),
-              );
-            },
-            loading: () {
-              _overlayLoader.createHighlightOverlay(
-                label: 'Carregando...',
-                color: Colors.black,
-                context: context,
-                widget: widget,
-              );
-            },
-            loadSuccess: (usuarios) {
-              _overlayLoader.removeHighlightOverlay();
-              _usuarios = List.from(usuarios, growable: true);
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      title: const Text('Gestão de Usuários'),
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      leading: const AutoLeadingButton(),
+    ),
+    body: BlocListener<UserCubit, UsuarioState>(
+      bloc: context.read<UserCubit>(),
+      listener: (context, state) {
+        state.when(
+          loadFailure: (errorMessage) {
+            _overlayLoader.removeHighlightOverlay();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Erro ao carregar usuários: $errorMessage'),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          },
+          loading: () {
+            _overlayLoader.createHighlightOverlay(
+              label: 'Carregando...',
+              color: Colors.black,
+              context: context,
+              widget: widget,
+            );
+          },
+          loadSuccess: (usuarios) {
+            _overlayLoader.removeHighlightOverlay();
+            _usuarios = List.from(usuarios);
+            setState(() {});
+          },
+          initial: () {
+            // Estado inicial, nada a fazer
+          },
+          senhaInvalida: (mensagem) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(mensagem),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          },
+          usuarioRemovido: (id) {
+            final usuario = _usuarios.firstWhere((usuario) => usuario.id == id);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Usuário "${usuario.name}" excluído com sucesso!'),
+                backgroundColor: Colors.orange,
+              ),
+            );
+            _usuarios.removeWhere((usuario) => usuario.id == id);
+            if (_usuarioEditando?.id == id) {
+              _cancelarEdicao();
+            } else {
               setState(() {});
-            },
-            initial: () {
-              // Estado inicial, nada a fazer
-            },
-            senhaInvalida: (mensagem) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(mensagem),
-                  backgroundColor: Theme.of(context).colorScheme.error,
+            }
+          },
+          usuarioAdicionado: (usuario, novoUsuario) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  novoUsuario
+                      ? 'Usuário "${usuario.name}" adicionado com sucesso!'
+                      : 'Usuário "${usuario.name}" atualizado com sucesso!',
                 ),
-              );
-            },
-            usuarioRemovido: (id) {
-              final usuario = _usuarios.firstWhere((usuario) => usuario.id == id);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Usuário "${usuario.name}" excluído com sucesso!'),
-                  backgroundColor: Colors.orange,
-                ),
-              );
-              _usuarios.removeWhere((usuario) => usuario.id == id);
-              if (_usuarioEditando?.id == id) {
-                _cancelarEdicao();
-              } else {
-                setState(() {});
-              }
-            },
-            usuarioAdicionado: (User usuario, bool novoUsuario) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    novoUsuario
-                        ? 'Usuário "${usuario.name}" adicionado com sucesso!'
-                        : 'Usuário "${usuario.name}" atualizado com sucesso!',
-                  ),
-                  backgroundColor: Colors.green,
-                ),
-              );
-              if (!novoUsuario) {
-                final index = _usuarios.indexWhere((u) => u.id == usuario.id);
-                if (index != -1) {
-                  setState(() {
-                    _usuarios[index] = usuario;
-                  });
-                }
-              } else {
-                _usuarios.add(usuario);
-                _limparFormulario();
+                backgroundColor: Colors.green,
+              ),
+            );
+            if (!novoUsuario) {
+              final index = _usuarios.indexWhere((u) => u.id == usuario.id);
+              if (index != -1) {
                 setState(() {
-                  _usuarioEditando = null;
+                  _usuarios[index] = usuario;
                 });
               }
-            },
-          );
-        },
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    UsuarioForm(
-                      formKey: _formKey,
-                      nomeController: _nomeController,
-                      emailController: _emailController,
-                      senhaController: _senhaController,
-                      nivelPermissaoSelecionado: _nivelPermissaoSelecionado,
-                      usuarioEditando: _usuarioEditando,
-                      onSubmit: _salvarUsuario,
-                      onCancel: _cancelarEdicao,
-                      onPermissaoChanged: (value) {
-                        setState(() {
-                          _nivelPermissaoSelecionado = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 32),
-                    UsuarioList(
-                      usuarios: _usuarios,
-                      onEdit: _editarUsuario,
-                      onDelete: _confirmarExclusao,
-                      onTap: _mostrarDetalhesUsuario,
-                    ),
-                  ],
-                ),
+            } else {
+              _usuarios.add(usuario);
+              _limparFormulario();
+              setState(() {
+                _usuarioEditando = null;
+              });
+            }
+          },
+        );
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  UsuarioForm(
+                    formKey: _formKey,
+                    nomeController: _nomeController,
+                    emailController: _emailController,
+                    senhaController: _senhaController,
+                    nivelPermissaoSelecionado: _nivelPermissaoSelecionado,
+                    usuarioEditando: _usuarioEditando,
+                    onSubmit: _salvarUsuario,
+                    onCancel: _cancelarEdicao,
+                    onPermissaoChanged: (value) {
+                      setState(() {
+                        _nivelPermissaoSelecionado = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 32),
+                  UsuarioList(
+                    usuarios: _usuarios,
+                    onEdit: _editarUsuario,
+                    onDelete: _confirmarExclusao,
+                    onTap: _mostrarDetalhesUsuario,
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
 
   @override
   void dispose() {

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:system_loja/core/exceptions/validation_exception.dart' show ValidationException;
 import 'package:system_loja/core/models/document/document.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 
@@ -9,6 +10,11 @@ final firstWeights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 final secondWeights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 
 class Cnpj extends Document {
+
+  /// Cria uma instância de [Cnpj] com o valor informado.
+  ///
+  /// Lança [ValidationException] se o formato ou os dígitos forem inválidos.
+  Cnpj(super.value);
   /// Expressões regulares para validar o formato do CNPJ
   /// - _cnpjRegExp: Valida o formato XX.XXX.XXX/XXXX-XX com base alfanumérica
   /// - _cnpjCleanRegExp: Valida base alfanumérica (12) + DV numérico (2)
@@ -17,12 +23,7 @@ class Cnpj extends Document {
   );
   static final RegExp _cnpjCleanRegExp = RegExp(r'^[A-Z\d]{12}\d{2}$');
   static final RegExp _cnpjAllZerosRegExp = RegExp(r'^0+$');
-  static final RegExp _cnpjFormattingCharsRegExp = RegExp(r'[./-]');
-
-  /// Cria uma instância de [Cnpj] com o valor informado.
-  ///
-  /// Lança [ValidationException] se o formato ou os dígitos forem inválidos.
-  Cnpj(super.value);
+  static final RegExp _cnpjFormattingCharsRegExp = RegExp('[./-]');
 
   @override
   String get formatted {
@@ -58,15 +59,15 @@ class Cnpj extends Document {
     final random = Random();
     final digits = List.generate(12, (_) => random.nextInt(10));
 
-    int sum1 = 0;
-    for (int i = 0; i < 12; i++) {
+    var sum1 = 0;
+    for (var i = 0; i < 12; i++) {
       sum1 += digits[i] * firstWeights[i];
     }
     final remainder1 = sum1 % 11;
     digits.add(remainder1 < 2 ? 0 : 11 - remainder1);
 
-    int sum2 = 0;
-    for (int i = 0; i < 13; i++) {
+    var sum2 = 0;
+    for (var i = 0; i < 13; i++) {
       sum2 += digits[i] * secondWeights[i];
     }
     final remainder2 = sum2 % 11;

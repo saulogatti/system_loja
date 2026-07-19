@@ -10,6 +10,27 @@ part 'system_configuration_data.g.dart';
 /// JSON para [SystemConfiguration].
 @JsonSerializable(explicitToJson: true)
 class SystemConfigurationData {
+
+  SystemConfigurationData({
+    required this.id,
+    required this.registrationDate,
+    required this.lastUpdatedDate,
+    required this.priceConfiguration,
+    required this.productCategories,
+    required this.systemUserData,
+  });
+
+  factory SystemConfigurationData.fromJson(Map<String, dynamic> json) =>
+      _$SystemConfigurationDataFromJson(json);
+
+  factory SystemConfigurationData.fromDomain(SystemConfiguration value) => SystemConfigurationData(
+      id: value.id,
+      registrationDate: value.registrationDate,
+      lastUpdatedDate: value.lastUpdatedDate,
+      priceConfiguration: value.priceConfiguration,
+      productCategories: List<String>.from(value.productCategories),
+      systemUserData: value.systemUserData,
+    );
   final int id;
   final DateTime registrationDate;
   final DateTime lastUpdatedDate;
@@ -30,33 +51,9 @@ class SystemConfigurationData {
   )
   final SystemUserData systemUserData;
 
-  SystemConfigurationData({
-    required this.id,
-    required this.registrationDate,
-    required this.lastUpdatedDate,
-    required this.priceConfiguration,
-    required this.productCategories,
-    required this.systemUserData,
-  });
-
-  factory SystemConfigurationData.fromJson(Map<String, dynamic> json) =>
-      _$SystemConfigurationDataFromJson(json);
-
   Map<String, dynamic> toJson() => _$SystemConfigurationDataToJson(this);
 
-  factory SystemConfigurationData.fromDomain(SystemConfiguration value) {
-    return SystemConfigurationData(
-      id: value.id,
-      registrationDate: value.registrationDate,
-      lastUpdatedDate: value.lastUpdatedDate,
-      priceConfiguration: value.priceConfiguration,
-      productCategories: List<String>.from(value.productCategories),
-      systemUserData: value.systemUserData,
-    );
-  }
-
-  SystemConfiguration toDomain() {
-    return SystemConfiguration(
+  SystemConfiguration toDomain() => SystemConfiguration(
       id: id,
       registrationDate: registrationDate,
       lastUpdatedDate: lastUpdatedDate,
@@ -64,7 +61,6 @@ class SystemConfigurationData {
       productCategories: List<String>.from(productCategories),
       systemUserData: systemUserData,
     );
-  }
 
   static SystemUserData _systemUserDataFromJson(Object? json) {
     if (json == null || json is! Map<String, dynamic>) {

@@ -11,8 +11,7 @@ extension PersonSelectionInvoiceMapping on PersonSelection {
     required InvoiceType type,
     required List<InvoiceItem> items,
     required String paymentMethod,
-  }) {
-    return switch (this) {
+  }) => switch (this) {
       CustomerSelection(:final customer) => InvoiceData(
         invoiceNumber: invoiceNumber,
         type: type,
@@ -32,5 +31,4 @@ extension PersonSelectionInvoiceMapping on PersonSelection {
         paymentMethod: paymentMethod,
       ),
     };
-  }
 }

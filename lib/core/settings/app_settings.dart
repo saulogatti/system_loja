@@ -6,6 +6,24 @@ import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 /// opções de backup, segurança e tipo de banco de dados.
 
 class AppSettings {
+
+  // Opções de Limpeza de Dados
+
+  AppSettings({
+    this.notificacoesAtivadas = true,
+    this.notificarVendas = true,
+    this.notificarEstoqueBaixo = true,
+    this.limiteEstoqueBaixo = 10,
+    this.temaEscuro = false,
+    this.backupAutomatico = false,
+    this.frequenciaBackup = 'semanal',
+    this.localBackup = 'data/backups',
+
+    this.corPrimaria = EnumColorAppThemeSettings.azul,
+  });
+
+  /// Cria um objeto de configuração padrão
+  factory AppSettings.createDefaultSettings() => AppSettings();
   /// Controla se as notificações estão ativadas globalmente no sistema
   final bool notificacoesAtivadas;
 
@@ -37,24 +55,6 @@ class AppSettings {
   /// Caminho do diretório onde os backups serão armazenados
   final String localBackup;
 
-  // Opções de Limpeza de Dados
-
-  AppSettings({
-    this.notificacoesAtivadas = true,
-    this.notificarVendas = true,
-    this.notificarEstoqueBaixo = true,
-    this.limiteEstoqueBaixo = 10,
-    this.temaEscuro = false,
-    this.backupAutomatico = false,
-    this.frequenciaBackup = 'semanal',
-    this.localBackup = 'data/backups',
-
-    this.corPrimaria = EnumColorAppThemeSettings.azul,
-  });
-
-  /// Cria um objeto de configuração padrão
-  factory AppSettings.createDefaultSettings() => AppSettings();
-
   /// Cria uma cópia da configuração com alterações opcionais
   AppSettings copyWith({
     bool? notificacoesAtivadas,
@@ -67,8 +67,7 @@ class AppSettings {
     String? localBackup,
 
     EnumColorAppThemeSettings? corPrimaria,
-  }) {
-    return AppSettings(
+  }) => AppSettings(
       notificacoesAtivadas: notificacoesAtivadas ?? this.notificacoesAtivadas,
       notificarVendas: notificarVendas ?? this.notificarVendas,
       notificarEstoqueBaixo: notificarEstoqueBaixo ?? this.notificarEstoqueBaixo,
@@ -79,5 +78,4 @@ class AppSettings {
       localBackup: localBackup ?? this.localBackup,
       corPrimaria: corPrimaria ?? this.corPrimaria,
     );
-  }
 }

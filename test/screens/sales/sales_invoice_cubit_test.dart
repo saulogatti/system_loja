@@ -13,20 +13,16 @@ import 'package:system_loja/screens/sales/models/person_selection.dart';
 void main() {
   late _FakeSalesCubit salesCubit;
 
-  Product product({required int id, int stock = 100, double price = 10}) {
-    return Product(
-      name: 'P$id',
-      description: '',
-      price: price,
-      stockQuantity: stock,
-      code: 'C$id',
-      id: id,
-    );
-  }
+  Product product({required int id, int stock = 100, double price = 10}) => Product(
+    name: 'P$id',
+    description: '',
+    price: price,
+    stockQuantity: stock,
+    code: 'C$id',
+    id: id,
+  );
 
-  Customer customer({int id = 1}) {
-    return Customer(name: 'João', cpf: '00000000000', id: id);
-  }
+  Customer customer({int id = 1}) => Customer(name: 'João', cpf: '00000000000', id: id);
 
   setUp(() {
     salesCubit = _FakeSalesCubit();
@@ -38,29 +34,23 @@ void main() {
         salesCubit: salesCubit,
         paymentMethods: [PaymentMethodType.pix],
       );
-      final p1 = product(id: 1, price: 10);
+      final p1 = product(id: 1);
       final p2 = product(id: 2, price: 5);
       cubit.addOrMergeLine(p1, 2);
       cubit.addOrMergeLine(p2, 3);
       expect(cubit.state.form.computeTotal(), 10 * 2 + 5 * 3);
     });
 
-    test(
-      'saída com quantidade acima do estoque emite SalesInvoiceFeedback',
-      () {
-        final cubit = SalesInvoiceCubit(
-          salesCubit: salesCubit,
-          paymentMethods: [PaymentMethodType.pix],
-        );
-        final p = product(id: 1, stock: 5);
-        cubit.addOrMergeLine(p, 10);
-        expect(cubit.state, isA<SalesInvoiceFeedback>());
-        expect(
-          (cubit.state as SalesInvoiceFeedback).message,
-          contains('Estoque insuficiente'),
-        );
-      },
-    );
+    test('saída com quantidade acima do estoque emite SalesInvoiceFeedback', () {
+      final cubit = SalesInvoiceCubit(
+        salesCubit: salesCubit,
+        paymentMethods: [PaymentMethodType.pix],
+      );
+      final p = product(id: 1, stock: 5);
+      cubit.addOrMergeLine(p, 10);
+      expect(cubit.state, isA<SalesInvoiceFeedback>());
+      expect((cubit.state as SalesInvoiceFeedback).message, contains('Estoque insuficiente'));
+    });
 
     test('entrada permite quantidade acima do estoque', () {
       final cubit = SalesInvoiceCubit(
@@ -79,7 +69,7 @@ void main() {
         salesCubit: salesCubit,
         paymentMethods: [PaymentMethodType.pix],
       );
-      final p = product(id: 1, stock: 100);
+      final p = product(id: 1);
       cubit.addOrMergeLine(p, 2);
       cubit.addOrMergeLine(p, 3);
       expect(cubit.state.form.linesByProductId[1]?.quantity, 5);
@@ -134,10 +124,7 @@ class _FakeSalesCubit extends Fake implements SalesCubit {
   Stream<SalesState> get stream => Stream.value(SalesSaved(items: const {}));
 
   @override
-  Future<void> registerSale(
-    InvoiceData invoiceData,
-    bool enableCodeGeneration,
-  ) async {
+  Future<void> registerSale(InvoiceData invoiceData, {bool enableCodeGeneration = false}) async {
     registerSaleCalls++;
   }
 }

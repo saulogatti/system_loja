@@ -8,13 +8,11 @@ part 'users_dao.g.dart';
 
 @DriftAccessor(tables: [UsersRecords])
 class UsersDao extends DatabaseAccessor<SystemDatabase> with _$UsersDaoMixin {
-  final SystemDatabase db;
 
   UsersDao(this.db) : super(db);
+  final SystemDatabase db;
 
-  Future<int> deleteUser(int id) {
-    return (delete(usersRecords)..where((tbl) => tbl.id.equals(id))).go();
-  }
+  Future<int> deleteUser(int id) => (delete(usersRecords)..where((tbl) => tbl.id.equals(id))).go();
 
   Future<User?> findByEmail(String email) async {
     final row = await (select(

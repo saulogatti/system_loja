@@ -26,7 +26,7 @@ void main() {
       settingsService: SettingsService.injection(),
       cache: CacheManager(),
     );
-    printerLog = registerLogPrinterColor(config: ConfigLog(enableLog: false));
+    printerLog = registerLogPrinterColor(config: const ConfigLog());
   });
 
   tearDownAll(() async {
@@ -189,7 +189,6 @@ void main() {
       final configOriginal = AppSettings(
         notificacoesAtivadas: false,
         notificarVendas: false,
-        notificarEstoqueBaixo: true,
         limiteEstoqueBaixo: 20,
         temaEscuro: true,
         corPrimaria: EnumColorAppThemeSettings.verde,
@@ -228,22 +227,14 @@ class FakePathProviderPlatform extends Fake
     with MockPlatformInterfaceMixin
     implements PathProviderPlatform {
   @override
-  Future<String?> getApplicationDocumentsPath() async {
-    return '/tmp';
-  }
+  Future<String?> getApplicationDocumentsPath() async => '/tmp';
 
   @override
-  Future<String?> getApplicationSupportPath() async {
-    return '/tmp';
-  }
+  Future<String?> getApplicationSupportPath() async => '/tmp';
 
   @override
-  Future<String?> getLibraryPath() async {
-    return '/tmp';
-  }
+  Future<String?> getLibraryPath() async => '/tmp';
 
   @override
-  Future<String?> getTemporaryPath() async {
-    return '/tmp';
-  }
+  Future<String?> getTemporaryPath() async => '/tmp';
 }

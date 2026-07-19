@@ -7,10 +7,10 @@ import 'package:system_loja/core/models/invoice_type.dart';
 /// Representa uma nota fiscal de entrada ([InvoiceType.entry]) ou saída
 /// ([InvoiceType.exit]). Os dados da nota estão encapsulados em [InvoiceData].
 class Invoice extends DefaultObject {
-  /// Dados da nota fiscal (número, tipo, itens, valores, etc.).
-  final InvoiceData data;
 
   Invoice({required this.data, super.registrationDate, super.lastUpdatedDate, super.id});
+  /// Dados da nota fiscal (número, tipo, itens, valores, etc.).
+  final InvoiceData data;
 
   @override
   String toString() {
@@ -28,7 +28,7 @@ class Invoice extends DefaultObject {
     buffer.writeln('Payment Method: ${data.paymentMethod}');
     buffer.writeln('Issue Date: ${data.issueDate.toString().split('.')[0]}');
     buffer.writeln('Items:');
-    for (var item in data.items) {
+    for (final item in data.items) {
       buffer.writeln(item.toString());
     }
     buffer.writeln('Data de Cadastro: ${registrationDate.toString().split('.')[0]}');
@@ -45,6 +45,27 @@ class Invoice extends DefaultObject {
 ///
 /// O [totalValue] é calculado automaticamente a partir da soma dos [items].
 class InvoiceData {
+
+  InvoiceData({
+    required this.invoiceNumber,
+    required this.items,
+    required this.paymentMethod,
+    this.customerId,
+    this.customerName,
+    this.customerCpf,
+    this.companyId,
+    this.companyName,
+    this.companyCnpj,
+    DateTime? issueDate,
+    this.type = InvoiceType.exit,
+  }) : totalValue = items.fold(0, (sum, item) => sum + item.totalValue),
+       issueDate = issueDate ?? DateTime.now() {
+    final withoutLink = customerId == null && companyId == null;
+    final withBothLinks = customerId != null && companyId != null;
+    if (withoutLink || withBothLinks) {
+      throw ArgumentError('Informe exatamente um vínculo: customerId ou companyId.');
+    }
+  }
   /// Número único da nota fiscal (ex.: NF-20260123-0001).
   String invoiceNumber;
 
@@ -80,27 +101,6 @@ class InvoiceData {
 
   /// Tipo da nota: entrada ([InvoiceType.entry]) ou saída ([InvoiceType.exit]).
   final InvoiceType type;
-
-  InvoiceData({
-    required this.invoiceNumber,
-    required this.items,
-    required this.paymentMethod,
-    this.customerId,
-    this.customerName,
-    this.customerCpf,
-    this.companyId,
-    this.companyName,
-    this.companyCnpj,
-    DateTime? issueDate,
-    this.type = InvoiceType.exit,
-  }) : totalValue = items.fold(0.0, (sum, item) => sum + item.totalValue),
-       issueDate = issueDate ?? DateTime.now() {
-    final withoutLink = customerId == null && companyId == null;
-    final withBothLinks = customerId != null && companyId != null;
-    if (withoutLink || withBothLinks) {
-      throw ArgumentError('Informe exatamente um vínculo: customerId ou companyId.');
-    }
-  }
 
   /// Nome de exibição unificado (cliente ou empresa).
   String get personDisplayName => customerName ?? companyName ?? '';

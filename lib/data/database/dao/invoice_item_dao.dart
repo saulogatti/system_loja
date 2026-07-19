@@ -18,19 +18,15 @@ class InvoiceItemDao extends DatabaseAccessor<AppDatabase>
   /// Remove um item de nota fiscal do banco de dados pelo ID.
   ///
   /// Retorna o número de linhas afetadas (normalmente 1 ou 0).
-  Future<int> deleteInvoiceItem(int id) {
-    return (delete(invoiceItemsRecords)..where((t) => t.id.equals(id))).go();
-  }
+  Future<int> deleteInvoiceItem(int id) => (delete(invoiceItemsRecords)..where((t) => t.id.equals(id))).go();
 
   /// Remove todos os itens de uma nota fiscal específica.
   ///
   /// Útil ao atualizar uma nota fiscal com novos itens.
   /// Retorna o número de linhas removidas.
-  Future<int> deleteByInvoiceId(int invoiceId) {
-    return (delete(
+  Future<int> deleteByInvoiceId(int invoiceId) => (delete(
       invoiceItemsRecords,
     )..where((t) => t.invoiceId.equals(invoiceId))).go();
-  }
 
   /// Retorna todos os itens de notas fiscais como objetos de domínio InvoiceItem.
   Future<List<InvoiceItem>> getAll() async {
@@ -62,10 +58,8 @@ class InvoiceItemDao extends DatabaseAccessor<AppDatabase>
   ///
   /// Aceita um objeto InvoiceItem do domínio e o ID da nota fiscal.
   /// Retorna o ID gerado automaticamente.
-  Future<int> insertInvoiceItem(InvoiceItem item, {required int invoiceId}) {
-    return into(invoiceItemsRecords).insert(
+  Future<int> insertInvoiceItem(InvoiceItem item, {required int invoiceId}) => into(invoiceItemsRecords).insert(
       item.toCompanion(invoiceId: invoiceId),
       mode: InsertMode.insertOrReplace,
     );
-  }
 }

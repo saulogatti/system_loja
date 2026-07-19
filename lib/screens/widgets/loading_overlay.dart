@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Widget de overlay de loading que bloqueia interações com a tela.
@@ -20,6 +21,13 @@ import 'package:flutter/material.dart';
 /// )
 /// ```
 class LoadingOverlay extends StatelessWidget {
+  const LoadingOverlay({
+    super.key,
+    this.message,
+    this.backgroundColor,
+    this.progressIndicatorColor,
+  });
+
   /// Mensagem opcional a ser exibida abaixo do indicador de progresso.
   final String? message;
 
@@ -29,17 +37,9 @@ class LoadingOverlay extends StatelessWidget {
   /// Cor do indicador de progresso. Se não especificado, usa a cor primária do tema.
   final Color? progressIndicatorColor;
 
-  const LoadingOverlay({
-    super.key,
-    this.message,
-    this.backgroundColor,
-    this.progressIndicatorColor,
-  });
-
   @override
   Widget build(BuildContext context) {
-    final indicatorColor =
-        progressIndicatorColor ?? Theme.of(context).colorScheme.primary;
+    final indicatorColor = progressIndicatorColor ?? Theme.of(context).colorScheme.primary;
     final colorAnimation = AlwaysStoppedAnimation<Color>(indicatorColor);
 
     return Stack(
@@ -52,14 +52,14 @@ class LoadingOverlay extends StatelessWidget {
         // Indicador de progresso centralizado
         Center(
           child: Container(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(12.0),
+              borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.2),
-                  blurRadius: 10.0,
+                  blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
               ],
@@ -70,7 +70,7 @@ class LoadingOverlay extends StatelessWidget {
                 CircularProgressIndicator(valueColor: colorAnimation),
                 if (message != null)
                   Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
+                    padding: const EdgeInsets.only(top: 16),
                     child: Text(
                       message!,
                       style: Theme.of(context).textTheme.bodyMedium,
@@ -83,5 +83,13 @@ class LoadingOverlay extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('message', message));
+    properties.add(ColorProperty('backgroundColor', backgroundColor));
+    properties.add(ColorProperty('progressIndicatorColor', progressIndicatorColor));
   }
 }

@@ -6,14 +6,6 @@ part 'system_user_data_entry.g.dart';
 /// DTO JSON para [SystemUserData] (sem herdar domínio).
 @JsonSerializable()
 class SystemUserDataEntry {
-  final String name;
-  final String? email;
-  final String? phone;
-  final String systemKey;
-  final String description;
-  final int id;
-  final DateTime registrationDate;
-  final DateTime lastUpdatedDate;
 
   const SystemUserDataEntry({
     required this.name,
@@ -29,12 +21,9 @@ class SystemUserDataEntry {
   factory SystemUserDataEntry.fromJson(Map<String, dynamic> json) =>
       _$SystemUserDataEntryFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SystemUserDataEntryToJson(this);
-
   factory SystemUserDataEntry.fromSystemUserData(
     SystemUserData systemUserData,
-  ) {
-    return SystemUserDataEntry(
+  ) => SystemUserDataEntry(
       name: systemUserData.name,
       email: systemUserData.email,
       phone: systemUserData.phone,
@@ -44,7 +33,16 @@ class SystemUserDataEntry {
       registrationDate: systemUserData.registrationDate,
       lastUpdatedDate: systemUserData.lastUpdatedDate,
     );
-  }
+  final String name;
+  final String? email;
+  final String? phone;
+  final String systemKey;
+  final String description;
+  final int id;
+  final DateTime registrationDate;
+  final DateTime lastUpdatedDate;
+
+  Map<String, dynamic> toJson() => _$SystemUserDataEntryToJson(this);
 
   SystemUserData toDomain() => SystemUserData(
     name: name,

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/application/app_injection.dart';
@@ -21,9 +22,6 @@ import 'package:system_loja/screens/widgets/empty_widget.dart';
 /// Tela de relatórios com abas para notas fiscais (entrada/saída) e estoque.
 @RoutePage()
 class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
-  final ISalesRepository? salesRepository;
-  final IProductRepository? productRepository;
-  final ICategoryRepository? categoryRepository;
 
   /// Cria uma instância de [RelatoriosScreen].
   const RelatoriosScreen({
@@ -32,23 +30,24 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
     this.productRepository,
     this.categoryRepository,
   });
+  final ISalesRepository? salesRepository;
+  final IProductRepository? productRepository;
+  final ICategoryRepository? categoryRepository;
 
   @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
+  Widget build(BuildContext context) => DefaultTabController(
       length: 2,
       child: Column(
         children: [
-          TabBar(
-            tabs: const [
+          const TabBar(
+            tabs: [
               Tab(icon: Icon(Icons.receipt_long), text: 'Notas Fiscais'),
               Tab(icon: Icon(Icons.inventory_2), text: 'Estoque'),
             ],
           ),
           Expanded(
             child: BlocBuilder<RelatorioCubit, RelatorioState>(
-              builder: (context, state) {
-                return switch (state) {
+              builder: (context, state) => switch (state) {
                   RelatorioInitial() ||
                   RelatorioLoading() => const Center(child: CircularProgressIndicator()),
                   RelatorioError(:final message) => Center(
@@ -97,18 +96,15 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
                         ),
                       ],
                     ),
-                };
-              },
+                },
             ),
           ),
         ],
       ),
     );
-  }
 
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<RelatorioCubit>(
+  Widget wrappedRoute(BuildContext context) => BlocProvider<RelatorioCubit>(
       create: (_) => RelatorioCubit(
         salesRepository ?? appInjection.get<ISalesRepository>(),
         productRepository ?? appInjection.get<IProductRepository>(),
@@ -118,11 +114,24 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
       ),
       child: this,
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<ISalesRepository?>('salesRepository', salesRepository));
+    properties.add(DiagnosticsProperty<IProductRepository?>('productRepository', productRepository));
+    properties.add(DiagnosticsProperty<ICategoryRepository?>('categoryRepository', categoryRepository));
   }
 }
 
 /// Aba de relatório de estoque de produtos.
 class _EstoqueTab extends StatelessWidget {
+
+  const _EstoqueTab({
+    required this.categoryNamesById,
+    required this.products,
+    required this.estoqueOverview,
+  });
   static const SliverGridDelegateWithMaxCrossAxisExtent _productGridDelegate =
       SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 420,
@@ -134,12 +143,6 @@ class _EstoqueTab extends StatelessWidget {
   final Map<int, String> categoryNamesById;
   final List<Product> products;
   final RelatorioEstoqueOverviewData estoqueOverview;
-
-  const _EstoqueTab({
-    required this.categoryNamesById,
-    required this.products,
-    required this.estoqueOverview,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -224,16 +227,24 @@ class _EstoqueTab extends StatelessWidget {
     }
     return categoryNamesById[categoryId] ?? 'Categoria #$categoryId';
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Map<int, String>>('categoryNamesById', categoryNamesById));
+    properties.add(IterableProperty<Product>('products', products));
+    properties.add(DiagnosticsProperty<RelatorioEstoqueOverviewData>('estoqueOverview', estoqueOverview));
+  }
 }
 
 enum _InvoiceFilterType { entrada, saida }
 
 /// Item de lista para uma nota fiscal.
 class _InvoiceTile extends StatelessWidget {
-  final Invoice invoice;
-  final Color color;
 
   const _InvoiceTile({required this.invoice, required this.color});
+  final Invoice invoice;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -304,18 +315,24 @@ class _InvoiceTile extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Invoice>('invoice', invoice));
+    properties.add(ColorProperty('color', color));
+  }
 }
 
 class _MovementSection extends StatelessWidget {
+
+  const _MovementSection({required this.title, required this.color, required this.movements});
   final String title;
   final Color color;
   final List<ProductInvoiceMovement> movements;
 
-  const _MovementSection({required this.title, required this.color, required this.movements});
-
   @override
-  Widget build(BuildContext context) {
-    return Card(
+  Widget build(BuildContext context) => Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -340,7 +357,7 @@ class _MovementSection extends StatelessWidget {
               ...movements.map((movement) {
                 final invoice = movement.invoice;
                 final item = movement.item;
-                final onTap = () => InvoiceOverviewBottomSheet.show(context, invoice);
+                Future<void> onTap() => InvoiceOverviewBottomSheet.show(context, invoice);
                 final semanticLabel =
                     'Nota Fiscal ${invoice.data.invoiceNumber}, Cliente ${invoice.data.personDisplayName}, Data ${invoice.data.issueDate.toFormattedDate()}, Quantidade ${item.quantity}, Preço unitário R\$ ${item.unitPrice.toStringAsFixed(2)}, Valor total R\$ ${item.totalValue.toStringAsFixed(2)}';
                 return Semantics(
@@ -384,23 +401,38 @@ class _MovementSection extends StatelessWidget {
         ),
       ),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('title', title));
+    properties.add(ColorProperty('color', color));
+    properties.add(IterableProperty<ProductInvoiceMovement>('movements', movements));
   }
 }
 
 /// Aba de relatório de notas fiscais (entrada e saída).
 class _NotasFiscaisTab extends StatefulWidget {
-  final Map<int, Invoice> entryInvoices;
-  final Map<int, Invoice> exitInvoices;
-  final RelatorioNotasOverviewData notasOverview;
 
   const _NotasFiscaisTab({
     required this.entryInvoices,
     required this.exitInvoices,
     required this.notasOverview,
   });
+  final Map<int, Invoice> entryInvoices;
+  final Map<int, Invoice> exitInvoices;
+  final RelatorioNotasOverviewData notasOverview;
 
   @override
   State<_NotasFiscaisTab> createState() => _NotasFiscaisTabState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Map<int, Invoice>>('entryInvoices', entryInvoices));
+    properties.add(DiagnosticsProperty<Map<int, Invoice>>('exitInvoices', exitInvoices));
+    properties.add(DiagnosticsProperty<RelatorioNotasOverviewData>('notasOverview', notasOverview));
+  }
 }
 
 class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
@@ -497,9 +529,7 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     gridDelegate: _invoiceGridDelegate,
                     itemCount: invoices.length,
-                    itemBuilder: (context, index) {
-                      return _InvoiceTile(invoice: invoices[index], color: sectionColor);
-                    },
+                    itemBuilder: (context, index) => _InvoiceTile(invoice: invoices[index], color: sectionColor),
                   ),
           ),
         ),
@@ -509,11 +539,6 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
 }
 
 class _ProductDetailsBottomSheet extends StatelessWidget {
-  final Product product;
-  final String categoryName;
-  final List<ProductInvoiceMovement> entries;
-  final List<ProductInvoiceMovement> exits;
-  final ProductMovementSummary summary;
 
   const _ProductDetailsBottomSheet({
     required this.product,
@@ -522,17 +547,20 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
     required this.exits,
     required this.summary,
   });
+  final Product product;
+  final String categoryName;
+  final List<ProductInvoiceMovement> entries;
+  final List<ProductInvoiceMovement> exits;
+  final ProductMovementSummary summary;
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
+  Widget build(BuildContext context) => SafeArea(
       child: DraggableScrollableSheet(
         expand: false,
         initialChildSize: 0.75,
         minChildSize: 0.5,
         maxChildSize: 0.95,
-        builder: (context, scrollController) {
-          return ListView(
+        builder: (context, scrollController) => ListView(
             controller: scrollController,
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
             children: [
@@ -564,11 +592,9 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
               const SizedBox(height: 12),
               _MovementSection(title: 'Saídas do produto', color: Colors.orange, movements: exits),
             ],
-          );
-        },
+          ),
       ),
     );
-  }
 
   static Future<void> show(
     BuildContext context, {
@@ -577,8 +603,7 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
     required List<ProductInvoiceMovement> entries,
     required List<ProductInvoiceMovement> exits,
     required ProductMovementSummary summary,
-  }) {
-    return showModalBottomSheet<void>(
+  }) => showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -592,13 +617,22 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
         summary: summary,
       ),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Product>('product', product));
+    properties.add(StringProperty('categoryName', categoryName));
+    properties.add(IterableProperty<ProductInvoiceMovement>('entries', entries));
+    properties.add(IterableProperty<ProductInvoiceMovement>('exits', exits));
+    properties.add(DiagnosticsProperty<ProductMovementSummary>('summary', summary));
   }
 }
 
 class _ProductMovementSummaryCard extends StatelessWidget {
-  final ProductMovementSummary summary;
 
   const _ProductMovementSummaryCard({required this.summary});
+  final ProductMovementSummary summary;
 
   @override
   Widget build(BuildContext context) {
@@ -636,15 +670,21 @@ class _ProductMovementSummaryCard extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<ProductMovementSummary>('summary', summary));
+  }
 }
 
 /// Item de lista para um produto com indicação de estoque.
 class _ProdutoTile extends StatelessWidget {
+
+  const _ProdutoTile({required this.product, required this.categoryName, required this.onTap});
   final Product product;
   final String categoryName;
   final VoidCallback onTap;
-
-  const _ProdutoTile({required this.product, required this.categoryName, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -725,15 +765,18 @@ class _ProdutoTile extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Product>('product', product));
+    properties.add(StringProperty('categoryName', categoryName));
+    properties.add(ObjectFlagProperty<VoidCallback>.has('onTap', onTap));
+  }
 }
 
 /// Card de resumo para um tipo de nota fiscal.
 class _ResumoCard extends StatelessWidget {
-  final String titulo;
-  final double valor;
-  final int quantidade;
-  final IconData icon;
-  final Color color;
 
   const _ResumoCard({
     required this.titulo,
@@ -742,10 +785,14 @@ class _ResumoCard extends StatelessWidget {
     required this.icon,
     required this.color,
   });
+  final String titulo;
+  final double valor;
+  final int quantidade;
+  final IconData icon;
+  final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
+  Widget build(BuildContext context) => Card(
       elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -775,15 +822,20 @@ class _ResumoCard extends StatelessWidget {
         ),
       ),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('titulo', titulo));
+    properties.add(DoubleProperty('valor', valor));
+    properties.add(IntProperty('quantidade', quantidade));
+    properties.add(DiagnosticsProperty<IconData>('icon', icon));
+    properties.add(ColorProperty('color', color));
   }
 }
 
 /// Card de resumo para estoque.
 class _ResumoEstoqueCard extends StatelessWidget {
-  final String label;
-  final int valor;
-  final IconData icon;
-  final Color color;
 
   const _ResumoEstoqueCard({
     required this.label,
@@ -791,10 +843,13 @@ class _ResumoEstoqueCard extends StatelessWidget {
     required this.icon,
     required this.color,
   });
+  final String label;
+  final int valor;
+  final IconData icon;
+  final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
+  Widget build(BuildContext context) => Card(
       elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -815,24 +870,31 @@ class _ResumoEstoqueCard extends StatelessWidget {
         ),
       ),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('label', label));
+    properties.add(IntProperty('valor', valor));
+    properties.add(DiagnosticsProperty<IconData>('icon', icon));
+    properties.add(ColorProperty('color', color));
   }
 }
 
 /// Resumo de estoque com cards informativos.
 class _ResumoEstoqueRow extends StatelessWidget {
-  final int total;
-  final int semEstoque;
-  final int estoqueBaixo;
 
   const _ResumoEstoqueRow({
     required this.total,
     required this.semEstoque,
     required this.estoqueBaixo,
   });
+  final int total;
+  final int semEstoque;
+  final int estoqueBaixo;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       children: [
         Expanded(
           child: _ResumoEstoqueCard(
@@ -862,15 +924,18 @@ class _ResumoEstoqueRow extends StatelessWidget {
         ),
       ],
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(IntProperty('total', total));
+    properties.add(IntProperty('semEstoque', semEstoque));
+    properties.add(IntProperty('estoqueBaixo', estoqueBaixo));
   }
 }
 
 /// Resumo com totais de entrada e saída.
 class _ResumoNotasRow extends StatelessWidget {
-  final double totalEntrada;
-  final int countEntrada;
-  final double totalSaida;
-  final int countSaida;
 
   const _ResumoNotasRow({
     required this.totalEntrada,
@@ -878,10 +943,13 @@ class _ResumoNotasRow extends StatelessWidget {
     required this.totalSaida,
     required this.countSaida,
   });
+  final double totalEntrada;
+  final int countEntrada;
+  final double totalSaida;
+  final int countSaida;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       children: [
         Expanded(
           child: _ResumoCard(
@@ -904,16 +972,19 @@ class _ResumoNotasRow extends StatelessWidget {
         ),
       ],
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DoubleProperty('totalEntrada', totalEntrada));
+    properties.add(IntProperty('countEntrada', countEntrada));
+    properties.add(DoubleProperty('totalSaida', totalSaida));
+    properties.add(IntProperty('countSaida', countSaida));
   }
 }
 
 /// Cabeçalho de seção com ícone e cor.
 class _SectionHeader extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final Color color;
-  final bool isSelected;
-  final VoidCallback? onTap;
 
   const _SectionHeader({
     required this.title,
@@ -922,6 +993,11 @@ class _SectionHeader extends StatelessWidget {
     this.isSelected = false,
     this.onTap,
   });
+  final String title;
+  final IconData icon;
+  final Color color;
+  final bool isSelected;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -970,14 +1046,19 @@ class _SectionHeader extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('title', title));
+    properties.add(DiagnosticsProperty<IconData>('icon', icon));
+    properties.add(ColorProperty('color', color));
+    properties.add(DiagnosticsProperty<bool>('isSelected', isSelected));
+    properties.add(ObjectFlagProperty<VoidCallback?>.has('onTap', onTap));
+  }
 }
 
 class _SummaryLine extends StatelessWidget {
-  final String label;
-  final String quantityText;
-  final String valueText;
-  final Color color;
-  final bool isBold;
 
   const _SummaryLine({
     required this.label,
@@ -986,6 +1067,11 @@ class _SummaryLine extends StatelessWidget {
     required this.color,
     this.isBold = false,
   });
+  final String label;
+  final String quantityText;
+  final String valueText;
+  final Color color;
+  final bool isBold;
 
   @override
   Widget build(BuildContext context) {
@@ -1012,5 +1098,15 @@ class _SummaryLine extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('label', label));
+    properties.add(StringProperty('quantityText', quantityText));
+    properties.add(StringProperty('valueText', valueText));
+    properties.add(ColorProperty('color', color));
+    properties.add(DiagnosticsProperty<bool>('isBold', isBold));
   }
 }

@@ -18,19 +18,15 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
   /// Remove todos os registros de log da tabela.
   ///
   /// Retorna o número de linhas removidas.
-  Future<int> deleteAll() {
-    return delete(logsRecords).go();
-  }
+  Future<int> deleteAll() => delete(logsRecords).go();
 
   /// Remove todos os logs com timestamp anterior a [dataLimite].
   ///
   /// Retorna true se ao menos um log foi removido.
-  Future<bool> deleteLogsBefore(DateTime dataLimite) {
-    return (delete(logsRecords)
+  Future<bool> deleteLogsBefore(DateTime dataLimite) => (delete(logsRecords)
           ..where((tbl) => tbl.timestamp.isSmallerThanValue(dataLimite)))
         .go()
         .then((rowsAffected) => rowsAffected > 0);
-  }
 
   /// Retorna todos os logs ordenados do mais recente para o mais antigo.
   Future<List<ActivityLog>> getAll() async {
@@ -90,17 +86,13 @@ class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
   /// Remove um log pelo [id].
   ///
   /// Retorna o número de linhas afetadas (normalmente 1 ou 0).
-  Future<int> removeLog(int id) {
-    return (delete(logsRecords)..where((tbl) => tbl.id.equals(id))).go();
-  }
+  Future<int> removeLog(int id) => (delete(logsRecords)..where((tbl) => tbl.id.equals(id))).go();
 
   /// Salva um novo log de atividade.
   ///
   /// Usa `insertOrIgnore` para evitar duplicatas silenciosas.
   /// Retorna o ID do registro inserido.
-  Future<int> save(ActivityLog log) {
-    return into(
+  Future<int> save(ActivityLog log) => into(
       logsRecords,
     ).insert(log.toCompanion(), mode: InsertMode.insertOrIgnore);
-  }
 }

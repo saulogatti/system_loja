@@ -6,6 +6,31 @@ part 'activity_log_data.g.dart';
 /// JSON para [ActivityLog].
 @JsonSerializable()
 class ActivityLogData {
+
+  const ActivityLogData({
+    required this.actionType,
+    required this.entity,
+    required this.userId,
+    required this.userName,
+    required this.timestamp,
+    this.details = '',
+    this.registrationDate,
+    this.lastUpdatedDate,
+  });
+
+  factory ActivityLogData.fromJson(Map<String, dynamic> json) =>
+      _$ActivityLogDataFromJson(json);
+
+  factory ActivityLogData.fromDomain(ActivityLog value) => ActivityLogData(
+    actionType: value.actionType,
+    entity: value.entity,
+    userId: value.userId,
+    userName: value.userName,
+    timestamp: value.timestamp,
+    details: value.details,
+    registrationDate: value.registrationDate,
+    lastUpdatedDate: value.lastUpdatedDate,
+  );
   @JsonKey(name: 'tipo_acao', fromJson: _actionFromJson, toJson: _actionToJson)
   final ActionType actionType;
 
@@ -26,32 +51,7 @@ class ActivityLogData {
   final DateTime? registrationDate;
   final DateTime? lastUpdatedDate;
 
-  const ActivityLogData({
-    required this.actionType,
-    required this.entity,
-    required this.userId,
-    required this.userName,
-    required this.timestamp,
-    this.details = '',
-    this.registrationDate,
-    this.lastUpdatedDate,
-  });
-
-  factory ActivityLogData.fromJson(Map<String, dynamic> json) =>
-      _$ActivityLogDataFromJson(json);
-
   Map<String, dynamic> toJson() => _$ActivityLogDataToJson(this);
-
-  factory ActivityLogData.fromDomain(ActivityLog value) => ActivityLogData(
-    actionType: value.actionType,
-    entity: value.entity,
-    userId: value.userId,
-    userName: value.userName,
-    timestamp: value.timestamp,
-    details: value.details,
-    registrationDate: value.registrationDate,
-    lastUpdatedDate: value.lastUpdatedDate,
-  );
 
   ActivityLog toDomain() => ActivityLog(
     actionType: actionType,
@@ -65,7 +65,7 @@ class ActivityLogData {
   );
 
   static ActionType _actionFromJson(Object? json) {
-    final s = json as String;
+    final s = json! as String;
     switch (s) {
       case 'CRIAR':
         return ActionType.criar;

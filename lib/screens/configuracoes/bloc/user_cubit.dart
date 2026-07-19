@@ -2,14 +2,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/models/default/authorization_level.dart';
 import 'package:system_loja/core/models/user.dart';
-import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 import 'package:system_loja/screens/configuracoes/bloc/usuario_state.dart';
 
 class UserCubit extends Cubit<UsuarioState> {
-  final IUserRepository _userRepository;
-
   UserCubit(this._userRepository) : super(UsuarioState.initial());
+  final IUserRepository _userRepository;
 
   Future<void> adicionarUsuario({
     required String nome,
@@ -24,13 +22,15 @@ class UserCubit extends Cubit<UsuarioState> {
       permission: nivelPermissao.value,
     );
 
-    final ResultStatus<bool, String> executionResult = await _userRepository.createUser(usuario);
+    final executionResult = await _userRepository.createUser(usuario);
     executionResult.when(
       onSuccess: (sucesso) {
         if (sucesso) {
-          emit(UsuarioState.usuarioAdicionado(usuario, true));
+          emit(UsuarioState.usuarioAdicionado(usuario, novoUsuario: true));
         } else {
-          emit(UsuarioState.loadFailure(errorMessage: 'Não foi possível adicionar o usuário.'));
+          emit(
+            const UsuarioState.loadFailure(errorMessage: 'Não foi possível adicionar o usuário.'),
+          );
         }
       },
       onError: (resultError) {
@@ -40,13 +40,13 @@ class UserCubit extends Cubit<UsuarioState> {
   }
 
   Future<void> atualizarUsuario({required User usuarioAtualizado}) async {
-    final ResultStatus<bool, String> resultAdd = await _userRepository.updateUser(usuarioAtualizado);
+    final resultAdd = await _userRepository.updateUser(usuarioAtualizado);
     resultAdd.when(
       onSuccess: (sucesso) {
         if (sucesso) {
-          emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
+          emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, novoUsuario: false));
         } else {
-          emit(UsuarioState.loadFailure(errorMessage: 'Falha ao atualizar usuário.'));
+          emit(const UsuarioState.loadFailure(errorMessage: 'Falha ao atualizar usuário.'));
         }
       },
       onError: (resultError) {
@@ -74,7 +74,7 @@ class UserCubit extends Cubit<UsuarioState> {
         if (sucesso) {
           emit(UsuarioState.usuarioRemovido(id));
         } else {
-          emit(UsuarioState.loadFailure(errorMessage: 'Falha ao remover usuário.'));
+          emit(const UsuarioState.loadFailure(errorMessage: 'Falha ao remover usuário.'));
         }
       },
       onError: (message) {

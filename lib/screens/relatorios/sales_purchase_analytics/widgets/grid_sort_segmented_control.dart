@@ -1,20 +1,20 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 enum GridSortOrder { recentes, antigos }
 
 class GridSortSegmentedControl extends StatelessWidget {
-  final GridSortOrder current;
-  final ValueChanged<GridSortOrder> onChanged;
 
   const GridSortSegmentedControl({
     required this.current,
     required this.onChanged,
     super.key,
   });
+  final GridSortOrder current;
+  final ValueChanged<GridSortOrder> onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    return SegmentedButton<GridSortOrder>(
+  Widget build(BuildContext context) => SegmentedButton<GridSortOrder>(
       segments: const [
         ButtonSegment(
           value: GridSortOrder.recentes,
@@ -30,5 +30,11 @@ class GridSortSegmentedControl extends StatelessWidget {
       selected: {current},
       onSelectionChanged: (selection) => onChanged(selection.first),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(EnumProperty<GridSortOrder>('current', current));
+    properties.add(ObjectFlagProperty<ValueChanged<GridSortOrder>>.has('onChanged', onChanged));
   }
 }

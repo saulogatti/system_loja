@@ -3,9 +3,9 @@ import 'package:system_loja/core/interface/i_system_error_manager.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_system_state.dart';
 
 class LogsSystemCubit extends Cubit<LogsSystemState> {
-  final ISystemErrorManager _systemErrorManager;
 
   LogsSystemCubit(this._systemErrorManager) : super(const LogsSystemState.initial());
+  final ISystemErrorManager _systemErrorManager;
 
   Future<void> clearLogs() async {
     emit(const LogsSystemState.loading());

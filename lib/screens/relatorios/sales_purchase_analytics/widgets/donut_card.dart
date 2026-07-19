@@ -1,15 +1,15 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 const message = 'Sem valores para exibir no gráfico.';
 
 class SalesPurchaseDonutCard extends StatelessWidget {
+  const SalesPurchaseDonutCard({required this.totalSales, required this.totalPurchases, super.key});
   final double totalSales;
   final double totalPurchases;
-
-  const SalesPurchaseDonutCard({required this.totalSales, required this.totalPurchases, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -118,28 +118,30 @@ class SalesPurchaseDonutCard extends StatelessWidget {
     );
   }
 
-  Future<void> _openZoom(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) =>
-          _DonutZoomDialog(totalSales: totalSales, totalPurchases: totalPurchases),
-    );
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DoubleProperty('totalSales', totalSales));
+    properties.add(DoubleProperty('totalPurchases', totalPurchases));
   }
+
+  Future<void> _openZoom(BuildContext context) => showDialog<void>(
+    context: context,
+    builder: (context) => _DonutZoomDialog(totalSales: totalSales, totalPurchases: totalPurchases),
+  );
 }
 
 class _DonutLegendLine extends StatelessWidget {
-  final Color color;
-  final String title;
-  final double value;
-  final double percent;
-
   const _DonutLegendLine({
     required this.color,
     required this.title,
     required this.value,
     required this.percent,
   });
+  final Color color;
+  final String title;
+  final double value;
+  final double percent;
 
   @override
   Widget build(BuildContext context) {
@@ -173,15 +175,18 @@ class _DonutLegendLine extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(ColorProperty('color', color));
+    properties.add(StringProperty('title', title));
+    properties.add(DoubleProperty('value', value));
+    properties.add(DoubleProperty('percent', percent));
+  }
 }
 
 class _DonutPainter extends CustomPainter {
-  final double salesFraction;
-  final double purchasesFraction;
-  final Color salesColor;
-  final Color purchasesColor;
-  final Color trackColor;
-
   const _DonutPainter({
     required this.salesFraction,
     required this.purchasesFraction,
@@ -189,6 +194,11 @@ class _DonutPainter extends CustomPainter {
     required this.purchasesColor,
     required this.trackColor,
   });
+  final double salesFraction;
+  final double purchasesFraction;
+  final Color salesColor;
+  final Color purchasesColor;
+  final Color trackColor;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -196,7 +206,7 @@ class _DonutPainter extends CustomPainter {
     final center = rect.center;
     final radius = math.min(size.width, size.height) / 2;
 
-    final stroke = math.max(10.0, radius * 0.18);
+    final stroke = math.max(10, radius * 0.18).toDouble();
     final basePaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
@@ -210,7 +220,7 @@ class _DonutPainter extends CustomPainter {
       return;
     }
 
-    final startAngle = -math.pi / 2;
+    const startAngle = -math.pi / 2;
     final sweepSales = (salesFraction / total).clamp(0.0, 1.0) * math.pi * 2;
     final sweepPurchases = (purchasesFraction / total).clamp(0.0, 1.0) * math.pi * 2;
 
@@ -236,20 +246,18 @@ class _DonutPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _DonutPainter oldDelegate) {
-    return oldDelegate.salesFraction != salesFraction ||
-        oldDelegate.purchasesFraction != purchasesFraction ||
-        oldDelegate.salesColor != salesColor ||
-        oldDelegate.purchasesColor != purchasesColor ||
-        oldDelegate.trackColor != trackColor;
-  }
+  bool shouldRepaint(covariant _DonutPainter oldDelegate) =>
+      oldDelegate.salesFraction != salesFraction ||
+      oldDelegate.purchasesFraction != purchasesFraction ||
+      oldDelegate.salesColor != salesColor ||
+      oldDelegate.purchasesColor != purchasesColor ||
+      oldDelegate.trackColor != trackColor;
 }
 
 class _DonutZoomDialog extends StatelessWidget {
+  const _DonutZoomDialog({required this.totalSales, required this.totalPurchases});
   final double totalSales;
   final double totalPurchases;
-
-  const _DonutZoomDialog({required this.totalSales, required this.totalPurchases});
 
   @override
   Widget build(BuildContext context) {
@@ -258,20 +266,18 @@ class _DonutZoomDialog extends StatelessWidget {
     final purchasesPct = total <= 0 ? 0.0 : totalPurchases / total;
 
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.94, end: 1.0),
+      tween: Tween(begin: 0.94, end: 1),
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOutCubic,
-      builder: (context, scale, child) {
-        return Transform.scale(
-          scale: scale,
-          child: AnimatedOpacity(
-            opacity: scale,
-            duration: const Duration(milliseconds: 180),
-            curve: Curves.easeOut,
-            child: child,
-          ),
-        );
-      },
+      builder: (context, scale, child) => Transform.scale(
+        scale: scale,
+        child: AnimatedOpacity(
+          opacity: scale,
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          child: child,
+        ),
+      ),
       child: Dialog(
         insetPadding: const EdgeInsets.all(16),
         clipBehavior: Clip.antiAlias,
@@ -358,5 +364,12 @@ class _DonutZoomDialog extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DoubleProperty('totalSales', totalSales));
+    properties.add(DoubleProperty('totalPurchases', totalPurchases));
   }
 }

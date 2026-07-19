@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:system_loja/core/models/default/authorization_level.dart';
@@ -9,13 +10,12 @@ import 'package:system_loja/core/models/user.dart';
 ///
 /// Exibe todas as informações do usuário em um dialog modal.
 class UsuarioDetailsDialog extends StatelessWidget {
-  final User usuario;
 
   const UsuarioDetailsDialog({required this.usuario, super.key});
+  final User usuario;
 
   @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
+  Widget build(BuildContext context) => AlertDialog(
       title: Text(usuario.name),
       content: SingleChildScrollView(
         child: Column(
@@ -46,11 +46,9 @@ class UsuarioDetailsDialog extends StatelessWidget {
       ),
       actions: [TextButton(onPressed: () => context.router.maybePop(), child: const Text('Fechar'))],
     );
-  }
 
-  Widget _buildDetailRow(BuildContext context, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+  Widget _buildDetailRow(BuildContext context, String label, String value) => Padding(
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -67,7 +65,6 @@ class UsuarioDetailsDialog extends StatelessWidget {
         ],
       ),
     );
-  }
 
   /// Mostra o dialog de detalhes do usuário
   static void show(BuildContext context, User usuario) {
@@ -75,5 +72,11 @@ class UsuarioDetailsDialog extends StatelessWidget {
       context: context,
       builder: (context) => UsuarioDetailsDialog(usuario: usuario),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<User>('usuario', usuario));
   }
 }

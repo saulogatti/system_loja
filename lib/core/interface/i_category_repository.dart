@@ -1,10 +1,10 @@
-import 'package:system_loja/core/models/category.dart';
+import 'package:system_loja/core/models/product_category.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 
 /// Interface que define o contrato para operações de repositório de categorias.
 ///
 /// Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
-/// para entidades [Category], permitindo diferentes implementações de
+/// para entidades [ProductCategory], permitindo diferentes implementações de
 /// persistência (Drift, JSON, etc.).
 ///
 /// Todas as operações retornam [ResultStatus] para tratamento type-safe
@@ -21,7 +21,7 @@ import 'package:system_loja/core/utils/result_status.dart';
 /// ```
 ///
 /// Veja também:
-/// - [Category] - modelo de domínio de categoria
+/// - [ProductCategory] - modelo de domínio de categoria
 /// - [ResultStatus] - tipo de retorno para operações
 abstract interface class ICategoryRepository {
   /// Cria uma nova categoria no sistema.
@@ -35,10 +35,7 @@ abstract interface class ICategoryRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com ID da categoria criada ou mensagem de erro
-  Future<ResultStatus<int, String>> createCategory({
-    required String name,
-    String? description,
-  });
+  Future<ResultStatus<int, String>> createCategory({required String name, String? description});
 
   /// Remove uma categoria do sistema pelo ID.
   ///
@@ -56,7 +53,7 @@ abstract interface class ICategoryRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com lista de categorias ou mensagem de erro
-  Future<ResultStatus<List<Category>, String>> getAllCategories();
+  Future<ResultStatus<List<ProductCategory>, String>> getAllCategories();
 
   /// Busca uma categoria específica pelo ID.
   ///
@@ -65,7 +62,7 @@ abstract interface class ICategoryRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com a categoria encontrada ou mensagem de erro
-  Future<ResultStatus<Category, String>> getCategoryById(int id);
+  Future<ResultStatus<ProductCategory, String>> getCategoryById(int id);
 
   /// Busca uma categoria pelo nome.
   ///
@@ -76,7 +73,7 @@ abstract interface class ICategoryRepository {
   ///
   /// Retorna:
   /// - [ResultStatus] com a categoria encontrada ou mensagem de erro
-  Future<ResultStatus<Category, String>> getCategoryByName(String name);
+  Future<ResultStatus<ProductCategory, String>> getCategoryByName(String name);
 
   /// Verifica se a categoria está sendo utilizada por produtos.
   ///

@@ -23,30 +23,26 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _expirationDate;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      builder: (context, state) {
-        return Scaffold(
-          body: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: state.when(
-                    initial: () => const Center(child: Text('Carregando...')),
-                    loading: () => const Center(child: CircularProgressIndicator()),
-                    error: (message) => Center(child: Text(message)),
+  Widget build(BuildContext context) => BlocBuilder<HomeBloc, HomeState>(
+    builder: (context, state) => Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: state.when(
+                initial: () => const Center(child: Text('Carregando...')),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (message) => Center(child: Text(message)),
 
-                    loaded: _makeBody,
-                    saved: _makeBody,
-                  ),
-                ),
-              ],
+                loaded: _makeBody,
+                saved: _makeBody,
+              ),
             ),
-          ),
-        );
-      },
-    );
-  }
+          ],
+        ),
+      ),
+    ),
+  );
 
   @override
   void dispose() {
@@ -56,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    context.read<HomeBloc>().add(HomeEvent.loadSystemUserData());
+    context.read<HomeBloc>().add(const HomeEvent.loadSystemUserData());
     super.initState();
   }
 
@@ -80,116 +76,114 @@ class _HomeScreenState extends State<HomeScreen> {
     ).showSnackBar(const SnackBar(content: Text('Chave ativada com sucesso!')));
   }
 
-  Widget _makeBody(SystemUserData systemUserData) {
-    return SafeArea(
-      child: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Icon(Icons.store, size: 100, color: Theme.of(context).colorScheme.primary),
-                  const SizedBox(height: 40),
-                  Text(
-                    'Bem-vindo!',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    systemUserData.name,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  if (systemUserData.email != null && systemUserData.email!.isNotEmpty)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.email_outlined,
-                          size: 18,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          systemUserData.email ?? 'Não informado',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-            ),
-          ),
-          // Rodapé (Footer) para validação da Key do sistema
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            ),
+  Widget _makeBody(SystemUserData systemUserData) => SafeArea(
+    child: Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Icon(Icons.store, size: 100, color: Theme.of(context).colorScheme.primary),
+                const SizedBox(height: 40),
                 Text(
-                  'Licença do Sistema',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  'Bem-vindo!',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _keyController,
-                        textInputAction: TextInputAction.done,
-                        onSubmitted: (_) => _activateKey(),
-                        autocorrect: false,
-                        enableSuggestions: false,
-                        decoration: const InputDecoration(
-                          labelText: 'Chave de Ativação',
-                          border: OutlineInputBorder(),
-                          isDense: true,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    ElevatedButton(
-                      onPressed: _activateKey,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                      ),
-                      child: const Text('Ativar'),
-                    ),
-                  ],
-                ),
-                if (_expirationDate != null) ...[
-                  const SizedBox(height: 12),
-                  Text(
-                    'Válido até: $_expirationDate',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.green.shade700,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+                const SizedBox(height: 10),
+                Text(
+                  systemUserData.name,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
-                ],
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                if (systemUserData.email != null && systemUserData.email!.isNotEmpty)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.email_outlined,
+                        size: 18,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        systemUserData.email ?? 'Não informado',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+        // Rodapé (Footer) para validação da Key do sistema
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Licença do Sistema',
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _keyController,
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (_) => _activateKey(),
+                      autocorrect: false,
+                      enableSuggestions: false,
+                      decoration: const InputDecoration(
+                        labelText: 'Chave de Ativação',
+                        border: OutlineInputBorder(),
+                        isDense: true,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    onPressed: _activateKey,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    ),
+                    child: const Text('Ativar'),
+                  ),
+                ],
+              ),
+              if (_expirationDate != null) ...[
+                const SizedBox(height: 12),
+                Text(
+                  'Válido até: $_expirationDate',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.green.shade700,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }

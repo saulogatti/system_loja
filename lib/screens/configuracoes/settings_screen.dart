@@ -5,14 +5,13 @@ import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
+import 'package:system_loja/screens/configuracoes/bloc/settings_bloc.dart';
+import 'package:system_loja/screens/configuracoes/bloc/settings_event.dart';
+import 'package:system_loja/screens/configuracoes/bloc/settings_state.dart';
+import 'package:system_loja/screens/configuracoes/widgets/secao_backup.dart';
+import 'package:system_loja/screens/configuracoes/widgets/secao_notificacoes.dart';
+import 'package:system_loja/screens/configuracoes/widgets/theme_settings.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
-
-import 'bloc/settings_bloc.dart';
-import 'bloc/settings_event.dart';
-import 'bloc/settings_state.dart';
-import 'widgets/secao_backup.dart';
-import 'widgets/secao_notificacoes.dart';
-import 'widgets/theme_settings.dart';
 
 /// Enum para frequência de backup
 enum FrequenciaBackup {
@@ -20,17 +19,15 @@ enum FrequenciaBackup {
   semanal('semanal', 'Semanal'),
   mensal('mensal', 'Mensal');
 
+  const FrequenciaBackup(this.value, this.label);
   final String value;
+
   final String label;
 
-  const FrequenciaBackup(this.value, this.label);
-
-  static FrequenciaBackup fromValue(String value) {
-    return FrequenciaBackup.values.firstWhere(
-      (e) => e.value == value,
-      orElse: () => FrequenciaBackup.diario,
-    );
-  }
+  static FrequenciaBackup fromValue(String value) => FrequenciaBackup.values.firstWhere(
+    (e) => e.value == value,
+    orElse: () => FrequenciaBackup.diario,
+  );
 }
 
 /// Tela de Configurações do Sistema
@@ -46,109 +43,105 @@ class SettingsScreen extends StatefulWidget implements AutoRouteWrapper {
   State<SettingsScreen> createState() => _SettingsScreenState();
 
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<SettingsBloc>(
-      create: (_) =>
-          SettingsBloc(configurationRepository: appInjection.get<IConfigurationRepository>()),
-      child: this,
-    );
-  }
+  Widget wrappedRoute(BuildContext context) => BlocProvider<SettingsBloc>(
+    create: (_) =>
+        SettingsBloc(configurationRepository: appInjection.get<IConfigurationRepository>()),
+    child: this,
+  );
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
   AppSettings? _draftConfig;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      persistentFooterButtons: [
-        TextButton(onPressed: () => _resetToDefault(context), child: const Text('Restaurar Dados')),
-        TextButton(
-          onPressed: () => _openSystemSettings(context),
-          child: const Text('Configurações do Sistema'),
-        ),
-        TextButton(
-          onPressed: () => context.router.push(const UsuarioRoute()),
-          child: const Text('Usuários'),
-        ),
-        TextButton(
-          onPressed: () => context.router.push(const IssuerConfigRoute()),
-          child: const Text('Empresa Emitente'),
-        ),
-      ],
-      body: BlocConsumer<SettingsBloc, SettingsState>(
-        listener: (context, state) {
-          if (state is SettingsLoadedState) {
-            _draftConfig = state.appSettings;
-            if (state.status != SettingsSuccessStatus.loaded) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.status.mensagem), backgroundColor: Colors.green),
-              );
-            }
-          } else if (state is SettingsError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.mensagem), backgroundColor: Colors.red));
-          }
-        },
-
-        builder: (context, state) {
-          switch (state) {
-            case SettingsError():
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.error, size: 64, color: Colors.red),
-                    const SizedBox(height: 16),
-                    Text(state.mensagem),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () => context.read<SettingsBloc>().add(const LoadSettingsEvent()),
-                      child: const Text('Tentar Novamente'),
-                    ),
-                  ],
-                ),
-              );
-            case SettingsLoadingState():
-            case SettingsInitialState():
-              return const Center(child: CircularProgressIndicator());
-
-            case SettingsLoadedState():
-              final currentConfig = _draftConfig ?? state.appSettings;
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SecaoNotificacoes(config: currentConfig, onConfigChanged: _updateConfig),
-                    const SizedBox(height: 24),
-                    ThemeSettings(
-                      config: currentConfig,
-                      onConfigChanged: _updateConfig,
-                      onMostrarSeletorCor: () => _mostrarSeletorCor(context, currentConfig),
-                    ),
-
-                    const SizedBox(height: 24),
-                    SecaoBackup(
-                      config: currentConfig,
-                      onConfigChanged: _updateConfig,
-                      onRealizarBackup: () =>
-                          context.read<SettingsBloc>().add(const BackupSettingsEvent()),
-                      onSelecionarFrequencia: () =>
-                          _selecionarFrequenciaBackup(context, currentConfig),
-                    ),
-
-                    const SizedBox(height: 32),
-                    _buildBotaoSalvar(context, currentConfig),
-                  ],
-                ),
-              );
-          }
-        },
+  Widget build(BuildContext context) => Scaffold(
+    persistentFooterButtons: [
+      TextButton(onPressed: () => _resetToDefault(context), child: const Text('Restaurar Dados')),
+      TextButton(
+        onPressed: () => _openSystemSettings(context),
+        child: const Text('Configurações do Sistema'),
       ),
-    );
-  }
+      TextButton(
+        onPressed: () => context.router.push(const UsuarioRoute()),
+        child: const Text('Usuários'),
+      ),
+      TextButton(
+        onPressed: () => context.router.push(const IssuerConfigRoute()),
+        child: const Text('Empresa Emitente'),
+      ),
+    ],
+    body: BlocConsumer<SettingsBloc, SettingsState>(
+      listener: (context, state) {
+        if (state is SettingsLoadedState) {
+          _draftConfig = state.appSettings;
+          if (state.status != SettingsSuccessStatus.loaded) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.status.mensagem), backgroundColor: Colors.green),
+            );
+          }
+        } else if (state is SettingsError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.mensagem), backgroundColor: Colors.red));
+        }
+      },
+
+      builder: (context, state) {
+        switch (state) {
+          case SettingsError():
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error, size: 64, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text(state.mensagem),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => context.read<SettingsBloc>().add(const LoadSettingsEvent()),
+                    child: const Text('Tentar Novamente'),
+                  ),
+                ],
+              ),
+            );
+          case SettingsLoadingState():
+          case SettingsInitialState():
+            return const Center(child: CircularProgressIndicator());
+
+          case SettingsLoadedState():
+            final currentConfig = _draftConfig ?? state.appSettings;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SecaoNotificacoes(config: currentConfig, onConfigChanged: _updateConfig),
+                  const SizedBox(height: 24),
+                  ThemeSettings(
+                    config: currentConfig,
+                    onConfigChanged: _updateConfig,
+                    onMostrarSeletorCor: () => _mostrarSeletorCor(context, currentConfig),
+                  ),
+
+                  const SizedBox(height: 24),
+                  SecaoBackup(
+                    config: currentConfig,
+                    onConfigChanged: _updateConfig,
+                    onRealizarBackup: () =>
+                        context.read<SettingsBloc>().add(const BackupSettingsEvent()),
+                    onSelecionarFrequencia: () =>
+                        _selecionarFrequenciaBackup(context, currentConfig),
+                  ),
+
+                  const SizedBox(height: 32),
+                  _buildBotaoSalvar(context, currentConfig),
+                ],
+              ),
+            );
+        }
+      },
+    ),
+  );
 
   @override
   void initState() {
@@ -158,19 +151,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   /// Botão de salvar configurações
-  Widget _buildBotaoSalvar(BuildContext context, AppSettings config) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton.icon(
-        icon: const Icon(Icons.save),
-        label: const Text('Salvar Configurações'),
-        style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
-        onPressed: () {
-          context.read<SettingsBloc>().add(UpdateSettingsEvent(_draftConfig ?? config));
-        },
-      ),
-    );
-  }
+  Widget _buildBotaoSalvar(BuildContext context, AppSettings config) => SizedBox(
+    width: double.infinity,
+    child: ElevatedButton.icon(
+      icon: const Icon(Icons.save),
+      label: const Text('Salvar Configurações'),
+      style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
+      onPressed: () {
+        context.read<SettingsBloc>().add(UpdateSettingsEvent(_draftConfig ?? config));
+      },
+    ),
+  );
 
   Future<void> _confirmarRestaurarPadrao(BuildContext context) async {
     final confirmado = await showDialog<bool>(
@@ -203,22 +194,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (dialogContext) => SimpleDialog(
         title: const Text('Escolher Cor'),
         children: EnumColorAppThemeSettings.values.map((entry) {
-          return SimpleDialogOption(
-            onPressed: () => Navigator.pop(dialogContext, entry),
-            child: Row(
-              children: [
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: entry.color,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: Colors.grey),
+          final isSelected = config.corPrimaria == entry;
+          return Semantics(
+            selected: isSelected,
+            child: SimpleDialogOption(
+              onPressed: () => Navigator.pop(dialogContext, entry),
+              child: Row(
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: entry.color,
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey,
+                        width: isSelected ? 2.0 : 1.0,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                Text(entry.name, style: TextStyle(fontWeight: FontWeight.normal)),
-              ],
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      entry.name,
+                      style: TextStyle(
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                  if (isSelected) Icon(Icons.check, color: Theme.of(context).colorScheme.primary),
+                ],
+              ),
             ),
           );
         }).toList(),
@@ -240,31 +246,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // Neste modal bottom sheet vai ter opções de recuperar padrão ou recuperar do backup. //
     await showModalBottomSheet(
       context: context,
-      builder: (buildContext) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.restore),
-              title: const Text('Restaurar Configurações Padrão'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                Navigator.pop(buildContext);
-                _confirmarRestaurarPadrao(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.backup),
-              title: const Text('Restaurar de Backup'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                Navigator.pop(buildContext);
-                context.read<SettingsBloc>().add(const RestoreBackupEvent());
-              },
-            ),
-          ],
-        );
-      },
+      builder: (buildContext) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.restore),
+            title: const Text('Restaurar Configurações Padrão'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.pop(buildContext);
+              _confirmarRestaurarPadrao(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.backup),
+            title: const Text('Restaurar de Backup'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.pop(buildContext);
+              context.read<SettingsBloc>().add(const RestoreBackupEvent());
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -275,14 +279,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (dialogContext) => SimpleDialog(
         title: const Text('Frequência de Backup'),
         children: FrequenciaBackup.values.map((opcao) {
-          return SimpleDialogOption(
-            onPressed: () => Navigator.pop(dialogContext, opcao),
-            child: Text(
-              opcao.label,
-              style: TextStyle(
-                fontWeight: config.frequenciaBackup == opcao.value
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+          final isSelected = config.frequenciaBackup == opcao.value;
+          return Semantics(
+            selected: isSelected,
+            child: SimpleDialogOption(
+              onPressed: () => Navigator.pop(dialogContext, opcao),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      opcao.label,
+                      style: TextStyle(
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                  if (isSelected) Icon(Icons.check, color: Theme.of(context).colorScheme.primary),
+                ],
               ),
             ),
           );

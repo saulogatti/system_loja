@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/screens/sales/models/invoice_line_entry.dart';
 
@@ -5,10 +6,10 @@ import 'package:system_loja/screens/sales/models/invoice_line_entry.dart';
 /// [InvoiceLineEntry] - Objeto que representa uma linha de item na nota.
 /// [onDelete] - Callback para deletar a linha de item.
 class InvoiceLineTile extends StatelessWidget {
+  const InvoiceLineTile({required this.entry, required this.onDelete, super.key});
   final InvoiceLineEntry entry;
 
   final VoidCallback onDelete;
-  const InvoiceLineTile({required this.entry, required this.onDelete, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,5 +26,12 @@ class InvoiceLineTile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<InvoiceLineEntry>('entry', entry));
+    properties.add(ObjectFlagProperty<VoidCallback>.has('onDelete', onDelete));
   }
 }

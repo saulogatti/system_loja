@@ -1,7 +1,7 @@
 class ChangeSalesPurchaseGrouping extends SalesPurchaseAnalyticsEvent {
-  final SalesPurchaseGrouping grouping;
 
   const ChangeSalesPurchaseGrouping(this.grouping);
+  final SalesPurchaseGrouping grouping;
 }
 
 class LoadSalesPurchaseAnalytics extends SalesPurchaseAnalyticsEvent {

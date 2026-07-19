@@ -1,13 +1,13 @@
 class CompanyEditDeleted extends CompanyEditState {
-  final String message;
 
   const CompanyEditDeleted(this.message);
+  final String message;
 }
 
 class CompanyEditError extends CompanyEditState {
-  final String message;
 
   const CompanyEditError(this.message);
+  final String message;
 }
 
 class CompanyEditInitial extends CompanyEditState {
@@ -19,9 +19,9 @@ class CompanyEditLoading extends CompanyEditState {
 }
 
 class CompanyEditSaved extends CompanyEditState {
-  final String message;
 
   const CompanyEditSaved(this.message);
+  final String message;
 }
 
 sealed class CompanyEditState {

@@ -35,6 +35,12 @@ typedef CacheableFactory<T extends Cacheable> = T Function(Map<String, dynamic> 
 /// final objeto = await cache.get<MinhaClasse>('chave', MinhaClasse.fromJson);
 /// ```
 class CacheManager with FileStorageUtility, LoggerClassMixin {
+  /// Construtor privado para implementar o padrão singleton.
+  ///
+  /// Inicializa o sistema de arquivos através do [FileStorageUtility]
+  /// chamando ` _initializeDirectory` para preparar o ambiente de cache.
+  CacheManager();
+
   /// Instância única do [CacheManager].
 
   /// Cache em memória para acesso rápido.
@@ -45,12 +51,6 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   final Lock _memoryLock = Lock();
 
   final Map<String, Lock> _fileLocks = {};
-
-  /// Construtor privado para implementar o padrão singleton.
-  ///
-  /// Inicializa o sistema de arquivos através do [FileStorageUtility]
-  /// chamando [_initializeDirectory] para preparar o ambiente de cache.
-  CacheManager();
 
   /// Limpa todo o cache da aplicação.
   ///
@@ -191,9 +191,8 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     unawaited(_memoryLock.synchronized(_memoryCache.clear));
   }
 
-  Map<String, dynamic> parseData(String dataString) {
-    return Map<String, dynamic>.from(jsonDecode(dataString));
-  }
+  Map<String, dynamic> parseData(String dataString) =>
+      Map<String, dynamic>.from(jsonDecode(dataString));
 
   /// Remove um objeto do cache pela sua chave.
   ///
@@ -253,16 +252,13 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// para definir o nome do diretório onde os arquivos de cache serão
   /// armazenados dentro do diretório de suporte da aplicação.
   @override
-  String retrieveDirectoryName() {
-    return 'system_loja_cache';
-  }
+  String retrieveDirectoryName() => 'system_loja_cache';
 
   /// Armazena um objeto [Cacheable] no cache.
   ///
   /// O objeto será persistido tanto em memória quanto em arquivo.
   ///
   /// [item] é o objeto a ser armazenado.
-  /// [typeName] é o nome do tipo (opcional, usa o nome da classe por padrão).
   ///
   /// Lança [CacheNotInitializedException] se o cache não estiver inicializado.
   /// Lança [CacheWriteException] se ocorrer um erro ao salvar no arquivo.
@@ -346,14 +342,10 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
   /// O caminho é relativo ao diretório de cache gerenciado pelo [FileStorageUtility].
   ///
   /// Retorna um caminho no formato: `${typeName.toLowerCase()}.json`
-  String _getCacheFilePath(String typeName) {
-    return p.setExtension(typeName.toLowerCase(), '.json');
-  }
+  String _getCacheFilePath(String typeName) => p.setExtension(typeName.toLowerCase(), '.json');
 
   /// Obtém ou cria um lock para o arquivo específico
-  Lock _getLock(String dataFile) {
-    return _fileLocks.putIfAbsent(dataFile, Lock.new);
-  }
+  Lock _getLock(String dataFile) => _fileLocks.putIfAbsent(dataFile, Lock.new);
 
   /// Carrega os dados do cache de um tipo específico do arquivo para memória.
   ///
@@ -389,7 +381,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     }
 
     try {
-      final Map<String, dynamic> jsonData = parseData(dataString!);
+      final jsonData = parseData(dataString!);
       final loadedData = jsonData.map(
         (key, value) => MapEntry(key, Map<String, dynamic>.from(value as Map<String, dynamic>)),
       );
