@@ -13,10 +13,6 @@ import 'package:system_loja/domain/code_generator_service.dart';
 /// Responsável por coordenar operações de CRUD de vendas (invoices)
 /// utilizando os DAOs do Drift.
 class SalesRepository implements ISalesRepository {
-  final InvoiceDao _invoiceDao;
-  final InvoiceItemDao _invoiceItemDao;
-  final ProductDao _productDao;
-  final CodeGeneratorService _codeGeneratorService;
 
   SalesRepository({
     required InvoiceDao invoiceDao,
@@ -27,6 +23,10 @@ class SalesRepository implements ISalesRepository {
        _invoiceDao = invoiceDao,
        _invoiceItemDao = invoiceItemDao,
        _productDao = productDao;
+  final InvoiceDao _invoiceDao;
+  final InvoiceItemDao _invoiceItemDao;
+  final ProductDao _productDao;
+  final CodeGeneratorService _codeGeneratorService;
 
   /// Deleta uma venda pelo ID
   ///
@@ -104,7 +104,7 @@ class SalesRepository implements ISalesRepository {
   Future<ResultStatus<Map<int, Invoice>, String>> loadAllSales() async {
     try {
       final invoices = await _invoiceDao.getAll();
-      final Map<int, Invoice> sales = {};
+      final sales = <int, Invoice>{};
 
       for (final invoice in invoices) {
         sales[invoice.id] = invoice;

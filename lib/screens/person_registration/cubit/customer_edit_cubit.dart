@@ -5,9 +5,9 @@ import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/screens/person_registration/cubit/customer_edit_state.dart';
 
 class CustomerEditCubit extends Cubit<CustomerEditState> {
-  final ICustomerRepository _repository;
 
   CustomerEditCubit(this._repository) : super(const CustomerEditInitial());
+  final ICustomerRepository _repository;
 
   Future<void> deleteCustomer(int id) async {
     emit(const CustomerEditLoading());

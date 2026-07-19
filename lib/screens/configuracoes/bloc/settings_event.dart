@@ -27,8 +27,8 @@ abstract class SettingsEvent {
 
 /// Evento para atualizar as configurações
 class UpdateSettingsEvent extends SettingsEvent {
-  /// Nova configuração a ser aplicada
-  final AppSettings appSettings;
 
   const UpdateSettingsEvent(this.appSettings);
+  /// Nova configuração a ser aplicada
+  final AppSettings appSettings;
 }

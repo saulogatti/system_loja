@@ -90,9 +90,7 @@ Set<String> _getTableColumns(Database database, String tableName) {
       .toSet();
 }
 
-String _numericCode({required int length, required int value}) {
-  return value.toString().padLeft(length, '0');
-}
+String _numericCode({required int length, required int value}) => value.toString().padLeft(length, '0');
 
 List<SeedProduct> _pickProducts({
   required List<SeedProduct> products,
@@ -218,7 +216,7 @@ INSERT INTO invoices_records (
     for (var i = 0; i < options.customerCount; i++) {
       final cpf = _numericCode(length: 11, value: i + 1);
       final addressJson =
-          '{"street":"Rua Cliente ${i + 1}","zipCode":"02002000","neighborhood":"Bairro ${((i % 5) + 1)}","city":"Sao Paulo","state":"SP"}';
+          '{"street":"Rua Cliente ${i + 1}","zipCode":"02002000","neighborhood":"Bairro ${(i % 5) + 1}","city":"Sao Paulo","state":"SP"}';
       insertCustomer.execute([
         cpf,
         'Cliente Teste ${i + 1}',
@@ -305,10 +303,10 @@ INSERT INTO invoices_records (
         'NF-${now.year}-${_numericCode(length: 6, value: i + 1)}',
         _toEpochSeconds(issueDate),
         nowEpochSeconds,
-        isExitInvoice ? 'PIX' : 'Boleto',
+        if (isExitInvoice) 'PIX' else 'Boleto',
         nowEpochSeconds,
         totalValue,
-        isExitInvoice ? 'exit' : 'entry',
+        if (isExitInvoice) 'exit' else 'entry',
       ]);
       final invoiceId = database.lastInsertRowId;
 
@@ -348,28 +346,18 @@ INSERT INTO invoices_records (
   );
 }
 
-int _toEpochSeconds(DateTime value) {
-  return value.millisecondsSinceEpoch ~/ 1000;
-}
+int _toEpochSeconds(DateTime value) => value.millisecondsSinceEpoch ~/ 1000;
 
 class SeedInvoiceItem {
-  final SeedProduct product;
-  final int quantity;
 
   const SeedInvoiceItem({required this.product, required this.quantity});
+  final SeedProduct product;
+  final int quantity;
 
   double get totalValue => product.price * quantity;
 }
 
 class SeedOptions {
-  final bool reset;
-  final int categoryCount;
-  final int companyCount;
-  final int customerCount;
-  final int productCount;
-  final int invoiceCount;
-  final int randomSeed;
-  final String databaseFilePath;
 
   const SeedOptions({
     required this.reset,
@@ -412,6 +400,14 @@ class SeedOptions {
           '${Directory.current.path}${Platform.pathSeparator}.seed_db${Platform.pathSeparator}system_loja.sqlite',
     );
   }
+  final bool reset;
+  final int categoryCount;
+  final int companyCount;
+  final int customerCount;
+  final int productCount;
+  final int invoiceCount;
+  final int randomSeed;
+  final String databaseFilePath;
 
   static int _parsePositive(String? input, {required int fallback}) {
     final parsed = int.tryParse(input ?? '');
@@ -423,10 +419,6 @@ class SeedOptions {
 }
 
 class SeedProduct {
-  final int id;
-  final String code;
-  final String name;
-  final double price;
 
   const SeedProduct({
     required this.id,
@@ -434,15 +426,13 @@ class SeedProduct {
     required this.name,
     required this.price,
   });
+  final int id;
+  final String code;
+  final String name;
+  final double price;
 }
 
 class SeedSummary {
-  final int categories;
-  final int companies;
-  final int customers;
-  final int products;
-  final int invoices;
-  final int invoiceItems;
 
   const SeedSummary({
     required this.categories,
@@ -452,4 +442,10 @@ class SeedSummary {
     required this.invoices,
     required this.invoiceItems,
   });
+  final int categories;
+  final int companies;
+  final int customers;
+  final int products;
+  final int invoices;
+  final int invoiceItems;
 }

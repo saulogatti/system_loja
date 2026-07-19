@@ -5,12 +5,12 @@ import 'package:system_loja/screens/configuracoes/settings_screen.dart';
 import 'package:system_loja/screens/settings/app_theme.dart';
 
 class SettingsService implements ISettingsService {
+  SettingsService.injection();
   ValueNotifier<ThemeData> currentThemeNotifier = ValueNotifier<ThemeData>(
     AppTheme.light(seedColor: EnumColorAppThemeSettings.azul.color),
   );
   ThemeData _appTheme = AppTheme.light(seedColor: EnumColorAppThemeSettings.azul.color);
   bool _temaEscuro = false;
-  SettingsService.injection();
   ThemeData get currentTheme => currentThemeNotifier.value;
   bool get temaEscuro => _temaEscuro;
   @override

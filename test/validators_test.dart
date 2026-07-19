@@ -38,7 +38,7 @@ void main() {
     test('deve retornar erro para valor não numérico', () {
       expect(validatePrice('abc'), isNotNull);
       expect(validatePrice('10.5a'), isNotNull);
-      expect(validatePrice('R\$ 10.50'), isNotNull);
+      expect(validatePrice(r'R$ 10.50'), isNotNull);
     });
 
     test('deve retornar erro para valor negativo', () {

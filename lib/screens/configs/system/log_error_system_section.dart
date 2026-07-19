@@ -6,10 +6,9 @@ class LogErrorSystemSection extends StatelessWidget {
   const LogErrorSystemSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
+  Widget build(BuildContext context) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -34,7 +33,6 @@ class LogErrorSystemSection extends StatelessWidget {
         ),
       ),
     );
-  }
 
   void onOpenLogsAnalysis(BuildContext context) {
     // Implementar a lógica para abrir a análise de logs

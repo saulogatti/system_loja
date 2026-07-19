@@ -8,13 +8,6 @@ part 'individual_entry.g.dart';
 /// DTO JSON para pessoa física (sem herdar [Person]).
 @JsonSerializable(converters: [CpfConverter()])
 class IndividualEntry {
-  final String name;
-  final Cpf document;
-  final DateTime registrationDate;
-  final DateTime lastUpdatedDate;
-  final int id;
-  final String? email;
-  final String? phone;
 
   const IndividualEntry({
     required this.name,
@@ -29,8 +22,7 @@ class IndividualEntry {
   factory IndividualEntry.fromJson(Map<String, dynamic> json) =>
       _$IndividualEntryFromJson(json);
 
-  factory IndividualEntry.fromPerson(Person<Cpf> person) {
-    return IndividualEntry(
+  factory IndividualEntry.fromPerson(Person<Cpf> person) => IndividualEntry(
       name: person.name,
       document: person.document,
       email: person.email,
@@ -39,7 +31,13 @@ class IndividualEntry {
       registrationDate: person.registrationDate,
       lastUpdatedDate: person.lastUpdatedDate,
     );
-  }
+  final String name;
+  final Cpf document;
+  final DateTime registrationDate;
+  final DateTime lastUpdatedDate;
+  final int id;
+  final String? email;
+  final String? phone;
 
   Map<String, dynamic> toJson() => _$IndividualEntryToJson(this);
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
@@ -7,15 +8,14 @@ import 'package:system_loja/screens/utils/extension_date_time.dart';
 /// Substitui o diálogo de detalhes, apresentando as informações da nota
 /// num painel deslizante com lista de itens e dados de pagamento.
 class InvoiceOverviewBottomSheet extends StatelessWidget {
-  /// Nota fiscal cujas informações serão exibidas.
-  final Invoice invoice;
 
   /// Cria uma instância de [InvoiceOverviewBottomSheet].
   const InvoiceOverviewBottomSheet({required this.invoice, super.key});
+  /// Nota fiscal cujas informações serão exibidas.
+  final Invoice invoice;
 
   /// Exibe o bottom sheet de visão geral da nota fiscal.
-  static Future<void> show(BuildContext context, Invoice invoice) {
-    return showModalBottomSheet(
+  static Future<void> show(BuildContext context, Invoice invoice) => showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -23,7 +23,6 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
       ),
       builder: (_) => InvoiceOverviewBottomSheet(invoice: invoice),
     );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +33,7 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
       initialChildSize: 0.6,
       minChildSize: 0.4,
       maxChildSize: 0.9,
-      builder: (_, scrollController) {
-        return Padding(
+      builder: (_, scrollController) => Padding(
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -161,27 +159,31 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
               ),
             ],
           ),
-        );
-      },
+        ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Invoice>('invoice', invoice));
   }
 }
 
 /// Linha de informação com ícone, rótulo e valor.
 class _InfoRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
 
   const _InfoRow({
     required this.icon,
     required this.label,
     required this.value,
   });
+  final IconData icon;
+  final String label;
+  final String value;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,5 +207,12 @@ class _InfoRow extends StatelessWidget {
         ],
       ),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<IconData>('icon', icon));
+    properties.add(StringProperty('label', label));
+    properties.add(StringProperty('value', value));
   }
 }

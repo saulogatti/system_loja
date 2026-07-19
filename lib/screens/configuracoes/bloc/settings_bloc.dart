@@ -6,8 +6,8 @@ import 'package:system_loja/core/interface/i_configuration_repository.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 
-import 'settings_event.dart';
-import 'settings_state.dart';
+import 'package:system_loja/screens/configuracoes/bloc/settings_event.dart';
+import 'package:system_loja/screens/configuracoes/bloc/settings_state.dart';
 
 /// BLoC para gerenciar o estado das configurações do sistema.
 ///
@@ -15,7 +15,6 @@ import 'settings_state.dart';
 /// apenas mapeia para [SettingsState]. `try/catch` fica limitado a fluxo de
 /// seleção de diretório quando a plataforma lança exceção.
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  final IConfigurationRepository _configurationRepository;
 
   SettingsBloc({required IConfigurationRepository configurationRepository})
     : _configurationRepository = configurationRepository,
@@ -27,6 +26,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
     on<RestoreBackupEvent>(_onRestoreBackup);
   }
+  final IConfigurationRepository _configurationRepository;
 
   void _emitResult({
     required Emitter<SettingsState> emit,
@@ -47,7 +47,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(const SettingsLoadingState());
     final file = await getDirectoryPath(canCreateDirectories: true);
     if (file == null) {
-      emit(SettingsError('Nenhum diretório selecionado para backup.'));
+      emit(const SettingsError('Nenhum diretório selecionado para backup.'));
       return;
     }
     final result = await _configurationRepository.createBackup(file);
@@ -78,7 +78,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       return;
     }
     if (direBackup == null) {
-      emit(SettingsError('Nenhum diretório selecionado para restaurar o backup.'));
+      emit(const SettingsError('Nenhum diretório selecionado para restaurar o backup.'));
       return;
     }
     emit(const SettingsLoadingState());

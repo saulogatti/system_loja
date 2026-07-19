@@ -2,11 +2,10 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
 import 'package:system_loja/core/interface/i_user_repository.dart';
 import 'package:system_loja/core/models/activity_log.dart';
+import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/core/utils/repository_error_mapper.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/users_dao.dart';
-
-import '../../../core/models/user.dart';
 
 /// Repositório para gerenciamento de usuários usando Drift.
 ///
@@ -18,11 +17,11 @@ import '../../../core/models/user.dart';
 /// - [IUserRepository] - contrato da interface
 /// - [UsersDao] - DAO do Drift
 class UserRepository with LoggerClassMixin implements IUserRepository {
-  final ILogRepository _logRepository;
-  final UsersDao _usersDao;
   UserRepository({required ILogRepository logRepository, required UsersDao usersDao})
     : _logRepository = logRepository,
       _usersDao = usersDao;
+  final ILogRepository _logRepository;
+  final UsersDao _usersDao;
 
   @override
   Future<ResultStatus<bool, String>> createUser(User user) async {

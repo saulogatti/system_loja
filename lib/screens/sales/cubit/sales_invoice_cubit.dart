@@ -13,7 +13,6 @@ import 'package:system_loja/screens/sales/models/person_selection_invoice_mappin
 
 /// Cubit do formulário de nova nota fiscal (delega persistência ao [SalesCubit]).
 class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
-  final SalesCubit _salesCubit;
 
   SalesInvoiceCubit({
     required SalesCubit salesCubit,
@@ -28,6 +27,7 @@ class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
            ),
          ),
        );
+  final SalesCubit _salesCubit;
 
   /// Adiciona ou soma quantidade; em falta de estoque (saída), emite [SalesInvoiceState.feedback].
   void addOrMergeLine(Product product, int quantityToAdd) {

@@ -32,7 +32,7 @@ void main() {
     });
 
     test('makeUniqueFileName appends timestamp', () {
-      final name = 'relatorio.pdf';
+      const name = 'relatorio.pdf';
       final uniqueName = name.makeUniqueFileName();
       expect(uniqueName, startsWith('relatorio_'));
       expect(uniqueName, endsWith('.pdf'));
@@ -82,14 +82,14 @@ void main() {
 
   group('ValidateDataCustomer', () {
     test('hashPassword generates valid BCrypt hash with random salt', () {
-      final password = 'Password123';
+      const password = 'Password123';
       final hash1 = password.hashPassword();
       final hash2 = password.hashPassword();
 
       expect(hash1, isNot(equals(hash2)));
       expect(hash1.length, equals(60));
 
-      final parts = hash1.split('\$');
+      final parts = hash1.split(r'$');
       expect(parts.length, equals(4));
       expect(parts[0], isEmpty);
       expect(parts[1], matches(RegExp(r'^2[aby]$')));

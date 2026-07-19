@@ -1,18 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CardListItem extends StatelessWidget {
-  final Color colorAvatar;
-
-  final String title;
-
-  final String subTitle;
-  final EdgeInsetsGeometry margin;
-  final EdgeInsetsGeometry contentPadding;
-  final int titleMaxLines;
-  final int subTitleMaxLines;
-
-  final GestureTapCallback onTap;
-  final GestureTapCallback? onDelete;
   const CardListItem({
     required this.colorAvatar,
     required this.title,
@@ -25,6 +14,18 @@ class CardListItem extends StatelessWidget {
     this.titleMaxLines = 2,
     this.subTitleMaxLines = 2,
   });
+  final Color colorAvatar;
+
+  final String title;
+
+  final String subTitle;
+  final EdgeInsetsGeometry margin;
+  final EdgeInsetsGeometry contentPadding;
+  final int titleMaxLines;
+  final int subTitleMaxLines;
+
+  final GestureTapCallback onTap;
+  final GestureTapCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -78,5 +79,19 @@ class CardListItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(ColorProperty('colorAvatar', colorAvatar));
+    properties.add(StringProperty('title', title));
+    properties.add(StringProperty('subTitle', subTitle));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('margin', margin));
+    properties.add(DiagnosticsProperty<EdgeInsetsGeometry>('contentPadding', contentPadding));
+    properties.add(IntProperty('titleMaxLines', titleMaxLines));
+    properties.add(IntProperty('subTitleMaxLines', subTitleMaxLines));
+    properties.add(ObjectFlagProperty<GestureTapCallback>.has('onTap', onTap));
+    properties.add(ObjectFlagProperty<GestureTapCallback?>.has('onDelete', onDelete));
   }
 }

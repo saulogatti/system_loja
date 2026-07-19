@@ -8,12 +8,6 @@ part 'price_configuration_entry.g.dart';
 /// DTO JSON para [PriceConfiguration] (sem herdar domínio).
 @JsonSerializable()
 class PriceConfigurationEntry {
-  final List<PaymentMethodType> types;
-  final List<String> measurementUnits;
-  final ReportConfigurationEntry? reportConfiguration;
-  final int id;
-  final DateTime registrationDate;
-  final DateTime lastUpdatedDate;
 
   const PriceConfigurationEntry({
     required this.types,
@@ -29,8 +23,7 @@ class PriceConfigurationEntry {
 
   factory PriceConfigurationEntry.fromDomain(
     PriceConfiguration priceConfiguration,
-  ) {
-    return PriceConfigurationEntry(
+  ) => PriceConfigurationEntry(
       types: priceConfiguration.types,
       measurementUnits: priceConfiguration.measurementUnits,
       reportConfiguration: priceConfiguration.reportConfiguration != null
@@ -42,7 +35,12 @@ class PriceConfigurationEntry {
       registrationDate: priceConfiguration.registrationDate,
       lastUpdatedDate: priceConfiguration.lastUpdatedDate,
     );
-  }
+  final List<PaymentMethodType> types;
+  final List<String> measurementUnits;
+  final ReportConfigurationEntry? reportConfiguration;
+  final int id;
+  final DateTime registrationDate;
+  final DateTime lastUpdatedDate;
 
   Map<String, dynamic> toJson() => _$PriceConfigurationEntryToJson(this);
 

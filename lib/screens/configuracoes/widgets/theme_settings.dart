@@ -1,9 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/screens/configuracoes/settings_screen.dart';
 
 /// Widget da seção de configurações de aparência/tema
 class ThemeSettings extends StatelessWidget {
+
+  const ThemeSettings({
+    required this.config,
+    required this.onConfigChanged,
+    required this.onMostrarSeletorCor,
+    super.key,
+  });
   /// Configuração atual do sistema
   final AppSettings config;
 
@@ -13,18 +21,10 @@ class ThemeSettings extends StatelessWidget {
   /// Callback para mostrar seletor de cor
   final VoidCallback onMostrarSeletorCor;
 
-  const ThemeSettings({
-    required this.config,
-    required this.onConfigChanged,
-    required this.onMostrarSeletorCor,
-    super.key,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return Card(
+  Widget build(BuildContext context) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -68,5 +68,12 @@ class ThemeSettings extends StatelessWidget {
         ),
       ),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<AppSettings>('config', config));
+    properties.add(ObjectFlagProperty<void Function(AppSettings)>.has('onConfigChanged', onConfigChanged));
+    properties.add(ObjectFlagProperty<VoidCallback>.has('onMostrarSeletorCor', onMostrarSeletorCor));
   }
 }

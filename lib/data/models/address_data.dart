@@ -6,16 +6,6 @@ part 'address_data.g.dart';
 /// Representação JSON de [Address].
 @JsonSerializable()
 class AddressData {
-  @JsonKey(defaultValue: '')
-  final String street;
-  @JsonKey(defaultValue: '')
-  final String zipCode;
-  @JsonKey(defaultValue: '')
-  final String neighborhood;
-  @JsonKey(defaultValue: '')
-  final String city;
-  @JsonKey(defaultValue: '')
-  final String state;
 
   const AddressData({
     this.street = '',
@@ -28,8 +18,6 @@ class AddressData {
   factory AddressData.fromJson(Map<String, dynamic> json) =>
       _$AddressDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AddressDataToJson(this);
-
   factory AddressData.fromDomain(Address value) => AddressData(
     street: value.street,
     zipCode: value.zipCode,
@@ -37,6 +25,18 @@ class AddressData {
     city: value.city,
     state: value.state,
   );
+  @JsonKey(defaultValue: '')
+  final String street;
+  @JsonKey(defaultValue: '')
+  final String zipCode;
+  @JsonKey(defaultValue: '')
+  final String neighborhood;
+  @JsonKey(defaultValue: '')
+  final String city;
+  @JsonKey(defaultValue: '')
+  final String state;
+
+  Map<String, dynamic> toJson() => _$AddressDataToJson(this);
 
   Address toDomain() => Address(
     street: street,

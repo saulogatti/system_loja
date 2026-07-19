@@ -1,4 +1,4 @@
-import '../activity_log.dart';
+import 'package:system_loja/core/models/activity_log.dart';
 
 /// Extensão para conversão entre TipoAcao e String
 ///

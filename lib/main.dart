@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/application/app_injection.dart';
@@ -56,17 +55,14 @@ class SystemLojaApp extends StatelessWidget {
       ],
       child: ValueListenableBuilder(
         valueListenable: appInjection.get<SettingsService>().currentThemeNotifier,
-        builder: (context, value, child) {
-          return MaterialApp.router(
+        builder: (context, value, child) => MaterialApp.router(
             title: 'Sistema de Gerenciamento de Loja',
             theme: value,
             themeMode: appInjection.get<SettingsService>().temaEscuro
                 ? ThemeMode.dark
                 : ThemeMode.light,
             routerConfig: appInjection.get<RouteApp>().config(),
-            debugShowCheckedModeBanner: kDebugMode,
-          );
-        },
+          ),
       ),
     );
   }

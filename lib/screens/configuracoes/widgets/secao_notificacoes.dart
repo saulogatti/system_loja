@@ -1,25 +1,25 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Widget da seção de configurações de notificações
 class SecaoNotificacoes extends StatelessWidget {
-  /// Configuração atual do sistema
-  final AppSettings config;
-
-  /// Callback para atualizar a configuração
-  final Function(AppSettings) onConfigChanged;
 
   const SecaoNotificacoes({
     required this.config,
     required this.onConfigChanged,
     super.key,
   });
+  /// Configuração atual do sistema
+  final AppSettings config;
+
+  /// Callback para atualizar a configuração
+  final Function(AppSettings) onConfigChanged;
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
+  Widget build(BuildContext context) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -88,5 +88,11 @@ class SecaoNotificacoes extends StatelessWidget {
         ),
       ),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<AppSettings>('config', config));
+    properties.add(ObjectFlagProperty<Function(AppSettings)>.has('onConfigChanged', onConfigChanged));
   }
 }

@@ -5,9 +5,9 @@ import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/screens/person_registration/cubit/company_edit_state.dart';
 
 class CompanyEditCubit extends Cubit<CompanyEditState> {
-  final ICompanyRepository _repository;
 
   CompanyEditCubit(this._repository) : super(const CompanyEditInitial());
+  final ICompanyRepository _repository;
 
   Future<void> deleteCompany(int id) async {
     emit(const CompanyEditLoading());

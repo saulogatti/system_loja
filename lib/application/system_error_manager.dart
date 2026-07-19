@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 
@@ -18,16 +19,16 @@ Future<void> reportError(Object error, StackTrace stackTrace) async {
 // TODO: Avaliar a necessidade de usar o SystemErrorManager
 
 class SystemErrorManager implements ISystemErrorManager {
-  final SystemCacheManager _cacheManager = SystemCacheManager();
   SystemErrorManager() {
-    FlutterError.onError = (FlutterErrorDetails details) {
-      reportError(details.exception, details.stack ?? StackTrace.current);
+    FlutterError.onError = (details) async {
+      await reportError(details.exception, details.stack ?? StackTrace.current);
     };
-    PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-      reportError(error, stack);
+    PlatformDispatcher.instance.onError = (error, stack) {
+      unawaited(reportError(error, stack));
       return true;
     };
   }
+  final SystemCacheManager _cacheManager = SystemCacheManager();
 
   @override
   Future<void> clearAllErrors() async {
@@ -41,9 +42,8 @@ class SystemErrorManager implements ISystemErrorManager {
     return list;
   }
 
-  Future<List<SystemErrorModel>> getErrorsByCode(int code) {
-    return _cacheManager.retrieveErrorsByCode(code);
-  }
+  Future<List<SystemErrorModel>> getErrorsByCode(int code) =>
+      _cacheManager.retrieveErrorsByCode(code);
 
   Future<void> saveErrorToCache(SystemErrorModel error) async {
     log(

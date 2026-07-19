@@ -1,8 +1,6 @@
 import 'package:system_loja/core/models/default/people_data.dart';
 
 class SystemUserData extends PersonDefault {
-  final String systemKey;
-  final String description;
   SystemUserData({
     required super.name,
     required super.email,
@@ -13,13 +11,13 @@ class SystemUserData extends PersonDefault {
     super.registrationDate,
     super.lastUpdatedDate,
   });
-  static SystemUserData defaultObject() {
-    return SystemUserData(
+  final String systemKey;
+  final String description;
+  static SystemUserData defaultObject() => SystemUserData(
       name: 'Default User',
       email: 'default@user.com',
       phone: '1234567890',
       systemKey: '',
       description: '',
     );
-  }
 }

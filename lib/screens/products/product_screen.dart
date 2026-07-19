@@ -18,12 +18,10 @@ class ProductInfoScreen extends StatefulWidget implements AutoRouteWrapper {
   State<ProductInfoScreen> createState() => _ProductInfoScreenState();
 
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<ProductCubit>(
+  Widget wrappedRoute(BuildContext context) => BlocProvider<ProductCubit>(
       create: (_) => ProductCubit(appInjection.get<IProductRepository>()),
       child: this,
     );
-  }
 }
 
 class _ProductInfoScreenState extends State<ProductInfoScreen> {
@@ -38,8 +36,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
   int? _selectedCategoryId;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<ProductCubit, ProductState>(
+  Widget build(BuildContext context) => BlocListener<ProductCubit, ProductState>(
       listener: (context, state) {
         if (state is ProductStateInsertSuccess) {
           _mostrarSucesso(_mensagemSucesso);
@@ -58,7 +55,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
           builder: (context, state) {
             final isLoading = state is ProductStateLoading;
             return SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: ProductForm(
                 isLoading: isLoading,
                 formKey: _formKey,
@@ -80,7 +77,6 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
         ),
       ),
     );
-  }
 
   @override
   void dispose() {

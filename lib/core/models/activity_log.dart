@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:system_loja/core/models/default/default_object.dart';
 
 /// Tipos de ação registrados no log de auditoria.
@@ -9,6 +8,18 @@ enum ActionType { criar, ler, atualizar, deletar }
 /// Registra ações dos usuários para fins de auditoria (criação, leitura,
 /// atualização e exclusão de entidades do sistema).
 class ActivityLog extends DefaultObject {
+  ActivityLog({
+    required this.actionType,
+    required this.entity,
+    required this.userId,
+    required this.userName,
+    DateTime? timestamp,
+    this.details = '',
+    super.lastUpdatedDate,
+    super.registrationDate,
+    super.id,
+  }) : timestamp = timestamp ?? DateTime.now();
+
   /// Tipo de ação realizada (criar, ler, atualizar, deletar).
   final ActionType actionType;
 
@@ -27,23 +38,10 @@ class ActivityLog extends DefaultObject {
   /// Detalhes adicionais sobre a ação (opcional).
   final String details;
 
-  ActivityLog({
-    required this.actionType,
-    required this.entity,
-    required this.userId,
-    required this.userName,
-    DateTime? timestamp,
-    this.details = '',
-    super.lastUpdatedDate,
-    super.registrationDate,
-    super.id,
-  }) : timestamp = timestamp ?? DateTime.now();
-
   /// Nome do tipo de ação como string (ex.: "criar", "deletar").
   String get action => actionType.name;
 
   @override
-  String toString() {
-    return 'ActivityLog(actionType: $actionType, entity: $entity, userId: $userId, userName: $userName, timestamp: $timestamp, details: $details)';
-  }
+  String toString() =>
+      'ActivityLog(actionType: $actionType, entity: $entity, userId: $userId, userName: $userName, timestamp: $timestamp, details: $details)';
 }

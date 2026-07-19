@@ -9,7 +9,7 @@ void main() {
       final hash2 = password.hashPassword();
 
       expect(hash1, isNot(equals(hash2)));
-      expect(hash1.split('\$').length, equals(4)); // BCrypt format: $2a$10$...
+      expect(hash1.split(r'$').length, equals(4)); // BCrypt format: $2a$10$...
     });
 
     test('validatePassword validates password strength rules', () {
@@ -22,7 +22,7 @@ void main() {
     test('hashPassword output matches expected format', () {
       const password = 'TestFormat1';
       final hash = password.hashPassword();
-      final parts = hash.split('\$');
+      final parts = hash.split(r'$');
 
       // BCrypt format: $2a$10$<53 chars from bcrypt alphabet>
       expect(parts.length, equals(4));

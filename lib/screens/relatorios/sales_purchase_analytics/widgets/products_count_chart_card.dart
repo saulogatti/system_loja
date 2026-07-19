@@ -1,12 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../bloc/sales_purchase_analytics_state.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/bloc/sales_purchase_analytics_state.dart';
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 class ProductsCountChartCard extends StatelessWidget {
-  final List<AnalyticsPoint> points;
 
   const ProductsCountChartCard({required this.points, super.key});
+  final List<AnalyticsPoint> points;
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +58,15 @@ class ProductsCountChartCard extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(IterableProperty<AnalyticsPoint>('points', points));
+  }
 }
 
 class _MiniBar extends StatelessWidget {
-  final String label;
-  final int value;
-  final int max;
-  final Color color;
 
   const _MiniBar({
     required this.label,
@@ -71,6 +74,10 @@ class _MiniBar extends StatelessWidget {
     required this.max,
     required this.color,
   });
+  final String label;
+  final int value;
+  final int max;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -118,5 +125,14 @@ class _MiniBar extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('label', label));
+    properties.add(IntProperty('value', value));
+    properties.add(IntProperty('max', max));
+    properties.add(ColorProperty('color', color));
   }
 }

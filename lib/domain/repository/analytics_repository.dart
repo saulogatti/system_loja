@@ -10,10 +10,10 @@ import 'package:system_loja/data/database/dao/invoice_dao.dart';
 /// Agrega dados de [InvoiceDao] para produzir listas de [AnalyticsPoint]
 /// agrupadas por data ou por produto, sem lógica de negócio na camada de UI.
 class AnalyticsRepository implements IAnalyticsRepository {
-  final InvoiceDao _invoiceDao;
 
   AnalyticsRepository({required InvoiceDao invoiceDao})
     : _invoiceDao = invoiceDao;
+  final InvoiceDao _invoiceDao;
 
   /// Agrupamento por data de emissão (DD/MM).
   ///
@@ -129,14 +129,12 @@ class AnalyticsRepository implements IAnalyticsRepository {
   }
 
   /// Soma as quantidades de todos os itens de uma nota.
-  int _itemCount(Invoice invoice) {
-    return invoice.data.items.fold(0, (sum, item) => sum + item.quantity);
-  }
+  int _itemCount(Invoice invoice) => invoice.data.items.fold(0, (sum, item) => sum + item.quantity);
 }
 
 /// Acumulador interno para valor monetário e contagem de itens.
 class _Accumulator {
-  double value = 0.0;
+  double value = 0;
   int count = 0;
 
   void add(double v, int c) {

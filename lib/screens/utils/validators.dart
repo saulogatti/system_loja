@@ -14,15 +14,13 @@ import 'package:system_loja/core/constants/app_constants.dart';
 /// ```
 String? Function(String? value) combineValidators(
   List<String? Function(String?)> validators,
-) {
-  return (String? value) {
+) => (value) {
     for (final validator in validators) {
       final error = validator(value);
       if (error != null) return error;
     }
     return null;
   };
-}
 
 /// Valida se um texto tem um comprimento mínimo.
 ///

@@ -12,20 +12,18 @@ import 'package:system_loja/screens/route/route_app.gr.dart';
 /// Exibe a listagem de produtos cadastrados.
 @RoutePage()
 class ProductListScreen extends StatefulWidget implements AutoRouteWrapper {
-  static final ValueNotifier<int> _reloadSignal = ValueNotifier<int>(0);
 
   const ProductListScreen({super.key});
+  static final ValueNotifier<int> _reloadSignal = ValueNotifier<int>(0);
 
   @override
   State<ProductListScreen> createState() => ProductListScreenState();
 
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<ProductCubit>(
+  Widget wrappedRoute(BuildContext context) => BlocProvider<ProductCubit>(
       create: (_) => ProductCubit(appInjection.get<IProductRepository>()),
       child: this,
     );
-  }
 
   static void requestReload() {
     _reloadSignal.value++;
@@ -34,8 +32,7 @@ class ProductListScreen extends StatefulWidget implements AutoRouteWrapper {
 
 class ProductListScreenState extends State<ProductListScreen> {
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<ProductCubit, ProductState>(
+  Widget build(BuildContext context) => BlocListener<ProductCubit, ProductState>(
       listener: (context, state) {
         if (state is ProductStateError) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -60,7 +57,6 @@ class ProductListScreenState extends State<ProductListScreen> {
         },
       ),
     );
-  }
 
   @override
   void dispose() {
@@ -82,15 +78,13 @@ class ProductListScreenState extends State<ProductListScreen> {
     }
   }
 
-  List<Product> _extractProducts(ProductState state) {
-    return switch (state) {
+  List<Product> _extractProducts(ProductState state) => switch (state) {
       ProductStateInsertSuccess(:final produtos) => produtos,
       ProductStateUpdateSuccess(:final produtos) => produtos,
       ProductStateDeleteSuccess(:final produtos) => produtos,
       ProductStateLoaded(:final produtos) => produtos,
       _ => <Product>[],
     };
-  }
 
   void _reloadProducts() {
     if (!mounted) {

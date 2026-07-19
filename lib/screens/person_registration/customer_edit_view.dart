@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/application/app_injection.dart';
@@ -16,19 +17,23 @@ import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
 @RoutePage()
 class CustomerEditView extends StatefulWidget implements AutoRouteWrapper {
-  final Customer customer;
 
   const CustomerEditView({required this.customer, super.key});
+  final Customer customer;
 
   @override
   State<CustomerEditView> createState() => _CustomerEditViewState();
 
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(
+  Widget wrappedRoute(BuildContext context) => BlocProvider(
       create: (_) => CustomerEditCubit(appInjection.get<ICustomerRepository>()),
       child: this,
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Customer>('customer', customer));
   }
 }
 
@@ -47,8 +52,7 @@ class _CustomerEditViewState extends State<CustomerEditView> {
   bool _isLoadingDialogOpen = false;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<CustomerEditCubit, CustomerEditState>(
+  Widget build(BuildContext context) => BlocListener<CustomerEditCubit, CustomerEditState>(
       listener: _onStateChanged,
       child: Scaffold(
         appBar: AppBar(
@@ -86,7 +90,7 @@ class _CustomerEditViewState extends State<CustomerEditView> {
                   ])(value),
                 ),
                 const SizedBox(height: 16),
-                TextFormFieldCpf(cpfController: _cpfController, enable: false),
+                TextFormFieldCpf(cpfController: _cpfController),
                 const SizedBox(height: 16),
                 TextFormFieldEmail(emailController: _emailController, isEditing: true),
                 const SizedBox(height: 16),
@@ -133,7 +137,6 @@ class _CustomerEditViewState extends State<CustomerEditView> {
         ),
       ),
     );
-  }
 
   @override
   void dispose() {
@@ -167,8 +170,7 @@ class _CustomerEditViewState extends State<CustomerEditView> {
   Future<void> _confirmDelete() async {
     final shouldDelete = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
+      builder: (dialogContext) => AlertDialog(
           title: const Text('Excluir pessoa física'),
           content: Text('Deseja realmente excluir "${widget.customer.name}"?'),
           actions: [
@@ -181,8 +183,7 @@ class _CustomerEditViewState extends State<CustomerEditView> {
               child: const Text('Excluir'),
             ),
           ],
-        );
-      },
+        ),
     );
 
     if (!mounted) {
@@ -272,8 +273,7 @@ class _CustomerEditViewState extends State<CustomerEditView> {
     );
   }
 
-  Widget _buildReadOnlyDateField({required String label, required String value}) {
-    return TextFormField(
+  Widget _buildReadOnlyDateField({required String label, required String value}) => TextFormField(
       initialValue: value,
       decoration: InputDecoration(
         labelText: label,
@@ -283,5 +283,4 @@ class _CustomerEditViewState extends State<CustomerEditView> {
       readOnly: true,
       enabled: false,
     );
-  }
 }

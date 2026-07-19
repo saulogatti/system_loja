@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/models/product.dart';
@@ -7,13 +8,20 @@ import 'package:system_loja/screens/utils/validators.dart';
 
 /// Diálogo para informar a quantidade de um produto; faz [State.dispose] do controller.
 class InvoiceQuantityDialog extends StatefulWidget {
+  const InvoiceQuantityDialog({required this.product, required this.invoiceType, super.key});
   final Product product;
 
   final InvoiceType invoiceType;
-  const InvoiceQuantityDialog({required this.product, required this.invoiceType, super.key});
 
   @override
   State<InvoiceQuantityDialog> createState() => _InvoiceQuantityDialogState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Product>('product', product));
+    properties.add(EnumProperty<InvoiceType>('invoiceType', invoiceType));
+  }
 }
 
 class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {

@@ -1036,7 +1036,7 @@ class $SystemRecordsTable extends SystemRecords
   static JsonTypeConverter2<PriceConfiguration, String, Object?>
   $converterpriceConfiguration = PriceConfigurationCodec.driftConverter;
   static TypeConverter<SystemUserDataEntry, String> $convertersystemUserData =
-      SystemUserDataConverter();
+      const SystemUserDataConverter();
 }
 
 class SystemRecordsCompanion extends UpdateCompanion<SystemConfigurationEntry> {

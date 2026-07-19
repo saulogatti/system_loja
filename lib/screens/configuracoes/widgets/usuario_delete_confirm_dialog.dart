@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/user.dart';
 
@@ -6,14 +7,13 @@ import 'package:system_loja/core/models/user.dart';
 ///
 /// Exibe um dialog de confirmação antes de excluir um usuário.
 class UsuarioDeleteConfirmDialog extends StatelessWidget {
+
+  const UsuarioDeleteConfirmDialog({required this.usuario, required this.onConfirm, super.key});
   final User usuario;
   final VoidCallback onConfirm;
 
-  const UsuarioDeleteConfirmDialog({required this.usuario, required this.onConfirm, super.key});
-
   @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
+  Widget build(BuildContext context) => AlertDialog(
       title: const Text('Confirmar Exclusão'),
       content: Text('Deseja realmente excluir o usuário "${usuario.name}"?'),
       actions: [
@@ -46,7 +46,6 @@ class UsuarioDeleteConfirmDialog extends StatelessWidget {
         ),
       ],
     );
-  }
 
   /// Mostra o dialog de confirmação de exclusão
   static void show(BuildContext context, User usuario, VoidCallback onConfirm) {
@@ -54,5 +53,12 @@ class UsuarioDeleteConfirmDialog extends StatelessWidget {
       context: context,
       builder: (context) => UsuarioDeleteConfirmDialog(usuario: usuario, onConfirm: onConfirm),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<User>('usuario', usuario));
+    properties.add(ObjectFlagProperty<VoidCallback>.has('onConfirm', onConfirm));
   }
 }

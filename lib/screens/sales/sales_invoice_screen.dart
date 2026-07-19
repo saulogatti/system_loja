@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/core/models/company.dart';
@@ -27,11 +28,6 @@ bool _shouldListenForFeedbackSnackBar(SalesInvoiceState previous, SalesInvoiceSt
 
 @RoutePage()
 class SalesInvoiceScreen extends StatelessWidget {
-  final List<PaymentMethodType> paymentMethods;
-  final Map<int, Customer> customers;
-  final Map<int, Company> companies;
-  final SalesCubit salesCubit;
-  final List<Product> products;
 
   const SalesInvoiceScreen({
     required this.paymentMethods,
@@ -41,10 +37,14 @@ class SalesInvoiceScreen extends StatelessWidget {
     required this.products,
     super.key,
   });
+  final List<PaymentMethodType> paymentMethods;
+  final Map<int, Customer> customers;
+  final Map<int, Company> companies;
+  final SalesCubit salesCubit;
+  final List<Product> products;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
+  Widget build(BuildContext context) => BlocProvider(
       create: (_) => SalesInvoiceCubit(salesCubit: salesCubit, paymentMethods: paymentMethods),
       child: _SalesInvoiceBody(
         paymentMethods: paymentMethods,
@@ -53,24 +53,42 @@ class SalesInvoiceScreen extends StatelessWidget {
         products: products,
       ),
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(IterableProperty<PaymentMethodType>('paymentMethods', paymentMethods));
+    properties.add(DiagnosticsProperty<Map<int, Customer>>('customers', customers));
+    properties.add(DiagnosticsProperty<Map<int, Company>>('companies', companies));
+    properties.add(DiagnosticsProperty<SalesCubit>('salesCubit', salesCubit));
+    properties.add(IterableProperty<Product>('products', products));
   }
 }
 
 class _SalesInvoiceBody extends StatefulWidget {
-  final List<PaymentMethodType> paymentMethods;
-
-  final Map<int, Customer> customers;
-  final Map<int, Company> companies;
-  final List<Product> products;
   const _SalesInvoiceBody({
     required this.paymentMethods,
     required this.customers,
     required this.companies,
     required this.products,
   });
+  final List<PaymentMethodType> paymentMethods;
+
+  final Map<int, Customer> customers;
+  final Map<int, Company> companies;
+  final List<Product> products;
 
   @override
   State<_SalesInvoiceBody> createState() => _SalesInvoiceBodyState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(IterableProperty<PaymentMethodType>('paymentMethods', paymentMethods));
+    properties.add(DiagnosticsProperty<Map<int, Customer>>('customers', customers));
+    properties.add(DiagnosticsProperty<Map<int, Company>>('companies', companies));
+    properties.add(IterableProperty<Product>('products', products));
+  }
 }
 
 class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
@@ -82,8 +100,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<SalesInvoiceCubit, SalesInvoiceState>(
+  Widget build(BuildContext context) => BlocListener<SalesInvoiceCubit, SalesInvoiceState>(
       listenWhen: _shouldListenForFeedbackSnackBar,
       listener: (context, state) {
         if (state case SalesInvoiceFeedback(:final message)) {
@@ -104,7 +121,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
           child: CustomScrollView(
             slivers: [
               SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 sliver: SliverMainAxisGroup(
                   slivers: [
                     const SliverToBoxAdapter(child: InvoiceNumberField()),
@@ -112,35 +129,30 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                     SliverToBoxAdapter(
                       child: BlocSelector<SalesInvoiceCubit, SalesInvoiceState, InvoiceType>(
                         selector: (state) => state.form.invoiceType,
-                        builder: (context, invoiceType) {
-                          return InvoiceTypeSegmented(
+                        builder: (context, invoiceType) => InvoiceTypeSegmented(
                             invoiceType: invoiceType,
                             onChanged: context.read<SalesInvoiceCubit>().setInvoiceType,
-                          );
-                        },
+                          ),
                       ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 16)),
                     SliverToBoxAdapter(
                       child: BlocSelector<SalesInvoiceCubit, SalesInvoiceState, PersonSelection?>(
                         selector: (state) => state.form.person,
-                        builder: (context, person) {
-                          return DropdownButtonFormField<PersonSelection>(
+                        builder: (context, person) => DropdownButtonFormField<PersonSelection>(
                             initialValue: person,
                             decoration: InputDecoration(
                               labelText: 'Cliente ou Empresa *',
                               border: const OutlineInputBorder(),
                               prefixIcon: Icon(person?.icon ?? Icons.person_search),
                             ),
-                            items: _personOptions.map((p) {
-                              return DropdownMenuItem(
+                            items: _personOptions.map((p) => DropdownMenuItem(
                                 value: p,
                                 child: Text(
                                   '${p.displayName} (${p.document})',
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                              );
-                            }).toList(),
+                              )).toList(),
                             onChanged: (value) =>
                                 context.read<SalesInvoiceCubit>().setPerson(value),
                             validator: (value) {
@@ -149,16 +161,14 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                               }
                               return null;
                             },
-                          );
-                        },
+                          ),
                       ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 16)),
                     SliverToBoxAdapter(
                       child: BlocSelector<SalesInvoiceCubit, SalesInvoiceState, PaymentMethodType?>(
                         selector: (state) => state.form.paymentMethod,
-                        builder: (context, paymentMethod) {
-                          return DropdownButtonFormField<PaymentMethodType>(
+                        builder: (context, paymentMethod) => DropdownButtonFormField<PaymentMethodType>(
                             initialValue: paymentMethod,
                             decoration: const InputDecoration(
                               labelText: 'Forma de Pagamento *',
@@ -166,9 +176,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                               prefixIcon: Icon(Icons.payment),
                               helperText: 'Ex: Dinheiro, Cartão, Pix',
                             ),
-                            items: widget.paymentMethods.map((method) {
-                              return DropdownMenuItem(value: method, child: Text(method.name));
-                            }).toList(),
+                            items: widget.paymentMethods.map((method) => DropdownMenuItem(value: method, child: Text(method.name))).toList(),
                             onChanged: (value) {
                               if (value == null) return;
                               context.read<SalesInvoiceCubit>().setPaymentMethod(value);
@@ -179,8 +187,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                               }
                               return null;
                             },
-                          );
-                        },
+                          ),
                       ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 24)),
@@ -232,17 +239,14 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                     SliverToBoxAdapter(
                       child: BlocSelector<SalesInvoiceCubit, SalesInvoiceState, double>(
                         selector: (state) => state.form.computeTotal(),
-                        builder: (context, total) {
-                          return InvoiceTotalBar(total: total);
-                        },
+                        builder: (context, total) => InvoiceTotalBar(total: total),
                       ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 24)),
                     SliverToBoxAdapter(
                       child: BlocSelector<SalesInvoiceCubit, SalesInvoiceState, bool>(
                         selector: (state) => state.form.isSubmitting,
-                        builder: (context, isSubmitting) {
-                          return ElevatedButton(
+                        builder: (context, isSubmitting) => ElevatedButton(
                             onPressed: isSubmitting ? null : _onSave,
                             style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
                             child: isSubmitting
@@ -252,8 +256,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                                     child: CircularProgressIndicator(strokeWidth: 2),
                                   )
                                 : const Text('Salvar Nota Fiscal', style: TextStyle(fontSize: 16)),
-                          );
-                        },
+                          ),
                       ),
                     ),
                     const SliverToBoxAdapter(child: SizedBox(height: 32)),
@@ -265,7 +268,6 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
         ),
       ),
     );
-  }
 
   Future<void> _onAddItem() async {
     final product = await showDialog<Product>(

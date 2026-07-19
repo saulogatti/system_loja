@@ -7,24 +7,15 @@ class StackTraceJsonConverter implements JsonConverter<StackTrace, String> {
   const StackTraceJsonConverter();
 
   @override
-  StackTrace fromJson(String json) {
-    return StackTrace.fromString(json);
-  }
+  StackTrace fromJson(String json) => StackTrace.fromString(json);
 
   @override
-  String toJson(StackTrace object) {
-    return object.toString();
-  }
+  String toJson(StackTrace object) => object.toString();
 }
 
 /// DTO JSON para erros persistidos em cache (sem herdar [SystemError]).
 @JsonSerializable()
 class SystemErrorModel {
-  final String message;
-  final int code;
-  @StackTraceJsonConverter()
-  final StackTrace stackTrace;
-  String cacheKey;
 
   SystemErrorModel({
     required this.message,
@@ -36,14 +27,19 @@ class SystemErrorModel {
   factory SystemErrorModel.fromJson(Map<String, dynamic> json) =>
       _$SystemErrorModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SystemErrorModelToJson(this);
-
-  SystemError toDomain() =>
-      SystemError(message: message, code: code, stackTrace: stackTrace);
-
   factory SystemErrorModel.fromDomain(SystemError error) => SystemErrorModel(
     message: error.message,
     code: error.code,
     stackTrace: error.stackTrace,
   );
+  final String message;
+  final int code;
+  @StackTraceJsonConverter()
+  final StackTrace stackTrace;
+  String cacheKey;
+
+  Map<String, dynamic> toJson() => _$SystemErrorModelToJson(this);
+
+  SystemError toDomain() =>
+      SystemError(message: message, code: code, stackTrace: stackTrace);
 }

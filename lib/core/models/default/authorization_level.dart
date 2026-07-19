@@ -6,6 +6,6 @@ enum AuthorizationLevel {
   /// Usuário comum com acesso limitado
   usuarioComum(2);
 
-  final int value;
   const AuthorizationLevel(this.value);
+  final int value;
 }

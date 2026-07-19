@@ -5,16 +5,13 @@ class ExportReportScreen extends StatefulWidget {
   const ExportReportScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return ExportReportScreenState();
-  }
+  State<StatefulWidget> createState() => ExportReportScreenState();
 }
 
 class ExportReportScreenState extends State<ExportReportScreen> {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Exportar Relatório')),
+  Widget build(BuildContext context) => Scaffold(
+      appBar: AppBar(title: const Text('Exportar Relatório')),
       body: Column(
         children: [
           Expanded(
@@ -25,19 +22,16 @@ class ExportReportScreenState extends State<ExportReportScreen> {
                   case ReportAction.shareCsv:
                     ScaffoldMessenger.of(
                       context,
-                    ).showSnackBar(SnackBar(content: Text('Exportar CSV')));
-                    break;
+                    ).showSnackBar(const SnackBar(content: Text('Exportar CSV')));
                   case ReportAction.sharePdf:
                     ScaffoldMessenger.of(
                       context,
-                    ).showSnackBar(SnackBar(content: Text('Compartilhar PDF')));
-                    break;
+                    ).showSnackBar(const SnackBar(content: Text('Compartilhar PDF')));
                   case ReportAction.printPdf:
                     // Implementar impressão PDF
                     ScaffoldMessenger.of(
                       context,
-                    ).showSnackBar(SnackBar(content: Text('Imprimir PDF')));
-                    break;
+                    ).showSnackBar(const SnackBar(content: Text('Imprimir PDF')));
                 }
               },
             ),
@@ -45,5 +39,4 @@ class ExportReportScreenState extends State<ExportReportScreen> {
         ],
       ),
     );
-  }
 }

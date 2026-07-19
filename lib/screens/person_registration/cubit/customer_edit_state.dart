@@ -1,13 +1,13 @@
 class CustomerEditDeleted extends CustomerEditState {
-  final String message;
 
   const CustomerEditDeleted(this.message);
+  final String message;
 }
 
 class CustomerEditError extends CustomerEditState {
-  final String message;
 
   const CustomerEditError(this.message);
+  final String message;
 }
 
 class CustomerEditInitial extends CustomerEditState {
@@ -19,9 +19,9 @@ class CustomerEditLoading extends CustomerEditState {
 }
 
 class CustomerEditSaved extends CustomerEditState {
-  final String message;
 
   const CustomerEditSaved(this.message);
+  final String message;
 }
 
 sealed class CustomerEditState {

@@ -5,9 +5,6 @@ import 'package:system_loja/core/models/system_config/report_configuration.dart'
 enum PaymentMethodType { cash, card, pix, other }
 
 class PriceConfiguration extends DefaultObject {
-  List<PaymentMethodType> types;
-  List<String> measurementUnits;
-  ReportConfiguration? reportConfiguration;
   PriceConfiguration({
     required this.types,
     required this.measurementUnits,
@@ -16,13 +13,15 @@ class PriceConfiguration extends DefaultObject {
     super.lastUpdatedDate,
     super.registrationDate,
   });
+  List<PaymentMethodType> types;
+  List<String> measurementUnits;
+  ReportConfiguration? reportConfiguration;
 
   PriceConfiguration copyWith({
     List<PaymentMethodType>? types,
     List<String>? measurementUnits,
     ReportConfiguration? reportConfiguration,
-  }) {
-    return PriceConfiguration(
+  }) => PriceConfiguration(
       types: types ?? this.types,
       measurementUnits: measurementUnits ?? this.measurementUnits,
       reportConfiguration: reportConfiguration ?? this.reportConfiguration,
@@ -30,13 +29,10 @@ class PriceConfiguration extends DefaultObject {
       lastUpdatedDate: lastUpdatedDate,
       registrationDate: registrationDate,
     );
-  }
 
-  static PriceConfiguration defaultConfiguration() {
-    return PriceConfiguration(
+  static PriceConfiguration defaultConfiguration() => PriceConfiguration(
       types: [],
       measurementUnits: [],
       reportConfiguration: ReportConfiguration(),
     );
-  }
 }

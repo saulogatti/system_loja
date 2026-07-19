@@ -9,7 +9,7 @@ class AddressCodec {
   static drift.JsonTypeConverter2<Address, String, Object?>
   get driftConverter => drift.TypeConverter.json2(
     fromJson: (json) =>
-        AddressData.fromJson(json as Map<String, dynamic>).toDomain(),
+        AddressData.fromJson(json! as Map<String, dynamic>).toDomain(),
     toJson: (address) => AddressData.fromDomain(address).toJson(),
   );
 }

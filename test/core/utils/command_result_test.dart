@@ -4,7 +4,7 @@ import 'package:system_loja/core/utils/result_status.dart';
 void main() {
   group('ResultStatus', () {
     group('ResultStatus.success', () {
-      const String successValue = 'Success value';
+      const successValue = 'Success value';
       final result = ResultStatus<String, Exception>.success(successValue);
 
       test('isSuccessful is true', () {
@@ -35,7 +35,7 @@ void main() {
     });
 
     group('ResultStatus.error', () {
-      final Exception errorValue = Exception('Error message');
+      final errorValue = Exception('Error message');
       final result = ResultStatus<String, Exception>.error(errorValue);
 
       test('isSuccessful is false', () {

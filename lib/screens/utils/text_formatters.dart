@@ -41,7 +41,7 @@ class CnpjTextInputFormatter extends TextInputFormatter {
 
     final buffer = StringBuffer();
 
-    for (int i = 0; i < digits.length; i++) {
+    for (var i = 0; i < digits.length; i++) {
       buffer.write(digits[i]);
       if (i == 1 || i == 4) {
         buffer.write('.');
@@ -93,7 +93,7 @@ class CpfTextInputFormatter extends TextInputFormatter {
 
     final buffer = StringBuffer();
 
-    for (int i = 0; i < digits.length; i++) {
+    for (var i = 0; i < digits.length; i++) {
       buffer.write(digits[i]);
       if (i == 2 || i == 5) {
         buffer.write('.');
@@ -116,7 +116,7 @@ class DecimalInputFormatter extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     // Permite apenas dígitos e um ponto decimal
-    String normalizedText = newValue.text.replaceAll(
+    var normalizedText = newValue.text.replaceAll(
       Constants.decimalAllowedRegExp,
       '',
     );
@@ -124,7 +124,7 @@ class DecimalInputFormatter extends TextInputFormatter {
     // Garante que haja no máximo um ponto decimal
     final parts = normalizedText.split('.');
     if (parts.length > 2) {
-      normalizedText = '${parts[0]}.${parts.sublist(1).join('')}';
+      normalizedText = '${parts[0]}.${parts.sublist(1).join()}';
     }
 
     return TextEditingValue(
@@ -171,7 +171,7 @@ class PhoneTextInputFormatter extends TextInputFormatter {
 
     final buffer = StringBuffer();
 
-    for (int i = 0; i < digits.length; i++) {
+    for (var i = 0; i < digits.length; i++) {
       if (i == 0) buffer.write('(');
       buffer.write(digits[i]);
       if (i == 1) buffer.write(') ');
@@ -222,7 +222,7 @@ class CepTextInputFormatter extends TextInputFormatter {
 
     final buffer = StringBuffer();
 
-    for (int i = 0; i < digits.length; i++) {
+    for (var i = 0; i < digits.length; i++) {
       buffer.write(digits[i]);
       if (i == _cepHyphenPosition) {
         buffer.write('-');

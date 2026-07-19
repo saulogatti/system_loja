@@ -6,26 +6,6 @@ import 'package:system_loja/core/models/system_config/system_user_data.dart';
 /// Configuração global do sistema (domínio).
 /// Importação/exportação JSON: `SystemConfigurationCodec` em `lib/data/`.
 class SystemConfiguration extends DefaultObject {
-  PriceConfiguration priceConfiguration;
-  SystemUserData systemUserData;
-  List<String> productCategories;
-
-  /// Define se a limpeza automática de logs antigos está habilitada
-  final bool isAutoCleanEnabled;
-
-  /// Número de dias para manter logs no sistema antes da limpeza (7-365)
-  final int logRetentionDays;
-
-  // Opções de Segurança
-
-  /// Define se o sistema deve exigir senha ao ser aberto
-  final bool isPasswordRequired;
-
-  /// Tempo em minutos de inatividade antes de solicitar senha novamente (1-60)
-  final int lockTimeoutMinutes;
-
-  /// Define se o sistema permite gestão de múltiplos usuários
-  final bool isMultiUserEnabled;
   SystemConfiguration({
     PriceConfiguration? priceConfiguration,
     List<String>? productCategories,
@@ -47,6 +27,26 @@ class SystemConfiguration extends DefaultObject {
            ),
        productCategories = productCategories ?? [],
        systemUserData = systemUserData ?? SystemUserData.defaultObject();
+  PriceConfiguration priceConfiguration;
+  SystemUserData systemUserData;
+  List<String> productCategories;
+
+  /// Define se a limpeza automática de logs antigos está habilitada
+  final bool isAutoCleanEnabled;
+
+  /// Número de dias para manter logs no sistema antes da limpeza (7-365)
+  final int logRetentionDays;
+
+  // Opções de Segurança
+
+  /// Define se o sistema deve exigir senha ao ser aberto
+  final bool isPasswordRequired;
+
+  /// Tempo em minutos de inatividade antes de solicitar senha novamente (1-60)
+  final int lockTimeoutMinutes;
+
+  /// Define se o sistema permite gestão de múltiplos usuários
+  final bool isMultiUserEnabled;
 
   SystemConfiguration copyWith({
     bool? isAutoCleanEnabled,
@@ -57,8 +57,7 @@ class SystemConfiguration extends DefaultObject {
     bool? isMultiUserEnabled,
     List<String>? productCategories,
     SystemUserData? systemUserData,
-  }) {
-    return SystemConfiguration(
+  }) => SystemConfiguration(
       priceConfiguration: priceConfiguration ?? this.priceConfiguration,
       productCategories: productCategories ?? this.productCategories,
       systemUserData: systemUserData ?? this.systemUserData,
@@ -68,5 +67,4 @@ class SystemConfiguration extends DefaultObject {
       lockTimeoutMinutes: lockTimeoutMinutes ?? this.lockTimeoutMinutes,
       isMultiUserEnabled: isMultiUserEnabled ?? this.isMultiUserEnabled,
     );
-  }
 }

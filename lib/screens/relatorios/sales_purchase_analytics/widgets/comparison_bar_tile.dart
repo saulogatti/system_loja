@@ -1,14 +1,15 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../bloc/sales_purchase_analytics_state.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/bloc/sales_purchase_analytics_state.dart';
 
 class ComparisonBarTile extends StatelessWidget {
-  final AnalyticsPoint point;
-  final double maxValue;
 
   const ComparisonBarTile({required this.point, required this.maxValue, super.key});
+  final AnalyticsPoint point;
+  final double maxValue;
 
   @override
   Widget build(BuildContext context) {
@@ -81,13 +82,16 @@ class ComparisonBarTile extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<AnalyticsPoint>('point', point));
+    properties.add(DoubleProperty('maxValue', maxValue));
+  }
 }
 
 class _VerticalValueBar extends StatelessWidget {
-  final String title;
-  final double value;
-  final double factor;
-  final Color color;
 
   const _VerticalValueBar({
     required this.title,
@@ -95,6 +99,10 @@ class _VerticalValueBar extends StatelessWidget {
     required this.factor,
     required this.color,
   });
+  final String title;
+  final double value;
+  final double factor;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +119,7 @@ class _VerticalValueBar extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Container(
               width: 26,
-              height: math.max(6.0, 140.0 * safeFactor),
+              height: math.max(6, 140.0 * safeFactor),
               decoration: BoxDecoration(color: barColor, borderRadius: BorderRadius.circular(10)),
             ),
           ),
@@ -126,5 +134,14 @@ class _VerticalValueBar extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(StringProperty('title', title));
+    properties.add(DoubleProperty('value', value));
+    properties.add(DoubleProperty('factor', factor));
+    properties.add(ColorProperty('color', color));
   }
 }

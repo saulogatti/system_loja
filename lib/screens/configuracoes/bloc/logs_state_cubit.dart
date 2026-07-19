@@ -2,15 +2,15 @@ import 'package:meta/meta.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 
 class LogsError extends LogsState {
-  final String message;
 
   const LogsError(this.message);
+  final String message;
 }
 
 class LogsLoaded extends LogsState {
-  final List<ActivityLog> logs;
 
   const LogsLoaded(this.logs);
+  final List<ActivityLog> logs;
 }
 
 class LogsLoading extends LogsState {

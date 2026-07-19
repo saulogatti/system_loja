@@ -2,12 +2,11 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:system_loja/core/constants/cache_keys.dart';
 import 'package:system_loja/core/interface/i_configuration_repository.dart';
 import 'package:system_loja/core/interface/i_settings_service.dart';
+import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/cache/cache_manager.dart';
 import 'package:system_loja/data/entry/app_settings_entry.dart';
 import 'package:system_loja/data/entry/configuration_cache_entry.dart';
-
-import '../../core/settings/app_settings.dart';
 
 //TODO: Refatorar para tirar mistura de data e domain, deixando este repositório apenas com lógica de domínio e delegando persistência para camada de dados. Talvez criar um ConfigurationService para lidar com cache e arquivos, e este repositório só chamar o service e mapear erros para mensagens amigáveis.
 /// Repositório para gerenciamento de configurações da aplicação.
@@ -21,13 +20,13 @@ import '../../core/settings/app_settings.dart';
 /// - [IConfigurationRepository] - contrato da interface
 /// - [AppSettings] - modelo de configurações
 class ConfigurationRepository with LoggerClassMixin implements IConfigurationRepository {
+  ConfigurationRepository({required ISettingsService settingsService, required CacheManager cache})
+    : _cache = cache,
+      _settingsService = settingsService;
   AppSettings _configuration = AppSettings.createDefaultSettings();
 
   final ISettingsService _settingsService;
   final CacheManager _cache;
-  ConfigurationRepository({required ISettingsService settingsService, required CacheManager cache})
-    : _cache = cache,
-      _settingsService = settingsService;
 
   /// Limpa todos os dados do sistema armazenados em cache.
   ///

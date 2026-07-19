@@ -1,27 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:system_loja/screens/person_registration/models/person_registration_form_data.dart';
 import 'package:system_loja/screens/utils/text_formatters.dart';
 import 'package:system_loja/screens/utils/validators.dart';
-import 'package:system_loja/screens/person_registration/models/person_registration_form_data.dart';
 import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
 /// Renderiza o formulário dinâmico para cadastro de pessoa física ou jurídica.
 class PersonRegistrationForm extends StatelessWidget {
-  final GlobalKey<FormState> formKey;
-  final PersonType selectedPersonType;
-  final ValueChanged<PersonType?> onPersonTypeChanged;
-  final TextEditingController nameController;
-  final TextEditingController documentController;
-  final TextEditingController emailController;
-  final TextEditingController phoneController;
-  final TextEditingController streetController;
-  final TextEditingController zipCodeController;
-  final TextEditingController neighborhoodController;
-  final TextEditingController cityController;
-  final TextEditingController stateController;
-  final VoidCallback onSubmit;
 
   const PersonRegistrationForm({
     required this.formKey,
@@ -39,6 +27,19 @@ class PersonRegistrationForm extends StatelessWidget {
     required this.onSubmit,
     super.key,
   });
+  final GlobalKey<FormState> formKey;
+  final PersonType selectedPersonType;
+  final ValueChanged<PersonType?> onPersonTypeChanged;
+  final TextEditingController nameController;
+  final TextEditingController documentController;
+  final TextEditingController emailController;
+  final TextEditingController phoneController;
+  final TextEditingController streetController;
+  final TextEditingController zipCodeController;
+  final TextEditingController neighborhoodController;
+  final TextEditingController cityController;
+  final TextEditingController stateController;
+  final VoidCallback onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -142,5 +143,23 @@ class PersonRegistrationForm extends StatelessWidget {
     }
 
     return [CnpjTextInputFormatter()];
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<GlobalKey<FormState>>('formKey', formKey));
+    properties.add(EnumProperty<PersonType>('selectedPersonType', selectedPersonType));
+    properties.add(ObjectFlagProperty<ValueChanged<PersonType?>>.has('onPersonTypeChanged', onPersonTypeChanged));
+    properties.add(DiagnosticsProperty<TextEditingController>('nameController', nameController));
+    properties.add(DiagnosticsProperty<TextEditingController>('documentController', documentController));
+    properties.add(DiagnosticsProperty<TextEditingController>('emailController', emailController));
+    properties.add(DiagnosticsProperty<TextEditingController>('phoneController', phoneController));
+    properties.add(DiagnosticsProperty<TextEditingController>('streetController', streetController));
+    properties.add(DiagnosticsProperty<TextEditingController>('zipCodeController', zipCodeController));
+    properties.add(DiagnosticsProperty<TextEditingController>('neighborhoodController', neighborhoodController));
+    properties.add(DiagnosticsProperty<TextEditingController>('cityController', cityController));
+    properties.add(DiagnosticsProperty<TextEditingController>('stateController', stateController));
+    properties.add(ObjectFlagProperty<VoidCallback>.has('onSubmit', onSubmit));
   }
 }

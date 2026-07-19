@@ -1,24 +1,31 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/sales_purchase_analytics_bloc.dart';
-import '../bloc/sales_purchase_analytics_event.dart';
-import '../bloc/sales_purchase_analytics_state.dart';
-import 'chart_legend.dart';
-import 'comparison_bar_tile.dart';
-import 'donut_card.dart';
-import 'grid_sort_segmented_control.dart';
-import 'grouping_segmented_control.dart';
-import 'products_count_chart_card.dart';
-import 'summary_cards.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/bloc/sales_purchase_analytics_bloc.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/bloc/sales_purchase_analytics_event.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/bloc/sales_purchase_analytics_state.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/widgets/chart_legend.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/widgets/comparison_bar_tile.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/widgets/donut_card.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/widgets/grid_sort_segmented_control.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/widgets/grouping_segmented_control.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/widgets/products_count_chart_card.dart';
+import 'package:system_loja/screens/relatorios/sales_purchase_analytics/widgets/summary_cards.dart';
 
 class LoadedBody extends StatefulWidget {
-  final SalesPurchaseAnalyticsLoaded state;
 
   const LoadedBody({required this.state, super.key});
+  final SalesPurchaseAnalyticsLoaded state;
 
   @override
   State<LoadedBody> createState() => _LoadedBodyState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<SalesPurchaseAnalyticsLoaded>('state', state));
+  }
 }
 
 class _LoadedBodyState extends State<LoadedBody> {

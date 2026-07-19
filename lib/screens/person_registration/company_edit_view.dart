@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:system_loja/application/app_injection.dart';
@@ -15,19 +16,23 @@ import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
 @RoutePage()
 class CompanyEditView extends StatefulWidget implements AutoRouteWrapper {
-  final Company company;
 
   const CompanyEditView({required this.company, super.key});
+  final Company company;
 
   @override
   State<CompanyEditView> createState() => _CompanyEditViewState();
 
   @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(
+  Widget wrappedRoute(BuildContext context) => BlocProvider(
       create: (_) => CompanyEditCubit(appInjection.get<ICompanyRepository>()),
       child: this,
     );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Company>('company', company));
   }
 }
 
@@ -46,8 +51,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
   bool _isLoadingDialogOpen = false;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<CompanyEditCubit, CompanyEditState>(
+  Widget build(BuildContext context) => BlocListener<CompanyEditCubit, CompanyEditState>(
       listener: _onStateChanged,
       child: Scaffold(
         appBar: AppBar(
@@ -141,7 +145,6 @@ class _CompanyEditViewState extends State<CompanyEditView> {
         ),
       ),
     );
-  }
 
   @override
   void dispose() {
@@ -175,8 +178,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
   Future<void> _confirmDelete() async {
     final shouldDelete = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
+      builder: (dialogContext) => AlertDialog(
           title: const Text('Excluir pessoa jurídica'),
           content: Text('Deseja realmente excluir "${widget.company.name}"?'),
           actions: [
@@ -189,8 +191,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
               child: const Text('Excluir'),
             ),
           ],
-        );
-      },
+        ),
     );
 
     if (!mounted) {
@@ -280,8 +281,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     );
   }
 
-  Widget _buildReadOnlyDateField({required String label, required String value}) {
-    return TextFormField(
+  Widget _buildReadOnlyDateField({required String label, required String value}) => TextFormField(
       initialValue: value,
       decoration: InputDecoration(
         labelText: label,
@@ -291,5 +291,4 @@ class _CompanyEditViewState extends State<CompanyEditView> {
       readOnly: true,
       enabled: false,
     );
-  }
 }

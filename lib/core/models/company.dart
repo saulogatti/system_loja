@@ -6,11 +6,6 @@ import 'package:system_loja/core/models/default/people_data.dart';
 /// Representa uma empresa fornecedora com CNPJ e endereço.
 /// Herda dados comuns de [PersonDefault] (nome, e-mail, telefone).
 class Company extends PersonDefault {
-  /// CNPJ da empresa. Utilizado como chave única de busca.
-  final String cnpj;
-
-  /// Endereço da empresa. Padrão: endereço vazio ([Address]).
-  final Address address;
 
   Company({
     required super.name,
@@ -22,6 +17,11 @@ class Company extends PersonDefault {
     super.registrationDate,
     super.lastUpdatedDate,
   }) : address = address ?? const Address();
+  /// CNPJ da empresa. Utilizado como chave única de busca.
+  final String cnpj;
+
+  /// Endereço da empresa. Padrão: endereço vazio ([Address]).
+  final Address address;
 
   @override
   String toString() =>

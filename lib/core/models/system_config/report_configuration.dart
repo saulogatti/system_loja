@@ -1,9 +1,6 @@
 import 'package:system_loja/core/models/default/default_object.dart';
 
 class ReportConfiguration extends DefaultObject {
-  bool enableSalesByPeriod;
-  bool enableTopProducts;
-  int defaultPeriodInDays;
 
   ReportConfiguration({
     this.defaultPeriodInDays = 30,
@@ -13,4 +10,7 @@ class ReportConfiguration extends DefaultObject {
     super.registrationDate,
     super.lastUpdatedDate,
   });
+  bool enableSalesByPeriod;
+  bool enableTopProducts;
+  int defaultPeriodInDays;
 }

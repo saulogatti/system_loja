@@ -5,7 +5,7 @@ import 'package:system_loja/screens/widgets/address_form.dart';
 void main() {
   testWidgets(
     'AddressForm fields have correct keyboardType, autofillHints, and textInputAction',
-    (WidgetTester tester) async {
+    (tester) async {
       final streetController = TextEditingController();
       final zipCodeController = TextEditingController();
       final neighborhoodController = TextEditingController();

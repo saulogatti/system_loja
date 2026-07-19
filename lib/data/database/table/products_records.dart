@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:system_loja/data/database/table/categories_records.dart';
 
 class ProductsRecords extends Table {
-  late final code = text().unique()();
+  late final Column<String> code = text().unique()();
 
   late final IntColumn id = integer().autoIncrement()();
 

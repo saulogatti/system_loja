@@ -15,6 +15,7 @@ import 'package:system_loja/data/database/dao/invoice_dao.dart';
 import 'package:system_loja/data/database/dao/invoice_item_dao.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
 import 'package:system_loja/data/database/extension/customer_to_companion.dart';
+import 'package:system_loja/data/database/system_database.dart' show SystemDatabase;
 import 'package:system_loja/data/database/table/address_records.dart';
 import 'package:system_loja/data/database/table/categories_records.dart';
 import 'package:system_loja/data/database/table/company_records.dart';
@@ -30,8 +31,6 @@ part 'app_database.g.dart';
 /// Gerencia todas as tabelas e DAOs do sistema de loja:
 /// clientes, produtos, categorias, empresas, notas fiscais e endereços.
 ///
-/// O [applicationSupportDirectory] permite injetar onde o SQLite é gravado
-/// (útil em testes sem plugin `path_provider`).
 ///
 /// Veja também:
 /// - [SystemDatabase] - banco secundário para usuários, logs e configurações do sistema
@@ -45,19 +44,9 @@ part 'app_database.g.dart';
     InvoiceItemsRecords,
     AddressRecords,
   ],
-  daos: [
-    CategoryDao,
-    CompanyDao,
-    CustomerDao,
-    ProductDao,
-    InvoiceDao,
-    InvoiceItemDao,
-    AddressDao,
-  ],
+  daos: [CategoryDao, CompanyDao, CustomerDao, ProductDao, InvoiceDao, InvoiceItemDao, AddressDao],
 )
 class AppDatabase extends _$AppDatabase {
-  static final _nameBd = 'system_loja';
-
   /// Cria uma instância do banco de dados principal.
   ///
   /// [applicationSupportDirectory] permite injetar onde o SQLite é gravado
@@ -74,11 +63,12 @@ class AppDatabase extends _$AppDatabase {
            tempDirectoryPath: tempDirectoryPath,
          ),
        );
+  static const _nameBd = 'system_loja';
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    onCreate: (Migrator m) => m.createAll(),
-    onUpgrade: (Migrator m, int from, int to) async {
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
       if (from < 3) {
         // Criar tabela de categorias
         await m.createTable(categoriesRecords);
@@ -180,14 +170,10 @@ class AppDatabase extends _$AppDatabase {
             state: row.data['state'] as String? ?? '',
           ),
           registrationDate: (row.data['registration_date'] as int) != 0
-              ? DateTime.fromMillisecondsSinceEpoch(
-                  (row.data['registration_date'] as int) * 1000,
-                )
+              ? DateTime.fromMillisecondsSinceEpoch((row.data['registration_date'] as int) * 1000)
               : DateTime.now(),
           lastUpdatedDate: (row.data['last_updated_date'] as int?) != null
-              ? DateTime.fromMillisecondsSinceEpoch(
-                  (row.data['last_updated_date'] as int) * 1000,
-                )
+              ? DateTime.fromMillisecondsSinceEpoch((row.data['last_updated_date'] as int) * 1000)
               : null,
         );
 
@@ -208,32 +194,28 @@ class AppDatabase extends _$AppDatabase {
   static QueryExecutor _openConnection(
     Future<Object> Function()? applicationSupportDirectory, {
     Future<String?> Function()? tempDirectoryPath,
-  }) {
-    return driftDatabase(
-      name: _nameBd,
-      web: DriftWebOptions(
-        sqlite3Wasm: Uri.parse('sqlite3.wasm'),
-        driftWorker: Uri.parse('drift_worker.js'),
-      ),
-      native: DriftNativeOptions(
-        // By default, `driftDatabase` from `package:drift_flutter` stores the
-        // database files in `getApplicationDocumentsDirectory()`.
-        databaseDirectory: applicationSupportDirectory,
-        tempDirectoryPath: tempDirectoryPath,
-      ),
-    );
-  }
+  }) => driftDatabase(
+    name: _nameBd,
+    web: DriftWebOptions(
+      sqlite3Wasm: Uri.parse('sqlite3.wasm'),
+      driftWorker: Uri.parse('drift_worker.js'),
+    ),
+    native: DriftNativeOptions(
+      // By default, `driftDatabase` from `package:drift_flutter` stores the
+      // database files in `getApplicationDocumentsDirectory()`.
+      databaseDirectory: applicationSupportDirectory,
+      tempDirectoryPath: tempDirectoryPath,
+    ),
+  );
 }
 
 extension on Address {
   /// Converte endereço de domínio para insert em [AddressRecords].
-  AddressRecordsCompanion toAddressInsertCompanion() {
-    return AddressRecordsCompanion.insert(
-      city: city,
-      neighborhood: neighborhood,
-      state: state,
-      street: street,
-      zipCode: zipCode,
-    );
-  }
+  AddressRecordsCompanion toAddressInsertCompanion() => AddressRecordsCompanion.insert(
+    city: city,
+    neighborhood: neighborhood,
+    state: state,
+    street: street,
+    zipCode: zipCode,
+  );
 }

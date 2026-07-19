@@ -11,8 +11,6 @@ import 'package:system_loja/screens/products/cubit/product_state.dart';
 /// a [IProductRepository]. Emite estados que refletem o resultado de cada
 /// operação para a UI.
 class ProductCubit extends Cubit<ProductState> {
-  /// Repositório utilizado para acessar dados de produtos.
-  final IProductRepository _productRepository;
 
   /// Inicializa o Cubit com estado de carregamento.
   ///
@@ -21,6 +19,8 @@ class ProductCubit extends Cubit<ProductState> {
   ProductCubit(this._productRepository) : super(ProductState.loading()) {
     loadAllProducts();
   }
+  /// Repositório utilizado para acessar dados de produtos.
+  final IProductRepository _productRepository;
 
   /// Adiciona um novo produto à base de dados.
   ///

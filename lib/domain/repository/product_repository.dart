@@ -1,9 +1,9 @@
-import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/application/system_error_manager.dart';
+import 'package:system_loja/core/interface/i_product_repository.dart';
 import 'package:system_loja/core/models/product.dart';
-import 'package:system_loja/domain/code_generator_service.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
+import 'package:system_loja/domain/code_generator_service.dart';
 
 /// Repositório para gerenciamento de produtos usando Drift.
 ///
@@ -16,14 +16,14 @@ import 'package:system_loja/data/database/dao/product_dao.dart';
 /// - [ProductDao] - DAO do Drift
 /// - [CodeGeneratorService] - geração e validação de códigos
 class ProductRepository implements IProductRepository {
-  final ProductDao _productDao;
-  final CodeGeneratorService _codeGeneratorService;
 
   ProductRepository({
     required ProductDao productDao,
     required CodeGeneratorService codeGeneratorService,
   }) : _productDao = productDao,
        _codeGeneratorService = codeGeneratorService;
+  final ProductDao _productDao;
+  final CodeGeneratorService _codeGeneratorService;
 
   /// Remove um produto do armazenamento.
   ///
@@ -85,9 +85,7 @@ class ProductRepository implements IProductRepository {
   ///
   /// Retorna um código no formato PRD-YYYYMMDD-NNNN que não existe no banco.
   @override
-  Future<String> generateProductCode() {
-    return _codeGeneratorService.generateProductCode();
-  }
+  Future<String> generateProductCode() => _codeGeneratorService.generateProductCode();
 
   /// Salva um produto no banco de dados.
   ///

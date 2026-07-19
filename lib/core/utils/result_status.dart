@@ -9,11 +9,11 @@ import 'package:meta/meta.dart';
 /// - `R`: tipo do valor em caso de sucesso
 /// - `E`: tipo do erro em caso de falha
 class ResultError<R, E> extends ResultStatus<R, E> {
-  /// Erro ocorrido durante a operação.
-  final E resultError;
 
   /// Cria uma instância de erro com o erro fornecido.
   ResultError(this.resultError);
+  /// Erro ocorrido durante a operação.
+  final E resultError;
 }
 
 /// Resultado selado de uma operação que pode ser sucesso ou falha.
@@ -40,14 +40,10 @@ sealed class ResultStatus<R, E> {
   ResultStatus();
 
   /// Factory que cria um resultado de erro contendo `error`.
-  factory ResultStatus.error(E error) {
-    return ResultError<R, E>(error);
-  }
+  factory ResultStatus.error(E error) => ResultError<R, E>(error);
 
   /// Factory que cria um resultado de sucesso contendo `result`.
-  factory ResultStatus.success(R result) {
-    return ResultSuccess(result);
-  }
+  factory ResultStatus.success(R result) => ResultSuccess(result);
 
   /// Retorna o erro quando o resultado é uma falha.
   ///
@@ -98,9 +94,9 @@ sealed class ResultStatus<R, E> {
 /// Subclasse de `ResultStatus<R, E>` utilizada quando a operação
 /// foi concluída com sucesso.
 class ResultSuccess<R, E> extends ResultStatus<R, E> {
-  /// Valor resultante da operação.
-  final R result;
 
   /// Cria uma instância de sucesso com o valor especificado.
   ResultSuccess(this.result);
+  /// Valor resultante da operação.
+  final R result;
 }

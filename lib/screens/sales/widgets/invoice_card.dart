@@ -1,12 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
-
 class InvoiceCard extends StatelessWidget {
-  final Invoice invoice;
-  final VoidCallback onTap;
 
   const InvoiceCard({required this.invoice, required this.onTap, super.key});
+  final Invoice invoice;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -153,5 +153,12 @@ class InvoiceCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Invoice>('invoice', invoice));
+    properties.add(ObjectFlagProperty<VoidCallback>.has('onTap', onTap));
   }
 }

@@ -1,11 +1,11 @@
+import 'package:system_loja/application/system_error_manager.dart';
 import 'package:system_loja/core/interface/i_customer_repository.dart';
 import 'package:system_loja/core/interface/i_log_repository.dart';
-import 'package:system_loja/domain/repository/exceptions/customer_exception.dart';
-import 'package:system_loja/application/system_error_manager.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/customer_dao.dart';
+import 'package:system_loja/domain/repository/exceptions/customer_exception.dart';
 
 /// Repositório para gerenciamento de clientes usando Drift.
 ///
@@ -17,14 +17,14 @@ import 'package:system_loja/data/database/dao/customer_dao.dart';
 /// - [ICustomerRepository] - contrato da interface
 /// - [CustomerDao] - DAO do Drift
 class CustomerRepository implements ICustomerRepository {
-  final ILogRepository _logRepository;
-  final CustomerDao _customerDao;
 
   CustomerRepository({
     required ILogRepository logRepository,
     required CustomerDao customerDao,
   }) : _logRepository = logRepository,
        _customerDao = customerDao;
+  final ILogRepository _logRepository;
+  final CustomerDao _customerDao;
 
   /// Deleta um cliente pelo ID.
   ///
@@ -67,7 +67,7 @@ class CustomerRepository implements ICustomerRepository {
       final data = await _customerDao.getAll();
       final customers = data;
       final mappedCustomers = {
-        for (var customer in customers) customer.id: customer,
+        for (final customer in customers) customer.id: customer,
       };
       return ResultStatus.success(mappedCustomers);
     } on CustomerException catch (e) {

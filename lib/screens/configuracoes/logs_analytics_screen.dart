@@ -14,8 +14,7 @@ class LogsAnalyticsScreen extends StatefulWidget {
 
 class _LogsAnalyticsScreenState extends State<LogsAnalyticsScreen> {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(title: const Text('Análise de Logs')),
       body: BlocBuilder<LogsCubit, LogsState>(
         builder: (context, state) {
@@ -56,7 +55,6 @@ class _LogsAnalyticsScreenState extends State<LogsAnalyticsScreen> {
         },
       ),
     );
-  }
 
   @override
   void initState() {

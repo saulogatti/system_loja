@@ -5,15 +5,15 @@ import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 
-import 'person_list_state.dart';
+import 'package:system_loja/screens/person_registration/cubit/person_list_state.dart';
 
 /// Cubit responsável por carregar e expor a listagem de pessoas físicas e jurídicas.
 class PersonListCubit extends Cubit<PersonListState> {
-  final ICustomerRepository _customerRepository;
-  final ICompanyRepository _companyRepository;
 
   PersonListCubit(this._customerRepository, this._companyRepository)
     : super(const PersonListInitial());
+  final ICustomerRepository _customerRepository;
+  final ICompanyRepository _companyRepository;
 
   Future<void> loadPeople() async {
     emit(const PersonListLoading());
@@ -24,7 +24,7 @@ class PersonListCubit extends Cubit<PersonListState> {
     final errors = <String>[];
     final List<Customer> customers;
     switch (customerResult) {
-      case ResultSuccess(result: final result):
+      case ResultSuccess(: final result):
         customers = result;
       case ResultError(resultError: final error):
         customers = const <Customer>[];
@@ -33,7 +33,7 @@ class PersonListCubit extends Cubit<PersonListState> {
 
     final List<Company> companies;
     switch (companyResult) {
-      case ResultSuccess(result: final result):
+      case ResultSuccess(: final result):
         companies = result;
       case ResultError(resultError: final error):
         companies = const <Company>[];

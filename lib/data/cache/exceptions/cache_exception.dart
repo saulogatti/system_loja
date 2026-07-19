@@ -1,20 +1,22 @@
+import 'package:system_loja/data/cache/cache_manager.dart' show CacheManager;
+
 /// Exceção base para erros relacionados ao cache.
 ///
 /// Esta classe serve como base para todas as exceções que podem
 /// ocorrer durante operações de cache, como leitura, escrita e
 /// remoção de dados.
 class CacheException implements Exception {
-  /// Mensagem descritiva do erro ocorrido.
-  final String message;
-
-  /// Exceção original que causou este erro, se houver.
-  final Object? cause;
 
   /// Cria uma nova instância de [CacheException].
   ///
   /// [message] descreve o erro que ocorreu.
   /// [cause] é a exceção original que causou este erro (opcional).
   const CacheException(this.message, [this.cause]);
+  /// Mensagem descritiva do erro ocorrido.
+  final String message;
+
+  /// Exceção original que causou este erro, se houver.
+  final Object? cause;
 
   @override
   String toString() {
@@ -40,14 +42,14 @@ class CacheNotInitializedException extends CacheException {
 /// Esta exceção é lançada quando se tenta recuperar um item
 /// do cache usando uma chave que não existe.
 class CacheKeyNotFoundException extends CacheException {
-  /// A chave que não foi encontrada.
-  final String key;
 
   /// Cria uma nova instância de [CacheKeyNotFoundException].
   ///
   /// [key] é a chave que não foi encontrada no cache.
   const CacheKeyNotFoundException(this.key)
     : super('Chave não encontrada no cache: $key');
+  /// A chave que não foi encontrada.
+  final String key;
 }
 
 /// Exceção lançada quando ocorre um erro de leitura do cache.

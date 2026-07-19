@@ -8,7 +8,7 @@ class FileZipUtility {
   static Future<void> unzipFile(String path, Directory directory) async {
     final input = InputFileStream(path);
     final zip = ZipDecoder().decodeStream(input);
-    for (var entry in zip) {
+    for (final entry in zip) {
       final fileName = entry.name;
       if (entry.isFile) {
         final output = OutputFileStream(p.join(directory.path, fileName));
@@ -22,7 +22,7 @@ class FileZipUtility {
 
   static Future<void> zipDirectory(Directory directory, String fileName) async {
     if (!await directory.exists()) {
-      throw CacheException('Directory does not exist');
+      throw const CacheException('Directory does not exist');
     }
     final zip = ZipFileEncoder();
     zip.create(fileName);
@@ -32,7 +32,7 @@ class FileZipUtility {
 
   static Future<void> zipFile(String path, String fileName) async {
     if (!await File(path).exists()) {
-      throw CacheException('File does not exist');
+      throw const CacheException('File does not exist');
     }
     final zip = ZipFileEncoder();
     zip.create(fileName);
@@ -43,7 +43,7 @@ class FileZipUtility {
   static Future<void> zipFiles(List<File> files, String fileName) async {
     final zip = ZipFileEncoder();
     zip.create(fileName);
-    for (var file in files) {
+    for (final file in files) {
       await zip.addFile(file);
     }
     await zip.close();
