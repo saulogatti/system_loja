@@ -183,3 +183,7 @@
 ## 25-10-2023 - Interactive Semantics with Trailing Actions (Reviewed)
 **Learning:** Using `excludeSemantics: true` on a parent `Semantics` widget effectively hides all inner semantics. If the widget contains multiple distinct semantic actions (e.g., a tap for details, and a trailing `IconButton` for deletion), the `excludeSemantics: true` approach breaks the secondary actions.
 **Action:** When a composite widget needs to consolidate some text but preserve independent inner actions (like an `IconButton`), do not use `excludeSemantics: true` on the parent. Instead, use `ExcludeSemantics` on the specific child elements to hide them, and use a `Semantics` widget with a combined label on a primary text element to provide the full context, leaving the independent interactive elements untouched.
+
+## 20-07-2026 - Semantic System Error Theme Color
+**Learning:** Hardcoding `Colors.red` for destructive actions or error states violates system theme consistency, specifically failing to adapt cleanly to dark mode, and missing the necessary foreground contrast color for accessible button text.
+**Action:** Always use `Theme.of(context).colorScheme.error` instead of hardcoding red. For filled buttons (like `ElevatedButton`) that override the `backgroundColor` with the error theme, always pair it with `foregroundColor: Theme.of(context).colorScheme.onError` to guarantee accessible text contrast.
