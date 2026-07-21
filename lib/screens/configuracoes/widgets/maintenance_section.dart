@@ -81,9 +81,12 @@ class MaintenanceSection extends StatelessWidget {
             onTap: onLimparLogsAntigos,
           ),
           ListTile(
-            title: const Text('Limpar todos os dados', style: TextStyle(color: Colors.red)),
+            title: Text(
+              'Limpar todos os dados',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
             subtitle: const Text('Remover TODOS os dados do sistema'),
-            leading: const Icon(Icons.warning, color: Colors.red),
+            leading: Icon(Icons.warning, color: Theme.of(context).colorScheme.error),
             onTap: onLimparTodosDados,
           ),
         ],
