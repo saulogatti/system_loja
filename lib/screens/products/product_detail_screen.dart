@@ -252,15 +252,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
-                        _buildInfoRow('ID', widget.product.code, Icons.numbers),
+                        _buildInfoRow(context, 'ID', widget.product.code, Icons.numbers),
                         const Divider(),
                         _buildInfoRow(
+                          context,
                           'Data de Cadastro',
                           widget.product.registrationDate.toFormattedDate(),
                           Icons.calendar_today,
                         ),
                         const Divider(),
                         _buildInfoRow(
+                          context,
                           'Data de Atualização',
                           widget.product.lastUpdatedDate.toFormattedDate(),
                           Icons.calendar_today,
@@ -324,11 +326,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     _selectedCategoryId = widget.product.categoryId;
   }
 
-  Widget _buildInfoRow(String label, String value, IconData icon) => Padding(
+  Widget _buildInfoRow(BuildContext context, String label, String value, IconData icon) => Padding(
     padding: const EdgeInsets.symmetric(vertical: 8),
     child: Row(
       children: [
-        Icon(icon, size: 20, color: Colors.grey[600]),
+        Icon(icon, size: 20, color: Theme.of(context).colorScheme.onSurfaceVariant),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -338,7 +340,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 label,
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.grey[600],
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w500,
                 ),
               ),

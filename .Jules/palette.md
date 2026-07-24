@@ -187,3 +187,11 @@
 ## 20-07-2026 - Semantic System Error Theme Color
 **Learning:** Hardcoding `Colors.red` for destructive actions or error states violates system theme consistency, specifically failing to adapt cleanly to dark mode, and missing the necessary foreground contrast color for accessible button text.
 **Action:** Always use `Theme.of(context).colorScheme.error` instead of hardcoding red. For filled buttons (like `ElevatedButton`) that override the `backgroundColor` with the error theme, always pair it with `foregroundColor: Theme.of(context).colorScheme.onError` to guarantee accessible text contrast.
+
+## 21-07-2024 - [Local Form Loading States in Dialogs]
+**Learning:** Flutter `AlertDialog`s do not automatically rebuild when the underlying screen's BLoC state changes, making it hard to provide visual loading feedback (like a disabled button and spinner) during async actions like form submissions.
+**Action:** A reusable UX pattern is to instantiate a local `ValueNotifier<bool>(false)` inside the dialog's builder method and wrap the dialog's actions in `ValueListenableBuilder`s. This provides immediate, localized visual feedback and prevents duplicate submissions without needing a separate StatefulWidget.
+
+## 24-07-2026 - Accessible Text Contrast
+**Learning:** Hardcoded colors like `Colors.grey` or `Colors.grey[600]` fail contrast requirements in dark mode and break the app's visual consistency.
+**Action:** Always use `Theme.of(context).colorScheme.onSurfaceVariant` or `outlineVariant` for secondary text, icons, and borders to ensure they adapt automatically to light/dark themes and maintain proper contrast.

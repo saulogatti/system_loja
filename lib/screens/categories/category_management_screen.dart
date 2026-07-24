@@ -103,12 +103,24 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         final category = categories[index];
         return Card(
           child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              child: Icon(Icons.category, color: Theme.of(context).colorScheme.onPrimaryContainer),
+            leading: ExcludeSemantics(
+              child: CircleAvatar(
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                child: Icon(
+                  Icons.category,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+              ),
             ),
-            title: Text(category.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: category.description != null ? Text(category.description!) : null,
+            title: Semantics(
+              label: category.description != null
+                  ? '${category.name}, ${category.description}'
+                  : category.name,
+              child: Text(category.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+            ),
+            subtitle: category.description != null
+                ? ExcludeSemantics(child: Text(category.description!))
+                : null,
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -197,6 +209,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
     final descriptionController = TextEditingController(text: category?.description ?? '');
     final formKey = GlobalKey<FormState>();
     final isEdit = category != null;
+    final isSubmitting = ValueNotifier<bool>(false);
 
     await showDialog(
       context: context,
@@ -246,38 +259,59 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(),
-                    child: const Text('Cancelar'),
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: isSubmitting,
+                    builder: (context, loading, _) => OutlinedButton(
+                      onPressed: loading ? null : () => Navigator.of(dialogContext).pop(),
+                      child: const Text('Cancelar'),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (formKey.currentState!.validate()) {
-                        if (isEdit) {
-                          await context.read<CategoryCubit>().updateCategory(
-                            id: category.id,
-                            name: nameController.text.trim(),
-                            description: descriptionController.text.trim().isEmpty
-                                ? null
-                                : descriptionController.text.trim(),
-                          );
-                        } else {
-                          await context.read<CategoryCubit>().createCategory(
-                            name: nameController.text.trim(),
-                            description: descriptionController.text.trim().isEmpty
-                                ? null
-                                : descriptionController.text.trim(),
-                          );
-                        }
-                        if (dialogContext.mounted) {
-                          Navigator.of(dialogContext).pop();
-                        }
-                      }
-                    },
-                    child: Text(isEdit ? 'Salvar' : 'Criar'),
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: isSubmitting,
+                    builder: (context, loading, _) => ElevatedButton(
+                      onPressed: loading
+                          ? null
+                          : () async {
+                              if (formKey.currentState!.validate()) {
+                                isSubmitting.value = true;
+                                try {
+                                  if (isEdit) {
+                                    await context.read<CategoryCubit>().updateCategory(
+                                      id: category.id,
+                                      name: nameController.text.trim(),
+                                      description: descriptionController.text.trim().isEmpty
+                                          ? null
+                                          : descriptionController.text.trim(),
+                                    );
+                                  } else {
+                                    await context.read<CategoryCubit>().createCategory(
+                                      name: nameController.text.trim(),
+                                      description: descriptionController.text.trim().isEmpty
+                                          ? null
+                                          : descriptionController.text.trim(),
+                                    );
+                                  }
+                                  if (dialogContext.mounted) {
+                                    Navigator.of(dialogContext).pop();
+                                  }
+                                } finally {
+                                  if (dialogContext.mounted) {
+                                    isSubmitting.value = false;
+                                  }
+                                }
+                              }
+                            },
+                      child: loading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Text(isEdit ? 'Salvar' : 'Criar'),
+                    ),
                   ),
                 ),
               ],
@@ -286,5 +320,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         ],
       ),
     );
+
+    isSubmitting.dispose();
   }
 }
