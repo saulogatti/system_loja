@@ -208,7 +208,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       color: entry.color,
                       borderRadius: BorderRadius.circular(4),
                       border: Border.all(
-                        color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey,
+                        color: isSelected
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.outlineVariant,
                         width: isSelected ? 2.0 : 1.0,
                       ),
                     ),
