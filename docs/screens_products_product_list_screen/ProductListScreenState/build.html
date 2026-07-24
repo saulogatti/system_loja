@@ -175,8 +175,7 @@ prints green, as expected.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return BlocListener&lt;ProductCubit, ProductState&gt;(
+Widget build(BuildContext context) =&gt; BlocListener&lt;ProductCubit, ProductState&gt;(
     listener: (context, state) {
       if (state is ProductStateError) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -200,8 +199,7 @@ Widget build(BuildContext context) {
         );
       },
     ),
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

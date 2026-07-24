@@ -175,9 +175,8 @@ prints green, as expected.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(title: Text(&#39;Exportar Relatório&#39;)),
+Widget build(BuildContext context) =&gt; Scaffold(
+    appBar: AppBar(title: const Text(&#39;Exportar Relatório&#39;)),
     body: Column(
       children: [
         Expanded(
@@ -188,27 +187,23 @@ Widget build(BuildContext context) {
                 case ReportAction.shareCsv:
                   ScaffoldMessenger.of(
                     context,
-                  ).showSnackBar(SnackBar(content: Text(&#39;Exportar CSV&#39;)));
-                  break;
+                  ).showSnackBar(const SnackBar(content: Text(&#39;Exportar CSV&#39;)));
                 case ReportAction.sharePdf:
                   ScaffoldMessenger.of(
                     context,
-                  ).showSnackBar(SnackBar(content: Text(&#39;Compartilhar PDF&#39;)));
-                  break;
+                  ).showSnackBar(const SnackBar(content: Text(&#39;Compartilhar PDF&#39;)));
                 case ReportAction.printPdf:
                   &#47;&#47; Implementar impressão PDF
                   ScaffoldMessenger.of(
                     context,
-                  ).showSnackBar(SnackBar(content: Text(&#39;Imprimir PDF&#39;)));
-                  break;
+                  ).showSnackBar(const SnackBar(content: Text(&#39;Imprimir PDF&#39;)));
               }
             },
           ),
         ),
       ],
     ),
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

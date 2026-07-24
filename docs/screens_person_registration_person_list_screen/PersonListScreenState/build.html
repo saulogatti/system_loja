@@ -175,83 +175,78 @@ prints green, as expected.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return BlocBuilder&lt;PersonListCubit, PersonListState&gt;(
-    builder: (context, state) {
-      if (state is PersonListLoading || state is PersonListInitial) {
-        return const Center(child: CircularProgressIndicator());
-      }
+Widget build(BuildContext context) =&gt; BlocBuilder&lt;PersonListCubit, PersonListState&gt;(
+  builder: (context, state) {
+    if (state is PersonListLoading || state is PersonListInitial) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-      if (state is! PersonListLoaded) {
-        return const SizedBox.shrink();
-      }
+    if (state is! PersonListLoaded) {
+      return const SizedBox.shrink();
+    }
 
-      return DefaultTabController(
-        length: 2,
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
-            const TabBar(
-              tabs: [
-                Tab(text: &#39;Pessoa Física&#39;, icon: Icon(Icons.badge)),
-                Tab(text: &#39;Pessoa Jurídica&#39;, icon: Icon(Icons.business)),
-              ],
-            ),
-            if (state.errorMessage != null)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                child: MaterialBanner(
-                  content: Text(state.errorMessage!),
-                  actions: [
-                    TextButton(
-                      onPressed: _reloadPeople,
-                      child: const Text(&#39;Tentar novamente&#39;),
-                    ),
-                  ],
-                ),
-              ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  _PersonSectionList&lt;Customer&gt;(
-                    emptyMessage: &#39;Nenhuma pessoa física cadastrada.&#39;,
-                    entries: state.customers,
-                    titleBuilder: (customer) =&gt; customer.name,
-                    subtitleBuilder: (customer) =&gt;
-                        &#39;CPF: ${customer.cpf} • E-mail: ${customer.email ?? &#39;-&#39;} • Telefone: ${customer.phone ?? &#39;-&#39;}&#39;,
-                    onTap: (customer) async {
-                      final changed = await context.router.push&lt;bool&gt;(
-                        CustomerEditRoute(customer: customer),
-                      );
-                      if (changed == true &amp;&amp; mounted) {
-                        await _reloadPeople();
-                      }
-                    },
-                  ),
-                  _PersonSectionList&lt;Company&gt;(
-                    emptyMessage: &#39;Nenhuma pessoa jurídica cadastrada.&#39;,
-                    entries: state.companies,
-                    titleBuilder: (company) =&gt; company.name,
-                    subtitleBuilder: (company) =&gt;
-                        &#39;CNPJ: ${company.cnpj} • E-mail: ${company.email ?? &#39;-&#39;} • Telefone: ${company.phone ?? &#39;-&#39;}&#39;,
-                    onTap: (company) async {
-                      final changed = await context.router.push&lt;bool&gt;(
-                        CompanyEditRoute(company: company),
-                      );
-                      if (changed == true &amp;&amp; mounted) {
-                        await _reloadPeople();
-                      }
-                    },
-                  ),
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          const SizedBox(height: 8),
+          const TabBar(
+            tabs: [
+              Tab(text: &#39;Pessoa Física&#39;, icon: Icon(Icons.badge)),
+              Tab(text: &#39;Pessoa Jurídica&#39;, icon: Icon(Icons.business)),
+            ],
+          ),
+          if (state.errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: MaterialBanner(
+                content: Text(state.errorMessage!),
+                actions: [
+                  TextButton(onPressed: _reloadPeople, child: const Text(&#39;Tentar novamente&#39;)),
                 ],
               ),
             ),
-          ],
-        ),
-      );
-    },
-  );
-}</code></pre>
+          Expanded(
+            child: TabBarView(
+              children: [
+                _PersonSectionList&lt;Customer&gt;(
+                  emptyMessage: &#39;Nenhuma pessoa física cadastrada.&#39;,
+                  entries: state.customers,
+                  titleBuilder: (customer) =&gt; customer.name,
+                  subtitleBuilder: (customer) =&gt;
+                      &#39;CPF: ${customer.cpf} • E-mail: ${customer.email ?? &#39;-&#39;} • Telefone: ${customer.phone ?? &#39;-&#39;}&#39;,
+                  onTap: (customer) async {
+                    final changed = await context.router.push&lt;bool&gt;(
+                      CustomerEditRoute(customer: customer),
+                    );
+                    if (changed == true &amp;&amp; mounted) {
+                      await _reloadPeople();
+                    }
+                  },
+                ),
+                _PersonSectionList&lt;Company&gt;(
+                  emptyMessage: &#39;Nenhuma pessoa jurídica cadastrada.&#39;,
+                  entries: state.companies,
+                  titleBuilder: (company) =&gt; company.name,
+                  subtitleBuilder: (company) =&gt;
+                      &#39;CNPJ: ${company.cnpj} • E-mail: ${company.email ?? &#39;-&#39;} • Telefone: ${company.phone ?? &#39;-&#39;}&#39;,
+                  onTap: (company) async {
+                    final changed = await context.router.push&lt;bool&gt;(
+                      CompanyEditRoute(company: company),
+                    );
+                    if (changed == true &amp;&amp; mounted) {
+                      await _reloadPeople();
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  },
+);</code></pre>
 </section>
 
 

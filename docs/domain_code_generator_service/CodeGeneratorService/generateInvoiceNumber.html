@@ -77,7 +77,7 @@ Se existir, incrementa o contador até encontrar um número disponível.</p>
   final now = DateTime.now();
   final datePrefix = &#39;NF-${now.year}${_padLeft(now.month)}${_padLeft(now.day)}&#39;;
 
-  int counter = 1;
+  var counter = 1;
   String invoiceNumber;
 
   do {

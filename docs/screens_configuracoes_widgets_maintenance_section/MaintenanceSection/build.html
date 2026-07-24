@@ -108,70 +108,72 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return Card(
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.cleaning_services, color: Theme.of(context).colorScheme.primary),
-              const SizedBox(width: 8),
-              const Text(
-                &#39;Limpeza de Dados&#39;,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          const Divider(),
-          SwitchListTile(
-            title: const Text(&#39;Limpeza automática de logs&#39;),
-            subtitle: const Text(&#39;Remover logs antigos automaticamente&#39;),
-            value: config.isAutoCleanEnabled,
-            onChanged: (value) {
-              onConfigChanged(config.copyWith(isAutoCleanEnabled: value));
-            },
-          ),
-          if (config.isAutoCleanEnabled)
-            ListTile(
-              title: const Text(&#39;Dias para manter logs&#39;),
-              subtitle: Slider(
-                value: config.logRetentionDays.toDouble(),
-                min: 7,
-                max: 365,
-                divisions: 358,
-                label: &#39;${config.logRetentionDays} dias&#39;,
-                onChanged: (value) {
-                  onConfigChanged(config.copyWith(logRetentionDays: value.toInt()));
-                },
-              ),
-              trailing: Text(&#39;${config.logRetentionDays}&#39;),
+Widget build(BuildContext context) =&gt; Card(
+  child: Padding(
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.cleaning_services, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 8),
+            const Text(
+              &#39;Limpeza de Dados&#39;,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+          ],
+        ),
+        const Divider(),
+        SwitchListTile(
+          title: const Text(&#39;Limpeza automática de logs&#39;),
+          subtitle: const Text(&#39;Remover logs antigos automaticamente&#39;),
+          value: config.isAutoCleanEnabled,
+          onChanged: (value) {
+            onConfigChanged(config.copyWith(isAutoCleanEnabled: value));
+          },
+        ),
+        if (config.isAutoCleanEnabled)
           ListTile(
-            title: const Text(&#39;Analisar logs do sistema&#39;),
-            subtitle: const Text(&#39;Abrir análise detalhada dos logs&#39;),
-            leading: const Icon(Icons.analytics),
-            onTap: () =&gt; onOpenLogsAnalysis(context),
+            title: const Text(&#39;Dias para manter logs&#39;),
+            subtitle: Slider(
+              value: config.logRetentionDays.toDouble(),
+              min: 7,
+              max: 365,
+              divisions: 358,
+              label: &#39;${config.logRetentionDays} dias&#39;,
+              onChanged: (value) {
+                onConfigChanged(config.copyWith(logRetentionDays: value.toInt()));
+              },
+            ),
+            trailing: Text(&#39;${config.logRetentionDays}&#39;),
           ),
-          ListTile(
-            title: const Text(&#39;Limpar logs antigos agora&#39;),
-            subtitle: const Text(&#39;Remover logs com base na configuração&#39;),
-            leading: const Icon(Icons.delete_sweep),
-            onTap: onLimparLogsAntigos,
+        ListTile(
+          title: const Text(&#39;Analisar logs do sistema&#39;),
+          subtitle: const Text(&#39;Abrir análise detalhada dos logs&#39;),
+          leading: const Icon(Icons.analytics),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () =&gt; onOpenLogsAnalysis(context),
+        ),
+        ListTile(
+          title: const Text(&#39;Limpar logs antigos agora&#39;),
+          subtitle: const Text(&#39;Remover logs com base na configuração&#39;),
+          leading: const Icon(Icons.delete_sweep),
+          onTap: onLimparLogsAntigos,
+        ),
+        ListTile(
+          title: Text(
+            &#39;Limpar todos os dados&#39;,
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
-          ListTile(
-            title: const Text(&#39;Limpar todos os dados&#39;, style: TextStyle(color: Colors.red)),
-            subtitle: const Text(&#39;Remover TODOS os dados do sistema&#39;),
-            leading: const Icon(Icons.warning, color: Colors.red),
-            onTap: onLimparTodosDados,
-          ),
-        ],
-      ),
+          subtitle: const Text(&#39;Remover TODOS os dados do sistema&#39;),
+          leading: Icon(Icons.warning, color: Theme.of(context).colorScheme.error),
+          onTap: onLimparTodosDados,
+        ),
+      ],
     ),
-  );
-}</code></pre>
+  ),
+);</code></pre>
 </section>
 
 

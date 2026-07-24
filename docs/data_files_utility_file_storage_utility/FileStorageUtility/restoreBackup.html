@@ -82,18 +82,17 @@ Retorna o número de arquivos restaurados com sucesso.</p>
 Future&lt;int&gt; restoreBackup(String direBackup) async {
   try {
     if (direBackup.isEmpty) {
-      throw CacheReadException(&#39;Caminho de backup não pode ser vazio&#39;, null);
+      throw const CacheReadException(&#39;Caminho de backup não pode ser vazio&#39;);
     }
     if (!direBackup.contains(_maskBackup)) {
-      throw CacheReadException(
+      throw const CacheReadException(
         &#39;Diretório de backup inválido: nome não contém a máscara &#39;
         &#39;&quot;$_maskBackup&quot;&#39;,
-        null,
       );
     }
     final backupDir = Directory(direBackup);
     if (!await backupDir.exists()) {
-      throw CacheReadException(&#39;Diretório de backup não encontrado&#39;, null);
+      throw const CacheReadException(&#39;Diretório de backup não encontrado&#39;);
     }
 
     final appDocDir = await getApplicationSupportDirectory();

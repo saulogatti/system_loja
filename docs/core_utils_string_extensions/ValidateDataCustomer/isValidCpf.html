@@ -75,20 +75,20 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">bool isValidCpf() {
-  final String cpf = replaceAll(Constants.nonNumericRegExp, &#39;&#39;);
+  final cpf = replaceAll(Constants.nonNumericRegExp, &#39;&#39;);
 
   if (cpf.length != 11 || Constants.cpfSameDigitRegExp.hasMatch(cpf)) {
     return false;
   }
 
-  final List&lt;int&gt; digits = cpf.split(&#39;&#39;).map(int.parse).toList();
+  final digits = cpf.split(&#39;&#39;).map(int.parse).toList();
 
-  for (int j = 9; j &lt; 11; j++) {
-    int sum = 0;
-    for (int i = 0; i &lt; j; i++) {
+  for (var j = 9; j &lt; 11; j++) {
+    var sum = 0;
+    for (var i = 0; i &lt; j; i++) {
       sum += digits[i] * ((j + 1) - i);
     }
-    int mod = (sum * 10) % 11;
+    var mod = (sum * 10) % 11;
     if (mod == 10) mod = 0;
     if (mod != digits[j]) {
       return false;

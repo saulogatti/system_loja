@@ -65,16 +65,14 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory ReportConfigurationEntry.fromDomain(
   ReportConfiguration reportConfiguration,
-) {
-  return ReportConfigurationEntry(
+) =&gt; ReportConfigurationEntry(
     enableSalesByPeriod: reportConfiguration.enableSalesByPeriod,
     enableTopProducts: reportConfiguration.enableTopProducts,
     defaultPeriodInDays: reportConfiguration.defaultPeriodInDays,
     id: reportConfiguration.id,
     registrationDate: reportConfiguration.registrationDate,
     lastUpdatedDate: reportConfiguration.lastUpdatedDate,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

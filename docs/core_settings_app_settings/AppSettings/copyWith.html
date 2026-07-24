@@ -89,8 +89,7 @@
   String? localBackup,
 
   EnumColorAppThemeSettings? corPrimaria,
-}) {
-  return AppSettings(
+}) =&gt; AppSettings(
     notificacoesAtivadas: notificacoesAtivadas ?? this.notificacoesAtivadas,
     notificarVendas: notificarVendas ?? this.notificarVendas,
     notificarEstoqueBaixo: notificarEstoqueBaixo ?? this.notificarEstoqueBaixo,
@@ -100,8 +99,7 @@
     frequenciaBackup: frequenciaBackup ?? this.frequenciaBackup,
     localBackup: localBackup ?? this.localBackup,
     corPrimaria: corPrimaria ?? this.corPrimaria,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

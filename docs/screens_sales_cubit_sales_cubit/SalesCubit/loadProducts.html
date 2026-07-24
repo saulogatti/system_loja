@@ -91,11 +91,7 @@
     case ResultSuccess(result: final value):
       customers = value;
     case ResultError(resultError: final error):
-      emit(
-        SalesState.loadProductsFailure(
-          message: &#39;Erro ao carregar clientes: $error&#39;,
-        ),
-      );
+      emit(SalesState.loadProductsFailure(message: &#39;Erro ao carregar clientes: $error&#39;));
       return;
   }
 
@@ -104,11 +100,7 @@
     case ResultSuccess(result: final value):
       invoices = value;
     case ResultError(resultError: final error):
-      emit(
-        SalesState.loadProductsFailure(
-          message: &#39;Erro ao carregar vendas: $error&#39;,
-        ),
-      );
+      emit(SalesState.loadProductsFailure(message: &#39;Erro ao carregar vendas: $error&#39;));
       return;
   }
 
@@ -117,11 +109,7 @@
     case ResultSuccess(result: final value):
       companies = value;
     case ResultError(resultError: final error):
-      emit(
-        SalesState.loadProductsFailure(
-          message: &#39;Erro ao carregar empresas: $error&#39;,
-        ),
-      );
+      emit(SalesState.loadProductsFailure(message: &#39;Erro ao carregar empresas: $error&#39;));
       return;
   }
 
@@ -136,12 +124,8 @@
           invoices: invoices,
         ),
       );
-    case ResultError(resultError: final resultError):
-      emit(
-        SalesState.loadProductsFailure(
-          message: &#39;Erro ao carregar produtos: $resultError&#39;,
-        ),
-      );
+    case ResultError(:final resultError):
+      emit(SalesState.loadProductsFailure(message: &#39;Erro ao carregar produtos: $resultError&#39;));
   }
 }</code></pre>
 </section>

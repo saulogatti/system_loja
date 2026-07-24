@@ -108,24 +108,22 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return SegmentedButton&lt;InvoiceType&gt;(
-    segments: const [
-      ButtonSegment&lt;InvoiceType&gt;(
-        value: InvoiceType.exit,
-        label: Text(&#39;Saída (Venda)&#39;),
-        icon: Icon(Icons.arrow_upward),
-      ),
-      ButtonSegment&lt;InvoiceType&gt;(
-        value: InvoiceType.entry,
-        label: Text(&#39;Entrada (Compra)&#39;),
-        icon: Icon(Icons.arrow_downward),
-      ),
-    ],
-    selected: {invoiceType},
-    onSelectionChanged: (selection) =&gt; onChanged(selection.first),
-  );
-}</code></pre>
+Widget build(BuildContext context) =&gt; SegmentedButton&lt;InvoiceType&gt;(
+  segments: const [
+    ButtonSegment&lt;InvoiceType&gt;(
+      value: InvoiceType.exit,
+      label: Text(&#39;Saída (Venda)&#39;),
+      icon: Icon(Icons.arrow_upward),
+    ),
+    ButtonSegment&lt;InvoiceType&gt;(
+      value: InvoiceType.entry,
+      label: Text(&#39;Entrada (Compra)&#39;),
+      icon: Icon(Icons.arrow_downward),
+    ),
+  ],
+  selected: {invoiceType},
+  onSelectionChanged: (selection) =&gt; onChanged(selection.first),
+);</code></pre>
 </section>
 
 

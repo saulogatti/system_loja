@@ -80,7 +80,7 @@ Retorna sucesso com o mapa ou erro se houver falha no carregamento.</p>
 Future&lt;ResultStatus&lt;Map&lt;int, Invoice&gt;, String&gt;&gt; loadAllSales() async {
   try {
     final invoices = await _invoiceDao.getAll();
-    final Map&lt;int, Invoice&gt; sales = {};
+    final sales = &lt;int, Invoice&gt;{};
 
     for (final invoice in invoices) {
       sales[invoice.id] = invoice;

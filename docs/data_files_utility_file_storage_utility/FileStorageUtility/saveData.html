@@ -97,7 +97,7 @@ Future&lt;bool&gt; saveData(String path, String data) async {
   }
 
   try {
-    final File file = await _mountFileSystem(path);
+    final file = await _mountFileSystem(path);
     if (!await file.parent.exists()) {
       await file.parent.create(recursive: true);
     }

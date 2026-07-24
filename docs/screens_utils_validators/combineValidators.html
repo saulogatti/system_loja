@@ -80,15 +80,13 @@ os validadores passarem.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">String? Function(String? value) combineValidators(
   List&lt;String? Function(String?)&gt; validators,
-) {
-  return (String? value) {
+) =&gt; (value) {
     for (final validator in validators) {
       final error = validator(value);
       if (error != null) return error;
     }
     return null;
-  };
-}</code></pre>
+  };</code></pre>
 </section>
 
 

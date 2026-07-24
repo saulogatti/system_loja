@@ -66,16 +66,14 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">SystemConfiguration toDomain() {
-  return SystemConfiguration(
+  <pre class="language-dart"><code class="language-dart">SystemConfiguration toDomain() =&gt; SystemConfiguration(
     id: id,
     registrationDate: registrationDate,
     lastUpdatedDate: lastUpdatedDate,
     priceConfiguration: priceConfiguration,
     productCategories: List&lt;String&gt;.from(productCategories),
     systemUserData: systemUserData,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

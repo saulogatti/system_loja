@@ -81,13 +81,11 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">String sanitizeFileName() {
-  return toLowerCase()
+  <pre class="language-dart"><code class="language-dart">String sanitizeFileName() =&gt; toLowerCase()
       .replaceAll(Constants.invalidFileNameCharsRegExp, &#39;_&#39;)
       .replaceAll(Constants.oneOrMoreWhitespaceRegExp, &#39;_&#39;)
       .replaceAll(Constants.oneOrMoreUnderscoreRegExp, &#39;_&#39;)
-      .trim();
-}</code></pre>
+      .trim();</code></pre>
 </section>
 
 

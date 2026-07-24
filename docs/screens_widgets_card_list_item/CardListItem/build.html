@@ -109,6 +109,8 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  final semanticLabel = subTitle.isNotEmpty ? &#39;$title, $subTitle&#39; : title;
+
   return Card(
     elevation: 2,
     margin: margin,
@@ -119,20 +121,27 @@ Widget build(BuildContext context) {
         minVerticalPadding: 4,
         titleAlignment: ListTileTitleAlignment.center,
 
-        leading: CircleAvatar(
-          backgroundColor: colorAvatar,
-          child: Text(switch (title.isNotEmpty) {
-            true =&gt; title[0].toUpperCase(),
-            _ =&gt; &#39;&#39;,
-          }, style: const TextStyle(color: Colors.white)),
+        leading: ExcludeSemantics(
+          child: CircleAvatar(
+            backgroundColor: colorAvatar,
+            child: Text(switch (title.isNotEmpty) {
+              true =&gt; title[0].toUpperCase(),
+              _ =&gt; &#39;&#39;,
+            }, style: const TextStyle(color: Colors.white)),
+          ),
         ),
-        title: Text(
-          title,
-          maxLines: titleMaxLines,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+        title: Semantics(
+          label: semanticLabel,
+          child: Text(
+            title,
+            maxLines: titleMaxLines,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
-        subtitle: Text(subTitle, maxLines: subTitleMaxLines, overflow: TextOverflow.ellipsis),
+        subtitle: ExcludeSemantics(
+          child: Text(subTitle, maxLines: subTitleMaxLines, overflow: TextOverflow.ellipsis),
+        ),
         isThreeLine: subTitleMaxLines &gt; 1,
         trailing: Row(
           mainAxisSize: MainAxisSize.min,

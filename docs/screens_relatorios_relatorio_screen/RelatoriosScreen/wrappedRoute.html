@@ -76,8 +76,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget wrappedRoute(BuildContext context) {
-  return BlocProvider&lt;RelatorioCubit&gt;(
+Widget wrappedRoute(BuildContext context) =&gt; BlocProvider&lt;RelatorioCubit&gt;(
     create: (_) =&gt; RelatorioCubit(
       salesRepository ?? appInjection.get&lt;ISalesRepository&gt;(),
       productRepository ?? appInjection.get&lt;IProductRepository&gt;(),
@@ -86,8 +85,7 @@ Widget wrappedRoute(BuildContext context) {
       appInjection.get&lt;RelatorioOverviewService&gt;(),
     ),
     child: this,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

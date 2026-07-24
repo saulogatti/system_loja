@@ -68,10 +68,10 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;SystemErrorModel&gt;&gt; retrieveErrorsByCode(int code) async {
-  final List&lt;SystemErrorModel&gt; errors = [];
+  final errors = &lt;SystemErrorModel&gt;[];
 
   try {
-    final String keyCode = &#39;${code}_error&#39;;
+    final keyCode = &#39;${code}_error&#39;;
     final cacheKey = _fileStorageOptions[keyCode];
     if (cacheKey != null) {
       final result = await fetchDataFromFile(cacheKey);
@@ -79,7 +79,7 @@
         case ResultSuccess(result: final dataString):
           final jsonData = jsonDecode(dataString);
           if (jsonData != null &amp;&amp; jsonData is Map) {
-            final Map&lt;String, dynamic&gt; dataMap = Map.from(jsonData);
+            final dataMap = Map&lt;String, dynamic&gt;.from(jsonData);
             final errorModel = SystemErrorModel.fromJson(dataMap);
             errors.add(errorModel);
           }

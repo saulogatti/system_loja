@@ -73,11 +73,9 @@ Retorna true se a atualização foi bem-sucedida, false caso contrário.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; updateInvoice(Invoice invoice) {
-  return update(
+  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; updateInvoice(Invoice invoice) =&gt; update(
     invoicesRecords,
-  ).replace(invoice.toCompanion(forUpdate: true));
-}</code></pre>
+  ).replace(invoice.toCompanion(forUpdate: true));</code></pre>
 </section>
 
 

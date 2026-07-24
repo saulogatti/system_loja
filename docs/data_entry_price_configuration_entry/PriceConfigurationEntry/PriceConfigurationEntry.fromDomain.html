@@ -65,8 +65,7 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory PriceConfigurationEntry.fromDomain(
   PriceConfiguration priceConfiguration,
-) {
-  return PriceConfigurationEntry(
+) =&gt; PriceConfigurationEntry(
     types: priceConfiguration.types,
     measurementUnits: priceConfiguration.measurementUnits,
     reportConfiguration: priceConfiguration.reportConfiguration != null
@@ -77,8 +76,7 @@
     id: priceConfiguration.id,
     registrationDate: priceConfiguration.registrationDate,
     lastUpdatedDate: priceConfiguration.lastUpdatedDate,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

@@ -84,7 +84,7 @@ Erros são registrados via <code>logError</code>.</p>
   <pre class="language-dart"><code class="language-dart">@protected
 Future&lt;bool&gt; deleteFile(String fileName) async {
   try {
-    final File file = await _mountFileSystem(fileName);
+    final file = await _mountFileSystem(fileName);
     if (await file.exists()) {
       await file.delete();
       return true;

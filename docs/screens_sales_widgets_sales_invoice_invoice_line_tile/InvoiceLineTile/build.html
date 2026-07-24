@@ -113,8 +113,13 @@ Widget build(BuildContext context) {
   return Card(
     margin: const EdgeInsets.only(bottom: 8),
     child: ListTile(
-      title: Text(product.name),
-      subtitle: Text(&#39;${entry.quantity}x R\$ ${product.price.toStringAsFixed(2)}&#39;),
+      title: Semantics(
+        label: &#39;${product.name}, ${entry.quantity} vezes R\$ ${product.price.toStringAsFixed(2)}&#39;,
+        child: Text(product.name),
+      ),
+      subtitle: ExcludeSemantics(
+        child: Text(&#39;${entry.quantity}x R\$ ${product.price.toStringAsFixed(2)}&#39;),
+      ),
       trailing: IconButton(
         tooltip: &#39;Remover ${product.name}&#39;,
         icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),

@@ -66,14 +66,12 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">factory ProductException.notFound(String code) {
-  return ProductException(
+  <pre class="language-dart"><code class="language-dart">factory ProductException.notFound(String code) =&gt; ProductException(
     type: ProductErrorType.notFound,
     message: &#39;Produto não encontrado&#39;,
     details: &#39;Não foi possível encontrar um produto com o código &quot;$code&quot;.&#39;,
     productCode: code,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

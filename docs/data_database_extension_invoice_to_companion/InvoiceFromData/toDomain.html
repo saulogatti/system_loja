@@ -72,8 +72,7 @@ usando <code>InvoiceItemDao.getByInvoiceId()</code>.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Invoice toDomain(List&lt;InvoiceItem&gt; items) {
-  return Invoice(
+  <pre class="language-dart"><code class="language-dart">Invoice toDomain(List&lt;InvoiceItem&gt; items) =&gt; Invoice(
     id: id,
     data: InvoiceData(
       invoiceNumber: invoiceNumber,
@@ -90,8 +89,7 @@ usando <code>InvoiceItemDao.getByInvoiceId()</code>.</p>
     ),
     registrationDate: registrationDate,
     lastUpdatedDate: lastUpdatedDate,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

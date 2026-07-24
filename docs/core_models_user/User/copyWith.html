@@ -80,16 +80,14 @@ alterada automaticamente — atualize-a explicitamente se necessário.</p>
   String? email,
   String? passwordHash,
   int? permission,
-}) {
-  return User(
+}) =&gt; User(
     name: name ?? this.name,
     email: email ?? this.email,
     passwordHash: passwordHash ?? this.passwordHash,
     permission: permission ?? this.permission,
     registrationDate: registrationDate,
     lastUpdatedDate: lastUpdatedDate,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

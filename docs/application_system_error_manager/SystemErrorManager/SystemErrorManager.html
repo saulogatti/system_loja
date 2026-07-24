@@ -63,11 +63,11 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">SystemErrorManager() {
-  FlutterError.onError = (FlutterErrorDetails details) {
-    reportError(details.exception, details.stack ?? StackTrace.current);
+  FlutterError.onError = (details) async {
+    await reportError(details.exception, details.stack ?? StackTrace.current);
   };
-  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    reportError(error, stack);
+  PlatformDispatcher.instance.onError = (error, stack) {
+    unawaited(reportError(error, stack));
     return true;
   };
 }</code></pre>

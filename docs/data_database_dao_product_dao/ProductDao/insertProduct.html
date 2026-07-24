@@ -72,8 +72,7 @@ Retorna o ID gerado automaticamente, ou 0 em caso de conflito.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; insertProduct(Product data) {
-  return into(productsRecords).insert(
+  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; insertProduct(Product data) =&gt; into(productsRecords).insert(
     ProductsRecordsCompanion.insert(
       code: data.code,
       categoryId: Value(data.categoryId),
@@ -84,8 +83,7 @@ Retorna o ID gerado automaticamente, ou 0 em caso de conflito.</p>
     ),
     mode: InsertMode.insertOrAbort,
     onConflict: DoNothing(),
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

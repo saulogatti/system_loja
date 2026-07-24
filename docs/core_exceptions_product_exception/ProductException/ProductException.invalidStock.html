@@ -67,16 +67,14 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">factory ProductException.invalidStock(String code, int stock) {
-  return ProductException(
+  <pre class="language-dart"><code class="language-dart">factory ProductException.invalidStock(String code, int stock) =&gt; ProductException(
     type: ProductErrorType.invalidStock,
     message: &#39;Estoque inválido&#39;,
     details:
         &#39;O estoque $stock não é válido. &#39;
         &#39;O estoque deve ser maior ou igual a zero.&#39;,
     productCode: code,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

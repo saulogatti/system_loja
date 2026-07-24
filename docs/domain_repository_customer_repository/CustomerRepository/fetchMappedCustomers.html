@@ -82,7 +82,7 @@ fetchMappedCustomers() async {
     final data = await _customerDao.getAll();
     final customers = data;
     final mappedCustomers = {
-      for (var customer in customers) customer.id: customer,
+      for (final customer in customers) customer.id: customer,
     };
     return ResultStatus.success(mappedCustomers);
   } on CustomerException catch (e) {

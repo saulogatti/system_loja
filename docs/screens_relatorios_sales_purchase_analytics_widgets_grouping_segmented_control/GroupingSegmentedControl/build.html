@@ -108,29 +108,25 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return SegmentedButton&lt;SalesPurchaseGrouping&gt;(
-    segments: const [
-      ButtonSegment(
-        value: SalesPurchaseGrouping.byDate,
-        label: Text(&#39;Por Data&#39;),
-        icon: Icon(Icons.calendar_today),
-      ),
-      ButtonSegment(
-        value: SalesPurchaseGrouping.byProduct,
-        label: Text(&#39;Por Produto&#39;),
-        icon: Icon(Icons.inventory_2),
-      ),
-    ],
-    selected: {current},
-    onSelectionChanged: (selection) {
-      final selected = selection.first;
-      context.read&lt;SalesPurchaseAnalyticsBloc&gt;().add(
-        ChangeSalesPurchaseGrouping(selected),
-      );
-    },
-  );
-}</code></pre>
+Widget build(BuildContext context) =&gt; SegmentedButton&lt;SalesPurchaseGrouping&gt;(
+  segments: const [
+    ButtonSegment(
+      value: SalesPurchaseGrouping.byDate,
+      label: Text(&#39;Por Data&#39;),
+      icon: Icon(Icons.calendar_today),
+    ),
+    ButtonSegment(
+      value: SalesPurchaseGrouping.byProduct,
+      label: Text(&#39;Por Produto&#39;),
+      icon: Icon(Icons.inventory_2),
+    ),
+  ],
+  selected: {current},
+  onSelectionChanged: (selection) {
+    final selected = selection.first;
+    context.read&lt;SalesPurchaseAnalyticsBloc&gt;().add(ChangeSalesPurchaseGrouping(selected));
+  },
+);</code></pre>
 </section>
 
 

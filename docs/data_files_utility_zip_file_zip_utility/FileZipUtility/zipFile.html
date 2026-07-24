@@ -70,7 +70,7 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">static Future&lt;void&gt; zipFile(String path, String fileName) async {
   if (!await File(path).exists()) {
-    throw CacheException(&#39;File does not exist&#39;);
+    throw const CacheException(&#39;File does not exist&#39;);
   }
   final zip = ZipFileEncoder();
   zip.create(fileName);

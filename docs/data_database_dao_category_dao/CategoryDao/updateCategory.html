@@ -76,11 +76,7 @@ Retorna true se a categoria foi atualizada com sucesso.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; updateCategory({
-  required int id,
-  required String name,
-  String? description,
-}) {
+  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; updateCategory({required int id, required String name, String? description}) {
   assert(id &gt; 0, &#39;ID da categoria deve ser maior que zero&#39;);
   return update(categoriesRecords).replace(
     CategoriesRecordsCompanion(

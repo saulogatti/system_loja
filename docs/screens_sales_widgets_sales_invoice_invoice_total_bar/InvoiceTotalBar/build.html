@@ -110,28 +110,26 @@ and</li>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
   final scheme = Theme.of(context).colorScheme;
-  return Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: scheme.primary.withAlpha(25),
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text(
-          &#39;Valor Total:&#39;,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          &#39;R\$ ${total.toStringAsFixed(2)}&#39;,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: scheme.primary,
+  return Semantics(
+    container: true,
+    excludeSemantics: true,
+    label: &#39;Valor Total: R\$ ${total.toStringAsFixed(2)}&#39;,
+    child: Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: scheme.primary.withAlpha(25),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(&#39;Valor Total:&#39;, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(
+            &#39;R\$ ${total.toStringAsFixed(2)}&#39;,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: scheme.primary),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }</code></pre>

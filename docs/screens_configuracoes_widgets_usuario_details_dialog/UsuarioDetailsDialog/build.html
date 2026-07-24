@@ -108,8 +108,7 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return AlertDialog(
+Widget build(BuildContext context) =&gt; AlertDialog(
     title: Text(usuario.name),
     content: SingleChildScrollView(
       child: Column(
@@ -139,8 +138,7 @@ Widget build(BuildContext context) {
       ),
     ),
     actions: [TextButton(onPressed: () =&gt; context.router.maybePop(), child: const Text(&#39;Fechar&#39;))],
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

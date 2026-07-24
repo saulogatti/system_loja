@@ -94,12 +94,12 @@ Future&lt;ResultStatus&lt;String, String&gt;&gt; fetchDataFromFile(String fileNa
     );
   }
 
-  final File file = await _mountFileSystem(fileName);
+  final file = await _mountFileSystem(fileName);
   if (!await file.exists()) {
     return ResultStatus.error(&#39;Arquivo $fileName não encontrado.&#39;);
   }
   try {
-    final String content = await file.readAsString();
+    final content = await file.readAsString();
 
     return ResultStatus.success(content);
   } catch (e, stackTrace) {

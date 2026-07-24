@@ -70,10 +70,7 @@
   final form = state.form;
   final next = !form.enableCodeGeneration;
   _emitEditing(
-    form.copyWith(
-      enableCodeGeneration: next,
-      invoiceNumber: next ? kStringGenerate : &#39;&#39;,
-    ),
+    form.copyWith(enableCodeGeneration: next, invoiceNumber: next ? kStringGenerate : &#39;&#39;),
   );
 }</code></pre>
 </section>

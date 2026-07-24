@@ -64,7 +64,7 @@
         <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-      <span class="returntype"><a href="https://pub.dev/documentation/drift/2.34.0/drift/MigrationStrategy-class.html">MigrationStrategy</a></span>
+      <span class="returntype"><a href="https://pub.dev/documentation/drift/2.34.2/drift/MigrationStrategy-class.html">MigrationStrategy</a></span>
       get
       <span class="name ">migration</span>
       <div class="features"><span class="feature">override</span></div>
@@ -84,8 +84,8 @@ the new tables or change the columns.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 MigrationStrategy get migration =&gt; MigrationStrategy(
-  onCreate: (Migrator m) =&gt; m.createAll(),
-  onUpgrade: (Migrator m, int from, int to) async {
+  onCreate: (m) =&gt; m.createAll(),
+  onUpgrade: (m, from, to) async {
     if (from &lt; 3) {
       &#47;&#47; Criar tabela de categorias
       await m.createTable(categoriesRecords);

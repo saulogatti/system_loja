@@ -63,8 +63,7 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">factory UserEntry.fromUser(User user) {
-  return UserEntry(
+  <pre class="language-dart"><code class="language-dart">factory UserEntry.fromUser(User user) =&gt; UserEntry(
     id: user.id,
     name: user.name,
     passwordHash: user.passwordHash,
@@ -72,8 +71,7 @@
     email: user.email,
     permission: user.permission,
     lastUpdatedDate: user.lastUpdatedDate,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

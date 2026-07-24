@@ -81,7 +81,7 @@ Future&lt;ResultStatus&lt;Map&lt;int, Company&gt;, String&gt;&gt; fetchMappedCom
     final data = await dao.getAll();
     final companies = data;
     final mappedCompanies = {
-      for (var company in companies) company.id: company,
+      for (final company in companies) company.id: company,
     };
     return ResultStatus.success(mappedCompanies);
   } catch (e, stackTrace) {

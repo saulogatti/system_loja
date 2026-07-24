@@ -72,11 +72,9 @@ Retorna o ID gerado automaticamente.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; addCustomer(Customer customer) {
-  return into(
+  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; addCustomer(Customer customer) =&gt; into(
     customerRecords,
-  ).insert(customer.toCompanion(), mode: InsertMode.insertOrAbort);
-}</code></pre>
+  ).insert(customer.toCompanion(), mode: InsertMode.insertOrAbort);</code></pre>
 </section>
 
 

@@ -68,13 +68,13 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; atualizarUsuario({required User usuarioAtualizado}) async {
-  final ResultStatus&lt;bool, String&gt; resultAdd = await _userRepository.updateUser(usuarioAtualizado);
+  final resultAdd = await _userRepository.updateUser(usuarioAtualizado);
   resultAdd.when(
     onSuccess: (sucesso) {
       if (sucesso) {
-        emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, false));
+        emit(UsuarioState.usuarioAdicionado(usuarioAtualizado, novoUsuario: false));
       } else {
-        emit(UsuarioState.loadFailure(errorMessage: &#39;Falha ao atualizar usuário.&#39;));
+        emit(const UsuarioState.loadFailure(errorMessage: &#39;Falha ao atualizar usuário.&#39;));
       }
     },
     onError: (resultError) {

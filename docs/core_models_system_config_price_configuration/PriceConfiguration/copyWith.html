@@ -73,16 +73,14 @@
   List&lt;PaymentMethodType&gt;? types,
   List&lt;String&gt;? measurementUnits,
   ReportConfiguration? reportConfiguration,
-}) {
-  return PriceConfiguration(
+}) =&gt; PriceConfiguration(
     types: types ?? this.types,
     measurementUnits: measurementUnits ?? this.measurementUnits,
     reportConfiguration: reportConfiguration ?? this.reportConfiguration,
     id: id,
     lastUpdatedDate: lastUpdatedDate,
     registrationDate: registrationDate,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

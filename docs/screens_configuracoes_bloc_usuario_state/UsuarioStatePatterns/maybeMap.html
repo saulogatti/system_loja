@@ -70,9 +70,9 @@
 </ol>)?, </span></li>
 <li><span class="parameter" id="maybeMap-param-senhaInvalida"><span class="type-annotation">TResult</span> <span class="parameter-name">senhaInvalida</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">UsuarioStateSenhaInvalida</span> <span class="parameter-name">value</span></span></li>
 </ol>)?, </span></li>
-<li><span class="parameter" id="maybeMap-param-usuarioRemovido"><span class="type-annotation">TResult</span> <span class="parameter-name">usuarioRemovido</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">UsuarioStateUsuarioRemovido</span> <span class="parameter-name">value</span></span></li>
-</ol>)?, </span></li>
 <li><span class="parameter" id="maybeMap-param-usuarioAdicionado"><span class="type-annotation">TResult</span> <span class="parameter-name">usuarioAdicionado</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">UsuarioStateUsuarioAdicionado</span> <span class="parameter-name">value</span></span></li>
+</ol>)?, </span></li>
+<li><span class="parameter" id="maybeMap-param-usuarioRemovido"><span class="type-annotation">TResult</span> <span class="parameter-name">usuarioRemovido</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-value"><span class="type-annotation">UsuarioStateUsuarioRemovido</span> <span class="parameter-name">value</span></span></li>
 </ol>)?, </span></li>
 <li><span class="parameter" id="maybeMap-param-orElse"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">orElse</span>(), </span></li>
 </ol>})
@@ -97,7 +97,7 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult maybeMap&lt;TResult extends Object?&gt;({TResult Function( UsuarioStateInitial value)?  initial,TResult Function( UsuarioStateLoadFailure value)?  loadFailure,TResult Function( UsuarioStateLoading value)?  loading,TResult Function( UsuarioStateLoadSuccess value)?  loadSuccess,TResult Function( UsuarioStateSenhaInvalida value)?  senhaInvalida,TResult Function( UsuarioStateUsuarioRemovido value)?  usuarioRemovido,TResult Function( UsuarioStateUsuarioAdicionado value)?  usuarioAdicionado,required TResult orElse(),}){
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult maybeMap&lt;TResult extends Object?&gt;({TResult Function( UsuarioStateInitial value)?  initial,TResult Function( UsuarioStateLoadFailure value)?  loadFailure,TResult Function( UsuarioStateLoading value)?  loading,TResult Function( UsuarioStateLoadSuccess value)?  loadSuccess,TResult Function( UsuarioStateSenhaInvalida value)?  senhaInvalida,TResult Function( UsuarioStateUsuarioAdicionado value)?  usuarioAdicionado,TResult Function( UsuarioStateUsuarioRemovido value)?  usuarioRemovido,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case UsuarioStateInitial() when initial != null:
@@ -105,9 +105,9 @@ return initial(_that);case UsuarioStateLoadFailure() when loadFailure != null:
 return loadFailure(_that);case UsuarioStateLoading() when loading != null:
 return loading(_that);case UsuarioStateLoadSuccess() when loadSuccess != null:
 return loadSuccess(_that);case UsuarioStateSenhaInvalida() when senhaInvalida != null:
-return senhaInvalida(_that);case UsuarioStateUsuarioRemovido() when usuarioRemovido != null:
-return usuarioRemovido(_that);case UsuarioStateUsuarioAdicionado() when usuarioAdicionado != null:
-return usuarioAdicionado(_that);case _:
+return senhaInvalida(_that);case UsuarioStateUsuarioAdicionado() when usuarioAdicionado != null:
+return usuarioAdicionado(_that);case UsuarioStateUsuarioRemovido() when usuarioRemovido != null:
+return usuarioRemovido(_that);case _:
   return orElse();
 
 }

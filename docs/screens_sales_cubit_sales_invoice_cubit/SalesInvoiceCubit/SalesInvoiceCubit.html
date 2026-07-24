@@ -71,9 +71,7 @@
      super(
        SalesInvoiceState.editing(
          form: SalesInvoiceFormData(
-           paymentMethod: paymentMethods.isEmpty
-               ? null
-               : paymentMethods.first,
+           paymentMethod: paymentMethods.isEmpty ? null : paymentMethods.first,
          ),
        ),
      );</code></pre>

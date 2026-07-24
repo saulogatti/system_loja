@@ -71,7 +71,7 @@
   <pre class="language-dart"><code class="language-dart">static Future&lt;void&gt; unzipFile(String path, Directory directory) async {
   final input = InputFileStream(path);
   final zip = ZipDecoder().decodeStream(input);
-  for (var entry in zip) {
+  for (final entry in zip) {
     final fileName = entry.name;
     if (entry.isFile) {
       final output = OutputFileStream(p.join(directory.path, fileName));

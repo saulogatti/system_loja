@@ -74,7 +74,7 @@
       if (sucesso) {
         emit(UsuarioState.usuarioRemovido(id));
       } else {
-        emit(UsuarioState.loadFailure(errorMessage: &#39;Falha ao remover usuário.&#39;));
+        emit(const UsuarioState.loadFailure(errorMessage: &#39;Falha ao remover usuário.&#39;));
       }
     },
     onError: (message) {

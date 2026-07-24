@@ -55,9 +55,9 @@
     <section class="multi-line-signature">
       
 <span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
-<span class="name ">registerSale</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="registerSale-param-invoiceData"><span class="type-annotation"><a href="../../core_models_invoice/InvoiceData-class.html">InvoiceData</a></span> <span class="parameter-name">invoiceData</span>, </span></li>
-<li><span class="parameter" id="registerSale-param-enableCodeGeneration"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">enableCodeGeneration</span></span></li>
-</ol>)
+<span class="name ">registerSale</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="registerSale-param-invoiceData"><span class="type-annotation"><a href="../../core_models_invoice/InvoiceData-class.html">InvoiceData</a></span> <span class="parameter-name">invoiceData</span>, {</span></li>
+<li><span class="parameter" id="registerSale-param-enableCodeGeneration"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">enableCodeGeneration</span> = <span class="default-value">false</span>, </span></li>
+</ol>})
 
       
 
@@ -73,15 +73,11 @@ e salva no banco de dados.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; registerSale(
-  InvoiceData invoiceData,
-  bool enableCodeGeneration,
-) async {
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; registerSale(InvoiceData invoiceData, {bool enableCodeGeneration = false}) async {
   emit(SalesState.loading());
 
   if (enableCodeGeneration) {
-    final invoiceNumberResult = await _salesRepository
-        .generateInvoiceNumber();
+    final invoiceNumberResult = await _salesRepository.generateInvoiceNumber();
     switch (invoiceNumberResult) {
       case ResultSuccess(result: final invoiceNumber):
         invoiceData.invoiceNumber = invoiceNumber;

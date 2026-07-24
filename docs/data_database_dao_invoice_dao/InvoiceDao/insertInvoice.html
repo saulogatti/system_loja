@@ -73,11 +73,9 @@ Retorna o ID gerado automaticamente.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; insertInvoice(Invoice invoice) {
-  return into(
+  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; insertInvoice(Invoice invoice) =&gt; into(
     invoicesRecords,
-  ).insert(invoice.toCompanion(), mode: InsertMode.insertOrAbort);
-}</code></pre>
+  ).insert(invoice.toCompanion(), mode: InsertMode.insertOrAbort);</code></pre>
 </section>
 
 

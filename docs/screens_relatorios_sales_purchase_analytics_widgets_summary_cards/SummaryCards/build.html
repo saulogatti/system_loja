@@ -108,41 +108,39 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return Row(
-    children: [
-      Expanded(
-        child: _SummaryCard(
-          title: &#39;Vendas&#39;,
-          value: state.totalSales,
-          color: Colors.green,
-          icon: Icons.trending_up,
-          suffix: &#39;R\$&#39;,
-        ),
+Widget build(BuildContext context) =&gt; Row(
+  children: [
+    Expanded(
+      child: _SummaryCard(
+        title: &#39;Vendas&#39;,
+        value: state.totalSales,
+        color: Colors.green,
+        icon: Icons.trending_up,
+        suffix: r&#39;R$&#39;,
       ),
-      const SizedBox(width: 10),
-      Expanded(
-        child: _SummaryCard(
-          title: &#39;Compras&#39;,
-          value: state.totalPurchases,
-          color: Colors.orange,
-          icon: Icons.shopping_cart,
-          suffix: &#39;R\$&#39;,
-        ),
+    ),
+    const SizedBox(width: 10),
+    Expanded(
+      child: _SummaryCard(
+        title: &#39;Compras&#39;,
+        value: state.totalPurchases,
+        color: Colors.orange,
+        icon: Icons.shopping_cart,
+        suffix: r&#39;R$&#39;,
       ),
-      const SizedBox(width: 10),
-      Expanded(
-        child: _SummaryCard(
-          title: &#39;Produtos&#39;,
-          value: state.totalProducts.toDouble(),
-          color: Theme.of(context).colorScheme.primary,
-          icon: Icons.inventory,
-          suffix: &#39;&#39;,
-        ),
+    ),
+    const SizedBox(width: 10),
+    Expanded(
+      child: _SummaryCard(
+        title: &#39;Produtos&#39;,
+        value: state.totalProducts.toDouble(),
+        color: Theme.of(context).colorScheme.primary,
+        icon: Icons.inventory,
+        suffix: &#39;&#39;,
       ),
-    ],
-  );
-}</code></pre>
+    ),
+  ],
+);</code></pre>
 </section>
 
 

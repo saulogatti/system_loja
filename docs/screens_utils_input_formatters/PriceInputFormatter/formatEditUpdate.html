@@ -87,8 +87,7 @@ TextEditingValue formatEditUpdate(
 ) {
   if (oldValue.text.length &gt; newValue.text.length || newValue.text.isEmpty) {
     &#47;&#47;Se o usuário está apagando e o campo está vazio, retorna vazio
-    return TextEditingValue(
-      text: &#39;&#39;,
+    return const TextEditingValue(
       selection: TextSelection.collapsed(offset: 0),
     );
   }

@@ -65,8 +65,7 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">factory SystemConfigurationEntry.fromSystemConfiguration(
   SystemConfiguration systemConfiguration,
-) {
-  return SystemConfigurationEntry(
+) =&gt; SystemConfigurationEntry(
     id: systemConfiguration.id,
     priceConfiguration: systemConfiguration.priceConfiguration,
     systemUserData: SystemUserDataEntry.fromSystemUserData(
@@ -74,8 +73,7 @@
     ),
     registrationDate: systemConfiguration.registrationDate,
     lastUpdatedDate: systemConfiguration.lastUpdatedDate,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

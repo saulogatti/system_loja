@@ -108,14 +108,12 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return BlocProvider(
+Widget build(BuildContext context) =&gt; BlocProvider(
     create: (_) =&gt; SalesPurchaseAnalyticsBloc(
       analyticsRepository: appInjection.get&lt;IAnalyticsRepository&gt;(),
     )..add(const LoadSalesPurchaseAnalytics()),
     child: const SalesPurchaseAnalyticsView(),
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

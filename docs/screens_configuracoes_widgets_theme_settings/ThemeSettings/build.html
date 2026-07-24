@@ -108,54 +108,46 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return Card(
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.palette,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(width: 8),
-              const Text(
-                &#39;Aparência&#39;,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          const Divider(),
-          SwitchListTile(
-            title: const Text(&#39;Tema escuro&#39;),
-            subtitle: const Text(&#39;Ativar modo escuro&#39;),
-            value: config.temaEscuro,
-            onChanged: (value) {
-              onConfigChanged(config.copyWith(temaEscuro: value));
-            },
-          ),
-          ListTile(
-            title: const Text(&#39;Cor primária&#39;),
-            subtitle: const Text(&#39;Cor principal do aplicativo&#39;),
-            trailing: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: config.corPrimaria.color,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey),
-              ),
+Widget build(BuildContext context) =&gt; Card(
+  child: Padding(
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.palette, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 8),
+            const Text(&#39;Aparência&#39;, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          ],
+        ),
+        const Divider(),
+        SwitchListTile(
+          title: const Text(&#39;Tema escuro&#39;),
+          subtitle: const Text(&#39;Ativar modo escuro&#39;),
+          value: config.temaEscuro,
+          onChanged: (value) {
+            onConfigChanged(config.copyWith(temaEscuro: value));
+          },
+        ),
+        ListTile(
+          title: const Text(&#39;Cor primária&#39;),
+          subtitle: const Text(&#39;Cor principal do aplicativo&#39;),
+          trailing: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: config.corPrimaria.color,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
             ),
-            onTap: onMostrarSeletorCor,
           ),
-        ],
-      ),
+          onTap: onMostrarSeletorCor,
+        ),
+      ],
     ),
-  );
-}</code></pre>
+  ),
+);</code></pre>
 </section>
 
 

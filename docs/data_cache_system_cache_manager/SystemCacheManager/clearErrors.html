@@ -72,7 +72,7 @@
     logInfo(&#39;No errors to clear from cache.&#39;);
     return;
   }
-  for (var cacheKey in _fileStorageOptions.values) {
+  for (final cacheKey in _fileStorageOptions.values) {
     await deleteFile(cacheKey);
   }
   _fileStorageOptions.clear();

@@ -74,18 +74,11 @@ Retorna o ID da categoria criada.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; insertCategory({
-  required String name,
-  String? description,
-}) {
-  return into(categoriesRecords).insert(
-    CategoriesRecordsCompanion.insert(
-      name: name,
-      description: Value(description),
-    ),
-    mode: InsertMode.insertOrAbort,
-  );
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; insertCategory({required String name, String? description}) =&gt;
+    into(categoriesRecords).insert(
+      CategoriesRecordsCompanion.insert(name: name, description: Value(description)),
+      mode: InsertMode.insertOrAbort,
+    );</code></pre>
 </section>
 
 

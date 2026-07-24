@@ -72,11 +72,9 @@ Retorna o ID do registro inserido.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; save(ActivityLog log) {
-  return into(
+  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; save(ActivityLog log) =&gt; into(
     logsRecords,
-  ).insert(log.toCompanion(), mode: InsertMode.insertOrIgnore);
-}</code></pre>
+  ).insert(log.toCompanion(), mode: InsertMode.insertOrIgnore);</code></pre>
 </section>
 
 

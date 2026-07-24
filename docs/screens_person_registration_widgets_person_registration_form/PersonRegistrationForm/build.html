@@ -120,7 +120,9 @@ Widget build(BuildContext context) {
       children: [
         Text(
           &#39;Cadastro de Pessoa&#39;,
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 20),
         SegmentedButton&lt;PersonType&gt;(
@@ -129,11 +131,7 @@ Widget build(BuildContext context) {
                 (type) =&gt; ButtonSegment&lt;PersonType&gt;(
                   value: type,
                   label: Text(type.displayName),
-                  icon: Icon(
-                    type == PersonType.individual
-                        ? Icons.person
-                        : Icons.business,
-                  ),
+                  icon: Icon(type == PersonType.individual ? Icons.person : Icons.business),
                 ),
               )
               .toList(),
@@ -146,16 +144,15 @@ Widget build(BuildContext context) {
         TextFormField(
           controller: nameController,
           keyboardType: TextInputType.name,
+          textCapitalization: TextCapitalization.words,
           autofillHints: [
             switch (selectedPersonType) {
               PersonType.individual =&gt; AutofillHints.name,
               _ =&gt; AutofillHints.organizationName,
-            }
+            },
           ],
           textInputAction: TextInputAction.next,
-          decoration: InputDecoration(
-            labelText: &#39;${selectedPersonType.nameLabel} *&#39;,
-          ),
+          decoration: InputDecoration(labelText: &#39;${selectedPersonType.nameLabel} *&#39;),
           validator: (value) =&gt; combineValidators([
             (v) =&gt; validateRequired(v, selectedPersonType.nameLabel),
             (v) =&gt; validateMinLength(v, 3, selectedPersonType.nameLabel),
@@ -167,6 +164,8 @@ Widget build(BuildContext context) {
           controller: documentController,
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.next,
+          autocorrect: false,
+          enableSuggestions: false,
           decoration: InputDecoration(
             labelText: &#39;$documentLabel *&#39;,
             border: const OutlineInputBorder(),
@@ -174,16 +173,12 @@ Widget build(BuildContext context) {
             hintText: isIndividual ? &#39;000.000.000-00&#39; : &#39;00.000.000&#47;0000-00&#39;,
           ),
           inputFormatters: _documentInputFormatters(selectedPersonType),
-          validator: (value) =&gt;
-              selectedPersonType.validateDocument(value: value),
+          validator: (value) =&gt; selectedPersonType.validateDocument(value: value),
         ),
         const SizedBox(height: 16),
         TextFormFieldEmail(emailController: emailController, isEditing: true),
         const SizedBox(height: 16),
-        TextFormFieldPhone(
-          telefoneController: phoneController,
-          isEditing: true,
-        ),
+        TextFormFieldPhone(telefoneController: phoneController, isEditing: true),
         const SizedBox(height: 16),
         AddressForm(
           streetController: streetController,

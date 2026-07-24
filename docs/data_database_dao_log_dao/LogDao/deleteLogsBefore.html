@@ -71,12 +71,10 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; deleteLogsBefore(DateTime dataLimite) {
-  return (delete(logsRecords)
+  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; deleteLogsBefore(DateTime dataLimite) =&gt; (delete(logsRecords)
         ..where((tbl) =&gt; tbl.timestamp.isSmallerThanValue(dataLimite)))
       .go()
-      .then((rowsAffected) =&gt; rowsAffected &gt; 0);
-}</code></pre>
+      .then((rowsAffected) =&gt; rowsAffected &gt; 0);</code></pre>
 </section>
 
 

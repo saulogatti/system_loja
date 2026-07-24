@@ -108,21 +108,21 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return TextFormField(
-    controller: cpfController,
-    decoration: const InputDecoration(
-      labelText: &#39;CPF&#39;,
-      border: OutlineInputBorder(),
-      prefixIcon: Icon(Icons.badge),
-    ),
-    enabled: enable, &#47;&#47; CPF cannot be changed
-    keyboardType: TextInputType.number,
-    textInputAction: TextInputAction.next,
-    inputFormatters: [CpfTextInputFormatter()],
-    validator: validatorOptions,
-  );
-}</code></pre>
+Widget build(BuildContext context) =&gt; TextFormField(
+  controller: cpfController,
+  decoration: const InputDecoration(
+    labelText: &#39;CPF&#39;,
+    border: OutlineInputBorder(),
+    prefixIcon: Icon(Icons.badge),
+  ),
+  enabled: enable, &#47;&#47; CPF cannot be changed
+  keyboardType: TextInputType.number,
+  textInputAction: TextInputAction.next,
+  autocorrect: false,
+  enableSuggestions: false,
+  inputFormatters: [CpfTextInputFormatter()],
+  validator: validatorOptions,
+);</code></pre>
 </section>
 
 

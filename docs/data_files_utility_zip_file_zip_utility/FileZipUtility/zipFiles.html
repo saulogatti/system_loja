@@ -71,7 +71,7 @@
   <pre class="language-dart"><code class="language-dart">static Future&lt;void&gt; zipFiles(List&lt;File&gt; files, String fileName) async {
   final zip = ZipFileEncoder();
   zip.create(fileName);
-  for (var file in files) {
+  for (final file in files) {
     await zip.addFile(file);
   }
   await zip.close();

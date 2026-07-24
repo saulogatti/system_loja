@@ -66,12 +66,10 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">List&lt;InvoiceLineEntry&gt; buildOrderedLines() {
-  return orderedProductIds
+  <pre class="language-dart"><code class="language-dart">List&lt;InvoiceLineEntry&gt; buildOrderedLines() =&gt; orderedProductIds
       .map((id) =&gt; linesByProductId[id])
       .whereType&lt;InvoiceLineEntry&gt;()
-      .toList(growable: false);
-}</code></pre>
+      .toList(growable: false);</code></pre>
 </section>
 
 

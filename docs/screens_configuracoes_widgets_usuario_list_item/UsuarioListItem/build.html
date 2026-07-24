@@ -109,6 +109,16 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
+  final permissionName = AuthorizationLevel.values
+      .firstWhere(
+        (level) =&gt; level.value == usuario.permission,
+        orElse: () =&gt; AuthorizationLevel.usuarioComum,
+      )
+      .toDisplayName();
+  final semanticLabel = usuario.email != null &amp;&amp; usuario.email!.isNotEmpty
+      ? &#39;${usuario.name}, ${usuario.email}, $permissionName&#39;
+      : &#39;${usuario.name}, $permissionName&#39;;
+
   return Card(
     margin: const EdgeInsets.only(bottom: 12),
     child: ListTile(
@@ -116,22 +126,27 @@ Widget build(BuildContext context) {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       minVerticalPadding: 0,
       titleAlignment: ListTileTitleAlignment.center,
-      leading: CircleAvatar(
-        backgroundColor: switch (usuario.permission) {
-          _ when usuario.permission == AuthorizationLevel.administrador.value =&gt; Theme.of(context).colorScheme.secondary,
-          _ =&gt; Theme.of(context).colorScheme.primary,
-        },
-        child: Icon(
-          usuario.permission == AuthorizationLevel.administrador.value
-              ? Icons.admin_panel_settings
-              : Icons.person,
-          color: Colors.white,
+      leading: ExcludeSemantics(
+        child: CircleAvatar(
+          backgroundColor: switch (usuario.permission) {
+            _ when usuario.permission == AuthorizationLevel.administrador.value =&gt; Theme.of(
+              context,
+            ).colorScheme.secondary,
+            _ =&gt; Theme.of(context).colorScheme.primary,
+          },
+          child: Icon(
+            usuario.permission == AuthorizationLevel.administrador.value
+                ? Icons.admin_panel_settings
+                : Icons.person,
+            color: Colors.white,
+          ),
         ),
       ),
-      title: Text(usuario.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-      subtitle: Text(
-        &#39;${usuario.email}\n${AuthorizationLevel.values.firstWhere((level) =&gt; level.value == usuario.permission).toDisplayName()}&#39;,
+      title: Semantics(
+        label: semanticLabel,
+        child: Text(usuario.name, style: const TextStyle(fontWeight: FontWeight.bold)),
       ),
+      subtitle: ExcludeSemantics(child: Text(&#39;${usuario.email ?? &#39;&#39;}\n$permissionName&#39;.trim())),
       isThreeLine: true,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

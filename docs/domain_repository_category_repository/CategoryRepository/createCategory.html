@@ -91,10 +91,7 @@ Future&lt;ResultStatus&lt;int, String&gt;&gt; createCategory({
       return ResultError(&#39;Já existe uma categoria com o nome &quot;$name&quot;&#39;);
     }
 
-    final id = await _categoryDao.insertCategory(
-      name: name,
-      description: description,
-    );
+    final id = await _categoryDao.insertCategory(name: name, description: description);
     return ResultSuccess(id);
   } catch (e, stackTrace) {
     await reportError(e, stackTrace);

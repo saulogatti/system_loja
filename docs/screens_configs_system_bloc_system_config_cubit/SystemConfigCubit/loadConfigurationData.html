@@ -67,7 +67,7 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; loadConfigurationData() async {
-  emit(SystemConfigState.loading());
+  emit(const SystemConfigState.loading());
   final result = await _systemRepository.getSystemConfiguration();
   result.when(
     onSuccess: (configData) {

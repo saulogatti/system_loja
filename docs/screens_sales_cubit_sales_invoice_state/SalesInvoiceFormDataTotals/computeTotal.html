@@ -66,12 +66,10 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">double computeTotal() {
-  return linesByProductId.values.fold&lt;double&gt;(
+  <pre class="language-dart"><code class="language-dart">double computeTotal() =&gt; linesByProductId.values.fold&lt;double&gt;(
     0,
     (sum, line) =&gt; sum + line.product.price * line.quantity,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

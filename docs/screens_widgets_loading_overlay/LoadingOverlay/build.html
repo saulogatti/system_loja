@@ -109,8 +109,7 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  final indicatorColor =
-      progressIndicatorColor ?? Theme.of(context).colorScheme.primary;
+  final indicatorColor = progressIndicatorColor ?? Theme.of(context).colorScheme.primary;
   final colorAnimation = AlwaysStoppedAnimation&lt;Color&gt;(indicatorColor);
 
   return Stack(
@@ -123,14 +122,14 @@ Widget build(BuildContext context) {
       &#47;&#47; Indicador de progresso centralizado
       Center(
         child: Container(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(12.0),
+            borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.2),
-                blurRadius: 10.0,
+                blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
             ],
@@ -141,7 +140,7 @@ Widget build(BuildContext context) {
               CircularProgressIndicator(valueColor: colorAnimation),
               if (message != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
+                  padding: const EdgeInsets.only(top: 16),
                   child: Text(
                     message!,
                     style: Theme.of(context).textTheme.bodyMedium,

@@ -108,12 +108,10 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return Scaffold(
+Widget build(BuildContext context) =&gt; Scaffold(
     body:
         BlocBuilder&lt;SalesPurchaseAnalyticsBloc, SalesPurchaseAnalyticsState&gt;(
-          builder: (context, state) {
-            return switch (state) {
+          builder: (context, state) =&gt; switch (state) {
               SalesPurchaseAnalyticsInitial() ||
               SalesPurchaseAnalyticsLoading() =&gt; const Center(
                 child: CircularProgressIndicator(),
@@ -125,11 +123,9 @@ Widget build(BuildContext context) {
                 grouping: grouping,
               ),
               SalesPurchaseAnalyticsLoaded() =&gt; LoadedBody(state: state),
-            };
-          },
+            },
         ),
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

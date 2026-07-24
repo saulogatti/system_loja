@@ -84,7 +84,7 @@
     return;
   }
 
-  emit(SystemConfigState.loading());
+  emit(const SystemConfigState.loading());
   final normalizedUnits = _normalizeUnits(measurementUnits);
   final systemConfiguration = await _obterConfiguracaoAtual();
   if (systemConfiguration == null) {

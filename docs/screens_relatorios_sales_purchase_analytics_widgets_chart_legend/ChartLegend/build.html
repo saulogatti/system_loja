@@ -108,15 +108,13 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return const Row(
+Widget build(BuildContext context) =&gt; const Row(
     children: [
       _LegendItem(color: Colors.green, label: &#39;Venda&#39;),
       SizedBox(width: 16),
       _LegendItem(color: Colors.orange, label: &#39;Compra&#39;),
     ],
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

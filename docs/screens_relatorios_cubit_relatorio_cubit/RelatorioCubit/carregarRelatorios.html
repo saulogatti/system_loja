@@ -77,18 +77,16 @@
   final exitResult = await _salesRepository.loadExitInvoices();
   final productsResult = await _productRepository.fetchProducts();
 
-  Map&lt;int, String&gt; categoryNamesById = {};
-  Map&lt;int, Invoice&gt; entryInvoices = {};
-  Map&lt;int, Invoice&gt; exitInvoices = {};
-  List&lt;Product&gt; products = [];
+  var categoryNamesById = &lt;int, String&gt;{};
+  var entryInvoices = &lt;int, Invoice&gt;{};
+  var exitInvoices = &lt;int, Invoice&gt;{};
+  var products = &lt;Product&gt;[];
 
   switch (categoriesResult) {
     case ResultSuccess(result: final data):
       categoryNamesById = _toCategoryMap(data);
     case ResultError(resultError: final error):
-      emit(
-        RelatorioState.error(message: &#39;Erro ao carregar categorias: $error&#39;),
-      );
+      emit(RelatorioState.error(message: &#39;Erro ao carregar categorias: $error&#39;));
       return;
   }
 
@@ -96,11 +94,7 @@
     case ResultSuccess(result: final data):
       entryInvoices = data;
     case ResultError(resultError: final error):
-      emit(
-        RelatorioState.error(
-          message: &#39;Erro ao carregar notas de entrada: $error&#39;,
-        ),
-      );
+      emit(RelatorioState.error(message: &#39;Erro ao carregar notas de entrada: $error&#39;));
       return;
   }
 
@@ -108,11 +102,7 @@
     case ResultSuccess(result: final data):
       exitInvoices = data;
     case ResultError(resultError: final error):
-      emit(
-        RelatorioState.error(
-          message: &#39;Erro ao carregar notas de saída: $error&#39;,
-        ),
-      );
+      emit(RelatorioState.error(message: &#39;Erro ao carregar notas de saída: $error&#39;));
       return;
   }
 
@@ -120,9 +110,7 @@
     case ResultSuccess(result: final data):
       products = data;
     case ResultError(resultError: final error):
-      emit(
-        RelatorioState.error(message: &#39;Erro ao carregar produtos: $error&#39;),
-      );
+      emit(RelatorioState.error(message: &#39;Erro ao carregar produtos: $error&#39;));
       return;
   }
 
@@ -137,7 +125,6 @@
         entryInvoices: entryInvoices,
         exitInvoices: exitInvoices,
       ),
-      selectedProductDetails: null,
     ),
   );
 }</code></pre>

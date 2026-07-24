@@ -108,43 +108,58 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return AlertDialog(
-    title: const Text(&#39;Selecionar Produto&#39;),
-    content: SizedBox(
-      width: double.maxFinite,
-      child: products.isEmpty
-          ? const EmptyWidget(
-              message: &#39;Nenhum produto disponível&#39;,
-              icon: Icons.inventory_2_outlined,
-            )
-          : ListView.builder(
-              shrinkWrap: true,
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return ListTile(
+Widget build(BuildContext context) =&gt; AlertDialog(
+  title: const Text(&#39;Selecionar Produto&#39;),
+  content: SizedBox(
+    width: double.maxFinite,
+    child: products.isEmpty
+        ? const EmptyWidget(
+            message: &#39;Nenhum produto disponível&#39;,
+            icon: Icons.inventory_2_outlined,
+          )
+        : ListView.builder(
+            shrinkWrap: true,
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+
+              final Color stockColor;
+              final IconData stockIcon;
+
+              if (product.stockQuantity == 0) {
+                stockColor = Theme.of(context).colorScheme.error;
+                stockIcon = Icons.remove_shopping_cart;
+              } else if (product.stockQuantity &lt;= 5) {
+                stockColor = Theme.of(context).colorScheme.secondary;
+                stockIcon = Icons.warning_amber;
+              } else {
+                stockColor = Theme.of(context).colorScheme.primary;
+                stockIcon = Icons.add_circle_outline;
+              }
+
+              return Semantics(
+                button: true,
+                label:
+                    &#39;Adicionar produto: ${product.name}, preço: R\$ ${product.price.toStringAsFixed(2)}, estoque: ${product.stockQuantity}&#39;,
+                onTapHint: &#39;Adicionar produto à nota&#39;,
+                onTap: () =&gt; context.router.maybePop(product),
+                excludeSemantics: true,
+                child: ListTile(
                   title: Text(product.name),
                   subtitle: Text(
                     &#39;R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}&#39;,
                   ),
-                  trailing: Icon(
-                    Icons.add_circle_outline,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                  trailing: Icon(stockIcon, color: stockColor),
                   onTap: () =&gt; context.router.maybePop(product),
-                );
-              },
-            ),
-    ),
-    actions: [
-      TextButton(
-        onPressed: () =&gt; context.router.maybePop(),
-        child: const Text(&#39;Cancelar&#39;),
-      ),
-    ],
-  );
-}</code></pre>
+                ),
+              );
+            },
+          ),
+  ),
+  actions: [
+    TextButton(onPressed: () =&gt; context.router.maybePop(), child: const Text(&#39;Cancelar&#39;)),
+  ],
+);</code></pre>
 </section>
 
 

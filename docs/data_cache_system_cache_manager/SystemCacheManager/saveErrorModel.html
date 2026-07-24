@@ -63,7 +63,7 @@
     </section>
     
 <section class="desc markdown">
-  <p>Persiste um <a href="../../data_cache_models_system_model_system_error_model/SystemErrorModel-class.html">SystemErrorModel</a> já montado (ex.: vindo de <a href="../../application_system_error_manager/reportError.html">reportError</a>).</p>
+  <p>Persiste um <a href="../../data_cache_models_system_model_system_error_model/SystemErrorModel-class.html">SystemErrorModel</a> já montado (ex.: vindo de reportError).</p>
 </section>
 
 
@@ -72,7 +72,7 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; saveErrorModel(SystemErrorModel errorModel) async {
   try {
-    final String keyCode = &#39;${errorModel.code}_error&#39;;
+    final keyCode = &#39;${errorModel.code}_error&#39;;
     errorModel.cacheKey = &#39;$keyCode.json&#39;;
     _fileStorageOptions[keyCode] = errorModel.cacheKey;
     final jsonData = jsonEncode(errorModel.toJson());

@@ -86,7 +86,7 @@ TextEditingValue formatEditUpdate(
   TextEditingValue newValue,
 ) {
   &#47;&#47; Permite apenas dígitos e um ponto decimal
-  String normalizedText = newValue.text.replaceAll(
+  var normalizedText = newValue.text.replaceAll(
     Constants.decimalAllowedRegExp,
     &#39;&#39;,
   );
@@ -94,7 +94,7 @@ TextEditingValue formatEditUpdate(
   &#47;&#47; Garante que haja no máximo um ponto decimal
   final parts = normalizedText.split(&#39;.&#39;);
   if (parts.length &gt; 2) {
-    normalizedText = &#39;${parts[0]}.${parts.sublist(1).join(&#39;&#39;)}&#39;;
+    normalizedText = &#39;${parts[0]}.${parts.sublist(1).join()}&#39;;
   }
 
   return TextEditingValue(

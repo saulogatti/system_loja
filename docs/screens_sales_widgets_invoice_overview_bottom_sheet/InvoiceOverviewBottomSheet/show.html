@@ -71,16 +71,14 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static Future&lt;void&gt; show(BuildContext context, Invoice invoice) {
-  return showModalBottomSheet(
+  <pre class="language-dart"><code class="language-dart">static Future&lt;void&gt; show(BuildContext context, Invoice invoice) =&gt; showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (_) =&gt; InvoiceOverviewBottomSheet(invoice: invoice),
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

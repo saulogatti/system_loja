@@ -83,8 +83,7 @@
   bool? isMultiUserEnabled,
   List&lt;String&gt;? productCategories,
   SystemUserData? systemUserData,
-}) {
-  return SystemConfiguration(
+}) =&gt; SystemConfiguration(
     priceConfiguration: priceConfiguration ?? this.priceConfiguration,
     productCategories: productCategories ?? this.productCategories,
     systemUserData: systemUserData ?? this.systemUserData,
@@ -93,8 +92,7 @@
     isPasswordRequired: isPasswordRequired ?? this.isPasswordRequired,
     lockTimeoutMinutes: lockTimeoutMinutes ?? this.lockTimeoutMinutes,
     isMultiUserEnabled: isMultiUserEnabled ?? this.isMultiUserEnabled,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

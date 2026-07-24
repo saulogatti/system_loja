@@ -73,12 +73,10 @@ Retorna o ID gerado automaticamente.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; insertInvoiceItem(InvoiceItem item, {required int invoiceId}) {
-  return into(invoiceItemsRecords).insert(
+  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; insertInvoiceItem(InvoiceItem item, {required int invoiceId}) =&gt; into(invoiceItemsRecords).insert(
     item.toCompanion(invoiceId: invoiceId),
     mode: InsertMode.insertOrReplace,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

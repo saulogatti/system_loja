@@ -137,17 +137,14 @@ Widget build(BuildContext context) {
     ],
     child: ValueListenableBuilder(
       valueListenable: appInjection.get&lt;SettingsService&gt;().currentThemeNotifier,
-      builder: (context, value, child) {
-        return MaterialApp.router(
+      builder: (context, value, child) =&gt; MaterialApp.router(
           title: &#39;Sistema de Gerenciamento de Loja&#39;,
           theme: value,
           themeMode: appInjection.get&lt;SettingsService&gt;().temaEscuro
               ? ThemeMode.dark
               : ThemeMode.light,
           routerConfig: appInjection.get&lt;RouteApp&gt;().config(),
-          debugShowCheckedModeBanner: kDebugMode,
-        );
-      },
+        ),
     ),
   );
 }</code></pre>

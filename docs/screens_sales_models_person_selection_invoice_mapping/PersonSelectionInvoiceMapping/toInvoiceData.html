@@ -78,8 +78,7 @@
   required InvoiceType type,
   required List&lt;InvoiceItem&gt; items,
   required String paymentMethod,
-}) {
-  return switch (this) {
+}) =&gt; switch (this) {
     CustomerSelection(:final customer) =&gt; InvoiceData(
       invoiceNumber: invoiceNumber,
       type: type,
@@ -98,8 +97,7 @@
       items: items,
       paymentMethod: paymentMethod,
     ),
-  };
-}</code></pre>
+  };</code></pre>
 </section>
 
 

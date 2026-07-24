@@ -108,28 +108,22 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return AutoTabsScaffold(
-    appBarBuilder: (context, tabsRouter) {
-      return AppBar(
+Widget build(BuildContext context) =&gt; AutoTabsScaffold(
+    appBarBuilder: (context, tabsRouter) =&gt; AppBar(
         title: Text(tabsRouter.topRoute.title(context)),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        leading: AutoLeadingButton(),
-      );
-    },
+        leading: const AutoLeadingButton(),
+      ),
     routes: [
-      SalesPurchaseAnalyticsRoute(),
-      CadastroGroupRoute(),
-      SalesRoute(),
+      const SalesPurchaseAnalyticsRoute(),
+      const CadastroGroupRoute(),
+      const SalesRoute(),
       RelatoriosRoute(),
-      SettingsRoute(),
+      const SettingsRoute(),
     ],
-    transitionBuilder: (context, child, animation) {
-      return FadeTransition(opacity: animation, child: child);
-    },
+    transitionBuilder: (context, child, animation) =&gt; FadeTransition(opacity: animation, child: child),
 
-    bottomNavigationBuilder: (context, tabsRouter) {
-      return BottomNavigationBar(
+    bottomNavigationBuilder: (context, tabsRouter) =&gt; BottomNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         showSelectedLabels: true,
         showUnselectedLabels: false,
@@ -140,7 +134,7 @@ Widget build(BuildContext context) {
         onTap: (index) {
           tabsRouter.setActiveIndex(index);
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: &#39;Home&#39;),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_add),
@@ -159,10 +153,8 @@ Widget build(BuildContext context) {
             label: &#39;Configurações&#39;,
           ),
         ],
-      );
-    },
-  );
-}</code></pre>
+      ),
+  );</code></pre>
 </section>
 
 

@@ -66,14 +66,12 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">factory ProductException.duplicateCode(String code) {
-  return ProductException(
+  <pre class="language-dart"><code class="language-dart">factory ProductException.duplicateCode(String code) =&gt; ProductException(
     type: ProductErrorType.duplicateCode,
     message: &#39;Código de produto já existe&#39;,
     details: &#39;Um produto com o código &quot;$code&quot; já está cadastrado no sistema.&#39;,
     productCode: code,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

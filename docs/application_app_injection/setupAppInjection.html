@@ -73,7 +73,7 @@ Para acessar as dependências, use o <code>appInjection.get&lt;T&gt;()</code> on
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void setupAppInjection() {
   printerLog = registerLogPrinterColor(
-    config: ConfigLog(enableLog: kDebugMode),
+    config: const ConfigLog(enableLog: kDebugMode),
     &#47;&#47; cacheFilePath: p.join(Directory.current.path, &#39;system_loja_cache&#39;),
   );
   appInjection.registerSingleton&lt;RouteApp&gt;(RouteApp());

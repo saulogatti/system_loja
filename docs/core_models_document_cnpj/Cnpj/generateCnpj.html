@@ -73,15 +73,15 @@
   final random = Random();
   final digits = List.generate(12, (_) =&gt; random.nextInt(10));
 
-  int sum1 = 0;
-  for (int i = 0; i &lt; 12; i++) {
+  var sum1 = 0;
+  for (var i = 0; i &lt; 12; i++) {
     sum1 += digits[i] * firstWeights[i];
   }
   final remainder1 = sum1 % 11;
   digits.add(remainder1 &lt; 2 ? 0 : 11 - remainder1);
 
-  int sum2 = 0;
-  for (int i = 0; i &lt; 13; i++) {
+  var sum2 = 0;
+  for (var i = 0; i &lt; 13; i++) {
     sum2 += digits[i] * secondWeights[i];
   }
   final remainder2 = sum2 % 11;

@@ -82,7 +82,10 @@ Future&lt;ResultStatus&lt;AppSettings, String&gt;&gt; updateAppSettings(AppSetti
   try {
     _configuration = novaConfiguracao;
     await _salvarDados();
-    _settingsService.updateSettings(novaConfiguracao.corPrimaria, novaConfiguracao.temaEscuro);
+    _settingsService.updateSettings(
+      novaConfiguracao.corPrimaria,
+      temaEscuro: novaConfiguracao.temaEscuro,
+    );
     logInfo(&#39;Configuração atualizada com sucesso&#39;);
     return ResultStatus.success(_configuration);
   } catch (e, stackTrace) {

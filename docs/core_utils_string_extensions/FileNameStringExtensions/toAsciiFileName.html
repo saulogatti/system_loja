@@ -75,16 +75,14 @@ substituindo-os por suas versões ASCII equivalentes.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">String toAsciiFileName() {
-  return replaceAll(Constants.accentARegExp, &#39;a&#39;)
+  <pre class="language-dart"><code class="language-dart">String toAsciiFileName() =&gt; replaceAll(Constants.accentARegExp, &#39;a&#39;)
       .replaceAll(Constants.accentERegExp, &#39;e&#39;)
       .replaceAll(Constants.accentIRegExp, &#39;i&#39;)
       .replaceAll(Constants.accentORegExp, &#39;o&#39;)
       .replaceAll(Constants.accentURegExp, &#39;u&#39;)
       .replaceAll(Constants.cedillaRegExp, &#39;c&#39;)
       .replaceAll(Constants.tildeNRegExp, &#39;n&#39;)
-      .replaceAll(Constants.yVariantsRegExp, &#39;y&#39;);
-}</code></pre>
+      .replaceAll(Constants.yVariantsRegExp, &#39;y&#39;);</code></pre>
 </section>
 
 

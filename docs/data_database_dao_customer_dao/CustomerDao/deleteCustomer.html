@@ -71,9 +71,7 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; deleteCustomer(int id) {
-  return (delete(customerRecords)..where((t) =&gt; t.id.equals(id))).go();
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">Future&lt;int&gt; deleteCustomer(int id) =&gt; (delete(customerRecords)..where((t) =&gt; t.id.equals(id))).go();</code></pre>
 </section>
 
 

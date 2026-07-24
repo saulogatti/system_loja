@@ -67,9 +67,8 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;SystemErrorModel&gt;&gt; getErrorsByCode(int code) {
-  return _cacheManager.retrieveErrorsByCode(code);
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">Future&lt;List&lt;SystemErrorModel&gt;&gt; getErrorsByCode(int code) =&gt;
+    _cacheManager.retrieveErrorsByCode(code);</code></pre>
 </section>
 
 

@@ -82,7 +82,7 @@
   <pre class="language-dart"><code class="language-dart">@override
 Future&lt;ResultStatus&lt;SystemConfiguration, String&gt;&gt; getSystemConfiguration() async {
   try {
-    SystemConfiguration? systemConfiguration = await _systemDao.getSystemConfiguration();
+    var systemConfiguration = await _systemDao.getSystemConfiguration();
     if (systemConfiguration == null) {
       systemConfiguration = _createDefaultConfiguration();
       await _systemDao.saveSystemConfiguration(systemConfiguration);

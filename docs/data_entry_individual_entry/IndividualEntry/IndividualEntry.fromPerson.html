@@ -63,8 +63,7 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">factory IndividualEntry.fromPerson(Person&lt;Cpf&gt; person) {
-  return IndividualEntry(
+  <pre class="language-dart"><code class="language-dart">factory IndividualEntry.fromPerson(Person&lt;Cpf&gt; person) =&gt; IndividualEntry(
     name: person.name,
     document: person.document,
     email: person.email,
@@ -72,8 +71,7 @@
     id: person.id,
     registrationDate: person.registrationDate,
     lastUpdatedDate: person.lastUpdatedDate,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

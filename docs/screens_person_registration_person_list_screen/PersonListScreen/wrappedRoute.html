@@ -76,15 +76,13 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget wrappedRoute(BuildContext context) {
-  return BlocProvider(
-    create: (_) =&gt; PersonListCubit(
-      appInjection.get&lt;ICustomerRepository&gt;(),
-      appInjection.get&lt;ICompanyRepository&gt;(),
-    )..loadPeople(),
-    child: this,
-  );
-}</code></pre>
+Widget wrappedRoute(BuildContext context) =&gt; BlocProvider(
+  create: (_) =&gt; PersonListCubit(
+    appInjection.get&lt;ICustomerRepository&gt;(),
+    appInjection.get&lt;ICompanyRepository&gt;(),
+  )..loadPeople(),
+  child: this,
+);</code></pre>
 </section>
 
 

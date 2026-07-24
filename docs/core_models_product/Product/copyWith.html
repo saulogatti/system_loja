@@ -80,8 +80,7 @@
   int? categoryId,
 
   DateTime? lastUpdatedDate,
-}) {
-  return Product(
+}) =&gt; Product(
     name: name ?? this.name,
     description: description ?? this.description,
     price: price ?? this.price,
@@ -91,8 +90,7 @@
     registrationDate: registrationDate,
     lastUpdatedDate: lastUpdatedDate ?? this.lastUpdatedDate,
     id: id,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

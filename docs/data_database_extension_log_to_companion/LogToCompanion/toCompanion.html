@@ -69,16 +69,14 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">LogsRecordsCompanion toCompanion() {
-  return LogsRecordsCompanion.insert(
-    actionType: (actionType),
+  <pre class="language-dart"><code class="language-dart">LogsRecordsCompanion toCompanion() =&gt; LogsRecordsCompanion.insert(
+    actionType: actionType,
     details: Value(details),
     timestamp: Value(timestamp),
     entity: entity,
-    userId: (userId),
+    userId: userId,
     userName: userName,
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

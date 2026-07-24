@@ -68,10 +68,10 @@
 </ol>), </span></li>
 <li><span class="parameter" id="when-param-senhaInvalida"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">senhaInvalida</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-errorMessage"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">errorMessage</span></span></li>
 </ol>), </span></li>
-<li><span class="parameter" id="when-param-usuarioRemovido"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">usuarioRemovido</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span></span></li>
-</ol>), </span></li>
 <li><span class="parameter" id="when-param-usuarioAdicionado"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">usuarioAdicionado</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-usuario"><span class="type-annotation"><a href="../../core_models_user/User-class.html">User</a></span> <span class="parameter-name">usuario</span>, </span></li>
 <li><span class="parameter" id="param-novoUsuario"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">novoUsuario</span></span></li>
+</ol>), </span></li>
+<li><span class="parameter" id="when-param-usuarioRemovido"><span>required</span> <span class="type-annotation">TResult</span> <span class="parameter-name">usuarioRemovido</span>(<ol class="parameter-list single-line"> <li><span class="parameter" id="param-id"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">id</span></span></li>
 </ol>), </span></li>
 </ol>})
 
@@ -96,16 +96,16 @@ It is equivalent to doing:</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult when&lt;TResult extends Object?&gt;({required TResult Function()  initial,required TResult Function( String errorMessage)  loadFailure,required TResult Function()  loading,required TResult Function( List&lt;User&gt; usuarios)  loadSuccess,required TResult Function( String mensagem)  senhaInvalida,required TResult Function( int id)  usuarioRemovido,required TResult Function( User usuario,  bool novoUsuario)  usuarioAdicionado,}) {final _that = this;
+  <pre class="language-dart"><code class="language-dart">@optionalTypeArgs TResult when&lt;TResult extends Object?&gt;({required TResult Function()  initial,required TResult Function( String errorMessage)  loadFailure,required TResult Function()  loading,required TResult Function( List&lt;User&gt; usuarios)  loadSuccess,required TResult Function( String mensagem)  senhaInvalida,required TResult Function( User usuario,  bool novoUsuario)  usuarioAdicionado,required TResult Function( int id)  usuarioRemovido,}) {final _that = this;
 switch (_that) {
 case UsuarioStateInitial():
 return initial();case UsuarioStateLoadFailure():
 return loadFailure(_that.errorMessage);case UsuarioStateLoading():
 return loading();case UsuarioStateLoadSuccess():
 return loadSuccess(_that.usuarios);case UsuarioStateSenhaInvalida():
-return senhaInvalida(_that.mensagem);case UsuarioStateUsuarioRemovido():
-return usuarioRemovido(_that.id);case UsuarioStateUsuarioAdicionado():
-return usuarioAdicionado(_that.usuario,_that.novoUsuario);}
+return senhaInvalida(_that.mensagem);case UsuarioStateUsuarioAdicionado():
+return usuarioAdicionado(_that.usuario,_that.novoUsuario);case UsuarioStateUsuarioRemovido():
+return usuarioRemovido(_that.id);}
 }</code></pre>
 </section>
 

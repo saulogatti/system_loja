@@ -75,7 +75,7 @@
   final errors = &lt;String&gt;[];
   final List&lt;Customer&gt; customers;
   switch (customerResult) {
-    case ResultSuccess(result: final result):
+    case ResultSuccess(: final result):
       customers = result;
     case ResultError(resultError: final error):
       customers = const &lt;Customer&gt;[];
@@ -84,7 +84,7 @@
 
   final List&lt;Company&gt; companies;
   switch (companyResult) {
-    case ResultSuccess(result: final result):
+    case ResultSuccess(: final result):
       companies = result;
     case ResultError(resultError: final error):
       companies = const &lt;Company&gt;[];

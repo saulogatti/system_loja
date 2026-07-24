@@ -71,11 +71,9 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; updateCustomer(Customer customer) {
-  return update(
+  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; updateCustomer(Customer customer) =&gt; update(
     customerRecords,
-  ).replace(customer.toCompanion(forUpdate: true));
-}</code></pre>
+  ).replace(customer.toCompanion(forUpdate: true));</code></pre>
 </section>
 
 

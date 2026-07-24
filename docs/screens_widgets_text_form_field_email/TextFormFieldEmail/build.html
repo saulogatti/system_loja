@@ -108,34 +108,32 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return TextFormField(
-    controller: emailController,
-    decoration: const InputDecoration(
-      labelText: &#39;Email&#39;,
-      border: OutlineInputBorder(),
-      prefixIcon: Icon(Icons.email),
-    ),
-    enabled: isEditing,
-    keyboardType: TextInputType.emailAddress,
-    autofillHints: const [AutofillHints.email],
-    textInputAction: TextInputAction.next,
-    inputFormatters: [
-      FilteringTextInputFormatter.deny(
-        Constants.oneOrMoreWhitespaceRegExp,
-      ), &#47;&#47; Remove espaços
-      FilteringTextInputFormatter.deny(Constants.accentedCharsRegExp),
-    ],
-    validator: (value) {
-      if (value != null &amp;&amp; value.trim().isNotEmpty) {
-        if (!Constants.emailRegExp.hasMatch(value.trim())) {
-          return &#39;Email inválido&#39;;
-        }
+Widget build(BuildContext context) =&gt; TextFormField(
+  controller: emailController,
+  decoration: const InputDecoration(
+    labelText: &#39;Email&#39;,
+    border: OutlineInputBorder(),
+    prefixIcon: Icon(Icons.email),
+  ),
+  enabled: isEditing,
+  keyboardType: TextInputType.emailAddress,
+  autocorrect: false,
+  enableSuggestions: false,
+  autofillHints: const [AutofillHints.email],
+  textInputAction: TextInputAction.next,
+  inputFormatters: [
+    FilteringTextInputFormatter.deny(Constants.oneOrMoreWhitespaceRegExp), &#47;&#47; Remove espaços
+    FilteringTextInputFormatter.deny(Constants.accentedCharsRegExp),
+  ],
+  validator: (value) {
+    if (value != null &amp;&amp; value.trim().isNotEmpty) {
+      if (!Constants.emailRegExp.hasMatch(value.trim())) {
+        return &#39;Email inválido&#39;;
       }
-      return null;
-    },
-  );
-}</code></pre>
+    }
+    return null;
+  },
+);</code></pre>
 </section>
 
 

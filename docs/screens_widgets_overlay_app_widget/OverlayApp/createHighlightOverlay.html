@@ -81,25 +81,23 @@
 
   _overlayEntry = OverlayEntry(
     &#47;&#47; Create a new OverlayEntry.
-    builder: (BuildContext context) {
+    builder: (context) {
       &#47;&#47; Align is used to position the highlight overlay
       &#47;&#47; relative to the NavigationBar destination.
       return ColoredBox(
         color: color.withValues(alpha: 0.3),
 
         child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: &lt;Widget&gt;[
             Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-            CircularProgressIndicator(color: Colors.white),
+            const CircularProgressIndicator(color: Colors.white),
           ],
         ),
       );

@@ -108,8 +108,7 @@ and</li>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Widget build(BuildContext context) {
-  return SegmentedButton&lt;GridSortOrder&gt;(
+Widget build(BuildContext context) =&gt; SegmentedButton&lt;GridSortOrder&gt;(
     segments: const [
       ButtonSegment(
         value: GridSortOrder.recentes,
@@ -124,8 +123,7 @@ Widget build(BuildContext context) {
     ],
     selected: {current},
     onSelectionChanged: (selection) =&gt; onChanged(selection.first),
-  );
-}</code></pre>
+  );</code></pre>
 </section>
 
 

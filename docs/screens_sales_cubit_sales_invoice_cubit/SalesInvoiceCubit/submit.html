@@ -109,7 +109,7 @@
       (state) =&gt; state is SalesSaved || state is SalesError,
     );
 
-    await _salesCubit.registerSale(notaFiscal, form.enableCodeGeneration);
+    await _salesCubit.registerSale(notaFiscal, enableCodeGeneration: form.enableCodeGeneration);
     final registerResult = await registerFlow;
 
     if (registerResult case SalesError(:final message)) {
