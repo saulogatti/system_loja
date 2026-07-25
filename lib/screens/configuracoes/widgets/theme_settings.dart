@@ -47,14 +47,21 @@ class ThemeSettings extends StatelessWidget {
           ListTile(
             title: const Text('Cor primária'),
             subtitle: const Text('Cor principal do aplicativo'),
-            trailing: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: config.corPrimaria.color,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
-              ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: config.corPrimaria.color,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              ],
             ),
             onTap: onMostrarSeletorCor,
           ),

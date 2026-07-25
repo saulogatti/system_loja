@@ -195,3 +195,7 @@
 ## 24-07-2026 - Accessible Text Contrast
 **Learning:** Hardcoded colors like `Colors.grey` or `Colors.grey[600]` fail contrast requirements in dark mode and break the app's visual consistency.
 **Action:** Always use `Theme.of(context).colorScheme.onSurfaceVariant` or `outlineVariant` for secondary text, icons, and borders to ensure they adapt automatically to light/dark themes and maintain proper contrast.
+
+## 25-07-2026 - Trailing Chevron on ListTiles
+**Learning:** Interactive `ListTile`s intended for navigation or dialog-opening lack visual interaction affordance if they are missing a trailing icon, even if they have an `onTap` property. This reduces the intuitive usability of the interface for touch interaction and visually separates them from other standard ListTiles that have chevrons.
+**Action:** Add `trailing: Icon(Icons.chevron_right)` to interactive `ListTile`s (like 'Limpar logs', 'Realizar backup', or theme color selection) to provide a clear, universally understood visual cue that the row is tappable and will result in an action/navigation.
