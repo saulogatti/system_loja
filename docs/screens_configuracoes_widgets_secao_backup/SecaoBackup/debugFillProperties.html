@@ -286,9 +286,13 @@ common <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsProperty-c
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   super.debugFillProperties(properties);
   properties.add(DiagnosticsProperty&lt;AppSettings&gt;(&#39;config&#39;, config));
-  properties.add(ObjectFlagProperty&lt;Function(AppSettings)&gt;.has(&#39;onConfigChanged&#39;, onConfigChanged));
+  properties.add(
+    ObjectFlagProperty&lt;Function(AppSettings)&gt;.has(&#39;onConfigChanged&#39;, onConfigChanged),
+  );
   properties.add(ObjectFlagProperty&lt;VoidCallback&gt;.has(&#39;onRealizarBackup&#39;, onRealizarBackup));
-  properties.add(ObjectFlagProperty&lt;VoidCallback&gt;.has(&#39;onSelecionarFrequencia&#39;, onSelecionarFrequencia));
+  properties.add(
+    ObjectFlagProperty&lt;VoidCallback&gt;.has(&#39;onSelecionarFrequencia&#39;, onSelecionarFrequencia),
+  );
 }</code></pre>
 </section>
 

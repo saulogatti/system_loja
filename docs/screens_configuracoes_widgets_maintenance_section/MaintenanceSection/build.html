@@ -159,6 +159,7 @@ Widget build(BuildContext context) =&gt; Card(
           title: const Text(&#39;Limpar logs antigos agora&#39;),
           subtitle: const Text(&#39;Remover logs com base na configuração&#39;),
           leading: const Icon(Icons.delete_sweep),
+          trailing: const Icon(Icons.chevron_right),
           onTap: onLimparLogsAntigos,
         ),
         ListTile(
@@ -168,6 +169,7 @@ Widget build(BuildContext context) =&gt; Card(
           ),
           subtitle: const Text(&#39;Remover TODOS os dados do sistema&#39;),
           leading: Icon(Icons.warning, color: Theme.of(context).colorScheme.error),
+          trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.error),
           onTap: onLimparTodosDados,
         ),
       ],
