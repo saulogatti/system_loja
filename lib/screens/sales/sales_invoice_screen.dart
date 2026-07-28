@@ -118,6 +118,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
         ),
         body: Form(
           key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: CustomScrollView(
             slivers: [
               SliverPadding(
