@@ -62,6 +62,7 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
           child: AutofillGroup(
             child: Form(
               key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

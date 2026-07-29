@@ -56,6 +56,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
   @override
   Widget build(BuildContext context) => Form(
       key: widget.formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

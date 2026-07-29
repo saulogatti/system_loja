@@ -217,6 +217,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         title: Text(isEdit ? 'Editar Categoria' : 'Nova Categoria'),
         content: Form(
           key: formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
