@@ -67,6 +67,7 @@ class _ProductFormState extends State<ProductForm> {
   @override
   Widget build(BuildContext context) => Form(
     key: widget.formKey,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
