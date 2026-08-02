@@ -203,3 +203,6 @@
 ## 27-07-2024 - [AutoValidateMode Form UX]
 **Learning:** Relying on default form validation behavior forces users to wait until submission to see errors, reducing confidence and form completion speed.
 **Action:** Use `autovalidateMode: AutovalidateMode.onUserInteraction` on `Form` widgets to provide immediate visual feedback on validation errors as the user interacts with the fields.
+## 26-10-2023 - Trailing Chevron on ListTiles Standard
+**Learning:** Interactive `ListTile`s intended for navigation or dialog-opening lack visual interaction affordance if they are missing a trailing icon or using inconsistent icons (like iOS-specific `arrow_forward_ios`). This reduces the intuitive usability of the interface for touch interaction and visually separates them from other standard ListTiles.
+**Action:** Add `trailing: Icon(Icons.chevron_right)` to interactive `ListTile`s (like 'Limpar logs', 'Realizar backup', or theme color selection) to provide a clear, universally understood visual cue that the row is tappable and will result in an action/navigation, matching standard Material UI patterns across the application.

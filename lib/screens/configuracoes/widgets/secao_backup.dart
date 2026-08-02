@@ -54,7 +54,7 @@ class SecaoBackup extends StatelessWidget {
             ListTile(
               title: const Text('Frequência de backup'),
               subtitle: Text(config.frequenciaBackup),
-              trailing: const Icon(Icons.arrow_forward_ios),
+              trailing: const Icon(Icons.chevron_right),
               onTap: onSelecionarFrequencia,
             ),
           ListTile(
