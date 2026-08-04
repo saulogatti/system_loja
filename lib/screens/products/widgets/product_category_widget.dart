@@ -151,6 +151,7 @@ class _ProductCategoryWidgetState extends State<ProductCategoryWidget> {
         title: const Text('Nova Categoria'),
         content: Form(
           key: formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

@@ -78,6 +78,7 @@ class MaintenanceSection extends StatelessWidget {
             title: const Text('Limpar logs antigos agora'),
             subtitle: const Text('Remover logs com base na configuração'),
             leading: const Icon(Icons.delete_sweep),
+            trailing: const Icon(Icons.chevron_right),
             onTap: onLimparLogsAntigos,
           ),
           ListTile(
@@ -87,6 +88,7 @@ class MaintenanceSection extends StatelessWidget {
             ),
             subtitle: const Text('Remover TODOS os dados do sistema'),
             leading: Icon(Icons.warning, color: Theme.of(context).colorScheme.error),
+            trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.error),
             onTap: onLimparTodosDados,
           ),
         ],

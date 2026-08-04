@@ -109,50 +109,48 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) =&gt; Card(
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.backup,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(width: 8),
-              const Text(
-                &#39;Backup de Dados&#39;,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          const Divider(),
-          SwitchListTile(
-            title: const Text(&#39;Backup automático&#39;),
-            subtitle: const Text(&#39;Realizar backups periodicamente&#39;),
-            value: config.backupAutomatico,
-            onChanged: (value) {
-              onConfigChanged(config.copyWith(backupAutomatico: value));
-            },
-          ),
-          if (config.backupAutomatico)
-            ListTile(
-              title: const Text(&#39;Frequência de backup&#39;),
-              subtitle: Text(config.frequenciaBackup),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: onSelecionarFrequencia,
+  child: Padding(
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.backup, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 8),
+            const Text(
+              &#39;Backup de Dados&#39;,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
+          ],
+        ),
+        const Divider(),
+        SwitchListTile(
+          title: const Text(&#39;Backup automático&#39;),
+          subtitle: const Text(&#39;Realizar backups periodicamente&#39;),
+          value: config.backupAutomatico,
+          onChanged: (value) {
+            onConfigChanged(config.copyWith(backupAutomatico: value));
+          },
+        ),
+        if (config.backupAutomatico)
           ListTile(
-            title: const Text(&#39;Realizar backup agora&#39;),
-            subtitle: const Text(&#39;Criar cópia dos dados manualmente&#39;),
-            leading: const Icon(Icons.save),
-            onTap: onRealizarBackup,
+            title: const Text(&#39;Frequência de backup&#39;),
+            subtitle: Text(config.frequenciaBackup),
+            trailing: const Icon(Icons.arrow_forward_ios),
+            onTap: onSelecionarFrequencia,
           ),
-        ],
-      ),
+        ListTile(
+          title: const Text(&#39;Realizar backup agora&#39;),
+          subtitle: const Text(&#39;Criar cópia dos dados manualmente&#39;),
+          leading: const Icon(Icons.save),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: onRealizarBackup,
+        ),
+      ],
     ),
-  );</code></pre>
+  ),
+);</code></pre>
 </section>
 
 

@@ -4,7 +4,6 @@ import 'package:system_loja/core/settings/app_settings.dart';
 
 /// Widget da seção de configurações de backup
 class SecaoBackup extends StatelessWidget {
-
   const SecaoBackup({
     required this.config,
     required this.onConfigChanged,
@@ -12,6 +11,7 @@ class SecaoBackup extends StatelessWidget {
     required this.onSelecionarFrequencia,
     super.key,
   });
+
   /// Configuração atual do sistema
   final AppSettings config;
 
@@ -26,57 +26,59 @@ class SecaoBackup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.backup,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'Backup de Dados',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const Divider(),
-            SwitchListTile(
-              title: const Text('Backup automático'),
-              subtitle: const Text('Realizar backups periodicamente'),
-              value: config.backupAutomatico,
-              onChanged: (value) {
-                onConfigChanged(config.copyWith(backupAutomatico: value));
-              },
-            ),
-            if (config.backupAutomatico)
-              ListTile(
-                title: const Text('Frequência de backup'),
-                subtitle: Text(config.frequenciaBackup),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: onSelecionarFrequencia,
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.backup, color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 8),
+              const Text(
+                'Backup de Dados',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
+            ],
+          ),
+          const Divider(),
+          SwitchListTile(
+            title: const Text('Backup automático'),
+            subtitle: const Text('Realizar backups periodicamente'),
+            value: config.backupAutomatico,
+            onChanged: (value) {
+              onConfigChanged(config.copyWith(backupAutomatico: value));
+            },
+          ),
+          if (config.backupAutomatico)
             ListTile(
-              title: const Text('Realizar backup agora'),
-              subtitle: const Text('Criar cópia dos dados manualmente'),
-              leading: const Icon(Icons.save),
-              onTap: onRealizarBackup,
+              title: const Text('Frequência de backup'),
+              subtitle: Text(config.frequenciaBackup),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: onSelecionarFrequencia,
             ),
-          ],
-        ),
+          ListTile(
+            title: const Text('Realizar backup agora'),
+            subtitle: const Text('Criar cópia dos dados manualmente'),
+            leading: const Icon(Icons.save),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: onRealizarBackup,
+          ),
+        ],
       ),
-    );
+    ),
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<AppSettings>('config', config));
-    properties.add(ObjectFlagProperty<Function(AppSettings)>.has('onConfigChanged', onConfigChanged));
+    properties.add(
+      ObjectFlagProperty<Function(AppSettings)>.has('onConfigChanged', onConfigChanged),
+    );
     properties.add(ObjectFlagProperty<VoidCallback>.has('onRealizarBackup', onRealizarBackup));
-    properties.add(ObjectFlagProperty<VoidCallback>.has('onSelecionarFrequencia', onSelecionarFrequencia));
+    properties.add(
+      ObjectFlagProperty<VoidCallback>.has('onSelecionarFrequencia', onSelecionarFrequencia),
+    );
   }
 }
