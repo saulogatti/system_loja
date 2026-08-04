@@ -9,7 +9,6 @@ import 'package:system_loja/screens/utils/validators.dart';
 ///
 /// Encapsula os campos de entrada e validações para criação e edição de usuários.
 class UsuarioForm extends StatefulWidget {
-
   const UsuarioForm({
     required this.formKey,
     required this.nomeController,
@@ -42,11 +41,18 @@ class UsuarioForm extends StatefulWidget {
     properties.add(DiagnosticsProperty<TextEditingController>('nomeController', nomeController));
     properties.add(DiagnosticsProperty<TextEditingController>('emailController', emailController));
     properties.add(DiagnosticsProperty<TextEditingController>('senhaController', senhaController));
-    properties.add(EnumProperty<AuthorizationLevel>('nivelPermissaoSelecionado', nivelPermissaoSelecionado));
+    properties.add(
+      EnumProperty<AuthorizationLevel>('nivelPermissaoSelecionado', nivelPermissaoSelecionado),
+    );
     properties.add(DiagnosticsProperty<User?>('usuarioEditando', usuarioEditando));
     properties.add(ObjectFlagProperty<VoidCallback>.has('onSubmit', onSubmit));
     properties.add(ObjectFlagProperty<VoidCallback?>.has('onCancel', onCancel));
-    properties.add(ObjectFlagProperty<ValueChanged<AuthorizationLevel>>.has('onPermissaoChanged', onPermissaoChanged));
+    properties.add(
+      ObjectFlagProperty<ValueChanged<AuthorizationLevel>>.has(
+        'onPermissaoChanged',
+        onPermissaoChanged,
+      ),
+    );
   }
 }
 
@@ -56,6 +62,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
   @override
   Widget build(BuildContext context) => Form(
       key: widget.formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

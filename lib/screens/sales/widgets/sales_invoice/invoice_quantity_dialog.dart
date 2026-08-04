@@ -35,6 +35,7 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
       title: Text('Quantidade de ${product.name}'),
       content: Form(
         key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: TextFormField(
           controller: _controller,
           keyboardType: TextInputType.number,
