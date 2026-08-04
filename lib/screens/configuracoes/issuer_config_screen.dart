@@ -32,54 +32,54 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
 
   @override
   Widget build(BuildContext context) => BlocListener<HomeBloc, HomeState>(
-    listener: (context, state) {
-      switch (state) {
-        case HomeLoaded(:final systemUserData):
-          _applySystemUserData(systemUserData);
-        case HomeSaved(:final systemUserData):
-          _applySystemUserData(systemUserData);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Dados da empresa emitente salvos com sucesso.'),
-              backgroundColor: Colors.green,
-            ),
-          );
-        case HomeError(:final message):
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Erro ao salvar dados da empresa emitente: $message'),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-          );
-        case HomeInitial() || HomeLoading():
-          break;
-      }
-    },
-    child: Scaffold(
-      appBar: AppBar(title: const Text('Empresa Emitente'), leading: const AutoLeadingButton()),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: AutofillGroup(
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildLogoSection(context),
-                const SizedBox(height: 24),
-                _buildInfoSection(context),
-                const SizedBox(height: 24),
-                _buildAccessKeySection(context),
-                const SizedBox(height: 32),
-                _buildSaveButton(context),
-              ],
+      listener: (context, state) {
+        switch (state) {
+          case HomeLoaded(:final systemUserData):
+            _applySystemUserData(systemUserData);
+          case HomeSaved(:final systemUserData):
+            _applySystemUserData(systemUserData);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Dados da empresa emitente salvos com sucesso.'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          case HomeError(:final message):
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Erro ao salvar dados da empresa emitente: $message'),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          case HomeInitial() || HomeLoading():
+            break;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Empresa Emitente'), leading: const AutoLeadingButton()),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: AutofillGroup(
+            child: Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildLogoSection(context),
+                  const SizedBox(height: 24),
+                  _buildInfoSection(context),
+                  const SizedBox(height: 24),
+                  _buildAccessKeySection(context),
+                  const SizedBox(height: 32),
+                  _buildSaveButton(context),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
+    );
 
   @override
   void dispose() {
