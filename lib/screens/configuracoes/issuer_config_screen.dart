@@ -111,234 +111,234 @@ class _IssuerConfigScreenState extends State<IssuerConfigScreen> {
 
   /// Constrói a seção de chave de acesso (reservada para futura implementação).
   Widget _buildAccessKeySection(BuildContext context) => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.vpn_key, color: Theme.of(context).colorScheme.primary),
-                const SizedBox(width: 8),
-                const Text(
-                  'Acesso ao Sistema',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Reservado para futura validação de chave de acesso',
-              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _accessKeyController,
-              obscureText: true,
-              enabled: false,
-              decoration: const InputDecoration(
-                labelText: 'Chave de Acesso',
-                hintText: 'Disponível em breve',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock_outline),
-                suffixIcon: IconButton(
-                  tooltip: 'Visibilidade da chave de acesso indisponível',
-                  icon: Icon(Icons.visibility_off),
-                  onPressed: null,
-                ),
-                helperText: 'Este campo será habilitado em uma versão futura.',
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.vpn_key, color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 8),
+              const Text(
+                'Acesso ao Sistema',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Reservado para futura validação de chave de acesso',
+            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _accessKeyController,
+            obscureText: true,
+            enabled: false,
+            decoration: const InputDecoration(
+              labelText: 'Chave de Acesso',
+              hintText: 'Disponível em breve',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.lock_outline),
+              suffixIcon: IconButton(
+                tooltip: 'Visibilidade da chave de acesso indisponível',
+                icon: Icon(Icons.visibility_off),
+                onPressed: null,
+              ),
+              helperText: 'Este campo será habilitado em uma versão futura.',
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
+    ),
+  );
 
   /// Constrói a seção de informações da empresa.
   Widget _buildInfoSection(BuildContext context) => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.business, color: Theme.of(context).colorScheme.primary),
-                const SizedBox(width: 8),
-                const Text(
-                  'Dados da Empresa',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _fantasyNameController,
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-              autofillHints: const [AutofillHints.organizationName],
-              decoration: const InputDecoration(
-                labelText: 'Nome Fantasia *',
-                hintText: 'Ex.: Minha Loja',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.storefront),
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.business, color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 8),
+              const Text(
+                'Dados da Empresa',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              textCapitalization: TextCapitalization.words,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Informe o Nome Fantasia';
-                }
-                if (value.trim().length < 2) {
-                  return 'Nome Fantasia deve ter ao menos 2 caracteres';
-                }
-                return null;
-              },
+            ],
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _fantasyNameController,
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.next,
+            autofillHints: const [AutofillHints.organizationName],
+            decoration: const InputDecoration(
+              labelText: 'Nome Fantasia *',
+              hintText: 'Ex.: Minha Loja',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.storefront),
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              autocorrect: false,
-              enableSuggestions: false,
-              textInputAction: TextInputAction.next,
-              autofillHints: const [AutofillHints.email],
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                hintText: 'Ex.: contato@minhaloja.com',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email),
-              ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Informe o Email';
-                }
-                return null;
-              },
+            textCapitalization: TextCapitalization.words,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Informe o Nome Fantasia';
+              }
+              if (value.trim().length < 2) {
+                return 'Nome Fantasia deve ter ao menos 2 caracteres';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
+            autocorrect: false,
+            enableSuggestions: false,
+            textInputAction: TextInputAction.next,
+            autofillHints: const [AutofillHints.email],
+            decoration: const InputDecoration(
+              labelText: 'Email',
+              hintText: 'Ex.: contato@minhaloja.com',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.email),
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _phoneController,
-              keyboardType: TextInputType.phone,
-              textInputAction: TextInputAction.next,
-              autofillHints: const [AutofillHints.telephoneNumber],
-              decoration: const InputDecoration(
-                labelText: 'Telefone',
-                hintText: 'Ex.: (11) 99999-9999',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.phone),
-              ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Informe o Telefone';
-                }
-                return null;
-              },
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Informe o Email';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _phoneController,
+            keyboardType: TextInputType.phone,
+            textInputAction: TextInputAction.next,
+            autofillHints: const [AutofillHints.telephoneNumber],
+            decoration: const InputDecoration(
+              labelText: 'Telefone',
+              hintText: 'Ex.: (11) 99999-9999',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.phone),
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _cnpjController,
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.next,
-              inputFormatters: [CnpjTextInputFormatter()],
-              decoration: const InputDecoration(
-                labelText: 'CNPJ',
-                hintText: 'Ex.: 12.345.678/0001-90',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.business),
-              ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Informe o CNPJ';
-                }
-                return null;
-              },
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Informe o Telefone';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _cnpjController,
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
+            inputFormatters: [CnpjTextInputFormatter()],
+            decoration: const InputDecoration(
+              labelText: 'CNPJ',
+              hintText: 'Ex.: 12.345.678/0001-90',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.business),
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _descriptionController,
-              keyboardType: TextInputType.multiline,
-              decoration: const InputDecoration(
-                labelText: 'Descrição',
-                hintText: 'Descreva brevemente a empresa ou os produtos/serviços oferecidos',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.description),
-                alignLabelWithHint: true,
-              ),
-              minLines: 3,
-              maxLines: null,
-              maxLength: 500,
-              textCapitalization: TextCapitalization.sentences,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Informe o CNPJ';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _descriptionController,
+            keyboardType: TextInputType.multiline,
+            decoration: const InputDecoration(
+              labelText: 'Descrição',
+              hintText: 'Descreva brevemente a empresa ou os produtos/serviços oferecidos',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.description),
+              alignLabelWithHint: true,
             ),
-          ],
-        ),
+            minLines: 3,
+            maxLines: null,
+            maxLength: 500,
+            textCapitalization: TextCapitalization.sentences,
+          ),
+        ],
       ),
-    );
+    ),
+  );
 
   /// Constrói a seção do logotipo da empresa.
   Widget _buildLogoSection(BuildContext context) => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.image, color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 8),
+              const Text('Logotipo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Center(
+            child: Column(
               children: [
-                Icon(Icons.image, color: Theme.of(context).colorScheme.primary),
-                const SizedBox(width: 8),
-                const Text('Logotipo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Theme.of(context).colorScheme.outline),
+                  ),
+                  child: Icon(
+                    Icons.add_photo_alternate_outlined,
+                    size: 48,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  onPressed: _selecionarLogo,
+                  icon: const Icon(Icons.upload),
+                  label: const Text('Selecionar Imagem'),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Formatos suportados: PNG, JPG. Tamanho máximo: 2 MB.',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
-            const SizedBox(height: 16),
-            Center(
-              child: Column(
-                children: [
-                  Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Theme.of(context).colorScheme.outline),
-                    ),
-                    child: Icon(
-                      Icons.add_photo_alternate_outlined,
-                      size: 48,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  OutlinedButton.icon(
-                    onPressed: _selecionarLogo,
-                    icon: const Icon(Icons.upload),
-                    label: const Text('Selecionar Imagem'),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Formatos suportados: PNG, JPG. Tamanho máximo: 2 MB.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
+    ),
+  );
 
   /// Constrói o botão de salvar.
   Widget _buildSaveButton(BuildContext context) => ElevatedButton.icon(
-      onPressed: _salvarConfiguracoes,
-      icon: const Icon(Icons.save),
-      label: const Text('Salvar Configurações'),
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.all(16),
-        textStyle: const TextStyle(fontSize: 16),
-      ),
-    );
+    onPressed: _salvarConfiguracoes,
+    icon: const Icon(Icons.save),
+    label: const Text('Salvar Configurações'),
+    style: ElevatedButton.styleFrom(
+      padding: const EdgeInsets.all(16),
+      textStyle: const TextStyle(fontSize: 16),
+    ),
+  );
 
   /// Salva as configurações da empresa emitente.
   void _salvarConfiguracoes() {
