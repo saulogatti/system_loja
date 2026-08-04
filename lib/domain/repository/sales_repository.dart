@@ -15,14 +15,11 @@ import 'package:system_loja/domain/code_generator_service.dart';
 class SalesRepository implements ISalesRepository {
 
   SalesRepository({
-    required InvoiceDao invoiceDao,
-    required InvoiceItemDao invoiceItemDao,
-    required ProductDao productDao,
-    required CodeGeneratorService codeGeneratorService,
-  }) : _codeGeneratorService = codeGeneratorService,
-       _invoiceDao = invoiceDao,
-       _invoiceItemDao = invoiceItemDao,
-       _productDao = productDao;
+    required this._invoiceDao,
+    required this._invoiceItemDao,
+    required this._productDao,
+    required this._codeGeneratorService,
+  });
   final InvoiceDao _invoiceDao;
   final InvoiceItemDao _invoiceItemDao;
   final ProductDao _productDao;

@@ -9,7 +9,7 @@ import 'package:system_loja/data/database/dao/category_dao.dart';
 /// Fornece uma camada de abstração entre a UI e o acesso a dados,
 /// encapsulando a lógica de negócios relacionada às categorias.
 class CategoryRepository implements ICategoryRepository {
-  CategoryRepository({required CategoryDao categoryDao}) : _categoryDao = categoryDao;
+  CategoryRepository({required this._categoryDao});
   final CategoryDao _categoryDao;
 
   /// Cria uma nova categoria.

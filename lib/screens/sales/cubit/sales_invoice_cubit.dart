@@ -14,10 +14,9 @@ import 'package:system_loja/screens/sales/models/person_selection_invoice_mappin
 /// Cubit do formulário de nova nota fiscal (delega persistência ao [SalesCubit]).
 class SalesInvoiceCubit extends Cubit<SalesInvoiceState> {
   SalesInvoiceCubit({
-    required SalesCubit salesCubit,
+    required this._salesCubit,
     required List<PaymentMethodType> paymentMethods,
-  }) : _salesCubit = salesCubit,
-       super(
+  }) : super(
          SalesInvoiceState.editing(
            form: SalesInvoiceFormData(
              paymentMethod: paymentMethods.isEmpty ? null : paymentMethods.first,

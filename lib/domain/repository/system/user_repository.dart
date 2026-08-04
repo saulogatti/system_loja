@@ -17,9 +17,7 @@ import 'package:system_loja/data/database/dao/users_dao.dart';
 /// - [IUserRepository] - contrato da interface
 /// - [UsersDao] - DAO do Drift
 class UserRepository with LoggerClassMixin implements IUserRepository {
-  UserRepository({required ILogRepository logRepository, required UsersDao usersDao})
-    : _logRepository = logRepository,
-      _usersDao = usersDao;
+  UserRepository({required this._logRepository, required this._usersDao});
   final ILogRepository _logRepository;
   final UsersDao _usersDao;
 

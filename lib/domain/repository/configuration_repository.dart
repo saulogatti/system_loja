@@ -20,9 +20,7 @@ import 'package:system_loja/data/entry/configuration_cache_entry.dart';
 /// - [IConfigurationRepository] - contrato da interface
 /// - [AppSettings] - modelo de configurações
 class ConfigurationRepository with LoggerClassMixin implements IConfigurationRepository {
-  ConfigurationRepository({required ISettingsService settingsService, required CacheManager cache})
-    : _cache = cache,
-      _settingsService = settingsService;
+  ConfigurationRepository({required this._settingsService, required this._cache});
   AppSettings _configuration = AppSettings.createDefaultSettings();
 
   final ISettingsService _settingsService;

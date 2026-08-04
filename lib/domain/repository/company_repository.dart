@@ -13,10 +13,9 @@ import 'package:system_loja/data/database/dao/company_dao.dart';
 class CompanyRepository implements ICompanyRepository {
 
   CompanyRepository({
-    required ILogRepository logRepository,
+    required this._logRepository,
     required CompanyDao companyDao,
-  }) : _logRepository = logRepository,
-       dao = companyDao;
+  }) : dao = companyDao;
   final ILogRepository _logRepository;
   final CompanyDao dao;
 

@@ -12,9 +12,8 @@ class SalesPurchaseAnalyticsBloc
     extends Bloc<SalesPurchaseAnalyticsEvent, SalesPurchaseAnalyticsState> {
 
   SalesPurchaseAnalyticsBloc({
-    required IAnalyticsRepository analyticsRepository,
-  }) : _analyticsRepository = analyticsRepository,
-       super(const SalesPurchaseAnalyticsInitial()) {
+    required this._analyticsRepository,
+  }) : super(const SalesPurchaseAnalyticsInitial()) {
     on<LoadSalesPurchaseAnalytics>(_onLoadAnalytics);
     on<ChangeSalesPurchaseGrouping>(_onChangeGrouping);
   }

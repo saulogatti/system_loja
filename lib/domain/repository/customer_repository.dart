@@ -19,10 +19,9 @@ import 'package:system_loja/domain/repository/exceptions/customer_exception.dart
 class CustomerRepository implements ICustomerRepository {
 
   CustomerRepository({
-    required ILogRepository logRepository,
-    required CustomerDao customerDao,
-  }) : _logRepository = logRepository,
-       _customerDao = customerDao;
+    required this._logRepository,
+    required this._customerDao,
+  });
   final ILogRepository _logRepository;
   final CustomerDao _customerDao;
 

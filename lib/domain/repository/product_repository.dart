@@ -18,10 +18,9 @@ import 'package:system_loja/domain/code_generator_service.dart';
 class ProductRepository implements IProductRepository {
 
   ProductRepository({
-    required ProductDao productDao,
-    required CodeGeneratorService codeGeneratorService,
-  }) : _productDao = productDao,
-       _codeGeneratorService = codeGeneratorService;
+    required this._productDao,
+    required this._codeGeneratorService,
+  });
   final ProductDao _productDao;
   final CodeGeneratorService _codeGeneratorService;
 

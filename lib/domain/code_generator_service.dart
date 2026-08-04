@@ -7,9 +7,7 @@ import 'package:system_loja/data/database/dao/product_dao.dart';
 /// ou validar códigos fornecidos pelo usuário, garantindo unicidade no banco.
 class CodeGeneratorService {
 
-  CodeGeneratorService({required ProductDao productDao, required InvoiceDao invoiceDao})
-    : _productDao = productDao,
-      _invoiceDao = invoiceDao;
+  CodeGeneratorService({required this._productDao, required this._invoiceDao});
   final ProductDao _productDao;
   final InvoiceDao _invoiceDao;
 

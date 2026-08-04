@@ -11,8 +11,7 @@ import 'package:system_loja/data/database/dao/invoice_dao.dart';
 /// agrupadas por data ou por produto, sem lógica de negócio na camada de UI.
 class AnalyticsRepository implements IAnalyticsRepository {
 
-  AnalyticsRepository({required InvoiceDao invoiceDao})
-    : _invoiceDao = invoiceDao;
+  AnalyticsRepository({required this._invoiceDao});
   final InvoiceDao _invoiceDao;
 
   /// Agrupamento por data de emissão (DD/MM).

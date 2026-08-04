@@ -9,9 +9,8 @@ import 'package:system_loja/screens/categories/cubit/category_state.dart';
 /// e exclusão de categorias através do CategoryRepository.
 class CategoryCubit extends Cubit<CategoryState> {
 
-  CategoryCubit({required ICategoryRepository repository})
-    : _repository = repository,
-      super(const CategoryState.initial()) {
+  CategoryCubit({required this._repository})
+    : super(const CategoryState.initial()) {
     loadCategories();
   }
   final ICategoryRepository _repository;

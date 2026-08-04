@@ -16,9 +16,8 @@ import 'package:system_loja/screens/configuracoes/bloc/settings_state.dart';
 /// seleção de diretório quando a plataforma lança exceção.
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
-  SettingsBloc({required IConfigurationRepository configurationRepository})
-    : _configurationRepository = configurationRepository,
-      super(const SettingsInitialState()) {
+  SettingsBloc({required this._configurationRepository})
+    : super(const SettingsInitialState()) {
     on<LoadSettingsEvent>(_onLoadSettings);
     on<UpdateSettingsEvent>(_onUpdateSettings);
     on<ResetDefaultSettingsEvent>(_onResetToDefault);

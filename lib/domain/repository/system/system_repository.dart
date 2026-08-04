@@ -23,9 +23,7 @@ import 'package:system_loja/data/database/dao/system_dao.dart';
 /// - [ISystemRepository] - contrato da interface
 /// - [SystemDao] - DAO do Drift
 class SystemRepository implements ISystemRepository {
-  SystemRepository({required SystemDao systemDao, required ILogRepository logRepository})
-    : _systemDao = systemDao,
-      _logRepository = logRepository;
+  SystemRepository({required this._systemDao, required this._logRepository});
   final SystemDao _systemDao;
   final ILogRepository _logRepository;
 
