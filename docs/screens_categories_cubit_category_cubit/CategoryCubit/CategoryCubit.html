@@ -63,9 +63,8 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">CategoryCubit({required ICategoryRepository repository})
-  : _repository = repository,
-    super(const CategoryState.initial()) {
+  <pre class="language-dart"><code class="language-dart">CategoryCubit({required this._repository})
+  : super(const CategoryState.initial()) {
   loadCategories();
 }</code></pre>
 </section>

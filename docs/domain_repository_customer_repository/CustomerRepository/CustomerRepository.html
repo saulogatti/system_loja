@@ -65,10 +65,9 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">CustomerRepository({
-  required ILogRepository logRepository,
-  required CustomerDao customerDao,
-}) : _logRepository = logRepository,
-     _customerDao = customerDao;</code></pre>
+  required this._logRepository,
+  required this._customerDao,
+});</code></pre>
 </section>
 
 

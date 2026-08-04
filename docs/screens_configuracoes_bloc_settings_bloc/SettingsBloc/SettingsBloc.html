@@ -63,9 +63,8 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">SettingsBloc({required IConfigurationRepository configurationRepository})
-  : _configurationRepository = configurationRepository,
-    super(const SettingsInitialState()) {
+  <pre class="language-dart"><code class="language-dart">SettingsBloc({required this._configurationRepository})
+  : super(const SettingsInitialState()) {
   on&lt;LoadSettingsEvent&gt;(_onLoadSettings);
   on&lt;UpdateSettingsEvent&gt;(_onUpdateSettings);
   on&lt;ResetDefaultSettingsEvent&gt;(_onResetToDefault);

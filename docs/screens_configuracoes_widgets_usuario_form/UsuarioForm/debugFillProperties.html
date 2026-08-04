@@ -289,11 +289,18 @@ void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;nomeController&#39;, nomeController));
   properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;emailController&#39;, emailController));
   properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;senhaController&#39;, senhaController));
-  properties.add(EnumProperty&lt;AuthorizationLevel&gt;(&#39;nivelPermissaoSelecionado&#39;, nivelPermissaoSelecionado));
+  properties.add(
+    EnumProperty&lt;AuthorizationLevel&gt;(&#39;nivelPermissaoSelecionado&#39;, nivelPermissaoSelecionado),
+  );
   properties.add(DiagnosticsProperty&lt;User?&gt;(&#39;usuarioEditando&#39;, usuarioEditando));
   properties.add(ObjectFlagProperty&lt;VoidCallback&gt;.has(&#39;onSubmit&#39;, onSubmit));
   properties.add(ObjectFlagProperty&lt;VoidCallback?&gt;.has(&#39;onCancel&#39;, onCancel));
-  properties.add(ObjectFlagProperty&lt;ValueChanged&lt;AuthorizationLevel&gt;&gt;.has(&#39;onPermissaoChanged&#39;, onPermissaoChanged));
+  properties.add(
+    ObjectFlagProperty&lt;ValueChanged&lt;AuthorizationLevel&gt;&gt;.has(
+      &#39;onPermissaoChanged&#39;,
+      onPermissaoChanged,
+    ),
+  );
 }</code></pre>
 </section>
 

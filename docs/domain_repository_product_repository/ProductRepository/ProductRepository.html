@@ -65,10 +65,9 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">ProductRepository({
-  required ProductDao productDao,
-  required CodeGeneratorService codeGeneratorService,
-}) : _productDao = productDao,
-     _codeGeneratorService = codeGeneratorService;</code></pre>
+  required this._productDao,
+  required this._codeGeneratorService,
+});</code></pre>
 </section>
 
 

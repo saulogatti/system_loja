@@ -67,14 +67,11 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">SalesRepository({
-  required InvoiceDao invoiceDao,
-  required InvoiceItemDao invoiceItemDao,
-  required ProductDao productDao,
-  required CodeGeneratorService codeGeneratorService,
-}) : _codeGeneratorService = codeGeneratorService,
-     _invoiceDao = invoiceDao,
-     _invoiceItemDao = invoiceItemDao,
-     _productDao = productDao;</code></pre>
+  required this._invoiceDao,
+  required this._invoiceItemDao,
+  required this._productDao,
+  required this._codeGeneratorService,
+});</code></pre>
 </section>
 
 
