@@ -207,3 +207,6 @@
 ## 28-07-2026 - Consolidating Key-Value Reading in Data Rows
 **Learning:** When displaying information rows that present a key and a value separately in the UI (e.g., in a `Row` with a label and its corresponding text), screen readers often read them disjointedly. This forces the user to navigate twice to understand the relationship.
 **Action:** Use `Semantics(label: '$label: $value', excludeSemantics: true)` around the structural widget (like `Row`) containing the pair. This merges the information into a single cohesive spoken announcement for screen readers.
+## 06-08-2026 - [Placeholder Text Accessibility]
+**Learning:** Missing placeholder (hint) text in TextFields reduces form usability by forcing users to guess the expected data format. While labelText identifies the field, hintText provides a concrete example.
+**Action:** Always include a 'hintText' in the InputDecoration of TextFields (e.g., 'Ex: João da Silva') to improve data entry clarity and screen reader context.

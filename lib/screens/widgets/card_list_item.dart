@@ -72,7 +72,7 @@ class CardListItem extends StatelessWidget {
                   onPressed: onDelete,
                   tooltip: 'Excluir $title',
                 ),
-              const Icon(Icons.arrow_forward_ios, size: 16),
+              const Icon(Icons.chevron_right),
             ],
           ),
           onTap: onTap,
