@@ -134,6 +134,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           textCapitalization: TextCapitalization.words,
                           decoration: const InputDecoration(
                             labelText: 'Nome *',
+                            hintText: 'Ex: Smartphone Galaxy S23',
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.inventory_2),
                           ),
@@ -150,6 +151,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           controller: _codigoController,
                           decoration: const InputDecoration(
                             labelText: 'Código *',
+                            hintText: 'Ex: PRD-001',
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.qr_code),
                           ),
@@ -165,6 +167,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
                                   labelText: r'Preço (R$) *',
+                                  hintText: 'Ex: 10,50',
                                   border: OutlineInputBorder(),
                                   prefixIcon: Icon(Icons.attach_money),
                                 ),
@@ -189,6 +192,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
                                   labelText: 'Estoque *',
+                                  hintText: 'Ex: 10',
                                   border: OutlineInputBorder(),
                                   prefixIcon: Icon(Icons.inventory),
                                 ),
@@ -227,6 +231,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           maxLength: Product.descriptionMaxLength,
                           decoration: const InputDecoration(
                             labelText: 'Descrição',
+                            hintText:
+                                'Ex: Smartphone de última geração com 256GB de armazenamento.',
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.description),
                           ),

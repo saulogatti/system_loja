@@ -81,6 +81,7 @@ class _ProductFormState extends State<ProductForm> {
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             labelText: 'Nome do Produto *',
+            hintText: 'Ex: Smartphone Galaxy S23',
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.inventory_2),
           ),
@@ -103,6 +104,7 @@ class _ProductFormState extends State<ProductForm> {
           inputFormatters: [ProductCodeInputFormatter()],
           decoration: InputDecoration(
             labelText: 'Código *',
+            hintText: 'Ex: PRD-001',
             border: const OutlineInputBorder(),
             prefixIcon: const Icon(Icons.qr_code),
             suffixIcon: IconButton(
@@ -186,6 +188,7 @@ class _ProductFormState extends State<ProductForm> {
           maxLength: Product.descriptionMaxLength,
           decoration: const InputDecoration(
             labelText: 'Descrição',
+            hintText: 'Ex: Smartphone de última geração com 256GB de armazenamento.',
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.description),
           ),
