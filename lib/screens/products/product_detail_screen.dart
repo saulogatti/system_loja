@@ -134,7 +134,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           textCapitalization: TextCapitalization.words,
                           decoration: const InputDecoration(
                             labelText: 'Nome *',
-                            hintText: 'Ex: Smartphone Galaxy S23',
+                            hintText: 'Ex: Smartphone',
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.inventory_2),
                           ),
@@ -151,7 +151,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           controller: _codigoController,
                           decoration: const InputDecoration(
                             labelText: 'Código *',
-                            hintText: 'Ex: PRD-001',
+                            hintText: 'Ex: PROD-001',
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.qr_code),
                           ),
@@ -231,8 +231,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           maxLength: Product.descriptionMaxLength,
                           decoration: const InputDecoration(
                             labelText: 'Descrição',
-                            hintText:
-                                'Ex: Smartphone de última geração com 256GB de armazenamento.',
+                            hintText: 'Ex: Smartphone com 128GB de armazenamento',
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.description),
                           ),
