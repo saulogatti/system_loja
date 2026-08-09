@@ -216,3 +216,6 @@
 ## 07-08-2026 - [Form Input Guidance]
 **Learning:** While `labelText` identifies a field's purpose, omitting `hintText` in `TextFormField`s leaves users guessing the expected format or level of detail (e.g., whether to include prefixes in codes or how descriptive to be). This increases friction in data entry.
 **Action:** Always include a contextual `hintText` providing a concrete example (e.g., 'Ex: Smartphone', 'Ex: PROD-001') within the `InputDecoration` of form fields to improve usability and reduce cognitive load.
+## 12-08-2024 - [Consistent Hint Text in Dialogs and Specialized Fields]
+**Learning:** Missing placeholder (hint) text in `TextFormField`s within dialogs (like `InvoiceQuantityDialog`) or specialized input fields (like `InvoiceNumberField`) forces users to guess the expected data format. While `labelText` identifies the field's purpose, omitting `hintText` leaves users without a concrete example, increasing friction in data entry.
+**Action:** Always include a contextual `hintText` providing a concrete example (e.g., 'Ex: 1', 'Ex: 123456') within the `InputDecoration` of all form fields, including those in dialogs and specialized components, to improve usability and reduce cognitive load.

@@ -49,6 +49,7 @@ class _InvoiceQuantityDialogState extends State<InvoiceQuantityDialog> {
           },
           decoration: InputDecoration(
             labelText: 'Quantidade *',
+            hintText: 'Ex: 1',
             helperText: widget.invoiceType == InvoiceType.exit
                 ? 'Estoque disponível: ${product.stockQuantity}'
                 : 'Estoque atual: ${product.stockQuantity}',
