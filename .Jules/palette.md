@@ -210,6 +210,9 @@
 ## 06-08-2026 - [Placeholder Text Accessibility]
 **Learning:** Missing placeholder (hint) text in TextFields reduces form usability by forcing users to guess the expected data format. While labelText identifies the field, hintText provides a concrete example.
 **Action:** Always include a 'hintText' in the InputDecoration of TextFields (e.g., 'Ex: João da Silva') to improve data entry clarity and screen reader context.
+## 24-05-2024 - Contextual Hints in Forms
+**Learning:** Users often hesitate when filling out abstract form fields (like codes or names). Missing placeholder (hintText) text in TextFields reduces form usability.
+**Action:** Always include `hintText` with concrete examples (e.g., 'Ex: Smartphone') in `TextFormField` widgets alongside `labelText` to guide user input.
 ## 07-08-2026 - [Form Input Guidance]
 **Learning:** While `labelText` identifies a field's purpose, omitting `hintText` in `TextFormField`s leaves users guessing the expected format or level of detail (e.g., whether to include prefixes in codes or how descriptive to be). This increases friction in data entry.
 **Action:** Always include a contextual `hintText` providing a concrete example (e.g., 'Ex: Smartphone', 'Ex: PROD-001') within the `InputDecoration` of form fields to improve usability and reduce cognitive load.

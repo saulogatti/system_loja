@@ -167,6 +167,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
                                   labelText: r'Preço (R$) *',
+                                  hintText: 'Ex: 10,50',
                                   border: OutlineInputBorder(),
                                   prefixIcon: Icon(Icons.attach_money),
                                 ),
@@ -191,6 +192,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 textInputAction: TextInputAction.next,
                                 decoration: const InputDecoration(
                                   labelText: 'Estoque *',
+                                  hintText: 'Ex: 10',
                                   border: OutlineInputBorder(),
                                   prefixIcon: Icon(Icons.inventory),
                                 ),
