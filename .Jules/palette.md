@@ -216,3 +216,6 @@
 ## 07-08-2026 - [Form Input Guidance]
 **Learning:** While `labelText` identifies a field's purpose, omitting `hintText` in `TextFormField`s leaves users guessing the expected format or level of detail (e.g., whether to include prefixes in codes or how descriptive to be). This increases friction in data entry.
 **Action:** Always include a contextual `hintText` providing a concrete example (e.g., 'Ex: Smartphone', 'Ex: PROD-001') within the `InputDecoration` of form fields to improve usability and reduce cognitive load.
+## 10-08-2026 - Trailing Chevron Affordance on Log System ListTiles
+**Learning:** Found that the interactive `ListTile` for system error logs lacked a trailing visual cue, making it unclear to users that the row could be tapped to reveal full error details via a dialog.
+**Action:** Consistently apply `trailing: const Icon(Icons.chevron_right)` to `ListTile`s designed for opening dialogs or navigating, particularly in technical sections like log analysis, to provide immediate visual interaction affordance.
