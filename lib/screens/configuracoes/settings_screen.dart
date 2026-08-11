@@ -55,6 +55,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+    persistentFooterDecoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.surface,
+      border: Border(top: BorderSide(color: Theme.of(context).colorScheme.outline)),
+    ),
     persistentFooterButtons: [
       TextButton(onPressed: () => _resetToDefault(context), child: const Text('Restaurar Dados')),
       TextButton(
