@@ -143,6 +143,7 @@ class _ProductCategoryWidgetState extends State<ProductCategoryWidget> {
     final nameController = TextEditingController();
     final descriptionController = TextEditingController();
     final formKey = GlobalKey<FormState>();
+    final isSubmitting = ValueNotifier<bool>(false);
 
     await showDialog(
       context: context,
@@ -162,7 +163,9 @@ class _ProductCategoryWidgetState extends State<ProductCategoryWidget> {
                 textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                   labelText: 'Nome *',
+                  hintText: 'Ex: Eletrônicos',
                   border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.category),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -179,7 +182,9 @@ class _ProductCategoryWidgetState extends State<ProductCategoryWidget> {
                 maxLength: 500,
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
+                  hintText: 'Ex: Produtos eletrônicos em geral',
                   border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.description),
                 ),
                 minLines: 3,
                 maxLines: null,
@@ -193,31 +198,52 @@ class _ProductCategoryWidgetState extends State<ProductCategoryWidget> {
             child: Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => context.router.pop(),
-                    child: const Text('Cancelar'),
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: isSubmitting,
+                    builder: (context, loading, _) => OutlinedButton(
+                      onPressed: loading ? null : () => context.router.pop(),
+                      child: const Text('Cancelar'),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (formKey.currentState!.validate()) {
-                        // Use parent context to access the cubit
-                        final cubit = parentContext.read<CategoryCubit>();
-                        await cubit.createCategory(
-                          name: nameController.text.trim(),
-                          description: descriptionController.text.trim().isEmpty
-                              ? null
-                              : descriptionController.text.trim(),
-                        );
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: isSubmitting,
+                    builder: (context, loading, _) => ElevatedButton(
+                      onPressed: loading
+                          ? null
+                          : () async {
+                              if (formKey.currentState!.validate()) {
+                                isSubmitting.value = true;
+                                try {
+                                  // Use parent context to access the cubit
+                                  final cubit = parentContext.read<CategoryCubit>();
+                                  await cubit.createCategory(
+                                    name: nameController.text.trim(),
+                                    description: descriptionController.text.trim().isEmpty
+                                        ? null
+                                        : descriptionController.text.trim(),
+                                  );
 
-                        if (context.mounted) {
-                          context.router.pop();
-                        }
-                      }
-                    },
-                    child: const Text('Criar'),
+                                  if (context.mounted) {
+                                    context.router.pop();
+                                  }
+                                } finally {
+                                  if (context.mounted) {
+                                    isSubmitting.value = false;
+                                  }
+                                }
+                              }
+                            },
+                      child: loading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Text('Criar'),
+                    ),
                   ),
                 ),
               ],
@@ -226,5 +252,7 @@ class _ProductCategoryWidgetState extends State<ProductCategoryWidget> {
         ],
       ),
     );
+
+    isSubmitting.dispose();
   }
 }
