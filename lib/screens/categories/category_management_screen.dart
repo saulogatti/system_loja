@@ -227,6 +227,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                 textCapitalization: TextCapitalization.words,
                 decoration: const InputDecoration(
                   labelText: 'Nome *',
+                  hintText: 'Ex: Eletrônicos',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.category),
                 ),
@@ -245,6 +246,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                 maxLength: 500,
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
+                  hintText: 'Ex: Produtos eletrônicos em geral',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.description),
                 ),

@@ -30,45 +30,42 @@ class _InvoiceNumberFieldState extends State<InvoiceNumberField> {
 
   @override
   Widget build(BuildContext context) => BlocConsumer<SalesInvoiceCubit, SalesInvoiceState>(
-      listenWhen: (previous, current) =>
-          previous.form.invoiceNumber != current.form.invoiceNumber ||
-          previous.form.enableCodeGeneration !=
-              current.form.enableCodeGeneration,
-      listener: (context, state) {
-        final n = state.form.invoiceNumber;
-        if (_controller.text != n) {
-          _controller.value = TextEditingValue(
-            text: n,
-            selection: TextSelection.collapsed(offset: n.length),
-          );
-        }
-      },
-      builder: (context, state) {
-        final form = state.form;
-        return TextFormField(
-          readOnly: form.enableCodeGeneration,
-          controller: _controller,
-          onChanged: context.read<SalesInvoiceCubit>().updateInvoiceNumber,
-          decoration: InputDecoration(
-            labelText: 'Número da Nota *',
-            border: const OutlineInputBorder(),
-            prefixIcon: const Icon(Icons.numbers),
-            suffixIcon: IconButton(
-              tooltip: form.enableCodeGeneration
-                  ? 'Desativar geração automática'
-                  : 'Gerar número automaticamente',
-              onPressed: () =>
-                  context.read<SalesInvoiceCubit>().toggleAutoInvoiceNumber(),
-              icon: Icon(
-                Icons.generating_tokens_outlined,
-                color: form.enableCodeGeneration
-                    ? Theme.of(context).colorScheme.primary
-                    : null,
-              ),
+    listenWhen: (previous, current) =>
+        previous.form.invoiceNumber != current.form.invoiceNumber ||
+        previous.form.enableCodeGeneration != current.form.enableCodeGeneration,
+    listener: (context, state) {
+      final n = state.form.invoiceNumber;
+      if (_controller.text != n) {
+        _controller.value = TextEditingValue(
+          text: n,
+          selection: TextSelection.collapsed(offset: n.length),
+        );
+      }
+    },
+    builder: (context, state) {
+      final form = state.form;
+      return TextFormField(
+        readOnly: form.enableCodeGeneration,
+        controller: _controller,
+        onChanged: context.read<SalesInvoiceCubit>().updateInvoiceNumber,
+        decoration: InputDecoration(
+          labelText: 'Número da Nota *',
+          hintText: 'Ex: 123456',
+          border: const OutlineInputBorder(),
+          prefixIcon: const Icon(Icons.numbers),
+          suffixIcon: IconButton(
+            tooltip: form.enableCodeGeneration
+                ? 'Desativar geração automática'
+                : 'Gerar número automaticamente',
+            onPressed: () => context.read<SalesInvoiceCubit>().toggleAutoInvoiceNumber(),
+            icon: Icon(
+              Icons.generating_tokens_outlined,
+              color: form.enableCodeGeneration ? Theme.of(context).colorScheme.primary : null,
             ),
           ),
-          validator: (value) => validateRequired(value, 'Número da nota'),
-        );
-      },
-    );
+        ),
+        validator: (value) => validateRequired(value, 'Número da nota'),
+      );
+    },
+  );
 }

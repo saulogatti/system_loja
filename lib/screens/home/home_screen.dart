@@ -154,6 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       enableSuggestions: false,
                       decoration: const InputDecoration(
                         labelText: 'Chave de Ativação',
+                        hintText: 'Ex: ABCD-1234-WXYZ-5678',
                         border: OutlineInputBorder(),
                         isDense: true,
                       ),
