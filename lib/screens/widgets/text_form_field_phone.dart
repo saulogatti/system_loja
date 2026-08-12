@@ -13,6 +13,7 @@ class TextFormFieldPhone extends StatelessWidget {
     controller: telefoneController,
     decoration: const InputDecoration(
       labelText: 'Telefone',
+      hintText: 'Ex: (11) 99999-9999',
       border: OutlineInputBorder(),
       prefixIcon: Icon(Icons.phone),
     ),
