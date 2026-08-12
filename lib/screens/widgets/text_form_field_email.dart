@@ -14,6 +14,7 @@ class TextFormFieldEmail extends StatelessWidget {
     controller: emailController,
     decoration: const InputDecoration(
       labelText: 'Email',
+      hintText: 'Ex: nome@exemplo.com',
       border: OutlineInputBorder(),
       prefixIcon: Icon(Icons.email),
     ),
