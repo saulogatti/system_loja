@@ -17,7 +17,6 @@ import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
 @RoutePage()
 class CustomerEditView extends StatefulWidget implements AutoRouteWrapper {
-
   const CustomerEditView({required this.customer, super.key});
   final Customer customer;
 
@@ -26,9 +25,9 @@ class CustomerEditView extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) => BlocProvider(
-      create: (_) => CustomerEditCubit(appInjection.get<ICustomerRepository>()),
-      child: this,
-    );
+    create: (_) => CustomerEditCubit(appInjection.get<ICustomerRepository>()),
+    child: this,
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -53,90 +52,87 @@ class _CustomerEditViewState extends State<CustomerEditView> {
 
   @override
   Widget build(BuildContext context) => BlocListener<CustomerEditCubit, CustomerEditState>(
-      listener: _onStateChanged,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Editar Pessoa Física'),
-          leading: const AutoLeadingButton(),
-          actions: [
-            IconButton(
-              tooltip: 'Excluir',
-              onPressed: _confirmDelete,
-              icon: const Icon(Icons.delete),
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextFormField(
-                  controller: _nameController,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  autofillHints: const [AutofillHints.name],
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: 'Nome Completo *',
-                    border: OutlineInputBorder(),
+    listener: _onStateChanged,
+    child: Scaffold(
+      appBar: AppBar(
+        title: const Text('Editar Pessoa Física'),
+        leading: const AutoLeadingButton(),
+        actions: [
+          IconButton(tooltip: 'Excluir', onPressed: _confirmDelete, icon: const Icon(Icons.delete)),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: _nameController,
+                keyboardType: TextInputType.name,
+                textCapitalization: TextCapitalization.words,
+                autofillHints: const [AutofillHints.name],
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  labelText: 'Nome Completo *',
+                  hintText: 'Ex: João da Silva',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) => combineValidators([
+                  (v) => validateRequired(v, 'Nome Completo'),
+                  (v) => validateMinLength(v, 3, 'Nome Completo'),
+                ])(value),
+              ),
+              const SizedBox(height: 16),
+              TextFormFieldCpf(cpfController: _cpfController),
+              const SizedBox(height: 16),
+              TextFormFieldEmail(emailController: _emailController, isEditing: true),
+              const SizedBox(height: 16),
+              TextFormFieldPhone(telefoneController: _phoneController, isEditing: true),
+              const SizedBox(height: 16),
+              AddressForm(
+                streetController: _streetController,
+                zipCodeController: _zipCodeController,
+                neighborhoodController: _neighborhoodController,
+                cityController: _cityController,
+                stateController: _stateController,
+              ),
+              const SizedBox(height: 16),
+              _buildReadOnlyDateField(
+                label: 'Data de Cadastro',
+                value: widget.customer.registrationDate.toFormattedDate(),
+              ),
+              const SizedBox(height: 16),
+              _buildReadOnlyDateField(
+                label: 'Última Atualização',
+                value: widget.customer.lastUpdatedDate.toFormattedDate(),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => context.router.maybePop(false),
+                      child: const Text('Voltar'),
+                    ),
                   ),
-                  validator: (value) => combineValidators([
-                    (v) => validateRequired(v, 'Nome Completo'),
-                    (v) => validateMinLength(v, 3, 'Nome Completo'),
-                  ])(value),
-                ),
-                const SizedBox(height: 16),
-                TextFormFieldCpf(cpfController: _cpfController),
-                const SizedBox(height: 16),
-                TextFormFieldEmail(emailController: _emailController, isEditing: true),
-                const SizedBox(height: 16),
-                TextFormFieldPhone(telefoneController: _phoneController, isEditing: true),
-                const SizedBox(height: 16),
-                AddressForm(
-                  streetController: _streetController,
-                  zipCodeController: _zipCodeController,
-                  neighborhoodController: _neighborhoodController,
-                  cityController: _cityController,
-                  stateController: _stateController,
-                ),
-                const SizedBox(height: 16),
-                _buildReadOnlyDateField(
-                  label: 'Data de Cadastro',
-                  value: widget.customer.registrationDate.toFormattedDate(),
-                ),
-                const SizedBox(height: 16),
-                _buildReadOnlyDateField(
-                  label: 'Última Atualização',
-                  value: widget.customer.lastUpdatedDate.toFormattedDate(),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => context.router.maybePop(false),
-                        child: const Text('Voltar'),
-                      ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _saveChanges,
+                      child: const Text('Salvar Alterações'),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _saveChanges,
-                        child: const Text('Salvar Alterações'),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
-    );
+    ),
+  );
 
   @override
   void dispose() {
@@ -171,19 +167,19 @@ class _CustomerEditViewState extends State<CustomerEditView> {
     final shouldDelete = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-          title: const Text('Excluir pessoa física'),
-          content: Text('Deseja realmente excluir "${widget.customer.name}"?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: const Text('Cancelar'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: const Text('Excluir'),
-            ),
-          ],
-        ),
+        title: const Text('Excluir pessoa física'),
+        content: Text('Deseja realmente excluir "${widget.customer.name}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
     );
 
     if (!mounted) {
@@ -274,13 +270,13 @@ class _CustomerEditViewState extends State<CustomerEditView> {
   }
 
   Widget _buildReadOnlyDateField({required String label, required String value}) => TextFormField(
-      initialValue: value,
-      decoration: InputDecoration(
-        labelText: label,
-        border: const OutlineInputBorder(),
-        prefixIcon: const Icon(Icons.event_note),
-      ),
-      readOnly: true,
-      enabled: false,
-    );
+    initialValue: value,
+    decoration: InputDecoration(
+      labelText: label,
+      border: const OutlineInputBorder(),
+      prefixIcon: const Icon(Icons.event_note),
+    ),
+    readOnly: true,
+    enabled: false,
+  );
 }

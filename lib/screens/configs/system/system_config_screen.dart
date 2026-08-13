@@ -293,6 +293,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
             textInputAction: TextInputAction.done,
             decoration: const InputDecoration(
               labelText: 'Período padrão (dias)',
+              hintText: 'Ex: 30',
               border: OutlineInputBorder(),
             ),
           ),

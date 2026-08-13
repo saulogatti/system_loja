@@ -18,6 +18,7 @@ class TextFormFieldCpf extends StatelessWidget {
     controller: cpfController,
     decoration: const InputDecoration(
       labelText: 'CPF',
+      hintText: 'Ex: 000.000.000-00',
       border: OutlineInputBorder(),
       prefixIcon: Icon(Icons.badge),
     ),

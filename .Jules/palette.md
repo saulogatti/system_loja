@@ -228,3 +228,7 @@
 ## 25-10-2026 - [Form Loading State in BottomSheets/Dialogs]
 **Learning:** Re-evaluating form submission within Flutter dialogs reveals a common pain point: state changes from cubits or outer contexts do not easily refresh the inner UI of a `showDialog`, often leaving action buttons enabled during submission or lacking visual progress indicators, causing double-submissions.
 **Action:** Always extract an isolated local state for dialog submissions using `final isSubmitting = ValueNotifier<bool>(false);`. Wrap action buttons (like 'Criar', 'Cancelar') inside a `ValueListenableBuilder<bool>`, disable them when `loading` is true, and conditionally swap the action label with a `CircularProgressIndicator`. Ensure `isSubmitting.dispose()` is called after the `showDialog` completes.
+
+## 25-10-2026 - [Global Form Guidance with hintText]
+**Learning:** Found multiple specialized and auto-generated fields (like Name, CNPJ, and Config properties) where `labelText` correctly labeled the input but failed to provide an example using `hintText`. This creates a poor UX because it leaves users wondering about formatting, especially for system parameters like "Período padrão".
+**Action:** Consistently enforce the presence of `hintText: 'Ex: [Value]'` in the `InputDecoration` across ALL editable text fields within the app to reduce cognitive load and enhance form usability.
