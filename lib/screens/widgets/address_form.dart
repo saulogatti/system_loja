@@ -29,6 +29,7 @@ class AddressForm extends StatelessWidget {
         controller: streetController,
         decoration: const InputDecoration(
           labelText: 'Rua',
+          hintText: 'Ex: Rua das Flores, 123',
           border: OutlineInputBorder(),
           prefixIcon: Icon(Icons.location_on),
         ),
@@ -61,6 +62,7 @@ class AddressForm extends StatelessWidget {
               controller: neighborhoodController,
               decoration: const InputDecoration(
                 labelText: 'Bairro',
+                hintText: 'Ex: Centro',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.map),
               ),
@@ -76,6 +78,7 @@ class AddressForm extends StatelessWidget {
         controller: cityController,
         decoration: const InputDecoration(
           labelText: 'Cidade',
+          hintText: 'Ex: São Paulo',
           border: OutlineInputBorder(),
           prefixIcon: Icon(Icons.location_city),
         ),
