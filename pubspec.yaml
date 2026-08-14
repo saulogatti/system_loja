@@ -39,6 +39,8 @@ dependencies:
   get_it: ^9.2.1
   archive: ^4.0.9
 
+  material_ui: any
+  collection: any
 dev_dependencies:
   freezed: ^4.0.0-dev.3
 

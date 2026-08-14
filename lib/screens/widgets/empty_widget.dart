@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Um widget reutilizável para exibir estados vazios com semântica adequada.
 class EmptyWidget extends StatelessWidget {

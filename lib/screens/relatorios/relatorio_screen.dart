@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_category_repository.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
@@ -22,7 +22,6 @@ import 'package:system_loja/screens/widgets/empty_widget.dart';
 /// Tela de relatórios com abas para notas fiscais (entrada/saída) e estoque.
 @RoutePage()
 class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
-
   /// Cria uma instância de [RelatoriosScreen].
   const RelatoriosScreen({
     super.key,
@@ -36,97 +35,96 @@ class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
-      length: 2,
-      child: Column(
-        children: [
-          const TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.receipt_long), text: 'Notas Fiscais'),
-              Tab(icon: Icon(Icons.inventory_2), text: 'Estoque'),
-            ],
-          ),
-          Expanded(
-            child: BlocBuilder<RelatorioCubit, RelatorioState>(
-              builder: (context, state) => switch (state) {
-                  RelatorioInitial() ||
-                  RelatorioLoading() => const Center(child: CircularProgressIndicator()),
-                  RelatorioError(:final message) => Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          size: 64,
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          message,
-                          style: TextStyle(color: Theme.of(context).colorScheme.error),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        ElevatedButton.icon(
-                          onPressed: () => context.read<RelatorioCubit>().carregarRelatorios(),
-                          icon: const Icon(Icons.refresh),
-                          label: const Text('Tentar novamente'),
-                        ),
-                      ],
+    length: 2,
+    child: Column(
+      children: [
+        const TabBar(
+          tabs: [
+            Tab(icon: Icon(Icons.receipt_long), text: 'Notas Fiscais'),
+            Tab(icon: Icon(Icons.inventory_2), text: 'Estoque'),
+          ],
+        ),
+        Expanded(
+          child: BlocBuilder<RelatorioCubit, RelatorioState>(
+            builder: (context, state) => switch (state) {
+              RelatorioInitial() ||
+              RelatorioLoading() => const Center(child: CircularProgressIndicator()),
+              RelatorioError(:final message) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline, size: 64, color: Theme.of(context).colorScheme.error),
+                    const SizedBox(height: 16),
+                    Text(
+                      message,
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  RelatorioLoaded(
-                    :final categoryNamesById,
-                    :final entryInvoices,
-                    :final exitInvoices,
-                    :final estoqueOverview,
-                    :final notasOverview,
-                    :final products,
-                  ) =>
-                    TabBarView(
-                      children: [
-                        _NotasFiscaisTab(
-                          entryInvoices: entryInvoices,
-                          exitInvoices: exitInvoices,
-                          notasOverview: notasOverview,
-                        ),
-                        _EstoqueTab(
-                          categoryNamesById: categoryNamesById,
-                          products: products,
-                          estoqueOverview: estoqueOverview,
-                        ),
-                      ],
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      onPressed: () => context.read<RelatorioCubit>().carregarRelatorios(),
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Tentar novamente'),
                     ),
-                },
-            ),
+                  ],
+                ),
+              ),
+              RelatorioLoaded(
+                :final categoryNamesById,
+                :final entryInvoices,
+                :final exitInvoices,
+                :final estoqueOverview,
+                :final notasOverview,
+                :final products,
+              ) =>
+                TabBarView(
+                  children: [
+                    _NotasFiscaisTab(
+                      entryInvoices: entryInvoices,
+                      exitInvoices: exitInvoices,
+                      notasOverview: notasOverview,
+                    ),
+                    _EstoqueTab(
+                      categoryNamesById: categoryNamesById,
+                      products: products,
+                      estoqueOverview: estoqueOverview,
+                    ),
+                  ],
+                ),
+            },
           ),
-        ],
-      ),
-    );
-
-  @override
-  Widget wrappedRoute(BuildContext context) => BlocProvider<RelatorioCubit>(
-      create: (_) => RelatorioCubit(
-        salesRepository ?? appInjection.get<ISalesRepository>(),
-        productRepository ?? appInjection.get<IProductRepository>(),
-        categoryRepository ?? appInjection.get<ICategoryRepository>(),
-        appInjection.get<ProductMovementReportService>(),
-        appInjection.get<RelatorioOverviewService>(),
-      ),
-      child: this,
-    );
+        ),
+      ],
+    ),
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<ISalesRepository?>('salesRepository', salesRepository));
-    properties.add(DiagnosticsProperty<IProductRepository?>('productRepository', productRepository));
-    properties.add(DiagnosticsProperty<ICategoryRepository?>('categoryRepository', categoryRepository));
+    properties.add(
+      DiagnosticsProperty<IProductRepository?>('productRepository', productRepository),
+    );
+    properties.add(
+      DiagnosticsProperty<ICategoryRepository?>('categoryRepository', categoryRepository),
+    );
   }
+
+  @override
+  Widget wrappedRoute(BuildContext context) => BlocProvider<RelatorioCubit>(
+    create: (_) => RelatorioCubit(
+      salesRepository ?? appInjection.get<ISalesRepository>(),
+      productRepository ?? appInjection.get<IProductRepository>(),
+      categoryRepository ?? appInjection.get<ICategoryRepository>(),
+      appInjection.get<ProductMovementReportService>(),
+      appInjection.get<RelatorioOverviewService>(),
+    ),
+    child: this,
+  );
 }
 
 /// Aba de relatório de estoque de produtos.
 class _EstoqueTab extends StatelessWidget {
-
   const _EstoqueTab({
     required this.categoryNamesById,
     required this.products,
@@ -200,6 +198,16 @@ class _EstoqueTab extends StatelessWidget {
     );
   }
 
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<Map<int, String>>('categoryNamesById', categoryNamesById));
+    properties.add(IterableProperty<Product>('products', products));
+    properties.add(
+      DiagnosticsProperty<RelatorioEstoqueOverviewData>('estoqueOverview', estoqueOverview),
+    );
+  }
+
   void _openProductDetails(BuildContext context, Product product) {
     final cubit = context.read<RelatorioCubit>();
     cubit.prepareProductDetails(product);
@@ -227,21 +235,12 @@ class _EstoqueTab extends StatelessWidget {
     }
     return categoryNamesById[categoryId] ?? 'Categoria #$categoryId';
   }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<Map<int, String>>('categoryNamesById', categoryNamesById));
-    properties.add(IterableProperty<Product>('products', products));
-    properties.add(DiagnosticsProperty<RelatorioEstoqueOverviewData>('estoqueOverview', estoqueOverview));
-  }
 }
 
 enum _InvoiceFilterType { entrada, saida }
 
 /// Item de lista para uma nota fiscal.
 class _InvoiceTile extends StatelessWidget {
-
   const _InvoiceTile({required this.invoice, required this.color});
   final Invoice invoice;
   final Color color;
@@ -325,7 +324,6 @@ class _InvoiceTile extends StatelessWidget {
 }
 
 class _MovementSection extends StatelessWidget {
-
   const _MovementSection({required this.title, required this.color, required this.movements});
   final String title;
   final Color color;
@@ -333,74 +331,74 @@ class _MovementSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.history, color: color, size: 18),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    '$title (${movements.length})',
-                    style: TextStyle(fontWeight: FontWeight.w700, color: color),
-                  ),
+    child: Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.history, color: color, size: 18),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  '$title (${movements.length})',
+                  style: TextStyle(fontWeight: FontWeight.w700, color: color),
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            if (movements.isEmpty)
-              const EmptyWidget(message: 'Nenhum registro encontrado.', icon: Icons.search_off)
-            else
-              ...movements.map((movement) {
-                final invoice = movement.invoice;
-                final item = movement.item;
-                Future<void> onTap() => InvoiceOverviewBottomSheet.show(context, invoice);
-                final semanticLabel =
-                    'Nota Fiscal ${invoice.data.invoiceNumber}, Cliente ${invoice.data.personDisplayName}, Data ${invoice.data.issueDate.toFormattedDate()}, Quantidade ${item.quantity}, Preço unitário R\$ ${item.unitPrice.toStringAsFixed(2)}, Valor total R\$ ${item.totalValue.toStringAsFixed(2)}';
-                return Semantics(
-                  button: true,
-                  label: semanticLabel,
-                  excludeSemantics: true,
-                  onTap: onTap,
-                  onTapHint: 'Ver detalhes da nota fiscal',
-                  child: ListTile(
-                    dense: true,
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      'NF ${invoice.data.invoiceNumber} • ${invoice.data.personDisplayName}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text(
-                      '${invoice.data.issueDate.toFormattedDate()} • Qtd: ${item.quantity} • Unit: R\$ ${item.unitPrice.toStringAsFixed(2)}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'R\$ ${item.totalValue.toStringAsFixed(2)}',
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(width: 8),
-                        Icon(
-                          Icons.chevron_right,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                      ],
-                    ),
-                    onTap: onTap,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (movements.isEmpty)
+            const EmptyWidget(message: 'Nenhum registro encontrado.', icon: Icons.search_off)
+          else
+            ...movements.map((movement) {
+              final invoice = movement.invoice;
+              final item = movement.item;
+              Future<void> onTap() => InvoiceOverviewBottomSheet.show(context, invoice);
+              final semanticLabel =
+                  'Nota Fiscal ${invoice.data.invoiceNumber}, Cliente ${invoice.data.personDisplayName}, Data ${invoice.data.issueDate.toFormattedDate()}, Quantidade ${item.quantity}, Preço unitário R\$ ${item.unitPrice.toStringAsFixed(2)}, Valor total R\$ ${item.totalValue.toStringAsFixed(2)}';
+              return Semantics(
+                button: true,
+                label: semanticLabel,
+                excludeSemantics: true,
+                onTap: onTap,
+                onTapHint: 'Ver detalhes da nota fiscal',
+                child: ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    'NF ${invoice.data.invoiceNumber} • ${invoice.data.personDisplayName}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                );
-              }),
-          ],
-        ),
+                  subtitle: Text(
+                    '${invoice.data.issueDate.toFormattedDate()} • Qtd: ${item.quantity} • Unit: R\$ ${item.unitPrice.toStringAsFixed(2)}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'R\$ ${item.totalValue.toStringAsFixed(2)}',
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(width: 8),
+                      Icon(
+                        Icons.chevron_right,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ],
+                  ),
+                  onTap: onTap,
+                ),
+              );
+            }),
+        ],
       ),
-    );
+    ),
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -413,7 +411,6 @@ class _MovementSection extends StatelessWidget {
 
 /// Aba de relatório de notas fiscais (entrada e saída).
 class _NotasFiscaisTab extends StatefulWidget {
-
   const _NotasFiscaisTab({
     required this.entryInvoices,
     required this.exitInvoices,
@@ -460,86 +457,89 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
         ? 'Nenhuma nota de entrada cadastrada'
         : 'Nenhuma nota de saída cadastrada';
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: _ResumoNotasRow(
-            totalEntrada: widget.notasOverview.totalEntrada,
-            countEntrada: widget.notasOverview.quantidadeEntradas,
-            totalSaida: widget.notasOverview.totalSaida,
-            countSaida: widget.notasOverview.quantidadeSaidas,
+    return Material(
+      color: Theme.of(context).colorScheme.surface,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: _ResumoNotasRow(
+              totalEntrada: widget.notasOverview.totalEntrada,
+              countEntrada: widget.notasOverview.quantidadeEntradas,
+              totalSaida: widget.notasOverview.totalSaida,
+              countSaida: widget.notasOverview.quantidadeSaidas,
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-          child: Row(
-            children: [
-              Expanded(
-                child: _SectionHeader(
-                  title: 'Notas de Entrada (${widget.entryInvoices.length})',
-                  icon: Icons.arrow_downward,
-                  color: Colors.green,
-                  isSelected: isShowingEntries,
-                  onTap: () {
-                    setState(() {
-                      _selectedFilter = _InvoiceFilterType.entrada;
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _SectionHeader(
-                  title: 'Notas de Saída (${widget.exitInvoices.length})',
-                  icon: Icons.arrow_upward,
-                  color: Colors.orange,
-                  isSelected: !isShowingEntries,
-                  onTap: () {
-                    setState(() {
-                      _selectedFilter = _InvoiceFilterType.saida;
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: _SectionHeader(
-            title: sectionTitle,
-            icon: isShowingEntries ? Icons.arrow_downward : Icons.arrow_upward,
-            color: sectionColor,
-          ),
-        ),
-        Expanded(
-          child: RefreshIndicator(
-            onRefresh: () => context.read<RelatorioCubit>().carregarRelatorios(),
-            child: invoices.isEmpty
-                ? ListView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    children: [
-                      EmptyWidget(message: emptyMessage, icon: Icons.receipt_long_outlined),
-                    ],
-                  )
-                : GridView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    gridDelegate: _invoiceGridDelegate,
-                    itemCount: invoices.length,
-                    itemBuilder: (context, index) => _InvoiceTile(invoice: invoices[index], color: sectionColor),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _SectionHeader(
+                    title: 'Notas de Entrada (${widget.entryInvoices.length})',
+                    icon: Icons.arrow_downward,
+                    color: Colors.green,
+                    isSelected: isShowingEntries,
+                    onTap: () {
+                      setState(() {
+                        _selectedFilter = _InvoiceFilterType.entrada;
+                      });
+                    },
                   ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _SectionHeader(
+                    title: 'Notas de Saída (${widget.exitInvoices.length})',
+                    icon: Icons.arrow_upward,
+                    color: Colors.orange,
+                    isSelected: !isShowingEntries,
+                    onTap: () {
+                      setState(() {
+                        _selectedFilter = _InvoiceFilterType.saida;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+            child: _SectionHeader(
+              title: sectionTitle,
+              icon: isShowingEntries ? Icons.arrow_downward : Icons.arrow_upward,
+              color: sectionColor,
+            ),
+          ),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () => context.read<RelatorioCubit>().carregarRelatorios(),
+              child: invoices.isEmpty
+                  ? ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                      children: [
+                        EmptyWidget(message: emptyMessage, icon: Icons.receipt_long_outlined),
+                      ],
+                    )
+                  : GridView.builder(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      gridDelegate: _invoiceGridDelegate,
+                      itemCount: invoices.length,
+                      itemBuilder: (context, index) =>
+                          _InvoiceTile(invoice: invoices[index], color: sectionColor),
+                    ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
 class _ProductDetailsBottomSheet extends StatelessWidget {
-
   const _ProductDetailsBottomSheet({
     required this.product,
     required this.categoryName,
@@ -555,68 +555,42 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SafeArea(
-      child: DraggableScrollableSheet(
-        expand: false,
-        initialChildSize: 0.75,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        builder: (context, scrollController) => ListView(
-            controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+    child: DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.75,
+      minChildSize: 0.5,
+      maxChildSize: 0.95,
+      builder: (context, scrollController) => ListView(
+        controller: scrollController,
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.outlineVariant,
+                borderRadius: BorderRadius.circular(2),
               ),
-              const SizedBox(height: 12),
-              Text(product.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 4),
-              Text('Código: ${product.code}'),
-              Text('Categoria: $categoryName'),
-              Text('Preço: R\$ ${product.price.toStringAsFixed(2)}'),
-              Text('Estoque atual: ${product.stockQuantity} unidade(s)'),
-              const SizedBox(height: 12),
-              _ProductMovementSummaryCard(summary: summary),
-              const SizedBox(height: 16),
-              _MovementSection(
-                title: 'Entradas do produto',
-                color: Colors.green,
-                movements: entries,
-              ),
-              const SizedBox(height: 12),
-              _MovementSection(title: 'Saídas do produto', color: Colors.orange, movements: exits),
-            ],
+            ),
           ),
+          const SizedBox(height: 12),
+          Text(product.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 4),
+          Text('Código: ${product.code}'),
+          Text('Categoria: $categoryName'),
+          Text('Preço: R\$ ${product.price.toStringAsFixed(2)}'),
+          Text('Estoque atual: ${product.stockQuantity} unidade(s)'),
+          const SizedBox(height: 12),
+          _ProductMovementSummaryCard(summary: summary),
+          const SizedBox(height: 16),
+          _MovementSection(title: 'Entradas do produto', color: Colors.green, movements: entries),
+          const SizedBox(height: 12),
+          _MovementSection(title: 'Saídas do produto', color: Colors.orange, movements: exits),
+        ],
       ),
-    );
-
-  static Future<void> show(
-    BuildContext context, {
-    required Product product,
-    required String categoryName,
-    required List<ProductInvoiceMovement> entries,
-    required List<ProductInvoiceMovement> exits,
-    required ProductMovementSummary summary,
-  }) => showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (_) => _ProductDetailsBottomSheet(
-        product: product,
-        categoryName: categoryName,
-        entries: entries,
-        exits: exits,
-        summary: summary,
-      ),
-    );
+    ),
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -627,10 +601,31 @@ class _ProductDetailsBottomSheet extends StatelessWidget {
     properties.add(IterableProperty<ProductInvoiceMovement>('exits', exits));
     properties.add(DiagnosticsProperty<ProductMovementSummary>('summary', summary));
   }
+
+  static Future<void> show(
+    BuildContext context, {
+    required Product product,
+    required String categoryName,
+    required List<ProductInvoiceMovement> entries,
+    required List<ProductInvoiceMovement> exits,
+    required ProductMovementSummary summary,
+  }) => showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    ),
+    builder: (_) => _ProductDetailsBottomSheet(
+      product: product,
+      categoryName: categoryName,
+      entries: entries,
+      exits: exits,
+      summary: summary,
+    ),
+  );
 }
 
 class _ProductMovementSummaryCard extends StatelessWidget {
-
   const _ProductMovementSummaryCard({required this.summary});
   final ProductMovementSummary summary;
 
@@ -680,7 +675,6 @@ class _ProductMovementSummaryCard extends StatelessWidget {
 
 /// Item de lista para um produto com indicação de estoque.
 class _ProdutoTile extends StatelessWidget {
-
   const _ProdutoTile({required this.product, required this.categoryName, required this.onTap});
   final Product product;
   final String categoryName;
@@ -777,7 +771,6 @@ class _ProdutoTile extends StatelessWidget {
 
 /// Card de resumo para um tipo de nota fiscal.
 class _ResumoCard extends StatelessWidget {
-
   const _ResumoCard({
     required this.titulo,
     required this.valor,
@@ -793,35 +786,35 @@ class _ResumoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-      elevation: 3,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: color, size: 20),
-                const SizedBox(width: 8),
-                Text(
-                  titulo,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'R\$ ${valor.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '$quantidade ${quantidade == 1 ? 'nota' : 'notas'}',
-              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
-            ),
-          ],
-        ),
+    elevation: 3,
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                titulo,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'R\$ ${valor.toStringAsFixed(2)}',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            '$quantidade ${quantidade == 1 ? 'nota' : 'notas'}',
+            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+          ),
+        ],
       ),
-    );
+    ),
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -836,7 +829,6 @@ class _ResumoCard extends StatelessWidget {
 
 /// Card de resumo para estoque.
 class _ResumoEstoqueCard extends StatelessWidget {
-
   const _ResumoEstoqueCard({
     required this.label,
     required this.valor,
@@ -850,26 +842,26 @@ class _ResumoEstoqueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-      elevation: 3,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: 24),
-            const SizedBox(height: 4),
-            Text(
-              '$valor',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color),
-            ),
-            Text(
-              label,
-              style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+    elevation: 3,
+    child: Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 24),
+          const SizedBox(height: 4),
+          Text(
+            '$valor',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color),
+          ),
+          Text(
+            label,
+            style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
-    );
+    ),
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -883,7 +875,6 @@ class _ResumoEstoqueCard extends StatelessWidget {
 
 /// Resumo de estoque com cards informativos.
 class _ResumoEstoqueRow extends StatelessWidget {
-
   const _ResumoEstoqueRow({
     required this.total,
     required this.semEstoque,
@@ -895,35 +886,35 @@ class _ResumoEstoqueRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-      children: [
-        Expanded(
-          child: _ResumoEstoqueCard(
-            label: 'Total',
-            valor: total,
-            icon: Icons.inventory_2,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+    children: [
+      Expanded(
+        child: _ResumoEstoqueCard(
+          label: 'Total',
+          valor: total,
+          icon: Icons.inventory_2,
+          color: Theme.of(context).colorScheme.primary,
         ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: _ResumoEstoqueCard(
-            label: 'Estoque baixo',
-            valor: estoqueBaixo,
-            icon: Icons.warning_amber,
-            color: Colors.orange,
-          ),
+      ),
+      const SizedBox(width: 8),
+      Expanded(
+        child: _ResumoEstoqueCard(
+          label: 'Estoque baixo',
+          valor: estoqueBaixo,
+          icon: Icons.warning_amber,
+          color: Colors.orange,
         ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: _ResumoEstoqueCard(
-            label: 'Sem estoque',
-            valor: semEstoque,
-            icon: Icons.remove_shopping_cart,
-            color: Colors.red,
-          ),
+      ),
+      const SizedBox(width: 8),
+      Expanded(
+        child: _ResumoEstoqueCard(
+          label: 'Sem estoque',
+          valor: semEstoque,
+          icon: Icons.remove_shopping_cart,
+          color: Colors.red,
         ),
-      ],
-    );
+      ),
+    ],
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -936,7 +927,6 @@ class _ResumoEstoqueRow extends StatelessWidget {
 
 /// Resumo com totais de entrada e saída.
 class _ResumoNotasRow extends StatelessWidget {
-
   const _ResumoNotasRow({
     required this.totalEntrada,
     required this.countEntrada,
@@ -950,28 +940,28 @@ class _ResumoNotasRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-      children: [
-        Expanded(
-          child: _ResumoCard(
-            titulo: 'Entradas',
-            valor: totalEntrada,
-            quantidade: countEntrada,
-            icon: Icons.arrow_downward,
-            color: Colors.green,
-          ),
+    children: [
+      Expanded(
+        child: _ResumoCard(
+          titulo: 'Entradas',
+          valor: totalEntrada,
+          quantidade: countEntrada,
+          icon: Icons.arrow_downward,
+          color: Colors.green,
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _ResumoCard(
-            titulo: 'Saídas',
-            valor: totalSaida,
-            quantidade: countSaida,
-            icon: Icons.arrow_upward,
-            color: Colors.orange,
-          ),
+      ),
+      const SizedBox(width: 12),
+      Expanded(
+        child: _ResumoCard(
+          titulo: 'Saídas',
+          valor: totalSaida,
+          quantidade: countSaida,
+          icon: Icons.arrow_upward,
+          color: Colors.orange,
         ),
-      ],
-    );
+      ),
+    ],
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -985,7 +975,6 @@ class _ResumoNotasRow extends StatelessWidget {
 
 /// Cabeçalho de seção com ícone e cor.
 class _SectionHeader extends StatelessWidget {
-
   const _SectionHeader({
     required this.title,
     required this.icon,
@@ -1059,7 +1048,6 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _SummaryLine extends StatelessWidget {
-
   const _SummaryLine({
     required this.label,
     required this.quantityText,

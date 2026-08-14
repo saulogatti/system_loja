@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
 /// Testes do widget LoadingOverlay

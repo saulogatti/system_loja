@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 
 class LogErrorSystemSection extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Faixa de destaque com o valor total da nota.
 class InvoiceTotalBar extends StatelessWidget {
