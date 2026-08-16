@@ -89,6 +89,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
                 controller: _cnpjController,
                 decoration: const InputDecoration(
                   labelText: 'CNPJ',
+                  hintText: 'Ex: 00.000.000/0000-00',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.badge),
                 ),
@@ -281,6 +282,7 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     initialValue: value,
     decoration: InputDecoration(
       labelText: label,
+      hintText: 'Ex: 01/01/2023',
       border: const OutlineInputBorder(),
       prefixIcon: const Icon(Icons.event_note),
     ),
