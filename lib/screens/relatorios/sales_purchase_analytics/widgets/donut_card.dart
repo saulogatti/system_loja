@@ -17,10 +17,20 @@ class SalesPurchaseDonutCard extends StatelessWidget {
     final salesPct = total <= 0 ? 0.0 : totalSales / total;
     final purchasesPct = total <= 0 ? 0.0 : totalPurchases / total;
 
+    final semanticLabel = total <= 0
+        ? 'Gráfico de distribuição: $message'
+        : 'Gráfico de distribuição de vendas e compras. '
+              'Total: R\$ ${total.toStringAsFixed(2)}. '
+              'Vendas: R\$ ${totalSales.toStringAsFixed(2)} (${(salesPct * 100).toStringAsFixed(0)}%). '
+              'Compras: R\$ ${totalPurchases.toStringAsFixed(2)} (${(purchasesPct * 100).toStringAsFixed(0)}%).';
+
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Semantics(
         button: true,
+        container: true,
+        excludeSemantics: true,
+        label: semanticLabel,
         hint: 'Ampliar gráfico de distribuição',
         onTap: () => _openZoom(context),
         onTapHint: 'Ampliar gráfico de distribuição',
