@@ -273,6 +273,7 @@ class _CustomerEditViewState extends State<CustomerEditView> {
     initialValue: value,
     decoration: InputDecoration(
       labelText: label,
+      hintText: 'Ex: 01/01/2023',
       border: const OutlineInputBorder(),
       prefixIcon: const Icon(Icons.event_note),
     ),
