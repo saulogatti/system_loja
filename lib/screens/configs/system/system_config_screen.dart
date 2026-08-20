@@ -187,6 +187,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
           TextField(
             controller: _measurementUnitController,
             textInputAction: TextInputAction.done,
+            textCapitalization: TextCapitalization.characters,
             onSubmitted: (_) => _addMeasurementUnit(),
             decoration: InputDecoration(
               hintText: 'Ex.: UN, KG, CX',
