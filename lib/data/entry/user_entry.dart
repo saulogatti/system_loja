@@ -3,7 +3,12 @@ import 'package:system_loja/core/models/user.dart';
 
 part 'user_entry.g.dart';
 
-/// Linha Drift / DTO JSON para usuário (sem herdar [User]).
+/// Linha Drift / DTO JSON de usuário, sem herdar [User].
+///
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Persistência principal é Drift; JSON serve a import/export e cache.
 @JsonSerializable(explicitToJson: true)
 class UserEntry {
 
@@ -40,6 +45,7 @@ class UserEntry {
 
   Map<String, dynamic> toJson() => _$UserEntryToJson(this);
 
+  /// Converte a linha/DTO para o modelo de domínio [User].
   User toUser() => User(
     name: name,
     email: email,

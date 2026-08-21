@@ -2,6 +2,10 @@ import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/data/database/system_database.dart';
 
+/// Converte [ActivityLog] (domínio) para [LogsRecordsCompanion] (Drift).
+///
+/// {@category persistencia}
+/// {@subCategory Sistema}
 extension LogToCompanion on ActivityLog {
   /// Converte um modelo de domínio ActivityLog para Companion usado em insert.
   LogsRecordsCompanion toCompanion() => LogsRecordsCompanion.insert(

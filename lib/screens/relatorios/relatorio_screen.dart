@@ -20,6 +20,9 @@ import 'package:system_loja/screens/utils/extension_date_time.dart';
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Tela de relatórios com abas para notas fiscais (entrada/saída) e estoque.
+///
+/// {@category apresentacao}
+/// {@subCategory Relatórios}
 @RoutePage()
 class RelatoriosScreen extends StatelessWidget implements AutoRouteWrapper {
   /// Cria uma instância de [RelatoriosScreen].

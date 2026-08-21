@@ -2,38 +2,29 @@ import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_type.dart' show InvoiceType;
 import 'package:system_loja/core/utils/result_status.dart';
 
-/// Interface que define o contrato para operações de repositório de vendas.
+/// Contrato de persistência de notas fiscais (entrada e saída).
 ///
-/// Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
-/// para entidades [Invoice] (Nota Fiscal/Venda), permitindo diferentes
-/// implementações de persistência (Drift, JSON, etc.).
+/// {@category contratos}
+/// {@subCategory Vendas}
 ///
-/// Inclui funcionalidades especiais como geração automática de número de
-/// nota fiscal e validação de números únicos.
+/// CRUD de [Invoice] via Drift, com geração e validação de número único.
+/// Erros voltam como [ResultStatus.error].
 ///
-/// Exemplo de uso:
+/// Resolver com `appInjection.get<ISalesRepository>()`.
+///
 /// ```dart
-/// final repository = appInjection.get<SalesRepository>();
-///
-/// // Gerar número de nota fiscal
-/// final numeroNota = await repository.generateInvoiceNumber();
-///
-/// // Criar venda
-/// final invoice = Invoice(
-///   invoiceNumber: numeroNota.asSuccess,
-///   customerId: 1,
-///   items: [...],
+/// final repository = appInjection.get<ISalesRepository>();
+/// final numero = await repository.generateInvoiceNumber();
+/// numero.when(
+///   onSuccess: (valor) => print(valor),
+///   onError: (mensagem) => print(mensagem),
 /// );
-///
-/// final resultado = await repository.saveSale(invoice);
-/// if (resultado.isSuccessful) {
-///   print('Venda registrada com sucesso');
-/// }
 /// ```
 ///
 /// Veja também:
-/// - [Invoice] - modelo de domínio de nota fiscal/venda
-/// - [ResultStatus] - tipo de retorno para operações
+/// - [Invoice] — modelo de domínio
+/// - [InvoiceType] — entrada ou saída
+/// - [ResultStatus] — retorno das operações
 abstract interface class ISalesRepository {
   /// Remove uma venda do sistema pelo ID.
   ///

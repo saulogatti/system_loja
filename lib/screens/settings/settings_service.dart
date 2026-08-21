@@ -4,6 +4,12 @@ import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 import 'package:system_loja/screens/configuracoes/settings_screen.dart';
 import 'package:system_loja/screens/settings/app_theme.dart';
 
+/// Serviço de tema da aplicação (claro/escuro e cor-semente).
+///
+/// {@category servicos}
+/// {@subCategory Sistema}
+///
+/// Implementa [ISettingsService] e notifica a UI via [currentThemeNotifier].
 class SettingsService implements ISettingsService {
   SettingsService.injection();
   ValueNotifier<ThemeData> currentThemeNotifier = ValueNotifier<ThemeData>(

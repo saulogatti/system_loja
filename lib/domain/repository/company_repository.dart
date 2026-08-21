@@ -6,10 +6,29 @@ import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/company_dao.dart';
 
-/// Repository para gerenciar operações de empresas.
+/// Repositório para gerenciamento de empresas usando Drift.
 ///
-/// Utiliza CompanyDao para acesso ao banco de dados e gerencia
-/// logs de atividades do sistema.
+/// {@category repositorios}
+/// {@subCategory Cadastros}
+///
+/// Coordena operações CRUD sobre [Company] via [CompanyDao] e registra
+/// eventos de auditoria via [ILogRepository]. Todos os erros são capturados
+/// internamente e devolvidos como [ResultStatus.error] com mensagem amigável.
+///
+/// Resolver com `appInjection.get<ICompanyRepository>()`.
+///
+/// ```dart
+/// final repository = appInjection.get<ICompanyRepository>();
+/// final resultado = await repository.findByCnpj(cnpj: '12345678000199');
+/// resultado.when(
+///   onSuccess: (company) => print(company?.name),
+///   onError: (mensagem) => print(mensagem),
+/// );
+/// ```
+///
+/// Veja também:
+/// - [ICompanyRepository] - contrato da interface
+/// - [CompanyDao] - DAO do Drift
 class CompanyRepository implements ICompanyRepository {
 
   CompanyRepository({

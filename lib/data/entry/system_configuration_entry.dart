@@ -2,7 +2,13 @@ import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/data/entry/system_user_data_entry.dart';
 
-/// Linha Drift / agregado persistido para configuração do sistema (sem herdar [SystemConfiguration]).
+/// Linha Drift / agregado persistido da configuração do sistema.
+///
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Não herda [SystemConfiguration]. JSON nas colunas é codec interno;
+/// persistência principal é Drift.
 class SystemConfigurationEntry {
 
   SystemConfigurationEntry({

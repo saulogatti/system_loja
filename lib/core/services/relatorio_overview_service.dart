@@ -4,6 +4,9 @@ import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/models/report/relatorio_overview_data.dart';
 
 /// Consolida métricas usadas pela tela de relatórios.
+///
+/// {@category servicos}
+/// {@subCategory Relatórios}
 class RelatorioOverviewService {
   /// Calcula resumo de estoque e ordenação por quantidade.
   RelatorioEstoqueOverviewData buildEstoqueOverview(List<Product> products) {

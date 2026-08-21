@@ -9,19 +9,22 @@ import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 import 'package:system_loja/data/cache/models/cacheable.dart';
 import 'package:system_loja/data/files_utility/file_storage_utility.dart';
 
-/// Tipo de função factory para criar instâncias de [Cacheable] a partir de JSON.
+/// Factory que recria um [Cacheable] a partir de JSON.
 ///
-/// Esta função é usada pelo [CacheManager] para deserializar objetos
-/// armazenados em cache de volta para seus tipos originais.
+/// {@category dados}
+/// {@subCategory Sistema}
 typedef CacheableFactory<T extends Cacheable> = T Function(Map<String, dynamic> json);
 
-/// Gerencia o cache de dados da aplicação.
+/// Gerencia o cache de dados da aplicação em arquivos JSON.
+///
+/// {@category dados}
+/// {@subCategory Sistema}
 ///
 /// Registrado via GetIt em `setupAppInjection()` — resolver com
 /// `appInjection.get<CacheManager>()`. Não use singleton global `.instance`.
 ///
-/// O cache é persistido em arquivos JSON no diretório de documentos
-/// da aplicação, organizados por tipo de objeto.
+/// Persistência principal da loja é Drift. Este cache é só arquivo JSON
+/// no diretório de documentos, organizado por tipo de objeto.
 ///
 /// Exemplo de uso:
 /// ```dart
@@ -189,6 +192,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     unawaited(_memoryLock.synchronized(_memoryCache.clear));
   }
 
+  /// Interpreta uma string JSON como mapa de cache.
   Map<String, dynamic> parseData(String dataString) =>
       Map<String, dynamic>.from(jsonDecode(dataString));
 
@@ -234,6 +238,7 @@ class CacheManager with FileStorageUtility, LoggerClassMixin {
     }
   }
 
+  /// Restaura arquivos de cache a partir de [direBackup].
   Future<void> restoreBackupFrom(String direBackup) async {
     try {
       await restoreBackup(direBackup);

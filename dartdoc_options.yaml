@@ -1,17 +1,50 @@
 dartdoc:
   categories:
-    awesome:
-      markdown: docs/COMPANY_FEATURE.md
-      displayName: Awesome
-    great:
-      markdown: docs/INTERFACES_ARCHITECTURE.md
-      displayName: Great
-  categoryOrder: [awesome, great]
-  includeExternal: ['bin/unusually_located_library.dart']
-  nodoc: ['lib/application/*.dart', 'lib/core/interface/*.dart', 'lib/core/models/*.dart', 'lib/screens/*/cubit/*.dart', 'lib/screens/*/widgets/*.dart']
+    contratos:
+      markdown: documentation/dartdoc/contratos.md
+      displayName: Contratos
+    modelos:
+      markdown: documentation/dartdoc/modelos.md
+      displayName: Modelos de domínio
+    repositorios:
+      markdown: documentation/dartdoc/repositorios.md
+      displayName: Repositórios
+    servicos:
+      markdown: documentation/dartdoc/servicos.md
+      displayName: Serviços
+    persistencia:
+      markdown: documentation/dartdoc/persistencia.md
+      displayName: Persistência Drift
+    dados:
+      markdown: documentation/dartdoc/dados.md
+      displayName: DTOs e cache
+    utilitarios:
+      markdown: documentation/dartdoc/utilitarios.md
+      displayName: Utilitários
+    apresentacao:
+      markdown: documentation/dartdoc/apresentacao.md
+      displayName: Apresentação
+  categoryOrder:
+    - contratos
+    - modelos
+    - repositorios
+    - servicos
+    - persistencia
+    - dados
+    - utilitarios
+    - apresentacao
+  nodoc:
+    - '**.g.dart'
+    - '**.freezed.dart'
+    - '**.gr.dart'
+    - 'lib/screens/**/cubit/*.dart'
+    - 'lib/screens/**/bloc/*.dart'
+    - 'lib/screens/**/widgets/*.dart'
+    - 'lib/screens/widgets/*.dart'
+    - 'lib/screens/**/widgets/**.dart'
   linkTo:
-    url: "https://saulogatti.github.io/system_loja/{path}#{anchor}"
-  showUndocumentedCategories: true
+    url: "https://saulogatti.github.io/system_loja/"
+  showUndocumentedCategories: false
   ignore:
     - ambiguous-doc-reference
   errors:

@@ -1,10 +1,11 @@
 import 'package:drift/drift.dart';
 
-/// Tabela de categorias de produtos no banco de dados Drift.
+/// Tabela Drift de categorias de produto no [AppDatabase].
 ///
-/// Armazena categorias de forma independente para evitar perda de dados
-/// quando produtos são deletados. Produtos referenciam categorias através
-/// de chave estrangeira (categoryId).
+/// {@category persistencia}
+/// {@subCategory Cadastros}
+///
+/// Categorias independentes dos produtos; a FK fica em [ProductsRecords].
 class CategoriesRecords extends Table {
   /// Descrição opcional da categoria
   TextColumn get description => text().nullable()();

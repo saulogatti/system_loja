@@ -1,9 +1,11 @@
 import 'package:system_loja/data/models/address_data.dart' show AddressData;
 
-/// Endereço (domínio). Serialização em [AddressData] na camada `data`.
+/// Endereço (domínio).
 ///
-/// Todos os campos são opcionais e têm valor padrão de string vazia,
-/// permitindo criação de endereços parciais.
+/// {@category modelos}
+/// {@subCategory Cadastros}
+///
+/// Serialização em [AddressData]. Campos opcionais com string vazia.
 class Address {
 
   const Address({

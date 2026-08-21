@@ -9,6 +9,9 @@ import 'package:system_loja/screens/products/widgets/product_form.dart';
 
 /// Tela de cadastro de produtos.
 ///
+/// {@category apresentacao}
+/// {@subCategory Cadastros}
+///
 /// Esta tela é aberta via navegação para cadastrar um novo produto.
 @RoutePage()
 class ProductInfoScreen extends StatefulWidget implements AutoRouteWrapper {

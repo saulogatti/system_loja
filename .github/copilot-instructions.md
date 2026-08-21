@@ -40,7 +40,7 @@ Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, 
 - `try/catch` na UI fica restrito a operacoes locais que nao passam por repository, como seletores de arquivo ou I/O direto.
 - `lib/data/` nao deve importar `lib/domain/` nem `lib/application/`; mantenha detalhes de persistencia abaixo das interfaces e repositories.
 - Drift segue a convencao: tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`. Nao use `@UseRowClass` com entidades de `lib/core/models/`; faca o mapeamento em `mapper/`, `extension/`, DAO ou repository.
-- See `docs/DRIFT_ARCHITECTURE.md` for the step-by-step migration pattern. At minimum, add a `from-to` step in `MigrationStrategy.onUpgrade` and a corresponding schema snapshot under `drift_schemas/`.
+- See `documentation/DRIFT_ARCHITECTURE.md` for the step-by-step migration pattern. At minimum, add a `from-to` step in `MigrationStrategy.onUpgrade` and a corresponding schema snapshot under `drift_schemas/`.
 - `CacheManager` e outros servicos compartilhados entram por DI (`GetIt`); nao introduza singletons globais paralelos.
 - Em testes de VM que instanciam `AppDatabase`, reutilize os helpers de `test/support/test_app_database.dart` para evitar dependencia de `path_provider`.
 - No Web, Drift depende de `web/sqlite3.wasm` e `web/drift_worker.js`; nao remova esses arquivos ao mexer em build web.
@@ -59,11 +59,11 @@ Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, 
 - `AGENTS.md`
 - `.github/instructions/dartcode.instructions.md`
 - `.github/instructions/dart-n-flutter.instructions.md`
-- `docs/DRIFT_ARCHITECTURE.md`
-- `docs/DRIFT_MIGRATION.md`
-- `docs/INTERFACES_ARCHITECTURE.md`
-- `docs/VALIDATION_SYSTEM.md`
-- `docs/CODE_GENERATOR_USAGE.md`
-- `docs/TESTING_VALIDATION.md`
-- `docs/historico/` (material antigo; nao canonico)
+- `documentation/DRIFT_ARCHITECTURE.md`
+- `documentation/DRIFT_MIGRATION.md`
+- `documentation/INTERFACES_ARCHITECTURE.md`
+- `documentation/VALIDATION_SYSTEM.md`
+- `documentation/CODE_GENERATOR_USAGE.md`
+- `documentation/TESTING_VALIDATION.md`
+- `documentation/historico/` (material antigo; nao canonico)
 - `flutter_rules.md`

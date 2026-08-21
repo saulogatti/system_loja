@@ -4,6 +4,10 @@ import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_state_cubit.dart';
 
+/// Tela de análise dos logs de atividade do sistema.
+///
+/// {@category apresentacao}
+/// {@subCategory Sistema}
 @RoutePage()
 class LogsAnalyticsScreen extends StatefulWidget {
   const LogsAnalyticsScreen({super.key});

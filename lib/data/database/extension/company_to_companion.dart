@@ -2,7 +2,10 @@ import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/data/database/app_database.dart';
 
-/// Extensão para converter Company (domínio) para CompanyRecordsCompanion (Drift).
+/// Converte [Company] (domínio) para [CompanyRecordsCompanion] (Drift).
+///
+/// {@category persistencia}
+/// {@subCategory Cadastros}
 extension CompanyToCompanion on Company {
   /// Converte um modelo de domínio Company para Companion usado em insert/update.
   ///

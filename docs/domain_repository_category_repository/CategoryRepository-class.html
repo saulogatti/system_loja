@@ -50,13 +50,28 @@
     <div>
 <h1><span class="kind-class">CategoryRepository</span> class 
  
+    <span class="category repositórios cp-2 linked" title="This is part of the Repositórios topic."><a href="../topics/repositorios-topic.html">Repositórios</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Repositório para gerenciar operações de categorias de produtos.</p>
-<p>Fornece uma camada de abstração entre a UI e o acesso a dados,
-encapsulando a lógica de negócios relacionada às categorias.</p>
+  <p>Repositório para gerenciamento de categorias de produtos usando Drift.</p>
+<p>Coordena operações CRUD sobre <a href="../core_models_product_category/ProductCategory-class.html">ProductCategory</a> via <a href="../data_database_dao_category_dao/CategoryDao-class.html">CategoryDao</a>.
+Todos os erros são capturados internamente e devolvidos como
+<a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com mensagem amigável.</p>
+<p>Resolver com <code>appInjection.get&lt;ICategoryRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;ICategoryRepository&gt;();
+final resultado = await repository.getCategoryById(1);
+resultado.when(
+  onSuccess: (category) =&gt; print(category.name),
+  onError: (mensagem) =&gt; print(mensagem),
+);
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_interface_i_category_repository/ICategoryRepository-class.html">ICategoryRepository</a> - contrato da interface</li>
+<li><a href="../data_database_dao_category_dao/CategoryDao-class.html">CategoryDao</a> - DAO do Drift</li>
+</ul>
 </section>
 
 

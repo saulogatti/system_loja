@@ -50,6 +50,7 @@
     <div>
 <h1><span class="kind-class">ConfigurationRepository</span> class 
  
+    <span class="category repositórios cp-2 linked" title="This is part of the Repositórios topic."><a href="../topics/repositorios-topic.html">Repositórios</a></span>
 </h1></div>
 
     
@@ -59,6 +60,14 @@
 (cor primária e modo escuro) em tempo real via <a href="../core_interface_i_settings_service/ISettingsService-class.html">ISettingsService</a>.
 Todos os erros são capturados internamente e devolvidos como
 <a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com mensagem amigável.</p>
+<p>Resolver com <code>appInjection.get&lt;IConfigurationRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;IConfigurationRepository&gt;();
+final resultado = await repository.loadConfiguration();
+resultado.when(
+  onSuccess: (settings) =&gt; print(settings.temaEscuro),
+  onError: (mensagem) =&gt; print(mensagem),
+);
+</code></pre>
 <p>Veja também:</p>
 <ul>
 <li><a href="../core_interface_i_configuration_repository/IConfigurationRepository-class.html">IConfigurationRepository</a> - contrato da interface</li>

@@ -1,21 +1,23 @@
 import 'package:system_loja/core/models/activity_log.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 
-/// Interface que define o contrato para operações de repositório de logs.
+/// Contrato de auditoria de ações do sistema.
 ///
-/// Esta interface gerencia o sistema de auditoria da aplicação, registrando
-/// todas as ações relevantes dos usuários (criação, edição, exclusão).
+/// {@category contratos}
+/// {@subCategory Sistema}
 ///
-/// Os logs podem ser filtrados por usuário, tipo de ação, entidade ou período,
-/// facilitando análise e auditoria do sistema.
+/// Persistência de [ActivityLog] no [SystemDatabase] (Drift). Filtros por
+/// usuário, tipo de ação, entidade ou período. Erros voltam como
+/// [ResultStatus.error].
 ///
-/// Exemplo de uso:
+/// Resolver com `appInjection.get<ILogRepository>()`.
+///
 /// ```dart
-/// final repository = appInjection.get<LogRepository>();
+/// final repository = appInjection.get<ILogRepository>();
 ///
 /// // Registrar uma ação
 /// await repository.createAndLogEntry(
-///   logActionType: ActionType.create,
+///   logActionType: ActionType.criar,
 ///   entityName: 'Customer',
 ///   userId: 1,
 ///   username: 'admin',

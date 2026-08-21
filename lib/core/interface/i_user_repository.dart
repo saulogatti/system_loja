@@ -1,34 +1,28 @@
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 
-/// Interface que define o contrato para operações de repositório de usuários.
+/// Contrato de persistência de usuários do sistema.
 ///
-/// Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
-/// para entidades [User], permitindo diferentes implementações de
-/// persistência (Drift, JSON, etc.).
+/// {@category contratos}
+/// {@subCategory Sistema}
 ///
-/// Inclui operações de autenticação, validação de email e gerenciamento
-/// completo de usuários do sistema.
+/// CRUD de [User] no [SystemDatabase] (Drift). Erros voltam como
+/// [ResultStatus.error].
 ///
-/// Exemplo de uso:
+/// Resolver com `appInjection.get<IUserRepository>()`.
+///
 /// ```dart
-/// final repository = appInjection.get<UserRepository>();
-///
-/// // Buscar usuário por email
-/// final user = await repository.obterUsuarioPorEmail('admin@system.com');
-/// if (user != null) {
-///   print('Usuário: ${user.name}');
-/// }
-///
-/// // Validar email
-/// if (repository.validarEmail('teste@example.com')) {
-///   print('Email válido');
-/// }
+/// final repository = appInjection.get<IUserRepository>();
+/// final resultado = await repository.getUserByEmail('admin@system.com');
+/// resultado.when(
+///   onSuccess: (user) => print(user?.name),
+///   onError: (mensagem) => print(mensagem),
+/// );
 /// ```
 ///
 /// Veja também:
-/// - [User] - modelo de domínio de usuário
-/// - [ResultStatus] - tipo de retorno para operações
+/// - [User] — modelo de domínio
+/// - [ResultStatus] — retorno das operações
 abstract interface class IUserRepository {
   /// Adiciona um novo usuário ao sistema.
   ///

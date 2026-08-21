@@ -50,9 +50,15 @@
     <div>
 <h1><span class="kind-class">SystemDao</span> class 
  
+    <span class="category persistência-drift cp-4 linked" title="This is part of the Persistência Drift topic."><a href="../topics/persistencia-topic.html">Persistência&nbsp;Drift</a></span>
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>DAO Drift de configuração do sistema no <a href="../data_database_system_database/SystemDatabase-class.html">SystemDatabase</a>.</p>
+<p>Lê e grava <a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a> em <a href="../data_database_table_system_system_records/SystemRecords-class.html">SystemRecords</a>. Persistência
+principal é Drift; JSON só entra como DTO da linha.</p>
+</section>
 
 
     <section>
@@ -455,7 +461,7 @@ query updates, especially when using triggers.
 
 </dt>
 <dd>
-  
+  Remove a configuração mais recente, se existir.
   
 
 </dd>
@@ -496,7 +502,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Retorna a configuração mais recente, ou null se a tabela estiver vazia.
   
 
 </dd>
@@ -575,7 +581,7 @@ to write data into the <code>table</code> by using <a href="https://pub.dev/docu
 
 </dt>
 <dd>
-  
+  Insere ou atualiza a configuração vigente e remove linhas extras.
   
 
 </dd>

@@ -3,7 +3,10 @@ import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/data/database/app_database.dart';
 
-/// Extensão para converter [InvoicesRecord] (Drift) para [Invoice] (domínio).
+/// Converte [InvoicesRecord] (Drift) para [Invoice] (domínio).
+///
+/// {@category persistencia}
+/// {@subCategory Vendas}
 extension InvoiceFromData on InvoicesRecord {
   /// Converte um registro do banco de dados para o modelo de domínio [Invoice].
   ///
@@ -29,7 +32,10 @@ extension InvoiceFromData on InvoicesRecord {
     );
 }
 
-/// Extensão para converter [Invoice] (domínio) para [InvoicesRecordsCompanion] (Drift).
+/// Converte [Invoice] (domínio) para [InvoicesRecordsCompanion] (Drift).
+///
+/// {@category persistencia}
+/// {@subCategory Vendas}
 extension InvoiceToCompanion on Invoice {
   /// Converte um modelo de domínio [Invoice] para Companion usado em insert/update.
   ///
@@ -71,7 +77,10 @@ extension InvoiceToCompanion on Invoice {
   }
 }
 
-/// Extensão para converter [InvoiceItemsRecord] (Drift) para [InvoiceItem] (domínio).
+/// Converte [InvoiceItemsRecord] (Drift) para [InvoiceItem] (domínio).
+///
+/// {@category persistencia}
+/// {@subCategory Vendas}
 extension InvoiceItemFromData on InvoiceItemsRecord {
   /// Converte um registro do banco de dados para o modelo de domínio [InvoiceItem].
   InvoiceItem toDomain() => InvoiceItem(
@@ -83,7 +92,10 @@ extension InvoiceItemFromData on InvoiceItemsRecord {
     );
 }
 
-/// Extensão para converter [InvoiceItem] (domínio) para [InvoiceItemsRecordsCompanion] (Drift).
+/// Converte [InvoiceItem] (domínio) para [InvoiceItemsRecordsCompanion] (Drift).
+///
+/// {@category persistencia}
+/// {@subCategory Vendas}
 extension InvoiceItemToCompanion on InvoiceItem {
   /// Converte um modelo de domínio [InvoiceItem] para Companion usado em insert.
   ///

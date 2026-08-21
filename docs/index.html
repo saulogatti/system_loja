@@ -44,24 +44,24 @@
       
 <section class="desc markdown">
   <h1 id="system-loja">System Loja</h1>
-<p>Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, categorias, empresa e notas/vendas), com persistencia local em SQLite via Drift e fluxo legado em JSON ainda ativo em partes especificas.</p>
-<h2 id="visao-geral">Visao geral</h2>
+<p>Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, categorias, empresa e notas/vendas), com persistência local em SQLite via Drift.</p>
+<h2 id="viso-geral">Visão geral</h2>
 <ul>
 <li>UI em <code>lib/screens/</code>, com BLoC/Cubit (<code>flutter_bloc</code>).</li>
 <li>Fluxo principal: <strong>Screen</strong> → <strong>Interface</strong> (<code>lib/core/interface/</code>) → <strong>Repository</strong> (<code>lib/domain/repository/</code>) → <strong>DAO Drift</strong> (<code>lib/data/database/dao/</code>) → SQLite.</li>
-<li>DI com <code>GetIt</code> via <code>setupAppInjection()</code> em <code>lib/application/app_injection.dart</code>.</li>
-<li>Navegacao com <code>auto_route</code> em <code>lib/screens/route/route_app.dart</code>.</li>
-<li>Padrao de retorno entre camadas: <code>ResultStatus&lt;R, E&gt;</code> (<code>lib/core/utils/result_status.dart</code>, usa <code>package:meta</code>).</li>
-<li>Repositorios usam <code>try/catch</code> internamente e retornam <code>ResultStatus.error(...)</code> com mensagens amigaveis via <code>mensagemErroRepositorio()</code> (<code>lib/core/utils/repository_error_mapper.dart</code>). A camada de apresentacao <strong>nao</strong> envolve chamadas ao repositorio em <code>try/catch</code>; usa <code>when</code> ou <code>switch</code> em <code>ResultStatus</code>.</li>
-<li>Camada <strong>data</strong> (<code>lib/data/</code>): Drift, DTOs/entries JSON, conversores, cache e mapeamento para modelos de <code>lib/core/models/</code> — <strong>sem</strong> depender de <code>lib/domain/</code> ou <code>lib/application/</code> (constantes compartilhadas ficam em <code>lib/core/</code> quando necessario).</li>
-<li><code>CacheManager</code> registrado via <code>GetIt</code> (injecao de dependencia) — <strong>nao</strong> usar <code>CacheManager.instance</code>.</li>
+<li>DI com <code>GetIt</code> via <code>setupAppInjection()</code> em <code>lib/application/app_injection.dart</code> — resolver com <code>appInjection.get&lt;T&gt;()</code>.</li>
+<li>Navegação com <code>auto_route</code> em <code>lib/screens/route/route_app.dart</code>.</li>
+<li>Padrão de retorno entre camadas: <code>ResultStatus&lt;R, E&gt;</code> (<code>lib/core/utils/result_status.dart</code>, usa <code>package:meta</code>).</li>
+<li>Repositórios usam <code>try/catch</code> internamente e retornam <code>ResultStatus.error(...)</code> com mensagens amigáveis via <code>mensagemErroRepositorio()</code> (<code>lib/core/utils/repository_error_mapper.dart</code>). A camada de apresentação <strong>não</strong> envolve chamadas ao repositório em <code>try/catch</code>; usa <code>when</code> ou <code>switch</code> em <code>ResultStatus</code>.</li>
+<li>Camada <strong>data</strong> (<code>lib/data/</code>): Drift, DTOs/entries JSON, conversões, cache e mapeamento para modelos de <code>lib/core/models/</code> — <strong>sem</strong> depender de <code>lib/domain/</code> ou <code>lib/application/</code> (constantes compartilhadas ficam em <code>lib/core/</code> quando necessário).</li>
+<li><code>CacheManager</code> registrado via <code>GetIt</code> (injeção de dependência) — <strong>não</strong> usar <code>CacheManager.instance</code>.</li>
 </ul>
 <h2 id="requisitos">Requisitos</h2>
 <ul>
-<li>Flutter &gt;=3.47.0 (conforme pubspec.yaml).</li>
+<li>Flutter <code>&gt;=3.47.0</code> (conforme <code>pubspec.yaml</code>).</li>
 <li>Dart SDK <code>&gt;=3.13.0 &lt;4.0.0</code>.</li>
 </ul>
-<h2 id="setup-rapido">Setup rapido</h2>
+<h2 id="setup-rpido">Setup rápido</h2>
 <pre class="language-bash"><code class="language-bash">git clone https://github.com/saulogatti/system_loja.git
 cd system_loja
 flutter pub get
@@ -81,18 +81,21 @@ flutter run -d chrome
 flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0
 </code></pre>
 <h2 id="comandos-de-qualidade">Comandos de qualidade</h2>
-<pre class="language-bash"><code class="language-bash"># Codegen (obrigatorio apos alterar Freezed/JsonSerializable/Drift/AutoRoute)
+<pre class="language-bash"><code class="language-bash"># Codegen (obrigatório após alterar Freezed/JsonSerializable/Drift/AutoRoute)
 dart run build_runner build
 
-# Analise estatica
+# Análise estática
 dart analyze
 
-# Formatacao
+# Formatação
 dart format --set-exit-if-changed .
 
 # Testes
 flutter test
 flutter test test/&lt;arquivo&gt;_test.dart
+
+# Documentação da API (GitHub Pages)
+dart doc -o docs/
 </code></pre>
 <h2 id="arquitetura">Arquitetura</h2>
 <h3 id="bancos-drift">Bancos Drift</h3>
@@ -100,15 +103,16 @@ flutter test test/&lt;arquivo&gt;_test.dart
 <li><code>AppDatabase</code> (<code>lib/data/database/app_database.dart</code>) com <code>schemaVersion =&gt; 12</code>.</li>
 <li><code>SystemDatabase</code> (<code>lib/data/database/system_database.dart</code>) com <code>schemaVersion =&gt; 1</code>.</li>
 </ul>
-<h3 id="persistencia-e-dtos">Persistencia e DTOs</h3>
-<p>A persistencia principal da loja e <strong>SQLite via Drift</strong>. DTOs serializaveis (JSON) ficam em <code>lib/data/entry/</code> quando necessario. Nao ha pasta <code>lib/core/managers/</code> nem managers JSON como padrao de feature nova.</p>
-<h3 id="convencoes-importantes">Convencoes importantes</h3>
+<h3 id="persistncia-e-dtos">Persistência e DTOs</h3>
+<p>A persistência principal da loja é <strong>SQLite via Drift</strong>. DTOs serializáveis (JSON) ficam em <code>lib/data/entry/</code> e afins quando necessário para importação/exportação ou serialização pontual — <strong>não</strong> há pasta <code>lib/core/managers/</code> nem managers JSON como padrão de feature nova.</p>
+<h3 id="convenes-importantes">Convenções importantes</h3>
 <ul>
-<li>Nao propagar excecoes entre Interface/Repository; retornar <code>ResultStatus</code>. Repositorios capturam excecoes internamente (<code>try/catch</code>) e devolvem <code>ResultStatus.error(mensagemErroRepositorio(...))</code>. A camada de apresentacao nao usa <code>try/catch</code> para chamadas ao repositorio.</li>
-<li>Drift: tabela <code>XxxRecords</code>, linha gerada <code>XxxRecord</code>, DAO <code>XxxDao</code>. Linhas Drift <strong>nao</strong> usam <code>@UseRowClass</code> com entidades de <code>lib/core/</code>; o mapeamento para dominio fica em extensoes/helpers (ex.: <code>lib/data/database/mapper/</code>) ou nos DAOs/repositorios, conforme o padrao do projeto.</li>
-<li>DTOs serializaveis (JSON) em <code>lib/data/entry/</code> e afins; modelos de negocio em <code>lib/core/models/</code>.</li>
-<li>Codigo em ingles; documentacao e comentarios (<code>///</code>) em portugues.</li>
-<li><code>SystemDatabase</code> aceita <code>QueryExecutor</code> opcional no construtor para facilitar testes com banco em memoria.</li>
+<li>Não propagar exceções entre Interface/Repository; retornar <code>ResultStatus</code>. Repositórios capturam exceções internamente (<code>try/catch</code>) e devolvem <code>ResultStatus.error(mensagemErroRepositorio(...))</code>. A camada de apresentação não usa <code>try/catch</code> para chamadas ao repositório.</li>
+<li>Drift: tabela <code>XxxRecords</code>, linha gerada <code>XxxRecord</code>, DAO <code>XxxDao</code>. Linhas Drift <strong>não</strong> usam <code>@UseRowClass</code> com entidades de <code>lib/core/</code>; o mapeamento para domínio fica em extensões/helpers (ex.: <code>lib/data/database/mapper/</code>) ou nos DAOs/repositórios, conforme o padrão do projeto.</li>
+<li>Modelos de negócio em <code>lib/core/models/</code>.</li>
+<li>Código em inglês; documentação e comentários (<code>///</code>) em português.</li>
+<li><code>SystemDatabase</code> aceita <code>QueryExecutor</code> opcional no construtor para facilitar testes com banco em memória.</li>
+<li>Navegação de páginas com <code>auto_route</code>; <code>Navigator</code> apenas para dialogs/bottom sheets/modais.</li>
 </ul>
 <h2 id="estrutura-resumida">Estrutura resumida</h2>
 <pre class="language-text"><code class="language-text">lib/
@@ -118,49 +122,57 @@ flutter test test/&lt;arquivo&gt;_test.dart
   core/
     interface/           # contratos (ex.: I*Repository)
     constants/
-    services/            # servicos transversais (quando aplicavel)
-    models/              # entidades de dominio
-    utils/               # ResultStatus, repository_error_mapper, extensoes
+    models/              # entidades de domínio
+    services/            # serviços transversais (quando aplicável)
+    utils/               # ResultStatus, repository_error_mapper, extensões
   domain/
-    repository/          # implementacoes dos repositorios
-    *.dart               # servicos de dominio (ex.: geracao de codigo)
+    repository/          # implementações dos repositórios
+    *.dart               # serviços de domínio (ex.: geração de código)
   data/
     database/
       dao/
       table/
       extension/
-      mapper/            # XxxRecord -&gt; modelo de dominio
+      mapper/            # XxxRecord -&gt; modelo de domínio
     entry/               # DTOs JSON (json_serializable)
     cache/
     converter/
-    models/              # modelos de persistencia auxiliares
+    models/              # modelos de persistência auxiliares
   screens/
     route/
 test/
   support/               # helpers (ex.: AppDatabase em teste sem path_provider)
-docs/
-  historico/             # material antigo (nao usar como padrao)
+documentation/
+  dartdoc/               # páginas-fonte das categorias do dart doc
+  historico/             # material antigo (não usar como padrão)
+docs/                    # HTML gerado (`dart doc -o docs/`) para GitHub Pages
 </code></pre>
-<h2 id="observacoes-importantes">Observacoes importantes</h2>
+<h2 id="observaes-importantes">Observações importantes</h2>
 <ul>
 <li>No Web, Drift depende de <code>web/sqlite3.wasm</code> e <code>web/drift_worker.js</code>.</li>
-<li>Existem testes com falhas pre-existentes no repositorio; valide primeiro o escopo alterado antes de tratar falhas fora da tarefa.</li>
+<li>Existem testes com falhas pré-existentes no repositório; valide primeiro o escopo alterado antes de tratar falhas fora da tarefa.</li>
 <li>Testes que instanciam <code>AppDatabase</code> na VM podem usar <code>applicationSupportDirectory</code> e <code>tempDirectoryPath</code> (ver <code>test/support/test_app_database.dart</code>) para evitar <code>path_provider</code> / <code>MissingPluginException</code>.</li>
 </ul>
-<h2 id="documentacao-principal">Documentacao principal</h2>
+<h2 id="documentao-da-api-dartdoc">Documentação da API (dartdoc)</h2>
+<p>Gera o site HTML publicado no GitHub Pages (pasta <code>/docs</code> do repositório):</p>
+<pre class="language-bash"><code class="language-bash">dart doc -o docs/
+</code></pre>
+<p>A saída em <code>docs/</code> é o site estático. Para navegar localmente, sirva com HTTP (busca e sidebar não funcionam em <code>file://</code>).</p>
+<p>Categorias do sidebar estão em <code>dartdoc_options.yaml</code> e nas páginas-fonte <code>documentation/dartdoc/</code>.</p>
+<h2 id="documentao-principal">Documentação principal</h2>
 <ul>
 <li><code>CONTRIBUTING.md</code></li>
 <li><code>.github/copilot-instructions.md</code></li>
 <li><code>.github/instructions/dartcode.instructions.md</code></li>
 <li><code>AGENTS.md</code></li>
-<li><code>flutter_rules.md</code></li>
-<li><code>docs/DRIFT_ARCHITECTURE.md</code></li>
-<li><code>docs/DRIFT_MIGRATION.md</code></li>
-<li><code>docs/INTERFACES_ARCHITECTURE.md</code></li>
-<li><code>docs/VALIDATION_SYSTEM.md</code></li>
-<li><code>docs/CODE_GENERATOR_USAGE.md</code></li>
-<li><code>docs/TESTING_VALIDATION.md</code></li>
-<li><code>docs/historico/</code> — material antigo (nao canonico)</li>
+<li><code>flutter_rules.md</code> (padrão específico deste repositório)</li>
+<li><code>documentation/DRIFT_ARCHITECTURE.md</code></li>
+<li><code>documentation/DRIFT_MIGRATION.md</code></li>
+<li><code>documentation/INTERFACES_ARCHITECTURE.md</code></li>
+<li><code>documentation/VALIDATION_SYSTEM.md</code></li>
+<li><code>documentation/CODE_GENERATOR_USAGE.md</code></li>
+<li><code>documentation/TESTING_VALIDATION.md</code></li>
+<li><code>documentation/historico/</code> — notas e summaries antigos (não canônicos)</li>
 </ul>
 </section>
 
@@ -1878,6 +1890,15 @@ docs/
 
     <h5 class="hidden-xs"><span class="package-name">system_loja</span> <span class="package-kind">package</span></h5>
     <ol>
+      <li class="section-title">Topics</li>
+        <li><a href="topics/contratos-topic.html">Contratos</a></li>
+        <li><a href="topics/modelos-topic.html">Modelos&nbsp;de&nbsp;domínio</a></li>
+        <li><a href="topics/repositorios-topic.html">Repositórios</a></li>
+        <li><a href="topics/servicos-topic.html">Serviços</a></li>
+        <li><a href="topics/persistencia-topic.html">Persistência&nbsp;Drift</a></li>
+        <li><a href="topics/dados-topic.html">DTOs&nbsp;e&nbsp;cache</a></li>
+        <li><a href="topics/utilitarios-topic.html">Utilitários</a></li>
+        <li><a href="topics/apresentacao-topic.html">Apresentação</a></li>
       <li class="section-title">Libraries</li>
       <li><a href="application_app_injection/">application\app_injection</a></li>
       <li><a href="application_system_error_manager/">application\system_error_manager</a></li>

@@ -5,6 +5,13 @@ import 'package:system_loja/data/entry/app_settings_entry.dart';
 
 part 'configuration_cache_entry.g.dart';
 
+/// Entrada de cache JSON das preferências da aplicação.
+///
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Empacota [AppSettingsEntry] para o [CacheManager]. Persistência
+/// principal da loja permanece no Drift.
 @JsonSerializable()
 class ConfigurationCacheEntry extends Cacheable {
   ConfigurationCacheEntry({required this.configuracao});

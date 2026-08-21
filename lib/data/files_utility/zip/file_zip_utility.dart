@@ -4,7 +4,14 @@ import 'package:archive/archive_io.dart';
 import 'package:path/path.dart' as p;
 import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 
+/// Compactação e extração ZIP de arquivos de cache/backup.
+///
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Auxilia import/export em arquivo. Persistência principal é Drift.
 class FileZipUtility {
+  /// Extrai o ZIP em [path] para [directory].
   static Future<void> unzipFile(String path, Directory directory) async {
     final input = InputFileStream(path);
     final zip = ZipDecoder().decodeStream(input);
@@ -20,6 +27,7 @@ class FileZipUtility {
     }
   }
 
+  /// Compacta o conteúdo de [directory] em [fileName].
   static Future<void> zipDirectory(Directory directory, String fileName) async {
     if (!await directory.exists()) {
       throw const CacheException('Directory does not exist');
@@ -30,6 +38,7 @@ class FileZipUtility {
     await zip.close();
   }
 
+  /// Compacta o arquivo em [path] gerando [fileName].
   static Future<void> zipFile(String path, String fileName) async {
     if (!await File(path).exists()) {
       throw const CacheException('File does not exist');
@@ -40,6 +49,7 @@ class FileZipUtility {
     await zip.close();
   }
 
+  /// Compacta a lista [files] gerando [fileName].
   static Future<void> zipFiles(List<File> files, String fileName) async {
     final zip = ZipFileEncoder();
     zip.create(fileName);

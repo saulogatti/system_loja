@@ -14,6 +14,9 @@ import 'package:system_loja/screens/widgets/card_list_item.dart';
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Exibe as listagens de pessoa fisica e pessoa juridica.
+///
+/// {@category apresentacao}
+/// {@subCategory Cadastros}
 @RoutePage()
 class PersonListScreen extends StatefulWidget implements AutoRouteWrapper {
   const PersonListScreen({super.key});

@@ -6,6 +6,9 @@ import 'package:system_loja/screens/route/route_app.gr.dart';
 
 /// Tela do grupo Cadastro.
 ///
+/// {@category apresentacao}
+/// {@subCategory Cadastros}
+///
 /// Esta tela é um contêiner para as abas de listagem de pessoa e produto.
 /// Ela utiliza AutoTabsRouter para gerenciar as abas e exibir o conteúdo correspondente a cada uma.
 /// A navegação entre as abas é feita através de uma TabBar no topo da tela.

@@ -3,7 +3,12 @@ import 'package:system_loja/core/models/system_config/system_user_data.dart';
 
 part 'system_user_data_entry.g.dart';
 
-/// DTO JSON para [SystemUserData] (sem herdar domínio).
+/// DTO JSON de [SystemUserData], sem herdar o domínio.
+///
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Usado em import/export, cache de arquivo e coluna JSON do Drift.
 @JsonSerializable()
 class SystemUserDataEntry {
 
@@ -44,6 +49,7 @@ class SystemUserDataEntry {
 
   Map<String, dynamic> toJson() => _$SystemUserDataEntryToJson(this);
 
+  /// Converte o DTO para o modelo de domínio [SystemUserData].
   SystemUserData toDomain() => SystemUserData(
     name: name,
     email: email ?? '',

@@ -94,6 +94,6 @@ Observação importante: o repositório pode conter testes com falhas preexisten
 ## Referências
 
 - `README.md`
-- `docs/TESTING_VALIDATION.md`
-- `docs/historico/BUILD_INSTRUCTIONS.md`
+- `documentation/TESTING_VALIDATION.md`
+- `documentation/historico/BUILD_INSTRUCTIONS.md`
 - `.github/copilot-instructions.md`

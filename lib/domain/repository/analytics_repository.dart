@@ -5,10 +5,29 @@ import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/invoice_dao.dart';
 
-/// Repositório de analytics de vendas e compras.
+/// Repositório de analytics de vendas e compras usando Drift.
+///
+/// {@category repositorios}
+/// {@subCategory Relatórios}
 ///
 /// Agrega dados de [InvoiceDao] para produzir listas de [AnalyticsPoint]
-/// agrupadas por data ou por produto, sem lógica de negócio na camada de UI.
+/// agrupadas por data ou por produto. Todos os erros são capturados
+/// internamente e devolvidos como [ResultStatus.error] com mensagem amigável.
+///
+/// Resolver com `appInjection.get<IAnalyticsRepository>()`.
+///
+/// ```dart
+/// final repository = appInjection.get<IAnalyticsRepository>();
+/// final resultado = await repository.getAnalyticsByDate();
+/// resultado.when(
+///   onSuccess: (points) => print(points.length),
+///   onError: (mensagem) => print(mensagem),
+/// );
+/// ```
+///
+/// Veja também:
+/// - [IAnalyticsRepository] - contrato da interface
+/// - [InvoiceDao] - DAO do Drift
 class AnalyticsRepository implements IAnalyticsRepository {
 
   AnalyticsRepository({required this._invoiceDao});

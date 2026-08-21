@@ -12,7 +12,10 @@ import 'package:system_loja/screens/products/product_list_screen.dart';
 import 'package:system_loja/screens/products/widgets/product_category_widget.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
 
-/// Tela de detalhes do produto com opções de edição e exclusão
+/// Tela de detalhes do produto com opções de edição e exclusão.
+///
+/// {@category apresentacao}
+/// {@subCategory Cadastros}
 ///
 /// Permite visualizar informações completas do produto e realizar operações como:
 /// - Editar dados do produto

@@ -26,14 +26,17 @@ import 'package:system_loja/data/database/table/products_records.dart';
 
 part 'app_database.g.dart';
 
-/// Banco de dados principal da aplicação usando Drift.
+/// Banco SQLite principal da loja, persistido com Drift.
 ///
-/// Gerencia todas as tabelas e DAOs do sistema de loja:
-/// clientes, produtos, categorias, empresas, notas fiscais e endereços.
+/// {@category persistencia}
+/// {@subCategory Cadastros}
 ///
+/// Agrupa tabelas e DAOs de clientes, produtos, categorias, empresas,
+/// endereços e notas fiscais. JSON neste projeto é só DTO, import/export
+/// ou cache de arquivo — não substitui este banco.
 ///
 /// Veja também:
-/// - [SystemDatabase] - banco secundário para usuários, logs e configurações do sistema
+/// - [SystemDatabase] — usuários, logs e configurações do sistema
 @DriftDatabase(
   tables: [
     CategoriesRecords,

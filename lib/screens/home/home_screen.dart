@@ -6,6 +6,9 @@ import 'package:system_loja/screens/home/bloc/home_bloc.dart';
 
 /// Tela inicial do sistema de gerenciamento de loja.
 ///
+/// {@category apresentacao}
+/// {@subCategory Sistema}
+///
 /// Exibe boas-vindas e os dados da loja. Nome, CNPJ, Endereço, Telefone, Email e LogoTipo.
 @RoutePage()
 class HomeScreen extends StatefulWidget {

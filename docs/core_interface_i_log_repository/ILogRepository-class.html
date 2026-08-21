@@ -52,21 +52,21 @@
     <a href="https://dart.dev/language/class-modifiers#abstract" class="feature feature-abstract" title="This type can not be directly constructed.">abstract</a>
     <a href="https://dart.dev/language/class-modifiers#interface" class="feature feature-interface" title="This class can only be implemented (not extended or mixed in).">interface</a>
  
+    <span class="category contratos cp-0 linked" title="This is part of the Contratos topic."><a href="../topics/contratos-topic.html">Contratos</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Interface que define o contrato para operações de repositório de logs.</p>
-<p>Esta interface gerencia o sistema de auditoria da aplicação, registrando
-todas as ações relevantes dos usuários (criação, edição, exclusão).</p>
-<p>Os logs podem ser filtrados por usuário, tipo de ação, entidade ou período,
-facilitando análise e auditoria do sistema.</p>
-<p>Exemplo de uso:</p>
-<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;LogRepository&gt;();
+  <p>Contrato de auditoria de ações do sistema.</p>
+<p>Persistência de <a href="../core_models_activity_log/ActivityLog-class.html">ActivityLog</a> no <a href="../data_database_system_database/SystemDatabase-class.html">SystemDatabase</a> (Drift). Filtros por
+usuário, tipo de ação, entidade ou período. Erros voltam como
+<a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a>.</p>
+<p>Resolver com <code>appInjection.get&lt;ILogRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;ILogRepository&gt;();
 
 // Registrar uma ação
 await repository.createAndLogEntry(
-  logActionType: ActionType.create,
+  logActionType: ActionType.criar,
   entityName: 'Customer',
   userId: 1,
   username: 'admin',

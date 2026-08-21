@@ -2,8 +2,10 @@ import 'package:system_loja/core/models/default/people_data.dart';
 
 /// Usuário do sistema com credenciais e nível de permissão.
 ///
-/// Herda dados comuns de [PersonDefault] (nome, e-mail).
-/// A senha é armazenada apenas como hash — nunca em texto plano.
+/// {@category modelos}
+/// {@subCategory Sistema}
+///
+/// Herda [PersonDefault] (nome, e-mail). A senha fica só como hash.
 class User extends PersonDefault {
 
   User({

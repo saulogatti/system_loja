@@ -144,7 +144,7 @@ is of type <a href="https://api.flutter.dev/flutter/widgets/IconData-class.html"
 </ul>
 <p>If none of these subclasses apply, use the <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsProperty-class.html">DiagnosticsProperty</a>
 constructor or in rare cases create your own <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsProperty-class.html">DiagnosticsProperty</a>
-subclass as in the case for <a href="https://api.flutter.dev/flutter/painting/TransformProperty-class.html">TransformProperty</a> which handles <a href="https://pub.dev/documentation/vector_math/2.2.0/vector_math_64/Matrix4-class.html">Matrix4</a>
+subclass as in the case for <a href="https://api.flutter.dev/flutter/painting/TransformProperty-class.html">TransformProperty</a> which handles <a href="https://pub.dev/documentation/vector_math/2.4.2/vector_math_64/Matrix4-class.html">Matrix4</a>
 that represent transforms. Generally any property value with a good
 <code>toString</code> method implementation works fine using <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsProperty-class.html">DiagnosticsProperty</a>
 directly.</p>
@@ -286,8 +286,12 @@ common <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsProperty-c
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   super.debugFillProperties(properties);
   properties.add(DiagnosticsProperty&lt;ISalesRepository?&gt;(&#39;salesRepository&#39;, salesRepository));
-  properties.add(DiagnosticsProperty&lt;IProductRepository?&gt;(&#39;productRepository&#39;, productRepository));
-  properties.add(DiagnosticsProperty&lt;ICategoryRepository?&gt;(&#39;categoryRepository&#39;, categoryRepository));
+  properties.add(
+    DiagnosticsProperty&lt;IProductRepository?&gt;(&#39;productRepository&#39;, productRepository),
+  );
+  properties.add(
+    DiagnosticsProperty&lt;ICategoryRepository?&gt;(&#39;categoryRepository&#39;, categoryRepository),
+  );
 }</code></pre>
 </section>
 

@@ -52,28 +52,26 @@
     <a href="https://dart.dev/language/class-modifiers#abstract" class="feature feature-abstract" title="This type can not be directly constructed.">abstract</a>
     <a href="https://dart.dev/language/class-modifiers#interface" class="feature feature-interface" title="This class can only be implemented (not extended or mixed in).">interface</a>
  
+    <span class="category contratos cp-0 linked" title="This is part of the Contratos topic."><a href="../topics/contratos-topic.html">Contratos</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Interface que define o contrato para operações de repositório de clientes.</p>
-<p>Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
-para entidades <a href="../core_models_customer/Customer-class.html">Customer</a>, permitindo diferentes implementações de
-persistência (Drift, JSON, etc.).</p>
-<p>As operações incluem busca por CPF, mapeamento de clientes por ID,
-e gerenciamento completo do cadastro de clientes.</p>
-<p>Exemplo de uso:</p>
-<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;CustomerRepository&gt;();
+  <p>Contrato de persistência de clientes exposto à UI.</p>
+<p>Operações CRUD de <a href="../core_models_customer/Customer-class.html">Customer</a> via Drift. Erros voltam como
+<a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> — a apresentação não usa <code>try/catch</code> nestas chamadas.</p>
+<p>Resolver com <code>appInjection.get&lt;ICustomerRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;ICustomerRepository&gt;();
 final resultado = await repository.findWith(cpf: '12345678900');
-if (resultado.isSuccessful &amp;&amp; resultado.asSuccess != null) {
-  final customer = resultado.asSuccess!;
-  print('Cliente: ${customer.name}');
-}
+resultado.when(
+  onSuccess: (customer) =&gt; print(customer?.name),
+  onError: (mensagem) =&gt; print(mensagem),
+);
 </code></pre>
 <p>Veja também:</p>
 <ul>
-<li><a href="../core_models_customer/Customer-class.html">Customer</a> - modelo de domínio de cliente</li>
-<li><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a> - tipo de retorno para operações</li>
+<li><a href="../core_models_customer/Customer-class.html">Customer</a> — modelo de domínio</li>
+<li><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a> — retorno das operações</li>
 </ul>
 </section>
 

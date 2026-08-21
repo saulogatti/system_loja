@@ -2,33 +2,37 @@ import 'package:system_loja/core/interface/i_configuration_repository.dart' show
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 
-/// Interface que define o contrato para operações de configuração do sistema.
+/// Contrato de configuração técnica do sistema (não preferências de UI).
 ///
-/// Esta interface gerencia as configurações técnicas e de baixo nível
-/// do sistema, como parâmetros de inicialização, versões, e metadados.
+/// {@category contratos}
+/// {@subCategory Sistema}
 ///
-/// Diferente de [IConfigurationRepository] que gerencia preferências do
-/// usuário, esta interface lida com configurações do próprio sistema.
+/// Distinto de [IConfigurationRepository]. Persistência via Drift; importação
+/// e exportação JSON usam DTOs em `lib/data/entry/`. Erros voltam como
+/// [ResultStatus.error].
 ///
-/// Exemplo de uso:
+/// Resolver com `appInjection.get<ISystemRepository>()`.
+///
 /// ```dart
-/// final repository = appInjection.get<SystemRepository>();
-///
+/// final repository = appInjection.get<ISystemRepository>();
 /// final resultado = await repository.getSystemConfiguration();
 /// resultado.when(
-///   onSuccess: (config) => print('Configuração carregada: ${config.id}'),
-///   onError: (erro) => print('Falha: $erro'),
+///   onSuccess: (config) => print(config.id),
+///   onError: (mensagem) => print(mensagem),
 /// );
 /// ```
 ///
 /// Veja também:
-/// - [SystemConfiguration] - modelo de configuração do sistema
-/// - [IConfigurationRepository] - para configurações de usuário
+/// - [SystemConfiguration] — modelo de domínio
+/// - [IConfigurationRepository] — preferências do usuário
 abstract interface class ISystemRepository {
+  /// Remove dados de negócio e devolve a configuração atual.
   Future<ResultStatus<SystemConfiguration, String>> clearAllData();
 
+  /// Remove logs antigos conforme a política de retenção.
   Future<ResultStatus<SystemConfiguration, String>> clearOldLogs();
 
+  /// Exporta a configuração técnica como DTO JSON.
   Future<ResultStatus<SystemConfiguration, String>> exportConfigurationToJson();
 
   /// Retorna as configurações atuais do sistema.

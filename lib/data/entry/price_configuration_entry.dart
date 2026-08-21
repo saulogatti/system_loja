@@ -5,7 +5,12 @@ import 'package:system_loja/data/entry/report_configuration_entry.dart';
 
 part 'price_configuration_entry.g.dart';
 
-/// DTO JSON para [PriceConfiguration] (sem herdar domínio).
+/// DTO JSON de [PriceConfiguration], sem herdar o domínio.
+///
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Usado em import/export, cache de arquivo e codec de coluna Drift.
 @JsonSerializable()
 class PriceConfigurationEntry {
 
@@ -44,6 +49,7 @@ class PriceConfigurationEntry {
 
   Map<String, dynamic> toJson() => _$PriceConfigurationEntryToJson(this);
 
+  /// Converte o DTO para o modelo de domínio [PriceConfiguration].
   PriceConfiguration toDomain() => PriceConfiguration(
     types: types,
     measurementUnits: measurementUnits,

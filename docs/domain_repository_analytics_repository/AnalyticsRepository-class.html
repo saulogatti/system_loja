@@ -50,13 +50,28 @@
     <div>
 <h1><span class="kind-class">AnalyticsRepository</span> class 
  
+    <span class="category repositórios cp-2 linked" title="This is part of the Repositórios topic."><a href="../topics/repositorios-topic.html">Repositórios</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Repositório de analytics de vendas e compras.</p>
+  <p>Repositório de analytics de vendas e compras usando Drift.</p>
 <p>Agrega dados de <a href="../data_database_dao_invoice_dao/InvoiceDao-class.html">InvoiceDao</a> para produzir listas de <a href="../core_models_analytics_point/AnalyticsPoint-class.html">AnalyticsPoint</a>
-agrupadas por data ou por produto, sem lógica de negócio na camada de UI.</p>
+agrupadas por data ou por produto. Todos os erros são capturados
+internamente e devolvidos como <a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com mensagem amigável.</p>
+<p>Resolver com <code>appInjection.get&lt;IAnalyticsRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;IAnalyticsRepository&gt;();
+final resultado = await repository.getAnalyticsByDate();
+resultado.when(
+  onSuccess: (points) =&gt; print(points.length),
+  onError: (mensagem) =&gt; print(mensagem),
+);
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_interface_i_analytics_repository/IAnalyticsRepository-class.html">IAnalyticsRepository</a> - contrato da interface</li>
+<li><a href="../data_database_dao_invoice_dao/InvoiceDao-class.html">InvoiceDao</a> - DAO do Drift</li>
+</ul>
 </section>
 
 

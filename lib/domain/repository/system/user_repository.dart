@@ -9,9 +9,23 @@ import 'package:system_loja/data/database/dao/users_dao.dart';
 
 /// Repositório para gerenciamento de usuários usando Drift.
 ///
+/// {@category repositorios}
+/// {@subCategory Sistema}
+///
 /// Coordena operações CRUD sobre [User] via [UsersDao] e registra eventos
 /// de auditoria via [ILogRepository]. Todos os erros são capturados
 /// internamente e devolvidos como [ResultStatus.error] com mensagem amigável.
+///
+/// Resolver com `appInjection.get<IUserRepository>()`.
+///
+/// ```dart
+/// final repository = appInjection.get<IUserRepository>();
+/// final resultado = await repository.getUserByEmail('admin@system.com');
+/// resultado.when(
+///   onSuccess: (user) => print(user?.name),
+///   onError: (mensagem) => print(mensagem),
+/// );
+/// ```
 ///
 /// Veja também:
 /// - [IUserRepository] - contrato da interface

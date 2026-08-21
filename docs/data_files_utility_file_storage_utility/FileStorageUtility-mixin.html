@@ -50,16 +50,15 @@
     <div>
 <h1><span class="kind-mixin">FileStorageUtility</span> mixin 
  
+    <span class="category dtos-e-cache cp-5 linked" title="This is part of the DTOs e cache topic."><a href="../topics/dados-topic.html">DTOs&nbsp;e&nbsp;cache</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Gerenciador centralizado de operações de sistema de arquivos JSON.</p>
-<p>Este mixin fornece funcionalidades de leitura e escrita de arquivos JSON
-com cache automático no diretório de suporte da aplicação. Garante formatação
-consistente (indentação de 2 espaços), validação de caminhos e inicialização
-segura do sistema de arquivos.</p>
-<p>Classes que utilizam este mixin devem implementar o método <code>logError</code>.</p>
+  <p>Operações de arquivo JSON no diretório de suporte da aplicação.</p>
+<p>Leitura, escrita, backup e restore de arquivos. Persistência principal
+da loja é Drift; este mixin só trata cache/import-export em disco.</p>
+<p>Classes que usam este mixin devem implementar <a href="../data_files_utility_file_storage_utility/FileStorageUtility/logError.html">logError</a>.</p>
 </section>
 
 
@@ -169,7 +168,7 @@ segura do sistema de arquivos.</p>
 
 </dt>
 <dd>
-  
+  Lê o conteúdo de todos os arquivos do diretório de cache.
   
 
 </dd>
@@ -195,7 +194,7 @@ segura do sistema de arquivos.</p>
 
 </dt>
 <dd>
-  
+  Monta o caminho absoluto de <code>fileName</code> dentro do diretório de cache.
   
 
 </dd>
@@ -208,7 +207,7 @@ segura do sistema de arquivos.</p>
 
 </dt>
 <dd>
-  
+  Registra mensagem de depuração.
   
 
 </dd>

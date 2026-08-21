@@ -50,14 +50,16 @@
     <div>
 <h1><span class="kind-class">SystemDatabase</span> class 
  
+    <span class="category persistência-drift cp-4 linked" title="This is part of the Persistência Drift topic."><a href="../topics/persistencia-topic.html">Persistência&nbsp;Drift</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Banco de dados de sistema usando Drift.</p>
-<p>Gerencia tabelas de usuários (<a href="../data_database_table_system_users_records/UsersRecords-class.html">UsersRecords</a>), logs (<a href="../data_database_table_system_logs_records/LogsRecords-class.html">LogsRecords</a>) e
-configurações do sistema (<a href="../data_database_table_system_system_records/SystemRecords-class.html">SystemRecords</a>).</p>
-<p>Aceita um <a href="https://pub.dev/documentation/drift/2.34.3/drift/QueryExecutor-class.html">QueryExecutor</a> opcional para facilitar testes com banco em memória.</p>
+  <p>Banco SQLite de sistema, persistido com Drift.</p>
+<p>Tabelas de usuários (<a href="../data_database_table_system_users_records/UsersRecords-class.html">UsersRecords</a>), logs (<a href="../data_database_table_system_logs_records/LogsRecords-class.html">LogsRecords</a>) e
+configurações (<a href="../data_database_table_system_system_records/SystemRecords-class.html">SystemRecords</a>). Aceita um <a href="https://pub.dev/documentation/drift/2.34.3/drift/QueryExecutor-class.html">QueryExecutor</a> opcional
+para testes em memória. JSON fica restrito a DTO, import/export e
+cache de arquivo.</p>
 <p>Exemplo de uso em testes:</p>
 <pre class="language-dart"><code class="language-dart">final db = SystemDatabase(executor: NativeDatabase.memory());
 </code></pre>
@@ -108,7 +110,7 @@ configurações do sistema (<a href="../data_database_table_system_system_record
           <span class="name"><a href="../data_database_system_database/SystemDatabase/SystemDatabase.html">SystemDatabase</a></span><span class="signature">({<span class="parameter" id="param-executor"><span class="type-annotation"><a href="https://pub.dev/documentation/drift/2.34.3/drift/QueryExecutor-class.html">QueryExecutor</a>?</span> <span class="parameter-name">executor</span></span>})</span>
         </dt>
         <dd>
-          
+          Abre o banco de sistema ou usa <code>executor</code> (testes em memória).
         </dd>
     </dl>
   </section>

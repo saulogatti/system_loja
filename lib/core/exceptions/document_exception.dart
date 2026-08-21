@@ -1,3 +1,6 @@
+/// Exceção lançada quando a validação de documento (CPF/CNPJ) falha.
+///
+/// {@category utilitarios}
 class DocumentException implements Exception {
 
   DocumentException({

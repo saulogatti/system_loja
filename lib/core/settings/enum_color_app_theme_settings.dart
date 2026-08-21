@@ -1,3 +1,7 @@
+/// Paleta de cores-semente do tema Material 3.
+///
+/// {@category utilitarios}
+/// {@subCategory Sistema}
 enum EnumColorAppThemeSettings {
   azul,
   verde,

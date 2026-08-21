@@ -7,10 +7,13 @@ import 'package:system_loja/data/database/table/system/logs_records.dart';
 
 part 'log_dao.g.dart';
 
-/// DAO para gerenciar operações CRUD de logs de atividade no [SystemDatabase].
+/// DAO Drift de logs de auditoria no [SystemDatabase].
 ///
-/// Permite inserir, buscar e remover registros de auditoria ([ActivityLog])
-/// com filtros por data, tipo de ação, entidade e usuário.
+/// {@category persistencia}
+/// {@subCategory Sistema}
+///
+/// CRUD de [ActivityLog] sobre [LogsRecords], com filtros por data, ação,
+/// entidade e usuário. Persistência principal é Drift.
 @DriftAccessor(tables: [LogsRecords])
 class LogDao extends DatabaseAccessor<SystemDatabase> with _$LogDaoMixin {
   LogDao(super.db);

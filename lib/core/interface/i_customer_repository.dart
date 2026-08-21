@@ -1,28 +1,28 @@
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 
-/// Interface que define o contrato para operações de repositório de clientes.
+/// Contrato de persistência de clientes exposto à UI.
 ///
-/// Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
-/// para entidades [Customer], permitindo diferentes implementações de
-/// persistência (Drift, JSON, etc.).
+/// {@category contratos}
+/// {@subCategory Cadastros}
 ///
-/// As operações incluem busca por CPF, mapeamento de clientes por ID,
-/// e gerenciamento completo do cadastro de clientes.
+/// Operações CRUD de [Customer] via Drift. Erros voltam como
+/// [ResultStatus.error] — a apresentação não usa `try/catch` nestas chamadas.
 ///
-/// Exemplo de uso:
+/// Resolver com `appInjection.get<ICustomerRepository>()`.
+///
 /// ```dart
-/// final repository = appInjection.get<CustomerRepository>();
+/// final repository = appInjection.get<ICustomerRepository>();
 /// final resultado = await repository.findWith(cpf: '12345678900');
-/// if (resultado.isSuccessful && resultado.asSuccess != null) {
-///   final customer = resultado.asSuccess!;
-///   print('Cliente: ${customer.name}');
-/// }
+/// resultado.when(
+///   onSuccess: (customer) => print(customer?.name),
+///   onError: (mensagem) => print(mensagem),
+/// );
 /// ```
 ///
 /// Veja também:
-/// - [Customer] - modelo de domínio de cliente
-/// - [ResultStatus] - tipo de retorno para operações
+/// - [Customer] — modelo de domínio
+/// - [ResultStatus] — retorno das operações
 abstract interface class ICustomerRepository {
   /// Remove um cliente do sistema pelo ID.
   ///

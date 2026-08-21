@@ -50,6 +50,7 @@
       <div>
 <h1><span class="kind-function">setupAppInjection</span> function 
  
+    <span class="category serviços cp-3 linked" title="This is part of the Serviços topic."><a href="../topics/servicos-topic.html">Serviços</a></span>
 </h1></div>
 
     <section class="multi-line-signature">
@@ -62,9 +63,10 @@
     </section>
     
 <section class="desc markdown">
-  <p>Configura as dependências da aplicação.
-Isso é usado no main.dart para configurar as dependências da aplicação.
-Para acessar as dependências, use o <code>appInjection.get&lt;T&gt;()</code> onde T é o tipo da dependência.</p>
+  <p>Registra bancos Drift, repositórios e serviços no GetIt.</p>
+<p>Chamado no <code>main.dart</code>. Resolver dependências com <code>appInjection.get&lt;T&gt;()</code>.
+Persistência principal é Drift (<a href="../data_database_app_database/AppDatabase-class.html">AppDatabase</a>, <a href="../data_database_system_database/SystemDatabase-class.html">SystemDatabase</a>); JSON
+fica em cache de arquivo e DTOs de import/export.</p>
 </section>
 
 

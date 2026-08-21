@@ -1,6 +1,10 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/activity_log.dart';
 
+/// Tabela Drift de logs de auditoria no [SystemDatabase].
+///
+/// {@category persistencia}
+/// {@subCategory Sistema}
 class LogsRecords extends Table {
   IntColumn get actionType => intEnum<ActionType>()();
   TextColumn get details => text().withDefault(const Constant(''))();

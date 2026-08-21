@@ -10,6 +10,9 @@ import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Tela de gerenciamento de categorias de produtos.
 ///
+/// {@category apresentacao}
+/// {@subCategory Cadastros}
+///
 /// Permite visualizar, criar, editar e excluir categorias.
 /// Acessível através das configurações da aplicação.
 @RoutePage()

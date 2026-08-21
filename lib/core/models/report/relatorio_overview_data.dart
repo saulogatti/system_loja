@@ -1,6 +1,9 @@
 import 'package:system_loja/core/models/product.dart';
 
 /// Dados consolidados de estoque para apresentação no relatório.
+///
+/// {@category modelos}
+/// {@subCategory Relatórios}
 class RelatorioEstoqueOverviewData {
 
   const RelatorioEstoqueOverviewData({
@@ -16,6 +19,9 @@ class RelatorioEstoqueOverviewData {
 }
 
 /// Dados consolidados de notas fiscais para apresentação no relatório.
+///
+/// {@category modelos}
+/// {@subCategory Relatórios}
 class RelatorioNotasOverviewData {
 
   const RelatorioNotasOverviewData({

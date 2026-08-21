@@ -7,7 +7,12 @@ import 'package:system_loja/data/entry/system_user_data_entry.dart';
 
 part 'system_configuration_data.g.dart';
 
-/// JSON para [SystemConfiguration].
+/// DTO JSON de [SystemConfiguration] para import/export e cache de arquivo.
+///
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Persistência principal é Drift em [SystemRecords].
 @JsonSerializable(explicitToJson: true)
 class SystemConfigurationData {
 
@@ -53,6 +58,7 @@ class SystemConfigurationData {
 
   Map<String, dynamic> toJson() => _$SystemConfigurationDataToJson(this);
 
+  /// Converte o DTO para o modelo de domínio [SystemConfiguration].
   SystemConfiguration toDomain() => SystemConfiguration(
       id: id,
       registrationDate: registrationDate,

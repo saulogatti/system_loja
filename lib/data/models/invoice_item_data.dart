@@ -3,7 +3,12 @@ import 'package:system_loja/core/models/invoice_item.dart';
 
 part 'invoice_item_data.g.dart';
 
-/// JSON para [InvoiceItem].
+/// DTO JSON de [InvoiceItem] para import/export e cache de arquivo.
+///
+/// {@category dados}
+/// {@subCategory Vendas}
+///
+/// Persistência principal é Drift em [InvoiceItemsRecords].
 @JsonSerializable()
 class InvoiceItemData {
 
@@ -38,6 +43,7 @@ class InvoiceItemData {
 
   Map<String, dynamic> toJson() => _$InvoiceItemDataToJson(this);
 
+  /// Converte o DTO para o modelo de domínio [InvoiceItem].
   InvoiceItem toDomain() => InvoiceItem(
     productId: productId ?? kInvalidId,
     productName: productName,

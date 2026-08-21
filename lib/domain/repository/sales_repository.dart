@@ -8,10 +8,30 @@ import 'package:system_loja/data/database/dao/invoice_item_dao.dart';
 import 'package:system_loja/data/database/dao/product_dao.dart';
 import 'package:system_loja/domain/code_generator_service.dart';
 
-/// Repositório para gerenciamento de vendas usando Drift
+/// Repositório para gerenciamento de vendas usando Drift.
 ///
-/// Responsável por coordenar operações de CRUD de vendas (invoices)
-/// utilizando os DAOs do Drift.
+/// {@category repositorios}
+/// {@subCategory Vendas}
+///
+/// Coordena CRUD de [Invoice] via [InvoiceDao] e [InvoiceItemDao],
+/// atualização de estoque e geração de número único via
+/// [CodeGeneratorService]. Todos os erros são capturados internamente
+/// e devolvidos como [ResultStatus.error] com mensagem amigável.
+///
+/// Resolver com `appInjection.get<ISalesRepository>()`.
+///
+/// ```dart
+/// final repository = appInjection.get<ISalesRepository>();
+/// final numero = await repository.generateInvoiceNumber();
+/// numero.when(
+///   onSuccess: (valor) => print(valor),
+///   onError: (mensagem) => print(mensagem),
+/// );
+/// ```
+///
+/// Veja também:
+/// - [ISalesRepository] - contrato da interface
+/// - [InvoiceDao] - DAO do Drift
 class SalesRepository implements ISalesRepository {
 
   SalesRepository({

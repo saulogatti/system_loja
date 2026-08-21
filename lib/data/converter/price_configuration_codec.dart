@@ -7,7 +7,11 @@ import 'package:system_loja/data/entry/price_configuration_entry.dart';
 
 /// Ponte entre [PriceConfiguration] (domínio) e JSON/Drift.
 ///
+/// {@category dados}
+/// {@subCategory Sistema}
+///
 /// O contrato JSON é [PriceConfigurationEntry] (`json_serializable`).
+/// Persistência principal continua no Drift.
 class PriceConfigurationCodec {
 
   PriceConfigurationCodec._();
@@ -28,9 +32,11 @@ class PriceConfigurationCodec {
     return priceConfigurationData.toDomain();
   }
 
+  /// Reconstrói [PriceConfiguration] a partir da string JSON.
   static PriceConfiguration fromJsonString(String raw) =>
       fromJson(jsonDecode(raw) as Map<String, dynamic>);
 
+  /// Serializa [PriceConfiguration] no contrato de [PriceConfigurationEntry].
   static Map<String, dynamic> toJson(PriceConfiguration instance) =>
       PriceConfigurationEntry.fromDomain(instance).toJson();
 }

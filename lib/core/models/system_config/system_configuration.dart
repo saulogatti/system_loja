@@ -4,6 +4,10 @@ import 'package:system_loja/core/models/system_config/report_configuration.dart'
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
 
 /// Configuração global do sistema (domínio).
+///
+/// {@category modelos}
+/// {@subCategory Sistema}
+///
 /// Importação/exportação JSON: `SystemConfigurationCodec` em `lib/data/`.
 class SystemConfiguration extends DefaultObject {
   SystemConfiguration({

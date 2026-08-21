@@ -16,6 +16,9 @@ import 'package:system_loja/screens/widgets/overlay_app_widget.dart';
 
 /// Tela de gestão de usuários com listagem, adição, edição e exclusão.
 ///
+/// {@category apresentacao}
+/// {@subCategory Sistema}
+///
 /// Esta tela foi refatorada em widgets menores para melhor manutenibilidade:
 /// - UsuarioForm: formulário de criação/edição
 /// - UsuarioList: lista de usuários cadastrados

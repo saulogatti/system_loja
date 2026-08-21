@@ -1,5 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 
+/// Constrói [ThemeData] Material 3 a partir de uma cor-semente.
+///
+/// {@category apresentacao}
+/// {@subCategory Sistema}
 class AppTheme {
   static ThemeData dark({required Color seedColor}) {
     final colorScheme = ColorScheme.fromSeed(

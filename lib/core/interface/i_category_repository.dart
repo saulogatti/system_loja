@@ -1,28 +1,28 @@
 import 'package:system_loja/core/models/product_category.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 
-/// Interface que define o contrato para operações de repositório de categorias.
+/// Contrato de persistência de categorias de produto exposto à UI.
 ///
-/// Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
-/// para entidades [ProductCategory], permitindo diferentes implementações de
-/// persistência (Drift, JSON, etc.).
+/// {@category contratos}
+/// {@subCategory Cadastros}
 ///
-/// Todas as operações retornam [ResultStatus] para tratamento type-safe
-/// de erros, exceto [isCategoryInUse] que retorna um booleano direto.
+/// CRUD de [ProductCategory] via Drift. A maioria das operações retorna
+/// [ResultStatus]; [isCategoryInUse] devolve `bool` direto.
 ///
-/// Exemplo de uso:
+/// Resolver com `appInjection.get<ICategoryRepository>()`.
+///
 /// ```dart
-/// final repository = appInjection.get<CategoryRepository>();
+/// final repository = appInjection.get<ICategoryRepository>();
 /// final resultado = await repository.getCategoryById(1);
-/// if (resultado.isSuccessful) {
-///   final category = resultado.asSuccess;
-///   print('Categoria: ${category.name}');
-/// }
+/// resultado.when(
+///   onSuccess: (category) => print(category.name),
+///   onError: (mensagem) => print(mensagem),
+/// );
 /// ```
 ///
 /// Veja também:
-/// - [ProductCategory] - modelo de domínio de categoria
-/// - [ResultStatus] - tipo de retorno para operações
+/// - [ProductCategory] — modelo de domínio
+/// - [ResultStatus] — retorno das operações
 abstract interface class ICategoryRepository {
   /// Cria uma nova categoria no sistema.
   ///

@@ -8,10 +8,13 @@ import 'package:system_loja/data/database/table/invoices_records.dart';
 
 part 'invoice_dao.g.dart';
 
-/// DAO para gerenciar operações CRUD de notas fiscais no banco de dados Drift.
+/// DAO Drift de notas fiscais no [AppDatabase].
 ///
-/// Utiliza o padrão Repository e conversões entre Invoice (domínio) e
-/// InvoicesRecord (Drift) através de extensões.
+/// {@category persistencia}
+/// {@subCategory Vendas}
+///
+/// CRUD de [Invoice] sobre [InvoicesRecords], carregando itens quando
+/// necessário. Persistência principal é Drift.
 @DriftAccessor(tables: [InvoicesRecords])
 class InvoiceDao extends DatabaseAccessor<AppDatabase> with _$InvoiceDaoMixin {
   InvoiceDao(super.db);

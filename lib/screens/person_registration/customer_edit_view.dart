@@ -15,6 +15,10 @@ import 'package:system_loja/screens/widgets/text_form_field_cpf.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
+/// Edição de um [Customer] já cadastrado.
+///
+/// {@category apresentacao}
+/// {@subCategory Cadastros}
 @RoutePage()
 class CustomerEditView extends StatefulWidget implements AutoRouteWrapper {
   const CustomerEditView({required this.customer, super.key});

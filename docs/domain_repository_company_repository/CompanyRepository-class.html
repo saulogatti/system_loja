@@ -50,13 +50,28 @@
     <div>
 <h1><span class="kind-class">CompanyRepository</span> class 
  
+    <span class="category repositórios cp-2 linked" title="This is part of the Repositórios topic."><a href="../topics/repositorios-topic.html">Repositórios</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Repository para gerenciar operações de empresas.</p>
-<p>Utiliza CompanyDao para acesso ao banco de dados e gerencia
-logs de atividades do sistema.</p>
+  <p>Repositório para gerenciamento de empresas usando Drift.</p>
+<p>Coordena operações CRUD sobre <a href="../core_models_company/Company-class.html">Company</a> via <a href="../data_database_dao_company_dao/CompanyDao-class.html">CompanyDao</a> e registra
+eventos de auditoria via <a href="../core_interface_i_log_repository/ILogRepository-class.html">ILogRepository</a>. Todos os erros são capturados
+internamente e devolvidos como <a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com mensagem amigável.</p>
+<p>Resolver com <code>appInjection.get&lt;ICompanyRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;ICompanyRepository&gt;();
+final resultado = await repository.findByCnpj(cnpj: '12345678000199');
+resultado.when(
+  onSuccess: (company) =&gt; print(company?.name),
+  onError: (mensagem) =&gt; print(mensagem),
+);
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_interface_i_company_repository/ICompanyRepository-class.html">ICompanyRepository</a> - contrato da interface</li>
+<li><a href="../data_database_dao_company_dao/CompanyDao-class.html">CompanyDao</a> - DAO do Drift</li>
+</ul>
 </section>
 
 

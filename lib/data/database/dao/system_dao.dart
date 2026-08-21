@@ -7,15 +7,24 @@ import 'package:system_loja/data/entry/system_user_data_entry.dart';
 
 part 'system_dao.g.dart';
 
+/// DAO Drift de configuração do sistema no [SystemDatabase].
+///
+/// {@category persistencia}
+/// {@subCategory Sistema}
+///
+/// Lê e grava [SystemConfiguration] em [SystemRecords]. Persistência
+/// principal é Drift; JSON só entra como DTO da linha.
 @DriftAccessor(tables: [SystemRecords])
 class SystemDao extends DatabaseAccessor<SystemDatabase> with _$SystemDaoMixin {
   SystemDao(super.db);
 
+  /// Retorna a configuração mais recente, ou null se a tabela estiver vazia.
   Future<SystemConfiguration?> getSystemConfiguration() async {
     final row = await _getLatestConfiguration();
     return row?.toDomain();
   }
 
+  /// Remove a configuração mais recente, se existir.
   Future<void> deleteSystemConfiguration() async {
     await transaction(() async {
       final latestConfiguration = await _getLatestConfiguration();
@@ -27,6 +36,7 @@ class SystemDao extends DatabaseAccessor<SystemDatabase> with _$SystemDaoMixin {
     });
   }
 
+  /// Insere ou atualiza a configuração vigente e remove linhas extras.
   Future<void> saveSystemConfiguration(SystemConfiguration data) async {
     await transaction(() async {
       final latestConfiguration = await _getLatestConfiguration();

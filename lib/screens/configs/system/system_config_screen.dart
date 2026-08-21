@@ -16,6 +16,9 @@ import 'package:system_loja/screens/route/route_app.gr.dart';
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Tela para configurar dados padrão e parâmetros técnicos do sistema.
+///
+/// {@category apresentacao}
+/// {@subCategory Sistema}
 @RoutePage()
 class SystemConfigScreen extends StatefulWidget implements AutoRouteWrapper {
   const SystemConfigScreen({super.key});

@@ -50,17 +50,18 @@
     <div>
 <h1><span class="kind-class">CacheManager</span> class 
  
+    <span class="category dtos-e-cache cp-5 linked" title="This is part of the DTOs e cache topic."><a href="../topics/dados-topic.html">DTOs&nbsp;e&nbsp;cache</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Gerencia o cache de dados da aplicação.</p>
-<p>Utiliza o padrão singleton para garantir uma única instância
-de <a href="../data_cache_cache_manager/CacheManager-class.html">CacheManager</a> durante o ciclo de vida da aplicação.</p>
-<p>O cache é persistido em arquivos JSON no diretório de documentos
-da aplicação, organizados por tipo de objeto.</p>
+  <p>Gerencia o cache de dados da aplicação em arquivos JSON.</p>
+<p>Registrado via GetIt em <code>setupAppInjection()</code> — resolver com
+<code>appInjection.get&lt;CacheManager&gt;()</code>. Não use singleton global <code>.instance</code>.</p>
+<p>Persistência principal da loja é Drift. Este cache é só arquivo JSON
+no diretório de documentos, organizado por tipo de objeto.</p>
 <p>Exemplo de uso:</p>
-<pre class="language-dart"><code class="language-dart">final cache = CacheManager.instance;
+<pre class="language-dart"><code class="language-dart">final cache = appInjection.get&lt;CacheManager&gt;();
 await cache.ensureInitialized();
 
 // Armazenar um objeto
@@ -102,7 +103,7 @@ final objeto = await cache.get&lt;MinhaClasse&gt;('chave', MinhaClasse.fromJson)
           <span class="name"><a href="../data_cache_cache_manager/CacheManager/CacheManager.html">CacheManager</a></span><span class="signature">()</span>
         </dt>
         <dd>
-          Construtor privado para implementar o padrão singleton.
+          Cria um <a href="../data_cache_cache_manager/CacheManager-class.html">CacheManager</a> (registre via DI; não use como singleton global).
         </dd>
     </dl>
   </section>
@@ -230,7 +231,7 @@ final objeto = await cache.get&lt;MinhaClasse&gt;('chave', MinhaClasse.fromJson)
 
 </dt>
 <dd class="inherited">
-  
+  Lê o conteúdo de todos os arquivos do diretório de cache.
   <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
@@ -282,7 +283,7 @@ final objeto = await cache.get&lt;MinhaClasse&gt;('chave', MinhaClasse.fromJson)
 
 </dt>
 <dd class="inherited">
-  
+  Monta o caminho absoluto de <code>fileName</code> dentro do diretório de cache.
   <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
@@ -373,7 +374,7 @@ final objeto = await cache.get&lt;MinhaClasse&gt;('chave', MinhaClasse.fromJson)
 
 </dt>
 <dd>
-  
+  Interpreta uma string JSON como mapa de cache.
   
 
 </dd>
@@ -412,7 +413,7 @@ final objeto = await cache.get&lt;MinhaClasse&gt;('chave', MinhaClasse.fromJson)
 
 </dt>
 <dd>
-  
+  Restaura arquivos de cache a partir de <code>direBackup</code>.
   
 
 </dd>

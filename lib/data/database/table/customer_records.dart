@@ -1,6 +1,10 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/data/converter/address_codec.dart';
 
+/// Tabela Drift de clientes no [AppDatabase].
+///
+/// {@category persistencia}
+/// {@subCategory Cadastros}
 class CustomerRecords extends Table {
   TextColumn get address =>
       text().map(AddressCodec.driftConverter).nullable()();

@@ -1,5 +1,7 @@
 /// Exceção lançada quando há erros relacionados a produtos.
 ///
+/// {@category utilitarios}
+///
 /// Esta classe representa erros específicos de operações com produtos,
 /// como duplicação de código, produto não encontrado, etc.
 class ProductException implements Exception {
@@ -106,6 +108,8 @@ class ProductException implements Exception {
 }
 
 /// Tipos de erros relacionados a produtos.
+///
+/// {@category utilitarios}
 enum ProductErrorType {
   /// Código de produto duplicado
   duplicateCode,

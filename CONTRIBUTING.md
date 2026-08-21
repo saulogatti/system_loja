@@ -337,11 +337,22 @@ system_loja/
 │   └── screens/                         # UI, BLoC/Cubit, rotas
 ├── test/
 │   └── support/                         # Helpers (ex.: AppDatabase em teste)
-├── docs/
+├── documentation/                       # Guias Markdown vivos
+│   ├── dartdoc/                         # Páginas-fonte das categorias
 │   └── historico/                       # Material antigo (não canônico)
+├── docs/                                # HTML do `dart doc -o docs/` (GitHub Pages)
+├── dartdoc_options.yaml
 ├── CONTRIBUTING.md
 └── README.md
 ```
+
+### Documentação da API
+
+```bash
+dart doc -o docs/
+```
+
+Publicação: GitHub Pages com source = branch e pasta `/docs`. Guias longos ficam em `documentation/`, não em `docs/`.
 
 O fluxo principal da aplicação usa SQLite embutido via Drift.
 

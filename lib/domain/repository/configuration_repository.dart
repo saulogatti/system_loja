@@ -11,10 +11,24 @@ import 'package:system_loja/data/entry/configuration_cache_entry.dart';
 //TODO: Refatorar para tirar mistura de data e domain, deixando este repositório apenas com lógica de domínio e delegando persistência para camada de dados. Talvez criar um ConfigurationService para lidar com cache e arquivos, e este repositório só chamar o service e mapear erros para mensagens amigáveis.
 /// Repositório para gerenciamento de configurações da aplicação.
 ///
+/// {@category repositorios}
+/// {@subCategory Sistema}
+///
 /// Persiste e recupera [AppSettings] via [CacheManager] e aplica o tema
 /// (cor primária e modo escuro) em tempo real via [ISettingsService].
 /// Todos os erros são capturados internamente e devolvidos como
 /// [ResultStatus.error] com mensagem amigável.
+///
+/// Resolver com `appInjection.get<IConfigurationRepository>()`.
+///
+/// ```dart
+/// final repository = appInjection.get<IConfigurationRepository>();
+/// final resultado = await repository.loadConfiguration();
+/// resultado.when(
+///   onSuccess: (settings) => print(settings.temaEscuro),
+///   onError: (mensagem) => print(mensagem),
+/// );
+/// ```
 ///
 /// Veja também:
 /// - [IConfigurationRepository] - contrato da interface

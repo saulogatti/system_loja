@@ -7,10 +7,13 @@ import 'package:system_loja/data/database/table/company_records.dart';
 
 part 'company_dao.g.dart';
 
-/// DAO para gerenciar operações CRUD de empresas no banco de dados Drift.
+/// DAO Drift de empresas no [AppDatabase].
 ///
-/// Utiliza o padrão Repository e conversões entre Company (domínio) e
-/// CompanyRecord (Drift) através de extensões.
+/// {@category persistencia}
+/// {@subCategory Cadastros}
+///
+/// CRUD de [Company] sobre [CompanyRecords], com mapeamento para o
+/// domínio via extensões. Persistência principal é Drift.
 @DriftAccessor(tables: [CompanyRecords])
 class CompanyDao extends DatabaseAccessor<AppDatabase> with _$CompanyDaoMixin {
   CompanyDao(super.db);

@@ -1,6 +1,10 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/screens/widgets/report_widget.dart';
 
+/// Tela para exportar relatórios em CSV ou PDF.
+///
+/// {@category apresentacao}
+/// {@subCategory Relatórios}
 class ExportReportScreen extends StatefulWidget {
   const ExportReportScreen({super.key});
 

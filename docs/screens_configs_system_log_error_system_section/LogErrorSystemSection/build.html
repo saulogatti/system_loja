@@ -109,32 +109,33 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) =&gt; Card(
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.analytics, color: Theme.of(context).colorScheme.primary),
-              const SizedBox(width: 8),
-              const Text(
-                &#39;Análise de Logs do Sistema&#39;,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text(&#39;Analisar logs de erro do sistema&#39;),
-            subtitle: const Text(&#39;Abrir análise detalhada dos logs&#39;),
-            leading: const Icon(Icons.analytics),
-            onTap: () =&gt; onOpenLogsAnalysis(context),
-          ),
-        ],
-      ),
+  child: Padding(
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.analytics, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 8),
+            const Text(
+              &#39;Análise de Logs do Sistema&#39;,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        const Divider(),
+        ListTile(
+          title: const Text(&#39;Analisar logs de erro do sistema&#39;),
+          subtitle: const Text(&#39;Abrir análise detalhada dos logs&#39;),
+          leading: const Icon(Icons.analytics),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () =&gt; onOpenLogsAnalysis(context),
+        ),
+      ],
     ),
-  );</code></pre>
+  ),
+);</code></pre>
 </section>
 
 

@@ -8,6 +8,9 @@ import 'package:system_loja/screens/relatorios/sales_purchase_analytics/bloc/sal
 import 'package:system_loja/screens/relatorios/sales_purchase_analytics/widgets/sales_purchase_analytics_view.dart';
 
 /// Tela de analytics com comparativo de vendas e compras.
+///
+/// {@category apresentacao}
+/// {@subCategory Relatórios}
 @RoutePage()
 class SalesPurchaseAnalyticsScreen extends StatelessWidget {
   const SalesPurchaseAnalyticsScreen({super.key});

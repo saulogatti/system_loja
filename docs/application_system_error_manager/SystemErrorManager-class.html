@@ -50,9 +50,15 @@
     <div>
 <h1><span class="kind-class">SystemErrorManager</span> class 
  
+    <span class="category serviços cp-3 linked" title="This is part of the Serviços topic."><a href="../topics/servicos-topic.html">Serviços</a></span>
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Captura erros de Flutter/plataforma e persiste no cache de arquivo.</p>
+<p>Implementa <a href="../core_interface_i_system_error_manager/ISystemErrorManager-class.html">ISystemErrorManager</a>. Persistência principal da loja é Drift;
+este serviço só grava <a href="../data_cache_models_system_model_system_error_model/SystemErrorModel-class.html">SystemErrorModel</a> em arquivo JSON.</p>
+</section>
 
 
     <section>
@@ -84,7 +90,7 @@
           <span class="name"><a href="../application_system_error_manager/SystemErrorManager/SystemErrorManager.html">SystemErrorManager</a></span><span class="signature">()</span>
         </dt>
         <dd>
-          
+          Instala handlers de <a href="https://api.flutter.dev/flutter/foundation/FlutterError-class.html">FlutterError</a> e <a href="https://api.flutter.dev/flutter/dart-ui/PlatformDispatcher-class.html">PlatformDispatcher</a> e grava no cache.
         </dd>
     </dl>
   </section>
@@ -161,7 +167,7 @@
 
 </dt>
 <dd>
-  
+  Retorna erros de cache cujo código coincide com <code>code</code>.
   
 
 </dd>
@@ -187,7 +193,7 @@
 
 </dt>
 <dd>
-  
+  Persiste <code>error</code> no cache de arquivo JSON.
   
 
 </dd>

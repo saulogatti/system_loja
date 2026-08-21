@@ -2,7 +2,10 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/document/cnpj.dart';
 import 'package:system_loja/core/models/document/cpf.dart';
 
-/// Conversor JSON para [Cpf] (camada de dados).
+/// Conversor JSON de [Cpf] na camada de dados.
+///
+/// {@category dados}
+/// {@subCategory Cadastros}
 class CpfConverter extends JsonConverter<Cpf, String> {
   const CpfConverter();
 
@@ -13,7 +16,10 @@ class CpfConverter extends JsonConverter<Cpf, String> {
   String toJson(Cpf value) => value.value;
 }
 
-/// Conversor JSON para [Cnpj] (camada de dados).
+/// Conversor JSON de [Cnpj] na camada de dados.
+///
+/// {@category dados}
+/// {@subCategory Cadastros}
 class CnpjConverter extends JsonConverter<Cnpj, String> {
   const CnpjConverter();
 

@@ -3,7 +3,12 @@ import 'package:system_loja/core/models/system_config/report_configuration.dart'
 
 part 'report_configuration_entry.g.dart';
 
-/// DTO JSON para [ReportConfiguration] (sem herdar domínio).
+/// DTO JSON de [ReportConfiguration], sem herdar o domínio.
+///
+/// {@category dados}
+/// {@subCategory Relatórios}
+///
+/// Usado em import/export e cache de arquivo. Persistência principal é Drift.
 @JsonSerializable()
 class ReportConfigurationEntry {
 
@@ -38,6 +43,7 @@ class ReportConfigurationEntry {
 
   Map<String, dynamic> toJson() => _$ReportConfigurationEntryToJson(this);
 
+  /// Converte o DTO para o modelo de domínio [ReportConfiguration].
   ReportConfiguration toDomain() => ReportConfiguration(
     enableSalesByPeriod: enableSalesByPeriod,
     enableTopProducts: enableTopProducts,
@@ -47,6 +53,7 @@ class ReportConfigurationEntry {
     lastUpdatedDate: lastUpdatedDate,
   );
 
+  /// Serializa [ReportConfiguration] no contrato JSON desta entry.
   static Map<String, dynamic> toJsonStatic(
     ReportConfiguration reportConfiguration,
   ) => ReportConfigurationEntry.fromDomain(reportConfiguration).toJson();

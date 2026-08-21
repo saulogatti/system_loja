@@ -1,12 +1,17 @@
 import 'package:system_loja/core/models/default/default_object.dart';
 
 /// Tipos de ação registrados no log de auditoria.
+///
+/// {@category modelos}
+/// {@subCategory Sistema}
 enum ActionType { criar, ler, atualizar, deletar }
 
-/// Log de atividade (domínio). Serialização em `activity_log_data.dart`.
+/// Log de atividade para auditoria (domínio).
 ///
-/// Registra ações dos usuários para fins de auditoria (criação, leitura,
-/// atualização e exclusão de entidades do sistema).
+/// {@category modelos}
+/// {@subCategory Sistema}
+///
+/// Serialização em `lib/data/models/activity_log_data.dart`.
 class ActivityLog extends DefaultObject {
   ActivityLog({
     required this.actionType,

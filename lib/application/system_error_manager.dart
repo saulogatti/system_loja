@@ -8,6 +8,10 @@ import 'package:system_loja/core/models/system_errors/system_error.dart';
 import 'package:system_loja/data/cache/models/system_model/system_error_model.dart';
 import 'package:system_loja/data/cache/system_cache_manager.dart';
 
+/// Grava um erro inesperado no cache de arquivo JSON.
+///
+/// {@category servicos}
+/// {@subCategory Sistema}
 Future<void> reportError(Object error, StackTrace stackTrace) async {
   final systemError = SystemErrorModel(
     message: error.toString(),
@@ -16,9 +20,17 @@ Future<void> reportError(Object error, StackTrace stackTrace) async {
   );
   await SystemErrorManager().saveErrorToCache(systemError);
 }
-// TODO: Avaliar a necessidade de usar o SystemErrorManager
 
+/// Captura erros de Flutter/plataforma e persiste no cache de arquivo.
+///
+/// {@category servicos}
+/// {@subCategory Sistema}
+///
+/// Implementa [ISystemErrorManager]. Persistência principal da loja é Drift;
+/// este serviço só grava [SystemErrorModel] em arquivo JSON.
+// TODO: Avaliar a necessidade de usar o SystemErrorManager
 class SystemErrorManager implements ISystemErrorManager {
+  /// Instala handlers de [FlutterError] e [PlatformDispatcher] e grava no cache.
   SystemErrorManager() {
     FlutterError.onError = (details) async {
       await reportError(details.exception, details.stack ?? StackTrace.current);
@@ -42,9 +54,11 @@ class SystemErrorManager implements ISystemErrorManager {
     return list;
   }
 
+  /// Retorna erros de cache cujo código coincide com [code].
   Future<List<SystemErrorModel>> getErrorsByCode(int code) =>
       _cacheManager.retrieveErrorsByCode(code);
 
+  /// Persiste [error] no cache de arquivo JSON.
   Future<void> saveErrorToCache(SystemErrorModel error) async {
     log(
       'Saving error to cache: ${error.message}',

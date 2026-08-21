@@ -7,9 +7,24 @@ import 'package:system_loja/domain/code_generator_service.dart';
 
 /// Repositório para gerenciamento de produtos usando Drift.
 ///
+/// {@category repositorios}
+/// {@subCategory Cadastros}
+///
 /// Coordena operações CRUD sobre [Product] via [ProductDao] e geração de
 /// códigos únicos via [CodeGeneratorService]. Todos os erros são capturados
 /// internamente e devolvidos como [ResultStatus.error] com mensagem amigável.
+///
+/// Resolver com `appInjection.get<IProductRepository>()`.
+///
+/// ```dart
+/// final repository = appInjection.get<IProductRepository>();
+/// final codigo = await repository.generateProductCode();
+/// final resultado = await repository.findByCode(1);
+/// resultado.when(
+///   onSuccess: (product) => print(product.name),
+///   onError: (mensagem) => print(mensagem),
+/// );
+/// ```
 ///
 /// Veja também:
 /// - [IProductRepository] - contrato da interface

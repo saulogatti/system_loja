@@ -5,6 +5,9 @@ import 'package:system_loja/core/models/user.dart' show User;
 
 /// Dados comuns a entidades que representam pessoas (usuário, cliente, fornecedor).
 ///
+/// {@category modelos}
+/// {@subCategory Cadastros}
+///
 /// Extende [DefaultObject] adicionando nome, e-mail e telefone.
 /// Subclasses concretas: [Customer], [Company], [User].
 abstract class PersonDefault extends DefaultObject {

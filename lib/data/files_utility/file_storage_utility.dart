@@ -7,14 +7,15 @@ import 'package:path_provider/path_provider.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/cache/exceptions/cache_exception.dart';
 
-/// Gerenciador centralizado de operações de sistema de arquivos JSON.
+/// Operações de arquivo JSON no diretório de suporte da aplicação.
 ///
-/// Este mixin fornece funcionalidades de leitura e escrita de arquivos JSON
-/// com cache automático no diretório de suporte da aplicação. Garante formatação
-/// consistente (indentação de 2 espaços), validação de caminhos e inicialização
-/// segura do sistema de arquivos.
+/// {@category dados}
+/// {@subCategory Sistema}
 ///
-/// Classes que utilizam este mixin devem implementar o método `logError`.
+/// Leitura, escrita, backup e restore de arquivos. Persistência principal
+/// da loja é Drift; este mixin só trata cache/import-export em disco.
+///
+/// Classes que usam este mixin devem implementar [logError].
 mixin FileStorageUtility {
   static const String _maskBackup = 'backup_';
 
@@ -134,6 +135,7 @@ mixin FileStorageUtility {
     }
   }
 
+  /// Lê o conteúdo de todos os arquivos do diretório de cache.
   @protected
   Future<ResultStatus<List<String>, String>> fetchAllDataFiles() async {
     try {
@@ -195,6 +197,7 @@ mixin FileStorageUtility {
     }
   }
 
+  /// Monta o caminho absoluto de [fileName] dentro do diretório de cache.
   @protected
   @nonVirtual
   Future<String> getPathWithFileName(String fileName) async {
@@ -202,6 +205,7 @@ mixin FileStorageUtility {
     return p.join(directoryPath, fileName);
   }
 
+  /// Registra mensagem de depuração.
   void logDebug(String message);
 
   /// Registra mensagens de erro com stack trace.

@@ -77,5 +77,5 @@ appInjection.registerSingleton<ICustomerRepository>(
 
 - `README.md`
 - `.github/copilot-instructions.md`
-- `docs/DRIFT_ARCHITECTURE.md`
+- `documentation/DRIFT_ARCHITECTURE.md`
 - `lib/application/app_injection.dart`

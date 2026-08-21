@@ -2,6 +2,10 @@ import 'package:system_loja/core/exceptions/validation_exception.dart' show Vali
 import 'package:system_loja/core/models/document/document.dart';
 import 'package:system_loja/core/utils/string_extensions.dart';
 
+/// CPF com validação de formato e dígitos verificadores.
+///
+/// {@category modelos}
+/// {@subCategory Cadastros}
 class Cpf extends Document {
 
   /// Cria uma instância de [Cpf] com o valor informado.

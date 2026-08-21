@@ -1,5 +1,8 @@
 /// Objeto base para entidades de domínio com ID, data de cadastro e data de atualização.
 ///
+/// {@category modelos}
+/// {@subCategory Cadastros}
+///
 /// Todas as entidades do sistema herdam desta classe para garantir
 /// rastreabilidade de criação e atualização.
 abstract class DefaultObject {

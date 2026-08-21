@@ -1,4 +1,7 @@
 /// Resumo consolidado de movimentacao de um produto.
+///
+/// {@category modelos}
+/// {@subCategory Relatórios}
 class ProductMovementSummary {
 
   const ProductMovementSummary({

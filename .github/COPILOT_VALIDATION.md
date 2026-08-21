@@ -97,7 +97,7 @@ Required fields:
 
 ### Test 4: Custom Agent - Documentation Specialist
 **Prompt:** "@documentation-specialist document the discount field feature"  
-**Expected:** Agent adds doc comments in Portuguese and updates docs/
+**Expected:** Agent adds doc comments in Portuguese and updates documentation/
 
 ### Test 5: Path-Specific Instructions
 **Action:** Edit any .dart file  

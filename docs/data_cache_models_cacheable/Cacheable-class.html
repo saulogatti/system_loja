@@ -51,13 +51,14 @@
 <h1><span class="kind-class">Cacheable</span> class 
     <a href="https://dart.dev/language/class-modifiers#abstract" class="feature feature-abstract" title="This type can not be directly constructed.">abstract</a>
  
+    <span class="category dtos-e-cache cp-5 linked" title="This is part of the DTOs e cache topic."><a href="../topics/dados-topic.html">DTOs&nbsp;e&nbsp;cache</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Define o objeto que pode ser armazenado em cache.</p>
-<p>Esta interface define os métodos necessários para que um objeto
-possa ser serializado e armazenado no sistema de cache da aplicação.</p>
+  <p>Contrato de objeto serializável no cache de arquivo JSON.</p>
+<p>Persistência principal é Drift; <a href="../data_cache_models_cacheable/Cacheable-class.html">Cacheable</a> só descreve chave e JSON
+para o <a href="../data_cache_cache_manager/CacheManager-class.html">CacheManager</a>.</p>
 <p>Exemplo de implementação:</p>
 <pre class="language-dart"><code class="language-dart">class MinhaClasse implements Cacheable {
   @override

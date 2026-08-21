@@ -50,13 +50,16 @@
     <div>
 <h1><span class="kind-class">CodeGeneratorService</span> class 
  
+    <span class="category serviços cp-3 linked" title="This is part of the Serviços topic."><a href="../topics/servicos-topic.html">Serviços</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
   <p>Serviço para geração de códigos únicos para produtos e notas fiscais.</p>
-<p>Este serviço fornece métodos para gerar códigos automáticos sequenciais
-ou validar códigos fornecidos pelo usuário, garantindo unicidade no banco.</p>
+<p>Consulta unicidade via <a href="../data_database_dao_product_dao/ProductDao-class.html">ProductDao</a> e <a href="../data_database_dao_invoice_dao/InvoiceDao-class.html">InvoiceDao</a> (Drift). Gera códigos
+sequenciais ou valida códigos informados pelo usuário.</p>
+<p>Consumido pelos repositórios de produto e vendas; resolver com
+<code>appInjection.get&lt;CodeGeneratorService&gt;()</code>.</p>
 </section>
 
 
