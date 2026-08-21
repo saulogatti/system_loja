@@ -158,7 +158,7 @@ Created (10 files):
 ### Critical (Required before testing):
 1. **Run Code Generation**:
    ```bash
-   dart run build_runner build --delete-conflicting-outputs
+   dart run build_runner build
    ```
    This generates:
    - `category.g.dart` - JSON serialization

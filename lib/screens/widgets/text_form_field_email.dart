@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/core/constants/app_constants.dart';
 
 class TextFormFieldEmail extends StatelessWidget {
@@ -14,6 +14,7 @@ class TextFormFieldEmail extends StatelessWidget {
     controller: emailController,
     decoration: const InputDecoration(
       labelText: 'Email',
+      hintText: 'Ex: nome@exemplo.com',
       border: OutlineInputBorder(),
       prefixIcon: Icon(Icons.email),
     ),

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/core/interface/i_system_error_manager.dart';
 import 'package:system_loja/core/models/system_errors/system_error.dart';
 import 'package:system_loja/data/cache/models/system_model/system_error_model.dart';

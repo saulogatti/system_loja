@@ -10,7 +10,7 @@ Use estas instrucoes apos alterar classes com `@freezed`, `@JsonSerializable`, D
 Execute no diretorio raiz do projeto:
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 Arquivos normalmente atualizados pela geracao:

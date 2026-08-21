@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/core/constants/app_constants.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/products/widgets/product_category_widget.dart';

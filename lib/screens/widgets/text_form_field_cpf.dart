@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/screens/utils/text_formatters.dart';
 
 class TextFormFieldCpf extends StatelessWidget {
@@ -18,6 +18,7 @@ class TextFormFieldCpf extends StatelessWidget {
     controller: cpfController,
     decoration: const InputDecoration(
       labelText: 'CPF',
+      hintText: 'Ex: 000.000.000-00',
       border: OutlineInputBorder(),
       prefixIcon: Icon(Icons.badge),
     ),

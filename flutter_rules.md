@@ -1,7 +1,7 @@
 # Regras de Desenvolvimento Flutter (Específicas do Projeto)
 
 Estas são as diretrizes consolidadas e estritas para o desenvolvimento em Flutter e Dart neste repositório. O objetivo é manter a consistência, arquitetura limpa e performance do aplicativo.
-Caso precise de informações gerais sobre desenvolvimento em Flutter e Dart, consulte o arquivo 
+Caso precise de informações gerais sobre desenvolvimento em Flutter e Dart, consulte o arquivo
 [`.github\instructions\dart-n-flutter.instructions.md`](.github\instructions\dart-n-flutter.instructions.md).
 
 ## 1. Arquitetura e Organização (Clean Architecture)
@@ -35,5 +35,7 @@ Caso precise de informações gerais sobre desenvolvimento em Flutter e Dart, co
 * **Rigor das Imagens Externas:** Qualquer carregamento de renderização `Image.network` sem os construtores de carregamento preventivo `loadingBuilder` e `errorBuilder` são inválidos.
 
 ## 6. Ferramentas, Comandos e Cultura local
-* Rode a reestruturação por geração de código via terminal: `dart run build_runner build --delete-conflicting-outputs` a cada edição relavante no codegen (JSON, Drift, BLoC States, Rotas).
+* Rode a geração de código via terminal: `dart run build_runner build` a cada edição relevante no codegen (JSON, Drift, BLoC States, Rotas).
 * Mantenha o formato global das descrições (comentários) da documentação em língua Portuguesa acompanhada pelo projeto.
+* DI: `setupAppInjection()` em `lib/application/app_injection.dart`; resolver com `appInjection.get<T>()`.
+* Persistência principal: Drift (`AppDatabase` schema 12 / `SystemDatabase` schema 1). DTOs JSON em `lib/data/entry/` quando necessário — sem pasta `managers/`.

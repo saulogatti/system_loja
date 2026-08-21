@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/screens/utils/input_formatters.dart';

@@ -115,35 +115,39 @@ void main() {
 }
 ```
 
-#### 4. Testes de BLoC
+#### 4. Testes de BLoC / Cubit
+O pacote `bloc_test` **não** está no `pubspec.yaml`. Use `flutter_test` + Mockito,
+seguindo o padrão já existente (ex.: `test/screens/sales/sales_invoice_cubit_test.dart`).
+
 ```dart
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:system_loja/screens/customer/bloc/customer_bloc.dart';
 
 void main() {
-  late CustomerBloc bloc;
-  late MockCustomerRepository mockRepository;
+  late SalesInvoiceCubit cubit;
+  late MockSalesRepository mockRepository;
 
   setUp(() {
-    mockRepository = MockCustomerRepository();
-    bloc = CustomerBloc(mockRepository);
+    mockRepository = MockSalesRepository();
+    cubit = SalesInvoiceCubit(mockRepository);
   });
 
-  blocTest<CustomerBloc, CustomerBlocState>(
-    'emite [loading, customersLoaded] quando LoadCustomers é adicionado',
-    build: () {
-      when(mockRepository.listarMapeado())
-          .thenAnswer((_) async => {1: customer1, 2: customer2});
-      return bloc;
-    },
-    act: (bloc) => bloc.add(const CustomerBlocEvent.loadCustomers()),
-    expect: () => [
-      const CustomerBlocState.loading(),
-      CustomerBlocState.customersLoaded(customers: {1: customer1, 2: customer2}),
-    ],
-  );
+  tearDown(() async {
+    await cubit.close();
+  });
+
+  test('emite loading e depois sucesso ao carregar', () async {
+    when(mockRepository.listar()).thenAnswer((_) async => ResultStatus.success([]));
+    final futuros = expectLater(
+      cubit.stream,
+      emitsInOrder([
+        isA<SalesInvoiceState>(), // loading
+        isA<SalesInvoiceState>(), // success
+      ]),
+    );
+    await cubit.carregar();
+    await futuros;
+  });
 }
 ```
 
@@ -271,6 +275,6 @@ Antes de finalizar:
 
 ## Recursos
 
-- **bloc_test**: https://pub.dev/packages/bloc_test
+- **padrão de cubit no repo**: `test/screens/sales/sales_invoice_cubit_test.dart`
 - **mockito**: https://pub.dev/packages/mockito
 - **flutter_test**: https://api.flutter.dev/flutter/flutter_test/flutter_test-library.html

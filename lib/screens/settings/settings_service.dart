@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/core/interface/i_settings_service.dart';
 import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 import 'package:system_loja/screens/configuracoes/settings_screen.dart';

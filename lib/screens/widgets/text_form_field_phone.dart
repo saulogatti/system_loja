@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/screens/utils/text_formatters.dart';
 
 class TextFormFieldPhone extends StatelessWidget {
@@ -13,6 +13,7 @@ class TextFormFieldPhone extends StatelessWidget {
     controller: telefoneController,
     decoration: const InputDecoration(
       labelText: 'Telefone',
+      hintText: 'Ex: (11) 99999-9999',
       border: OutlineInputBorder(),
       prefixIcon: Icon(Icons.phone),
     ),

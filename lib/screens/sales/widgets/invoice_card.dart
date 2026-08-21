@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/screens/utils/extension_date_time.dart';
 class InvoiceCard extends StatelessWidget {

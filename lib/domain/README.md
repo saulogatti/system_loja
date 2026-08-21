@@ -39,8 +39,6 @@ final invoiceNumber = await salesRepository.generateInvoiceNumber();
 
 **Documentação completa**: Ver `/docs/CODE_GENERATOR_USAGE.md`
 
-**Exemplos de uso**: Ver `code_generator_examples.dart`
-
 **Testes**: Ver `/test/code_generator_service_test.dart`
 
 ---
@@ -49,14 +47,19 @@ final invoiceNumber = await salesRepository.generateInvoiceNumber();
 
 ### Injeção de Dependência
 
-Todos os serviços devem ser registrados no `AppInjection` para facilitar o acesso:
+Registre serviços e repositórios em `setupAppInjection()` (`lib/application/app_injection.dart`) e resolva com `appInjection.get<T>()`:
 
 ```dart
-// Em app_injection.dart
-late final MeuServicoService meuServico = MeuServicoService(
-  dependencia1: ...,
-  dependencia2: ...,
+// Em lib/application/app_injection.dart (dentro de setupAppInjection)
+appInjection.registerLazySingleton<MeuServicoService>(
+  () => MeuServicoService(
+    dependencia1: appInjection.get(),
+    dependencia2: appInjection.get(),
+  ),
 );
+
+// Uso
+final servico = appInjection.get<MeuServicoService>();
 ```
 
 ### Documentação
@@ -141,10 +144,10 @@ void main() {
     test('deve fazer algo específico', () async {
       // Arrange
       final input = ...;
-      
+
       // Act
       final result = await service.metodo(input);
-      
+
       // Assert
       expect(result, equals(esperado));
     });
@@ -214,14 +217,13 @@ Ao adicionar um novo serviço:
 
 1. ✅ Crie o arquivo em `lib/domain/nome_servico_service.dart`
 2. ✅ Documente todos os métodos públicos em português
-3. ✅ Registre no `AppInjection`
+3. ✅ Registre em `setupAppInjection()` (`lib/application/app_injection.dart`)
 4. ✅ Crie testes em `test/nome_servico_service_test.dart`
 5. ✅ Atualize este README com informações do novo serviço
-6. ✅ Se complexo, crie documentação adicional em `/docs/`
-7. ✅ Considere criar exemplos de uso
+6. ✅ Se complexo, crie documentação adicional em `/docs/` (guias vivos; históricos vão para `docs/historico/`)
 
 ## Recursos Adicionais
 
 - **Documentação de Arquitetura**: `/.github/copilot-instructions.md`
 - **Padrões de Código Dart**: `/.github/instructions/dartcode.instructions.md`
-- **Build Runner**: Execute `dart run build_runner build --delete-conflicting-outputs` após mudanças em serviços que usam geração de código
+- **Build Runner**: Execute `dart run build_runner build` após mudanças em serviços que usam geração de código

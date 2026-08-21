@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/models/customer.dart';
 import 'package:system_loja/core/models/default/people_data.dart';

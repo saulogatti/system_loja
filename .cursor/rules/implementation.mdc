@@ -9,20 +9,20 @@ Diretrizes para implementar features, correções e melhorias no código em `lib
 
 ## 1. Contexto arquitetural
 
-- **Framework**: Flutter (Windows, macOS, iOS, Android).
-- **Persistência**: SQLite via Drift em `lib/data/database/`; legado JSON em `lib/core/managers/` (não remover sem validar uso).
+- **Framework**: Flutter (Windows, macOS, iOS, Android, Web, Linux).
+- **Persistência**: SQLite via Drift em `lib/data/database/`. DTOs JSON (quando necessário) em `lib/data/entry/` com `json_serializable`.
 - **State management**: BLoC com `flutter_bloc` e `freezed`.
 - **Estrutura**: Screen (Bloc/Cubit) → Interface (`lib/core/interface/`) → Repository (`lib/domain/repository/`) → DAO Drift (`lib/data/database/dao/`) → SQLite.
 
 ```
 lib/
-├── aplication/
+├── application/
 │   └── app_injection.dart # GetIt / setupAppInjection()
 ├── core/
-│   ├── managers/          # JSON (legado pontual)
 │   ├── models/            # Entidades de domínio
 │   ├── interface/         # Contratos (I*Repository)
-│   └── utils/             # command_result.dart, extensões
+│   ├── services/          # Serviços transversais de domínio (quando aplicável)
+│   └── utils/             # result_status.dart, extensões
 ├── domain/
 │   └── repository/        # Implementações de repositório + serviços de domínio
 ├── data/
@@ -37,7 +37,7 @@ lib/
 
 ## 2. Tratamento de erros: ResultStatus
 
-Use **sempre** `ResultStatus<R, E>` para operações que podem falhar (`lib/core/utils/command_result.dart`, usa `package:meta`). **Nunca** lance exceções através das camadas e **nunca** use `ExecutionResult`.
+Use **sempre** `ResultStatus<R, E>` para operações que podem falhar (`lib/core/utils/result_status.dart`, usa `package:meta`). **Nunca** lance exceções através das camadas e **nunca** use `ExecutionResult`.
 
 ### Repositório (camada `lib/domain/repository/`)
 Repositórios usam `try/catch` internamente e devolvem `ResultStatus.error(...)` com mensagens amigáveis via `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`). **Nunca** relançam exceções para BLoC/Cubit.
@@ -68,7 +68,7 @@ resultado.when(
 
 ## 3. Drift DAO (dois bancos)
 
-Existem **dois bancos**: `AppDatabase` (`app_database.dart`, `schemaVersion => 11`) e `SystemDatabase` (`system_database.dart`, `schemaVersion => 1`).
+Existem **dois bancos**: `AppDatabase` (`app_database.dart`, `schemaVersion => 12`) e `SystemDatabase` (`system_database.dart`, `schemaVersion => 1`).
 
 - **Não** acoplar tabelas a classes de `lib/core/models/` com `@UseRowClass`; usar `XxxRecord` gerado e mapear para domínio em `lib/data/database/mapper/` ou no DAO/repositório.
 - Convenção: tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`.
@@ -96,7 +96,7 @@ Ao alterar schema Drift: atualizar `schemaVersion` e migração no banco correto
 ## 4. Modelos e serialização
 
 - **Domínio** (`lib/core/models/`): entidades de negócio; evitar acoplamento a Drift. Alguns modelos podem ter `fromJson`/`toJson` quando fizer sentido ao domínio, mas **DTOs de persistência/arquivo** preferir em `lib/data/entry/` ou `lib/data/models/` com `json_serializable`.
-- Após alterar classes geradas: `dart run build_runner build --delete-conflicting-outputs`.
+- Após alterar classes geradas: `dart run build_runner build`.
 
 ## 5. BLoC com Freezed
 
@@ -117,7 +117,7 @@ Sempre rodar build_runner após alterar eventos/estados freezed.
 ## 6. Navegação e DI
 
 - **Rotas**: `auto_route` com root em `lib/screens/route/route_app.dart`; gerado em `route_app.gr.dart`. Use `@RoutePage` nas telas.
-- **DI**: Registrar singletons/factories em `setupAppInjection()` em `lib/aplication/app_injection.dart` (GetIt), chamado no `main()`.
+- **DI**: Registrar singletons/factories em `setupAppInjection()` em `lib/application/app_injection.dart` (GetIt), chamado no `main()`. Resolver com `appInjection.get<T>()`.
 
 Ao alterar rotas ou registros de DI: conferir `setupAppInjection()` e o router em `MaterialApp.router`.
 
@@ -128,6 +128,6 @@ Ao alterar rotas ou registros de DI: conferir `setupAppInjection()` e o router e
 
 ## 8. Restrições
 
-- Não usar o fluxo legado em `lib/core/managers/` a menos que exigido.
-- Não remover JSON/managers antigos sem confirmar impacto na UI.
-- Não migrar/remover legado sem confirmar uso em repositório/interface/UI.
+- Persistência principal é Drift; não introduzir managers JSON como padrão de feature nova.
+- DTOs JSON ficam em `lib/data/entry/` (ou afins), não em uma pasta `managers/`.
+- Não inventar camada UseCase — o projeto usa Interface + Repository.

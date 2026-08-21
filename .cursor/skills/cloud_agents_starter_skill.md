@@ -15,7 +15,7 @@ tentativas aleatórias.
    - `flutter pub get`
 3. Gere código se o branch já veio com mudanças em `freezed`, `json_serializable`,
    Drift ou AutoRoute:
-   - `dart run build_runner build --delete-conflicting-outputs`
+   - `dart run build_runner build`
 4. Faça um sanity check rápido:
    - `dart analyze`
 
@@ -61,7 +61,7 @@ Use quando alterar modelos JSON, validações de campos, extensões utilitárias
 
 Fluxo:
 1. Rodar codegen (se houver `@JsonSerializable`):
-   - `dart run build_runner build --delete-conflicting-outputs`
+   - `dart run build_runner build`
 2. Executar testes focados:
    - `flutter test test/json_serialization_test.dart`
    - `flutter test test/validators_test.dart`
@@ -76,7 +76,7 @@ persistência.
 
 Fluxo:
 1. Rodar codegen Drift:
-   - `dart run build_runner build --delete-conflicting-outputs`
+   - `dart run build_runner build`
 2. Executar testes de banco focados:
    - `flutter test test/category_dao_test.dart`
    - `flutter test test/invoice_dao_test.dart`
@@ -107,7 +107,7 @@ Use quando alterar telas, eventos/estados freezed, navegação ou componentes vi
 
 Fluxo:
 1. Rodar codegen quando mexer em Freezed/AutoRoute:
-   - `dart run build_runner build --delete-conflicting-outputs`
+   - `dart run build_runner build`
 2. Rodar testes focados de UI/widget:
    - `flutter test test/loading_overlay_test.dart`
    - `flutter test test/product_category_widget_test.dart`
@@ -120,7 +120,7 @@ Fluxo:
 Critério de pronto:
 - Tela funciona ponta a ponta e estado da UI reflete corretamente o estado do BLoC/Cubit.
 
-### 5) Inicialização e DI (`lib/main.dart`, `lib/app_injection.dart`, rotas)
+### 5) Inicialização e DI (`lib/main.dart`, `lib/application/app_injection.dart`, rotas)
 
 Use quando alterar bootstrap, registro de dependências ou router.
 
@@ -137,7 +137,7 @@ Critério de pronto:
 ## Sequência mínima recomendada por task
 
 1. `flutter pub get`
-2. `dart run build_runner build --delete-conflicting-outputs` (quando aplicável)
+2. `dart run build_runner build` (quando aplicável)
 3. Testes focados por área alterada
 4. `dart analyze`
 5. Validação manual curta no app (quando houver mudança visual ou fluxo de usuário)

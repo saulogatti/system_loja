@@ -26,7 +26,7 @@ flutter pub get
 Se houver alterações em `@freezed`, `@JsonSerializable`, Drift ou `auto_route`, rode também:
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 ## Comandos Principais
@@ -79,7 +79,7 @@ Falha por arquivos gerados desatualizados:
 
 ```bash
 dart run build_runner clean
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 Falha de ambiente/local cache:
@@ -95,5 +95,5 @@ Observação importante: o repositório pode conter testes com falhas preexisten
 
 - `README.md`
 - `docs/TESTING_VALIDATION.md`
-- `docs/BUILD_INSTRUCTIONS.md`
+- `docs/historico/BUILD_INSTRUCTIONS.md`
 - `.github/copilot-instructions.md`

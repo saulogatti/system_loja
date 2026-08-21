@@ -12,7 +12,7 @@ This implementation adds a new dedicated screen for editing company information 
 **You MUST run the following command before testing the application:**
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 This command generates:
@@ -55,7 +55,7 @@ Added `CompanyEditRoute` to the routes list in the RouteApp class
 ### 1. Generate Code (REQUIRED)
 ```bash
 cd /home/runner/work/system_loja/system_loja
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 ### 2. Run the Application
@@ -124,7 +124,7 @@ This implementation follows the system architecture:
 ## Troubleshooting
 
 ### Error: "CompanyEditRoute is not defined"
-**Solution**: Run `dart run build_runner build --delete-conflicting-outputs`
+**Solution**: Run `dart run build_runner build`
 
 ### Error: "Could not find a generator for route"
 **Solution**: Ensure @RoutePage() annotation is present on CompanyEditView class
@@ -142,7 +142,7 @@ This implementation follows the system architecture:
 
 ## Next Steps
 
-1. ✅ Run `dart run build_runner build --delete-conflicting-outputs`
+1. ✅ Run `dart run build_runner build`
 2. ✅ Run the application
 3. ✅ Test the complete flow: view company → edit → save → verify update
 4. Optional: Add delete button to edit screen if needed

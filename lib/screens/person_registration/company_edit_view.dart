@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_company_repository.dart';
 import 'package:system_loja/core/models/address.dart';
@@ -16,7 +16,6 @@ import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
 @RoutePage()
 class CompanyEditView extends StatefulWidget implements AutoRouteWrapper {
-
   const CompanyEditView({required this.company, super.key});
   final Company company;
 
@@ -25,9 +24,9 @@ class CompanyEditView extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) => BlocProvider(
-      create: (_) => CompanyEditCubit(appInjection.get<ICompanyRepository>()),
-      child: this,
-    );
+    create: (_) => CompanyEditCubit(appInjection.get<ICompanyRepository>()),
+    child: this,
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -52,99 +51,97 @@ class _CompanyEditViewState extends State<CompanyEditView> {
 
   @override
   Widget build(BuildContext context) => BlocListener<CompanyEditCubit, CompanyEditState>(
-      listener: _onStateChanged,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Editar Pessoa Jurídica'),
-          leading: const AutoLeadingButton(),
-          actions: [
-            IconButton(
-              tooltip: 'Excluir',
-              onPressed: _confirmDelete,
-              icon: const Icon(Icons.delete),
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextFormField(
-                  controller: _nameController,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  autofillHints: const [AutofillHints.organizationName],
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: 'Razão Social *',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) => combineValidators([
-                    (v) => validateRequired(v, 'Razão Social'),
-                    (v) => validateMinLength(v, 3, 'Razão Social'),
-                  ])(value),
+    listener: _onStateChanged,
+    child: Scaffold(
+      appBar: AppBar(
+        title: const Text('Editar Pessoa Jurídica'),
+        leading: const AutoLeadingButton(),
+        actions: [
+          IconButton(tooltip: 'Excluir', onPressed: _confirmDelete, icon: const Icon(Icons.delete)),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: _nameController,
+                keyboardType: TextInputType.name,
+                textCapitalization: TextCapitalization.words,
+                autofillHints: const [AutofillHints.organizationName],
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  labelText: 'Razão Social *',
+                  hintText: 'Ex: Loja de Departamentos S.A.',
+                  border: OutlineInputBorder(),
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _cnpjController,
-                  decoration: const InputDecoration(
-                    labelText: 'CNPJ',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.badge),
-                  ),
-                  readOnly: true,
-                  enabled: false,
+                validator: (value) => combineValidators([
+                  (v) => validateRequired(v, 'Razão Social'),
+                  (v) => validateMinLength(v, 3, 'Razão Social'),
+                ])(value),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _cnpjController,
+                decoration: const InputDecoration(
+                  labelText: 'CNPJ',
+                  hintText: 'Ex: 00.000.000/0000-00',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.badge),
                 ),
-                const SizedBox(height: 16),
-                TextFormFieldEmail(emailController: _emailController, isEditing: true),
-                const SizedBox(height: 16),
-                TextFormFieldPhone(telefoneController: _phoneController, isEditing: true),
-                const SizedBox(height: 16),
-                AddressForm(
-                  streetController: _streetController,
-                  zipCodeController: _zipCodeController,
-                  neighborhoodController: _neighborhoodController,
-                  cityController: _cityController,
-                  stateController: _stateController,
-                ),
-                const SizedBox(height: 16),
-                _buildReadOnlyDateField(
-                  label: 'Data de Cadastro',
-                  value: widget.company.registrationDate.toFormattedDate(),
-                ),
-                const SizedBox(height: 16),
-                _buildReadOnlyDateField(
-                  label: 'Última Atualização',
-                  value: widget.company.lastUpdatedDate.toFormattedDate(),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => context.router.maybePop(false),
-                        child: const Text('Voltar'),
-                      ),
+                readOnly: true,
+                enabled: false,
+              ),
+              const SizedBox(height: 16),
+              TextFormFieldEmail(emailController: _emailController, isEditing: true),
+              const SizedBox(height: 16),
+              TextFormFieldPhone(telefoneController: _phoneController, isEditing: true),
+              const SizedBox(height: 16),
+              AddressForm(
+                streetController: _streetController,
+                zipCodeController: _zipCodeController,
+                neighborhoodController: _neighborhoodController,
+                cityController: _cityController,
+                stateController: _stateController,
+              ),
+              const SizedBox(height: 16),
+              _buildReadOnlyDateField(
+                label: 'Data de Cadastro',
+                value: widget.company.registrationDate.toFormattedDate(),
+              ),
+              const SizedBox(height: 16),
+              _buildReadOnlyDateField(
+                label: 'Última Atualização',
+                value: widget.company.lastUpdatedDate.toFormattedDate(),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => context.router.maybePop(false),
+                      child: const Text('Voltar'),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _saveChanges,
-                        child: const Text('Salvar Alterações'),
-                      ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _saveChanges,
+                      child: const Text('Salvar Alterações'),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
-    );
+    ),
+  );
 
   @override
   void dispose() {
@@ -179,19 +176,19 @@ class _CompanyEditViewState extends State<CompanyEditView> {
     final shouldDelete = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-          title: const Text('Excluir pessoa jurídica'),
-          content: Text('Deseja realmente excluir "${widget.company.name}"?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: const Text('Cancelar'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: const Text('Excluir'),
-            ),
-          ],
-        ),
+        title: const Text('Excluir pessoa jurídica'),
+        content: Text('Deseja realmente excluir "${widget.company.name}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
     );
 
     if (!mounted) {
@@ -282,13 +279,14 @@ class _CompanyEditViewState extends State<CompanyEditView> {
   }
 
   Widget _buildReadOnlyDateField({required String label, required String value}) => TextFormField(
-      initialValue: value,
-      decoration: InputDecoration(
-        labelText: label,
-        border: const OutlineInputBorder(),
-        prefixIcon: const Icon(Icons.event_note),
-      ),
-      readOnly: true,
-      enabled: false,
-    );
+    initialValue: value,
+    decoration: InputDecoration(
+      labelText: label,
+      hintText: 'Ex: 01/01/2023',
+      border: const OutlineInputBorder(),
+      prefixIcon: const Icon(Icons.event_note),
+    ),
+    readOnly: true,
+    enabled: false,
+  );
 }

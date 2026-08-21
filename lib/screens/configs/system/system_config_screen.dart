@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/models/system_config/price_configuration.dart';
@@ -187,6 +187,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
           TextField(
             controller: _measurementUnitController,
             textInputAction: TextInputAction.done,
+            textCapitalization: TextCapitalization.characters,
             onSubmitted: (_) => _addMeasurementUnit(),
             decoration: InputDecoration(
               hintText: 'Ex.: UN, KG, CX',
@@ -293,6 +294,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
             textInputAction: TextInputAction.done,
             decoration: const InputDecoration(
               labelText: 'Período padrão (dias)',
+              hintText: 'Ex: 30',
               border: OutlineInputBorder(),
             ),
           ),

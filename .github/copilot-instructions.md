@@ -10,8 +10,8 @@ Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, 
   - Linux: `flutter run -d linux`
   - Chrome: `flutter run -d chrome`
   - Web server: `flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0`
-- Rodar `dart run build_runner build --delete-conflicting-outputs` após fazer alteracao em classes que tenham annotations: `@freezed`, `@JsonSerializable`, Drift (`@DriftDatabase`, `@DriftAccessor`, tabelas/DAOs) ou `auto_route`.
-- Se houver conflito com arquivos gerados, executar: `dart run build_runner clean` e depois `dart run build_runner build --delete-conflicting-outputs`.
+- Rodar `dart run build_runner build` após fazer alteracao em classes que tenham annotations: `@freezed`, `@JsonSerializable`, Drift (`@DriftDatabase`, `@DriftAccessor`, tabelas/DAOs) ou `auto_route`.
+- Se houver conflito com arquivos gerados, executar: `dart run build_runner clean` e depois `dart run build_runner build`.
 - Analise estatica: `dart analyze`
 - Verificacao de formatacao: `dart format --set-exit-if-changed .`
 - Suite completa de testes: `flutter test`
@@ -30,7 +30,7 @@ Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, 
   - `AppDatabase` (`lib/data/database/app_database.dart`): dados de negocio como clientes, produtos, categorias, empresa, notas e itens.
   - `SystemDatabase` (`lib/data/database/system_database.dart`): usuarios, logs e configuracoes de sistema.
 - `lib/data/` concentra persistencia e adaptacao: tabelas Drift, DAOs, `entry/` para DTOs serializaveis, `converter/`, `cache/` e `mapper/` para transformar `XxxRecord` em modelos de `lib/core/models/`.
-- Ha codigo legado em `lib/core/managers/` e alguns fluxos JSON antigos. O caminho preferencial para novas features e manter o fluxo atual baseado em Drift + repository.
+- Persistencia principal: Drift + repository. DTOs JSON ficam em `lib/data/entry/` quando necessario. Nao ha pasta `lib/core/managers/`; nao introduzir managers JSON como padrao de feature nova.
 
 ## Key conventions
 
@@ -59,6 +59,11 @@ Use estas instrucoes como complemento rapido ao `README.md`, `CONTRIBUTING.md`, 
 - `AGENTS.md`
 - `.github/instructions/dartcode.instructions.md`
 - `.github/instructions/dart-n-flutter.instructions.md`
-- `docs/BUILD_INSTRUCTIONS.md`
 - `docs/DRIFT_ARCHITECTURE.md`
+- `docs/DRIFT_MIGRATION.md`
 - `docs/INTERFACES_ARCHITECTURE.md`
+- `docs/VALIDATION_SYSTEM.md`
+- `docs/CODE_GENERATOR_USAGE.md`
+- `docs/TESTING_VALIDATION.md`
+- `docs/historico/` (material antigo; nao canonico)
+- `flutter_rules.md`

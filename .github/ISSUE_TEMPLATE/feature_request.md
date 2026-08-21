@@ -39,7 +39,7 @@ assignees: ''
 - `lib/screens/...`
 
 **Arquivos a Modificar:**
-- `lib/core/managers/...`
+- `lib/domain/repository/...` ou `lib/data/database/...`
 - `test/...`
 
 ## 🎯 Critérios de Aceitação
