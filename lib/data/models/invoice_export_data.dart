@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
+import 'package:system_loja/data/database/table/invoices_records.dart';
 import 'package:system_loja/data/models/invoice_item_data.dart';
 
 part 'invoice_export_data.g.dart';

@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/product.dart';
+import 'package:system_loja/data/database/table/products_records.dart';
 
 part 'product_data.g.dart';
 

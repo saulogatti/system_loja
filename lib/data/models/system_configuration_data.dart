@@ -3,6 +3,7 @@ import 'package:system_loja/core/models/system_config/price_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/core/models/system_config/system_user_data.dart';
 import 'package:system_loja/data/converter/price_configuration_codec.dart';
+import 'package:system_loja/data/database/table/system/system_records.dart';
 import 'package:system_loja/data/entry/system_user_data_entry.dart';
 
 part 'system_configuration_data.g.dart';

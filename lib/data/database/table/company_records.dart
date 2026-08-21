@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/data/converter/address_codec.dart';
+import 'package:system_loja/data/database/app_database.dart';
 
 /// Tabela Drift de empresas no [AppDatabase].
 ///

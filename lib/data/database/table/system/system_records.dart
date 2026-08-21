@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 import 'package:system_loja/data/converter/price_configuration_codec.dart';
+import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/data/entry/system_configuration_entry.dart';
 import 'package:system_loja/data/entry/system_user_data_entry.dart';
 

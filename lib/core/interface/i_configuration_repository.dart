@@ -1,3 +1,4 @@
+import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 

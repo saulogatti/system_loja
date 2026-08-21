@@ -1,3 +1,4 @@
+import 'package:system_loja/core/interface/i_configuration_repository.dart';
 import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 
 /// Contrato de tema da aplicação (cor primária e modo claro/escuro).

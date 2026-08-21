@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/activity_log.dart';
+import 'package:system_loja/data/database/system_database.dart';
 
 /// Tabela Drift de logs de auditoria no [SystemDatabase].
 ///

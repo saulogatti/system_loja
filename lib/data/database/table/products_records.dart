@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:system_loja/data/database/app_database.dart';
 import 'package:system_loja/data/database/table/categories_records.dart';
 
 /// Tabela Drift de produtos no [AppDatabase].

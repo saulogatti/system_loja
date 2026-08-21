@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/activity_log.dart';
+import 'package:system_loja/data/database/table/system/logs_records.dart';
 
 part 'activity_log_data.g.dart';
 

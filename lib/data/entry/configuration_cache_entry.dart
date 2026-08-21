@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/constants/cache_keys.dart';
+import 'package:system_loja/data/cache/cache_manager.dart';
 import 'package:system_loja/data/cache/models/cacheable.dart';
 import 'package:system_loja/data/entry/app_settings_entry.dart';
 

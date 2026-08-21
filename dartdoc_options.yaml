@@ -2,7 +2,7 @@ dartdoc:
   categories:
     contratos:
       markdown: documentation/dartdoc/contratos.md
-      displayName: Contratos
+      displayName: Interfaces
     modelos:
       markdown: documentation/dartdoc/modelos.md
       displayName: Modelos de domínio
@@ -34,14 +34,14 @@ dartdoc:
     - utilitarios
     - apresentacao
   nodoc:
-    - '**.g.dart'
-    - '**.freezed.dart'
-    - '**.gr.dart'
-    - 'lib/screens/**/cubit/*.dart'
-    - 'lib/screens/**/bloc/*.dart'
-    - 'lib/screens/**/widgets/*.dart'
-    - 'lib/screens/widgets/*.dart'
-    - 'lib/screens/**/widgets/**.dart'
+    - "**.g.dart"
+    - "**.freezed.dart"
+    - "**.gr.dart"
+    - "lib/screens/**/cubit/*.dart"
+    - "lib/screens/**/bloc/*.dart"
+    - "lib/screens/**/widgets/*.dart"
+    - "lib/screens/widgets/*.dart"
+    - "lib/screens/**/widgets/**.dart"
   linkTo:
     url: "https://saulogatti.github.io/system_loja/"
   showUndocumentedCategories: false

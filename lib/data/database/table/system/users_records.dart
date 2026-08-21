@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/data/entry/user_entry.dart';
 
 /// Tabela Drift de usuários no [SystemDatabase].

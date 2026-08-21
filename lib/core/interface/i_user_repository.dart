@@ -1,5 +1,6 @@
 import 'package:system_loja/core/models/user.dart';
 import 'package:system_loja/core/utils/result_status.dart';
+import 'package:system_loja/data/database/system_database.dart';
 
 /// Contrato de persistência de usuários do sistema.
 ///
