@@ -47,7 +47,7 @@ Screen -> Interface -> Repository -> DAO Drift -> SQLite.
 Sempre que houver alteracao de modelos Freezed/JSON, DAOs/tabelas Drift ou rotas:
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 dart analyze
 flutter test
 ```

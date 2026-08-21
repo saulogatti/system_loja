@@ -1,4 +1,7 @@
 ---
+
+> **Neste repositório (system_loja):** navegação de páginas usa **`auto_route`** (não `go_router`). Estado: `flutter_bloc`. DI: `appInjection` / GetIt. Persistência: Drift. Em conflito com este guia genérico, prevalecem `flutter_rules.md` e `.github/copilot-instructions.md`.
+
 description: 'Instructions for writing Dart and Flutter code following the official recommendations.'
 applyTo: '**/*.dart'
 ---

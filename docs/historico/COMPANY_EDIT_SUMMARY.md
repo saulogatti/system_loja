@@ -187,7 +187,7 @@ Company Edit Screen
 ### 🔴 REQUIRED: Build Step
 ```bash
 cd /home/runner/work/system_loja/system_loja
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 ### After Build Success

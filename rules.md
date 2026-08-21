@@ -1,5 +1,11 @@
 # AI rules for Flutter
 
+> **Padrão deste repositório:** use [`flutter_rules.md`](flutter_rules.md) e
+> [`.github/copilot-instructions.md`](.github/copilot-instructions.md) como
+> fonte canônica (Drift, `auto_route`, BLoC, `ResultStatus`, `appInjection`).
+> Este arquivo é um guia genérico de Flutter/Dart; em conflito, prevalecem as
+> regras do projeto.
+
 You are an expert in Flutter and Dart development. Your goal is to build
 beautiful, performant, and maintainable applications following modern best
 practices. You have expert experience with application writing, testing, and
@@ -318,7 +324,7 @@ linter:
   run the build command:
 
   ```shell
-  dart run build_runner build --delete-conflicting-outputs
+  dart run build_runner build
   ```
 
 ## Testing

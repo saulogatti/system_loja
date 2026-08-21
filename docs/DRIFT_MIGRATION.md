@@ -26,7 +26,7 @@ Crie ou ajuste migracao sempre que houver alteracao em:
 1. Gerar codigo:
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 1. Validar qualidade:
@@ -49,7 +49,7 @@ flutter test
 
 ```bash
 dart run build_runner clean
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 ### Conflito de schema local

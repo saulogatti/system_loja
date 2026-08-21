@@ -254,7 +254,7 @@ Para finalizar a implementação, execute os seguintes comandos quando o ambient
 ### 1. Gerar Código com Build Runner
 
 ```bash
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 Isto gerará os arquivos `.g.dart` necessários para:

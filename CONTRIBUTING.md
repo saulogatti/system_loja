@@ -29,9 +29,10 @@ O GitHub Copilot Coding Agent pode ajudar a automatizar tarefas de desenvolvimen
 
 2. **Verifique as convenções do projeto**:
    - **Clean Architecture**: UI → interfaces em `lib/core/interface/` → repositórios em `lib/domain/repository/` → `lib/data/` (Drift, DTOs, mapeadores)
-   - Persistência principal: **SQLite via Drift** (sem backend externo); JSON/managers em `lib/core/managers/` só onde ainda for legado pontual
+   - Persistência principal: **SQLite via Drift** (sem backend externo); DTOs JSON em `lib/data/entry/` quando necessário
    - Documentação em português usando comentários `///`
    - Material Design 3 para interface
+   - Codegen: `dart run build_runner build` após Freezed / JsonSerializable / Drift / AutoRoute
 
 ### Tarefas Ideais para o Copilot Agent
 
@@ -115,19 +116,14 @@ Trate os PRs do Copilot Agent como você trataria código de qualquer desenvolve
 **SEMPRE** documente código público em **português**:
 
 ```dart
-/// Gerencia operações CRUD para clientes
+/// Gerencia operações CRUD de clientes via Drift.
 ///
-/// Esta classe é responsável por carregar, salvar e manipular
-/// dados de clientes em arquivos JSON locais.
-class ClienteManager {
-  /// Lista de todos os clientes carregados
-  List<Cliente> clientes = [];
-
-  /// Adiciona um novo cliente ao sistema
+/// Todos os métodos retornam [ResultStatus] — sem propagar exceções para a UI.
+class CustomerRepository implements ICustomerRepository {
+  /// Busca um cliente pelo ID.
   ///
-  /// Valida se o CPF já existe antes de adicionar.
-  /// Retorna true se o cliente foi adicionado com sucesso.
-  bool adicionarCliente(Cliente cliente) { ... }
+  /// Retorna [ResultStatus] com o [Customer] ou mensagem de erro amigável.
+  Future<ResultStatus<Customer, String>> buscar({required int id}) async { ... }
 }
 ```
 
@@ -139,15 +135,12 @@ class ClienteManager {
 - **Repositórios** (`lib/domain/repository/`): orquestram DAOs e regras; usam `try/catch` internamente e retornam `ResultStatus.error(mensagemErroRepositorio(...))` com mensagens amigáveis (`lib/core/utils/repository_error_mapper.dart`). Dependem de interfaces e de tipos de `lib/core/models/`.
 - **Apresentação** (`lib/screens/`): **não** envolve chamadas ao repositório em `try/catch`; usa `when`/`switch` no `ResultStatus` e emite estado de erro com a mensagem já tratada.
 - **Dados** (`lib/data/`): tabelas/DAOs Drift, DTOs em `entry/` etc., mapeamento registro → domínio; **sem** imports de `domain/` ou `application/`. `CacheManager` é registrado via `GetIt` (DI) — não usar `CacheManager.instance`.
-
-#### Legado: Manager + JSON
-
-Onde ainda existir `lib/core/managers/`, o padrão histórico foi carregar/salvar JSON local. **Novas features** devem seguir Drift + repositórios; não expandir o legado sem necessidade.
+- **DI**: `setupAppInjection()` em `lib/application/app_injection.dart`; resolver com `appInjection.get<T>()`.
 
 #### Persistência
 
-- **Principal**: Drift (`AppDatabase` / `SystemDatabase`); IDs auto-incrementais onde a tabela usar `autoIncrement()`. `SystemDatabase` aceita `QueryExecutor` opcional no construtor para testes com banco em memória.
-- **JSON legado**: apenas nos fluxos que ainda usam managers (os arquivos de dados estáticos `data/*.json` foram removidos).
+- **Principal**: Drift (`AppDatabase` schema 12 / `SystemDatabase` schema 1); IDs auto-incrementais onde a tabela usar `autoIncrement()`. `SystemDatabase` aceita `QueryExecutor` opcional no construtor para testes com banco em memória.
+- **DTOs JSON**: em `lib/data/entry/` quando necessário (serialização/importação). Não há pasta `lib/core/managers/`.
 
 ### Flutter UI
 
@@ -166,11 +159,12 @@ Onde ainda existir `lib/core/managers/`, o padrão histórico foi carregar/salva
 1. **Fork** o repositório
 2. **Crie uma branch** para sua feature: `git checkout -b feature/minha-feature`
 3. **Faça commits** frequentes e descritivos
-4. **Execute os testes**: `flutter test`
-5. **Execute o linter**: `dart analyze`
-6. **Formate o código**: `dart format .`
-7. **Push** para seu fork: `git push origin feature/minha-feature`
-8. **Abra um Pull Request** para o branch `main`
+4. **Gere código** se alterou Freezed/Json/Drift/AutoRoute: `dart run build_runner build`
+5. **Execute os testes**: `flutter test`
+6. **Execute o linter**: `dart analyze`
+7. **Formate o código**: `dart format .`
+8. **Push** para seu fork: `git push origin feature/minha-feature`
+9. **Abra um Pull Request** para o branch `main`
 
 ### Para o Copilot Coding Agent
 
@@ -332,7 +326,7 @@ system_loja/
 │   ├── core/
 │   │   ├── interface/                   # Contratos (ex.: ICustomerRepository)
 │   │   ├── models/                      # Entidades de domínio
-│   │   ├── managers/                    # Legado JSON (pontual)
+│   │   ├── services/                    # Serviços transversais (quando aplicável)
 │   │   └── utils/                       # ResultStatus, helpers
 │   ├── domain/
 │   │   └── repository/                  # Implementações de repositório
@@ -344,11 +338,12 @@ system_loja/
 ├── test/
 │   └── support/                         # Helpers (ex.: AppDatabase em teste)
 ├── docs/
+│   └── historico/                       # Material antigo (não canônico)
 ├── CONTRIBUTING.md
 └── README.md
 ```
 
-Arquivos JSON em disco podem existir em runtime apenas nos fluxos legados; o fluxo principal da aplicação usa SQLite embutido.
+O fluxo principal da aplicação usa SQLite embutido via Drift.
 
 ---
 

@@ -32,7 +32,7 @@ applyTo: '**/*.dart'
 
 ## Geracao de codigo
 
-Executar `dart run build_runner build --delete-conflicting-outputs` ao alterar:
+Executar `dart run build_runner build` ao alterar:
 
 - classes com `@freezed`
 - classes com `@JsonSerializable`

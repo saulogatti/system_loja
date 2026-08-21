@@ -70,11 +70,11 @@ tearDown(() async {
 
 ### Testes de repository
 
-Usar mocks (Mockito): `@GenerateMocks([Classe])`, rodar build_runner para gerar `.mocks.dart`, usar `when`/`verify` nos testes.
+Usar mocks (Mockito): `@GenerateMocks([Classe])`, rodar `dart run build_runner build` para gerar `.mocks.dart`, usar `when`/`verify` nos testes.
 
-### Testes de BLoC
+### Testes de BLoC / Cubit
 
-Usar `bloc_test` para sequências de estados esperados; mockar repositórios/DAOs.
+Usar `flutter_test` (e Mockito para dependências). O pacote `bloc_test` **não** está no `pubspec.yaml` — não introduzir como dependência obrigatória nesta regra. Preferir testar sequências de estados com o padrão já usado no repositório (ex.: `sales_invoice_cubit_test.dart`).
 
 ## Padrões obrigatórios
 
@@ -91,6 +91,7 @@ Usar `bloc_test` para sequências de estados esperados; mockar repositórios/DAO
 flutter test
 flutter test test/<arquivo>_test.dart
 flutter test --coverage
+dart run build_runner build
 ```
 
 ## Restrições

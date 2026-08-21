@@ -19,7 +19,7 @@ Este arquivo define o comportamento esperado para implementacoes, correcoes e re
 
 - Banco principal: `AppDatabase` com `schemaVersion => 12`.
 - Banco de sistema: `SystemDatabase` com `schemaVersion => 1`.
-- Existe codigo legado em `lib/core/managers/` e JSON em partes do sistema; a direcao preferida e refatorar em direcao a arquitetura limpa, nao congelar formato antigo.
+- Persistencia principal e Drift. DTOs JSON em `lib/data/entry/` quando necessario. Nao ha `lib/core/managers/`; novas features seguem Interface + Repository + DAO.
 
 Regras:
 
@@ -51,7 +51,7 @@ Sempre executar quando aplicavel:
 
 ```bash
 flutter pub get
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 dart analyze
 flutter test
 ```

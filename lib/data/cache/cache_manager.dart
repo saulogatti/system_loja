@@ -17,15 +17,15 @@ typedef CacheableFactory<T extends Cacheable> = T Function(Map<String, dynamic> 
 
 /// Gerencia o cache de dados da aplicação.
 ///
-/// Utiliza o padrão singleton para garantir uma única instância
-/// de [CacheManager] durante o ciclo de vida da aplicação.
+/// Registrado via GetIt em `setupAppInjection()` — resolver com
+/// `appInjection.get<CacheManager>()`. Não use singleton global `.instance`.
 ///
 /// O cache é persistido em arquivos JSON no diretório de documentos
 /// da aplicação, organizados por tipo de objeto.
 ///
 /// Exemplo de uso:
 /// ```dart
-/// final cache = CacheManager.instance;
+/// final cache = appInjection.get<CacheManager>();
 /// await cache.ensureInitialized();
 ///
 /// // Armazenar um objeto
@@ -35,13 +35,11 @@ typedef CacheableFactory<T extends Cacheable> = T Function(Map<String, dynamic> 
 /// final objeto = await cache.get<MinhaClasse>('chave', MinhaClasse.fromJson);
 /// ```
 class CacheManager with FileStorageUtility, LoggerClassMixin {
-  /// Construtor privado para implementar o padrão singleton.
+  /// Cria um [CacheManager] (registre via DI; não use como singleton global).
   ///
   /// Inicializa o sistema de arquivos através do [FileStorageUtility]
-  /// chamando ` _initializeDirectory` para preparar o ambiente de cache.
+  /// chamando `_initializeDirectory` para preparar o ambiente de cache.
   CacheManager();
-
-  /// Instância única do [CacheManager].
 
   /// Cache em memória para acesso rápido.
   ///

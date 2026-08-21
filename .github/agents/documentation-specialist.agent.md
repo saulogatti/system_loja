@@ -121,7 +121,7 @@ Instruções passo a passo com exemplos de código.
 
 #### Tipos de Documentos
 
-1. **Guias Arquiteturais** (`docs/ARCHITECTURE_*.md`)
+1. **Guias vivos** (`docs/DRIFT_ARCHITECTURE.md`, `docs/INTERFACES_ARCHITECTURE.md`, `docs/VALIDATION_SYSTEM.md`)
    - Explicam decisões arquiteturais
    - Diagramas quando relevante
    - Exemplos de código
@@ -214,7 +214,7 @@ flutter pub get
 
 3. Gere o código necessário:
 \`\`\`bash
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 \`\`\`
 
 4. Execute o aplicativo:
@@ -264,9 +264,13 @@ graph TD
 
 ## Estrutura docs/
 
+Material antigo fica em `docs/historico/` e **não** é padrão de implementação.
+
+## Estrutura docs/ (legado da descrição)
+
 ```
 docs/
-├── ARCHITECTURE_*.md      # Decisões arquiteturais
+├── DRIFT_ARCHITECTURE.md  # Arquitetura Drift (guia vivo)
 ├── *_MIGRATION.md         # Guias de migração
 ├── PATTERNS_*.md          # Padrões de design
 ├── API_*.md              # Documentação de APIs

@@ -25,7 +25,7 @@ Você é um desenvolvedor Flutter/Dart Senior especializado no projeto System Lo
 1. **Implementar novas features** seguindo a Clean Architecture simplificada (Drift ORM + BLoC + auto_route)
 2. **Corrigir bugs** focando em estabilidade e performance
 3. **Refatorar código** mantendo compatibilidade
-4. **Migrar código JSON legacy** (`core/managers`) para Drift ORM somente quando o usuário solicitar explicitamente na mensagem atual, nunca de forma proativa ou por inferência de contexto
+4. **Não reintroduzir managers JSON**; persistência é Drift. DTOs ficam em `lib/data/entry/` quando necessário
 
 ## Arquitetura e Padrões Obrigatórios
 
@@ -98,7 +98,7 @@ sealed class CustomerState with _$CustomerState {
 ### 4. Code Generation Workflow
 **SEMPRE rode após alterar anotações, rotas, modelos ou DAOs:**
 ```bash
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 ### 5. Navegação & Injeção de Dependência
@@ -119,6 +119,7 @@ dart run build_runner build --delete-conflicting-outputs
 7. **UI & Route:** Criar a tela, assinar com `@RoutePage`, executar `build_runner` novamente se necessário e registrar a rota.
 
 ## Restrições
-- **NÃO** use o fluxo legacy em `lib/core/managers` a menos que explicitamente exigido.
-- **NÃO** remova JSON/managers antigos sem confirmar o impacto na UI atual.
+- **NÃO** introduza pasta ou padrão `managers` JSON.
+- **NÃO** invente camada UseCase — use Interface + Repository.
+- DI via `setupAppInjection()` / `appInjection.get<T>()` em `lib/application/app_injection.dart`.
 - Mantenha testes rodando perfeitamente (`flutter test`).

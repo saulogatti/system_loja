@@ -58,14 +58,14 @@
 </ul>
 <h2 id="requisitos">Requisitos</h2>
 <ul>
-<li>Flutter 3.41.2 ou superior.</li>
-<li>Dart SDK <code>&gt;=3.11.0</code>.</li>
+<li>Flutter &gt;=3.47.0 (conforme pubspec.yaml).</li>
+<li>Dart SDK <code>&gt;=3.13.0 &lt;4.0.0</code>.</li>
 </ul>
 <h2 id="setup-rapido">Setup rapido</h2>
 <pre class="language-bash"><code class="language-bash">git clone https://github.com/saulogatti/system_loja.git
 cd system_loja
 flutter pub get
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 </code></pre>
 <h2 id="executar-o-app">Executar o app</h2>
 <pre class="language-bash"><code class="language-bash"># Windows
@@ -82,7 +82,7 @@ flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0
 </code></pre>
 <h2 id="comandos-de-qualidade">Comandos de qualidade</h2>
 <pre class="language-bash"><code class="language-bash"># Codegen (obrigatorio apos alterar Freezed/JsonSerializable/Drift/AutoRoute)
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 
 # Analise estatica
 dart analyze
@@ -100,8 +100,8 @@ flutter test test/&lt;arquivo&gt;_test.dart
 <li><code>AppDatabase</code> (<code>lib/data/database/app_database.dart</code>) com <code>schemaVersion =&gt; 12</code>.</li>
 <li><code>SystemDatabase</code> (<code>lib/data/database/system_database.dart</code>) com <code>schemaVersion =&gt; 1</code>.</li>
 </ul>
-<h3 id="legado-json">Legado JSON</h3>
-<p>Ha codigo legado em <code>lib/core/managers/</code> e fluxos em JSON ainda usados em cenarios pontuais. Nao remover sem validar impacto; o fluxo principal da loja e <strong>SQLite via Drift</strong>. Os arquivos de dados estaticos anteriores (<code>data/*.json</code>) foram removidos.</p>
+<h3 id="persistencia-e-dtos">Persistencia e DTOs</h3>
+<p>A persistencia principal da loja e <strong>SQLite via Drift</strong>. DTOs serializaveis (JSON) ficam em <code>lib/data/entry/</code> quando necessario. Nao ha pasta <code>lib/core/managers/</code> nem managers JSON como padrao de feature nova.</p>
 <h3 id="convencoes-importantes">Convencoes importantes</h3>
 <ul>
 <li>Nao propagar excecoes entre Interface/Repository; retornar <code>ResultStatus</code>. Repositorios capturam excecoes internamente (<code>try/catch</code>) e devolvem <code>ResultStatus.error(mensagemErroRepositorio(...))</code>. A camada de apresentacao nao usa <code>try/catch</code> para chamadas ao repositorio.</li>
@@ -118,7 +118,7 @@ flutter test test/&lt;arquivo&gt;_test.dart
   core/
     interface/           # contratos (ex.: I*Repository)
     constants/
-    managers/            # legado em uso pontual
+    services/            # servicos transversais (quando aplicavel)
     models/              # entidades de dominio
     utils/               # ResultStatus, repository_error_mapper, extensoes
   domain/
@@ -139,6 +139,7 @@ flutter test test/&lt;arquivo&gt;_test.dart
 test/
   support/               # helpers (ex.: AppDatabase em teste sem path_provider)
 docs/
+  historico/             # material antigo (nao usar como padrao)
 </code></pre>
 <h2 id="observacoes-importantes">Observacoes importantes</h2>
 <ul>
@@ -152,11 +153,14 @@ docs/
 <li><code>.github/copilot-instructions.md</code></li>
 <li><code>.github/instructions/dartcode.instructions.md</code></li>
 <li><code>AGENTS.md</code></li>
-<li><code>docs/BUILD_INSTRUCTIONS.md</code></li>
+<li><code>flutter_rules.md</code></li>
 <li><code>docs/DRIFT_ARCHITECTURE.md</code></li>
 <li><code>docs/DRIFT_MIGRATION.md</code></li>
 <li><code>docs/INTERFACES_ARCHITECTURE.md</code></li>
 <li><code>docs/VALIDATION_SYSTEM.md</code></li>
+<li><code>docs/CODE_GENERATOR_USAGE.md</code></li>
+<li><code>docs/TESTING_VALIDATION.md</code></li>
+<li><code>docs/historico/</code> — material antigo (nao canonico)</li>
 </ul>
 </section>
 

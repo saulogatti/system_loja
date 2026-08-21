@@ -28,7 +28,7 @@ Regras para documentação em `docs/` e para doc comments no código. Para arqui
 ///   onError: (msg) => print('Erro: $msg'),
 /// );
 /// ```
-class ClienteRepository {
+class CustomerRepository {
   /// Busca um cliente pelo ID.
   ///
   /// Retorna [ResultStatus] com o cliente ou mensagem de erro em texto.
@@ -39,9 +39,10 @@ class ClienteRepository {
 ## Documentos técnicos em docs/
 
 - **Idioma**: português.
-- **Estrutura**: Título, Índice (links), Visão Geral, seções específicas, Exemplos, Referências.
-- **Guias**: `ARCHITECTURE_*.md`, `*_MIGRATION.md`, `PATTERNS_*.md`, `API_*.md`; guias em `docs/guides/`.
+- **Guias vivos** (padrão a seguir): `DRIFT_ARCHITECTURE.md`, `DRIFT_MIGRATION.md`, `INTERFACES_ARCHITECTURE.md`, `VALIDATION_SYSTEM.md`, `CODE_GENERATOR_USAGE.md`, `TESTING_VALIDATION.md`, `guides/styleguide.md`.
+- **Históricos**: material antigo em `docs/historico/` — **não** usar como padrão de implementação.
 - **Markdown**: usar Mermaid para diagramas quando fizer sentido; evitar HTML; exemplos de código em cercas com linguagem.
+- **Estrutura sugerida**: Título, Índice (links), Visão Geral, seções específicas, Exemplos, Referências.
 
 ## Padrões obrigatórios
 
@@ -50,9 +51,11 @@ class ClienteRepository {
 - Incluir exemplos práticos; atualizar documentação junto com o código.
 - Links relativos entre documentos; não duplicar informação (usar links).
 - Revisar ortografia; testar comandos e exemplos de código.
+- Codegen: `dart run build_runner build` (sem `--delete-conflicting-outputs`).
 
 ## Restrições
 
 - Não criar documentação genérica ou óbvia.
 - Não deixar código nos exemplos sem funcionar.
 - Sempre revisar ortografia e testar comandos/exemplos.
+- Não tratar arquivos em `docs/historico/` como fonte canônica.

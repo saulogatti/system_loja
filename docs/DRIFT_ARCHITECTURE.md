@@ -78,7 +78,7 @@ Ao alterar tabelas, DAOs ou tipos persistidos:
 
 1. Atualize o schema no banco correto.
 2. Implemente/ajuste a estratégia de migração.
-3. Gere código com `dart run build_runner build --delete-conflicting-outputs`.
+3. Gere código com `dart run build_runner build`.
 4. Valide com `dart analyze` e `flutter test`.
 
 ## Boas Práticas
