@@ -1,5 +1,8 @@
 import 'package:system_loja/core/models/default/default_object.dart';
 
+/// Extensão que calcula o próximo identificador em um mapa de [DefaultObject].
+///
+/// {@category utilitarios}
 extension MapId on Map<int, DefaultObject> {
   int get novoId {
     if (isEmpty) return 1;
@@ -7,7 +10,9 @@ extension MapId on Map<int, DefaultObject> {
   }
 }
 
-/// Extensão para formatação de preços
+/// Extensão para formatação de preços.
+///
+/// {@category utilitarios}
 extension PriceFormatter on double {
   /// Formata o preço no padrão brasileiro (R$ XX.XX)
   String toFormattedPrice() => 'R\$ ${toStringAsFixed(2)}';

@@ -50,6 +50,7 @@
     <div>
 <h1><span class="kind-class">SystemRepository</span> class 
  
+    <span class="category repositórios cp-2 linked" title="This is part of the Repositórios topic."><a href="../topics/repositorios-topic.html">Repositórios</a></span>
 </h1></div>
 
     
@@ -59,6 +60,14 @@
 métodos de pagamento, unidades de medida e dados do usuário do sistema.
 Todos os erros são capturados internamente e devolvidos como
 <a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com mensagem amigável.</p>
+<p>Resolver com <code>appInjection.get&lt;ISystemRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;ISystemRepository&gt;();
+final resultado = await repository.getSystemConfiguration();
+resultado.when(
+  onSuccess: (config) =&gt; print(config.id),
+  onError: (mensagem) =&gt; print(mensagem),
+);
+</code></pre>
 <p>Veja também:</p>
 <ul>
 <li><a href="../core_interface_i_system_repository/ISystemRepository-class.html">ISystemRepository</a> - contrato da interface</li>
@@ -147,7 +156,7 @@ Todos os erros são capturados internamente e devolvidos como
 
 </dt>
 <dd>
-  
+  Remove dados de negócio e devolve a configuração atual.
   <div class="features"><span class="feature">override</span></div>
 
 </dd>
@@ -160,7 +169,7 @@ Todos os erros são capturados internamente e devolvidos como
 
 </dt>
 <dd>
-  
+  Remove logs antigos conforme a política de retenção.
   <div class="features"><span class="feature">override</span></div>
 
 </dd>
@@ -173,7 +182,7 @@ Todos os erros são capturados internamente e devolvidos como
 
 </dt>
 <dd>
-  
+  Exporta a configuração técnica como DTO JSON.
   <div class="features"><span class="feature">override</span></div>
 
 </dd>

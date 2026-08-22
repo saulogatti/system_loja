@@ -1,10 +1,17 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/invoice.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
+import 'package:system_loja/data/database/table/invoices_records.dart';
 import 'package:system_loja/data/models/invoice_item_data.dart';
 
 part 'invoice_export_data.g.dart';
 
+/// DTO JSON dos dados de uma nota para importação/exportação.
+///
+/// {@category dados}
+/// {@subCategory Vendas}
+///
+/// Não persiste no Drift; use [InvoiceExportData] para o envelope completo.
 @JsonSerializable(explicitToJson: true)
 class InvoiceDataExport {
 
@@ -60,6 +67,7 @@ class InvoiceDataExport {
   @JsonKey(fromJson: _invoiceTypeFromJson, toJson: _invoiceTypeToJson)
   final InvoiceType type;
 
+  /// Converte o DTO para o modelo de domínio [InvoiceData].
   InvoiceData toDomain() => InvoiceData(
     invoiceNumber: invoiceNumber,
     customerId: customerId,
@@ -82,7 +90,12 @@ class InvoiceDataExport {
   static String _invoiceTypeToJson(InvoiceType value) => value.name;
 }
 
-/// JSON para importação/exportação de [Invoice].
+/// DTO JSON de [Invoice] para importação/exportação em arquivo.
+///
+/// {@category dados}
+/// {@subCategory Vendas}
+///
+/// Persistência principal é Drift em [InvoicesRecords].
 @JsonSerializable(explicitToJson: true)
 class InvoiceExportData {
 
@@ -107,6 +120,7 @@ class InvoiceExportData {
   final DateTime lastUpdatedDate;
   final InvoiceDataExport data;
 
+  /// Converte o DTO para o modelo de domínio [Invoice].
   Invoice toDomain() => Invoice(
     id: id,
     registrationDate: registrationDate,

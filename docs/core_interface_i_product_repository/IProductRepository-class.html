@@ -52,38 +52,35 @@
     <a href="https://dart.dev/language/class-modifiers#abstract" class="feature feature-abstract" title="This type can not be directly constructed.">abstract</a>
     <a href="https://dart.dev/language/class-modifiers#interface" class="feature feature-interface" title="This class can only be implemented (not extended or mixed in).">interface</a>
  
+    <span class="category interfaces cp-0 linked" title="This is part of the Interfaces topic."><a href="../topics/contratos-topic.html">Interfaces</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Interface que define o contrato para operações de repositório de produtos.</p>
-<p>Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
-para entidades <a href="../core_models_product/Product-class.html">Product</a>, permitindo diferentes implementações de
-persistência (Drift, JSON, etc.).</p>
-<p>Inclui funcionalidades especiais como geração automática de código de
-produto e validação de códigos únicos.</p>
-<p>Exemplo de uso:</p>
-<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;ProductRepository&gt;();
-
-// Gerar código automático
+  <p>Contrato de persistência de produtos exposto à UI.</p>
+<p>CRUD de <a href="../core_models_product/Product-class.html">Product</a> via Drift, com geração e validação de código único.
+Erros voltam como <a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a>.</p>
+<p>Resolver com <code>appInjection.get&lt;IProductRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;IProductRepository&gt;();
 final codigo = await repository.generateProductCode();
-
-// Criar produto
-final produto = Product(
-  code: codigo,
-  name: 'Notebook Dell',
-  price: 3500.00,
+final resultado = await repository.saveProduct(
+  Product(
+    code: codigo,
+    name: 'Notebook Dell',
+    description: 'Notebook 15 polegadas',
+    price: 3500,
+    stockQuantity: 10,
+  ),
 );
-
-final resultado = await repository.saveProduct(produto);
-if (resultado.isSuccessful) {
-  print('Produto salvo com sucesso');
-}
+resultado.when(
+  onSuccess: (_) =&gt; print('Produto salvo'),
+  onError: (mensagem) =&gt; print(mensagem),
+);
 </code></pre>
 <p>Veja também:</p>
 <ul>
-<li><a href="../core_models_product/Product-class.html">Product</a> - modelo de domínio de produto</li>
-<li><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a> - tipo de retorno para operações</li>
+<li><a href="../core_models_product/Product-class.html">Product</a> — modelo de domínio</li>
+<li><a href="../core_utils_result_status/ResultStatus-class.html">ResultStatus</a> — retorno das operações</li>
 </ul>
 </section>
 

@@ -1,10 +1,13 @@
 import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/default/people_data.dart';
 
-/// Empresa (domínio). Serialização em `lib/data/models/company_data.dart`.
+/// Empresa fornecedora (domínio).
 ///
-/// Representa uma empresa fornecedora com CNPJ e endereço.
-/// Herda dados comuns de [PersonDefault] (nome, e-mail, telefone).
+/// {@category modelos}
+/// {@subCategory Cadastros}
+///
+/// Serialização em `lib/data/models/company_data.dart`.
+/// Herda [PersonDefault] (nome, e-mail, telefone).
 class Company extends PersonDefault {
 
   Company({

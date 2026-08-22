@@ -16,12 +16,17 @@ import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/sales/cubit/sales_cubit.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
+/// Ponto de entrada: inicializa o binding, registra o DI e executa [SystemLojaApp].
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setupAppInjection();
   runApp(const SystemLojaApp());
 }
 
+/// Widget raiz do aplicativo, com providers de BLoC, tema e roteador.
+///
+/// {@category apresentacao}
+/// {@subCategory Sistema}
 class SystemLojaApp extends StatelessWidget {
   const SystemLojaApp({super.key});
 

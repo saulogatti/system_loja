@@ -14,10 +14,24 @@ import 'package:system_loja/data/database/dao/system_dao.dart';
 
 /// Repositório para gerenciamento da configuração técnica do sistema usando Drift.
 ///
+/// {@category repositorios}
+/// {@subCategory Sistema}
+///
 /// Persiste e recupera [SystemConfiguration] via [SystemDao], incluindo
 /// métodos de pagamento, unidades de medida e dados do usuário do sistema.
 /// Todos os erros são capturados internamente e devolvidos como
 /// [ResultStatus.error] com mensagem amigável.
+///
+/// Resolver com `appInjection.get<ISystemRepository>()`.
+///
+/// ```dart
+/// final repository = appInjection.get<ISystemRepository>();
+/// final resultado = await repository.getSystemConfiguration();
+/// resultado.when(
+///   onSuccess: (config) => print(config.id),
+///   onError: (mensagem) => print(mensagem),
+/// );
+/// ```
 ///
 /// Veja também:
 /// - [ISystemRepository] - contrato da interface

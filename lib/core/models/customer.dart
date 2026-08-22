@@ -1,10 +1,13 @@
 import 'package:system_loja/core/models/address.dart';
 import 'package:system_loja/core/models/default/people_data.dart';
 
-/// Cliente (domínio). Serialização em `lib/data/models/customer_data.dart`.
+/// Cliente pessoa física (domínio).
 ///
-/// Representa um cliente pessoa física com CPF e endereço.
-/// Herda dados comuns de [PersonDefault] (nome, e-mail, telefone).
+/// {@category modelos}
+/// {@subCategory Cadastros}
+///
+/// Serialização em `lib/data/models/customer_data.dart`.
+/// Herda [PersonDefault] (nome, e-mail, telefone).
 class Customer extends PersonDefault {
 
   Customer({

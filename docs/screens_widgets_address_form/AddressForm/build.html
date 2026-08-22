@@ -116,6 +116,7 @@ Widget build(BuildContext context) =&gt; Column(
       controller: streetController,
       decoration: const InputDecoration(
         labelText: &#39;Rua&#39;,
+        hintText: &#39;Ex: Rua das Flores, 123&#39;,
         border: OutlineInputBorder(),
         prefixIcon: Icon(Icons.location_on),
       ),
@@ -148,6 +149,7 @@ Widget build(BuildContext context) =&gt; Column(
             controller: neighborhoodController,
             decoration: const InputDecoration(
               labelText: &#39;Bairro&#39;,
+              hintText: &#39;Ex: Centro&#39;,
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.map),
             ),
@@ -163,6 +165,7 @@ Widget build(BuildContext context) =&gt; Column(
       controller: cityController,
       decoration: const InputDecoration(
         labelText: &#39;Cidade&#39;,
+        hintText: &#39;Ex: São Paulo&#39;,
         border: OutlineInputBorder(),
         prefixIcon: Icon(Icons.location_city),
       ),

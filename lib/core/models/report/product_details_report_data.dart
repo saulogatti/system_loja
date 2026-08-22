@@ -2,6 +2,9 @@ import 'package:system_loja/core/models/report/product_invoice_movement.dart';
 import 'package:system_loja/core/models/report/product_movement_summary.dart';
 
 /// Dados prontos para renderizar o detalhe de produto no relatório.
+///
+/// {@category modelos}
+/// {@subCategory Relatórios}
 class ProductDetailsReportData {
 
   const ProductDetailsReportData({

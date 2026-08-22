@@ -1,9 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/product.dart';
+import 'package:system_loja/data/database/table/products_records.dart';
 
 part 'product_data.g.dart';
 
-/// JSON para [Product].
+/// DTO JSON de [Product] para import/export e cache de arquivo.
+///
+/// {@category dados}
+/// {@subCategory Cadastros}
+///
+/// Persistência principal é Drift em [ProductsRecords].
 @JsonSerializable()
 class ProductData {
 
@@ -45,6 +51,7 @@ class ProductData {
 
   Map<String, dynamic> toJson() => _$ProductDataToJson(this);
 
+  /// Converte o DTO para o modelo de domínio [Product].
   Product toDomain() => Product(
     id: id,
     name: name,

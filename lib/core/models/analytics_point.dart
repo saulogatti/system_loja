@@ -1,9 +1,11 @@
 import 'package:meta/meta.dart';
 
-/// Ponto de dados para gráficos de analytics de vendas e compras.
+/// Ponto agregado para gráficos de vendas e compras.
 ///
-/// Representa um agrupamento (por data ou por produto) com os totais
-/// de vendas, compras e quantidade de produtos movimentados.
+/// {@category modelos}
+/// {@subCategory Relatórios}
+///
+/// Um agrupamento (data ou produto) com totais de venda, compra e quantidade.
 @immutable
 class AnalyticsPoint {
 

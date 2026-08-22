@@ -4,10 +4,29 @@ import 'package:system_loja/core/models/product_category.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/database/dao/category_dao.dart';
 
-/// Repositório para gerenciar operações de categorias de produtos.
+/// Repositório para gerenciamento de categorias de produtos usando Drift.
 ///
-/// Fornece uma camada de abstração entre a UI e o acesso a dados,
-/// encapsulando a lógica de negócios relacionada às categorias.
+/// {@category repositorios}
+/// {@subCategory Cadastros}
+///
+/// Coordena operações CRUD sobre [ProductCategory] via [CategoryDao].
+/// Todos os erros são capturados internamente e devolvidos como
+/// [ResultStatus.error] com mensagem amigável.
+///
+/// Resolver com `appInjection.get<ICategoryRepository>()`.
+///
+/// ```dart
+/// final repository = appInjection.get<ICategoryRepository>();
+/// final resultado = await repository.getCategoryById(1);
+/// resultado.when(
+///   onSuccess: (category) => print(category.name),
+///   onError: (mensagem) => print(mensagem),
+/// );
+/// ```
+///
+/// Veja também:
+/// - [ICategoryRepository] - contrato da interface
+/// - [CategoryDao] - DAO do Drift
 class CategoryRepository implements ICategoryRepository {
   CategoryRepository({required this._categoryDao});
   final CategoryDao _categoryDao;

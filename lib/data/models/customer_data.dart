@@ -1,10 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/customer.dart';
+import 'package:system_loja/data/database/table/customer_records.dart';
 import 'package:system_loja/data/models/address_data.dart';
 
 part 'customer_data.g.dart';
 
-/// JSON para [Customer].
+/// DTO JSON de [Customer] para import/export e cache de arquivo.
+///
+/// {@category dados}
+/// {@subCategory Cadastros}
+///
+/// Persistência principal é Drift em [CustomerRecords].
 @JsonSerializable(explicitToJson: true)
 class CustomerData {
 
@@ -43,6 +49,7 @@ class CustomerData {
 
   Map<String, dynamic> toJson() => _$CustomerDataToJson(this);
 
+  /// Converte o DTO para o modelo de domínio [Customer].
   Customer toDomain() => Customer(
     id: id,
     name: name,

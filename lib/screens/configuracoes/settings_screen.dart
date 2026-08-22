@@ -30,7 +30,10 @@ enum FrequenciaBackup {
   );
 }
 
-/// Tela de Configurações do Sistema
+/// Tela de Configurações do Sistema.
+///
+/// {@category apresentacao}
+/// {@subCategory Sistema}
 ///
 /// Permite aos administradores ajustar preferências de notificação,
 /// temas visuais, backup, limpeza de dados, segurança e tipo de banco.

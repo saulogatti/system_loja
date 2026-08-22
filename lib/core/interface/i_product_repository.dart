@@ -1,38 +1,37 @@
 import 'package:system_loja/core/models/product.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 
-/// Interface que define o contrato para operações de repositório de produtos.
+/// Contrato de persistência de produtos exposto à UI.
 ///
-/// Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
-/// para entidades [Product], permitindo diferentes implementações de
-/// persistência (Drift, JSON, etc.).
+/// {@category contratos}
+/// {@subCategory Cadastros}
 ///
-/// Inclui funcionalidades especiais como geração automática de código de
-/// produto e validação de códigos únicos.
+/// CRUD de [Product] via Drift, com geração e validação de código único.
+/// Erros voltam como [ResultStatus.error].
 ///
-/// Exemplo de uso:
+/// Resolver com `appInjection.get<IProductRepository>()`.
+///
 /// ```dart
-/// final repository = appInjection.get<ProductRepository>();
-///
-/// // Gerar código automático
+/// final repository = appInjection.get<IProductRepository>();
 /// final codigo = await repository.generateProductCode();
-///
-/// // Criar produto
-/// final produto = Product(
-///   code: codigo,
-///   name: 'Notebook Dell',
-///   price: 3500.00,
+/// final resultado = await repository.saveProduct(
+///   Product(
+///     code: codigo,
+///     name: 'Notebook Dell',
+///     description: 'Notebook 15 polegadas',
+///     price: 3500,
+///     stockQuantity: 10,
+///   ),
 /// );
-///
-/// final resultado = await repository.saveProduct(produto);
-/// if (resultado.isSuccessful) {
-///   print('Produto salvo com sucesso');
-/// }
+/// resultado.when(
+///   onSuccess: (_) => print('Produto salvo'),
+///   onError: (mensagem) => print(mensagem),
+/// );
 /// ```
 ///
 /// Veja também:
-/// - [Product] - modelo de domínio de produto
-/// - [ResultStatus] - tipo de retorno para operações
+/// - [Product] — modelo de domínio
+/// - [ResultStatus] — retorno das operações
 abstract interface class IProductRepository {
   /// Remove um produto do sistema pelo ID.
   ///

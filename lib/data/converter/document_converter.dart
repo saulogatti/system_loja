@@ -4,6 +4,10 @@ import 'package:system_loja/core/models/document/cnpj.dart';
 import 'package:system_loja/core/models/document/cpf.dart';
 import 'package:system_loja/core/models/document/document.dart';
 
+/// Conversor JSON de [Document] (CPF ou CNPJ) a partir da string.
+///
+/// {@category dados}
+/// {@subCategory Cadastros}
 class DocumentConverter extends JsonConverter<Document, String> {
   const DocumentConverter();
 

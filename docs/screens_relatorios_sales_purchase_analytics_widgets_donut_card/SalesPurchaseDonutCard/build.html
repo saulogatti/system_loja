@@ -113,10 +113,20 @@ Widget build(BuildContext context) {
   final salesPct = total &lt;= 0 ? 0.0 : totalSales &#47; total;
   final purchasesPct = total &lt;= 0 ? 0.0 : totalPurchases &#47; total;
 
+  final semanticLabel = total &lt;= 0
+      ? &#39;Gráfico de distribuição: $message&#39;
+      : &#39;Gráfico de distribuição de vendas e compras. &#39;
+            &#39;Total: R\$ ${total.toStringAsFixed(2)}. &#39;
+            &#39;Vendas: R\$ ${totalSales.toStringAsFixed(2)} (${(salesPct * 100).toStringAsFixed(0)}%). &#39;
+            &#39;Compras: R\$ ${totalPurchases.toStringAsFixed(2)} (${(purchasesPct * 100).toStringAsFixed(0)}%).&#39;;
+
   return Card(
     clipBehavior: Clip.antiAlias,
     child: Semantics(
       button: true,
+      container: true,
+      excludeSemantics: true,
+      label: semanticLabel,
       hint: &#39;Ampliar gráfico de distribuição&#39;,
       onTap: () =&gt; _openZoom(context),
       onTapHint: &#39;Ampliar gráfico de distribuição&#39;,

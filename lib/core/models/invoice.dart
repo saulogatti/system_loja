@@ -2,10 +2,13 @@ import 'package:system_loja/core/models/default/default_object.dart';
 import 'package:system_loja/core/models/invoice_item.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
 
-/// Nota fiscal (domínio). Serialização em `lib/data/models/invoice_export_data.dart`.
+/// Nota fiscal de entrada ou saída (domínio).
 ///
-/// Representa uma nota fiscal de entrada ([InvoiceType.entry]) ou saída
-/// ([InvoiceType.exit]). Os dados da nota estão encapsulados em [InvoiceData].
+/// {@category modelos}
+/// {@subCategory Vendas}
+///
+/// Serialização em `lib/data/models/invoice_export_data.dart`.
+/// Tipo em [InvoiceType]; payload em [InvoiceData].
 class Invoice extends DefaultObject {
 
   Invoice({required this.data, super.registrationDate, super.lastUpdatedDate, super.id});
@@ -38,6 +41,9 @@ class Invoice extends DefaultObject {
 }
 
 /// Dados da nota fiscal.
+///
+/// {@category modelos}
+/// {@subCategory Vendas}
 ///
 /// Exatamente um de [customerId] ou [companyId] deve ser informado.
 /// Notas de saída ([InvoiceType.exit]) vinculam a clientes; notas de entrada

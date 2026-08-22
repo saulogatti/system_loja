@@ -8,6 +8,10 @@ import 'package:system_loja/screens/configuracoes/bloc/logs_system_cubit.dart';
 import 'package:system_loja/screens/configuracoes/bloc/logs_system_state.dart';
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 
+/// Tela de consulta e limpeza dos logs de erro do sistema.
+///
+/// {@category apresentacao}
+/// {@subCategory Sistema}
 @RoutePage()
 class LogSystemScreen extends StatefulWidget implements AutoRouteWrapper {
   const LogSystemScreen({super.key});

@@ -1,10 +1,9 @@
 import 'package:system_loja/data/cache/cache_manager.dart' show CacheManager;
 
-/// Exceção base para erros relacionados ao cache.
+/// Exceção base das falhas de cache em arquivo JSON.
 ///
-/// Esta classe serve como base para todas as exceções que podem
-/// ocorrer durante operações de cache, como leitura, escrita e
-/// remoção de dados.
+/// {@category dados}
+/// {@subCategory Sistema}
 class CacheException implements Exception {
 
   /// Cria uma nova instância de [CacheException].
@@ -27,20 +26,22 @@ class CacheException implements Exception {
   }
 }
 
-/// Exceção lançada quando o cache não está inicializado.
+/// Exceção lançada quando o cache ainda não foi inicializado.
 ///
-/// Esta exceção é lançada quando uma operação de cache é tentada
-/// antes que o [CacheManager] tenha sido completamente inicializado.
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Disparada se uma operação ocorre antes do [CacheManager] estar pronto.
 class CacheNotInitializedException extends CacheException {
   /// Cria uma nova instância de [CacheNotInitializedException].
   const CacheNotInitializedException()
     : super('O cache não foi inicializado. Aguarde a inicialização.');
 }
 
-/// Exceção lançada quando uma chave não é encontrada no cache.
+/// Exceção lançada quando a chave não existe no cache.
 ///
-/// Esta exceção é lançada quando se tenta recuperar um item
-/// do cache usando uma chave que não existe.
+/// {@category dados}
+/// {@subCategory Sistema}
 class CacheKeyNotFoundException extends CacheException {
 
   /// Cria uma nova instância de [CacheKeyNotFoundException].
@@ -52,10 +53,10 @@ class CacheKeyNotFoundException extends CacheException {
   final String key;
 }
 
-/// Exceção lançada quando ocorre um erro de leitura do cache.
+/// Exceção lançada quando a leitura do arquivo de cache falha.
 ///
-/// Esta exceção é lançada quando há uma falha ao ler dados
-/// do arquivo de cache no sistema de arquivos.
+/// {@category dados}
+/// {@subCategory Sistema}
 class CacheReadException extends CacheException {
   /// Cria uma nova instância de [CacheReadException].
   ///
@@ -64,10 +65,10 @@ class CacheReadException extends CacheException {
   const CacheReadException(super.message, [super.cause]);
 }
 
-/// Exceção lançada quando ocorre um erro de escrita no cache.
+/// Exceção lançada quando a escrita no arquivo de cache falha.
 ///
-/// Esta exceção é lançada quando há uma falha ao escrever dados
-/// no arquivo de cache no sistema de arquivos.
+/// {@category dados}
+/// {@subCategory Sistema}
 class CacheWriteException extends CacheException {
   /// Cria uma nova instância de [CacheWriteException].
   ///
@@ -76,10 +77,10 @@ class CacheWriteException extends CacheException {
   const CacheWriteException(super.message, [super.cause]);
 }
 
-/// Exceção lançada quando ocorre um erro de serialização/deserialização.
+/// Exceção lançada quando a serialização JSON do cache falha.
 ///
-/// Esta exceção é lançada quando há uma falha ao converter dados
-/// entre objetos Dart e formato JSON.
+/// {@category dados}
+/// {@subCategory Sistema}
 class CacheSerializationException extends CacheException {
   /// Cria uma nova instância de [CacheSerializationException].
   ///

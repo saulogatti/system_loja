@@ -2,8 +2,15 @@ import 'package:system_loja/core/models/default/default_object.dart';
 import 'package:system_loja/core/models/system_config/report_configuration.dart';
 
 /// Formas de pagamento aceitas na configuração de preços.
+///
+/// {@category modelos}
+/// {@subCategory Sistema}
 enum PaymentMethodType { cash, card, pix, other }
 
+/// Configuração de preços, unidades de medida e relatórios associados.
+///
+/// {@category modelos}
+/// {@subCategory Sistema}
 class PriceConfiguration extends DefaultObject {
   PriceConfiguration({
     required this.types,

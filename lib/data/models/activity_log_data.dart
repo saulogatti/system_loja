@@ -1,9 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/activity_log.dart';
+import 'package:system_loja/data/database/table/system/logs_records.dart';
 
 part 'activity_log_data.g.dart';
 
-/// JSON para [ActivityLog].
+/// DTO JSON de [ActivityLog] para import/export e cache de arquivo.
+///
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Persistência principal é Drift em [LogsRecords].
 @JsonSerializable()
 class ActivityLogData {
 
@@ -53,6 +59,7 @@ class ActivityLogData {
 
   Map<String, dynamic> toJson() => _$ActivityLogDataToJson(this);
 
+  /// Converte o DTO para o modelo de domínio [ActivityLog].
   ActivityLog toDomain() => ActivityLog(
     actionType: actionType,
     entity: entity,

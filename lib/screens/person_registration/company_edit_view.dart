@@ -14,6 +14,10 @@ import 'package:system_loja/screens/widgets/address_form.dart';
 import 'package:system_loja/screens/widgets/text_form_field_email.dart';
 import 'package:system_loja/screens/widgets/text_form_field_phone.dart';
 
+/// Edição de uma [Company] já cadastrada.
+///
+/// {@category apresentacao}
+/// {@subCategory Cadastros}
 @RoutePage()
 class CompanyEditView extends StatefulWidget implements AutoRouteWrapper {
   const CompanyEditView({required this.company, super.key});

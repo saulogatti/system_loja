@@ -6,8 +6,16 @@ import 'package:system_loja/core/utils/result_status.dart';
 import 'package:system_loja/data/cache/models/system_model/system_error_model.dart';
 import 'package:system_loja/data/files_utility/file_storage_utility.dart';
 
+/// Cache em arquivo JSON dos erros capturados pelo sistema.
+///
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Não substitui o Drift; serve só para persistir [SystemErrorModel] em disco.
 class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
   final Map<String, String> _fileStorageOptions = {};
+
+  /// Remove todos os arquivos de erro do cache.
   Future<void> clearErrors() async {
     await retrieveAllErrors();
     if (_fileStorageOptions.isEmpty) {
@@ -21,6 +29,7 @@ class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
     logInfo('All errors cleared from cache.');
   }
 
+  /// Lê todos os erros persistidos em arquivo.
   Future<List<SystemErrorModel>> retrieveAllErrors() async {
     final errors = <SystemErrorModel>[];
     try {
@@ -51,6 +60,7 @@ class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
   @override
   String retrieveDirectoryName() => 'system_cache';
 
+  /// Retorna erros cujo código coincide com [code].
   Future<List<SystemErrorModel>> retrieveErrorsByCode(int code) async {
     final errors = <SystemErrorModel>[];
 
@@ -80,6 +90,7 @@ class SystemCacheManager with FileStorageUtility, LoggerClassMixin {
     return errors;
   }
 
+  /// Persiste um [SystemError] de domínio no cache de arquivo.
   Future<void> saveError(SystemError error) async {
     await saveErrorModel(SystemErrorModel.fromDomain(error));
   }

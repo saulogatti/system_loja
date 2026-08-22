@@ -50,9 +50,14 @@
     <div>
 <h1><span class="kind-class">SystemCacheManager</span> class 
  
+    <span class="category dtos-e-cache cp-5 linked" title="This is part of the DTOs e cache topic."><a href="../topics/dados-topic.html">DTOs&nbsp;e&nbsp;cache</a></span>
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Cache em arquivo JSON dos erros capturados pelo sistema.</p>
+<p>Não substitui o Drift; serve só para persistir <a href="../data_cache_models_system_model_system_error_model/SystemErrorModel-class.html">SystemErrorModel</a> em disco.</p>
+</section>
 
 
     <section>
@@ -161,7 +166,7 @@
 
 </dt>
 <dd>
-  
+  Remove todos os arquivos de erro do cache.
   
 
 </dd>
@@ -200,7 +205,7 @@
 
 </dt>
 <dd class="inherited">
-  
+  Lê o conteúdo de todos os arquivos do diretório de cache.
   <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
@@ -226,7 +231,7 @@
 
 </dt>
 <dd class="inherited">
-  
+  Monta o caminho absoluto de <code>fileName</code> dentro do diretório de cache.
   <div class="features"><span class="feature">inherited</span></div>
 
 </dd>
@@ -317,7 +322,7 @@
 
 </dt>
 <dd>
-  
+  Lê todos os erros persistidos em arquivo.
   
 
 </dd>
@@ -343,7 +348,7 @@
 
 </dt>
 <dd>
-  
+  Retorna erros cujo código coincide com <code>code</code>.
   
 
 </dd>
@@ -369,7 +374,7 @@
 
 </dt>
 <dd>
-  
+  Persiste um <a href="../core_models_system_errors_system_error/SystemError-class.html">SystemError</a> de domínio no cache de arquivo.
   
 
 </dd>

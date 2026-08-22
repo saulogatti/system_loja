@@ -4,7 +4,13 @@ import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 
 part 'app_settings_entry.g.dart';
 
-/// DTO JSON para persistência de [AppSettings] (sem herdar modelo de domínio).
+/// DTO JSON de [AppSettings], sem herdar o modelo de domínio.
+///
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Persistência de preferências em arquivo/cache. O banco Drift continua
+/// sendo a persistência principal da loja.
 @JsonSerializable()
 class AppSettingsEntry {
 
@@ -43,6 +49,7 @@ class AppSettingsEntry {
   final String frequenciaBackup;
   final String localBackup;
 
+  /// Converte o DTO para o modelo de domínio [AppSettings].
   AppSettings toAppSettings() => AppSettings(
     notificacoesAtivadas: notificacoesAtivadas,
     notificarVendas: notificarVendas,

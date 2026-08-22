@@ -18,6 +18,7 @@ Este arquivo permanece apenas como complemento de ambiente para execução em Li
 - Lint: `dart analyze`
 - Verificar formatação: `dart format --set-exit-if-changed .`
 - Testes: `flutter test`
+- Documentação da API: `dart doc -o docs/`
 - Run web server: `flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0`
 - Run linux: `flutter run -d linux`
 - Listar devices: `flutter devices`

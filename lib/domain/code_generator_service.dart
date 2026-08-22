@@ -3,8 +3,14 @@ import 'package:system_loja/data/database/dao/product_dao.dart';
 
 /// Serviço para geração de códigos únicos para produtos e notas fiscais.
 ///
-/// Este serviço fornece métodos para gerar códigos automáticos sequenciais
-/// ou validar códigos fornecidos pelo usuário, garantindo unicidade no banco.
+/// {@category servicos}
+/// {@subCategory Cadastros}
+///
+/// Consulta unicidade via [ProductDao] e [InvoiceDao] (Drift). Gera códigos
+/// sequenciais ou valida códigos informados pelo usuário.
+///
+/// Consumido pelos repositórios de produto e vendas; resolver com
+/// `appInjection.get<CodeGeneratorService>()`.
 class CodeGeneratorService {
 
   CodeGeneratorService({required this._productDao, required this._invoiceDao});
@@ -169,6 +175,9 @@ class CodeGeneratorService {
 }
 
 /// Resultado da validação de código.
+///
+/// {@category servicos}
+/// {@subCategory Cadastros}
 class CodeValidationResult {
 
   CodeValidationResult({required this.isValid, required this.message});

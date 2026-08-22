@@ -2,6 +2,8 @@ import 'package:meta/meta.dart';
 
 /// Representa um resultado que contém um erro.
 ///
+/// {@category utilitarios}
+///
 /// Subclasse de `ResultStatus<R, E>` usada internamente para indicar
 /// que a operação falhou. O erro real está em `failure`.
 ///
@@ -17,6 +19,8 @@ class ResultError<R, E> extends ResultStatus<R, E> {
 }
 
 /// Resultado selado de uma operação que pode ser sucesso ou falha.
+///
+/// {@category utilitarios}
 ///
 /// Use `isSuccessful` / `hasError` para checar o estado antes de
 /// acessar `asSuccess` ou `asError`. Alternativamente, use `when`
@@ -90,6 +94,8 @@ sealed class ResultStatus<R, E> {
 }
 
 /// Representa um resultado bem-sucedido contendo o valor `result`.
+///
+/// {@category utilitarios}
 ///
 /// Subclasse de `ResultStatus<R, E>` utilizada quando a operação
 /// foi concluída com sucesso.

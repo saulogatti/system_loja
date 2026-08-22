@@ -37,7 +37,7 @@ final salesRepository = appInjection.get<SalesRepository>();
 final invoiceNumber = await salesRepository.generateInvoiceNumber();
 ```
 
-**Documentação completa**: Ver `/docs/CODE_GENERATOR_USAGE.md`
+**Documentação completa**: Ver `/documentation/CODE_GENERATOR_USAGE.md`
 
 **Testes**: Ver `/test/code_generator_service_test.dart`
 
@@ -220,7 +220,7 @@ Ao adicionar um novo serviço:
 3. ✅ Registre em `setupAppInjection()` (`lib/application/app_injection.dart`)
 4. ✅ Crie testes em `test/nome_servico_service_test.dart`
 5. ✅ Atualize este README com informações do novo serviço
-6. ✅ Se complexo, crie documentação adicional em `/docs/` (guias vivos; históricos vão para `docs/historico/`)
+6. ✅ Se complexo, crie documentação adicional em `/documentation/` (guias vivos; históricos vão para `documentation/historico/`)
 
 ## Recursos Adicionais
 

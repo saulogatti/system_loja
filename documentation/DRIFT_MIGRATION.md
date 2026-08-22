@@ -60,5 +60,5 @@ dart run build_runner build
 ## Referencias
 
 - `README.md`
-- `docs/DRIFT_ARCHITECTURE.md`
+- `documentation/DRIFT_ARCHITECTURE.md`
 - `.github/copilot-instructions.md`

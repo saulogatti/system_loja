@@ -1,16 +1,17 @@
+import 'package:system_loja/core/interface/i_system_repository.dart';
 import 'package:system_loja/core/settings/app_settings.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 
-/// Interface que define o contrato para operações de configuração do sistema.
+/// Contrato de preferências da aplicação (tema, backup, retenção).
 ///
-/// Esta interface gerencia as configurações globais da aplicação,
-/// incluindo backup/restore, limpeza de dados e reset de configurações.
+/// {@category contratos}
+/// {@subCategory Sistema}
 ///
-/// Todas as operações retornam [ResultStatus] com [AppSettings] em sucesso
-/// e mensagem de erro em texto — sem propagar exceções para a UI.
+/// Distinto de [ISystemRepository], que trata configuração técnica do
+/// sistema. Erros voltam como [ResultStatus.error].
 ///
 /// Veja também:
-/// - [AppSettings] - modelo de configurações da aplicação
+/// - [AppSettings] — preferências persistidas
 abstract interface class IConfigurationRepository {
   /// Limpa todos os dados do sistema (clientes, produtos, vendas, etc.).
   ///

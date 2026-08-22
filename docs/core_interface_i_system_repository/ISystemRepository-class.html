@@ -52,28 +52,27 @@
     <a href="https://dart.dev/language/class-modifiers#abstract" class="feature feature-abstract" title="This type can not be directly constructed.">abstract</a>
     <a href="https://dart.dev/language/class-modifiers#interface" class="feature feature-interface" title="This class can only be implemented (not extended or mixed in).">interface</a>
  
+    <span class="category interfaces cp-0 linked" title="This is part of the Interfaces topic."><a href="../topics/contratos-topic.html">Interfaces</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Interface que define o contrato para operações de configuração do sistema.</p>
-<p>Esta interface gerencia as configurações técnicas e de baixo nível
-do sistema, como parâmetros de inicialização, versões, e metadados.</p>
-<p>Diferente de <a href="../core_interface_i_configuration_repository/IConfigurationRepository-class.html">IConfigurationRepository</a> que gerencia preferências do
-usuário, esta interface lida com configurações do próprio sistema.</p>
-<p>Exemplo de uso:</p>
-<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;SystemRepository&gt;();
-
+  <p>Contrato de configuração técnica do sistema (não preferências de UI).</p>
+<p>Distinto de <a href="../core_interface_i_configuration_repository/IConfigurationRepository-class.html">IConfigurationRepository</a>. Persistência via Drift; importação
+e exportação JSON usam DTOs em <code>lib/data/entry/</code>. Erros voltam como
+<a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a>.</p>
+<p>Resolver com <code>appInjection.get&lt;ISystemRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;ISystemRepository&gt;();
 final resultado = await repository.getSystemConfiguration();
 resultado.when(
-  onSuccess: (config) =&gt; print('Configuração carregada: ${config.id}'),
-  onError: (erro) =&gt; print('Falha: $erro'),
+  onSuccess: (config) =&gt; print(config.id),
+  onError: (mensagem) =&gt; print(mensagem),
 );
 </code></pre>
 <p>Veja também:</p>
 <ul>
-<li><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a> - modelo de configuração do sistema</li>
-<li><a href="../core_interface_i_configuration_repository/IConfigurationRepository-class.html">IConfigurationRepository</a> - para configurações de usuário</li>
+<li><a href="../core_models_system_config_system_configuration/SystemConfiguration-class.html">SystemConfiguration</a> — modelo de domínio</li>
+<li><a href="../core_interface_i_configuration_repository/IConfigurationRepository-class.html">IConfigurationRepository</a> — preferências do usuário</li>
 </ul>
 </section>
 
@@ -145,7 +144,7 @@ resultado.when(
 
 </dt>
 <dd>
-  
+  Remove dados de negócio e devolve a configuração atual.
   
 
 </dd>
@@ -158,7 +157,7 @@ resultado.when(
 
 </dt>
 <dd>
-  
+  Remove logs antigos conforme a política de retenção.
   
 
 </dd>
@@ -171,7 +170,7 @@ resultado.when(
 
 </dt>
 <dd>
-  
+  Exporta a configuração técnica como DTO JSON.
   
 
 </dd>

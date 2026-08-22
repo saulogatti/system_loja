@@ -9,6 +9,10 @@ final firstWeights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 // Validação do segundo dígito verificador
 final secondWeights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 
+/// CNPJ com validação de formato e dígitos verificadores.
+///
+/// {@category modelos}
+/// {@subCategory Cadastros}
 class Cnpj extends Document {
 
   /// Cria uma instância de [Cnpj] com o valor informado.

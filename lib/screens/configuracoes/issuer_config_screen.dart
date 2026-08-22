@@ -7,6 +7,9 @@ import 'package:system_loja/screens/utils/text_formatters.dart';
 
 /// Tela de configuração da empresa emitente.
 ///
+/// {@category apresentacao}
+/// {@subCategory Cadastros}
+///
 /// Permite configurar os dados da pessoa/empresa que o sistema está gerenciando,
 /// incluindo Nome Fantasia, Logotipo, Descrição e um campo reservado para futura
 /// validação de chave de acesso.

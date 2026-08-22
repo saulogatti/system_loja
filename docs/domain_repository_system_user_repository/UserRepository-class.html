@@ -50,6 +50,7 @@
     <div>
 <h1><span class="kind-class">UserRepository</span> class 
  
+    <span class="category repositórios cp-2 linked" title="This is part of the Repositórios topic."><a href="../topics/repositorios-topic.html">Repositórios</a></span>
 </h1></div>
 
     
@@ -58,6 +59,14 @@
 <p>Coordena operações CRUD sobre <a href="../core_models_user/User-class.html">User</a> via <a href="../data_database_dao_users_dao/UsersDao-class.html">UsersDao</a> e registra eventos
 de auditoria via <a href="../core_interface_i_log_repository/ILogRepository-class.html">ILogRepository</a>. Todos os erros são capturados
 internamente e devolvidos como <a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com mensagem amigável.</p>
+<p>Resolver com <code>appInjection.get&lt;IUserRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;IUserRepository&gt;();
+final resultado = await repository.getUserByEmail('admin@system.com');
+resultado.when(
+  onSuccess: (user) =&gt; print(user?.name),
+  onError: (mensagem) =&gt; print(mensagem),
+);
+</code></pre>
 <p>Veja também:</p>
 <ul>
 <li><a href="../core_interface_i_user_repository/IUserRepository-class.html">IUserRepository</a> - contrato da interface</li>

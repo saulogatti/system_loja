@@ -31,10 +31,10 @@ Especialista em testes para Flutter/Dart, focado em garantir qualidade do códig
 ---
 
 ### 📚 Documentation Specialist (`documentation-specialist.agent.md`)
-Especialista em documentação técnica para manter docs/, README e doc comments atualizados.
+Especialista em documentação técnica para manter documentation/, README e doc comments atualizados.
 
 **Use quando:**
-- Criar ou atualizar documentação em `docs/`
+- Criar ou atualizar documentação em `documentation/`
 - Documentar código com `///` doc comments
 - Atualizar README.md
 - Criar guias para contribuidores

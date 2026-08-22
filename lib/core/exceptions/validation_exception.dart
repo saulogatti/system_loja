@@ -1,5 +1,7 @@
 /// Exceção lançada quando há falha na validação de dados.
 ///
+/// {@category utilitarios}
+///
 /// Esta classe representa erros de validação de campos de entrada,
 /// fornecendo mensagens detalhadas sobre o que falhou e como corrigir.
 class ValidationException implements Exception {

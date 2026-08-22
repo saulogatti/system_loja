@@ -1,7 +1,11 @@
 /// Texto exibido quando um código ou número será gerado automaticamente.
+///
+/// {@category utilitarios}
 const String kStringGenerate = 'Será gerado automaticamente';
 
 /// Constantes de RegExp reutilizáveis no app.
+///
+/// {@category utilitarios}
 abstract final class Constants {
   Constants._();
   static const int kLowStockThreshold = 5;

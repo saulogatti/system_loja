@@ -1,21 +1,27 @@
 ---
-description: Documentação em docs/ e doc comments /// em português
-globs: "docs/*.md"
+description: Documentação em documentation/ e doc comments /// em português
+globs: "documentation/**/*.md"
 alwaysApply: false
 ---
 
 # Padrões de Documentação - System Loja
 
-Regras para documentação em `docs/` e para doc comments no código. Para arquivos em `lib/`, use `///` em **português** seguindo as diretrizes abaixo.
+Regras para documentação em `documentation/` e para doc comments no código. Para arquivos em `lib/`, use `///` em **português** seguindo as diretrizes abaixo.
+
+A pasta `docs/` é **somente** o HTML gerado por `dart doc -o docs/` (GitHub Pages). Não coloque guias Markdown lá.
 
 ## Doc comments (Dart) — uso em lib/
 
 - **Primeira linha**: resumo em uma frase.
 - **Parágrafo vazio**: separa resumo da descrição detalhada.
+- **Categorias dartdoc**: `{@category chave}` com a chave de `dartdoc_options.yaml` (`contratos`, `modelos`, `repositorios`, `servicos`, `persistencia`, `dados`, `utilitarios`, `apresentacao`). `{@subCategory}` opcional: Cadastros, Vendas, Sistema, Relatórios.
 - **Seções úteis**: `Parâmetros:`, `Retorna:`, `Veja também:`, `Exemplo de uso:` com código em ```dart. Repositórios **não** lançam exceções para a UI (retornam `ResultStatus.error`), portanto **não** documentar `Lança:` em métodos de repositório/interface.
 
 ```dart
 /// Gerencia operações CRUD para clientes no banco SQLite usando Drift ORM.
+///
+/// {@category repositorios}
+/// {@subCategory Cadastros}
 ///
 /// Implementa o padrão Repository. Todos os métodos retornam [ResultStatus]
 /// para tratamento type-safe de erros — sem propagar exceções para a UI.
@@ -36,13 +42,20 @@ class CustomerRepository {
 }
 ```
 
-## Documentos técnicos em docs/
+## Documentos técnicos em documentation/
 
 - **Idioma**: português.
 - **Guias vivos** (padrão a seguir): `DRIFT_ARCHITECTURE.md`, `DRIFT_MIGRATION.md`, `INTERFACES_ARCHITECTURE.md`, `VALIDATION_SYSTEM.md`, `CODE_GENERATOR_USAGE.md`, `TESTING_VALIDATION.md`, `guides/styleguide.md`.
-- **Históricos**: material antigo em `docs/historico/` — **não** usar como padrão de implementação.
+- **Categorias dartdoc**: páginas curtas em `documentation/dartdoc/`.
+- **Históricos**: material antigo em `documentation/historico/` — **não** usar como padrão de implementação.
 - **Markdown**: usar Mermaid para diagramas quando fizer sentido; evitar HTML; exemplos de código em cercas com linguagem.
 - **Estrutura sugerida**: Título, Índice (links), Visão Geral, seções específicas, Exemplos, Referências.
+
+## Geração da API
+
+```bash
+dart doc -o docs/
+```
 
 ## Padrões obrigatórios
 
@@ -52,10 +65,12 @@ class CustomerRepository {
 - Links relativos entre documentos; não duplicar informação (usar links).
 - Revisar ortografia; testar comandos e exemplos de código.
 - Codegen: `dart run build_runner build` (sem `--delete-conflicting-outputs`).
+- DI nos exemplos: `appInjection.get<IXxxRepository>()`.
 
 ## Restrições
 
 - Não criar documentação genérica ou óbvia.
 - Não deixar código nos exemplos sem funcionar.
 - Sempre revisar ortografia e testar comandos/exemplos.
-- Não tratar arquivos em `docs/historico/` como fonte canônica.
+- Não tratar arquivos em `documentation/historico/` como fonte canônica.
+- Não escrever guias Markdown em `docs/` (essa pasta é o site gerado).

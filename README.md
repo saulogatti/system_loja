@@ -58,6 +58,9 @@ dart format --set-exit-if-changed .
 # Testes
 flutter test
 flutter test test/<arquivo>_test.dart
+
+# Documentação da API (GitHub Pages)
+dart doc -o docs/
 ```
 
 ## Arquitetura
@@ -110,8 +113,10 @@ lib/
     route/
 test/
   support/               # helpers (ex.: AppDatabase em teste sem path_provider)
-docs/
+documentation/
+  dartdoc/               # páginas-fonte das categorias do dart doc
   historico/             # material antigo (não usar como padrão)
+docs/                    # HTML gerado (`dart doc -o docs/`) para GitHub Pages
 ```
 
 ## Observações importantes
@@ -120,6 +125,18 @@ docs/
 - Existem testes com falhas pré-existentes no repositório; valide primeiro o escopo alterado antes de tratar falhas fora da tarefa.
 - Testes que instanciam `AppDatabase` na VM podem usar `applicationSupportDirectory` e `tempDirectoryPath` (ver `test/support/test_app_database.dart`) para evitar `path_provider` / `MissingPluginException`.
 
+## Documentação da API (dartdoc)
+
+Gera o site HTML publicado no GitHub Pages (pasta `/docs` do repositório):
+
+```bash
+dart doc -o docs/
+```
+
+A saída em `docs/` é o site estático. Para navegar localmente, sirva com HTTP (busca e sidebar não funcionam em `file://`).
+
+Categorias do sidebar estão em `dartdoc_options.yaml` e nas páginas-fonte `documentation/dartdoc/`.
+
 ## Documentação principal
 
 - `CONTRIBUTING.md`
@@ -127,10 +144,10 @@ docs/
 - `.github/instructions/dartcode.instructions.md`
 - `AGENTS.md`
 - `flutter_rules.md` (padrão específico deste repositório)
-- `docs/DRIFT_ARCHITECTURE.md`
-- `docs/DRIFT_MIGRATION.md`
-- `docs/INTERFACES_ARCHITECTURE.md`
-- `docs/VALIDATION_SYSTEM.md`
-- `docs/CODE_GENERATOR_USAGE.md`
-- `docs/TESTING_VALIDATION.md`
-- `docs/historico/` — notas e summaries antigos (não canônicos)
+- `documentation/DRIFT_ARCHITECTURE.md`
+- `documentation/DRIFT_MIGRATION.md`
+- `documentation/INTERFACES_ARCHITECTURE.md`
+- `documentation/VALIDATION_SYSTEM.md`
+- `documentation/CODE_GENERATOR_USAGE.md`
+- `documentation/TESTING_VALIDATION.md`
+- `documentation/historico/` — notas e summaries antigos (não canônicos)

@@ -1,6 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 
+/// Roteador raiz do app (`auto_route`).
+///
+/// {@category apresentacao}
+/// {@subCategory Sistema}
+///
+/// Gerado em `route_app.gr.dart`. `Navigator` só para dialogs e bottom sheets.
 @AutoRouterConfig(replaceInRouteName: 'View|Screen,Route')
 class RouteApp extends RootStackRouter {
   @override

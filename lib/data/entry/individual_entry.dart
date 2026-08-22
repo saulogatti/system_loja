@@ -5,7 +5,12 @@ import 'package:system_loja/data/converter/cpf_cnpj_json_converters.dart';
 
 part 'individual_entry.g.dart';
 
-/// DTO JSON para pessoa física (sem herdar [Person]).
+/// DTO JSON de pessoa física, sem herdar [Person].
+///
+/// {@category dados}
+/// {@subCategory Cadastros}
+///
+/// Usado em import/export e cache de arquivo. Persistência principal é Drift.
 @JsonSerializable(converters: [CpfConverter()])
 class IndividualEntry {
 

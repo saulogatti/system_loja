@@ -109,72 +109,68 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) =&gt; DefaultTabController(
-    length: 2,
-    child: Column(
-      children: [
-        const TabBar(
-          tabs: [
-            Tab(icon: Icon(Icons.receipt_long), text: &#39;Notas Fiscais&#39;),
-            Tab(icon: Icon(Icons.inventory_2), text: &#39;Estoque&#39;),
-          ],
-        ),
-        Expanded(
-          child: BlocBuilder&lt;RelatorioCubit, RelatorioState&gt;(
-            builder: (context, state) =&gt; switch (state) {
-                RelatorioInitial() ||
-                RelatorioLoading() =&gt; const Center(child: CircularProgressIndicator()),
-                RelatorioError(:final message) =&gt; Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.error_outline,
-                        size: 64,
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        message,
-                        style: TextStyle(color: Theme.of(context).colorScheme.error),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton.icon(
-                        onPressed: () =&gt; context.read&lt;RelatorioCubit&gt;().carregarRelatorios(),
-                        icon: const Icon(Icons.refresh),
-                        label: const Text(&#39;Tentar novamente&#39;),
-                      ),
-                    ],
+  length: 2,
+  child: Column(
+    children: [
+      const TabBar(
+        tabs: [
+          Tab(icon: Icon(Icons.receipt_long), text: &#39;Notas Fiscais&#39;),
+          Tab(icon: Icon(Icons.inventory_2), text: &#39;Estoque&#39;),
+        ],
+      ),
+      Expanded(
+        child: BlocBuilder&lt;RelatorioCubit, RelatorioState&gt;(
+          builder: (context, state) =&gt; switch (state) {
+            RelatorioInitial() ||
+            RelatorioLoading() =&gt; const Center(child: CircularProgressIndicator()),
+            RelatorioError(:final message) =&gt; Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, size: 64, color: Theme.of(context).colorScheme.error),
+                  const SizedBox(height: 16),
+                  Text(
+                    message,
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-                RelatorioLoaded(
-                  :final categoryNamesById,
-                  :final entryInvoices,
-                  :final exitInvoices,
-                  :final estoqueOverview,
-                  :final notasOverview,
-                  :final products,
-                ) =&gt;
-                  TabBarView(
-                    children: [
-                      _NotasFiscaisTab(
-                        entryInvoices: entryInvoices,
-                        exitInvoices: exitInvoices,
-                        notasOverview: notasOverview,
-                      ),
-                      _EstoqueTab(
-                        categoryNamesById: categoryNamesById,
-                        products: products,
-                        estoqueOverview: estoqueOverview,
-                      ),
-                    ],
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: () =&gt; context.read&lt;RelatorioCubit&gt;().carregarRelatorios(),
+                    icon: const Icon(Icons.refresh),
+                    label: const Text(&#39;Tentar novamente&#39;),
                   ),
-              },
-          ),
+                ],
+              ),
+            ),
+            RelatorioLoaded(
+              :final categoryNamesById,
+              :final entryInvoices,
+              :final exitInvoices,
+              :final estoqueOverview,
+              :final notasOverview,
+              :final products,
+            ) =&gt;
+              TabBarView(
+                children: [
+                  _NotasFiscaisTab(
+                    entryInvoices: entryInvoices,
+                    exitInvoices: exitInvoices,
+                    notasOverview: notasOverview,
+                  ),
+                  _EstoqueTab(
+                    categoryNamesById: categoryNamesById,
+                    products: products,
+                    estoqueOverview: estoqueOverview,
+                  ),
+                ],
+              ),
+          },
         ),
-      ],
-    ),
-  );</code></pre>
+      ),
+    ],
+  ),
+);</code></pre>
 </section>
 
 

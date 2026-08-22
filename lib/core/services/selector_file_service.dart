@@ -5,6 +5,10 @@ import 'package:file_selector/file_selector.dart';
 import 'package:system_loja/core/models/system_config/system_configuration.dart';
 import 'package:system_loja/data/converter/system_configuration_codec.dart';
 
+/// Serviço de seleção e gravação de arquivos de configuração do sistema.
+///
+/// {@category servicos}
+/// {@subCategory Sistema}
 class SelectorFileService {
   SelectorFileService();
 

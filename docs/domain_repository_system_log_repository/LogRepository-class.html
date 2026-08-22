@@ -50,6 +50,7 @@
     <div>
 <h1><span class="kind-class">LogRepository</span> class 
  
+    <span class="category repositórios cp-2 linked" title="This is part of the Repositórios topic."><a href="../topics/repositorios-topic.html">Repositórios</a></span>
 </h1></div>
 
     
@@ -58,6 +59,14 @@
 <p>Persiste e recupera registros <a href="../core_models_activity_log/ActivityLog-class.html">ActivityLog</a> via <a href="../data_database_dao_log_dao/LogDao-class.html">LogDao</a>. Todos os erros
 são capturados internamente e devolvidos como <a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com
 mensagem amigável.</p>
+<p>Resolver com <code>appInjection.get&lt;ILogRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;ILogRepository&gt;();
+final resultado = await repository.fetchAllLogs();
+resultado.when(
+  onSuccess: (logs) =&gt; print(logs.length),
+  onError: (mensagem) =&gt; print(mensagem),
+);
+</code></pre>
 <p>Veja também:</p>
 <ul>
 <li><a href="../core_interface_i_log_repository/ILogRepository-class.html">ILogRepository</a> - contrato da interface</li>

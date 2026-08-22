@@ -1,6 +1,9 @@
 import 'package:system_loja/core/models/default/authorization_level.dart';
 
-/// Extensão para conversão entre NivelPermissao e String
+/// Extensão para conversão entre NivelPermissao e String.
+///
+/// {@category modelos}
+/// {@subCategory Sistema}
 ///
 /// Fornece métodos utilitários para converter níveis de permissão
 /// para strings e vice-versa, mantendo consistência em todo o sistema.

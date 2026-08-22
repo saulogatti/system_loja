@@ -1,10 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/company.dart';
+import 'package:system_loja/data/database/table/company_records.dart';
 import 'package:system_loja/data/models/address_data.dart';
 
 part 'company_data.g.dart';
 
-/// JSON para [Company].
+/// DTO JSON de [Company] para import/export e cache de arquivo.
+///
+/// {@category dados}
+/// {@subCategory Cadastros}
+///
+/// Persistência principal é Drift em [CompanyRecords].
 @JsonSerializable(explicitToJson: true)
 class CompanyData {
 
@@ -43,6 +49,7 @@ class CompanyData {
 
   Map<String, dynamic> toJson() => _$CompanyDataToJson(this);
 
+  /// Converte o DTO para o modelo de domínio [Company].
   Company toDomain() => Company(
     id: id,
     name: name,

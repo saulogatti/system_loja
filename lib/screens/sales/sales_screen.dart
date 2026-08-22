@@ -14,6 +14,10 @@ import 'package:system_loja/screens/sales/widgets/invoice_overview_bottom_sheet.
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 import 'package:system_loja/screens/widgets/loading_overlay.dart';
 
+/// Tela de listagem e acompanhamento das notas de venda e compra.
+///
+/// {@category apresentacao}
+/// {@subCategory Vendas}
 @RoutePage()
 class SalesView extends StatefulWidget {
   const SalesView({super.key});

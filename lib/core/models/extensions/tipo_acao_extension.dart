@@ -1,6 +1,9 @@
 import 'package:system_loja/core/models/activity_log.dart';
 
-/// Extensão para conversão entre TipoAcao e String
+/// Extensão para conversão entre TipoAcao e String.
+///
+/// {@category modelos}
+/// {@subCategory Sistema}
 ///
 /// Fornece métodos utilitários para converter tipos de ação
 /// para strings e vice-versa, mantendo consistência em todo o sistema.

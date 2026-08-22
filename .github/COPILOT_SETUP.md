@@ -116,7 +116,7 @@ O projeto System Loja está totalmente configurado para trabalhar com GitHub Cop
 **Arquivo:** `.github/agents/documentation-specialist.agent.md`  
 **Especialidade:** Documentação técnica  
 **Use para:**
-- Criar/atualizar documentação em `docs/`
+- Criar/atualizar documentação em `documentation/`
 - Documentar código com `///` doc comments em português
 - Manter README.md atualizado
 - Criar guias para contribuidores

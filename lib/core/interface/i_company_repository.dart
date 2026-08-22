@@ -1,28 +1,28 @@
 import 'package:system_loja/core/models/company.dart';
 import 'package:system_loja/core/utils/result_status.dart';
 
-/// Interface que define o contrato para operações de repositório de empresas.
+/// Contrato de persistência de empresas exposto à UI.
 ///
-/// Esta interface abstrai as operações CRUD (Create, Read, Update, Delete)
-/// para entidades [Company], permitindo diferentes implementações de
-/// persistência (Drift, JSON, etc.).
+/// {@category contratos}
+/// {@subCategory Cadastros}
 ///
-/// As operações incluem busca por CNPJ, mapeamento de empresas por ID,
-/// e gerenciamento completo do cadastro de empresas.
+/// CRUD de [Company] via Drift, incluindo busca por CNPJ. Erros voltam
+/// como [ResultStatus.error].
 ///
-/// Exemplo de uso:
+/// Resolver com `appInjection.get<ICompanyRepository>()`.
+///
 /// ```dart
-/// final repository = appInjection.get<CompanyRepository>();
+/// final repository = appInjection.get<ICompanyRepository>();
 /// final resultado = await repository.findByCnpj(cnpj: '12345678000199');
-/// if (resultado.isSuccessful && resultado.asSuccess != null) {
-///   final company = resultado.asSuccess!;
-///   print('Empresa: ${company.fantasyName}');
-/// }
+/// resultado.when(
+///   onSuccess: (company) => print(company?.name),
+///   onError: (mensagem) => print(mensagem),
+/// );
 /// ```
 ///
 /// Veja também:
-/// - [Company] - modelo de domínio de empresa
-/// - [ResultStatus] - tipo de retorno para operações
+/// - [Company] — modelo de domínio
+/// - [ResultStatus] — retorno das operações
 abstract interface class ICompanyRepository {
   /// Remove uma empresa do sistema pelo ID.
   ///

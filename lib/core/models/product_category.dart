@@ -1,10 +1,13 @@
 import 'package:system_loja/core/models/default/default_object.dart';
 import 'package:system_loja/core/models/product.dart' show Product;
 
-/// Categoria de produtos (domínio). Serialização em `category_data.dart`.
+/// Categoria de produtos (domínio).
 ///
-/// Agrupa produtos por tipo (ex.: Eletrônicos, Vestuário).
-/// Utilizada como chave estrangeira em [Product.categoryId].
+/// {@category modelos}
+/// {@subCategory Cadastros}
+///
+/// Serialização em `lib/data/models/category_data.dart`.
+/// Agrupa produtos (ex.: Eletrônicos). Referenciada por [Product.categoryId].
 class ProductCategory extends DefaultObject {
   ProductCategory({
     required this.name,

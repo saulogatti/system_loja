@@ -1,4 +1,7 @@
-/// Tipo de nota fiscal: entrada (compra/fornecedor) ou saída (venda/cliente).
+/// Tipo de nota fiscal: entrada (compra) ou saída (venda).
+///
+/// {@category modelos}
+/// {@subCategory Vendas}
 enum InvoiceType {
   /// Nota de entrada: vinculada a uma empresa fornecedora.
   entry,

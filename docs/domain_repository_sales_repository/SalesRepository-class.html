@@ -50,13 +50,29 @@
     <div>
 <h1><span class="kind-class">SalesRepository</span> class 
  
+    <span class="category repositórios cp-2 linked" title="This is part of the Repositórios topic."><a href="../topics/repositorios-topic.html">Repositórios</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Repositório para gerenciamento de vendas usando Drift</p>
-<p>Responsável por coordenar operações de CRUD de vendas (invoices)
-utilizando os DAOs do Drift.</p>
+  <p>Repositório para gerenciamento de vendas usando Drift.</p>
+<p>Coordena CRUD de <a href="../core_models_invoice/Invoice-class.html">Invoice</a> via <a href="../data_database_dao_invoice_dao/InvoiceDao-class.html">InvoiceDao</a> e <a href="../data_database_dao_invoice_item_dao/InvoiceItemDao-class.html">InvoiceItemDao</a>,
+atualização de estoque e geração de número único via
+<a href="../domain_code_generator_service/CodeGeneratorService-class.html">CodeGeneratorService</a>. Todos os erros são capturados internamente
+e devolvidos como <a href="../core_utils_result_status/ResultStatus/ResultStatus.error.html">ResultStatus.error</a> com mensagem amigável.</p>
+<p>Resolver com <code>appInjection.get&lt;ISalesRepository&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final repository = appInjection.get&lt;ISalesRepository&gt;();
+final numero = await repository.generateInvoiceNumber();
+numero.when(
+  onSuccess: (valor) =&gt; print(valor),
+  onError: (mensagem) =&gt; print(mensagem),
+);
+</code></pre>
+<p>Veja também:</p>
+<ul>
+<li><a href="../core_interface_i_sales_repository/ISalesRepository-class.html">ISalesRepository</a> - contrato da interface</li>
+<li><a href="../data_database_dao_invoice_dao/InvoiceDao-class.html">InvoiceDao</a> - DAO do Drift</li>
+</ul>
 </section>
 
 

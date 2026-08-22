@@ -8,10 +8,12 @@ import 'package:system_loja/screens/person_registration/bloc/person_state.dart';
 import 'package:system_loja/screens/person_registration/models/person_registration_form_data.dart';
 import 'package:system_loja/screens/person_registration/widgets/person_registration_form.dart';
 
-/// Exibe a tela de cadastro unificado para pessoa física e jurídica.
+/// Cadastro unificado de pessoa física e jurídica.
 ///
-/// Esta tela trata apenas entrada e validação dos dados.
-/// Não executa persistência, busca ou consulta nesta etapa.
+/// {@category apresentacao}
+/// {@subCategory Cadastros}
+///
+/// Só valida entrada; persistência fica no repositório após esta etapa.
 @RoutePage()
 class PersonRegistrationView extends StatefulWidget {
   const PersonRegistrationView({super.key});

@@ -1,9 +1,12 @@
 import 'package:system_loja/data/cache/cache_manager.dart' show CacheManager;
 
-/// Define o objeto que pode ser armazenado em cache.
+/// Contrato de objeto serializável no cache de arquivo JSON.
 ///
-/// Esta interface define os métodos necessários para que um objeto
-/// possa ser serializado e armazenado no sistema de cache da aplicação.
+/// {@category dados}
+/// {@subCategory Sistema}
+///
+/// Persistência principal é Drift; [Cacheable] só descreve chave e JSON
+/// para o [CacheManager].
 ///
 /// Exemplo de implementação:
 /// ```dart

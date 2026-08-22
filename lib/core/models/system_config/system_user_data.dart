@@ -1,5 +1,9 @@
 import 'package:system_loja/core/models/default/people_data.dart';
 
+/// Dados do usuário do sistema, incluindo chave e descrição.
+///
+/// {@category modelos}
+/// {@subCategory Sistema}
 class SystemUserData extends PersonDefault {
   SystemUserData({
     required super.name,

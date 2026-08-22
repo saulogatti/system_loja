@@ -1,6 +1,8 @@
 import 'package:system_loja/core/settings/enum_color_app_theme_settings.dart';
 
-/// Modelo de dados para Configurações do Sistema
+/// Modelo de dados para Configurações do Sistema.
+///
+/// {@category utilitarios}
 ///
 /// Armazena preferências do usuário como notificações, temas,
 /// opções de backup, segurança e tipo de banco de dados.

@@ -50,16 +50,18 @@
     <div>
 <h1><span class="kind-class">AppDatabase</span> class 
  
+    <span class="category persistência-drift cp-4 linked" title="This is part of the Persistência Drift topic."><a href="../topics/persistencia-topic.html">Persistência&nbsp;Drift</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Banco de dados principal da aplicação usando Drift.</p>
-<p>Gerencia todas as tabelas e DAOs do sistema de loja:
-clientes, produtos, categorias, empresas, notas fiscais e endereços.</p>
+  <p>Banco SQLite principal da loja, persistido com Drift.</p>
+<p>Agrupa tabelas e DAOs de clientes, produtos, categorias, empresas,
+endereços e notas fiscais. JSON neste projeto é só DTO, import/export
+ou cache de arquivo — não substitui este banco.</p>
 <p>Veja também:</p>
 <ul>
-<li><a href="../data_database_system_database/SystemDatabase-class.html">SystemDatabase</a> - banco secundário para usuários, logs e configurações do sistema</li>
+<li><a href="../data_database_system_database/SystemDatabase-class.html">SystemDatabase</a> — usuários, logs e configurações do sistema</li>
 </ul>
 </section>
 

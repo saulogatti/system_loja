@@ -52,27 +52,21 @@
     <a href="https://dart.dev/language/class-modifiers#abstract" class="feature feature-abstract" title="This type can not be directly constructed.">abstract</a>
     <a href="https://dart.dev/language/class-modifiers#interface" class="feature feature-interface" title="This class can only be implemented (not extended or mixed in).">interface</a>
  
+    <span class="category interfaces cp-0 linked" title="This is part of the Interfaces topic."><a href="../topics/contratos-topic.html">Interfaces</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Interface que define o contrato para serviço de configurações de tema.</p>
-<p>Esta interface gerencia as configurações visuais da aplicação,
-como cor primária e modo escuro/claro.</p>
-<p>Diferente dos repositories, este serviço não persiste dados diretamente,
-mas notifica listeners para atualização da UI em tempo real.</p>
-<p>Exemplo de uso:</p>
-<pre class="language-dart"><code class="language-dart">final service = appInjection.get&lt;SettingsService&gt;();
-
-// Atualizar para tema escuro com cor azul
-service.updateSettings(
-  EnumColorAppThemeSettings.blue,
-  true, // tema escuro
-);
+  <p>Contrato de tema da aplicação (cor primária e modo claro/escuro).</p>
+<p>Notifica listeners para atualizar a UI. Persistência das preferências
+fica em <a href="../core_interface_i_configuration_repository/IConfigurationRepository-class.html">IConfigurationRepository</a>.</p>
+<p>Resolver com <code>appInjection.get&lt;ISettingsService&gt;()</code>.</p>
+<pre class="language-dart"><code class="language-dart">final service = appInjection.get&lt;ISettingsService&gt;();
+service.updateSettings(EnumColorAppThemeSettings.blue, temaEscuro: true);
 </code></pre>
 <p>Veja também:</p>
 <ul>
-<li><a href="../core_settings_enum_color_app_theme_settings/EnumColorAppThemeSettings.html">EnumColorAppThemeSettings</a> - enum com cores disponíveis</li>
+<li><a href="../core_settings_enum_color_app_theme_settings/EnumColorAppThemeSettings.html">EnumColorAppThemeSettings</a> — paleta disponível</li>
 </ul>
 </section>
 

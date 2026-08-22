@@ -34,12 +34,20 @@ import 'package:system_loja/domain/repository/system/user_repository.dart';
 import 'package:system_loja/screens/route/route_app.dart';
 import 'package:system_loja/screens/settings/settings_service.dart';
 
+/// Localizador de serviços (GetIt) da aplicação.
 final GetIt appInjection = GetIt.instance;
+
+/// Serviço de log colorido registrado em [setupAppInjection].
 late LoggerPersistenceService printerLog;
 
-/// Configura as dependências da aplicação.
-/// Isso é usado no main.dart para configurar as dependências da aplicação.
-/// Para acessar as dependências, use o `appInjection.get<T>()` onde T é o tipo da dependência.
+/// Registra bancos Drift, repositórios e serviços no GetIt.
+///
+/// {@category servicos}
+/// {@subCategory Sistema}
+///
+/// Chamado no `main.dart`. Resolver dependências com `appInjection.get<T>()`.
+/// Persistência principal é Drift ([AppDatabase], [SystemDatabase]); JSON
+/// fica em cache de arquivo e DTOs de import/export.
 void setupAppInjection() {
   printerLog = registerLogPrinterColor(
     config: const ConfigLog(enableLog: kDebugMode),

@@ -50,9 +50,15 @@
     <div>
 <h1><span class="kind-class">CustomerException</span> class 
  
+    <span class="category repositórios cp-2 linked" title="This is part of the Repositórios topic."><a href="../topics/repositorios-topic.html">Repositórios</a></span>
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>Exceção de operações de cliente no repositório.</p>
+<p>Capturada internamente por <code>CustomerRepository</code> (try/catch) e convertida
+em <code>ResultStatus.error</code>. Não deve vazar para a camada de apresentação.</p>
+</section>
 
 
     <section>
@@ -115,7 +121,7 @@
 
 </dt>
 <dd>
-  
+  Mensagem amigável devolvida ao chamador via <code>ResultStatus.error</code>.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>

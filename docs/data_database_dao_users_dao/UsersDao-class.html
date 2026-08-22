@@ -50,9 +50,15 @@
     <div>
 <h1><span class="kind-class">UsersDao</span> class 
  
+    <span class="category persistência-drift cp-4 linked" title="This is part of the Persistência Drift topic."><a href="../topics/persistencia-topic.html">Persistência&nbsp;Drift</a></span>
 </h1></div>
 
     
+<section class="desc markdown">
+  <p>DAO Drift de usuários no <a href="../data_database_system_database/SystemDatabase-class.html">SystemDatabase</a>.</p>
+<p>CRUD de <a href="../core_models_user/User-class.html">User</a> sobre <a href="../data_database_table_system_users_records/UsersRecords-class.html">UsersRecords</a>, usando <a href="../data_entry_user_entry/UserEntry-class.html">UserEntry</a> como linha.
+Persistência principal é Drift.</p>
+</section>
 
 
     <section>
@@ -467,7 +473,7 @@ query updates, especially when using triggers.
 
 </dt>
 <dd>
-  
+  Remove um usuário pelo <code>id</code>.
   
 
 </dd>
@@ -508,7 +514,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Busca um usuário pelo e-mail.
   
 
 </dd>
@@ -521,7 +527,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Retorna todos os usuários como objetos de domínio <a href="../core_models_user/User-class.html">User</a>.
   
 
 </dd>
@@ -534,7 +540,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Busca um usuário pelo <code>id</code>.
   
 
 </dd>
@@ -547,7 +553,7 @@ in it and then releases the lock.
 
 </dt>
 <dd>
-  
+  Insere um usuário e devolve a linha persistida como <a href="../core_models_user/User-class.html">User</a>.
   
 
 </dd>
@@ -739,7 +745,7 @@ clause on that table and then use <a href="https://pub.dev/documentation/drift/2
 
 </dt>
 <dd>
-  
+  Atualiza um usuário existente.
   
 
 </dd>

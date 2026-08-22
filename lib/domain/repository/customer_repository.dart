@@ -9,9 +9,23 @@ import 'package:system_loja/domain/repository/exceptions/customer_exception.dart
 
 /// Repositório para gerenciamento de clientes usando Drift.
 ///
+/// {@category repositorios}
+/// {@subCategory Cadastros}
+///
 /// Coordena operações CRUD sobre [Customer] via [CustomerDao] e registra
 /// eventos de auditoria via [ILogRepository]. Todos os erros são capturados
 /// internamente e devolvidos como [ResultStatus.error] com mensagem amigável.
+///
+/// Resolver com `appInjection.get<ICustomerRepository>()`.
+///
+/// ```dart
+/// final repository = appInjection.get<ICustomerRepository>();
+/// final resultado = await repository.findWith(cpf: '12345678900');
+/// resultado.when(
+///   onSuccess: (customer) => print(customer?.name),
+///   onError: (mensagem) => print(mensagem),
+/// );
+/// ```
 ///
 /// Veja também:
 /// - [ICustomerRepository] - contrato da interface

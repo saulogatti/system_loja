@@ -6,6 +6,8 @@ import 'package:system_loja/core/utils/result_status.dart' show ResultStatus;
 /// Utilitário para mensagens de erro exibíveis na UI a partir de falhas
 /// capturadas nos repositórios.
 ///
+/// {@category utilitarios}
+///
 /// **Convenção do projeto**
 /// - Repositórios (`lib/domain/repository/`): usam `try/catch` em torno de
 ///   I/O, Drift e parse; **não** propagam exceção para BLoC/Cubit; retornam

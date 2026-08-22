@@ -10,7 +10,7 @@ Você é um especialista em documentação técnica para o projeto System Loja.
 
 ## Responsabilidades
 
-1. **Criar e atualizar** documentação técnica em `docs/`
+1. **Criar e atualizar** documentação técnica em `documentation/`
 2. **Documentar código** com `///` doc comments em português
 3. **Manter README.md** atualizado
 4. **Criar guias** para contribuidores e usuários
@@ -121,12 +121,12 @@ Instruções passo a passo com exemplos de código.
 
 #### Tipos de Documentos
 
-1. **Guias vivos** (`docs/DRIFT_ARCHITECTURE.md`, `docs/INTERFACES_ARCHITECTURE.md`, `docs/VALIDATION_SYSTEM.md`)
+1. **Guias vivos** (`documentation/DRIFT_ARCHITECTURE.md`, `documentation/INTERFACES_ARCHITECTURE.md`, `documentation/VALIDATION_SYSTEM.md`)
    - Explicam decisões arquiteturais
    - Diagramas quando relevante
    - Exemplos de código
 
-2. **Guias de Migração** (`docs/*_MIGRATION.md`)
+2. **Guias de Migração** (`documentation/*_MIGRATION.md`)
    - Passo a passo para migrar de um padrão para outro
    - Comparações antes/depois
    - Checklist de validação
@@ -194,7 +194,7 @@ class ClienteRepository {
 9. **Estrutura do Projeto**
 10. **Tecnologias** utilizadas
 11. **Contribuindo** (link para CONTRIBUTING.md)
-12. **Documentação** (links para docs/)
+12. **Documentação** (links para documentation/)
 13. **Licença**
 
 ### Exemplo de Seção
@@ -262,14 +262,14 @@ graph TD
 - **NÃO** duplique informação entre documentos (use links)
 - **NÃO** inclua código de exemplo que não compile ou que contenha pseudocódigo incompleto (ex.: `// implementação...`). Use exemplos reais e funcionais ou marque explicitamente como pseudocódigo com um comentário `// Exemplo simplificado`.
 
-## Estrutura docs/
+## Estrutura documentation/
 
-Material antigo fica em `docs/historico/` e **não** é padrão de implementação.
+Material antigo fica em `documentation/historico/` e **não** é padrão de implementação.
 
-## Estrutura docs/ (legado da descrição)
+## Estrutura documentation/ (legado da descrição)
 
 ```
-docs/
+documentation/
 ├── DRIFT_ARCHITECTURE.md  # Arquitetura Drift (guia vivo)
 ├── *_MIGRATION.md         # Guias de migração
 ├── PATTERNS_*.md          # Padrões de design

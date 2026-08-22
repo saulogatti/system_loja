@@ -1,10 +1,14 @@
 import 'package:drift/drift.dart';
 import 'package:system_loja/core/models/invoice_type.dart';
+import 'package:system_loja/data/database/app_database.dart';
 
-/// Tabela para armazenar notas fiscais no Drift.
+/// Tabela Drift de notas fiscais no [AppDatabase].
 ///
-/// Regra exclusiva: exatamente um de [customerId] ou [companyId] deve ser
-/// preenchido, independente do [type].
+/// {@category persistencia}
+/// {@subCategory Vendas}
+///
+/// Exatamente um de [customerId] ou [companyId] deve ser preenchido,
+/// independente do [type].
 class InvoicesRecords extends Table {
   /// CNPJ da empresa (desnormalizado; null quando vínculo for cliente).
   TextColumn get companyCnpj => text().nullable()();

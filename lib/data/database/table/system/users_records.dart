@@ -1,6 +1,11 @@
 import 'package:drift/drift.dart';
+import 'package:system_loja/data/database/system_database.dart';
 import 'package:system_loja/data/entry/user_entry.dart';
 
+/// Tabela Drift de usuários no [SystemDatabase].
+///
+/// {@category persistencia}
+/// {@subCategory Sistema}
 @UseRowClass(UserEntry)
 class UsersRecords extends Table {
   TextColumn get email => text().nullable()();

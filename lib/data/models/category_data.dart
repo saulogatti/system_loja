@@ -1,9 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:system_loja/core/models/product_category.dart';
+import 'package:system_loja/data/database/table/categories_records.dart';
 
 part 'category_data.g.dart';
 
-/// JSON para [ProductCategory].
+/// DTO JSON de [ProductCategory] para import/export e cache de arquivo.
+///
+/// {@category dados}
+/// {@subCategory Cadastros}
+///
+/// Persistência principal é Drift em [CategoriesRecords].
 @JsonSerializable()
 class CategoryData {
   const CategoryData({
@@ -29,6 +35,7 @@ class CategoryData {
   final DateTime registrationDate;
   final DateTime? lastUpdatedDate;
 
+  /// Converte o DTO para o modelo de domínio [ProductCategory].
   ProductCategory toDomain() => ProductCategory(
     id: id,
     name: name,

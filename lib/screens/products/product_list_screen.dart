@@ -10,6 +10,9 @@ import 'package:system_loja/screens/products/widgets/product_list.dart';
 import 'package:system_loja/screens/route/route_app.gr.dart';
 
 /// Exibe a listagem de produtos cadastrados.
+///
+/// {@category apresentacao}
+/// {@subCategory Cadastros}
 @RoutePage()
 class ProductListScreen extends StatefulWidget implements AutoRouteWrapper {
 

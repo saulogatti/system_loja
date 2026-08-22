@@ -26,6 +26,10 @@ bool _shouldListenForFeedbackSnackBar(SalesInvoiceState previous, SalesInvoiceSt
   return previous.message != current.message;
 }
 
+/// Tela de emissão e edição de nota fiscal de venda ou compra.
+///
+/// {@category apresentacao}
+/// {@subCategory Vendas}
 @RoutePage()
 class SalesInvoiceScreen extends StatelessWidget {
 

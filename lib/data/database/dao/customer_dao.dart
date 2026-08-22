@@ -7,10 +7,13 @@ import 'package:system_loja/data/database/table/customer_records.dart';
 
 part 'customer_dao.g.dart';
 
-/// DAO para gerenciar operações CRUD de clientes no banco de dados Drift.
+/// DAO Drift de clientes no [AppDatabase].
 ///
-/// Utiliza o padrão Repository e conversões entre Customer (domínio) e
-/// CustomerRecord (Drift) através de extensões.
+/// {@category persistencia}
+/// {@subCategory Cadastros}
+///
+/// CRUD de [Customer] sobre [CustomerRecords], com mapeamento para o
+/// domínio via extensões. Persistência principal é Drift.
 @DriftAccessor(tables: [CustomerRecords])
 class CustomerDao extends DatabaseAccessor<AppDatabase>
     with _$CustomerDaoMixin {

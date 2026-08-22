@@ -7,10 +7,13 @@ import 'package:system_loja/domain/repository/sales_repository.dart' show SalesR
 
 part 'product_dao.g.dart';
 
-/// DAO para gerenciar operações CRUD de produtos no banco de dados Drift.
+/// DAO Drift de produtos no [AppDatabase].
 ///
-/// Utiliza o padrão Repository e conversões entre [Product] (domínio) e
-/// `ProductsRecord` (Drift) via extensões de mapeamento.
+/// {@category persistencia}
+/// {@subCategory Cadastros}
+///
+/// CRUD de [Product] sobre [ProductsRecords], com mapeamento para o
+/// domínio via extensões. Persistência principal é Drift.
 @DriftAccessor(tables: [ProductsRecords])
 class ProductDao extends DatabaseAccessor<AppDatabase> with _$ProductDaoMixin {
   ProductDao(super.db);

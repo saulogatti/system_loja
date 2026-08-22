@@ -92,6 +92,6 @@ Ao alterar tabelas, DAOs ou tipos persistidos:
 ## Referências
 
 - `README.md`
-- `docs/DRIFT_MIGRATION.md`
-- `docs/INTERFACES_ARCHITECTURE.md`
+- `documentation/DRIFT_MIGRATION.md`
+- `documentation/INTERFACES_ARCHITECTURE.md`
 - `.github/copilot-instructions.md`

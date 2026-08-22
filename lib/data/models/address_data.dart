@@ -3,7 +3,12 @@ import 'package:system_loja/core/models/address.dart';
 
 part 'address_data.g.dart';
 
-/// Representação JSON de [Address].
+/// DTO JSON de [Address] para import/export e coluna serializada.
+///
+/// {@category dados}
+/// {@subCategory Cadastros}
+///
+/// Persistência principal é Drift; JSON é só DTO/codec.
 @JsonSerializable()
 class AddressData {
 
@@ -38,6 +43,7 @@ class AddressData {
 
   Map<String, dynamic> toJson() => _$AddressDataToJson(this);
 
+  /// Converte o DTO para o modelo de domínio [Address].
   Address toDomain() => Address(
     street: street,
     zipCode: zipCode,

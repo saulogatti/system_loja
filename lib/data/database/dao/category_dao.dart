@@ -6,10 +6,13 @@ import 'package:system_loja/data/database/table/categories_records.dart';
 
 part 'category_dao.g.dart';
 
-/// DAO para gerenciar operações CRUD de categorias no banco de dados.
+/// DAO Drift de categorias de produto no [AppDatabase].
 ///
-/// Implementa métodos para criar, ler, atualizar e deletar categorias,
-/// além de verificações de duplicidade de nomes.
+/// {@category persistencia}
+/// {@subCategory Cadastros}
+///
+/// CRUD de [ProductCategory] sobre [CategoriesRecords], com checagem de
+/// nome duplicado. Persistência principal é Drift.
 @DriftAccessor(tables: [CategoriesRecords])
 class CategoryDao extends DatabaseAccessor<AppDatabase> with _$CategoryDaoMixin {
   CategoryDao(super.db);

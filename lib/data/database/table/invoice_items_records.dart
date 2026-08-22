@@ -1,6 +1,10 @@
 import 'package:drift/drift.dart';
+import 'package:system_loja/data/database/app_database.dart';
 
-/// Tabela para armazenar itens de notas fiscais no Drift.
+/// Tabela Drift de itens de nota fiscal no [AppDatabase].
+///
+/// {@category persistencia}
+/// {@subCategory Vendas}
 class InvoiceItemsRecords extends Table {
   IntColumn get id => integer().autoIncrement()();
 

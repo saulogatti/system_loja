@@ -1,8 +1,11 @@
 import 'package:system_loja/core/models/default/default_object.dart';
 
-/// Produto (domínio). Serialização em `product_data.dart`.
+/// Item do catálogo da loja (domínio).
 ///
-/// Representa um item do catálogo da loja com preço, estoque e código único.
+/// {@category modelos}
+/// {@subCategory Cadastros}
+///
+/// Serialização em `lib/data/models/product_data.dart`.
 class Product extends DefaultObject {
 
   Product({

@@ -17,6 +17,8 @@ int _calculateCnpjDigit(String value, List<int> weights) {
 
 /// Extensões para manipulação segura de strings em nomes de arquivos.
 ///
+/// {@category utilitarios}
+///
 /// Fornece métodos para sanitizar, normalizar e validar strings
 /// que serão usadas como nomes de arquivos, garantindo compatibilidade
 /// entre diferentes sistemas operacionais.
@@ -223,6 +225,9 @@ extension FileNameStringExtensions on String {
   }
 }
 
+/// Extensões de validação de documentos, e-mail, telefone e senha.
+///
+/// {@category utilitarios}
 extension ValidateDataCustomer on String {
   static const int minPasswordLength = 8;
   static final RegExp _cnpjAllZerosRegExp = RegExp(r'^0+$');

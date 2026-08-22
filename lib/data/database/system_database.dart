@@ -16,12 +16,15 @@ import 'package:system_loja/data/entry/user_entry.dart';
 
 part 'system_database.g.dart';
 
-/// Banco de dados de sistema usando Drift.
+/// Banco SQLite de sistema, persistido com Drift.
 ///
-/// Gerencia tabelas de usuários ([UsersRecords]), logs ([LogsRecords]) e
-/// configurações do sistema ([SystemRecords]).
+/// {@category persistencia}
+/// {@subCategory Sistema}
 ///
-/// Aceita um [QueryExecutor] opcional para facilitar testes com banco em memória.
+/// Tabelas de usuários ([UsersRecords]), logs ([LogsRecords]) e
+/// configurações ([SystemRecords]). Aceita um [QueryExecutor] opcional
+/// para testes em memória. JSON fica restrito a DTO, import/export e
+/// cache de arquivo.
 ///
 /// Exemplo de uso em testes:
 /// ```dart
@@ -32,6 +35,7 @@ part 'system_database.g.dart';
   daos: [UsersDao, LogDao, SystemDao],
 )
 class SystemDatabase extends _$SystemDatabase {
+  /// Abre o banco de sistema ou usa [executor] (testes em memória).
   SystemDatabase({QueryExecutor? executor})
     : super(executor ?? _openConnection());
   static const _nameBd = 'system_database';

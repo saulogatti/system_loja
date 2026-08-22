@@ -6,9 +6,23 @@ import 'package:system_loja/data/database/dao/log_dao.dart';
 
 /// Repositório para gerenciamento de logs de auditoria usando Drift.
 ///
+/// {@category repositorios}
+/// {@subCategory Sistema}
+///
 /// Persiste e recupera registros [ActivityLog] via [LogDao]. Todos os erros
 /// são capturados internamente e devolvidos como [ResultStatus.error] com
 /// mensagem amigável.
+///
+/// Resolver com `appInjection.get<ILogRepository>()`.
+///
+/// ```dart
+/// final repository = appInjection.get<ILogRepository>();
+/// final resultado = await repository.fetchAllLogs();
+/// resultado.when(
+///   onSuccess: (logs) => print(logs.length),
+///   onError: (mensagem) => print(mensagem),
+/// );
+/// ```
 ///
 /// Veja também:
 /// - [ILogRepository] - contrato da interface
