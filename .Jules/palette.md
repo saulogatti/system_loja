@@ -238,3 +238,7 @@
 ## 19-08-2024 - [Text Capitalization for Measurement Units]
 **Learning:** Text fields intended for standard abbreviations (like measurement units: UN, KG, CX) often lack formatting enforcement, forcing users to manually capitalize their input or resulting in visually inconsistent data.
 **Action:** Always apply `textCapitalization: TextCapitalization.characters` to `TextField`s or `TextFormField`s that are meant for abbreviations or codes to improve data entry consistency and reduce user friction.
+
+## 26-10-2026 - [Trailing Chevron Affordance in Dialogs]
+**Learning:** Found that interactive `ListTile`s used for item selection within dialogs (like product selection for an invoice) lack visual interaction affordance if they only have a state icon (like a stock warning). Users might not immediately realize the row is tappable to make a selection.
+**Action:** Always append a trailing chevron (`Icon(Icons.chevron_right)`) alongside other state icons within a `Row(mainAxisSize: MainAxisSize.min)` on interactive `ListTile`s in selection dialogs to provide clear, consistent navigation/selection cues.
