@@ -52,7 +52,17 @@ class SelectProductDialog extends StatelessWidget {
                     subtitle: Text(
                       'R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}',
                     ),
-                    trailing: Icon(stockIcon, color: stockColor),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(stockIcon, color: stockColor),
+                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
                     onTap: () => context.router.maybePop(product),
                   ),
                 );
