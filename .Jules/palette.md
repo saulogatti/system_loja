@@ -242,3 +242,11 @@
 ## 26-10-2026 - [Trailing Chevron Affordance in Dialogs]
 **Learning:** Found that interactive `ListTile`s used for item selection within dialogs (like product selection for an invoice) lack visual interaction affordance if they only have a state icon (like a stock warning). Users might not immediately realize the row is tappable to make a selection.
 **Action:** Always append a trailing chevron (`Icon(Icons.chevron_right)`) alongside other state icons within a `Row(mainAxisSize: MainAxisSize.min)` on interactive `ListTile`s in selection dialogs to provide clear, consistent navigation/selection cues.
+
+## 24-08-2026 - [Consolidating Data Row Reading in Invoice Bottom Sheet]
+**Learning:** When displaying dynamic data lists (like invoice items) or simple key-value pairs in a BottomSheet, failing to wrap the structural  with merged Semantics causes screen readers to disjointedly announce the quantity, pause, announce the name, pause, and then the total, frustrating the user.
+**Action:** Use `Semantics(label: '$label: $value', excludeSemantics: true)` around the structural `Row` to consolidate the information into a single cohesive spoken announcement for screen readers. Apply this pattern to any repeating list of data rows or key-value summary rows.
+
+## 24-08-2026 - [Consolidating Data Row Reading in Invoice Bottom Sheet]
+**Learning:** When displaying dynamic data lists (like invoice items) or simple key-value pairs in a BottomSheet, failing to wrap the structural row with merged Semantics causes screen readers to disjointedly announce the quantity, pause, announce the name, pause, and then the total, frustrating the user.
+**Action:** Use Semantics(label: '$label: $value', excludeSemantics: true) around the structural row to consolidate the information into a single cohesive spoken announcement for screen readers. Apply this pattern to any repeating list of data rows or key-value summary rows.
