@@ -4998,19 +4998,15 @@ class $$ProductsRecordsTableTableManager
                     >
                   >(state) {
                     if (categoryId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.categoryId,
-                                referencedTable:
-                                    $$ProductsRecordsTableReferences
-                                        ._categoryIdTable(db),
-                                referencedColumn:
-                                    $$ProductsRecordsTableReferences
-                                        ._categoryIdTable(db)
-                                        .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.categoryId,
+                        referencedTable: $$ProductsRecordsTableReferences
+                            ._categoryIdTable(db),
+                        referencedColumn: $$ProductsRecordsTableReferences
+                            ._categoryIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;
