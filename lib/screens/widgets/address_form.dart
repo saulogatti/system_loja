@@ -97,6 +97,7 @@ class AddressForm extends StatelessWidget {
 
         decoration: const InputDecoration(
           labelText: 'Estado',
+          hintText: 'Ex: SP',
           border: OutlineInputBorder(),
           prefixIcon: Icon(Icons.map),
         ),

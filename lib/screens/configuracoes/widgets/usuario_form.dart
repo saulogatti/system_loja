@@ -163,6 +163,7 @@ class _UsuarioFormState extends State<UsuarioForm> {
           initialValue: widget.nivelPermissaoSelecionado,
           decoration: const InputDecoration(
             labelText: 'Nível de Permissão *',
+            hintText: 'Ex: Usuário Comum',
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.security),
           ),
