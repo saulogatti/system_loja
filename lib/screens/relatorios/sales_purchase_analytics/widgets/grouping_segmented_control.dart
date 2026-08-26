@@ -15,11 +15,13 @@ class GroupingSegmentedControl extends StatelessWidget {
         value: SalesPurchaseGrouping.byDate,
         label: Text('Por Data'),
         icon: Icon(Icons.calendar_today),
+        tooltip: 'Agrupar por data',
       ),
       ButtonSegment(
         value: SalesPurchaseGrouping.byProduct,
         label: Text('Por Produto'),
         icon: Icon(Icons.inventory_2),
+        tooltip: 'Agrupar por produto',
       ),
     ],
     selected: {current},

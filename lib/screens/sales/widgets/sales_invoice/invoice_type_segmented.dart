@@ -17,11 +17,13 @@ class InvoiceTypeSegmented extends StatelessWidget {
         value: InvoiceType.exit,
         label: Text('Saída (Venda)'),
         icon: Icon(Icons.arrow_upward),
+        tooltip: 'Registrar saída de mercadorias',
       ),
       ButtonSegment<InvoiceType>(
         value: InvoiceType.entry,
         label: Text('Entrada (Compra)'),
         icon: Icon(Icons.arrow_downward),
+        tooltip: 'Registrar entrada de mercadorias',
       ),
     ],
     selected: {invoiceType},
