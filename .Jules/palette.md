@@ -250,3 +250,10 @@
 ## 24-08-2026 - [Consolidating Data Row Reading in Invoice Bottom Sheet]
 **Learning:** When displaying dynamic data lists (like invoice items) or simple key-value pairs in a BottomSheet, failing to wrap the structural row with merged Semantics causes screen readers to disjointedly announce the quantity, pause, announce the name, pause, and then the total, frustrating the user.
 **Action:** Use Semantics(label: '$label: $value', excludeSemantics: true) around the structural row to consolidate the information into a single cohesive spoken announcement for screen readers. Apply this pattern to any repeating list of data rows or key-value summary rows.
+
+## 26-08-2026 - [SegmentedButton Tooltips]
+**Learning:** ButtonSegments within SegmentedButton widgets often rely solely on their label or icon to convey meaning, which can be insufficient for screen readers or when icons are ambiguous. Unlike IconButtons, ButtonSegments do not have a default tooltip behavior.
+**Action:** Always provide a descriptive `tooltip` property to `ButtonSegment` widgets to enhance accessibility context and provide helpful hover text for desktop/web users.
+## 25-10-2026 - [Form Input Guidance - HelperText vs HintText]
+**Learning:** Found that some form fields (like Price and Stock in ProductForm) used `helperText` to show input examples. This unnecessarily consumes vertical space below the field and clutters the UI before the user even interacts with it.
+**Action:** Consistently use `hintText` instead of `helperText` for input examples (like 'Ex: 10,50') across form fields to save vertical space and provide the example exactly where the user is typing.
