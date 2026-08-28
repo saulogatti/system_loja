@@ -89,6 +89,7 @@ class _ProductCategoryWidgetState extends State<ProductCategoryWidget> {
           hint: const Text('Selecione uma categoria'),
           decoration: InputDecoration(
             labelText: widget.required ? 'Categoria *' : 'Categoria',
+            hintText: 'Ex: Eletrônicos',
             border: const OutlineInputBorder(),
             prefixIcon: const Icon(Icons.category),
           ),
