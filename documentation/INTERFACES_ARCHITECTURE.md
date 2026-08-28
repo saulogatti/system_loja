@@ -32,6 +32,11 @@ Screen (BLoC/Cubit) -> Interface (`lib/core/interface/`) -> Repository (`lib/dom
 - `ISystemRepository`
 - `IAnalyticsRepository`
 
+Alem dos repositorios, `lib/core/interface/` tambem define contratos de servicos compartilhados:
+
+- `ISettingsService` - configuracoes de tema da aplicacao (cor primaria, modo claro/escuro).
+- `ISystemErrorManager` - consulta e limpeza de erros de sistema em cache.
+
 As interfaces permanecem em `lib/core/interface/` e suas implementacoes em `lib/domain/repository/`.
 
 ## Padroes de Retorno e Erro

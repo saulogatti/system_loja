@@ -8,7 +8,7 @@ O sistema fornece validadores reutilizáveis e formatadores de entrada para gara
 
 ## Componentes
 
-### 1. Validadores (`lib/core/utils/validators.dart`)
+### 1. Validadores (`lib/screens/utils/validators.dart`)
 
 Os validadores são funções que retornam `null` se o valor for válido, ou uma mensagem de erro caso contrário.
 
@@ -133,7 +133,7 @@ TextFormField(
 )
 ```
 
-### 2. Formatadores de Entrada (`lib/core/utils/input_formatters.dart`)
+### 2. Formatadores de Entrada (`lib/screens/utils/input_formatters.dart`)
 
 Os formatadores aplicam regras de formatação automaticamente enquanto o usuário digita, filtrando caracteres inválidos.
 
@@ -293,10 +293,10 @@ As seguintes telas já foram atualizadas para usar o novo sistema de validação
    - Campo de quantidade: `QuantityInputFormatter` + validação de estoque
    - Campos obrigatórios: `validateRequired`
 
-3. **Clientes** (`lib/screens/customer/customer_view.dart`)
+3. **Clientes** (`lib/screens/person_registration/customer_edit_view.dart`)
    - Campo de nome: validação combinada (required + minLength)
 
-4. **Usuários** (`lib/screens/usuario_screen.dart`)
+4. **Usuários** (`lib/screens/configuracoes/usuario_screen.dart`)
    - Campo de nome: validação combinada (required + minLength)
 
 ## Testes
