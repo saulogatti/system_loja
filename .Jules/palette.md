@@ -257,3 +257,7 @@
 ## 25-10-2026 - [Form Input Guidance - HelperText vs HintText]
 **Learning:** Found that some form fields (like Price and Stock in ProductForm) used `helperText` to show input examples. This unnecessarily consumes vertical space below the field and clutters the UI before the user even interacts with it.
 **Action:** Consistently use `hintText` instead of `helperText` for input examples (like 'Ex: 10,50') across form fields to save vertical space and provide the example exactly where the user is typing.
+
+## 28-10-2026 - [Screen Reader Consolidation in Custom Report Cards]
+**Learning:** Found that custom reporting cards containing visual hierarchies (e.g., `Icon`, `Text` for title, `Text` for value, `Text` for quantity inside a `Card` or `Row`) are announced by screen readers as completely separate items. For instance, reading "Entradas", pause, "R$ 1500.00", pause, "5 notas". This severely degrades accessibility.
+**Action:** Always wrap the root `Card` or container in custom reporting widgets (like `_ResumoCard` or `_SummaryLine`) with `Semantics(container: true, excludeSemantics: true, label: '$titulo: R\$ $valor. $quantidade notas')` to consolidate all visual data into one cohesive sentence for screen readers.
