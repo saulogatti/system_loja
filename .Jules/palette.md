@@ -261,3 +261,6 @@
 ## 28-10-2026 - [Screen Reader Consolidation in Custom Report Cards]
 **Learning:** Found that custom reporting cards containing visual hierarchies (e.g., `Icon`, `Text` for title, `Text` for value, `Text` for quantity inside a `Card` or `Row`) are announced by screen readers as completely separate items. For instance, reading "Entradas", pause, "R$ 1500.00", pause, "5 notas". This severely degrades accessibility.
 **Action:** Always wrap the root `Card` or container in custom reporting widgets (like `_ResumoCard` or `_SummaryLine`) with `Semantics(container: true, excludeSemantics: true, label: '$titulo: R\$ $valor. $quantidade notas')` to consolidate all visual data into one cohesive sentence for screen readers.
+## 04-09-2024 - [Form Input Guidance - HelperText vs HintText]
+**Learning:** Consolidating form guidance examples from `helperText` into `hintText` improves UX by keeping input examples exactly where the user will type and saves vertical space in forms.
+**Action:** Consistently use `hintText` for input examples across form fields, removing redundant `helperText` instances when they serve the exact same purpose.
