@@ -261,3 +261,7 @@
 ## 28-10-2026 - [Screen Reader Consolidation in Custom Report Cards]
 **Learning:** Found that custom reporting cards containing visual hierarchies (e.g., `Icon`, `Text` for title, `Text` for value, `Text` for quantity inside a `Card` or `Row`) are announced by screen readers as completely separate items. For instance, reading "Entradas", pause, "R$ 1500.00", pause, "5 notas". This severely degrades accessibility.
 **Action:** Always wrap the root `Card` or container in custom reporting widgets (like `_ResumoCard` or `_SummaryLine`) with `Semantics(container: true, excludeSemantics: true, label: '$titulo: R\$ $valor. $quantidade notas')` to consolidate all visual data into one cohesive sentence for screen readers.
+
+## 05-09-2026 - [Trailing Chevron Affordance in UsuarioListItem]
+**Learning:** Found that the interactive `ListTile` for user items (`UsuarioListItem`) lacked a trailing visual cue, making it unclear to users that the row could be tapped to reveal full user details via a dialog.
+**Action:** Consistently apply `trailing: const Icon(Icons.chevron_right)` to `ListTile`s designed for opening dialogs or navigating to provide immediate visual interaction affordance.
