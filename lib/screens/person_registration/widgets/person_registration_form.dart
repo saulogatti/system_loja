@@ -86,7 +86,12 @@ class PersonRegistrationForm extends StatelessWidget {
               },
             ],
             textInputAction: TextInputAction.next,
-            decoration: InputDecoration(labelText: '${selectedPersonType.nameLabel} *'),
+            decoration: InputDecoration(
+              labelText: '${selectedPersonType.nameLabel} *',
+              border: const OutlineInputBorder(),
+              hintText: isIndividual ? 'Ex: João da Silva' : 'Ex: Empresa Silva LTDA',
+              prefixIcon: Icon(isIndividual ? Icons.person : Icons.business),
+            ),
             validator: (value) => combineValidators([
               (v) => validateRequired(v, selectedPersonType.nameLabel),
               (v) => validateMinLength(v, 3, selectedPersonType.nameLabel),

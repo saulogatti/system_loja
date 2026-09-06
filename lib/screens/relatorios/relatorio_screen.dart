@@ -788,33 +788,39 @@ class _ResumoCard extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) => Card(
-    elevation: 3,
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: color, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                titulo,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'R\$ ${valor.toStringAsFixed(2)}',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            '$quantidade ${quantidade == 1 ? 'nota' : 'notas'}',
-            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
-          ),
-        ],
+  Widget build(BuildContext context) => Semantics(
+    container: true,
+    excludeSemantics: true,
+    label:
+        '$titulo: R\$ ${valor.toStringAsFixed(2)}. $quantidade ${quantidade == 1 ? 'nota' : 'notas'}',
+    child: Card(
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, color: color, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  titulo,
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: color),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'R\$ ${valor.toStringAsFixed(2)}',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '$quantidade ${quantidade == 1 ? 'nota' : 'notas'}',
+              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            ),
+          ],
+        ),
       ),
     ),
   );
@@ -844,24 +850,29 @@ class _ResumoEstoqueCard extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) => Card(
-    elevation: 3,
-    child: Padding(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: 24),
-          const SizedBox(height: 4),
-          Text(
-            '$valor',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color),
-          ),
-          Text(
-            label,
-            style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
-            textAlign: TextAlign.center,
-          ),
-        ],
+  Widget build(BuildContext context) => Semantics(
+    container: true,
+    excludeSemantics: true,
+    label: '$label: $valor',
+    child: Card(
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 24),
+            const SizedBox(height: 4),
+            Text(
+              '$valor',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color),
+            ),
+            Text(
+              label,
+              style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     ),
   );
@@ -1067,26 +1078,31 @@ class _SummaryLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fontWeight = isBold ? FontWeight.w700 : FontWeight.w500;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              label,
+    return Semantics(
+      container: true,
+      excludeSemantics: true,
+      label: '$label. $quantityText. $valueText',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(color: color, fontWeight: fontWeight),
+              ),
+            ),
+            Text(
+              quantityText,
               style: TextStyle(color: color, fontWeight: fontWeight),
             ),
-          ),
-          Text(
-            quantityText,
-            style: TextStyle(color: color, fontWeight: fontWeight),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            valueText,
-            style: TextStyle(color: color, fontWeight: fontWeight),
-          ),
-        ],
+            const SizedBox(width: 12),
+            Text(
+              valueText,
+              style: TextStyle(color: color, fontWeight: fontWeight),
+            ),
+          ],
+        ),
       ),
     );
   }

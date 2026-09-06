@@ -8,7 +8,6 @@ import 'package:system_loja/core/models/user.dart';
 ///
 /// Exibe as informações do usuário em formato de card com ações de editar e excluir.
 class UsuarioListItem extends StatelessWidget {
-
   const UsuarioListItem({
     required this.usuario,
     required this.onEdit,
@@ -75,6 +74,7 @@ class UsuarioListItem extends StatelessWidget {
               onPressed: onDelete,
               tooltip: 'Excluir ${usuario.name}',
             ),
+            const Icon(Icons.chevron_right),
           ],
         ),
         onTap: onTap,

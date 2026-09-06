@@ -181,10 +181,9 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                             initialValue: paymentMethod,
                             decoration: const InputDecoration(
                               labelText: 'Forma de Pagamento *',
-                              hintText: 'Ex: Cartão de Crédito',
+                              hintText: 'Ex: Dinheiro, Cartão, Pix',
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.payment),
-                              helperText: 'Ex: Dinheiro, Cartão, Pix',
                             ),
                             items: widget.paymentMethods
                                 .map(

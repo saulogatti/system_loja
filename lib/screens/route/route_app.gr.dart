@@ -9,6 +9,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:auto_route/auto_route.dart' as _i22;
 import 'package:collection/collection.dart' as _i27;
 import 'package:flutter/foundation.dart' as _i24;
