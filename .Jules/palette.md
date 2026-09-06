@@ -269,3 +269,6 @@
 ## 05-09-2026 - [Trailing Chevron Affordance in UsuarioListItem]
 **Learning:** Found that the interactive `ListTile` for user items (`UsuarioListItem`) lacked a trailing visual cue, making it unclear to users that the row could be tapped to reveal full user details via a dialog.
 **Action:** Consistently apply `trailing: const Icon(Icons.chevron_right)` to `ListTile`s designed for opening dialogs or navigating to provide immediate visual interaction affordance.
+## 06-09-2026 - Form Field Placeholders
+**Learning:** Missing placeholder (hint) text reduces form usability, especially when differentiating entity types (e.g., Person vs. Business names).
+**Action:** Always include a contextual `hintText` with concrete examples (e.g., 'Ex: João da Silva', 'Ex: Empresa Silva LTDA') in form field widgets alongside `labelText` to guide user input, consistently applying this across all form fields.
