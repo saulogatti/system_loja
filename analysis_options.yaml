@@ -42,14 +42,13 @@ analyzer:
     matching_super_parameters: ignore
     avoid_futureor_void: ignore
     specify_nonobvious_property_types: ignore
-    parameter_assignments: ignore
+    parameter_assignments: error
 
 linter:
   rules:
     - always_declare_return_types
     - always_put_control_body_on_new_line
     - always_put_required_named_parameters_first
-
     - always_use_package_imports
     - annotate_overrides
     - annotate_redeclares

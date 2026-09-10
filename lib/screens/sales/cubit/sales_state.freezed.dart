@@ -21,7 +21,7 @@ mixin _$SalesState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesState);
 }
 
 
@@ -30,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SalesState()';
+    return 'SalesState()';
 }
 
 
@@ -233,16 +233,18 @@ $SalesErrorCopyWith<SalesError> get copyWith => _$SalesErrorCopyWithImpl<SalesEr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesError&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesError&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'SalesState.error(message: $message)';
+    return 'SalesState.error(message: $message)';
 }
 
 
@@ -294,7 +296,7 @@ class SalesInitial implements SalesState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInitial);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInitial);
 }
 
 
@@ -303,7 +305,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SalesState.initial()';
+    return 'SalesState.initial()';
 }
 
 
@@ -337,16 +339,18 @@ $SalesLoadedCopyWith<SalesLoaded> get copyWith => _$SalesLoadedCopyWithImpl<Sale
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoaded&&const DeepCollectionEquality().equals(other._items, _items));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoaded&&const DeepCollectionEquality().equals(other.items, _items));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_items));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_items));
+}
 
 @override
 String toString() {
-  return 'SalesState.loaded(items: $items)';
+    return 'SalesState.loaded(items: $items)';
 }
 
 
@@ -437,16 +441,18 @@ $SalesLoadedAllCopyWith<SalesLoadedAll> get copyWith => _$SalesLoadedAllCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoadedAll&&const DeepCollectionEquality().equals(other._products, _products)&&const DeepCollectionEquality().equals(other._paymentMethods, _paymentMethods)&&const DeepCollectionEquality().equals(other._customers, _customers)&&const DeepCollectionEquality().equals(other._companies, _companies)&&const DeepCollectionEquality().equals(other._invoices, _invoices));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoadedAll&&const DeepCollectionEquality().equals(other.products, _products)&&const DeepCollectionEquality().equals(other.paymentMethods, _paymentMethods)&&const DeepCollectionEquality().equals(other.customers, _customers)&&const DeepCollectionEquality().equals(other.companies, _companies)&&const DeepCollectionEquality().equals(other.invoices, _invoices));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_products),const DeepCollectionEquality().hash(_paymentMethods),const DeepCollectionEquality().hash(_customers),const DeepCollectionEquality().hash(_companies),const DeepCollectionEquality().hash(_invoices));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_products),const DeepCollectionEquality().hash(_paymentMethods),const DeepCollectionEquality().hash(_customers),const DeepCollectionEquality().hash(_companies),const DeepCollectionEquality().hash(_invoices));
+}
 
 @override
 String toString() {
-  return 'SalesState.loadedAll(products: $products, paymentMethods: $paymentMethods, customers: $customers, companies: $companies, invoices: $invoices)';
+    return 'SalesState.loadedAll(products: $products, paymentMethods: $paymentMethods, customers: $customers, companies: $companies, invoices: $invoices)';
 }
 
 
@@ -513,16 +519,18 @@ $SalesLoadedCustomersCopyWith<SalesLoadedCustomers> get copyWith => _$SalesLoade
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoadedCustomers&&const DeepCollectionEquality().equals(other._customers, _customers));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoadedCustomers&&const DeepCollectionEquality().equals(other.customers, _customers));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_customers));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_customers));
+}
 
 @override
 String toString() {
-  return 'SalesState.loadedCustomers(customers: $customers)';
+    return 'SalesState.loadedCustomers(customers: $customers)';
 }
 
 
@@ -574,7 +582,7 @@ class SalesLoading implements SalesState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoading);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoading);
 }
 
 
@@ -583,7 +591,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SalesState.loading()';
+    return 'SalesState.loading()';
 }
 
 
@@ -606,7 +614,7 @@ class SalesLoadingProducts implements SalesState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoadingProducts);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoadingProducts);
 }
 
 
@@ -615,7 +623,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SalesState.loadingProducts()';
+    return 'SalesState.loadingProducts()';
 }
 
 
@@ -643,16 +651,18 @@ $SalesLoadProductsFailureCopyWith<SalesLoadProductsFailure> get copyWith => _$Sa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoadProductsFailure&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesLoadProductsFailure&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'SalesState.loadProductsFailure(message: $message)';
+    return 'SalesState.loadProductsFailure(message: $message)';
 }
 
 
@@ -715,16 +725,18 @@ $SalesSavedCopyWith<SalesSaved> get copyWith => _$SalesSavedCopyWithImpl<SalesSa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesSaved&&const DeepCollectionEquality().equals(other._items, _items));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesSaved&&const DeepCollectionEquality().equals(other.items, _items));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_items));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_items));
+}
 
 @override
 String toString() {
-  return 'SalesState.saved(items: $items)';
+    return 'SalesState.saved(items: $items)';
 }
 
 

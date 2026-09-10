@@ -21,7 +21,7 @@ mixin _$PersonState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonState);
 }
 
 
@@ -30,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'PersonState()';
+    return 'PersonState()';
 }
 
 
@@ -198,7 +198,7 @@ class PersonInitial implements PersonState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonInitial);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonInitial);
 }
 
 
@@ -207,7 +207,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'PersonState.initial()';
+    return 'PersonState.initial()';
 }
 
 
@@ -230,7 +230,7 @@ class PersonLoading implements PersonState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonLoading);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonLoading);
 }
 
 
@@ -239,7 +239,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'PersonState.loading()';
+    return 'PersonState.loading()';
 }
 
 
@@ -262,7 +262,7 @@ class PersonSuccess implements PersonState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonSuccess);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonSuccess);
 }
 
 
@@ -271,7 +271,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'PersonState.success()';
+    return 'PersonState.success()';
 }
 
 
@@ -299,16 +299,18 @@ $PersonFailureCopyWith<PersonFailure> get copyWith => _$PersonFailureCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonFailure&&(identical(other.error, error) || other.error == error));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonFailure&&(identical(other.error, error) || other.error == error));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,error);
+int get hashCode {
+    return Object.hash(runtimeType,error);
+}
 
 @override
 String toString() {
-  return 'PersonState.failure(error: $error)';
+    return 'PersonState.failure(error: $error)';
 }
 
 

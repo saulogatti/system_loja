@@ -21,7 +21,7 @@ mixin _$RelatorioState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioState);
 }
 
 
@@ -30,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'RelatorioState()';
+    return 'RelatorioState()';
 }
 
 
@@ -203,16 +203,18 @@ $RelatorioErrorCopyWith<RelatorioError> get copyWith => _$RelatorioErrorCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioError&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioError&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'RelatorioState.error(message: $message)';
+    return 'RelatorioState.error(message: $message)';
 }
 
 
@@ -264,7 +266,7 @@ class RelatorioInitial implements RelatorioState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioInitial);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioInitial);
 }
 
 
@@ -273,7 +275,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'RelatorioState.initial()';
+    return 'RelatorioState.initial()';
 }
 
 
@@ -331,16 +333,18 @@ $RelatorioLoadedCopyWith<RelatorioLoaded> get copyWith => _$RelatorioLoadedCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioLoaded&&const DeepCollectionEquality().equals(other._categoryNamesById, _categoryNamesById)&&const DeepCollectionEquality().equals(other._entryInvoices, _entryInvoices)&&const DeepCollectionEquality().equals(other._exitInvoices, _exitInvoices)&&const DeepCollectionEquality().equals(other._products, _products)&&(identical(other.estoqueOverview, estoqueOverview) || other.estoqueOverview == estoqueOverview)&&(identical(other.notasOverview, notasOverview) || other.notasOverview == notasOverview)&&(identical(other.selectedProductDetails, selectedProductDetails) || other.selectedProductDetails == selectedProductDetails));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioLoaded&&const DeepCollectionEquality().equals(other.categoryNamesById, _categoryNamesById)&&const DeepCollectionEquality().equals(other.entryInvoices, _entryInvoices)&&const DeepCollectionEquality().equals(other.exitInvoices, _exitInvoices)&&const DeepCollectionEquality().equals(other.products, _products)&&(identical(other.estoqueOverview, estoqueOverview) || other.estoqueOverview == estoqueOverview)&&(identical(other.notasOverview, notasOverview) || other.notasOverview == notasOverview)&&(identical(other.selectedProductDetails, selectedProductDetails) || other.selectedProductDetails == selectedProductDetails));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categoryNamesById),const DeepCollectionEquality().hash(_entryInvoices),const DeepCollectionEquality().hash(_exitInvoices),const DeepCollectionEquality().hash(_products),estoqueOverview,notasOverview,selectedProductDetails);
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_categoryNamesById),const DeepCollectionEquality().hash(_entryInvoices),const DeepCollectionEquality().hash(_exitInvoices),const DeepCollectionEquality().hash(_products),estoqueOverview,notasOverview,selectedProductDetails);
+}
 
 @override
 String toString() {
-  return 'RelatorioState.loaded(categoryNamesById: $categoryNamesById, entryInvoices: $entryInvoices, exitInvoices: $exitInvoices, products: $products, estoqueOverview: $estoqueOverview, notasOverview: $notasOverview, selectedProductDetails: $selectedProductDetails)';
+    return 'RelatorioState.loaded(categoryNamesById: $categoryNamesById, entryInvoices: $entryInvoices, exitInvoices: $exitInvoices, products: $products, estoqueOverview: $estoqueOverview, notasOverview: $notasOverview, selectedProductDetails: $selectedProductDetails)';
 }
 
 
@@ -398,7 +402,7 @@ class RelatorioLoading implements RelatorioState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioLoading);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is RelatorioLoading);
 }
 
 
@@ -407,7 +411,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'RelatorioState.loading()';
+    return 'RelatorioState.loading()';
 }
 
 

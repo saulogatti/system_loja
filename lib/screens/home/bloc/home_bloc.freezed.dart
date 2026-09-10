@@ -21,7 +21,7 @@ mixin _$HomeEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeEvent);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeEvent);
 }
 
 
@@ -30,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'HomeEvent()';
+    return 'HomeEvent()';
 }
 
 
@@ -186,7 +186,7 @@ class LoadSystemUserData implements HomeEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadSystemUserData);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadSystemUserData);
 }
 
 
@@ -195,7 +195,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'HomeEvent.loadSystemUserData()';
+    return 'HomeEvent.loadSystemUserData()';
 }
 
 
@@ -223,16 +223,18 @@ $SaveSystemUserDataCopyWith<SaveSystemUserData> get copyWith => _$SaveSystemUser
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SaveSystemUserData&&(identical(other.systemUserData, systemUserData) || other.systemUserData == systemUserData));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SaveSystemUserData&&(identical(other.systemUserData, systemUserData) || other.systemUserData == systemUserData));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,systemUserData);
+int get hashCode {
+    return Object.hash(runtimeType,systemUserData);
+}
 
 @override
 String toString() {
-  return 'HomeEvent.saveSystemUserData(systemUserData: $systemUserData)';
+    return 'HomeEvent.saveSystemUserData(systemUserData: $systemUserData)';
 }
 
 
@@ -279,7 +281,7 @@ mixin _$HomeState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState);
 }
 
 
@@ -288,7 +290,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'HomeState()';
+    return 'HomeState()';
 }
 
 
@@ -467,16 +469,18 @@ $HomeErrorCopyWith<HomeError> get copyWith => _$HomeErrorCopyWithImpl<HomeError>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeError&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeError&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'HomeState.error(message: $message)';
+    return 'HomeState.error(message: $message)';
 }
 
 
@@ -528,7 +532,7 @@ class HomeInitial implements HomeState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeInitial);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeInitial);
 }
 
 
@@ -537,7 +541,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'HomeState.initial()';
+    return 'HomeState.initial()';
 }
 
 
@@ -565,16 +569,18 @@ $HomeLoadedCopyWith<HomeLoaded> get copyWith => _$HomeLoadedCopyWithImpl<HomeLoa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeLoaded&&(identical(other.systemUserData, systemUserData) || other.systemUserData == systemUserData));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeLoaded&&(identical(other.systemUserData, systemUserData) || other.systemUserData == systemUserData));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,systemUserData);
+int get hashCode {
+    return Object.hash(runtimeType,systemUserData);
+}
 
 @override
 String toString() {
-  return 'HomeState.loaded(systemUserData: $systemUserData)';
+    return 'HomeState.loaded(systemUserData: $systemUserData)';
 }
 
 
@@ -626,7 +632,7 @@ class HomeLoading implements HomeState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeLoading);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeLoading);
 }
 
 
@@ -635,7 +641,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'HomeState.loading()';
+    return 'HomeState.loading()';
 }
 
 
@@ -663,16 +669,18 @@ $HomeSavedCopyWith<HomeSaved> get copyWith => _$HomeSavedCopyWithImpl<HomeSaved>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeSaved&&(identical(other.systemUserData, systemUserData) || other.systemUserData == systemUserData));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeSaved&&(identical(other.systemUserData, systemUserData) || other.systemUserData == systemUserData));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,systemUserData);
+int get hashCode {
+    return Object.hash(runtimeType,systemUserData);
+}
 
 @override
 String toString() {
-  return 'HomeState.saved(systemUserData: $systemUserData)';
+    return 'HomeState.saved(systemUserData: $systemUserData)';
 }
 
 

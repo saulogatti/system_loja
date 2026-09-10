@@ -21,7 +21,7 @@ mixin _$ProductState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductState);
 }
 
 
@@ -30,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ProductState()';
+    return 'ProductState()';
 }
 
 
@@ -221,16 +221,18 @@ $ProductStateDeleteSuccessCopyWith<ProductStateDeleteSuccess> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateDeleteSuccess&&const DeepCollectionEquality().equals(other._produtos, _produtos));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateDeleteSuccess&&const DeepCollectionEquality().equals(other.produtos, _produtos));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_produtos));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_produtos));
+}
 
 @override
 String toString() {
-  return 'ProductState.deleteSuccess(produtos: $produtos)';
+    return 'ProductState.deleteSuccess(produtos: $produtos)';
 }
 
 
@@ -287,16 +289,18 @@ $ProductStateErrorCopyWith<ProductStateError> get copyWith => _$ProductStateErro
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateError&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateError&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'ProductState.error(message: $message)';
+    return 'ProductState.error(message: $message)';
 }
 
 
@@ -359,16 +363,18 @@ $ProductStateInsertSuccessCopyWith<ProductStateInsertSuccess> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateInsertSuccess&&const DeepCollectionEquality().equals(other._produtos, _produtos));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateInsertSuccess&&const DeepCollectionEquality().equals(other.produtos, _produtos));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_produtos));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_produtos));
+}
 
 @override
 String toString() {
-  return 'ProductState.insertSuccess(produtos: $produtos)';
+    return 'ProductState.insertSuccess(produtos: $produtos)';
 }
 
 
@@ -420,7 +426,7 @@ class ProductStateLoading implements ProductState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateLoading);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateLoading);
 }
 
 
@@ -429,7 +435,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ProductState.loading()';
+    return 'ProductState.loading()';
 }
 
 
@@ -463,16 +469,18 @@ $ProductStateLoadedCopyWith<ProductStateLoaded> get copyWith => _$ProductStateLo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateLoaded&&const DeepCollectionEquality().equals(other._produtos, _produtos));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateLoaded&&const DeepCollectionEquality().equals(other.produtos, _produtos));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_produtos));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_produtos));
+}
 
 @override
 String toString() {
-  return 'ProductState.loaded(produtos: $produtos)';
+    return 'ProductState.loaded(produtos: $produtos)';
 }
 
 
@@ -535,16 +543,18 @@ $ProductStateUpdateSuccessCopyWith<ProductStateUpdateSuccess> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateUpdateSuccess&&const DeepCollectionEquality().equals(other._produtos, _produtos));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductStateUpdateSuccess&&const DeepCollectionEquality().equals(other.produtos, _produtos));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_produtos));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_produtos));
+}
 
 @override
 String toString() {
-  return 'ProductState.updateSuccess(produtos: $produtos)';
+    return 'ProductState.updateSuccess(produtos: $produtos)';
 }
 
 

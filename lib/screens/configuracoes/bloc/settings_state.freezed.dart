@@ -21,7 +21,7 @@ mixin _$SettingsState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsState);
 }
 
 
@@ -30,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SettingsState()';
+    return 'SettingsState()';
 }
 
 
@@ -203,16 +203,18 @@ $SettingsErrorCopyWith<SettingsError> get copyWith => _$SettingsErrorCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsError&&(identical(other.mensagem, mensagem) || other.mensagem == mensagem));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsError&&(identical(other.mensagem, mensagem) || other.mensagem == mensagem));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,mensagem);
+int get hashCode {
+    return Object.hash(runtimeType,mensagem);
+}
 
 @override
 String toString() {
-  return 'SettingsState.error(mensagem: $mensagem)';
+    return 'SettingsState.error(mensagem: $mensagem)';
 }
 
 
@@ -264,7 +266,7 @@ class SettingsInitialState implements SettingsState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsInitialState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsInitialState);
 }
 
 
@@ -273,7 +275,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SettingsState.initial()';
+    return 'SettingsState.initial()';
 }
 
 
@@ -302,16 +304,18 @@ $SettingsLoadedStateCopyWith<SettingsLoadedState> get copyWith => _$SettingsLoad
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsLoadedState&&(identical(other.appSettings, appSettings) || other.appSettings == appSettings)&&(identical(other.status, status) || other.status == status));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsLoadedState&&(identical(other.appSettings, appSettings) || other.appSettings == appSettings)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,appSettings,status);
+int get hashCode {
+    return Object.hash(runtimeType,appSettings,status);
+}
 
 @override
 String toString() {
-  return 'SettingsState.loaded(appSettings: $appSettings, status: $status)';
+    return 'SettingsState.loaded(appSettings: $appSettings, status: $status)';
 }
 
 
@@ -364,7 +368,7 @@ class SettingsLoadingState implements SettingsState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsLoadingState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SettingsLoadingState);
 }
 
 
@@ -373,7 +377,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SettingsState.loading()';
+    return 'SettingsState.loading()';
 }
 
 

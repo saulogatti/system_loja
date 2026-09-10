@@ -26,16 +26,21 @@ $SalesInvoiceFormDataCopyWith<SalesInvoiceFormData> get copyWith => _$SalesInvoi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInvoiceFormData&&(identical(other.invoiceType, invoiceType) || other.invoiceType == invoiceType)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.person, person) || other.person == person)&&const DeepCollectionEquality().equals(other.linesByProductId, linesByProductId)&&const DeepCollectionEquality().equals(other.orderedProductIds, orderedProductIds)&&(identical(other.enableCodeGeneration, enableCodeGeneration) || other.enableCodeGeneration == enableCodeGeneration)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting));
+  final _this = this as SalesInvoiceFormData;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInvoiceFormData&&(identical(other.invoiceType, _this.invoiceType) || other.invoiceType == _this.invoiceType)&&(identical(other.paymentMethod, _this.paymentMethod) || other.paymentMethod == _this.paymentMethod)&&(identical(other.person, _this.person) || other.person == _this.person)&&const DeepCollectionEquality().equals(other.linesByProductId, _this.linesByProductId)&&const DeepCollectionEquality().equals(other.orderedProductIds, _this.orderedProductIds)&&(identical(other.enableCodeGeneration, _this.enableCodeGeneration) || other.enableCodeGeneration == _this.enableCodeGeneration)&&(identical(other.invoiceNumber, _this.invoiceNumber) || other.invoiceNumber == _this.invoiceNumber)&&(identical(other.isSubmitting, _this.isSubmitting) || other.isSubmitting == _this.isSubmitting));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,invoiceType,paymentMethod,person,const DeepCollectionEquality().hash(linesByProductId),const DeepCollectionEquality().hash(orderedProductIds),enableCodeGeneration,invoiceNumber,isSubmitting);
+int get hashCode {
+  final _this = this as SalesInvoiceFormData;
+  return Object.hash(runtimeType,_this.invoiceType,_this.paymentMethod,_this.person,const DeepCollectionEquality().hash(_this.linesByProductId),const DeepCollectionEquality().hash(_this.orderedProductIds),_this.enableCodeGeneration,_this.invoiceNumber,_this.isSubmitting);
+}
 
 @override
 String toString() {
-  return 'SalesInvoiceFormData(invoiceType: $invoiceType, paymentMethod: $paymentMethod, person: $person, linesByProductId: $linesByProductId, orderedProductIds: $orderedProductIds, enableCodeGeneration: $enableCodeGeneration, invoiceNumber: $invoiceNumber, isSubmitting: $isSubmitting)';
+  final _this = this as SalesInvoiceFormData;
+  return 'SalesInvoiceFormData(invoiceType: ${_this.invoiceType}, paymentMethod: ${_this.paymentMethod}, person: ${_this.person}, linesByProductId: ${_this.linesByProductId}, orderedProductIds: ${_this.orderedProductIds}, enableCodeGeneration: ${_this.enableCodeGeneration}, invoiceNumber: ${_this.invoiceNumber}, isSubmitting: ${_this.isSubmitting})';
 }
 
 
@@ -248,16 +253,18 @@ _$SalesInvoiceFormDataCopyWith<_SalesInvoiceFormData> get copyWith => __$SalesIn
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SalesInvoiceFormData&&(identical(other.invoiceType, invoiceType) || other.invoiceType == invoiceType)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.person, person) || other.person == person)&&const DeepCollectionEquality().equals(other._linesByProductId, _linesByProductId)&&const DeepCollectionEquality().equals(other._orderedProductIds, _orderedProductIds)&&(identical(other.enableCodeGeneration, enableCodeGeneration) || other.enableCodeGeneration == enableCodeGeneration)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SalesInvoiceFormData&&(identical(other.invoiceType, invoiceType) || other.invoiceType == invoiceType)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.person, person) || other.person == person)&&const DeepCollectionEquality().equals(other.linesByProductId, _linesByProductId)&&const DeepCollectionEquality().equals(other.orderedProductIds, _orderedProductIds)&&(identical(other.enableCodeGeneration, enableCodeGeneration) || other.enableCodeGeneration == enableCodeGeneration)&&(identical(other.invoiceNumber, invoiceNumber) || other.invoiceNumber == invoiceNumber)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,invoiceType,paymentMethod,person,const DeepCollectionEquality().hash(_linesByProductId),const DeepCollectionEquality().hash(_orderedProductIds),enableCodeGeneration,invoiceNumber,isSubmitting);
+int get hashCode {
+    return Object.hash(runtimeType,invoiceType,paymentMethod,person,const DeepCollectionEquality().hash(_linesByProductId),const DeepCollectionEquality().hash(_orderedProductIds),enableCodeGeneration,invoiceNumber,isSubmitting);
+}
 
 @override
 String toString() {
-  return 'SalesInvoiceFormData(invoiceType: $invoiceType, paymentMethod: $paymentMethod, person: $person, linesByProductId: $linesByProductId, orderedProductIds: $orderedProductIds, enableCodeGeneration: $enableCodeGeneration, invoiceNumber: $invoiceNumber, isSubmitting: $isSubmitting)';
+    return 'SalesInvoiceFormData(invoiceType: $invoiceType, paymentMethod: $paymentMethod, person: $person, linesByProductId: $linesByProductId, orderedProductIds: $orderedProductIds, enableCodeGeneration: $enableCodeGeneration, invoiceNumber: $invoiceNumber, isSubmitting: $isSubmitting)';
 }
 
 
@@ -316,16 +323,21 @@ $SalesInvoiceStateCopyWith<SalesInvoiceState> get copyWith => _$SalesInvoiceStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInvoiceState&&(identical(other.form, form) || other.form == form));
+  final _this = this as SalesInvoiceState;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInvoiceState&&(identical(other.form, _this.form) || other.form == _this.form));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,form);
+int get hashCode {
+  final _this = this as SalesInvoiceState;
+  return Object.hash(runtimeType,_this.form);
+}
 
 @override
 String toString() {
-  return 'SalesInvoiceState(form: $form)';
+  final _this = this as SalesInvoiceState;
+  return 'SalesInvoiceState(form: ${_this.form})';
 }
 
 
@@ -521,16 +533,18 @@ $SalesInvoiceEditingCopyWith<SalesInvoiceEditing> get copyWith => _$SalesInvoice
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInvoiceEditing&&(identical(other.form, form) || other.form == form));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInvoiceEditing&&(identical(other.form, form) || other.form == form));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,form);
+int get hashCode {
+    return Object.hash(runtimeType,form);
+}
 
 @override
 String toString() {
-  return 'SalesInvoiceState.editing(form: $form)';
+    return 'SalesInvoiceState.editing(form: $form)';
 }
 
 
@@ -597,16 +611,18 @@ $SalesInvoiceFeedbackCopyWith<SalesInvoiceFeedback> get copyWith => _$SalesInvoi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInvoiceFeedback&&(identical(other.form, form) || other.form == form)&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SalesInvoiceFeedback&&(identical(other.form, form) || other.form == form)&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,form,message);
+int get hashCode {
+    return Object.hash(runtimeType,form,message);
+}
 
 @override
 String toString() {
-  return 'SalesInvoiceState.feedback(form: $form, message: $message)';
+    return 'SalesInvoiceState.feedback(form: $form, message: $message)';
 }
 
 

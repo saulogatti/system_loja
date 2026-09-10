@@ -21,7 +21,7 @@ mixin _$UsuarioState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioState);
 }
 
 
@@ -30,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'UsuarioState()';
+    return 'UsuarioState()';
 }
 
 
@@ -216,7 +216,7 @@ class UsuarioStateInitial implements UsuarioState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateInitial);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateInitial);
 }
 
 
@@ -225,7 +225,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'UsuarioState.initial()';
+    return 'UsuarioState.initial()';
 }
 
 
@@ -253,16 +253,18 @@ $UsuarioStateLoadFailureCopyWith<UsuarioStateLoadFailure> get copyWith => _$Usua
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateLoadFailure&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateLoadFailure&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,errorMessage);
+int get hashCode {
+    return Object.hash(runtimeType,errorMessage);
+}
 
 @override
 String toString() {
-  return 'UsuarioState.loadFailure(errorMessage: $errorMessage)';
+    return 'UsuarioState.loadFailure(errorMessage: $errorMessage)';
 }
 
 
@@ -314,7 +316,7 @@ class UsuarioStateLoading implements UsuarioState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateLoading);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateLoading);
 }
 
 
@@ -323,7 +325,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'UsuarioState.loading()';
+    return 'UsuarioState.loading()';
 }
 
 
@@ -357,16 +359,18 @@ $UsuarioStateLoadSuccessCopyWith<UsuarioStateLoadSuccess> get copyWith => _$Usua
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateLoadSuccess&&const DeepCollectionEquality().equals(other._usuarios, _usuarios));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateLoadSuccess&&const DeepCollectionEquality().equals(other.usuarios, _usuarios));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_usuarios));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_usuarios));
+}
 
 @override
 String toString() {
-  return 'UsuarioState.loadSuccess(usuarios: $usuarios)';
+    return 'UsuarioState.loadSuccess(usuarios: $usuarios)';
 }
 
 
@@ -423,16 +427,18 @@ $UsuarioStateSenhaInvalidaCopyWith<UsuarioStateSenhaInvalida> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateSenhaInvalida&&(identical(other.mensagem, mensagem) || other.mensagem == mensagem));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateSenhaInvalida&&(identical(other.mensagem, mensagem) || other.mensagem == mensagem));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,mensagem);
+int get hashCode {
+    return Object.hash(runtimeType,mensagem);
+}
 
 @override
 String toString() {
-  return 'UsuarioState.senhaInvalida(mensagem: $mensagem)';
+    return 'UsuarioState.senhaInvalida(mensagem: $mensagem)';
 }
 
 
@@ -490,16 +496,18 @@ $UsuarioStateUsuarioAdicionadoCopyWith<UsuarioStateUsuarioAdicionado> get copyWi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateUsuarioAdicionado&&(identical(other.usuario, usuario) || other.usuario == usuario)&&(identical(other.novoUsuario, novoUsuario) || other.novoUsuario == novoUsuario));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateUsuarioAdicionado&&(identical(other.usuario, usuario) || other.usuario == usuario)&&(identical(other.novoUsuario, novoUsuario) || other.novoUsuario == novoUsuario));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,usuario,novoUsuario);
+int get hashCode {
+    return Object.hash(runtimeType,usuario,novoUsuario);
+}
 
 @override
 String toString() {
-  return 'UsuarioState.usuarioAdicionado(usuario: $usuario, novoUsuario: $novoUsuario)';
+    return 'UsuarioState.usuarioAdicionado(usuario: $usuario, novoUsuario: $novoUsuario)';
 }
 
 
@@ -557,16 +565,18 @@ $UsuarioStateUsuarioRemovidoCopyWith<UsuarioStateUsuarioRemovido> get copyWith =
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateUsuarioRemovido&&(identical(other.id, id) || other.id == id));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is UsuarioStateUsuarioRemovido&&(identical(other.id, id) || other.id == id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id);
+int get hashCode {
+    return Object.hash(runtimeType,id);
+}
 
 @override
 String toString() {
-  return 'UsuarioState.usuarioRemovido(id: $id)';
+    return 'UsuarioState.usuarioRemovido(id: $id)';
 }
 
 

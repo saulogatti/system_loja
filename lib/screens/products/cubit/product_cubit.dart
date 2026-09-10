@@ -11,7 +11,6 @@ import 'package:system_loja/screens/products/cubit/product_state.dart';
 /// a [IProductRepository]. Emite estados que refletem o resultado de cada
 /// operação para a UI.
 class ProductCubit extends Cubit<ProductState> {
-
   /// Inicializa o Cubit com estado de carregamento.
   ///
   /// Cria uma nova instância do repositório e carrega todos os produtos
@@ -19,6 +18,7 @@ class ProductCubit extends Cubit<ProductState> {
   ProductCubit(this._productRepository) : super(ProductState.loading()) {
     loadAllProducts();
   }
+
   /// Repositório utilizado para acessar dados de produtos.
   final IProductRepository _productRepository;
 
@@ -43,12 +43,14 @@ class ProductCubit extends Cubit<ProductState> {
     required bool codeGenerate,
     int? categoryId,
   }) async {
+    var newCode = codigo;
     if (codeGenerate) {
-      codigo = await _productRepository.generateProductCode();
+      assert(newCode.isNotEmpty, 'Para gerar codigo o atual precisa ser vazio');
+      newCode = await _productRepository.generateProductCode();
     }
     final produto = Product(
       name: nome,
-      code: codigo,
+      code: newCode,
       price: preco,
       stockQuantity: estoque,
       description: descricao,
@@ -59,11 +61,7 @@ class ProductCubit extends Cubit<ProductState> {
     switch (resultSave) {
       case ResultSuccess(result: final saved):
         if (!saved) {
-          emit(
-            ProductState.error(
-              message: 'Erro ao adicionar produto: operação falhou',
-            ),
-          );
+          emit(ProductState.error(message: 'Erro ao adicionar produto: operação falhou'));
           return;
         }
         final result = await _productRepository.fetchProducts();
@@ -71,18 +69,10 @@ class ProductCubit extends Cubit<ProductState> {
           case ResultSuccess(result: final produtos):
             emit(ProductState.insertSuccess(produtos: produtos.toList()));
           case ResultError(resultError: final errorMessage):
-            emit(
-              ProductState.error(
-                message: 'Erro ao adicionar produto: $errorMessage',
-              ),
-            );
+            emit(ProductState.error(message: 'Erro ao adicionar produto: $errorMessage'));
         }
       case ResultError(resultError: final errorMessage):
-        emit(
-          ProductState.error(
-            message: 'Erro ao adicionar produto: $errorMessage',
-          ),
-        );
+        emit(ProductState.error(message: 'Erro ao adicionar produto: $errorMessage'));
     }
   }
 
@@ -103,16 +93,11 @@ class ProductCubit extends Cubit<ProductState> {
             emit(ProductState.deleteSuccess(produtos: produtos.toList()));
           case ResultError(resultError: final errorMessage):
             emit(
-              ProductState.error(
-                message:
-                    'Erro ao carregar produtos após exclusão: $errorMessage',
-              ),
+              ProductState.error(message: 'Erro ao carregar produtos após exclusão: $errorMessage'),
             );
         }
       case ResultError(resultError: final errorMessage):
-        emit(
-          ProductState.error(message: 'Erro ao deletar produto: $errorMessage'),
-        );
+        emit(ProductState.error(message: 'Erro ao deletar produto: $errorMessage'));
     }
   }
 
@@ -127,16 +112,10 @@ class ProductCubit extends Cubit<ProductState> {
     final result = await _productRepository.findByCode(codigo);
     switch (result) {
       case ResultSuccess(result: final produto):
-        emit(
-          ProductState.error(
-            message: 'Funcionalidade não implementada: ${produto.name}',
-          ),
-        );
+        emit(ProductState.error(message: 'Funcionalidade não implementada: ${produto.name}'));
 
       case ResultError(resultError: final errorMessage):
-        emit(
-          ProductState.error(message: 'Erro ao buscar produto: $errorMessage'),
-        );
+        emit(ProductState.error(message: 'Erro ao buscar produto: $errorMessage'));
     }
   }
 
@@ -146,11 +125,7 @@ class ProductCubit extends Cubit<ProductState> {
       case ResultSuccess(result: final produtos):
         emit(ProductState.loaded(produtos: produtos.toList()));
       case ResultError(resultError: final errorMessage):
-        emit(
-          ProductState.error(
-            message: 'Erro ao carregar produtos: $errorMessage',
-          ),
-        );
+        emit(ProductState.error(message: 'Erro ao carregar produtos: $errorMessage'));
     }
   }
 
@@ -173,17 +148,12 @@ class ProductCubit extends Cubit<ProductState> {
           case ResultError(resultError: final errorMessage):
             emit(
               ProductState.error(
-                message:
-                    'Erro ao carregar produtos após atualização: $errorMessage',
+                message: 'Erro ao carregar produtos após atualização: $errorMessage',
               ),
             );
         }
       case ResultError(resultError: final errorMessage):
-        emit(
-          ProductState.error(
-            message: 'Erro ao atualizar produto: $errorMessage',
-          ),
-        );
+        emit(ProductState.error(message: 'Erro ao atualizar produto: $errorMessage'));
     }
   }
 }

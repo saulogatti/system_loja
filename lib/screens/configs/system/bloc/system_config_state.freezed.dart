@@ -21,7 +21,7 @@ mixin _$SystemConfigState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigState);
 }
 
 
@@ -30,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SystemConfigState()';
+    return 'SystemConfigState()';
 }
 
 
@@ -203,16 +203,18 @@ $SystemConfigStateErrorCopyWith<SystemConfigStateError> get copyWith => _$System
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateError&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateError&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'SystemConfigState.error(message: $message)';
+    return 'SystemConfigState.error(message: $message)';
 }
 
 
@@ -264,7 +266,7 @@ class SystemConfigStateInitial implements SystemConfigState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateInitial);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateInitial);
 }
 
 
@@ -273,7 +275,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SystemConfigState.initial()';
+    return 'SystemConfigState.initial()';
 }
 
 
@@ -303,16 +305,18 @@ $SystemConfigStateLoadedCopyWith<SystemConfigStateLoaded> get copyWith => _$Syst
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateLoaded&&(identical(other.data, data) || other.data == data)&&(identical(other.feedbackMessage, feedbackMessage) || other.feedbackMessage == feedbackMessage)&&(identical(other.feedbackType, feedbackType) || other.feedbackType == feedbackType));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateLoaded&&(identical(other.data, data) || other.data == data)&&(identical(other.feedbackMessage, feedbackMessage) || other.feedbackMessage == feedbackMessage)&&(identical(other.feedbackType, feedbackType) || other.feedbackType == feedbackType));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,data,feedbackMessage,feedbackType);
+int get hashCode {
+    return Object.hash(runtimeType,data,feedbackMessage,feedbackType);
+}
 
 @override
 String toString() {
-  return 'SystemConfigState.loaded(data: $data, feedbackMessage: $feedbackMessage, feedbackType: $feedbackType)';
+    return 'SystemConfigState.loaded(data: $data, feedbackMessage: $feedbackMessage, feedbackType: $feedbackType)';
 }
 
 
@@ -366,7 +370,7 @@ class SystemConfigStateLoading implements SystemConfigState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateLoading);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SystemConfigStateLoading);
 }
 
 
@@ -375,7 +379,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'SystemConfigState.loading()';
+    return 'SystemConfigState.loading()';
 }
 
 
