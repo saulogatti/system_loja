@@ -49,20 +49,24 @@ class UsuarioDetailsDialog extends StatelessWidget {
 
   Widget _buildDetailRow(BuildContext context, String label, String value) => Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontSize: 12,
+      child: Semantics(
+        label: '$label: $value',
+        excludeSemantics: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 12,
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(fontSize: 16)),
-        ],
+            const SizedBox(height: 4),
+            Text(value, style: const TextStyle(fontSize: 16)),
+          ],
+        ),
       ),
     );
 

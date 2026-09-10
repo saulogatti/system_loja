@@ -272,3 +272,6 @@
 ## 06-09-2026 - Form Field Placeholders
 **Learning:** Missing placeholder (hint) text reduces form usability, especially when differentiating entity types (e.g., Person vs. Business names).
 **Action:** Always include a contextual `hintText` with concrete examples (e.g., 'Ex: João da Silva', 'Ex: Empresa Silva LTDA') in form field widgets alongside `labelText` to guide user input, consistently applying this across all form fields.
+## 09-09-2026 - [Consolidating Data Row Reading in User Details]
+**Learning:** When displaying information rows that present a key and a value separately inside a dialog, screen readers disjointedly read them as separate items. For instance, reading 'ID', pause, '123'. This degrades accessibility.
+**Action:** Wrapped the internal Column in `UsuarioDetailsDialog` with a `Semantics(label: '$label: $value', excludeSemantics: true)` to consolidate the data into one cohesive sentence for screen readers.
