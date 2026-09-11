@@ -275,3 +275,7 @@
 ## 09-09-2026 - [Consolidating Data Row Reading in User Details]
 **Learning:** When displaying information rows that present a key and a value separately inside a dialog, screen readers disjointedly read them as separate items. For instance, reading 'ID', pause, '123'. This degrades accessibility.
 **Action:** Wrapped the internal Column in `UsuarioDetailsDialog` with a `Semantics(label: '$label: $value', excludeSemantics: true)` to consolidate the data into one cohesive sentence for screen readers.
+
+## 28-10-2026 - [Consistent Tap Targets for Settings Navigation]
+**Learning:** Found a settings card (`_buildCategoriesSection`) that used a trailing `FilledButton.tonal` for navigation without making the parent `ListTile` tappable. This created an inconsistent UX compared to other settings (which use full-row tap targets with `chevron_right`) and provided a much smaller touch area.
+**Action:** Always make the entire `ListTile` interactive by using the `onTap` property and a trailing `Icon(Icons.chevron_right)` when the primary purpose of the row is navigation, rather than relying solely on trailing buttons. This maximizes the touch target and unifies visual cues.

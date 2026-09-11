@@ -166,16 +166,15 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
 
   Widget _buildCategoriesSection(BuildContext context) => Card(
     child: ListTile(
+      leading: const Icon(Icons.category),
       title: const Text('Categorias de produtos'),
       subtitle: const Text(
         'O cadastro de categorias é centralizado e pode ser gerenciado em uma tela dedicada.',
       ),
-      trailing: FilledButton.tonal(
-        onPressed: () {
-          context.router.push(const CategoryManagementRoute());
-        },
-        child: const Text('Gerenciar'),
-      ),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () {
+        context.router.push(const CategoryManagementRoute());
+      },
     ),
   );
 
