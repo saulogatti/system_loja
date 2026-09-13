@@ -279,3 +279,7 @@
 ## 28-10-2026 - [Consistent Tap Targets for Settings Navigation]
 **Learning:** Found a settings card (`_buildCategoriesSection`) that used a trailing `FilledButton.tonal` for navigation without making the parent `ListTile` tappable. This created an inconsistent UX compared to other settings (which use full-row tap targets with `chevron_right`) and provided a much smaller touch area.
 **Action:** Always make the entire `ListTile` interactive by using the `onTap` property and a trailing `Icon(Icons.chevron_right)` when the primary purpose of the row is navigation, rather than relying solely on trailing buttons. This maximizes the touch target and unifies visual cues.
+
+## 28-10-2026 - [Consistent Symmetric Destructive Dialogs]
+**Learning:** Found several "delete" or "clear data" confirmation dialogs using default `TextButton`/`ElevatedButton` placements without expanded constraints or consistent semantic error coloring. This creates an inconsistent touch target experience and weakens the visual warning of destructive actions.
+**Action:** For all destructive `AlertDialog` confirmations, wrap the actions in a `SizedBox(width: double.maxFinite)` containing a `Row` with `Expanded` buttons for `OutlinedButton` ('Cancelar') and `ElevatedButton` ('Excluir'/'Limpar'). Always style the destructive `ElevatedButton` with `backgroundColor: Theme.of(context).colorScheme.error` and `foregroundColor: Theme.of(context).colorScheme.onError`.
