@@ -4076,7 +4076,7 @@ class $$CategoriesRecordsTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$CategoriesRecordsTable, CategoriesRecord>(table),
                   $$CategoriesRecordsTableReferences(db, table, e),
                 ),
               )
@@ -4346,7 +4346,16 @@ class $$CompanyRecordsTableTableManager
                 registrationDate: registrationDate,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$CompanyRecordsTable, CompanyRecord>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $CompanyRecordsTable,
+                    CompanyRecord
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -4608,7 +4617,16 @@ class $$CustomerRecordsTableTableManager
                 registrationDate: registrationDate,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$CustomerRecordsTable, CustomerRecord>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $CustomerRecordsTable,
+                    CustomerRecord
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -4972,7 +4990,7 @@ class $$ProductsRecordsTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$ProductsRecordsTable, ProductsRecord>(table),
                   $$ProductsRecordsTableReferences(db, table, e),
                 ),
               )
@@ -5402,7 +5420,16 @@ class $$InvoicesRecordsTableTableManager
                 type: type,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$InvoicesRecordsTable, InvoicesRecord>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $InvoicesRecordsTable,
+                    InvoicesRecord
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -5671,7 +5698,18 @@ class $$InvoiceItemsRecordsTableTableManager
                 unitPrice: unitPrice,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$InvoiceItemsRecordsTable, InvoiceItemsRecord>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $InvoiceItemsRecordsTable,
+                    InvoiceItemsRecord
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -5900,7 +5938,16 @@ class $$AddressRecordsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$AddressRecordsTable, AddressRecord>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $AddressRecordsTable,
+                    AddressRecord
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),

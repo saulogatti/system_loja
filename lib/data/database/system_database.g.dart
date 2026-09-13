@@ -1372,7 +1372,16 @@ class $$UsersRecordsTableTableManager
                 registrationDate: registrationDate,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$UsersRecordsTable, UserEntry>(table),
+                  BaseReferences<
+                    _$SystemDatabase,
+                    $UsersRecordsTable,
+                    UserEntry
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -1650,7 +1659,16 @@ class $$LogsRecordsTableTableManager
                 userName: userName,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$LogsRecordsTable, LogsRecord>(table),
+                  BaseReferences<
+                    _$SystemDatabase,
+                    $LogsRecordsTable,
+                    LogsRecord
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -1868,7 +1886,18 @@ class $$SystemRecordsTableTableManager
                 systemUserData: systemUserData,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$SystemRecordsTable, SystemConfigurationEntry>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$SystemDatabase,
+                    $SystemRecordsTable,
+                    SystemConfigurationEntry
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),

@@ -26,16 +26,21 @@ $PersonEventCopyWith<PersonEvent> get copyWith => _$PersonEventCopyWithImpl<Pers
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonEvent&&(identical(other.formData, formData) || other.formData == formData));
+  final _this = this as PersonEvent;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonEvent&&(identical(other.formData, _this.formData) || other.formData == _this.formData));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,formData);
+int get hashCode {
+  final _this = this as PersonEvent;
+  return Object.hash(runtimeType,_this.formData);
+}
 
 @override
 String toString() {
-  return 'PersonEvent(formData: $formData)';
+  final _this = this as PersonEvent;
+  return 'PersonEvent(formData: ${_this.formData})';
 }
 
 
@@ -216,16 +221,18 @@ $PersonSubmitCopyWith<PersonSubmit> get copyWith => _$PersonSubmitCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonSubmit&&(identical(other.formData, formData) || other.formData == formData));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is PersonSubmit&&(identical(other.formData, formData) || other.formData == formData));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,formData);
+int get hashCode {
+    return Object.hash(runtimeType,formData);
+}
 
 @override
 String toString() {
-  return 'PersonEvent.submit(formData: $formData)';
+    return 'PersonEvent.submit(formData: $formData)';
 }
 
 

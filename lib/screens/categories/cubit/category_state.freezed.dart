@@ -21,7 +21,7 @@ mixin _$CategoryState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryState);
 }
 
 
@@ -30,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'CategoryState()';
+    return 'CategoryState()';
 }
 
 
@@ -227,16 +227,18 @@ $CategoryCreatedCopyWith<CategoryCreated> get copyWith => _$CategoryCreatedCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryCreated&&const DeepCollectionEquality().equals(other._categories, _categories));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryCreated&&const DeepCollectionEquality().equals(other.categories, _categories));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+}
 
 @override
 String toString() {
-  return 'CategoryState.created(categories: $categories)';
+    return 'CategoryState.created(categories: $categories)';
 }
 
 
@@ -299,16 +301,18 @@ $CategoryDeletedCopyWith<CategoryDeleted> get copyWith => _$CategoryDeletedCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryDeleted&&const DeepCollectionEquality().equals(other._categories, _categories));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryDeleted&&const DeepCollectionEquality().equals(other.categories, _categories));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+}
 
 @override
 String toString() {
-  return 'CategoryState.deleted(categories: $categories)';
+    return 'CategoryState.deleted(categories: $categories)';
 }
 
 
@@ -365,16 +369,18 @@ $CategoryErrorCopyWith<CategoryError> get copyWith => _$CategoryErrorCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryError&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryError&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'CategoryState.error(message: $message)';
+    return 'CategoryState.error(message: $message)';
 }
 
 
@@ -426,7 +432,7 @@ class CategoryInitial implements CategoryState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryInitial);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryInitial);
 }
 
 
@@ -435,7 +441,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'CategoryState.initial()';
+    return 'CategoryState.initial()';
 }
 
 
@@ -469,16 +475,18 @@ $CategoryLoadedCopyWith<CategoryLoaded> get copyWith => _$CategoryLoadedCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryLoaded&&const DeepCollectionEquality().equals(other._categories, _categories));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryLoaded&&const DeepCollectionEquality().equals(other.categories, _categories));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+}
 
 @override
 String toString() {
-  return 'CategoryState.loaded(categories: $categories)';
+    return 'CategoryState.loaded(categories: $categories)';
 }
 
 
@@ -530,7 +538,7 @@ class CategoryLoading implements CategoryState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryLoading);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryLoading);
 }
 
 
@@ -539,7 +547,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'CategoryState.loading()';
+    return 'CategoryState.loading()';
 }
 
 
@@ -573,16 +581,18 @@ $CategoryUpdatedCopyWith<CategoryUpdated> get copyWith => _$CategoryUpdatedCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryUpdated&&const DeepCollectionEquality().equals(other._categories, _categories));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryUpdated&&const DeepCollectionEquality().equals(other.categories, _categories));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_categories));
+}
 
 @override
 String toString() {
-  return 'CategoryState.updated(categories: $categories)';
+    return 'CategoryState.updated(categories: $categories)';
 }
 
 

@@ -21,7 +21,7 @@ mixin _$LogsSystemState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemState);
 }
 
 
@@ -30,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LogsSystemState()';
+    return 'LogsSystemState()';
 }
 
 
@@ -204,7 +204,7 @@ class LogsSystemInitial implements LogsSystemState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemInitial);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemInitial);
 }
 
 
@@ -213,7 +213,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LogsSystemState.initial()';
+    return 'LogsSystemState.initial()';
 }
 
 
@@ -236,7 +236,7 @@ class LogsSystemLoading implements LogsSystemState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemLoading);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemLoading);
 }
 
 
@@ -245,7 +245,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LogsSystemState.loading()';
+    return 'LogsSystemState.loading()';
 }
 
 
@@ -279,16 +279,18 @@ $LogsSystemLoadedCopyWith<LogsSystemLoaded> get copyWith => _$LogsSystemLoadedCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemLoaded&&const DeepCollectionEquality().equals(other._logs, _logs));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemLoaded&&const DeepCollectionEquality().equals(other.logs, _logs));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_logs));
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_logs));
+}
 
 @override
 String toString() {
-  return 'LogsSystemState.loaded(logs: $logs)';
+    return 'LogsSystemState.loaded(logs: $logs)';
 }
 
 
@@ -345,16 +347,18 @@ $LogsSystemErrorCopyWith<LogsSystemError> get copyWith => _$LogsSystemErrorCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemError&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemError&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'LogsSystemState.error(message: $message)';
+    return 'LogsSystemState.error(message: $message)';
 }
 
 
@@ -406,7 +410,7 @@ class LogsSystemDeleted implements LogsSystemState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemDeleted);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is LogsSystemDeleted);
 }
 
 
@@ -415,7 +419,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'LogsSystemState.deleted()';
+    return 'LogsSystemState.deleted()';
 }
 
 

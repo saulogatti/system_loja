@@ -166,16 +166,15 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
 
   Widget _buildCategoriesSection(BuildContext context) => Card(
     child: ListTile(
+      leading: const Icon(Icons.category),
       title: const Text('Categorias de produtos'),
       subtitle: const Text(
         'O cadastro de categorias é centralizado e pode ser gerenciado em uma tela dedicada.',
       ),
-      trailing: FilledButton.tonal(
-        onPressed: () {
-          context.router.push(const CategoryManagementRoute());
-        },
-        child: const Text('Gerenciar'),
-      ),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () {
+        context.router.push(const CategoryManagementRoute());
+      },
     ),
   );
 
@@ -373,13 +372,29 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
         title: const Text('Limpar Logs Antigos'),
         content: Text('Deseja remover logs com mais de ${config.logRetentionDays} dias?'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('Limpar'),
+          SizedBox(
+            width: double.maxFinite,
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(dialogContext, false),
+                    child: const Text('Cancelar'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(dialogContext, true),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Theme.of(context).colorScheme.onError,
+                    ),
+                    child: const Text('Limpar'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -403,17 +418,29 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
           'Tem certeza que deseja continuar?',
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
-              foregroundColor: Theme.of(context).colorScheme.onError,
+          SizedBox(
+            width: double.maxFinite,
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(dialogContext, false),
+                    child: const Text('Cancelar'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Theme.of(context).colorScheme.onError,
+                    ),
+                    onPressed: () => Navigator.pop(dialogContext, true),
+                    child: const Text('Sim, Limpar Tudo'),
+                  ),
+                ),
+              ],
             ),
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('Sim, Limpar Tudo'),
           ),
         ],
       ),
