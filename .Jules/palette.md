@@ -283,3 +283,6 @@
 ## 28-10-2026 - [Consistent Symmetric Destructive Dialogs]
 **Learning:** Found several "delete" or "clear data" confirmation dialogs using default `TextButton`/`ElevatedButton` placements without expanded constraints or consistent semantic error coloring. This creates an inconsistent touch target experience and weakens the visual warning of destructive actions.
 **Action:** For all destructive `AlertDialog` confirmations, wrap the actions in a `SizedBox(width: double.maxFinite)` containing a `Row` with `Expanded` buttons for `OutlinedButton` ('Cancelar') and `ElevatedButton` ('Excluir'/'Limpar'). Always style the destructive `ElevatedButton` with `backgroundColor: Theme.of(context).colorScheme.error` and `foregroundColor: Theme.of(context).colorScheme.onError`.
+## 28-10-2026 - [Tooltip on Extended FABs]
+**Learning:** Found that `FloatingActionButton.extended` widgets lack automatic tooltips for screen readers when only their label or icon is provided. Even though they contain a `label`, adding a direct `tooltip` property significantly enhances screen reader compatibility and helps web/desktop users when hovering.
+**Action:** Always include a `tooltip` parameter when implementing `FloatingActionButton.extended`, replicating the explicit intention of the label.

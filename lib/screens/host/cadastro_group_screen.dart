@@ -24,34 +24,33 @@ class CadastroGroupScreen extends StatefulWidget {
 class _CadastroGroupScreenState extends State<CadastroGroupScreen> {
   @override
   Widget build(BuildContext context) => AutoTabsRouter(
-      routes: const [PersonListRoute(), ProductListRoute()],
-      builder: (context, child) {
-        final tabsRouter = AutoTabsRouter.of(context);
-        final isPersonTab = tabsRouter.activeIndex == 0;
+    routes: const [PersonListRoute(), ProductListRoute()],
+    builder: (context, child) {
+      final tabsRouter = AutoTabsRouter.of(context);
+      final isPersonTab = tabsRouter.activeIndex == 0;
 
-        return DefaultTabController(
-          length: 2,
-          initialIndex: tabsRouter.activeIndex,
-          child: Scaffold(
-            appBar: TabBar(
-              onTap: tabsRouter.setActiveIndex,
-              tabs: const [
-                Tab(icon: Icon(Icons.people), text: 'Pessoas'),
-                Tab(icon: Icon(Icons.inventory), text: 'Produtos'),
-              ],
-            ),
-            body: child,
-            floatingActionButton: FloatingActionButton.extended(
-              onPressed: () => _handleFabAction(isPersonTab: isPersonTab),
-              icon: Icon(isPersonTab ? Icons.person_add : Icons.add_box),
-              label: Text(
-                isPersonTab ? 'Cadastrar Pessoa' : 'Cadastrar Produto',
-              ),
-            ),
+      return DefaultTabController(
+        length: 2,
+        initialIndex: tabsRouter.activeIndex,
+        child: Scaffold(
+          appBar: TabBar(
+            onTap: tabsRouter.setActiveIndex,
+            tabs: const [
+              Tab(icon: Icon(Icons.people), text: 'Pessoas'),
+              Tab(icon: Icon(Icons.inventory), text: 'Produtos'),
+            ],
           ),
-        );
-      },
-    );
+          body: child,
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () => _handleFabAction(isPersonTab: isPersonTab),
+            icon: Icon(isPersonTab ? Icons.person_add : Icons.add_box),
+            tooltip: isPersonTab ? 'Cadastrar Pessoa' : 'Cadastrar Produto',
+            label: Text(isPersonTab ? 'Cadastrar Pessoa' : 'Cadastrar Produto'),
+          ),
+        ),
+      );
+    },
+  );
 
   Future<void> _handleFabAction({required bool isPersonTab}) async {
     final rootRouter = context.router.root;
