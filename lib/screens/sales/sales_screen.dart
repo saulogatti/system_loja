@@ -27,7 +27,6 @@ class SalesView extends StatefulWidget {
 }
 
 class _SalesLoadedAllViewData {
-
   const _SalesLoadedAllViewData({
     required this.products,
     required this.paymentMethods,
@@ -208,6 +207,7 @@ class _SalesViewState extends State<SalesView> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _adicionarNotaFiscal(salesCubit),
         icon: const Icon(Icons.add),
+        tooltip: 'Nova Nota Fiscal',
         label: const Text('Nova Nota Fiscal'),
       ),
     );
@@ -271,21 +271,21 @@ class _SalesViewState extends State<SalesView> {
   }
 
   List<Invoice> _extractInvoices(SalesState state) => switch (state) {
-      SalesLoadedAll(:final invoices) => invoices.values.toList(growable: false),
-      SalesLoaded(:final items) || SalesSaved(:final items) => items.values.toList(growable: false),
-      _ => const <Invoice>[],
-    };
+    SalesLoadedAll(:final invoices) => invoices.values.toList(growable: false),
+    SalesLoaded(:final items) || SalesSaved(:final items) => items.values.toList(growable: false),
+    _ => const <Invoice>[],
+  };
 
   _SalesLoadedAllViewData? _extractLoadedAll(SalesState state) => switch (state) {
-      SalesLoadedAll(:final products, :final paymentMethods, :final customers, :final companies) =>
-        _SalesLoadedAllViewData(
-          products: products,
-          paymentMethods: paymentMethods,
-          customers: customers,
-          companies: companies,
-        ),
-      _ => null,
-    };
+    SalesLoadedAll(:final products, :final paymentMethods, :final customers, :final companies) =>
+      _SalesLoadedAllViewData(
+        products: products,
+        paymentMethods: paymentMethods,
+        customers: customers,
+        companies: companies,
+      ),
+    _ => null,
+  };
 
   void _mostrarDetalhesNota(Invoice nf) {
     InvoiceOverviewBottomSheet.show(context, nf);
