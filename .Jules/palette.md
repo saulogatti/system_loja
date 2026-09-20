@@ -287,6 +287,6 @@
 **Learning:** Found that `FloatingActionButton.extended` widgets lack automatic tooltips for screen readers when only their label or icon is provided. Even though they contain a `label`, adding a direct `tooltip` property significantly enhances screen reader compatibility and helps web/desktop users when hovering.
 **Action:** Always include a `tooltip` parameter when implementing `FloatingActionButton.extended`, replicating the explicit intention of the label.
 
-## 20-09-2024 - [Extended FABs for Primary Actions]
+## 20-09-2026 - [Extended FABs for Primary Actions]
 **Learning:** Regular `FloatingActionButton` widgets containing only icons often lack clear textual affordance, making their purpose ambiguous. Using `FloatingActionButton.extended` provides both an icon and a label, improving clarity and consistency across main list screens.
 **Action:** Always prefer `FloatingActionButton.extended` with both `icon` and `label` properties for primary creation actions on list screens to provide explicit textual context.
