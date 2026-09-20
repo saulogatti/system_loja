@@ -83,10 +83,11 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         error: _buildErrorWidget,
       ),
     ),
-    floatingActionButton: FloatingActionButton(
+    floatingActionButton: FloatingActionButton.extended(
       onPressed: _showCategoryDialog,
       tooltip: 'Adicionar Categoria',
-      child: const Icon(Icons.add),
+      icon: const Icon(Icons.add),
+      label: const Text('Nova Categoria'),
     ),
   );
 
