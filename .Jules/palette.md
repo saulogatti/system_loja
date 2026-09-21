@@ -290,3 +290,7 @@
 ## 20-09-2026 - [Extended FABs for Primary Actions]
 **Learning:** Regular `FloatingActionButton` widgets containing only icons often lack clear textual affordance, making their purpose ambiguous. Using `FloatingActionButton.extended` provides both an icon and a label, improving clarity and consistency across main list screens.
 **Action:** Always prefer `FloatingActionButton.extended` with both `icon` and `label` properties for primary creation actions on list screens to provide explicit textual context.
+
+## 29-10-2026 - [Interactive ListTile Affordance for List Items]
+**Learning:** Found that `ListTile`s used for data management (like `CategoryManagementScreen`) relied entirely on small trailing `IconButton`s for their primary action (editing). This creates a poor user experience with a very small touch target and inconsistent behavior compared to standard lists.
+**Action:** Always make the entire `ListTile` interactive by using the `onTap` property to trigger the primary action (like opening details or editing). Replace the explicit primary action `IconButton` with a trailing `Icon(Icons.chevron_right)` to provide clear visual affordance while keeping secondary/destructive actions (like delete) as separate trailing buttons.
