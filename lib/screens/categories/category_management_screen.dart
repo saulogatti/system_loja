@@ -83,10 +83,11 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         error: _buildErrorWidget,
       ),
     ),
-    floatingActionButton: FloatingActionButton(
+    floatingActionButton: FloatingActionButton.extended(
       onPressed: _showCategoryDialog,
       tooltip: 'Adicionar Categoria',
-      child: const Icon(Icons.add),
+      icon: const Icon(Icons.add),
+      label: const Text('Nova Categoria'),
     ),
   );
 
@@ -124,19 +125,16 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
             subtitle: category.description != null
                 ? ExcludeSemantics(child: Text(category.description!))
                 : null,
+            onTap: () => _showCategoryDialog(category: category),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                IconButton(
-                  icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
-                  onPressed: () => _showCategoryDialog(category: category),
-                  tooltip: 'Editar ${category.name}',
-                ),
                 IconButton(
                   icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
                   onPressed: () => _confirmDeleteCategory(category),
                   tooltip: 'Excluir ${category.name}',
                 ),
+                const Icon(Icons.chevron_right),
               ],
             ),
           ),

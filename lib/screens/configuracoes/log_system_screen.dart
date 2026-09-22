@@ -67,17 +67,29 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                             'Tem certeza que deseja limpar todos os logs do sistema? Esta ação não poderá ser desfeita.',
                           ),
                           actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(false),
-                              child: const Text('Cancelar'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () => Navigator.of(context).pop(true),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).colorScheme.error,
-                                foregroundColor: Theme.of(context).colorScheme.onError,
+                            SizedBox(
+                              width: double.maxFinite,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: OutlinedButton(
+                                      onPressed: () => Navigator.of(context).pop(false),
+                                      child: const Text('Cancelar'),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () => Navigator.of(context).pop(true),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Theme.of(context).colorScheme.error,
+                                        foregroundColor: Theme.of(context).colorScheme.onError,
+                                      ),
+                                      child: const Text('Limpar'),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              child: const Text('Limpar'),
                             ),
                           ],
                         ),
