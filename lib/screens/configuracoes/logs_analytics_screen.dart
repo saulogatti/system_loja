@@ -19,46 +19,58 @@ class LogsAnalyticsScreen extends StatefulWidget {
 class _LogsAnalyticsScreenState extends State<LogsAnalyticsScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(title: const Text('Análise de Logs')),
-      body: BlocBuilder<LogsCubit, LogsState>(
-        builder: (context, state) {
-          switch (state) {
-            case LogsStateInitial():
-            case LogsLoading():
-              return const Center(child: CircularProgressIndicator());
-            case LogsLoaded(:final logs):
-              return ListView.builder(
-                itemCount: logs.length,
-                itemBuilder: (context, index) {
-                  final log = logs[index];
-                  return ListTile(
+    appBar: AppBar(title: const Text('Análise de Logs')),
+    body: BlocBuilder<LogsCubit, LogsState>(
+      builder: (context, state) {
+        switch (state) {
+          case LogsStateInitial():
+          case LogsLoading():
+            return const Center(child: CircularProgressIndicator());
+          case LogsLoaded(:final logs):
+            return ListView.builder(
+              itemCount: logs.length,
+              itemBuilder: (context, index) {
+                final log = logs[index];
+                return Semantics(
+                  label:
+                      'Ação: ${log.action}, Usuário: ${log.userName}, Entidade: ${log.entity}, Detalhes: ${log.details}, Timestamp: ${log.timestamp}, Criado em: ${log.registrationDate}',
+                  excludeSemantics: true,
+                  child: ListTile(
                     title: Text('Ação: ${log.action}'),
                     subtitle: Text(
                       'Usuário: ${log.userName} - Entidade: ${log.entity}\nDetalhes: ${log.details} - Timestamp: ${log.timestamp} createdAt: ${log.registrationDate}',
                     ),
                     isThreeLine: true,
-                  );
-                },
-              );
-            case LogsError(:final message):
-              return Center(
-                child: TextButton(
+                  ),
+                );
+              },
+            );
+          case LogsError(:final message):
+            return Center(
+              child: Semantics(
+                button: true,
+                child: ElevatedButton.icon(
                   onPressed: () {
                     // Tenta carregar os logs novamente ao clicar no botão
                     context.read<LogsCubit>().fetchActivesLogs();
                   },
-                  child: Text(
-                    'Erro ao carregar logs: $message',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
+                  icon: const Icon(Icons.refresh),
+                  label: Text(
+                    'Erro ao carregar logs: $message\nToque para tentar novamente',
+                    textAlign: TextAlign.center,
+                  ),
+                  tooltip: 'Tentar novamente',
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.onError,
+                    backgroundColor: Theme.of(context).colorScheme.error,
                   ),
                 ),
-              );
-          }
-        },
-      ),
-    );
+              ),
+            );
+        }
+      },
+    ),
+  );
 
   @override
   void initState() {

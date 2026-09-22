@@ -290,3 +290,6 @@
 ## 20-09-2026 - [Extended FABs for Primary Actions]
 **Learning:** Regular `FloatingActionButton` widgets containing only icons often lack clear textual affordance, making their purpose ambiguous. Using `FloatingActionButton.extended` provides both an icon and a label, improving clarity and consistency across main list screens.
 **Action:** Always prefer `FloatingActionButton.extended` with both `icon` and `label` properties for primary creation actions on list screens to provide explicit textual context.
+## 22-09-2026 - Consolidating Complex ListTile Semantics in Analytics Logs
+**Learning:** When a `ListTile` displays many distinct pieces of data (e.g., action, user, entity, details, timestamps) and uses `isThreeLine: true`, screen readers can read these components disjointedly, leading to a confusing auditory experience.
+**Action:** Wrap the entire `ListTile` in a `Semantics` widget with `excludeSemantics: true` and provide a single, well-formatted `label` that interpolates all the relevant data fields cohesively.
