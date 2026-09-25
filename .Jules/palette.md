@@ -150,15 +150,6 @@
 
 **Learning:** Forcing multiline fields like "descriptions" to a fixed `maxLines` limits the input area and forces users to scroll within a small box. Using `minLines` together with `maxLines: null` makes the field auto-expand gracefully as the user types, improving native-like form usability.
 **Action:** When working with description fields or similar multiline inputs, pair `keyboardType: TextInputType.multiline` with `minLines: 3` and `maxLines: null` for a better typing experience without eating up screen space when empty.
-## 29-06-2026 - Missing Interactive Actions in Semantics
-**Learning:** When wrapping interactive widgets (like `ListTile` with `onTap`) in a `Semantics` widget and using `excludeSemantics: true` to provide a consolidated accessibility label, the semantic actions (like the tap action) of the child are stripped from the accessibility tree. This breaks screen reader interaction and keyboard navigation (Tab/Enter) on Flutter Web/Desktop.
-**Action:** Always redefine interaction properties (e.g., `onTap`, `onTapHint`, `onLongPress`) directly on the `Semantics` widget when using `excludeSemantics: true` around interactive child widgets.
-## 12-07-2026 - Standardizing Semantics for Interactive List Items
-**Learning:** Wrapping interactive list items (like logs with an `onTap` dialog) inside `Semantics(excludeSemantics: true)` consolidates screen reader reading, but it strips the inner `onTap` from the accessibility tree, breaking screen reader interactivity if the callback is not explicitly provided to the `Semantics` node.
-**Action:** Always extract the interaction logic (e.g., a local function `showDialog`) and assign it to BOTH the inner widget's `onTap` and the parent `Semantics` widget's `onTap` property. Ensure `button: true` and a helpful `onTapHint` are also defined on the `Semantics` node.
-## 03-07-2024 - Semantic Wrapper Interaction Fix
-**Learning:** When using `Semantics(excludeSemantics: true)` around an interactive composite widget (like `Card` containing an `InkWell`), any native semantic actions are dropped. To preserve accessibility, `onTap` and `onTapHint` must be explicitly declared directly on the `Semantics` widget itself.
-**Action:** Always replicate `onTap` functionality and provide a clear `onTapHint` in the `Semantics` properties when wrapping custom clickable widgets to ensure full screen reader support.
 ## 25-07-2024 - [Visual Affordance on Interactive List Items]
 **Learning:** When using `ListTile` widgets for interactive elements (e.g., selection dialogs, navigation, or opening bottom sheets), relying solely on the `onTap` property and implicit interaction (like Ink ripples) may not be enough visual affordance for users to realize the entire row is tappable.
 **Action:** Always add a trailing icon (like `Icons.add_circle_outline` for selection or `Icons.chevron_right` for details/navigation) to provide clear visual affordance indicating the row is tappable.
@@ -302,3 +293,6 @@
 ## 24-09-2026 - [Missing Ink Splash on Semantic ListTiles]
 **Learning:** When wrapping a non-interactive `ListTile` with a parent `Semantics` widget that provides `onTap` routing for screen readers, the `ListTile` itself lacks visual tap feedback (the material ripple) for sighted users unless its own `onTap` property is also explicitly set.
 **Action:** Always assign the `onTap` callback to BOTH the parent `Semantics` widget and the child `ListTile` (or `InkWell`) to ensure native visual splash feedback is preserved alongside accessibility routing.
+## 25-09-2026 - [Missing Confirmation Dialogs on Destructive Inline Actions]
+**Learning:** Destructive inline actions within list tiles (like removing an item from an invoice list via an IconButton) lack confirmation feedback, making accidental deletions easy and jarring.
+**Action:** Always intercept destructive actions on ListTile trailing buttons by presenting an AlertDialog (styled symmetrically with an error-colored ElevatedButton) to confirm user intent before committing the deletion, ensuring the action is deliberate.
