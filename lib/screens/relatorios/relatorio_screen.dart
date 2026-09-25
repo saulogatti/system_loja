@@ -368,6 +368,7 @@ class _MovementSection extends StatelessWidget {
                 onTap: onTap,
                 onTapHint: 'Ver detalhes da nota fiscal',
                 child: ListTile(
+                  onTap: onTap,
                   dense: true,
                   contentPadding: EdgeInsets.zero,
                   title: Text(

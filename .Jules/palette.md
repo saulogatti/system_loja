@@ -298,3 +298,7 @@
 ## 22-09-2026 - [Interactive ListTile Affordance for List Items]
 **Learning:** Found that `ListTile`s used for data management (like `CategoryManagementScreen`) relied entirely on small trailing `IconButton`s for their primary action (editing). This creates a poor user experience with a very small touch target and inconsistent behavior compared to standard lists.
 **Action:** Always make the entire `ListTile` interactive by using the `onTap` property to trigger the primary action (like opening details or editing). Replace the explicit primary action `IconButton` with a trailing `Icon(Icons.chevron_right)` to provide clear visual affordance while keeping secondary/destructive actions (like delete) as separate trailing buttons.
+
+## 24-09-2026 - [Missing Ink Splash on Semantic ListTiles]
+**Learning:** When wrapping a non-interactive `ListTile` with a parent `Semantics` widget that provides `onTap` routing for screen readers, the `ListTile` itself lacks visual tap feedback (the material ripple) for sighted users unless its own `onTap` property is also explicitly set.
+**Action:** Always assign the `onTap` callback to BOTH the parent `Semantics` widget and the child `ListTile` (or `InkWell`) to ensure native visual splash feedback is preserved alongside accessibility routing.
