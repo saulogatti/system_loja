@@ -27,7 +27,44 @@ class InvoiceLineTile extends StatelessWidget {
         trailing: IconButton(
           tooltip: 'Remover ${product.name}',
           icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
-          onPressed: onDelete,
+          onPressed: () {
+            showDialog<void>(
+              context: context,
+              builder: (dialogContext) => AlertDialog(
+                title: const Text('Confirmar Remoção'),
+                content: Text('Tem certeza que deseja remover ${product.name} da nota?'),
+                actions: [
+                  SizedBox(
+                    width: double.maxFinite,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.of(dialogContext).pop(),
+                            child: const Text('Cancelar'),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(dialogContext).pop();
+                              onDelete();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).colorScheme.error,
+                              foregroundColor: Theme.of(context).colorScheme.onError,
+                            ),
+                            child: const Text('Remover'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
