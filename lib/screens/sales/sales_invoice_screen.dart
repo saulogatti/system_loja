@@ -242,8 +242,7 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                           final line = orderedLines[index];
                           return InvoiceLineTile(
                             entry: line,
-                            onDelete: () =>
-                                context.read<SalesInvoiceCubit>().removeLine(line.product.id),
+                            onDelete: () => _confirmDelete(context, line.product),
                           );
                         },
                       );
@@ -305,6 +304,46 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
   void _onSave() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<SalesInvoiceCubit>().submit();
+    }
+  }
+
+  Future<void> _confirmDelete(BuildContext context, Product product) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Remover Item'),
+        content: Text('Tem certeza que deseja remover o item "${product.name}" da nota?'),
+        actions: [
+          SizedBox(
+            width: double.maxFinite,
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(false),
+                    child: const Text('Cancelar'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(true),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Theme.of(context).colorScheme.onError,
+                    ),
+                    child: const Text('Remover'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && context.mounted) {
+      context.read<SalesInvoiceCubit>().removeLine(product.id);
     }
   }
 }
