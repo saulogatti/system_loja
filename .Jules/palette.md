@@ -296,3 +296,6 @@
 ## 25-09-2026 - [Missing Confirmation Dialogs on Destructive Inline Actions]
 **Learning:** Destructive inline actions within list tiles (like removing an item from an invoice list via an IconButton) lack confirmation feedback, making accidental deletions easy and jarring.
 **Action:** Always intercept destructive actions on ListTile trailing buttons by presenting an AlertDialog (styled symmetrically with an error-colored ElevatedButton) to confirm user intent before committing the deletion, ensuring the action is deliberate.
+## 15-06-2024 - [Missing Confirmation Dialogs on Destructive Inline Actions]
+**Learning:** Destructive inline actions within list tiles (like removing an item from an invoice list via an IconButton) lack confirmation feedback, making accidental deletions easy and jarring.
+**Action:** Always intercept destructive actions on ListTile trailing buttons by presenting an AlertDialog (styled symmetrically with an error-colored ElevatedButton) to confirm user intent before committing the deletion, ensuring the action is deliberate.
