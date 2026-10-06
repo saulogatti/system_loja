@@ -299,3 +299,6 @@
 ## 15-06-2024 - [Missing Confirmation Dialogs on Destructive Inline Actions]
 **Learning:** Destructive inline actions within list tiles (like removing an item from an invoice list via an IconButton) lack confirmation feedback, making accidental deletions easy and jarring.
 **Action:** Always intercept destructive actions on ListTile trailing buttons by presenting an AlertDialog (styled symmetrically with an error-colored ElevatedButton) to confirm user intent before committing the deletion, ensuring the action is deliberate.
+## 06-10-2026 - Consistent Keyboard Navigation
+**Learning:** When users input data sequentially (like filling a sales invoice form), they expect to jump between fields without dismissing the keyboard. Omitting `textInputAction: TextInputAction.next` breaks this flow.
+**Action:** Always check form fields for the appropriate `textInputAction`.
