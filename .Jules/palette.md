@@ -302,3 +302,7 @@
 ## 06-10-2026 - Consistent Keyboard Navigation
 **Learning:** When users input data sequentially (like filling a sales invoice form), they expect to jump between fields without dismissing the keyboard. Omitting `textInputAction: TextInputAction.next` breaks this flow.
 **Action:** Always check form fields for the appropriate `textInputAction`.
+
+## 08-10-2026 - [EmptyWidget Accessibility Configuration]
+**Learning:** Found instances of `EmptyWidget` used for empty list states where the default message was sufficient visually but lacked explicit contextual announcement for screen readers. Some instances also missed the `subMessage` parameter, reducing the affordance.
+**Action:** Always provide the `semanticLabel` parameter when utilizing `EmptyWidget` to offer complete screen reader context (merging visual message and subMessage) that differs from the default displayed message.

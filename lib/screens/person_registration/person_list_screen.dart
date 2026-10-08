@@ -158,7 +158,12 @@ class _PersonSectionList<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (entries.isEmpty) {
-      return EmptyWidget(message: emptyMessage, icon: Icons.person_off_outlined);
+      return EmptyWidget(
+        message: emptyMessage,
+        subMessage: 'Lista vazia.',
+        icon: Icons.person_off_outlined,
+        semanticLabel: 'Lista vazia. $emptyMessage',
+      );
     }
 
     return GridView.builder(
