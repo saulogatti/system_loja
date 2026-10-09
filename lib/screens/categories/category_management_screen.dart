@@ -97,6 +97,8 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
         message: 'Nenhuma categoria cadastrada',
         subMessage: 'Toque no botão + para adicionar',
         icon: Icons.category_outlined,
+        semanticLabel:
+            'Lista de categorias vazia. Nenhuma categoria cadastrada. Toque no botão + para adicionar.',
       );
     }
 
