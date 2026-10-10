@@ -306,3 +306,6 @@
 ## 08-10-2026 - [EmptyWidget Accessibility Configuration]
 **Learning:** Found instances of `EmptyWidget` used for empty list states where the default message was sufficient visually but lacked explicit contextual announcement for screen readers. Some instances also missed the `subMessage` parameter, reducing the affordance.
 **Action:** Always provide the `semanticLabel` parameter when utilizing `EmptyWidget` to offer complete screen reader context (merging visual message and subMessage) that differs from the default displayed message.
+## 10-10-2026 - EmptyWidget Semantics and Parameters
+**Learning:** Adding named parameters like `subMessage` or `semanticLabel` to custom widgets like `EmptyWidget` without also updating the widget's constructor definition in its source file (e.g., `lib/screens/widgets/empty_widget.dart`) causes compilation errors. Standard Flutter attributes like `Semantics` don't automatically apply if the custom widget hasn't implemented them internally.
+**Action:** When modifying custom project widgets to include new accessibility properties or text fields, always check and update the widget's class definition and `build` method first, or wrap the widget in a `Semantics` node rather than hallucinating parameters.
