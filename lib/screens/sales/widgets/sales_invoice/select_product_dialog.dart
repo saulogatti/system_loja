@@ -18,7 +18,9 @@ class SelectProductDialog extends StatelessWidget {
       child: products.isEmpty
           ? const EmptyWidget(
               message: 'Nenhum produto disponível',
+              subMessage: 'Não há produtos para adicionar.',
               icon: Icons.inventory_2_outlined,
+              semanticLabel: 'Não há produtos para adicionar. Nenhum produto disponível.',
             )
           : ListView.builder(
               shrinkWrap: true,
