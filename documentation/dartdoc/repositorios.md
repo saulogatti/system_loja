@@ -1,5 +1,5 @@
-# Repositórios
+# Repositories
 
-Implementações em `lib/domain/repository/`. Orquestram DAOs Drift, capturam exceções internamente e devolvem `ResultStatus.error` com mensagem amigável (`mensagemErroRepositorio`).
+Implementations in `lib/domain/repository/`. They coordinate Drift DAOs, catch exceptions internally, and return `ResultStatus.error` with a user-friendly message (`mensagemErroRepositorio`).
 
-Guia: [Arquitetura de interfaces](../INTERFACES_ARCHITECTURE.md).
+Guide: [Interface Architecture](../INTERFACES_ARCHITECTURE.md).

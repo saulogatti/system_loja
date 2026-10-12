@@ -1,3 +1,3 @@
 ## 0.0.1
-- Versão sem release. Esta sendo concluido 
+- Unreleased version. This is being completed.
 - Initial version.

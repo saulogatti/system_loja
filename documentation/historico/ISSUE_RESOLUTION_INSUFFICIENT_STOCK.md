@@ -1,16 +1,16 @@
-# Resolução do Issue: Clareza da Mensagem insufficientStock
+# Issue Resolution: Clarity of the insufficientStock Message
 
-## Issue Original
+## Original Issue
 
-**Fonte**: Code review comment em PR #42  
-**Tipo**: Melhoria de clareza de mensagem de erro  
-**Prioridade**: Medium
+**Source**: Code review comment on PR #42
+**Type**: Error-message clarity improvement
+**Priority**: Medium
 
-### Descrição do Issue
+### Issue Description
 
-O code reviewer (gemini-code-assist[bot]) sugeriu que a mensagem de erro para `ProductException.insufficientStock` poderia ser mais clara sobre o que `available` e `requested` representam.
+The code reviewer (gemini-code-assist[bot]) suggested that the error message for `ProductException.insufficientStock` could clarify what `available` and `requested` represent.
 
-**Sugestão**:
+**Suggestion**:
 ```dart
 return ProductException(
   type: ProductErrorType.insufficientStock,
@@ -20,16 +20,16 @@ return ProductException(
 );
 ```
 
-## Status da Resolução
+## Resolution Status
 
-✅ **RESOLVIDO** - A implementação já contém exatamente a mensagem sugerida.
+✅ **RESOLVED** - The implementation already contains exactly the suggested message.
 
-## Análise
+## Analysis
 
-Ao analisar o código atual em `lib/core/exceptions/product_exception.dart`, verificou-se que a implementação já contém exatamente a mensagem sugerida pelo reviewer:
+Reviewing the current code in `lib/core/exceptions/product_exception.dart` confirmed that it already contains exactly the message suggested by the reviewer:
 
 ```dart
-/// Cria uma exceção para estoque insuficiente.
+/// Creates an exception for insufficient stock.
 factory ProductException.insufficientStock(
   String code,
   int available,
@@ -44,64 +44,64 @@ factory ProductException.insufficientStock(
 }
 ```
 
-**Linha 87** do arquivo contém: `details: 'Estoque disponível: $available. Quantidade solicitada: $requested.',`
+**Line 87** of the file contains: `details: 'Estoque disponível: $available. Quantidade solicitada: $requested.',`
 
-## Ações Realizadas
+## Actions Taken
 
-Para garantir a qualidade e documentar adequadamente esta implementação, foram realizadas as seguintes ações:
+The following actions were taken to ensure quality and document the implementation:
 
-### 1. Criação de Testes Abrangentes
+### 1. Comprehensive Tests Added
 
-**Arquivo**: `test/product_exception_test.dart`
+**File**: `test/product_exception_test.dart`
 
-Testes criados (11 casos de teste):
-- ✅ Verificação de mensagem clara com labels
-- ✅ Validação de inclusão dos labels "Estoque disponível:" e "Quantidade solicitada:"
-- ✅ Teste do formato `toString()`
-- ✅ Teste do formato `userMessage`
-- ✅ Teste com estoque zero
-- ✅ Teste com grandes quantidades
-- ✅ Testes das outras factory methods (duplicateCode, notFound, invalidPrice, invalidStock)
+Tests created (11 cases):
+- ✅ Verify that the message has clear labels.
+- ✅ Verify that the labels "Available stock:" and "Requested quantity:" are included.
+- ✅ Test the `toString()` format.
+- ✅ Test the `userMessage` format.
+- ✅ Test zero stock.
+- ✅ Test large quantities.
+- ✅ Test the other factory methods (duplicateCode, notFound, invalidPrice, invalidStock).
 
-**Cobertura**: 100% dos métodos públicos da classe `ProductException`
+**Coverage**: 100% of the public methods in `ProductException`.
 
-### 2. Documentação de Verificação
+### 2. Verification Documentation
 
 **Arquivo**: `docs/PRODUCT_EXCEPTION_MESSAGE_VERIFICATION.md`
 
-Documentação incluindo:
-- Requisito do issue original
-- Implementação atual
-- Análise da clareza da mensagem
-- Exemplos de uso
-- Confirmação de que a implementação está completa
+Documentation includes:
+- The original issue requirement.
+- The current implementation.
+- An analysis of message clarity.
+- Usage examples.
+- Confirmation that the implementation is complete.
 
-### 3. Validações de Qualidade
+### 3. Quality Checks
 
-- ✅ **Code Review**: Nenhum problema encontrado
-- ✅ **CodeQL Security Check**: Sem problemas de segurança
-- ✅ **Análise Manual**: Mensagem clara e bem formatada
+- ✅ **Code Review**: No issues found
+- ✅ **CodeQL Security Check**: No security issues found
+- ✅ **Manual review**: Message is clear and well formatted.
 
-## Benefícios da Implementação
+## Implementation Benefits
 
-### Clareza
-A mensagem usa labels explícitos em português:
-- **"Estoque disponível:"** - Identifica claramente o valor do estoque
-- **"Quantidade solicitada:"** - Identifica claramente a quantidade requisitada
+### Clarity
+The message uses explicit labels in Portuguese:
+- **"Estoque disponível:"** - Clearly identifies the available stock value.
+- **"Quantidade solicitada:"** - Clearly identifies the requested quantity.
 
-### Usabilidade
-Usuários do sistema conseguem entender imediatamente:
-1. Por que a operação falhou (estoque insuficiente)
-2. Quanto estoque está disponível
-3. Quanto foi solicitado
-4. Qual produto está relacionado ao erro
+### Usability
+System users can immediately understand:
+1. Why the operation failed (insufficient stock).
+2. How much stock is available.
+3. How much was requested.
+4. Which product is associated with the error.
 
-### Exemplo Prático
+### Practical Example
 
 ```dart
-// Tentativa de vender 10 unidades quando há apenas 5 em estoque
+// Attempt to sell 10 units when only 5 are in stock
 try {
-  // ... operação de venda ...
+  // ... sale operation ...
 } catch (e) {
   if (e is ProductException && e.type == ProductErrorType.insufficientStock) {
     print(e.userMessage);
@@ -113,24 +113,24 @@ try {
 }
 ```
 
-## Conclusão
+## Conclusion
 
-O issue foi resolvido com sucesso. A implementação atual já contém a mensagem clara e explícita sugerida pelo code reviewer. Além disso, foram adicionados:
+The issue has been resolved. The current implementation already contains the clear, explicit message suggested by the code reviewer. In addition:
 
-1. ✅ Testes abrangentes para garantir a qualidade
-2. ✅ Documentação completa
-3. ✅ Validações de segurança e qualidade de código
+1. ✅ Comprehensive tests to ensure quality.
+2. ✅ Complete documentation.
+3. ✅ Security and code-quality checks.
 
-**Status Final**: ✅ COMPLETO - Nenhuma ação adicional necessária.
+**Final status**: ✅ COMPLETE - No further action required.
 
 ---
 
-**Data de Resolução**: 2025-12-10  
-**Resolvido por**: GitHub Copilot Agent  
-**Arquivos Modificados**: 
-- `test/product_exception_test.dart` (novo)
-- `docs/PRODUCT_EXCEPTION_MESSAGE_VERIFICATION.md` (novo)
-- `docs/ISSUE_RESOLUTION_INSUFFICIENT_STOCK.md` (novo)
+**Resolution date**: 2025-12-10
+**Resolved by**: GitHub Copilot Agent
+**Modified files**:
+- `test/product_exception_test.dart` (new)
+- `docs/PRODUCT_EXCEPTION_MESSAGE_VERIFICATION.md` (new)
+- `docs/ISSUE_RESOLUTION_INSUFFICIENT_STOCK.md` (new)
 
-**Arquivos Analisados**:
-- `lib/core/exceptions/product_exception.dart` (verificado, já correto)
+**Reviewed files**:
+- `lib/core/exceptions/product_exception.dart` (verified, already correct)

@@ -72,7 +72,7 @@ flutter run
    - CNPJ is displayed in formatted mode (XX.XXX.XXX/XXXX-XX)
    - CNPJ field is disabled (gray text, not editable)
    - All other fields are editable
-   - Validation works on required fields (Razão Social)
+   - Validation works on required fields (Legal Name)
    - Cancel button returns to previous screen
    - Save button updates the company
    - Success message is displayed
@@ -94,7 +94,7 @@ flutter run
 - Shows error message on failure
 
 ### Form Validation
-- **Razão Social**: required, minimum 3 characters
+- **Legal Name**: required, minimum 3 characters
 - **Email**: optional, validated via TextFormFieldEmail widget
 - **CNPJ**: not validated (read-only field)
 - **Other fields**: optional (street, zipCode, neighborhood, city)

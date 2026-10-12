@@ -1,35 +1,35 @@
-# Normalização do Banco de Dados SQL
+# SQL Database Normalization
 
-## Problema Identificado
+## Identified Problem
 
-Nas versões anteriores do banco de dados (v1), as tabelas `notas_fiscais` e `itens_nota_fiscal` continham campos desnormalizados:
+In earlier database versions (v1), the `notas_fiscais` and `itens_nota_fiscal` tables contained denormalized fields:
 
-- **Tabela `notas_fiscais`**: `cliente_nome`, `cliente_cpf`
-- **Tabela `itens_nota_fiscal`**: `produto_nome`, `produto_codigo`
+- **Table `notas_fiscais`**: `cliente_nome`, `cliente_cpf`
+- **Table `itens_nota_fiscal`**: `produto_nome`, `produto_codigo`
 
-### Risco de Inconsistência
+### Risk of Inconsistency
 
-Esses campos desnormalizados introduziam um risco de inconsistência de dados:
+These denormalized fields introduced a risk of data inconsistency:
 
-1. Se o nome ou CPF de um cliente fosse atualizado através do `ClienteSqlManager`, as notas fiscais existentes para esse cliente ficariam com dados desatualizados.
-2. Se o nome ou código de um produto fosse atualizado através do `ProdutoSqlManager`, os itens das notas fiscais existentes ficariam com dados desatualizados.
+1. If a customer's name or CPF was updated through `ClienteSqlManager`, existing invoices for that customer would contain stale data.
+2. If a product's name or code was updated through `ProdutoSqlManager`, existing invoice items would contain stale data.
 
-## Solução Implementada
+## Implemented Solution
 
-### Versão 2 do Banco de Dados
+### Database Version 2
 
-Na versão 2, foram removidos os campos desnormalizados e implementadas consultas com JOIN para garantir integridade dos dados.
+In version 2, the denormalized fields were removed and queries using JOINs were implemented to ensure data integrity.
 
-#### Alterações no Schema
+#### Schema Changes
 
-**Tabela `notas_fiscais` (v2)**
+**`notas_fiscais` table (v2)**
 ```sql
 CREATE TABLE notas_fiscais (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   numero_nota TEXT NOT NULL UNIQUE,
-  cliente_id INTEGER NOT NULL,              -- Mantido
-  -- cliente_nome TEXT NOT NULL,            -- REMOVIDO
-  -- cliente_cpf TEXT NOT NULL,             -- REMOVIDO
+  cliente_id INTEGER NOT NULL,              -- Retained
+  -- cliente_nome TEXT NOT NULL,            -- REMOVED
+  -- cliente_cpf TEXT NOT NULL,             -- REMOVED
   valor_total REAL NOT NULL,
   forma_pagamento TEXT NOT NULL,
   data_emissao TEXT NOT NULL,
@@ -37,14 +37,14 @@ CREATE TABLE notas_fiscais (
 )
 ```
 
-**Tabela `itens_nota_fiscal` (v2)**
+**`itens_nota_fiscal` table (v2)**
 ```sql
 CREATE TABLE itens_nota_fiscal (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   nota_fiscal_id INTEGER NOT NULL,
-  produto_id INTEGER NOT NULL,              -- Mantido
-  -- produto_nome TEXT NOT NULL,            -- REMOVIDO
-  -- produto_codigo TEXT NOT NULL,          -- REMOVIDO
+  produto_id INTEGER NOT NULL,              -- Retained
+  -- produto_nome TEXT NOT NULL,            -- REMOVED
+  -- produto_codigo TEXT NOT NULL,          -- REMOVED
   quantidade INTEGER NOT NULL,
   preco_unitario REAL NOT NULL,
   valor_total REAL NOT NULL,
@@ -53,12 +53,12 @@ CREATE TABLE itens_nota_fiscal (
 )
 ```
 
-#### Uso de JOINs
+#### Using JOINs
 
-Todas as consultas de notas fiscais agora utilizam JOINs para buscar os dados atualizados de clientes e produtos:
+All invoice queries now use JOINs to retrieve current customer and product data:
 
 ```sql
--- Exemplo de consulta de nota fiscal
+-- Example invoice query
 SELECT 
   nf.*, 
   c.nome as cliente_nome, 
@@ -67,7 +67,7 @@ FROM notas_fiscais nf
 INNER JOIN clientes c ON nf.cliente_id = c.id
 WHERE nf.id = ?
 
--- Exemplo de consulta de itens da nota fiscal
+-- Example invoice-item query
 SELECT 
   i.*, 
   p.nome as produto_nome, 
@@ -77,63 +77,63 @@ INNER JOIN produtos p ON i.produto_id = p.id
 WHERE i.nota_fiscal_id = ?
 ```
 
-### Migração Automática
+### Automatic Migration
 
-O sistema implementa migração automática de dados da versão 1 para a versão 2:
+The system automatically migrates data from version 1 to version 2:
 
-1. Cria tabelas temporárias com a nova estrutura (sem campos desnormalizados)
-2. Copia os dados relevantes das tabelas antigas
-3. Exclui as tabelas antigas
-4. Renomeia as tabelas temporárias
+1. Creates temporary tables with the new structure (without denormalized fields).
+2. Copies the relevant data from the old tables.
+3. Deletes the old tables.
+4. Renames the temporary tables.
 
-A migração é executada automaticamente quando o banco é aberto e a versão é detectada como anterior a 2.
+The migration runs automatically when the database is opened and its version is detected as earlier than 2.
 
-## Benefícios
+## Benefits
 
-### 1. Integridade de Dados
+### 1. Data Integrity
 
-Agora, quando um cliente ou produto é atualizado, todas as notas fiscais refletirão automaticamente os dados atualizados através dos JOINs.
+When a customer or product is updated, all invoices now automatically reflect the latest data through JOINs.
 
-### 2. Consistência Garantida
+### 2. Guaranteed Consistency
 
-Não há mais risco de dados desatualizados nas notas fiscais, pois os dados são sempre buscados das tabelas originais.
+Invoices no longer risk containing stale data because values are always retrieved from the original tables.
 
-### 3. Manutenção Simplificada
+### 3. Simplified Maintenance
 
-Não é necessário implementar lógica complexa para propagar atualizações de clientes e produtos para todas as notas fiscais relacionadas.
+There is no need for complex logic to propagate customer and product updates to every related invoice.
 
-### 4. Padrão de Banco de Dados
+### 4. Database Standards
 
-A solução segue as melhores práticas de normalização de banco de dados, mantendo as chaves estrangeiras e usando JOINs para relacionamentos.
+The solution follows database normalization best practices, retaining foreign keys and using JOINs for relationships.
 
-## Testes de Integridade
+## Integrity Tests
 
-Foram implementados testes abrangentes em `test/data_integrity_test.dart` que validam:
+Comprehensive tests in `test/data_integrity_test.dart` validate:
 
-1. Alterações no nome do cliente são refletidas nas notas fiscais
-2. Alterações no CPF do cliente são refletidas nas notas fiscais
-3. Alterações no nome do produto são refletidas nos itens das notas fiscais
-4. Alterações no código do produto são refletidas nos itens das notas fiscais
-5. Dados atualizados são consistentes em todas as formas de consulta (por ID, número, cliente, período, lista completa)
+1. Customer name changes are reflected in invoices.
+2. Customer CPF changes are reflected in invoices.
+3. Product name changes are reflected in invoice items.
+4. Product code changes are reflected in invoice items.
+5. Updated data is consistent across all query methods (by ID, number, customer, period, and full list).
 
-## Impacto em Sistemas Existentes
+## Impact on Existing Systems
 
-### Compatibilidade com Modelos
+### Model Compatibility
 
-Os modelos de dados (`NotaFiscal`, `ItemNotaFiscal`) mantêm os campos desnormalizados para compatibilidade com a persistência JSON. O `NotaFiscalSqlManager` popula esses campos dinamicamente através dos JOINs.
+The data models (`NotaFiscal`, `ItemNotaFiscal`) retain denormalized fields for compatibility with JSON persistence. `NotaFiscalSqlManager` populates these fields dynamically through JOINs.
 
-### Sem Impacto na UI
+### No UI Impact
 
-As telas e componentes de UI não precisam ser alterados, pois continuam recebendo objetos `NotaFiscal` completos com todos os campos populados.
+Screens and UI components do not need changes because they continue receiving complete `NotaFiscal` objects with all fields populated.
 
-### Migração Transparente
+### Transparent Migration
 
-Usuários existentes terão seus bancos de dados migrados automaticamente na próxima inicialização do aplicativo, sem perda de dados.
+Existing users' databases are migrated automatically the next time the app starts, without data loss.
 
-## Referências
+## References
 
 - [GitHub Issue #11 - Discussion r2573166765](https://github.com/saulogatti/system_loja/pull/11#discussion_r2573166765)
-- Implementação: `lib/data/database/database_scripts.dart`
-- Migração: `lib/data/database/database_helper.dart`
+- Implementation: `lib/data/database/database_scripts.dart`
+- Migration: `lib/data/database/database_helper.dart`
 - Manager: `lib/data/database/nota_fiscal_sql_manager.dart`
-- Testes: `test/data_integrity_test.dart`
+- Tests: `test/data_integrity_test.dart`

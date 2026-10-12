@@ -1,155 +1,155 @@
-# Implementação do Widget ProductCategory
+# ProductCategory Widget Implementation
 
-## Resumo da Implementação
+## Implementation Summary
 
-Esta implementação resolve o TODO em `lib/screens/products/widgets/product_category.dart`, criando um widget completo e testado para seleção e criação de categorias de produtos.
+This implementation resolves the TODO in `lib/screens/products/widgets/product_category.dart` by creating a complete, tested widget for selecting and creating product categories.
 
-## Arquivos Modificados/Criados
+## Modified/Created Files
 
-### Novos Arquivos
-1. `lib/screens/products/widgets/product_category.dart` - Widget principal (200 linhas)
-2. `test/product_category_widget_test.dart` - Testes unitários (508 linhas, 18 testes)
-3. `docs/PRODUCT_CATEGORY_WIDGET.md` - Documentação completa
+### New Files
+1. `lib/screens/products/widgets/product_category.dart` - Main widget (200 lines).
+2. `test/product_category_widget_test.dart` - Unit tests (508 lines, 18 tests).
+3. `docs/PRODUCT_CATEGORY_WIDGET.md` - Complete documentation.
 
-### Arquivos Modificados
-1. `lib/screens/products/widgets/product_form.dart` - Integração do widget
-2. `lib/screens/products/product_screen.dart` - Passagem da lista de produtos
-3. `lib/screens/products/product_detail_screen.dart` - Integração na tela de detalhes
+### Modified Files
+1. `lib/screens/products/widgets/product_form.dart` - Widget integration.
+2. `lib/screens/products/product_screen.dart` - Passing the product list.
+3. `lib/screens/products/product_detail_screen.dart` - Integration in the details screen.
 
-## Funcionalidades Implementadas
+## Implemented Features
 
-### 1. Modo Dropdown (Categorias Existentes)
-- Extrai automaticamente categorias únicas de todos os produtos
-- Ordena as categorias alfabeticamente
-- Permite seleção rápida através de dropdown
-- Ignora categorias vazias
-- Remove duplicatas automaticamente
+### 1. Dropdown Mode (Existing Categories)
+- Automatically extracts unique categories from all products.
+- Sorts categories alphabetically.
+- Allows quick selection through a dropdown.
+- Ignores empty categories.
+- Removes duplicates automatically.
 
-### 2. Modo Entrada Manual (Novas Categorias)
-- Campo de texto livre para criar novas categorias
-- Ativado através do botão "+" (adicionar)
-- Permite digitar categoria personalizada
+### 2. Manual Entry Mode (New Categories)
+- Free-text field for creating new categories.
+- Activated through the "+" (add) button.
+- Allows users to enter a custom category.
 
-### 3. Alternância de Modos
-- Botão "+" no modo dropdown alterna para entrada manual
-- Botão "☰" (lista) no modo manual volta para dropdown
-- Preserva valor do controller durante alternância
-- Interface intuitiva com tooltips descritivos
+### 3. Switching Modes
+- The "+" button switches from dropdown to manual entry.
+- The "☰" (list) button switches from manual entry back to dropdown.
+- Preserves the controller value when switching modes.
+- Provides an intuitive interface with descriptive tooltips.
 
-### 4. Validação
-- Suporte a campo obrigatório via parâmetro `required`
-- Mensagens de erro específicas para cada modo:
-  - Dropdown: "Selecione uma categoria"
-  - Manual: "Categoria é obrigatória"
-- Integração com sistema de validação do Flutter Form
+### 4. Validation
+- Supports required-field validation through the `required` parameter.
+- Provides mode-specific error messages:
+  - Dropdown: "Select a category".
+  - Manual: "Category is required".
+- Integrates with Flutter's Form validation.
 
-### 5. Estado e Controle
-- Sincronização automática com TextEditingController
-- Atualização dinâmica quando lista de produtos muda
-- Inicialização inteligente baseada no valor do controller
-- Suporte a habilitação/desabilitação (readonly)
+### 5. State and Control
+- Automatically synchronizes with `TextEditingController`.
+- Dynamically updates when the product list changes.
+- Initializes intelligently based on the controller value.
+- Supports enabling/disabling (read-only).
 
-## Integração com o Sistema
+## System Integration
 
-### ProductForm (Cadastro)
+### ProductForm (Registration)
 ```dart
 ProductCategory(
   controller: categoriaController,
-  produtos: produtos, // Da lista do BLoC state
+  produtos: produtos, // From the BLoC state list
 )
 ```
 
-### ProductDetailScreen (Edição)
+### ProductDetailScreen (Editing)
 ```dart
 ProductCategory(
   controller: _categoriaController,
-  produtos: widget.produtos, // Passado como parâmetro
-  enabled: _isEditing, // Habilitado apenas em modo edição
+  produtos: widget.produtos, // Passed as a parameter
+  enabled: _isEditing, // Enabled only in edit mode
 )
 ```
 
-## Testes Implementados
+## Implemented Tests
 
-### Cobertura (18 testes)
-1. ✅ Exibição condicional (texto vs dropdown)
-2. ✅ Extração de categorias únicas
-3. ✅ Seleção de categorias
-4. ✅ Alternância entre modos
-5. ✅ Entrada manual de texto
-6. ✅ Validação de campo obrigatório (ambos os modos)
-7. ✅ Habilitação/desabilitação
-8. ✅ Callbacks de mudança
-9. ✅ Inicialização com valores existentes
-10. ✅ Inicialização com valores não existentes
-11. ✅ Tratamento de categorias vazias
-12. ✅ Atualização dinâmica da lista
+### Coverage (18 tests)
+1. ✅ Conditional display (text field vs. dropdown).
+2. ✅ Unique category extraction.
+3. ✅ Category selection.
+4. ✅ Switching between modes.
+5. ✅ Manual text entry.
+6. ✅ Required-field validation (both modes).
+7. ✅ Enable/disable behavior.
+8. ✅ Change callbacks.
+9. ✅ Initialization with existing values.
+10. ✅ Initialization with nonexistent values.
+11. ✅ Handling empty categories.
+12. ✅ Dynamic list updates.
 
-### Execução
+### Run
 ```bash
 flutter test test/product_category_widget_test.dart
 ```
 
-## Padrões Seguidos
+## Standards Followed
 
-### Documentação
-- ✅ Comentários `///` em português
-- ✅ Documentação de todos os parâmetros
-- ✅ Explicação do comportamento em cada método
-- ✅ Exemplos de uso na documentação
+### Documentation
+- ✅ `///` comments in English.
+- ✅ All parameters are documented.
+- ✅ Method behavior is explained.
+- ✅ Usage examples are included in the documentation.
 
-### Código
-- ✅ Material 3 design
-- ✅ Stateful widget com controle de estado local
-- ✅ Separação de responsabilidades
-- ✅ Nomes descritivos de variáveis e métodos
-- ✅ Validação consistente com outros widgets
-- ✅ Programação funcional para operações em listas
+### Code
+- ✅ Material 3 design.
+- ✅ Stateful widget with local state management.
+- ✅ Separation of responsibilities.
+- ✅ Descriptive variable and method names.
+- ✅ Validation consistent with other widgets.
+- ✅ Functional programming for list operations.
 
-### Testes
-- ✅ Arrange-Act-Assert pattern
-- ✅ setUp/tearDown apropriados
-- ✅ Casos de sucesso e falha
-- ✅ Testes de edge cases
-- ✅ Comentários descritivos
+### Tests
+- ✅ Arrange-Act-Assert pattern.
+- ✅ Appropriate setUp/tearDown.
+- ✅ Success and failure cases.
+- ✅ Edge-case tests.
+- ✅ Descriptive comments.
 
 ## Code Review
 
-### Feedback Recebido e Aplicado
+### Feedback Received and Applied
 
 1. **ProductDetailScreen State Management**
-   - ❌ Problema: Extração de produtos do BLoC state era inadequada
-   - ✅ Solução: Produtos passados como parâmetro na navegação
-   - Benefício: Evita dependências desnecessárias e código mais limpo
+   - ❌ Problem: Extracting products from the BLoC state was inadequate.
+   - ✅ Solution: Products are passed as a navigation parameter.
+   - Benefit: Avoids unnecessary dependencies and keeps the code cleaner.
 
-2. **Otimização de Código**
-   - ❌ Problema: Loop for manual para extração de categorias
-   - ✅ Solução: Uso de programação funcional (where, map, toSet)
-   - Benefício: Código mais legível e performático
+2. **Code Optimization**
+   - ❌ Problem: A manual for-loop was used to extract categories.
+   - ✅ Solution: Functional operations (`where`, `map`, `toSet`) are used.
+   - Benefit: More readable and performant code.
 
-3. **Robustez dos Testes**
-   - ❌ Problema: Uso de coordenadas hardcoded para fechar dropdown
-   - ✅ Solução: Uso de tester.getCenter(find.byType(Scaffold))
-   - Benefício: Testes mais robustos em diferentes tamanhos de tela
+3. **Test Robustness**
+   - ❌ Problem: Hard-coded coordinates were used to close the dropdown.
+   - ✅ Solution: Use `tester.getCenter(find.byType(Scaffold))`.
+   - Benefit: More robust tests across different screen sizes.
 
-## Melhorias Futuras Sugeridas
+## Suggested Future Improvements
 
-1. **Autocomplete**: Sugestões enquanto o usuário digita
-2. **Ícones por Categoria**: Permitir personalização visual
-3. **Cores Customizáveis**: Identificação visual de categorias
-4. **Histórico**: Categorias mais usadas em destaque
-5. **Busca/Filtro**: Para quando houver muitas categorias
+1. **Autocomplete**: Suggestions as the user types.
+2. **Category icons**: Allow visual customization.
+3. **Customizable colors**: Visually identify categories.
+4. **History**: Highlight the most frequently used categories.
+5. **Search/filter**: Support large category lists.
 
-## Métricas
+## Metrics
 
-- **Linhas de Código**: ~200 (widget) + 508 (testes)
-- **Cobertura de Testes**: 18 cenários testados
-- **Arquivos Modificados**: 6 arquivos
-- **Commits**: 4 commits bem documentados
-- **Code Review**: 100% dos feedbacks endereçados
+- **Lines of Code**: ~200 (widget) + 508 (tests).
+- **Test Coverage**: 18 scenarios tested.
+- **Modified Files**: 6 files.
+- **Commits**: 4 well-documented commits.
+- **Code Review**: 100% of feedback addressed.
 
-## Como Usar
+## How to Use
 
-### Exemplo Completo
+### Complete Example
 ```dart
 class MeuFormulario extends StatefulWidget {
   @override
@@ -178,7 +178,7 @@ class _MeuFormularioState extends State<MeuFormulario> {
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                // Usar _categoriaController.text
+                // Use _categoriaController.text
               }
             },
             child: Text('Salvar'),
@@ -196,6 +196,6 @@ class _MeuFormularioState extends State<MeuFormulario> {
 }
 ```
 
-## Conclusão
+## Conclusion
 
-A implementação do ProductCategory widget está completa, testada e documentada. O widget segue todos os padrões estabelecidos no projeto e resolve completamente o TODO original. A solução é robusta, reutilizável e extensível para futuras melhorias.
+The ProductCategory widget implementation is complete, tested, and documented. It follows the project's established standards and fully resolves the original TODO. The solution is robust, reusable, and extensible for future improvements.

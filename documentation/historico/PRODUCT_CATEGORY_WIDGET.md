@@ -1,47 +1,47 @@
-# Widget de Categoria de Produto
+# Product Category Widget
 
-## Visão Geral
+## Overview
 
-O `ProductCategory` é um widget reutilizável que facilita a seleção e criação de categorias de produtos. Ele oferece duas formas de interação:
+`ProductCategory` is a reusable widget that simplifies selecting and creating product categories. It provides two interaction modes:
 
-1. **Modo Dropdown**: Permite selecionar uma categoria existente de uma lista
-2. **Modo Manual**: Permite digitar uma nova categoria personalizada
+1. **Dropdown mode**: Select an existing category from a list.
+2. **Manual mode**: Enter a new custom category.
 
-## Funcionalidades
+## Features
 
-### Seleção Inteligente
-- Extrai automaticamente categorias únicas dos produtos existentes
-- Ordena as categorias alfabeticamente
-- Ignora categorias vazias
+### Smart Selection
+- Automatically extracts unique categories from existing products.
+- Sorts categories alphabetically.
+- Ignores empty categories.
 
-### Alternância de Modos
-- Inicia no modo dropdown se houver categorias cadastradas
-- Botão **+** (adicionar) alterna para modo de entrada manual
-- Botão `Icons.list` (lista) retorna ao modo dropdown
-- Preserva o valor do controller durante alternância
+### Switching Modes
+- Starts in dropdown mode when categories are available.
+- The **+** (add) button switches to manual entry mode.
+- The `Icons.list` button switches back to dropdown mode.
+- Preserves the controller value when switching modes.
 
-### Validação
-- Suporta validação de campo obrigatório via parâmetro `required`
-- Mensagens de erro apropriadas para cada modo
-- Integração com `Form` do Flutter
+### Validation
+- Supports required-field validation through the `required` parameter.
+- Provides appropriate error messages for each mode.
+- Integrates with Flutter's `Form`.
 
-### Controle de Estado
-- Sincroniza automaticamente com o `TextEditingController`
-- Atualiza lista de categorias quando produtos mudam
-- Inicializa com valor pré-existente do controller
+### State Management
+- Automatically synchronizes with the `TextEditingController`.
+- Updates the category list when products change.
+- Initializes from an existing controller value.
 
-### Acessibilidade
-- Suporta habilitação/desabilitação via parâmetro `enabled`
-- Callback `onChanged` para reagir a mudanças de categoria
-- Tooltips descritivos nos botões de ação
+### Accessibility
+- Supports enabling/disabling through the `enabled` parameter.
+- Provides an `onChanged` callback for category changes.
+- Adds descriptive tooltips to action buttons.
 
-## Uso
+## Usage
 
-### Exemplo Básico
+### Basic Example
 
 ```dart
 final categoriaController = TextEditingController();
-final produtos = [...]; // Lista de produtos existentes
+final produtos = [...]; // Existing products
 
 ProductCategory(
   controller: categoriaController,
@@ -49,7 +49,7 @@ ProductCategory(
 )
 ```
 
-### Com Validação Obrigatória
+### With Required-Field Validation
 
 ```dart
 ProductCategory(
@@ -59,19 +59,19 @@ ProductCategory(
 )
 ```
 
-### Com Callback de Mudança
+### With a Change Callback
 
 ```dart
 ProductCategory(
   controller: categoriaController,
   produtos: produtos,
   onChanged: (novaCategoria) {
-    print('Categoria alterada para: $novaCategoria');
+    print('Category changed to: $novaCategoria');
   },
 )
 ```
 
-### Em Modo Somente Leitura
+### In Read-Only Mode
 
 ```dart
 ProductCategory(
@@ -81,98 +81,98 @@ ProductCategory(
 )
 ```
 
-## Parâmetros
+## Parameters
 
-| Parâmetro | Tipo | Obrigatório | Descrição |
+| Parameter | Type | Required | Description |
 |-----------|------|-------------|-----------|
-| `controller` | `TextEditingController` | Sim | Controller para gerenciar o texto da categoria |
-| `produtos` | `List<Produto>` | Sim | Lista de produtos para extrair categorias existentes |
-| `required` | `bool` | Não | Se `true`, valida que o campo não está vazio (padrão: `false`) |
-| `enabled` | `bool` | Não | Se `false`, desabilita o campo (padrão: `true`) |
-| `onChanged` | `ValueChanged<String?>?` | Não | Callback chamado quando a categoria é alterada |
+| `controller` | `TextEditingController` | Yes | Controller for managing the category text |
+| `produtos` | `List<Produto>` | Yes | Products from which existing categories are extracted |
+| `required` | `bool` | No | When `true`, validates that the field is not empty (default: `false`) |
+| `enabled` | `bool` | No | When `false`, disables the field (default: `true`) |
+| `onChanged` | `ValueChanged<String?>?` | No | Callback invoked when the category changes |
 
-## Integração
+## Integration
 
 ### ProductForm
 
-O widget está integrado ao `ProductForm`, substituindo o `TextFormField` original para categorias:
+The widget is integrated with `ProductForm`, replacing the original category `TextFormField`:
 
 ```dart
 ProductForm(
-  // ... outros parâmetros
+  // ... other parameters
   categoriaController: _categoriaController,
-  produtos: produtos, // Lista de produtos do estado BLoC
+  produtos: produtos, // Product list from the BLoC state
 )
 ```
 
 ### ProductDetailScreen
 
-Também está integrado ao `ProductDetailScreen` para edição de produtos:
+It is also integrated with `ProductDetailScreen` for product editing:
 
 ```dart
 ProductCategory(
   controller: _categoriaController,
-  produtos: produtos, // Lista do BLoC state
-  enabled: _isEditing, // Habilitado apenas em modo edição
+  produtos: produtos, // List from the BLoC state
+  enabled: _isEditing, // Enabled only in edit mode
 )
 ```
 
-## Comportamento Detalhado
+## Detailed Behavior
 
-### Inicialização
-- Se não há produtos, exibe campo de texto
-- Se há produtos mas controller está vazio, exibe dropdown
-- Se controller tem valor que existe nas categorias, exibe dropdown com valor selecionado
-- Se controller tem valor que não existe nas categorias, exibe campo de texto com o valor
+### Initialization
+- If there are no products, displays a text field.
+- If products exist but the controller is empty, displays a dropdown.
+- If the controller value matches an existing category, displays a dropdown with that category selected.
+- If the controller value does not match an existing category, displays a text field containing that value.
 
-### Extração de Categorias
-1. Percorre todos os produtos na lista
-2. Extrai o campo `categoria` de cada produto
-3. Filtra categorias vazias
-4. Remove duplicatas
-5. Ordena alfabeticamente
+### Category Extraction
+1. Iterates over all products in the list.
+2. Extracts the `categoria` field from each product.
+3. Filters out empty categories.
+4. Removes duplicates.
+5. Sorts alphabetically.
 
-### Alternância de Modo
+### Switching Modes
 **Dropdown → Manual:**
-- Limpa seleção do dropdown
-- Mantém valor do controller (se houver)
+- Clears the dropdown selection.
+- Retains the controller value, if present.
 
 **Manual → Dropdown:**
-- Limpa o controller
-- Reseta para estado inicial do dropdown
+- Clears the controller.
+- Resets to the initial dropdown state.
 
-## Testes
+## Tests
 
-O widget possui 18 testes automatizados que cobrem:
-- Exibição condicional (dropdown vs campo de texto)
-- Extração de categorias únicas
-- Seleção de categorias
-- Alternância entre modos
-- Validação de campos obrigatórios
-- Habilitação/desabilitação
-- Callbacks de mudança
-- Inicialização com valores
-- Atualização dinâmica de categorias
+The widget has 18 automated tests covering:
+- Conditional display (dropdown vs. text field)
+- Unique category extraction
+- Category selection
+- Switching between modes
+- Required-field validation
+- Enable/disable behavior
+- Change callbacks
+- Initialization with values
+- Dynamic category updates
 
-Para executar os testes:
+Run the tests with:
 ```bash
 flutter test test/product_category_widget_test.dart
 ```
 
 ## Design Pattern
 
-O widget segue os padrões estabelecidos no projeto:
-- Documentação completa em português
-- Uso de Material 3 design
-- Integração com BLoC para gerenciamento de estado
-- Validação consistente com outros widgets do formulário
-- Separação de responsabilidades (widget separado, não inline)
+The widget follows established project patterns:
+- Complete documentation in English.
+- Material 3 design.
+- BLoC integration for state management.
+- Validation consistent with other form widgets.
+- Separation of responsibilities (a separate widget rather than inline code).
 
-## Melhorias Futuras
+## Future Improvements
 
-Possíveis melhorias que podem ser implementadas:
-1. Autocomplete com sugestões enquanto digita
-2. Ícones personalizados por categoria
-3. Cores customizáveis por categoria
-4. Histórico de categorias mais usadas
-5. Busca/filtro de categorias quando há muitas opções
+Potential improvements:
+1. Autocomplete suggestions while typing.
+2. Custom icons per category.
+3. Customizable category colors.
+4. A history of frequently used categories.
+5. Category search/filtering when there are many options.

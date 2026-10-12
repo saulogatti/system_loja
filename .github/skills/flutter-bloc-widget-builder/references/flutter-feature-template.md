@@ -1,8 +1,9 @@
+<!-- TODO: verify whether this documentation is out of date -->
 # Flutter Feature Template
 
-Use este template para criar uma feature nova ou reorganizar uma estrutura mista.
+Use this template to create a new feature or reorganize a mixed structure.
 
-## Estrutura sugerida
+## Suggested Structure
 
 ```text
 feature_name/
@@ -34,34 +35,34 @@ feature_name/
       feature_repository_impl.dart
 ```
 
-## Notas
+## Notes
 
-- feature_page.dart monta o bloco e a composicao principal.
-- feature_view.dart orquestra layout com widgets menores.
-- Item de lista, secoes de formulario e widgets de estado devem ser separados quando melhorarem leitura.
-- O bloco chama casos de uso e emite estados de UI explicitos.
-- Interface de repositorio fica no dominio; implementacao no data.
+- `feature_page.dart` assembles the BLoC and the main composition.
+- `feature_view.dart` orchestrates the layout with smaller widgets.
+- List items, form sections, and state widgets should be separated when doing so improves readability.
+- The BLoC calls use cases and emits explicit UI states.
+- The repository interface belongs in the domain; its implementation belongs in the data layer.
 
-## Modelo de estado sugerido
+## Suggested State Model
 
 - initial
 - loading
-- success com dados
+- success with data
 - empty
-- error com mensagem
+- error with a message
 
-## Regras de split
+## Widget-Splitting Rules
 
-Separe widget em novo arquivo quando:
+Move a widget to a new file when:
 
-- O build ficar cansativo para leitura.
-- O widget misturar layout, renderizacao de itens e efeitos colaterais.
-- Uma secao tiver nome de dominio claro, como FilterBar ou OrderSummary.
-- O mesmo padrao visual aparecer em mais de um lugar com pequenas variacoes.
+- The `build` method becomes difficult to read.
+- The widget mixes layout, item rendering, and side effects.
+- A section has a clear domain name, such as `FilterBar` or `OrderSummary`.
+- The same visual pattern appears in more than one place with minor variations.
 
-## Evitar
+## Avoid
 
-- Regra de negocio em widget.
-- Chamada de repositorio diretamente da UI.
-- Arquivo unico com page, bloc, state, event e muitos widgets auxiliares sem necessidade.
-- Abstracao reutilizavel criada antes da segunda necessidade real.
+- Business rules in widgets.
+- Calling repositories directly from the UI.
+- A single file containing the page, BLoC, state, event, and many unnecessary helper widgets.
+- Creating a reusable abstraction before a second real use case exists.

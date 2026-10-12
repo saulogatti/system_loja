@@ -1,63 +1,63 @@
-# DRIFT_MIGRATION
+# Drift Migration
 
-## Visao Geral
+## Overview
 
-Este documento consolida orientacoes de migracao de schema Drift no System Loja.
+This document consolidates guidance for Drift schema migrations in System Loja.
 
-## Estado Atual dos Bancos
+## Current Database State
 
 - `AppDatabase`: `schemaVersion => 12`
 - `SystemDatabase`: `schemaVersion => 1`
 
-## Quando criar migracao
+## When to Create a Migration
 
-Crie ou ajuste migracao sempre que houver alteracao em:
+Create or update a migration whenever any of the following change:
 
-- tabelas Drift (`lib/data/database/table/`)
+- Drift tables (`lib/data/database/table/`)
 - DAOs (`lib/data/database/dao/`)
-- relacionamentos/constraints
-- tipos persistidos por converter/custom type
+- Relationships/constraints
+- Types persisted through a converter/custom type
 
-## Processo Recomendado
+## Recommended Process
 
-1. Atualizar tabela(s) e/ou DAO(s).
-1. Incrementar `schemaVersion` no banco correto.
-1. Implementar `onUpgrade` com os passos de migracao necessarios.
-1. Gerar codigo:
+1. Update the relevant table(s) and/or DAO(s).
+1. Increment `schemaVersion` in the correct database.
+1. Implement `onUpgrade` with the required migration steps.
+1. Generate code:
 
 ```bash
 dart run build_runner build
 ```
 
-1. Validar qualidade:
+1. Validate quality:
 
 ```bash
 dart analyze
 flutter test
 ```
 
-## Boas Praticas
+## Best Practices
 
-- Manter migracoes pequenas e incrementais.
-- Evitar logica de negocio na camada de migracao.
-- Preservar dados quando aplicavel; em cenarios pre-producao, breaking changes sao aceitaveis quando alinhados ao time.
-- Registrar no PR quais versoes de schema foram alteradas e por que.
+- Keep migrations small and incremental.
+- Avoid business logic in the migration layer.
+- Preserve data when applicable; before production, breaking changes are acceptable when agreed upon by the team.
+- Record in the PR which schema versions changed and why.
 
 ## Troubleshooting
 
-### Falha no build_runner
+### build_runner Failure
 
 ```bash
 dart run build_runner clean
 dart run build_runner build
 ```
 
-### Conflito de schema local
+### Local Schema Conflict
 
-- Remover instalacao local do app para criar banco limpo quando apropriado.
-- Confirmar se o `onUpgrade` cobre todos os passos entre versoes.
+- Remove the local app installation to create a clean database when appropriate.
+- Confirm that `onUpgrade` covers every step between versions.
 
-## Referencias
+## References
 
 - `README.md`
 - `documentation/DRIFT_ARCHITECTURE.md`

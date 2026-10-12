@@ -1,277 +1,277 @@
-# Guia de Teste Manual - Sistema de Validação
+# Manual Testing Guide - Validation System
 
-Este documento fornece um guia completo para testar manualmente as melhorias de validação implementadas.
+This document provides a complete guide for manually testing the implemented validation improvements.
 
-## Objetivos dos Testes
+## Test Objectives
 
-Verificar que:
-1. Valores negativos são rejeitados em campos numéricos
-2. Mensagens de erro são claras e específicas
-3. Formatação de entrada funciona corretamente
-4. Validação não bloqueia valores válidos
-5. Experiência do usuário é intuitiva
+Verify that:
+1. Negative values are rejected in numeric fields.
+2. Error messages are clear and specific.
+3. Input formatting works correctly.
+4. Validation does not block valid values.
+5. The user experience is intuitive.
 
-## Tela de Produtos
+## Product Screen
 
-### Cenários de Teste
+### Test Scenarios
 
-#### Campo de Preço
+#### Price Field
 
-**Teste 1: Valores Válidos**
-1. Acesse a tela de cadastro de produtos
-2. Digite no campo de preço: `10.50`
-3. ✅ **Esperado**: Valor aceito
-4. Tente também: `10,50`, `100`, `0`, `0.01`
-5. ✅ **Esperado**: Todos aceitos
+**Test 1: Valid Values**
+1. Open the product registration screen.
+2. Enter `10.50` in the price field.
+3. ✅ **Expected**: The value is accepted.
+4. Also try: `10,50`, `100`, `0`, `0.01`.
+5. ✅ **Expected**: All values are accepted.
 
-**Teste 2: Valores Inválidos - Negativos**
-1. Digite no campo de preço: `-10.50`
-2. Tente submeter o formulário
-3. ✅ **Esperado**: Mensagem "Preço não pode ser negativo"
+**Test 2: Invalid Negative Values**
+1. Enter `-10.50` in the price field.
+2. Try to submit the form.
+3. ✅ **Expected**: Message "Price cannot be negative".
 
-**Teste 3: Valores Inválidos - Formato**
-1. Digite no campo de preço: `abc`
-2. Observe que letras não são digitadas (formatador)
-3. ✅ **Esperado**: Apenas números e ponto/vírgula permitidos
+**Test 3: Invalid Format**
+1. Enter `abc` in the price field.
+2. Observe that letters are not entered (input formatter).
+3. ✅ **Expected**: Only numbers and a period/comma are allowed.
 
-**Teste 4: Valores Inválidos - Decimais**
-1. Digite no campo de preço: `10.505`
-2. Observe que é limitado a `10.50` (formatador)
-3. ✅ **Esperado**: Máximo 2 casas decimais
+**Test 4: Invalid Decimal Precision**
+1. Enter `10.505` in the price field.
+2. Observe that it is limited to `10.50` (input formatter).
+3. ✅ **Expected**: A maximum of 2 decimal places.
 
-**Teste 5: Conversão de Vírgula**
-1. Digite no campo de preço: `10,50`
-2. Observe que é convertido para `10.50`
-3. ✅ **Esperado**: Vírgula convertida para ponto automaticamente
+**Test 5: Comma Conversion**
+1. Enter `10,50` in the price field.
+2. Observe that it is converted to `10.50`.
+3. ✅ **Expected**: The comma is automatically converted to a period.
 
-#### Campo de Estoque
+#### Stock Field
 
-**Teste 6: Valores Válidos**
-1. Digite no campo de estoque: `10`
-2. ✅ **Esperado**: Valor aceito
-3. Tente também: `0`, `100`, `9999`
-4. ✅ **Esperado**: Todos aceitos
+**Test 6: Valid Values**
+1. Enter `10` in the stock field.
+2. ✅ **Expected**: The value is accepted.
+3. Also try: `0`, `100`, `9999`.
+4. ✅ **Expected**: All values are accepted.
 
-**Teste 7: Valores Inválidos - Negativos**
-1. Tente digitar no campo de estoque: `-10`
-2. Observe que o sinal negativo não é aceito (formatador)
-3. ✅ **Esperado**: Apenas dígitos permitidos
+**Test 7: Invalid Negative Values**
+1. Try entering `-10` in the stock field.
+2. Observe that the minus sign is not accepted (input formatter).
+3. ✅ **Expected**: Only digits are allowed.
 
-**Teste 8: Valores Inválidos - Decimais**
-1. Tente digitar no campo de estoque: `10.5`
-2. Observe que o ponto decimal não é aceito
-3. ✅ **Esperado**: Apenas números inteiros permitidos
+**Test 8: Invalid Decimal Values**
+1. Try entering `10.5` in the stock field.
+2. Observe that the decimal point is not accepted.
+3. ✅ **Expected**: Only whole numbers are allowed.
 
-#### Campo de Código
+#### Code Field
 
-**Teste 9: Valores Válidos**
-1. Digite no campo de código: `ABC-123`
-2. ✅ **Esperado**: Valor aceito e convertido para maiúsculas
-3. Tente também: `PROD001`, `12345`, `ABC`
-4. ✅ **Esperado**: Todos aceitos
+**Test 9: Valid Values**
+1. Enter `ABC-123` in the code field.
+2. ✅ **Expected**: The value is accepted and converted to uppercase.
+3. Also try: `PROD001`, `12345`, `ABC`.
+4. ✅ **Expected**: All values are accepted.
 
-**Teste 10: Conversão para Maiúsculas**
-1. Digite no campo de código: `abc-123`
-2. Observe que é convertido para `ABC-123`
-3. ✅ **Esperado**: Conversão automática para maiúsculas
+**Test 10: Uppercase Conversion**
+1. Enter `abc-123` in the code field.
+2. Observe that it is converted to `ABC-123`.
+3. ✅ **Expected**: Automatic conversion to uppercase.
 
-**Teste 11: Valores Inválidos - Caracteres**
-1. Tente digitar: `ABC@123`
-2. Observe que `@` não é aceito
-3. ✅ **Esperado**: Apenas letras, números e hífens permitidos
+**Test 11: Invalid Characters**
+1. Try entering `ABC@123`.
+2. Observe that `@` is not accepted.
+3. ✅ **Expected**: Only letters, numbers, and hyphens are allowed.
 
-**Teste 12: Valores Inválidos - Comprimento**
-1. Digite apenas: `AB`
-2. Tente submeter o formulário
-3. ✅ **Esperado**: Mensagem "Código deve ter no mínimo 3 caracteres"
+**Test 12: Invalid Length**
+1. Enter only `AB`.
+2. Try to submit the form.
+3. ✅ **Expected**: Message "Code must contain at least 3 characters".
 
-#### Fluxo Completo
+#### Complete Flow
 
-**Teste 13: Cadastro Bem-Sucedido**
-1. Preencha todos os campos corretamente:
+**Test 13: Successful Registration**
+1. Fill in all fields correctly:
    - Nome: `Notebook Dell`
    - Código: `NOTE-001`
    - Preço: `3500.00`
    - Estoque: `10`
    - Categoria: `Eletrônicos`
    - Descrição: `Notebook Dell Inspiron 15`
-2. Clique em "Adicionar Produto"
-3. ✅ **Esperado**: Mensagem de sucesso "Produto 'Notebook Dell' cadastrado com sucesso!"
-4. ✅ **Esperado**: Formulário limpo
-5. ✅ **Esperado**: Produto aparece na lista
+2. Click "Add Product".
+3. ✅ **Expected**: Success message "Product 'Notebook Dell' registered successfully!".
+4. ✅ **Expected**: The form is cleared.
+5. ✅ **Expected**: The product appears in the list.
 
-## Tela de Vendas
+## Sales Screen
 
-### Cenários de Teste
+### Test Scenarios
 
-#### Campo de Quantidade
+#### Quantity Field
 
-**Teste 14: Quantidade Válida**
-1. Acesse a tela de vendas
-2. Clique em "Adicionar Item"
-3. Selecione um produto com estoque de 10 unidades
-4. Digite quantidade: `5`
-5. ✅ **Esperado**: Item adicionado com sucesso
+**Test 14: Valid Quantity**
+1. Open the sales screen.
+2. Click "Add Item".
+3. Select a product with 10 units in stock.
+4. Enter quantity: `5`.
+5. ✅ **Expected**: The item is added successfully.
 
-**Teste 15: Quantidade Inválida - Negativa**
-1. Tente adicionar item
-2. Tente digitar: `-5`
-3. Observe que sinal negativo não é aceito
-4. ✅ **Esperado**: Apenas números positivos permitidos
+**Test 15: Invalid Negative Quantity**
+1. Try to add an item.
+2. Try to enter `-5`.
+3. Observe that the minus sign is not accepted.
+4. ✅ **Expected**: Only positive numbers are allowed.
 
-**Teste 16: Quantidade Inválida - Estoque**
-1. Tente adicionar item de produto com estoque de 5
-2. Digite quantidade: `10`
-3. Tente confirmar
-4. ✅ **Esperado**: Mensagem "Quantidade maior que o estoque disponível"
+**Test 16: Quantity Exceeds Stock**
+1. Try to add an item for a product with 5 units in stock.
+2. Enter quantity: `10`.
+3. Try to confirm.
+4. ✅ **Expected**: Message "Quantity exceeds available stock".
 
-**Teste 17: Quantidade Inválida - Decimal**
-1. Tente digitar: `5.5`
-2. Observe que ponto decimal não é aceito
-3. ✅ **Esperado**: Apenas números inteiros permitidos
+**Test 17: Invalid Decimal Quantity**
+1. Try to enter `5.5`.
+2. Observe that the decimal point is not accepted.
+3. ✅ **Expected**: Only whole numbers are allowed.
 
-#### Campos de Nota Fiscal
+#### Invoice Fields
 
-**Teste 18: Campos Obrigatórios**
-1. Tente salvar nota fiscal sem preencher campos
-2. ✅ **Esperado**: Mensagens de erro específicas para cada campo vazio
+**Test 18: Required Fields**
+1. Try to save an invoice without filling in its fields.
+2. ✅ **Expected**: Specific error messages appear for each empty field.
 
-**Teste 19: Validação de Cliente**
-1. Preencha número da nota e forma de pagamento
-2. Não selecione cliente
-3. Tente salvar
-4. ✅ **Esperado**: Mensagem "Erro: Selecione um cliente!"
+**Test 19: Customer Validation**
+1. Enter the invoice number and payment method.
+2. Do not select a customer.
+3. Try to save.
+4. ✅ **Expected**: Message "Error: Select a customer!".
 
-**Teste 20: Validação de Itens**
-1. Preencha todos os campos mas não adicione itens
-2. Tente salvar
-3. ✅ **Esperado**: Mensagem "Erro: Adicione pelo menos um item!"
+**Test 20: Item Validation**
+1. Fill in all fields but do not add any items.
+2. Try to save.
+3. ✅ **Expected**: Message "Error: Add at least one item!".
 
-## Tela de Clientes
+## Customers Screen
 
-### Cenários de Teste
+### Test Scenarios
 
-**Teste 21: Nome Válido**
-1. Digite nome: `João Silva`
-2. ✅ **Esperado**: Aceito (>= 3 caracteres)
+**Test 21: Valid Name**
+1. Enter the name `João Silva`.
+2. ✅ **Expected**: Accepted (>= 3 characters).
 
-**Teste 22: Nome Inválido - Muito Curto**
-1. Digite nome: `Jo`
-2. Tente submeter
-3. ✅ **Esperado**: Mensagem "Nome deve ter no mínimo 3 caracteres"
+**Test 22: Invalid Name - Too Short**
+1. Enter the name `Jo`.
+2. Try to submit.
+3. ✅ **Expected**: Message "Name must contain at least 3 characters".
 
-**Teste 23: Nome Vazio**
-1. Deixe campo de nome vazio
-2. Tente submeter
-3. ✅ **Esperado**: Mensagem "Nome é obrigatório"
+**Test 23: Empty Name**
+1. Leave the name field empty.
+2. Try to submit.
+3. ✅ **Expected**: Message "Name is required".
 
-## Tela de Usuários
+## Users Screen
 
-### Cenários de Teste
+### Test Scenarios
 
-**Teste 24: Nome Válido**
-1. Digite nome: `Maria Santos`
-2. ✅ **Esperado**: Aceito (>= 3 caracteres)
+**Test 24: Valid Name**
+1. Enter the name `Maria Santos`.
+2. ✅ **Expected**: Accepted (>= 3 characters).
 
-**Teste 25: Nome Inválido - Muito Curto**
-1. Digite nome: `Ma`
-2. Tente submeter
-3. ✅ **Esperado**: Mensagem "Nome deve ter no mínimo 3 caracteres"
+**Test 25: Invalid Name - Too Short**
+1. Enter the name `Ma`.
+2. Try to submit.
+3. ✅ **Expected**: Message "Name must contain at least 3 characters".
 
-## Testes de Integração
+## Integration Tests
 
-### Fluxo Completo de Venda
+### Complete Sales Flow
 
-**Teste 26: Venda Completa**
-1. Cadastre um produto com estoque de 10
-2. Cadastre um cliente
-3. Crie uma nota fiscal
-4. Adicione o produto com quantidade 5
-5. Salve a nota fiscal
-6. ✅ **Esperado**: Venda registrada com sucesso
-7. Verifique o estoque do produto
-8. ✅ **Esperado**: Estoque reduzido para 5
+**Test 26: Complete Sale**
+1. Register a product with 10 units in stock.
+2. Register a customer.
+3. Create an invoice.
+4. Add the product with a quantity of 5.
+5. Save the invoice.
+6. ✅ **Expected**: The sale is recorded successfully.
+7. Check the product stock.
+8. ✅ **Expected**: Stock is reduced to 5.
 
-## Testes de Regressão
+## Regression Tests
 
-**Teste 27: Funcionalidades Existentes**
-1. Teste todas as funcionalidades existentes (listar, editar, excluir)
-2. ✅ **Esperado**: Nenhuma funcionalidade quebrada
+**Test 27: Existing Functionality**
+1. Test all existing functionality (list, edit, delete).
+2. ✅ **Expected**: No functionality is broken.
 
-## Checklist de Validação
+## Validation Checklist
 
-Use este checklist para garantir que todos os testes foram realizados:
+Use this checklist to ensure that all tests have been completed:
 
-### Produtos
-- [ ] Preço aceita valores positivos
-- [ ] Preço rejeita valores negativos
-- [ ] Preço limita a 2 casas decimais
-- [ ] Preço converte vírgula para ponto
-- [ ] Estoque aceita inteiros positivos
-- [ ] Estoque rejeita negativos
-- [ ] Estoque rejeita decimais
-- [ ] Código aceita alfanuméricos e hífens
-- [ ] Código converte para maiúsculas
-- [ ] Código rejeita caracteres especiais
-- [ ] Código valida comprimento mínimo/máximo
+### Products
+- [ ] Price accepts positive values.
+- [ ] Price rejects negative values.
+- [ ] Price is limited to 2 decimal places.
+- [ ] Price converts commas to periods.
+- [ ] Stock accepts positive integers.
+- [ ] Stock rejects negative values.
+- [ ] Stock rejects decimal values.
+- [ ] Code accepts alphanumeric characters and hyphens.
+- [ ] Code is converted to uppercase.
+- [ ] Code rejects special characters.
+- [ ] Code validates minimum/maximum length.
 
-### Vendas
-- [ ] Quantidade aceita inteiros positivos
-- [ ] Quantidade rejeita negativos
-- [ ] Quantidade rejeita decimais
-- [ ] Quantidade valida contra estoque
-- [ ] Campos obrigatórios são validados
-- [ ] Validação de cliente funciona
-- [ ] Validação de itens funciona
+### Sales
+- [ ] Quantity accepts positive integers.
+- [ ] Quantity rejects negative values.
+- [ ] Quantity rejects decimals.
+- [ ] Quantity is validated against stock.
+- [ ] Required fields are validated.
+- [ ] Customer validation works.
+- [ ] Item validation works.
 
-### Clientes
-- [ ] Nome valida comprimento mínimo
-- [ ] Nome valida obrigatoriedade
+### Customers
+- [ ] Name minimum length is validated.
+- [ ] Name is validated as required.
 
-### Usuários
-- [ ] Nome valida comprimento mínimo
-- [ ] Nome valida obrigatoriedade
+### Users
+- [ ] Name minimum length is validated.
+- [ ] Name is validated as required.
 
-### Geral
-- [ ] Mensagens de erro são claras e específicas
-- [ ] Helper text orienta o usuário
-- [ ] Formatadores previnem entrada inválida
-- [ ] Validadores capturam erros
-- [ ] Formulários não permitem submissão com erros
-- [ ] Experiência do usuário é intuitiva
+### General
+- [ ] Error messages are clear and specific.
+- [ ] Helper text guides the user.
+- [ ] Formatters prevent invalid input.
+- [ ] Validators catch errors.
+- [ ] Forms cannot be submitted with errors.
+- [ ] The user experience is intuitive.
 
-## Relatando Problemas
+## Reporting Issues
 
-Se encontrar algum problema durante os testes, reporte com:
+If you find an issue during testing, report:
 
-1. **Tela**: Qual tela foi afetada
-2. **Campo**: Qual campo apresentou o problema
-3. **Ação**: O que você tentou fazer
-4. **Esperado**: O que deveria acontecer
-5. **Obtido**: O que realmente aconteceu
-6. **Passos para Reproduzir**: Como recriar o problema
+1. **Screen**: Which screen was affected.
+2. **Field**: Which field had the issue.
+3. **Action**: What you tried to do.
+4. **Expected**: What should have happened.
+5. **Actual**: What happened.
+6. **Steps to Reproduce**: How to reproduce the issue.
 
-## Notas Importantes
+## Important Notes
 
-1. Todos os formatadores funcionam em tempo real - caracteres inválidos simplesmente não aparecem no campo
-2. Validadores são executados ao tentar submeter o formulário
-3. Mensagens de erro aparecem abaixo do campo correspondente
-4. Helper text fornece exemplos de formato correto
-5. Campos obrigatórios são marcados com asterisco (*)
+1. All formatters work in real time; invalid characters simply do not appear in the field.
+2. Validators run when the form is submitted.
+3. Error messages appear below the corresponding field.
+4. Helper text provides examples of the correct format.
+5. Required fields are marked with an asterisk (*).
 
-## Ambiente de Teste
+## Test Environment
 
-Teste em múltiplas plataformas quando possível:
+Test on multiple platforms when possible:
 - [ ] Windows
 - [ ] macOS
 - [ ] iOS
 - [ ] Android
 
-## Conclusão
+## Conclusion
 
-Após completar todos os testes deste guia, você terá verificado que:
-- ✅ Valores negativos são corretamente rejeitados
-- ✅ Formatação de entrada funciona adequadamente
-- ✅ Mensagens de erro são específicas e úteis
-- ✅ Validação não interfere com uso normal
-- ✅ Sistema é mais robusto e confiável
+After completing all tests in this guide, you will have verified that:
+- ✅ Negative values are correctly rejected.
+- ✅ Input formatting works as expected.
+- ✅ Error messages are specific and useful.
+- ✅ Validation does not interfere with normal use.
+- ✅ The system is more robust and reliable.

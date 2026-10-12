@@ -1,105 +1,105 @@
-# Refatoração para BLoC Pattern - Tela de Configurações
+# Refactoring the Settings Screen to the BLoC Pattern
 
-## Visão Geral
+## Overview
 
-A tela de configurações foi refatorada para seguir o padrão BLoC (Business Logic Component), conforme solicitado nos comentários do PR. Esta refatoração melhora a separação de responsabilidades, facilita testes e torna o código mais manutenível.
+The settings screen was refactored to follow the BLoC (Business Logic Component) pattern, as requested in the PR comments. This refactoring improves separation of responsibilities, simplifies testing, and makes the code easier to maintain.
 
-## Mudanças Realizadas
+## Changes Made
 
-### 1. Implementação do BLoC Pattern
+### 1. BLoC Pattern Implementation
 
-#### Estrutura Criada
+#### Structure Created
 
 ```
 lib/screens/configuracoes/bloc/
-├── configuracoes_bloc.dart   - Lógica de negócio
-├── configuracoes_event.dart  - 6 eventos
-└── configuracoes_state.dart  - 5 estados
+├── configuracoes_bloc.dart   - Business logic
+├── configuracoes_event.dart  - 6 events
+└── configuracoes_state.dart  - 5 states
 ```
 
-#### Eventos Implementados
+#### Implemented Events
 
-1. `CarregarConfiguracoesEvent` - Carrega configurações iniciais
-2. `AtualizarConfiguracoesEvent` - Salva configurações
-3. `RestaurarPadraoEvent` - Restaura valores padrão
-4. `RealizarBackupEvent` - Executa backup
-5. `LimparLogsAntigosEvent` - Remove logs antigos
-6. `LimparTodosDadosEvent` - Limpa todos os dados
+1. `CarregarConfiguracoesEvent` - Loads initial settings.
+2. `AtualizarConfiguracoesEvent` - Saves settings.
+3. `RestaurarPadraoEvent` - Restores default values.
+4. `RealizarBackupEvent` - Creates a backup.
+5. `LimparLogsAntigosEvent` - Removes old logs.
+6. `LimparTodosDadosEvent` - Clears all data.
 
-#### Estados Implementados
+#### Implemented States
 
-1. `ConfiguracoesInitial` - Estado inicial
-2. `ConfiguracoesLoading` - Carregando
-3. `ConfiguracoesLoaded` - Carregado com sucesso
-4. `ConfiguracoesSuccess` - Operação bem-sucedida
-5. `ConfiguracoesError` - Erro na operação
+1. `ConfiguracoesInitial` - Initial state.
+2. `ConfiguracoesLoading` - Loading.
+3. `ConfiguracoesLoaded` - Loaded successfully.
+4. `ConfiguracoesSuccess` - Operation succeeded.
+5. `ConfiguracoesError` - Operation failed.
 
-### 2. Modularização da UI
+### 2. UI Modularization
 
-#### Antes
-- 1 arquivo: `configuracoes_screen.dart` (739 linhas)
+#### Before
+- 1 file: `configuracoes_screen.dart` (739 lines).
 
-#### Depois
-- 1 arquivo principal: `configuracoes_screen.dart` (~350 linhas)
-- 6 widgets modulares:
-  - `secao_notificacoes.dart` (~100 linhas)
-  - `secao_tema.dart` (~80 linhas)
-  - `secao_backup.dart` (~85 linhas)
-  - `secao_limpeza.dart` (~100 linhas)
-  - `secao_seguranca.dart` (~85 linhas)
-  - `secao_banco_dados.dart` (~90 linhas)
+#### After
+- 1 main file: `configuracoes_screen.dart` (~350 lines).
+- 6 modular widgets:
+  - `secao_notificacoes.dart` (~100 lines)
+  - `secao_tema.dart` (~80 lines)
+  - `secao_backup.dart` (~85 lines)
+  - `secao_limpeza.dart` (~100 lines)
+  - `secao_seguranca.dart` (~85 lines)
+  - `secao_banco_dados.dart` (~90 lines)
 
-#### Benefícios
-- ✅ Código mais legível e organizado
-- ✅ Widgets reutilizáveis
-- ✅ Mais fácil de manter e testar
-- ✅ Melhor performance (widgets menores)
+#### Benefits
+- ✅ More readable and organized code.
+- ✅ Reusable widgets.
+- ✅ Easier to maintain and test.
+- ✅ Better performance (smaller widgets).
 
-### 3. Documentação Melhorada
+### 3. Improved Documentation
 
-Todos os 15 atributos do modelo `Configuracao` agora têm documentação completa:
+All 15 fields in the `Configuracao` model now have complete documentation:
 
 ```dart
-/// Controla se as notificações estão ativadas globalmente no sistema
+/// Controls whether notifications are enabled globally in the system.
 final bool notificacoesAtivadas;
 
-/// Quantidade mínima de unidades em estoque para disparar alerta (1-50)
+/// Minimum number of units in stock required to trigger an alert (1-50).
 final int limiteEstoqueBaixo;
 
-/// Frequência do backup automático: 'diario', 'semanal' ou 'mensal'
+/// Automatic backup frequency: 'diario', 'semanal', or 'mensal'.
 final String frequenciaBackup;
 ```
 
-## Separação de Responsabilidades
+## Separation of Responsibilities
 
-### Antes (Padrão Manager)
+### Before (Manager Pattern)
 ```
 ConfiguracoesScreen → ConfiguracaoManager → JSON
 ```
 
-### Depois (Padrão BLoC)
+### After (BLoC Pattern)
 ```
 ConfiguracoesScreen → ConfiguracoesBloc → ConfiguracaoManager → JSON
 ```
 
-### Vantagens
-- UI não conhece detalhes de persistência
-- Manager pode ser mockado nos testes do BLoC
-- BLoC pode ser testado independentemente da UI
-- Estado é previsível e rastreável
+### Advantages
+- The UI does not know about persistence details.
+- The Manager can be mocked in BLoC tests.
+- The BLoC can be tested independently of the UI.
+- State is predictable and traceable.
 
-## Dependências Adicionadas
+## Dependencies Added
 
-### pubspec.yaml
+### `pubspec.yaml`
 ```yaml
 dependencies:
   flutter_bloc: ^8.1.6  # State management
-  equatable: ^2.0.5     # Comparação de eventos/estados
+  equatable: ^2.0.5     # Event/state comparison
 ```
 
-## Uso na UI
+## UI Usage
 
-### Antes (StatefulWidget com Manager)
+### Before (StatefulWidget with Manager)
 ```dart
 class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
   final ConfiguracaoManager _manager = ConfiguracaoManager();
@@ -107,12 +107,12 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
   
   void _salvar() async {
     await _manager.atualizarConfiguracao(_config);
-    // Lógica de UI misturada
+    // UI logic mixed with persistence
   }
 }
 ```
 
-### Depois (BLoC)
+### After (BLoC)
 ```dart
 class ConfiguracoesScreen extends StatelessWidget {
   @override
@@ -122,14 +122,14 @@ class ConfiguracoesScreen extends StatelessWidget {
       child: BlocConsumer<ConfiguracoesBloc, ConfiguracoesState>(
         listener: (context, state) {
           if (state is ConfiguracoesSuccess) {
-            // Mostra sucesso
+            // Show success
           }
         },
         builder: (context, state) {
           if (state is ConfiguracoesLoaded) {
             return _buildContent(state.configuracao);
           }
-          // Outros estados...
+          // Other states...
         },
       ),
     );
@@ -137,13 +137,13 @@ class ConfiguracoesScreen extends StatelessWidget {
 }
 ```
 
-## Testes
+## Tests
 
-### Facilidade de Teste
+### Testability
 
-**BLoC pode ser testado isoladamente:**
+**The BLoC can be tested in isolation:**
 ```dart
-test('deve emitir ConfiguracoesSuccess ao atualizar', () async {
+test('should emit ConfiguracoesSuccess when updating', () async {
   final mockManager = MockConfiguracaoManager();
   final bloc = ConfiguracoesBloc(manager: mockManager);
   
@@ -160,16 +160,16 @@ test('deve emitir ConfiguracoesSuccess ao atualizar', () async {
 });
 ```
 
-## Estrutura de Diretórios Final
+## Final Directory Structure
 
 ```
 lib/screens/configuracoes/
-├── configuracoes_screen.dart    # Tela principal
-├── bloc/                         # Lógica de negócio
+├── configuracoes_screen.dart    # Main screen
+├── bloc/                         # Business logic
 │   ├── configuracoes_bloc.dart
 │   ├── configuracoes_event.dart
 │   └── configuracoes_state.dart
-└── widgets/                      # Componentes UI
+└── widgets/                      # UI components
     ├── secao_notificacoes.dart
     ├── secao_tema.dart
     ├── secao_backup.dart
@@ -178,14 +178,14 @@ lib/screens/configuracoes/
     └── secao_banco_dados.dart
 ```
 
-## Próximos Passos
+## Next Steps
 
-1. ✅ Migrar outras telas para BLoC pattern
-2. ✅ Criar testes unitários para ConfiguracoesBloc
-3. ✅ Adicionar testes de widget para os componentes
-4. ✅ Documentar padrão BLoC no README
+1. ✅ Migrate other screens to the BLoC pattern.
+2. ✅ Add unit tests for ConfiguracoesBloc.
+3. ✅ Add widget tests for the components.
+4. ✅ Document the BLoC pattern in the README.
 
-## Referências
+## References
 
 - [flutter_bloc Documentation](https://bloclibrary.dev/)
 - [Effective BLoC Pattern](https://verygood.ventures/blog/effective-bloc-pattern)
@@ -193,6 +193,6 @@ lib/screens/configuracoes/
 
 ---
 
-**Commit:** 4451857  
-**Data:** Dezembro 2024  
-**Autor:** @copilot
+**Commit:** 4451857<br>
+**Date:** December 2024
+**Author:** @copilot

@@ -1,12 +1,12 @@
-# Verificação da Mensagem de Erro ProductException.insufficientStock
+# ProductException.insufficientStock Error Message Verification
 
-## Resumo
+## Summary
 
-Este documento verifica que a mensagem de erro para `ProductException.insufficientStock` está implementada conforme sugerido no issue referente à clareza dos tipos de erros.
+This document verifies that the error message for `ProductException.insufficientStock` is implemented as suggested in the issue concerning error-message clarity.
 
-## Requisito do Issue
+## Issue Requirement
 
-O issue #42 (comentário de code review) sugeria que a mensagem de erro para `insufficientStock` deveria ser mais clara sobre o que `available` e `requested` representam:
+Issue #42 (code review comment) suggested that the error message for `insufficientStock` should clarify what `available` and `requested` represent:
 
 ```dart
 return ProductException(
@@ -17,12 +17,12 @@ return ProductException(
 );
 ```
 
-## Implementação Atual
+## Current Implementation
 
-A implementação atual em `lib/core/exceptions/product_exception.dart` (linhas 78-90) já contém exatamente a mensagem sugerida:
+The current implementation in `lib/core/exceptions/product_exception.dart` (lines 78-90) already contains exactly the suggested message:
 
 ```dart
-/// Cria uma exceção para estoque insuficiente.
+/// Creates an exception for insufficient stock.
 factory ProductException.insufficientStock(
   String code,
   int available,
@@ -37,28 +37,28 @@ factory ProductException.insufficientStock(
 }
 ```
 
-## Clareza da Mensagem
+## Message Clarity
 
-A mensagem implementada é clara e específica:
+The implemented message is clear and specific:
 
-1. **"Estoque disponível:"** - Label explícito indicando que o valor seguinte é o estoque disponível
-2. **`$available`** - Valor numérico do estoque disponível
-3. **"Quantidade solicitada:"** - Label explícito indicando que o valor seguinte é a quantidade solicitada
-4. **`$requested`** - Valor numérico da quantidade solicitada
+1. **"Estoque disponível:"** - Explicitly labels the following value as available stock.
+2. **`$available`** - Numeric value of the available stock.
+3. **"Quantidade solicitada:"** - Explicitly labels the following value as the requested quantity.
+4. **`$requested`** - Numeric value of the requested quantity.
 
-## Cobertura de Testes
+## Test Coverage
 
-Foram criados testes abrangentes em `test/product_exception_test.dart` que verificam:
+Comprehensive tests in `test/product_exception_test.dart` verify:
 
-1. ✅ Mensagem contém labels claros "Estoque disponível:" e "Quantidade solicitada:"
-2. ✅ Valores numéricos são corretamente interpolados na mensagem
-3. ✅ Formato da mensagem está correto em `toString()` e `userMessage`
-4. ✅ Casos extremos (estoque zero, grandes quantidades) são tratados corretamente
-5. ✅ Tipo de exceção e código do produto são preservados
+1. ✅ The message contains the clear labels "Estoque disponível:" and "Quantidade solicitada:".
+2. ✅ Numeric values are correctly interpolated into the message.
+3. ✅ The message format is correct in `toString()` and `userMessage`.
+4. ✅ Edge cases (zero stock, large quantities) are handled correctly.
+5. ✅ The exception type and product code are preserved.
 
-## Exemplos de Uso
+## Usage Examples
 
-### Exemplo 1: Estoque Insuficiente Comum
+### Example 1: Typical Insufficient Stock
 ```dart
 final exception = ProductException.insufficientStock('PROD-001', 5, 10);
 print(exception.userMessage);
@@ -68,7 +68,7 @@ print(exception.userMessage);
 // Detalhes: Estoque disponível: 5. Quantidade solicitada: 10.
 ```
 
-### Exemplo 2: Estoque Esgotado
+### Example 2: Out of Stock
 ```dart
 final exception = ProductException.insufficientStock('PROD-002', 0, 1);
 print(exception.userMessage);
@@ -78,7 +78,7 @@ print(exception.userMessage);
 // Detalhes: Estoque disponível: 0. Quantidade solicitada: 1.
 ```
 
-### Exemplo 3: Grande Diferença
+### Example 3: Large Difference
 ```dart
 final exception = ProductException.insufficientStock('PROD-003', 100, 1000);
 print(exception.userMessage);
@@ -88,18 +88,18 @@ print(exception.userMessage);
 // Detalhes: Estoque disponível: 100. Quantidade solicitada: 1000.
 ```
 
-## Conclusão
+## Conclusion
 
-✅ **A implementação está completa e correta.**
+✅ **The implementation is complete and correct.**
 
-A mensagem de erro para `ProductException.insufficientStock` já implementa a sugestão do issue, fornecendo clareza sobre o significado dos valores `available` e `requested` através de labels explícitos em português.
+The error message for `ProductException.insufficientStock` already implements the issue's suggestion, clarifying the meaning of `available` and `requested` through explicit labels in Portuguese.
 
-A mensagem é:
-- ✅ Clara e específica
-- ✅ Em português (seguindo o padrão do projeto)
-- ✅ Bem testada
-- ✅ Consistente com outras mensagens de erro da classe
+The message is:
+- ✅ Clear and specific.
+- ✅ In Portuguese (following the project's convention).
+- ✅ Well tested.
+- ✅ Consistent with other error messages in the class.
 
-## Data de Verificação
+## Verification Date
 
 2025-12-10

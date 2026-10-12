@@ -1,50 +1,50 @@
-# Feature: Cadastro de Empresas
+# Feature: Company Registration
 
-## Visao Geral
+## Overview
 
-Esta funcionalidade cobre o ciclo de cadastro, listagem, busca por CNPJ, atualizacao e remocao de empresas, seguindo o fluxo oficial do projeto:
+This feature covers company creation, listing, CNPJ lookup, updating, and deletion, following the project's standard flow:
 
 Screen -> Interface -> Repository -> DAO Drift -> SQLite.
 
-## Regras de Negocio
+## Business Rules
 
-- CNPJ deve ser unico no banco.
-- CNPJ e normalizado para comparacao/armazenamento (somente digitos).
-- Operacoes de repositorio retornam `ResultStatus<R, E>` com mensagens amigaveis.
+- CNPJ values must be unique in the database.
+- CNPJ values are normalized for comparison/storage (digits only).
+- Repository operations return `ResultStatus<R, E>` with user-friendly messages.
 
-## Arquitetura Atual
+## Current Architecture
 
-### Dominio/Core
+### Domain/Core
 
-- Modelo: `lib/core/models/company.dart`
-- Contrato: `lib/core/interface/i_company_repository.dart`
+- Model: `lib/core/models/company.dart`
+- Interface: `lib/core/interface/i_company_repository.dart`
 
-### Dados (Drift)
+### Data (Drift)
 
-- Tabela: `lib/data/database/table/company_records.dart`
+- Table: `lib/data/database/table/company_records.dart`
 - DAO: `lib/data/database/dao/company_dao.dart`
-- Conversao para companion: `lib/data/database/extension/company_to_companion.dart`
+- Conversion to companion: `lib/data/database/extension/company_to_companion.dart`
 
-### Repositorio
+### Repository
 
-- Implementacao: `lib/domain/repository/company_repository.dart`
-- Registro em DI: `setupAppInjection()` em `lib/application/app_injection.dart`
+- Implementation: `lib/domain/repository/company_repository.dart`
+- DI registration: `setupAppInjection()` in `lib/application/app_injection.dart`
 
-### Apresentacao
+### Presentation
 
-- Tela principal: `lib/screens/company/company_view.dart`
-- Bloc e estados: `lib/screens/company/bloc/`
+- Main screen: `lib/screens/company/company_view.dart`
+- BLoC and states: `lib/screens/company/bloc/`
 - Widgets: `lib/screens/company/widgets/`
 
-## Banco de Dados
+## Database
 
-- Banco principal: `AppDatabase`
-- Versao atual do schema: `12`
-- A tabela de empresas e registrada no `@DriftDatabase` do `AppDatabase`.
+- Primary database: `AppDatabase`
+- Current schema version: `12`
+- The company table is registered in `AppDatabase`'s `@DriftDatabase`.
 
-## Geracao e Validacao
+## Code Generation and Validation
 
-Sempre que houver alteracao de modelos Freezed/JSON, DAOs/tabelas Drift ou rotas:
+Whenever Freezed/JSON models, Drift DAOs/tables, or routes change:
 
 ```bash
 dart run build_runner build
@@ -52,14 +52,14 @@ dart analyze
 flutter test
 ```
 
-## Checklist de Teste Funcional
+## Functional Test Checklist
 
-1. Cadastrar empresa com CNPJ valido.
-2. Tentar cadastrar CNPJ duplicado (deve retornar erro amigavel).
-3. Buscar empresa por CNPJ existente e inexistente.
-4. Editar dados da empresa e confirmar persistencia.
-5. Excluir empresa e validar atualizacao da lista.
+1. Register a company with a valid CNPJ.
+2. Try to register a duplicate CNPJ (a user-friendly error should be returned).
+3. Search for companies using an existing and a nonexistent CNPJ.
+4. Edit company data and confirm that the changes persist.
+5. Delete a company and verify that the list is updated.
 
-## Nota Historica
+## Historical Note
 
-Versoes antigas deste documento citavam paths e schema versions anteriores (ex.: repositores em `lib/core/repository/` e schema `9`). O estado atual do projeto usa repositores em `lib/domain/repository/` e schema `12` no `AppDatabase`.
+Older versions of this document referred to previous paths and schema versions (e.g., repositories in `lib/core/repository/` and schema `9`). The current project uses repositories in `lib/domain/repository/` and schema `12` in `AppDatabase`.

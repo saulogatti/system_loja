@@ -1,296 +1,294 @@
-# Mockup da Tela de Configurações
+# Settings Screen Mockup
 
-## Layout Visual
+## Visual Layout
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│  ← Configurações do Sistema                              ⟲ Restaurar│
+│  ← System Settings                                      ⟲ Restore│
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                       │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ 🔔 Notificações                                               │  │
+│  │ 🔔 Notifications                                              │  │
 │  ├──────────────────────────────────────────────────────────────┤  │
 │  │                                                               │  │
-│  │  ⚫ Ativar notificações                         ◉ ON          │  │
-│  │     Receber alertas do sistema                               │  │
+│  │  ⚫ Enable notifications                       ◉ ON          │  │
+│  │     Receive system alerts                                    │  │
 │  │                                                               │  │
-│  │  ⚫ Notificar vendas                            ◉ ON          │  │
-│  │     Alertas sobre novas vendas                               │  │
+│  │  ⚫ Notify about sales                         ◉ ON          │  │
+│  │     Alerts about new sales                                    │  │
 │  │                                                               │  │
-│  │  ⚫ Notificar estoque baixo                     ◉ ON          │  │
-│  │     Alertas quando estoque está baixo                        │  │
+│  │  ⚫ Notify about low stock                     ◉ ON          │  │
+│  │     Alerts when stock is low                                  │  │
 │  │                                                               │  │
-│  │  📊 Limite de estoque baixo                                  │  │
-│  │     ├──────────●──────────────────────────────┤ 10 unidades  │  │
+│  │  📊 Low-stock threshold                                      │  │
+│  │     ├──────────●──────────────────────────────┤ 10 units     │  │
 │  │     1                                       50                │  │
 │  │                                                               │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 │                                                                       │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ 🎨 Aparência                                                  │  │
+│  │ 🎨 Appearance                                                 │  │
 │  ├──────────────────────────────────────────────────────────────┤  │
 │  │                                                               │  │
-│  │  ⚫ Tema escuro                                 ○ OFF         │  │
-│  │     Ativar modo escuro                                       │  │
+│  │  ⚫ Dark theme                                  ○ OFF         │  │
+│  │     Enable dark mode                                         │  │
 │  │                                                               │  │
-│  │  🎨 Cor primária                                         ▣    │  │
-│  │     Cor principal do aplicativo                    [Azul]    │  │
+│  │  🎨 Primary color                                         ▣    │  │
+│  │     Main application color                         [Blue]    │  │
 │  │                                                        →      │  │
 │  │                                                               │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 │                                                                       │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ 💾 Backup de Dados                                            │  │
+│  │ 💾 Data Backup                                                │  │
 │  ├──────────────────────────────────────────────────────────────┤  │
 │  │                                                               │  │
-│  │  ⚫ Backup automático                           ○ OFF         │  │
-│  │     Realizar backups periodicamente                          │  │
+│  │  ⚫ Automatic backup                           ○ OFF         │  │
+│  │     Create backups periodically                               │  │
 │  │                                                               │  │
-│  │  💾 Realizar backup agora                               →    │  │
-│  │     Criar cópia dos dados manualmente                        │  │
+│  │  💾 Back up now                                          →    │  │
+│  │     Create a manual copy of the data                         │  │
 │  │                                                               │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 │                                                                       │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ 🧹 Limpeza de Dados                                           │  │
+│  │ 🧹 Data Cleanup                                               │  │
 │  ├──────────────────────────────────────────────────────────────┤  │
 │  │                                                               │  │
-│  │  ⚫ Limpeza automática de logs                  ○ OFF         │  │
-│  │     Remover logs antigos automaticamente                     │  │
+│  │  ⚫ Automatic log cleanup                       ○ OFF         │  │
+│  │     Automatically remove old logs                            │  │
 │  │                                                               │  │
-│  │  🧹 Limpar logs antigos agora                           →    │  │
-│  │     Remover logs com base na configuração                    │  │
+│  │  🧹 Clear old logs now                                   →    │  │
+│  │     Remove logs based on the current setting                 │  │
 │  │                                                               │  │
-│  │  ⚠️  Limpar todos os dados                               →    │  │
-│  │     Remover TODOS os dados do sistema           [VERMELHO]   │  │
+│  │  ⚠️  Clear all data                                      →    │  │
+│  │     Remove ALL system data                       [RED]       │  │
 │  │                                                               │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 │                                                                       │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ 🔒 Segurança                                                  │  │
+│  │ 🔒 Security                                                   │  │
 │  ├──────────────────────────────────────────────────────────────┤  │
 │  │                                                               │  │
-│  │  ⚫ Exigir senha                                ○ OFF         │  │
-│  │     Solicitar senha ao abrir o aplicativo                    │  │
+│  │  ⚫ Require password                            ○ OFF         │  │
+│  │     Request a password when opening the app                  │  │
 │  │                                                               │  │
-│  │  ⚫ Permitir múltiplos usuários                 ○ OFF         │  │
-│  │     Habilitar gestão de usuários                             │  │
+│  │  ⚫ Allow multiple users                        ○ OFF         │  │
+│  │     Enable user management                                    │  │
 │  │                                                               │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 │                                                                       │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │ 🗄️  Banco de Dados                                            │  │
+│  │ 🗄️  Database                                                  │  │
 │  ├──────────────────────────────────────────────────────────────┤  │
 │  │                                                               │  │
-│  │  ◉ JSON (Arquivos locais)                                    │  │
-│  │     Leve e simples, recomendado para uso básico              │  │
+│  │  ◉ JSON (Local files)                                        │  │
+│  │     Lightweight and simple; recommended for basic use        │  │
 │  │                                                               │  │
 │  │  ○ SQL (SQLite)                                               │  │
-│  │     Mais robusto, recomendado para muitos dados              │  │
+│  │     More robust; recommended for large amounts of data       │  │
 │  │                                                               │  │
-│  │  ℹ️  Nota: Alterar o tipo de banco de dados requer           │  │
-│  │     reinicialização do aplicativo.                           │  │
+│  │  ℹ️  Note: Changing the database type requires               │  │
+│  │     restarting the application.                              │  │
 │  │                                                               │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 │                                                                       │
 │  ┌──────────────────────────────────────────────────────────────┐  │
-│  │                    💾 SALVAR CONFIGURAÇÕES                    │  │
+│  │                       💾 SAVE SETTINGS                         │  │
 │  └──────────────────────────────────────────────────────────────┘  │
 │                                                                       │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-## Interações por Seção
+## Interactions by Section
 
 ### 1. Header (AppBar)
-- **Botão Voltar (←)**: Retorna à tela inicial
-- **Título**: "Configurações do Sistema"
-- **Botão Restaurar (⟲)**: Abre diálogo de confirmação para restaurar padrões
+- **Back button (←)**: Returns to the home screen
+- **Title**: "System Settings"
+- **Restore button (⟲)**: Opens a confirmation dialog to restore defaults
 
-### 2. Notificações (Card Azul)
-- **Toggle Mestre**: Controla todas as notificações
-- **Toggle Vendas**: Ativa/desativa notificações de vendas
-- **Toggle Estoque**: Ativa/desativa alertas de estoque baixo
-- **Slider Limite**: Ajusta o limite (1-50 unidades) com preview do valor
+### 2. Notifications (Blue Card)
+- **Master toggle**: Controls all notifications
+- **Sales toggle**: Enables/disables sales notifications
+- **Stock toggle**: Enables/disables low-stock alerts
+- **Threshold slider**: Adjusts the threshold (1-50 units) with a value preview
 
-### 3. Aparência (Card Verde)
-- **Toggle Tema**: Liga/desliga modo escuro
-- **Seletor de Cor**: Abre modal com 8 opções de cores
-  - Mostra preview da cor atual
-  - Cores: Azul, Verde, Laranja, Roxo, Vermelho, Rosa, Ciano, Índigo
+### 3. Appearance (Green Card)
+- **Theme toggle**: Turns dark mode on/off
+- **Color picker**: Opens a modal with 8 color options
+  - Shows a preview of the current color
+  - Colors: Blue, Green, Orange, Purple, Red, Pink, Cyan, Indigo
 
-### 4. Backup (Card Laranja)
-- **Toggle Automático**: Habilita backups periódicos
-- **Seletor Frequência**: Modal com opções (Diário/Semanal/Mensal)
-  - Aparece apenas se backup automático estiver ativo
-- **Botão Manual**: Executa backup imediato
-  - Mostra progresso e resultado
+### 4. Backup (Orange Card)
+- **Automatic toggle**: Enables scheduled backups
+- **Frequency picker**: Modal with options (Daily/Weekly/Monthly)
+  - Appears only when automatic backup is enabled
+- **Manual button**: Runs a backup immediately
+  - Shows progress and result
 
-### 5. Limpeza (Card Vermelho Claro)
-- **Toggle Automático**: Habilita limpeza automática
-- **Slider Dias**: Define retenção de logs (7-365 dias)
-  - Aparece apenas se limpeza automática estiver ativa
-- **Botão Limpar Logs**: Remove logs antigos
-  - Requer confirmação
-- **Botão Limpar Tudo**: Remove TODOS os dados
-  - Botão vermelho destacado
-  - Requer confirmação dupla com alerta severo
+### 5. Cleanup (Light Red Card)
+- **Automatic toggle**: Enables automatic cleanup
+- **Days slider**: Sets log retention (7-365 days)
+  - Appears only when automatic cleanup is enabled
+- **Clear logs button**: Removes old logs
+  - Requires confirmation
+- **Clear all button**: Removes ALL data
+  - Prominent red button
+  - Requires double confirmation with a severe warning
 
-### 6. Segurança (Card Roxo)
-- **Toggle Senha**: Habilita autenticação
-- **Slider Bloqueio**: Define timeout (1-60 minutos)
-  - Aparece apenas se senha estiver habilitada
-- **Toggle Usuários**: Habilita sistema multi-usuário
+### 6. Security (Purple Card)
+- **Password toggle**: Enables authentication
+- **Lock slider**: Sets the timeout (1-60 minutes)
+  - Appears only when password protection is enabled
+- **Users toggle**: Enables multi-user support
 
-### 7. Banco de Dados (Card Cinza)
-- **Radio JSON**: Seleciona persistência em arquivos
-  - Marcado por padrão
-  - Descrição: "Leve e simples"
-- **Radio SQL**: Seleciona persistência em SQLite
-  - Descrição: "Mais robusto"
-- **Nota Informativa**: Aviso sobre reinicialização
+### 7. Database (Gray Card)
+- **JSON radio button**: Selects file-based persistence
+  - Selected by default
+  - Description: "Lightweight and simple"
+- **SQL radio button**: Selects SQLite persistence
+  - Description: "More robust"
+- **Informational note**: Warns that a restart is required
 
-### 8. Botão Salvar (Footer)
-- **Estilo**: Botão grande e destacado
-- **Cor**: Azul primário com texto branco
-- **Ícone**: Disco de salvamento
-- **Feedback**: SnackBar verde (sucesso) ou vermelha (erro)
+### 8. Save Button (Footer)
+- **Style**: Large, prominent button
+- **Color**: Primary blue with white text
+- **Icon**: Save disk
+- **Feedback**: Green SnackBar on success or red on error
 
-## Fluxos de Interação
+## Interaction Flows
 
-### Salvar Configurações
+### Save Settings
 ```
-1. Usuário altera valores
-2. Clica em "SALVAR CONFIGURAÇÕES"
-3. Indicador de carregamento aparece
-4. Dados são persistidos no JSON
-5. SnackBar confirma sucesso/erro
-6. Estado é atualizado na memória
-```
-
-### Realizar Backup
-```
-1. Usuário clica em "Realizar backup agora"
-2. Sistema cria pasta com timestamp
-3. Copia arquivos JSON
-4. SnackBar mostra resultado
-   - Verde: "Backup realizado com sucesso!"
-   - Vermelha: "Erro ao realizar backup"
+1. The user changes values.
+2. Clicks "SAVE SETTINGS".
+3. A loading indicator appears.
+4. Data is persisted to JSON.
+5. A SnackBar confirms success or failure.
+6. State is updated in memory.
 ```
 
-### Limpar Todos os Dados
+### Create a Backup
 ```
-1. Usuário clica em "Limpar todos os dados"
-2. Modal de confirmação aparece:
+1. The user clicks "Back up now".
+2. The system creates a timestamped folder.
+3. JSON files are copied.
+4. The SnackBar displays the result.
+   - Green: "Backup completed successfully!"
+   - Red: "Error creating backup"
+```
+
+### Clear All Data
+```
+1. The user clicks "Clear all data".
+2. A confirmation modal appears:
    ┌────────────────────────────────────┐
-   │         ⚠️  ATENÇÃO!                │
+   │         ⚠️  WARNING!                │
    ├────────────────────────────────────┤
-   │ Esta ação irá REMOVER TODOS OS     │
-   │ DADOS do sistema (clientes,        │
-   │ produtos, notas fiscais, usuários  │
-   │ e logs).                           │
+   │ This action will REMOVE ALL        │
+   │ SYSTEM DATA (customers, products,  │
+   │ invoices, users, and logs).        │
    │                                    │
-   │ Esta ação NÃO PODE ser desfeita!   │
+   │ This action CANNOT be undone!      │
    │                                    │
-   │ Tem certeza que deseja continuar?  │
+   │ Are you sure you want to continue? │
    ├────────────────────────────────────┤
-   │ [Cancelar]  [Sim, Limpar Tudo] 🔴  │
+   │ [Cancel]  [Yes, Clear All] 🔴      │
    └────────────────────────────────────┘
-3. Se confirmado:
-   - Todos os arquivos JSON são zerados
-   - SnackBar laranja: "Todos os dados foram removidos!"
+3. If confirmed:
+   - All JSON files are cleared.
+   - Orange SnackBar: "All data has been removed!"
 ```
 
-### Restaurar Padrão
+### Restore Defaults
 ```
-1. Usuário clica no ícone ⟲ no AppBar
-2. Modal de confirmação:
+1. The user clicks the ⟲ icon in the AppBar.
+2. A confirmation modal appears:
    ┌────────────────────────────────────┐
-   │   Restaurar Configurações          │
+   │   Restore Settings                 │
    ├────────────────────────────────────┤
-   │ Deseja restaurar todas as          │
-   │ configurações para os valores      │
-   │ padrão?                            │
+   │ Do you want to restore all         │
+   │ settings to their defaults?        │
    ├────────────────────────────────────┤
-   │    [Cancelar]    [Restaurar]       │
+   │    [Cancel]      [Restore]         │
    └────────────────────────────────────┘
-3. Se confirmado:
-   - Valores voltam ao padrão
-   - UI é atualizada
-   - SnackBar verde: "Configurações restauradas!"
+3. If confirmed:
+   - Values return to their defaults.
+   - The UI is updated.
+   - Green SnackBar: "Settings restored!"
 ```
 
-### Seletor de Cor
+### Color Picker
 ```
-1. Usuário clica em "Cor primária"
-2. Modal aparece com opções:
+1. The user clicks "Primary color".
+2. A modal appears with these options:
    ┌────────────────────────────────────┐
-   │       Escolher Cor                 │
+   │       Choose a Color               │
    ├────────────────────────────────────┤
-   │  ▣ Azul                            │
-   │  ▣ Verde                           │
-   │  ▣ Laranja                         │
-   │  ▣ Roxo                            │
-   │  ▣ Vermelho                        │
-   │  ▣ Rosa                            │
-   │  ▣ Ciano                           │
-   │  ▣ Índigo                          │
+   │  ▣ Blue                            │
+   │  ▣ Green                           │
+   │  ▣ Orange                          │
+   │  ▣ Purple                          │
+   │  ▣ Red                             │
+   │  ▣ Pink                            │
+   │  ▣ Cyan                            │
+   │  ▣ Indigo                          │
    └────────────────────────────────────┘
-3. Usuário seleciona cor
-4. Modal fecha
-5. Preview atualiza instantaneamente
+3. The user selects a color.
+4. The modal closes.
+5. The preview updates instantly.
 ```
 
-## Estados Condicionais
+## Conditional States
 
-### Notificações Desabilitadas
-- Sub-opções ficam acinzentadas
-- Slider de limite fica oculto
-- Toggle de vendas/estoque não é clicável
+### Notifications Disabled
+- Sub-options are grayed out.
+- The threshold slider is hidden.
+- Sales/stock toggles are disabled.
 
-### Backup Automático Desabilitado
-- Seletor de frequência fica oculto
+### Automatic Backup Disabled
+- The frequency picker is hidden.
 
-### Limpeza Automática Desabilitada
-- Slider de dias fica oculto
+### Automatic Cleanup Disabled
+- The days slider is hidden.
 
-### Senha Desabilitada
-- Slider de tempo de bloqueio fica oculto
+### Password Disabled
+- The lock-timeout slider is hidden.
 
-## Responsividade
+## Responsiveness
 
 ### Desktop (> 800px)
-- Cards ocupam largura máxima de 600px centralizados
-- Padding lateral generoso
+- Cards use a centered maximum width of 600px.
+- Generous horizontal padding.
 
 ### Tablet (400-800px)
-- Cards ocupam 90% da largura
-- Padding moderado
+- Cards use 90% of the available width.
+- Moderate padding.
 
 ### Mobile (< 400px)
-- Cards ocupam 100% da largura
-- ScrollView habilitado
-- Padding mínimo para maximizar espaço
+- Cards use 100% of the available width.
+- Scrolling is enabled.
+- Minimal padding maximizes the available space.
 
-## Acessibilidade
+## Accessibility
 
-- ✅ Labels descritivos em todos os controles
-- ✅ Subtítulos explicativos
-- ✅ Ícones informativos
-- ✅ Cores com contraste adequado
-- ✅ Feedbacks visuais claros
-- ✅ Confirmações para ações destrutivas
-- ✅ Tooltips nos botões do AppBar
+- ✅ Descriptive labels on all controls
+- ✅ Explanatory subtitles
+- ✅ Informative icons
+- ✅ Adequate color contrast
+- ✅ Clear visual feedback
+- ✅ Confirmations for destructive actions
+- ✅ Tooltips on AppBar buttons
 
 ## Performance
 
-- ⚡ Renderização otimizada com setState local
-- ⚡ Operações de I/O em background
-- ⚡ Indicadores de carregamento durante operações assíncronas
-- ⚡ Validações instantâneas
-- ⚡ UI responsiva e fluida
+- ⚡ Optimized rendering with local setState
+- ⚡ Background I/O operations
+- ⚡ Loading indicators during asynchronous operations
+- ⚡ Immediate validation
+- ⚡ Responsive, smooth UI
 
-## Compatibilidade
+## Compatibility
 
 - ✅ Windows
 - ✅ macOS

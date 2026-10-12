@@ -1,53 +1,53 @@
 ---
-description: Instrucoes praticas para implementacoes e correcoes no System Loja
+description: Practical guidance for implementation and fixes in System Loja
 applyTo: "**"
 ---
 
-# Instrucoes para Agentes de Implementacao - System Loja
+# Implementation Agent Instructions - System Loja
 
-Este arquivo define o comportamento esperado para implementacoes, correcoes e refatoracoes no projeto.
+This file defines expectations for implementations, fixes, and refactoring in the project.
 
-## 1) Arquitetura e fluxo
+## 1) Architecture and Flow
 
-- UI em `lib/screens/`.
-- Fluxo principal: Screen (Bloc/Cubit) -> Interface (`lib/core/interface/`) -> Repository (`lib/domain/repository/`) -> DAO Drift (`lib/data/database/dao/`) -> SQLite.
-- **Arquitetura limpa e obrigatoria**: manter dominio (`lib/core/`) sem dependencias desnecessarias da camada de dados; DTOs, JSON e Drift em `lib/data/`; implementacoes de repositorio em `lib/domain/`. Refactors grandes sao aceitaveis para preservar essas fronteiras (detalhes em `.github/copilot-instructions.md`).
-- DI com `GetIt` via `setupAppInjection()`.
-- Navegacao com `auto_route` em `lib/screens/route/route_app.dart`.
+- UI is in `lib/screens/`.
+- Main flow: Screen (Bloc/Cubit) -> Interface (`lib/core/interface/`) -> Repository (`lib/domain/repository/`) -> Drift DAO (`lib/data/database/dao/`) -> SQLite.
+- **Clean Architecture is required**: keep the domain (`lib/core/`) free of unnecessary dependencies on the data layer; place DTOs, JSON, and Drift in `lib/data/`; place repository implementations in `lib/domain/`. Large refactors are acceptable to preserve these boundaries (see `.github/copilot-instructions.md` for details).
+- Dependency injection uses `GetIt` via `setupAppInjection()`.
+- Navigation uses `auto_route` in `lib/screens/route/route_app.dart`.
 
-## 2) Persistencia e compatibilidade
+## 2) Persistence and Compatibility
 
-- Banco principal: `AppDatabase` com `schemaVersion => 12`.
-- Banco de sistema: `SystemDatabase` com `schemaVersion => 1`.
-- Persistencia principal e Drift. DTOs JSON em `lib/data/entry/` quando necessario. Nao ha `lib/core/managers/`; novas features seguem Interface + Repository + DAO.
+- Main database: `AppDatabase` with `schemaVersion => 12`.
+- System database: `SystemDatabase` with `schemaVersion => 1`.
+- Drift is the primary persistence mechanism. Use JSON DTOs in `lib/data/entry/` when needed. There is no `lib/core/managers/`; new features follow Interface + Repository + DAO.
 
-Regras:
+Rules:
 
-- **Compatibilidade retroativa nao e requisito** enquanto o app esta em desenvolvimento: pode-se alterar contratos JSON, modelos e schemas quando a arquitetura exigir; atualizar `build_runner`, Drift e testes do escopo.
-- Em mudanca de schema Drift, atualizar `schemaVersion` e estrategia de migracao no banco correto.
+- **Backward compatibility is not required** while the app is under development: JSON contracts, models, and schemas may be changed when required by the architecture; update generated code, Drift, and tests in the affected scope.
+- When changing a Drift schema, update `schemaVersion` and the migration strategy in the correct database.
 
-## 3) Tratamento de erros e contratos
+## 3) Error Handling and Contracts
 
-- O padrao oficial de retorno e `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, usa `package:meta`).
-- Nao introduzir `OperationResult`, `Either` ou contratos alternativos sem alinhamento previo.
-- Nao propagar excecoes entre Interface e Repository; retornar `ResultStatus`. Repositorios usam `try/catch` internamente e retornam `ResultStatus.error(mensagemErroRepositorio(erro, contexto: '...'))` com mensagens amigaveis (ver `lib/core/utils/repository_error_mapper.dart`).
-- A camada de apresentacao (BLoC/Cubit/Screen) **nao** envolve chamadas ao repositorio em `try/catch`; usa `when` ou `switch` no `ResultStatus`. `try/catch` na UI fica reservado a operacoes locais (seletor de arquivo, escrita em `File`) que nao passam pelo contrato do repositorio.
+- The official return type is `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, which uses `package:meta`).
+- Do not introduce `OperationResult`, `Either`, or alternative contracts without prior agreement.
+- Do not propagate exceptions between Interface and Repository; return `ResultStatus`. Repositories use internal `try/catch` blocks and return `ResultStatus.error(mensagemErroRepositorio(error, contexto: '...'))` with user-friendly messages (see `lib/core/utils/repository_error_mapper.dart`).
+- The presentation layer (BLoC/Cubit/Screen) does **not** wrap repository calls in `try/catch`; it uses `when` or `switch` on `ResultStatus`. In the UI, `try/catch` is reserved for local operations (file picker, writing to `File`) that do not use the repository contract.
 
-## 4) Convencoes de codigo
+## 4) Code Conventions
 
 - Drift:
-  - tabela: `XxxRecords`
-  - linha: `XxxRecord`
+  - table: `XxxRecords`
+  - row: `XxxRecord`
   - DAO: `XxxDao`
-- **Nao** usar `@UseRowClass` apontando para entidades de `lib/core/models/`; mapear `XxxRecord` -> dominio em `lib/data/database/mapper/` ou no DAO/repositorio.
-- `SystemDatabase` aceita `QueryExecutor` opcional no construtor para testes com banco em memoria.
-- `CacheManager` registrado via `GetIt` (DI); nao usar `CacheManager.instance`. Repositorios o recebem por injecao de construtor.
-- Codigo em ingles.
-- Documentacao e comentarios (`///`) em portugues.
+- **Do not** use `@UseRowClass` with entities from `lib/core/models/`; map `XxxRecord` to the domain in `lib/data/database/mapper/` or in the DAO/repository.
+- `SystemDatabase` accepts an optional `QueryExecutor` in its constructor for in-memory database tests.
+- `CacheManager` is registered through `GetIt` (DI); do not use `CacheManager.instance`. Repositories receive it through constructor injection.
+- Code is in English.
+- Documentation and comments (`///`) are in English.
 
-## 5) Build, codegen e validacao
+## 5) Build, Code Generation, and Validation
 
-Sempre executar quando aplicavel:
+Always run the following when applicable:
 
 ```bash
 flutter pub get
@@ -56,24 +56,24 @@ dart analyze
 flutter test
 ```
 
-Quando rodar build_runner:
+Run build_runner after changes to:
 
-- Alteracoes em `@freezed`
-- Alteracoes em `@JsonSerializable`
-- Alteracoes em Drift (`@DriftDatabase`, `@DriftAccessor`, tabelas e DAOs)
-- Alteracoes em rotas (`@RoutePage` / AutoRoute)
+- `@freezed` declarations
+- `@JsonSerializable` declarations
+- Drift (`@DriftDatabase`, `@DriftAccessor`, tables, and DAOs)
+- Routes (`@RoutePage` / AutoRoute)
 
-## 6) Web e multiplataforma
+## 6) Web and Cross-Platform Support
 
-- Para Drift no Web funcionar, manter `web/sqlite3.wasm` e `web/drift_worker.js`.
-- Evitar solucao especifica de SO sem fallback para Windows/Linux/Web.
+- For Drift to work on the Web, keep `web/sqlite3.wasm` and `web/drift_worker.js`.
+- Avoid OS-specific solutions without a fallback for Windows/Linux/Web.
 
-## 7) Checklist antes de concluir
+## 7) Completion Checklist
 
-- [ ] Implementacao segue fluxo de camadas (Screen -> Interface -> Repository -> DAO).
-- [ ] Contratos retornam `ResultStatus<R, E>`.
-- [ ] Mudancas de schema incluem migracao e versao.
-- [ ] Build runner executado quando necessario.
-- [ ] `dart analyze` sem novos erros causados pela alteracao.
-- [ ] Testes de escopo executados.
-- [ ] Comentarios e docs no padrao do projeto.
+- [ ] The implementation follows the layer flow (Screen -> Interface -> Repository -> DAO).
+- [ ] Contracts return `ResultStatus<R, E>`.
+- [ ] Schema changes include a migration and version update.
+- [ ] Build runner has been run when required.
+- [ ] `dart analyze` reports no new errors caused by the change.
+- [ ] Tests for the affected scope have been run.
+- [ ] Comments and documentation follow project standards.

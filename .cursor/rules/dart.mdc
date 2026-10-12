@@ -2,205 +2,204 @@
 globs: *.dart
 alwaysApply: false
 ---
-# Padrões de Codificação
+# Coding Standards
 
-Siga as diretrizes do **Effective Dart** para garantir **Documentação e
-Codificação consistentes**.
-
-------------------------------------------------------------------------
-
-## Glossário
-
--   **Membro de biblioteca**: campo, getter, setter ou função de nível
-    superior.\
--   **Membro de classe**: construtor, campo, getter, setter, função ou
-    operador dentro de uma classe (instância ou estático).\
--   **Membro**: qualquer membro de biblioteca ou de classe.\
--   **Variável**: variáveis de nível superior, parâmetros e variáveis
-    locais (não inclui campos).\
--   **Tipo**: classe, typedef ou enum nomeado.\
--   **Propriedade**: variável, getter, setter ou campo (instância ou
-    estático).
+Follow the **Effective Dart** guidelines to ensure consistent **documentation
+and coding**.
 
 ------------------------------------------------------------------------
 
-## Resumo das Regras
+## Glossary
 
-### Estilo
-
--   **USE** nomes de tipos e extensões com `UpperCamelCase`.\
--   **USE** nomes de pacotes, diretórios e arquivos com
-    `lowercase_with_underscores`.\
--   **USE** outros identificadores com `lowerCamelCase`.\
--   **PREFIRA** `lowerCamelCase` para constantes.\
--   **USE** acrônimos com mais de duas letras como palavras.\
--   **PREFIRA** usar `_` para parâmetros não utilizados.\
--   **NÃO** use `_` inicial em identificadores não privados.\
--   **NÃO** use prefixos de letras.\
--   **NÃO** nomeie bibliotecas explicitamente.
+-   **Library member**: a top-level field, getter, setter, or function.\
+-   **Class member**: a constructor, field, getter, setter, function, or
+    operator inside a class (instance or static).\
+-   **Member**: any library or class member.\
+-   **Variable**: top-level variables, parameters, and local variables
+    (excluding fields).\
+-   **Type**: a class, typedef, or named enum.\
+-   **Property**: a variable, getter, setter, or field (instance or
+    static).
 
 ------------------------------------------------------------------------
 
-### Ordem
+## Rules Summary
 
--   **USE** imports `dart:` antes dos outros.\
--   **USE** imports `package:` antes de relativos.\
--   **USE** exports após todos os imports.\
--   **USE** ordenação alfabética.
+### Style
+
+-   **USE** `UpperCamelCase` for type and extension names.\
+-   **USE** `lowercase_with_underscores` for package, directory, and file
+    names.\
+-   **USE** `lowerCamelCase` for other identifiers.\
+-   **PREFER** `lowerCamelCase` for constants.\
+-   **USE** acronyms longer than two letters as words.\
+-   **PREFER** `_` for unused parameters.\
+-   **DON'T** use a leading `_` for non-private identifiers.\
+-   **DON'T** use letter prefixes.\
+-   **DON'T** explicitly name libraries.
 
 ------------------------------------------------------------------------
 
-### Formatação
+### Ordering
+
+-   **USE** `dart:` imports before other imports.\
+-   **USE** `package:` imports before relative imports.\
+-   **USE** a separate section for exports after all imports.\
+-   **USE** alphabetical ordering.
+
+------------------------------------------------------------------------
+
+### Formatting
 
 -   **USE** `dart format`.\
--   **PREFIRA** linhas até 80 caracteres.\
--   **USE** chaves em todas as declarações de controle de fluxo.
+-   **PREFER** lines of 80 characters or fewer.\
+-   **USE** braces for all flow-control statements.
 
 ------------------------------------------------------------------------
 
-### Documentação
+### Documentation
 
-#### Comentários
+#### Comments
 
--   **USE** frases completas.\
--   **NÃO** use comentários em bloco para documentação.
+-   **USE** complete sentences.\
+-   **DON'T** use block comments for documentation.
 
 #### Doc Comments
 
--   **USE** `///` para documentar membros e tipos.\
--   **PREFIRA** doc comments em APIs públicas.\
--   **CONSIDERE** doc comments em APIs privadas.\
--   **INICIE** com uma frase resumo.\
--   **SEPARE** a primeira frase em seu parágrafo.\
--   **EVITE** redundâncias.\
--   **PREFIRA** verbos na 3ª pessoa para funções.\
--   **PREFIRA** frases nominais para variáveis.\
--   **USE** "Se" para booleanos.\
--   **NÃO** duplique doc em getter/setter.\
--   **CONSIDERE** exemplos de código.\
--   **USE** colchetes `[]` para identificadores.\
--   **COLOQUE** comentários antes de anotações.
+-   **USE** `///` to document members and types.\
+-   **PREFER** doc comments for public APIs.\
+-   **CONSIDER** doc comments for private APIs.\
+-   **START** with a summary sentence.\
+-   **SEPARATE** the first sentence into its own paragraph.\
+-   **AVOID** redundancy.\
+-   **PREFER** third-person verbs for functions.\
+-   **PREFER** noun phrases for variables.\
+-   **USE** "Whether" for booleans.\
+-   **DON'T** duplicate documentation on getters and setters.\
+-   **CONSIDER** including code examples.\
+-   **USE** square brackets `[]` for identifiers.\
+-   **PLACE** comments before annotations.
 
 ------------------------------------------------------------------------
 
 ### Markdown
 
--   **EVITE** excesso de markdown.\
--   **EVITE** HTML.\
--   **PREFIRA** cercas de código com crases.
+-   **AVOID** excessive Markdown.\
+-   **AVOID** HTML.\
+-   **PREFER** backtick code fences.
 
 ------------------------------------------------------------------------
 
-### Escrita
+### Writing
 
--   **PREFIRA** ser breve.\
--   **EVITE** siglas obscuras.\
--   **PREFIRA** "esta" para se referir à instância.
+-   **PREFER** brevity.\
+-   **AVOID** obscure acronyms.\
+-   **PREFER** "this" when referring to the instance.
 
 ------------------------------------------------------------------------
 
-### Uso
+### Usage
 
-#### Bibliotecas
+#### Libraries
 
 -   **USE** `part of`.\
--   **NÃO** importe dentro de `src`.\
--   **PREFIRA** caminhos relativos.
+-   **DON'T** import from within `src`.\
+-   **PREFER** relative paths.
 
 #### Null Safety
 
--   **NÃO** inicialize com `null`.\
--   **EVITE** `late` desnecessário.\
--   **CONSIDERE** checagens de null inteligentes.
+-   **DON'T** initialize with `null`.\
+-   **AVOID** unnecessary `late`.\
+-   **CONSIDER** using smart null checks.
 
 #### Strings
 
--   **USE** literais adjacentes.\
--   **PREFIRA** interpolação.\
--   **EVITE** chaves desnecessárias.
+-   **USE** adjacent literals.\
+-   **PREFER** interpolation.\
+-   **AVOID** unnecessary braces.
 
-#### Coleções
+#### Collections
 
--   **USE** literais (`[]`, `{}`) sempre que possível.\
--   **NÃO** use `.length` para verificar vazio.\
--   **EVITE** `Iterable.forEach()`.\
+-   **USE** collection literals (`[]`, `{}`) whenever possible.\
+-   **DON'T** use `.length` to check whether a collection is empty.\
+-   **AVOID** `Iterable.forEach()`.\
 -   **USE** `whereType()`.\
--   **EVITE** `cast()` desnecessário.
+-   **AVOID** unnecessary `cast()`.
 
 ------------------------------------------------------------------------
 
-### Funções e Variáveis
+### Functions and Variables
 
--   **USE** declaração de função nomeada.\
--   **NÃO** crie lambda quando um tear-off resolve.\
--   **SIGA** padrão consistente para `var` e `final`.\
--   **EVITE** armazenar valores calculáveis.
-
-------------------------------------------------------------------------
-
-### Membros e Construtores
-
--   **NÃO** envolva campo com getter/setter sem necessidade.\
--   **PREFIRA** `final` para somente leitura.\
--   **USE** `=>` para expressões simples.\
--   **INICIALIZE** campos na declaração.\
--   **NÃO** use `new` ou `const` redundante.
+-   **USE** named function declarations.\
+-   **DON'T** create a lambda when a tear-off will do.\
+-   **FOLLOW** a consistent pattern for `var` and `final`.\
+-   **AVOID** storing values that can be computed.
 
 ------------------------------------------------------------------------
 
-### Tratamento de Erros
+### Members and Constructors
 
--   **EVITE** `catch` sem `on`.\
--   **NÃO** descarte exceções.\
--   **USE** `rethrow` para relançar.
+-   **DON'T** wrap a field in a getter/setter without a reason.\
+-   **PREFER** `final` for read-only values.\
+-   **USE** `=>` for simple expressions.\
+-   **INITIALIZE** fields in their declarations.\
+-   **DON'T** use redundant `new` or `const`.
 
 ------------------------------------------------------------------------
 
-### Assincronismo
+### Error Handling
 
--   **PREFIRA** `async/await`.\
--   **NÃO** use `async` à toa.\
--   **EVITE** `Completer` diretamente.
+-   **AVOID** `catch` without `on`.\
+-   **DON'T** discard exceptions.\
+-   **USE** `rethrow` to rethrow.
+
+------------------------------------------------------------------------
+
+### Asynchrony
+
+-   **PREFER** `async/await`.\
+-   **DON'T** use `async` unnecessarily.\
+-   **AVOID** using `Completer` directly.
 
 ------------------------------------------------------------------------
 
 ### Design
 
-#### Nomes
+#### Names
 
--   **USE** termos consistentes.\
--   **EVITE** abreviações.\
--   **PREFIRA** nomes positivos e claros.\
--   **EVITE** prefixo `get`.\
--   **PREFIRA** `to___()` e `as___()`.\
--   **SIGA** convenções mnemônicas.
+-   **USE** consistent terms.\
+-   **AVOID** abbreviations.\
+-   **PREFER** clear, positive names.\
+-   **AVOID** the `get` prefix.\
+-   **PREFER** `to___()` and `as___()`.\
+-   **FOLLOW** mnemonic conventions.
 
-#### Bibliotecas e Classes
+#### Libraries and Classes
 
--   **PREFIRA** classes privadas.\
--   **EVITE** classes só com membros estáticos.\
--   **USE** modificadores (`base`, `sealed`, etc.).\
--   **PREFIRA** mixin puro.
+-   **PREFER** private classes.\
+-   **AVOID** classes with only static members.\
+-   **USE** modifiers (`base`, `sealed`, etc.).\
+-   **PREFER** pure mixins.
 
-#### Construtores
+#### Constructors
 
--   **CONSIDERE** `const` se aplicável.
-
-------------------------------------------------------------------------
-
-### Tipos e Parâmetros
-
--   **ANOTE** tipos quando necessário.\
--   **NÃO** duplique tipo inferido.\
--   **USE** `Future<void>` quando sem retorno.\
--   **EVITE** `FutureOr<T>`.\
--   **NÃO** use typedef antiga.
+-   **CONSIDER** `const` where applicable.
 
 ------------------------------------------------------------------------
 
-### Igualdade
+### Types and Parameters
 
--   **REESCREVA** `hashCode` se reescrever `==`.\
--   **FAÇA** `==` obedecer igualdade matemática.\
--   **EVITE** igualdade customizada em classes mutáveis.\
--   **NÃO** torne `==` anulável.
+-   **ANNOTATE** types when necessary.\
+-   **DON'T** duplicate an inferred type.\
+-   **USE** `Future<void>` when there is no return value.\
+-   **AVOID** `FutureOr<T>`.\
+-   **DON'T** use the old typedef syntax.
+
+------------------------------------------------------------------------
+
+### Equality
+
+-   **OVERRIDE** `hashCode` when overriding `==`.\
+-   **MAKE** `==` obey mathematical equality.\
+-   **AVOID** custom equality in mutable classes.\
+-   **DON'T** make `==` nullable.

@@ -1,291 +1,291 @@
-# Guia de Testes - Feature Cadastro de Empresas
+# Test Guide - Company Registration Feature
 
-## Como Testar
+## How to Test
 
-### Pré-requisitos
-1. Executar a aplicação: `flutter run -d <device>`
-2. Navegar até a tela "Cadastro de Empresa" via:
-   - Card "Cadastro de Empresa" na Home Screen, OU
-   - Bottom Navigation bar (ícone "Business")
-
----
-
-## Casos de Teste
-
-### ✅ CT-01: Cadastro de Empresa Completo
-**Objetivo**: Validar cadastro com todos os campos preenchidos
-
-**Passos**:
-1. Preencher "Razão Social": `Empresa Teste LTDA`
-2. Preencher "CNPJ": `12345678000195` (14 dígitos)
-3. Preencher "Email": `contato@empresateste.com`
-4. Preencher "Rua": `Av. Paulista, 1000`
-5. Preencher "CEP": `01310-100`
-6. Preencher "Bairro": `Bela Vista`
-7. Preencher "Cidade": `São Paulo`
-8. Clicar em "Adicionar Empresa"
-
-**Resultado Esperado**:
-- ✅ SnackBar verde: "Empresa cadastrada com sucesso!"
-- ✅ Formulário limpo
-- ✅ Empresa aparece na lista com todos os dados
-- ✅ Card da empresa exibe: nome, CNPJ, email e cidade
+### Prerequisites
+1. Run the app: `flutter run -d <device>`.
+2. Open the "Company Registration" screen through:
+   - The "Company Registration" card on the Home screen, or
+   - The bottom navigation bar (Business icon).
 
 ---
 
-### ✅ CT-02: Cadastro com Campos Opcionais Vazios
-**Objetivo**: Validar cadastro com apenas campos obrigatórios
+## Test Cases
 
-**Passos**:
-1. Preencher "Razão Social": `Empresa Mínima`
-2. Preencher "CNPJ": `98765432000188`
-3. Deixar demais campos vazios
-4. Clicar em "Adicionar Empresa"
+### ✅ CT-01: Complete Company Registration
+**Objective**: Validate registration with all fields filled in.
 
-**Resultado Esperado**:
-- ✅ Empresa cadastrada com sucesso
-- ✅ Card exibe "Sem email" quando email não preenchido
-- ✅ Detalhes mostram apenas campos preenchidos
+**Steps**:
+1. Enter "Legal Name": `Empresa Teste LTDA`.
+2. Enter "CNPJ": `12345678000195` (14 digits).
+3. Enter "Email": `contato@empresateste.com`.
+4. Enter "Street": `Av. Paulista, 1000`.
+5. Enter "ZIP Code": `01310-100`.
+6. Enter "Neighborhood": `Bela Vista`.
+7. Enter "City": `São Paulo`.
+8. Click "Add Company".
 
----
-
-### ❌ CT-03: CNPJ Duplicado
-**Objetivo**: Validar constraint UNIQUE do CNPJ
-
-**Passos**:
-1. Cadastrar primeira empresa com CNPJ `11122233000144`
-2. Tentar cadastrar segunda empresa com MESMO CNPJ `11122233000144`
-3. Clicar em "Adicionar Empresa"
-
-**Resultado Esperado**:
-- ❌ SnackBar vermelho: "Já existe uma empresa cadastrada com o CNPJ 11122233000144."
-- ❌ Empresa NÃO é cadastrada
-- ❌ Formulário mantém os dados
+**Expected Result**:
+- ✅ Green SnackBar: "Company registered successfully!"
+- ✅ The form is cleared.
+- ✅ The company appears in the list with all its data.
+- ✅ The company card shows its name, CNPJ, email, and city.
 
 ---
 
-### ❌ CT-04: Validação de CNPJ Inválido
-**Objetivo**: Validar tamanho do CNPJ
+### ✅ CT-02: Registration with Empty Optional Fields
+**Objective**: Validate registration with only required fields.
 
-**Passos - Menos de 14 dígitos**:
-1. Preencher "CNPJ": `123456789` (9 dígitos)
-2. Clicar em "Adicionar Empresa"
+**Steps**:
+1. Enter "Legal Name": `Empresa Mínima`.
+2. Enter "CNPJ": `98765432000188`.
+3. Leave the other fields empty.
+4. Click "Add Company".
 
-**Resultado Esperado**:
-- ❌ Mensagem de erro: "CNPJ deve conter 14 dígitos"
-
-**Passos - Mais de 14 dígitos**:
-1. Preencher "CNPJ": `123456789012345` (15 dígitos)
-2. Clicar em "Adicionar Empresa"
-
-**Resultado Esperado**:
-- ❌ Mensagem de erro: "CNPJ deve conter 14 dígitos"
-
-**Passos - Campo vazio**:
-1. Deixar "CNPJ" vazio
-2. Clicar em "Adicionar Empresa"
-
-**Resultado Esperado**:
-- ❌ Mensagem de erro: "CNPJ é obrigatório"
+**Expected Result**:
+- ✅ The company is registered successfully.
+- ✅ The card shows "No email" when no email is provided.
+- ✅ Details show only the fields that were filled in.
 
 ---
 
-### ❌ CT-05: Validação de Razão Social
-**Objetivo**: Validar campos obrigatórios
+### ❌ CT-03: Duplicate CNPJ
+**Objective**: Validate the CNPJ `UNIQUE` constraint.
 
-**Passos - Campo vazio**:
-1. Deixar "Razão Social" vazio
-2. Preencher CNPJ válido
-3. Clicar em "Adicionar Empresa"
+**Steps**:
+1. Register a company with CNPJ `11122233000144`.
+2. Try to register a second company with the SAME CNPJ, `11122233000144`.
+3. Click "Add Company".
 
-**Resultado Esperado**:
-- ❌ Mensagem de erro: "Razão Social é obrigatório"
-
-**Passos - Nome muito curto**:
-1. Preencher "Razão Social": `AB` (2 caracteres)
-2. Clicar em "Adicionar Empresa"
-
-**Resultado Esperado**:
-- ❌ Mensagem de erro: "Razão Social deve ter no mínimo 3 caracteres"
+**Expected Result**:
+- ❌ Red SnackBar: "A company with CNPJ 11122233000144 is already registered."
+- ❌ The company is NOT registered.
+- ❌ The form retains its data.
 
 ---
 
-### ❌ CT-06: Validação de Email
-**Objetivo**: Validar formato de email
+### ❌ CT-04: Invalid CNPJ Validation
+**Objective**: Validate CNPJ length.
 
-**Passos**:
-1. Preencher dados válidos
-2. Preencher "Email": `emailinvalido` (sem @)
-3. Clicar em "Adicionar Empresa"
+**Steps - Fewer than 14 digits**:
+1. Enter `123456789` (9 digits) in "CNPJ".
+2. Click "Add Company".
 
-**Resultado Esperado**:
-- ❌ SnackBar vermelho: "Erro: Email inválido!"
+**Expected Result**:
+- ❌ Error message: "CNPJ must contain 14 digits".
+
+**Steps - More than 14 digits**:
+1. Enter `123456789012345` (15 digits) in "CNPJ".
+2. Click "Add Company".
+
+**Expected Result**:
+- ❌ Error message: "CNPJ must contain 14 digits".
+
+**Steps - Empty field**:
+1. Leave "CNPJ" empty.
+2. Click "Add Company".
+
+**Expected Result**:
+- ❌ Error message: "CNPJ is required".
 
 ---
 
-### ✅ CT-07: Busca por CNPJ Existente
-**Objetivo**: Validar busca de empresa
+### ❌ CT-05: Legal Name Validation
+**Objective**: Validate required fields.
 
-**Passos**:
-1. Cadastrar empresa com CNPJ `55566677000100`
-2. No campo "Buscar Empresa por CNPJ", digitar: `55566677000100`
-3. Clicar em "Buscar"
+**Steps - Empty field**:
+1. Leave "Legal Name" empty.
+2. Enter a valid CNPJ.
+3. Click "Add Company".
 
-**Resultado Esperado**:
-- ✅ Dialog aparece com título da razão social
-- ✅ Dialog exibe todos os dados da empresa:
+**Expected Result**:
+- ❌ Error message: "Legal Name is required".
+
+**Steps - Name too short**:
+1. Enter `AB` (2 characters) in "Legal Name".
+2. Click "Add Company".
+
+**Expected Result**:
+- ❌ Error message: "Legal Name must contain at least 3 characters".
+
+---
+
+### ❌ CT-06: Email Validation
+**Objective**: Validate the email format.
+
+**Steps**:
+1. Enter valid data.
+2. Enter `emailinvalido` (without @) in "Email".
+3. Click "Add Company".
+
+**Expected Result**:
+- ❌ Red SnackBar: "Error: Invalid email!".
+
+---
+
+### ✅ CT-07: Search for an Existing CNPJ
+**Objective**: Validate company search.
+
+**Steps**:
+1. Register a company with CNPJ `55566677000100`.
+2. Enter `55566677000100` in "Search Company by CNPJ".
+3. Click "Search".
+
+**Expected Result**:
+- ✅ A dialog appears with the legal name as its title.
+- ✅ The dialog displays all company data:
   - CNPJ
-  - Email (se preenchido)
-  - Rua (se preenchido)
-  - CEP (se preenchido)
-  - Bairro (se preenchido)
-  - Cidade (se preenchido)
+  - Email (if provided)
+  - Street (if provided)
+  - ZIP code (if provided)
+  - Neighborhood (if provided)
+  - City (if provided)
 
 ---
 
-### ❌ CT-08: Busca por CNPJ Inexistente
-**Objetivo**: Validar tratamento de empresa não encontrada
+### ❌ CT-08: Search for a Nonexistent CNPJ
+**Objective**: Validate handling of a company that was not found.
 
-**Passos**:
-1. No campo de busca, digitar CNPJ que não existe: `99999999000199`
-2. Clicar em "Buscar"
+**Steps**:
+1. Enter a nonexistent CNPJ, `99999999000199`, in the search field.
+2. Click "Search".
 
-**Resultado Esperado**:
-- ❌ SnackBar vermelho: "Empresa com CNPJ 99999999000199 não encontrada."
-
----
-
-### ❌ CT-09: Busca com Campo Vazio
-**Objetivo**: Validar busca com campo vazio
-
-**Passos**:
-1. Deixar campo de busca vazio
-2. Clicar em "Buscar"
-
-**Resultado Esperado**:
-- ❌ SnackBar laranja: "Digite um CNPJ para buscar"
+**Expected Result**:
+- ❌ Red SnackBar: "No company found with CNPJ 99999999000199."
 
 ---
 
-### 🗑️ CT-10: Exclusão de Empresa
-**Objetivo**: Validar deleção com confirmação
+### ❌ CT-09: Search with an Empty Field
+**Objective**: Validate a search with an empty field.
 
-**Passos**:
-1. Cadastrar empresa teste
-2. Na lista, clicar no ícone de lixeira do card
-3. Na dialog de confirmação, clicar "Cancelar"
+**Steps**:
+1. Leave the search field empty.
+2. Click "Search".
 
-**Resultado Esperado**:
-- ✅ Dialog fecha
-- ✅ Empresa NÃO é deletada
-
-**Passos (continuação)**:
-4. Clicar novamente no ícone de lixeira
-5. Na dialog, clicar "Deletar"
-
-**Resultado Esperado**:
-- ✅ Dialog fecha
-- ✅ SnackBar verde: "Empresa deletada com sucesso!"
-- ✅ Empresa REMOVIDA da lista
-- ✅ Card desaparece
+**Expected Result**:
+- ❌ Orange SnackBar: "Enter a CNPJ to search".
 
 ---
 
-### 👆 CT-11: Visualizar Detalhes pelo Card
-**Objetivo**: Validar clique no card da lista
+### 🗑️ CT-10: Delete a Company
+**Objective**: Validate deletion with confirmation.
 
-**Passos**:
-1. Cadastrar empresa com dados completos
-2. Na lista, clicar no card da empresa (não no ícone de lixeira)
+**Steps**:
+1. Register a test company.
+2. Click the card's trash icon in the list.
+3. Click "Cancel" in the confirmation dialog.
 
-**Resultado Esperado**:
-- ✅ Dialog de detalhes aparece (mesmo comportamento da busca)
-- ✅ Exibe todos os campos preenchidos
-- ✅ Botão "Fechar" fecha o dialog
+**Expected Result**:
+- ✅ The dialog closes.
+- ✅ The company is NOT deleted.
 
----
+**Steps (continued)**:
+4. Click the trash icon again.
+5. Click "Delete" in the dialog.
 
-### 📋 CT-12: Lista Vazia
-**Objetivo**: Validar estado inicial
-
-**Passos**:
-1. Acessar tela sem empresas cadastradas
-
-**Resultado Esperado**:
-- ✅ Mensagem exibida: "Nenhuma empresa cadastrada"
-- ✅ Cor cinza, centralizada
+**Expected Result**:
+- ✅ The dialog closes.
+- ✅ Green SnackBar: "Company deleted successfully!"
+- ✅ The company is REMOVED from the list.
+- ✅ The card disappears.
 
 ---
 
-### 🔄 CT-13: Formatação Automática de CNPJ
-**Objetivo**: Validar remoção de caracteres especiais
+### 👆 CT-11: View Details from a Card
+**Objective**: Validate clicking a list card.
 
-**Passos**:
-1. Preencher "CNPJ": `12.345.678/0001-95` (com formatação)
-2. Preencher demais campos
-3. Clicar em "Adicionar Empresa"
+**Steps**:
+1. Register a company with complete data.
+2. Click the company card in the list (not the trash icon).
 
-**Resultado Esperado**:
-- ✅ Empresa cadastrada com CNPJ armazenado como: `12345678000195` (sem formatação)
-- ✅ Na busca, pode usar com ou sem formatação
-
----
-
-## Testes de Integração
-
-### 🔗 CT-14: Navegação
-**Passos**:
-1. Na Home Screen, clicar no card "Cadastro de Empresa"
-2. Verificar se abre a tela correta
-3. Usar Bottom Navigation para ir a outra tela
-4. Voltar usando Bottom Navigation (ícone Business)
-
-**Resultado Esperado**:
-- ✅ Navegação fluida
-- ✅ Estado preservado (lista não recarrega desnecessariamente)
+**Expected Result**:
+- ✅ The details dialog appears (as it does for search results).
+- ✅ It shows all populated fields.
+- ✅ The "Close" button closes the dialog.
 
 ---
 
-### 💾 CT-15: Persistência de Dados
-**Passos**:
-1. Cadastrar 3 empresas
-2. Fechar aplicação completamente
-3. Reabrir aplicação
-4. Navegar até tela de empresas
+### 📋 CT-12: Empty List
+**Objective**: Validate the initial state.
 
-**Resultado Esperado**:
-- ✅ Todas as 3 empresas aparecem na lista
-- ✅ Dados completos preservados
+**Steps**:
+1. Open the screen when no companies are registered.
 
----
-
-## Checklist de Validação Final
-
-- [ ] Formulário funciona corretamente
-- [ ] Validações impedem cadastros inválidos
-- [ ] CNPJ único é respeitado
-- [ ] Busca retorna resultados corretos
-- [ ] Exclusão funciona com confirmação
-- [ ] Lista exibe empresas cadastradas
-- [ ] Dialog de detalhes mostra informações completas
-- [ ] Navegação funciona (Home e Bottom Nav)
-- [ ] SnackBars aparecem com feedback adequado
-- [ ] Dados persistem após reiniciar app
-- [ ] Não há crashes ou erros no console
-- [ ] Interface responsiva (diferentes tamanhos de tela)
+**Expected Result**:
+- ✅ Message displayed: "No companies registered".
+- ✅ Gray, centered text.
 
 ---
 
-## Relatório de Bugs
+### 🔄 CT-13: Automatic CNPJ Formatting
+**Objective**: Validate removal of special characters.
 
-Se encontrar problemas, reportar com:
-1. **Passos para reproduzir**
-2. **Comportamento esperado**
-3. **Comportamento atual**
-4. **Screenshots (se aplicável)**
-5. **Logs do console**
+**Steps**:
+1. Enter `12.345.678/0001-95` (formatted) in "CNPJ".
+2. Fill in the other fields.
+3. Click "Add Company".
+
+**Expected Result**:
+- ✅ The company is registered with CNPJ stored as `12345678000195` (unformatted).
+- ✅ Search works with or without formatting.
 
 ---
 
-**Versão do Schema**: 9
-**Última atualização**: 30/01/2026
+## Integration Tests
+
+### 🔗 CT-14: Navigation
+**Steps**:
+1. Click the "Company Registration" card on the Home screen.
+2. Verify that the correct screen opens.
+3. Use the bottom navigation to open another screen.
+4. Return using the bottom navigation (Business icon).
+
+**Expected Result**:
+- ✅ Navigation is smooth.
+- ✅ State is preserved (the list does not reload unnecessarily).
+
+---
+
+### 💾 CT-15: Data Persistence
+**Steps**:
+1. Register 3 companies.
+2. Close the app completely.
+3. Reopen the app.
+4. Open the companies screen.
+
+**Expected Result**:
+- ✅ All 3 companies appear in the list.
+- ✅ All data is preserved.
+
+---
+
+## Final Validation Checklist
+
+- [ ] The form works correctly.
+- [ ] Validation prevents invalid registrations.
+- [ ] CNPJ uniqueness is enforced.
+- [ ] Search returns the correct results.
+- [ ] Deletion works with confirmation.
+- [ ] The list displays registered companies.
+- [ ] The details dialog shows complete information.
+- [ ] Navigation works (Home and bottom navigation).
+- [ ] SnackBars provide appropriate feedback.
+- [ ] Data persists after restarting the app.
+- [ ] There are no crashes or console errors.
+- [ ] The interface is responsive (different screen sizes).
+
+---
+
+## Bug Report
+
+If you find issues, report:
+1. **Steps to reproduce**
+2. **Expected behavior**
+3. **Actual behavior**
+4. **Screenshots (if applicable)**
+5. **Console logs**
+
+---
+
+**Schema version**: 9
+**Last updated**: 30/01/2026

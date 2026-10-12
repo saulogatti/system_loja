@@ -1,71 +1,71 @@
-# Guia de Testes - System Loja
+# Testing Guide - System Loja
 
-## Índice
+## Contents
 
-- [Visão Geral](#visão-geral)
-- [Pré-requisitos](#pré-requisitos)
-- [Comandos Principais](#comandos-principais)
-- [Fluxo Recomendado](#fluxo-recomendado)
-- [Execução por Escopo](#execução-por-escopo)
+- [Overview](#overview)
+- [Prerequisites](#prerequisites)
+- [Main Commands](#main-commands)
+- [Recommended Workflow](#recommended-workflow)
+- [Running Tests by Scope](#running-tests-by-scope)
 - [Troubleshooting](#troubleshooting)
-- [Referências](#referências)
+- [References](#references)
 
-## Visão Geral
+## Overview
 
-Este documento consolida o processo de validação de código para o projeto.
-Use este guia após alterações em lógica de negócio, UI, banco Drift, serialização JSON ou rotas.
+This document summarizes the project's code validation process.
+Use this guide after changes to business logic, the UI, the Drift database, JSON serialization, or routes.
 
-## Pré-requisitos
+## Prerequisites
 
-Na raiz do repositório, execute:
+From the repository root, run:
 
 ```bash
 flutter pub get
 ```
 
-Se houver alterações em `@freezed`, `@JsonSerializable`, Drift ou `auto_route`, rode também:
+If you changed `@freezed`, `@JsonSerializable`, Drift, or `auto_route`, also run:
 
 ```bash
 dart run build_runner build
 ```
 
-## Comandos Principais
+## Main Commands
 
-Validação estática:
+Static analysis:
 
 ```bash
 dart analyze
 ```
 
-Verificação de formatação:
+Formatting check:
 
 ```bash
 dart format --set-exit-if-changed .
 ```
 
-Testes:
+Tests:
 
 ```bash
 flutter test
 ```
 
-## Fluxo Recomendado
+## Recommended Workflow
 
-1. Atualize dependências e gere código quando necessário.
-2. Execute `dart analyze`.
-3. Execute `flutter test`.
-4. Rode testes específicos do escopo alterado para acelerar iteração.
-5. Em mudanças de persistência, valide migrações e cenários de leitura/escrita.
+1. Update dependencies and generate code when needed.
+2. Run `dart analyze`.
+3. Run `flutter test`.
+4. Run tests for the changed scope to iterate faster.
+5. For persistence changes, validate migrations and read/write scenarios.
 
-## Execução por Escopo
+## Running Tests by Scope
 
-Executar um único arquivo de teste:
+Run a single test file:
 
 ```bash
-flutter test test/<arquivo>_test.dart
+flutter test test/<file>_test.dart
 ```
 
-Executar por pasta:
+Run tests in a directory:
 
 ```bash
 flutter test test/screens/
@@ -75,23 +75,23 @@ flutter test test/data/
 
 ## Troubleshooting
 
-Falha por arquivos gerados desatualizados:
+Failure caused by outdated generated files:
 
 ```bash
 dart run build_runner clean
 dart run build_runner build
 ```
 
-Falha de ambiente/local cache:
+Environment or local cache failure:
 
 ```bash
 flutter clean
 flutter pub get
 ```
 
-Observação importante: o repositório pode conter testes com falhas preexistentes fora do escopo da sua alteração. Priorize validar primeiro o escopo alterado antes de tratar falhas legadas.
+Important: the repository may contain pre-existing test failures outside the scope of your changes. Validate the changed scope first before addressing legacy failures.
 
-## Referências
+## References
 
 - `README.md`
 - `documentation/TESTING_VALIDATION.md`

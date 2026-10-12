@@ -1,41 +1,41 @@
-# Regras de Desenvolvimento Flutter (Específicas do Projeto)
+# Flutter Development Rules (Project-Specific)
 
-Estas são as diretrizes consolidadas e estritas para o desenvolvimento em Flutter e Dart neste repositório. O objetivo é manter a consistência, arquitetura limpa e performance do aplicativo.
-Caso precise de informações gerais sobre desenvolvimento em Flutter e Dart, consulte o arquivo
+These are the consolidated, strict guidelines for Flutter and Dart development in this repository. Their purpose is to maintain consistency, clean architecture, and application performance.
+For general information about Flutter and Dart development, see
 [`.github\instructions\dart-n-flutter.instructions.md`](.github\instructions\dart-n-flutter.instructions.md).
 
-## 1. Arquitetura e Organização (Clean Architecture)
-* **Padrão de Camadas:** Siga rigidamente a separação entre `Presentation` (UI, Bloc/Cubit), `Domain` (Regras de negócio, Entidades) e `Data` (Repositórios, DTOs, DAOs, Fontes de Dados).
-* **Isolamento da Camada Data:** A camada `data/` **nunca** deve importar classes das camadas `domain/` ou `application/`. Compartilhamentos e contratos devem viver em `core/`.
-* **Tratamento de Erros e Banco de Dados:**
-    * Os repositórios devem tratar suas exceções internamente com `try/catch` e sempre retornar o encapsulador `ResultStatus.error(...)`. Nenhuma exceção do repositório deve ser repassada (thrown) para a camada Presentation.
-    * A camada Presentation (BLoC) **não** deve encapsular chamadas de repositório em `try/catch`. Ela deve fazer pattern-matching (verificação de status) do `ResultStatus` fornecido.
-    * Injeção de suporte a cache (`CacheManager`) deve ser via `GetIt` ou construtor (nunca via Singletons hardcoded com `.instance`).
+## 1. Architecture and Organization (Clean Architecture)
+* **Layered pattern:** Strictly follow the separation between `Presentation` (UI, Bloc/Cubit), `Domain` (business rules, entities), and `Data` (repositories, DTOs, DAOs, data sources).
+* **Data-layer isolation:** The `data/` layer must **never** import classes from `domain/` or `application/`. Shared elements and contracts belong in `core/`.
+* **Error handling and databases:**
+    * Repositories must handle exceptions internally with `try/catch` and always return the `ResultStatus.error(...)` wrapper. Repository exceptions must never be propagated (thrown) to the Presentation layer.
+    * The Presentation layer (BLoC) must **not** wrap repository calls in `try/catch`. It must pattern-match (check the status of) the returned `ResultStatus`.
+    * Inject cache support (`CacheManager`) through `GetIt` or a constructor (never through hard-coded singletons using `.instance`).
 
-## 2. Gerenciamento de Estado (Presentation)
-* **Padrão Absoluto:** Use **sempre BLoC / Cubit** (`flutter_bloc`) para o gerenciamento de estados da UI.
-* **Repositórios para BLoC:** O BLoC consome métodos do repositório e converte as intenções do usuário (Eventos) nos estados adequados analisando o `ResultStatus` imutável, mantendo total autonomia para regras de exibição sem se meter nas fontes de dados.
+## 2. State Management (Presentation)
+* **Absolute rule:** Always use **BLoC / Cubit** (`flutter_bloc`) for UI state management.
+* **Repositories and BLoC:** The BLoC consumes repository methods and converts user intentions (events) into the appropriate states by inspecting the immutable `ResultStatus`, retaining full control over presentation rules without interfering with data sources.
 
-## 3. Navegação e Roteamento
-* **Padrão Absoluto:** Use **sempre o `auto_route`** para gerenciamento de páginas/telas do projeto.
-* O componente clássico `Navigator` é proibido para transições comuns e é restrito a gerenciar modais temporários ou telas de interação ultrarrápidas sem permalink (como dialogs e BottomSheets). Toda alteração de rotas implicará na execução do gerador de códigos (build runner).
+## 3. Navigation and Routing
+* **Absolute rule:** Always use **`auto_route`** to manage project pages/screens.
+* The classic `Navigator` is prohibited for ordinary transitions and is limited to temporary modals or very brief interactions without a permalink (such as dialogs and bottom sheets). Any route change requires running the code generator (build runner).
 
-## 4. UI, Widgets e Layout
-* **Tudo é Composição (Widgets Clássicos):** Prefira sempre a **composição** construindo pequenas classes `StatelessWidget` ao invés de grandes métodos que poluem uma mesma classe maior.
-* **Imutabilidade Absoluta:** O uso da chave `const` é mandatário na inicialização dos widgets e declarações na chamada global para o gerenciamento correto da memória com a engine Flutter.
-* **Performance Visceral:**
-    * Invocações extensamente renderizáveis (grades e listas densas) utilizarão sempre formatações de listas com `.builder` (`ListView.builder`, `GridView.builder`).
-    * Processamentos síncronos pesados e serializações que engasgam frame utilizarão fluxos `compute()` separadamente para offiliar a carga da thread-mãe nativa da UI.
-* **Responsividade e Comportamento Modal Seguro:** Use recursos flexíveis `Expanded`/`Flexible` para redimensionamentos coesos no mesmo plano, com sobreposições usando `OverlayPortal` fora d'agua da arvore DOM local ao invés de misturar empilhamentos pesados nos modais fixos.
+## 4. UI, Widgets, and Layout
+* **Composition first (classic widgets):** Prefer **composition**, building small `StatelessWidget` classes instead of large methods that clutter a larger class.
+* **Immutability:** Use the `const` keyword when initializing widgets and declarations at the call site to manage memory correctly with the Flutter engine.
+* **Performance:**
+    * For large renderable collections (dense grids and lists), always use the `.builder` constructors (`ListView.builder`, `GridView.builder`).
+    * Move heavy synchronous processing and serialization that can cause frame jank into separate `compute()` calls to offload work from the UI's main native thread.
+* **Responsive layouts and safe modal behavior:** Use flexible widgets such as `Expanded`/`Flexible` for consistent resizing on the same plane. Use `OverlayPortal` for overlays outside the local widget tree instead of mixing deep stacks into fixed modals.
 
-## 5. Design e Material 3 (M3)
-* **Theming Centrado:** Configure a paleta de cores central com `ColorScheme.fromSeed` pelo `ThemeData`.
-* **Aesthetics e Qualidade Premium:** Usufrua de hierarquias de fonte com leitura apurada, efeitos e `Layer Drop Shadows` ou "glow" de botões; emulando comportamentos `WidgetStateProperty` interativos perante cursores para Desktop e Web.
-* **Tokens Customizados:** Ao exceder a paleta do Material native, faça uso obrigatório do `ThemeExtension`.
-* **Rigor das Imagens Externas:** Qualquer carregamento de renderização `Image.network` sem os construtores de carregamento preventivo `loadingBuilder` e `errorBuilder` são inválidos.
+## 5. Design and Material 3 (M3)
+* **Centralized theming:** Configure the central color palette with `ColorScheme.fromSeed` through `ThemeData`.
+* **Aesthetics and premium quality:** Use carefully readable font hierarchies and effects such as drop shadows or button glow; emulate interactive `WidgetStateProperty` behavior for desktop and web cursors.
+* **Custom tokens:** When extending beyond the native Material palette, use `ThemeExtension`.
+* **External images:** Any `Image.network` rendering without the preventive `loadingBuilder` and `errorBuilder` constructors is invalid.
 
-## 6. Ferramentas, Comandos e Cultura local
-* Rode a geração de código via terminal: `dart run build_runner build` a cada edição relevante no codegen (JSON, Drift, BLoC States, Rotas).
-* Mantenha o formato global das descrições (comentários) da documentação em língua Portuguesa acompanhada pelo projeto.
-* DI: `setupAppInjection()` em `lib/application/app_injection.dart`; resolver com `appInjection.get<T>()`.
-* Persistência principal: Drift (`AppDatabase` schema 12 / `SystemDatabase` schema 1). DTOs JSON em `lib/data/entry/` quando necessário — sem pasta `managers/`.
+## 6. Tools, Commands, and Local Conventions
+* Run code generation from the terminal with `dart run build_runner build` after relevant changes to codegen inputs (JSON, Drift, BLoC states, routes).
+* Write documentation descriptions and comments in English, consistent with the project.
+* DI: `setupAppInjection()` in `lib/application/app_injection.dart`; resolve dependencies with `appInjection.get<T>()`.
+* Primary persistence: Drift (`AppDatabase` schema 12 / `SystemDatabase` schema 1). JSON DTOs belong in `lib/data/entry/` when needed — there is no `managers/` directory.
