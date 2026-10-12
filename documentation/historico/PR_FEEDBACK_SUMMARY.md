@@ -1,42 +1,42 @@
-# Resumo da Implementação do Feedback do PR
+# PR Feedback Implementation Summary
 
-## Comentários Atendidos
+## Feedback Addressed
 
-### 1. ✅ Arquivo Muito Grande - Modularizar
+### 1. ✅ Large File - Modularization
 
-**Comentário:** "Ficou muito grande o arquivo, separe algumas widget em outros arquivos para melhorar a quantidade de codigo."
+**Comment:** "The file has become very large; split some widgets into separate files to reduce the amount of code."
 
-**Solução Implementada:**
-- ✅ Arquivo principal reduzido de **739 linhas** para **361 linhas** (51% redução)
-- ✅ Criados **6 widgets modulares** em arquivos separados
-- ✅ Total: **10 arquivos** organizados em estrutura clara
+**Implemented solution:**
+- ✅ Reduced the main file from **739 lines** to **361 lines** (51% reduction).
+- ✅ Created **6 modular widgets** in separate files.
+- ✅ Organized **10 files** into a clear structure.
 
-**Estrutura Criada:**
+**Structure Created:**
 ```
 lib/screens/configuracoes/
-├── configuracoes_screen.dart (361 linhas) ⬇️ 51% menor
-├── bloc/                      (3 arquivos, 265 linhas)
-└── widgets/                   (6 arquivos, 481 linhas)
+├── configuracoes_screen.dart (361 lines) ⬇️ 51% smaller
+├── bloc/                      (3 files, 265 lines)
+└── widgets/                   (6 files, 481 lines)
 ```
 
-**Comparação:**
-| Antes | Depois | Redução |
+**Comparison:**
+| Before | After | Reduction |
 |-------|--------|---------|
-| 1 arquivo de 739 linhas | 10 arquivos modulares | 51% no arquivo principal |
-| Tudo em um lugar | Separado por responsabilidade | ✅ Muito mais legível |
+| 1 file with 739 lines | 10 modular files | 51% in the main file |
+| Everything in one place | Split by responsibility | ✅ Much more readable |
 
 ---
 
-### 2. ✅ Trocar para BLoC Pattern
+### 2. ✅ Switch to the BLoC Pattern
 
-**Comentário:** "O correto para controle de estado é usar o Bloc conforme esta documentado no readme. Classes que são _manager.dart devem ser evitadas porque vão ser retiradas futuramente. Faça apenas a alteração onde a widget segue o estado que o bloc enviar"
+**Comment:** "The correct state-management approach is to use BLoC as documented in the README. Classes named _manager.dart should be avoided because they will be removed in the future. Only change the widget so it follows the state emitted by the BLoC."
 
-**Solução Implementada:**
+**Implemented solution:**
 
-#### Estrutura BLoC Criada
+#### BLoC Structure Created
 
-**bloc/configuracoes_event.dart** (46 linhas)
-- 6 eventos implementados:
+**bloc/configuracoes_event.dart** (46 lines)
+- 6 events implemented:
   - `CarregarConfiguracoesEvent`
   - `AtualizarConfiguracoesEvent`
   - `RestaurarPadraoEvent`
@@ -44,37 +44,37 @@ lib/screens/configuracoes/
   - `LimparLogsAntigosEvent`
   - `LimparTodosDadosEvent`
 
-**bloc/configuracoes_state.dart** (56 linhas)
-- 5 estados implementados:
+**bloc/configuracoes_state.dart** (56 lines)
+- 5 states implemented:
   - `ConfiguracoesInitial`
   - `ConfiguracoesLoading`
   - `ConfiguracoesLoaded`
   - `ConfiguracoesSuccess`
   - `ConfiguracoesError`
 
-**bloc/configuracoes_bloc.dart** (163 linhas)
-- Processa todos os eventos
-- Gerencia transições de estado
-- Usa Manager apenas internamente
+**bloc/configuracoes_bloc.dart** (163 lines)
+- Processes all events.
+- Manages state transitions.
+- Uses the Manager internally only.
 
-#### Separação de Responsabilidades
+#### Separation of Responsibilities
 
-**Antes:**
+**Before:**
 ```dart
-// UI acessava Manager diretamente
+// The UI accessed the Manager directly
 class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
   final ConfiguracaoManager _manager = ConfiguracaoManager();
   
   void _salvar() async {
     await _manager.atualizarConfiguracao(_config);
-    // Lógica de UI misturada com persistência
+    // UI logic mixed with persistence
   }
 }
 ```
 
-**Depois:**
+**After:**
 ```dart
-// UI usa BLoC, que usa Manager
+// The UI uses BLoC, which uses the Manager
 class ConfiguracoesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -83,10 +83,10 @@ class ConfiguracoesScreen extends StatelessWidget {
         ..add(CarregarConfiguracoesEvent()),
       child: BlocConsumer<ConfiguracoesBloc, ConfiguracoesState>(
         listener: (context, state) {
-          // Reage a estados
+          // React to states
         },
         builder: (context, state) {
-          // Renderiza baseado no estado
+          // Render based on the state
         },
       ),
     );
@@ -94,25 +94,25 @@ class ConfiguracoesScreen extends StatelessWidget {
 }
 ```
 
-#### Fluxo de Dados
+#### Data Flow
 
 ```
 ┌─────────────┐
-│     UI      │ ← Renderiza baseado no estado
+│     UI      │ ← Renders based on state
 └─────┬───────┘
-      │ Dispara evento
+      │ Dispatches an event
       ↓
 ┌─────────────┐
-│    BLoC     │ ← Processa eventos, emite estados
+│    BLoC     │ ← Processes events and emits states
 └─────┬───────┘
-      │ Usa para persistência
+      │ Uses for persistence
       ↓
 ┌─────────────┐
-│   Manager   │ ← Apenas chamado pelo BLoC
+│   Manager   │ ← Called only by the BLoC
 └─────────────┘
 ```
 
-#### Dependências Adicionadas
+#### Dependencies Added
 
 ```yaml
 dependencies:
@@ -122,17 +122,17 @@ dependencies:
 
 ---
 
-### 3. ✅ Documentação Incompleta
+### 3. ✅ Incomplete Documentation
 
-**Comentário:** "faltou documentar corretamente. Alguns atributos não tem nada especificado"
+**Comment:** "The documentation is incomplete. Some fields have no documentation."
 
-**Solução Implementada:**
+**Implemented solution:**
 
-Todos os **15 atributos** do modelo `Configuracao` agora têm documentação completa:
+All **15 fields** in the `Configuracao` model now have complete documentation:
 
-#### Antes:
+#### Before:
 ```dart
-// Preferências de Notificação
+// Notification preferences
 @JsonKey(name: 'notificacoes_ativadas')
 final bool notificacoesAtivadas;
 
@@ -140,82 +140,82 @@ final bool notificacoesAtivadas;
 final int limiteEstoqueBaixo;
 ```
 
-#### Depois:
+#### After:
 ```dart
-// Preferências de Notificação
+// Notification Preferences
 
-/// Controla se as notificações estão ativadas globalmente no sistema
+/// Controls whether notifications are enabled globally in the system.
 @JsonKey(name: 'notificacoes_ativadas')
 final bool notificacoesAtivadas;
 
-/// Quantidade mínima de unidades em estoque para disparar alerta (1-50)
+/// Minimum number of units in stock required to trigger an alert (1-50).
 @JsonKey(name: 'limite_estoque_baixo')
 final int limiteEstoqueBaixo;
 ```
 
-#### Documentação Completa:
+#### Complete Documentation:
 
-✅ **Notificações** (4 atributos)
-- Controle mestre de notificações
-- Alertas de vendas
-- Alertas de estoque baixo
-- Limite de estoque (range: 1-50)
+✅ **Notifications** (4 fields)
+- Master notification control.
+- Sales alerts.
+- Low-stock alerts.
+- Stock threshold (range: 1-50).
 
-✅ **Tema** (2 atributos)
-- Modo escuro (boolean)
-- Cor primária (formato hexadecimal)
+✅ **Theme** (2 fields)
+- Dark mode (boolean).
+- Primary color (hexadecimal format).
 
-✅ **Backup** (3 atributos)
-- Backup automático
-- Frequência (diário/semanal/mensal)
-- Local do backup (path)
+✅ **Backup** (3 fields)
+- Automatic backup.
+- Frequency (daily/weekly/monthly).
+- Backup location (path).
 
-✅ **Limpeza** (2 atributos)
-- Limpeza automática
-- Dias de retenção (range: 7-365)
+✅ **Cleanup** (2 fields)
+- Automatic cleanup.
+- Retention period (range: 7-365 days).
 
-✅ **Segurança** (3 atributos)
-- Exigir senha
-- Timeout de bloqueio (range: 1-60 min)
-- Múltiplos usuários
+✅ **Security** (3 fields)
+- Require a password.
+- Lock timeout (range: 1-60 minutes).
+- Multiple users.
 
-✅ **Banco de Dados** (1 atributo)
-- Tipo (json/sql)
+✅ **Database** (1 field)
+- Type (json/sql).
 
 ---
 
-## Estatísticas da Refatoração
+## Refactoring Statistics
 
-### Métricas de Código
+### Code Metrics
 
-| Métrica | Antes | Depois | Melhoria |
+| Metric | Before | After | Improvement |
 |---------|-------|--------|----------|
-| **Arquivos** | 1 | 10 | 10x mais organizado |
-| **Linhas (main)** | 739 | 361 | 51% redução |
-| **Linhas (total)** | 739 | 1107 | Modularizado |
-| **Responsabilidades** | Misturadas | Separadas | ✅ BLoC pattern |
-| **Testabilidade** | Difícil | Fácil | ✅ BLoC isolado |
-| **Documentação** | Parcial | Completa | 100% documentado |
+| **Files** | 1 | 10 | 10x more organized |
+| **Lines (main)** | 739 | 361 | 51% reduction |
+| **Lines (total)** | 739 | 1107 | Modularized |
+| **Responsibilities** | Mixed | Separated | ✅ BLoC pattern |
+| **Testability** | Difficult | Easy | ✅ Isolated BLoC |
+| **Documentation** | Partial | Complete | 100% documented |
 
-### Organização
+### Organization
 
 ```
-Antes:
+Before:
 lib/screens/
-└── configuracoes_screen.dart (739 linhas) 
+└── configuracoes_screen.dart (739 lines)
     - UI
-    - Estado
-    - Lógica
-    - Persistência (Manager direto)
+    - State
+    - Logic
+    - Persistence (direct Manager access)
 
-Depois:
+After:
 lib/screens/configuracoes/
-├── configuracoes_screen.dart (361 linhas - apenas UI)
-├── bloc/ (265 linhas - lógica)
+├── configuracoes_screen.dart (361 lines - UI only)
+├── bloc/ (265 lines - logic)
 │   ├── configuracoes_bloc.dart
 │   ├── configuracoes_event.dart
 │   └── configuracoes_state.dart
-└── widgets/ (481 linhas - componentes)
+└── widgets/ (481 lines - components)
     ├── secao_notificacoes.dart
     ├── secao_tema.dart
     ├── secao_backup.dart
@@ -226,66 +226,66 @@ lib/screens/configuracoes/
 
 ---
 
-## Benefícios da Refatoração
+## Refactoring Benefits
 
-### 1. Manutenibilidade
-- ✅ Arquivos menores e focados
-- ✅ Mudanças isoladas em seções específicas
-- ✅ Menos conflitos em merge
+### 1. Maintainability
+- ✅ Smaller, focused files.
+- ✅ Changes isolated to specific sections.
+- ✅ Fewer merge conflicts.
 
-### 2. Testabilidade
-- ✅ BLoC testável isoladamente
-- ✅ Widgets testáveis sem lógica
-- ✅ Manager mockável nos testes
+### 2. Testability
+- ✅ The BLoC can be tested in isolation.
+- ✅ Widgets can be tested without business logic.
+- ✅ The Manager can be mocked in tests.
 
-### 3. Escalabilidade
-- ✅ Fácil adicionar novos eventos
-- ✅ Fácil adicionar novos estados
-- ✅ Fácil adicionar novas seções
+### 3. Scalability
+- ✅ Easy to add new events.
+- ✅ Easy to add new states.
+- ✅ Easy to add new sections.
 
-### 4. Legibilidade
-- ✅ Código organizado por responsabilidade
-- ✅ Nomes descritivos
-- ✅ Documentação completa
-
----
-
-## Commits Relacionados
-
-1. **4451857** - Refatoração principal
-   - Implementa BLoC pattern
-   - Cria widgets modulares
-   - Melhora documentação
-
-2. **78af81e** - Documentação
-   - Adiciona REFACTORING_BLOC.md
-   - Adiciona este resumo
+### 4. Readability
+- ✅ Code organized by responsibility.
+- ✅ Descriptive names.
+- ✅ Complete documentation.
 
 ---
 
-## Próximos Passos Sugeridos
+## Related Commits
 
-1. ✅ Criar testes unitários para ConfiguracoesBloc
-2. ✅ Criar testes de widget para os componentes
-3. ✅ Migrar outras telas para BLoC pattern
-4. ✅ Atualizar README com padrão BLoC
+1. **4451857** - Main refactoring.
+   - Implements the BLoC pattern.
+   - Creates modular widgets.
+   - Improves documentation.
+
+2. **78af81e** - Documentation.
+   - Adds REFACTORING_BLOC.md.
+   - Adds this summary.
 
 ---
 
-## Referências
+## Suggested Next Steps
+
+1. ✅ Add unit tests for ConfiguracoesBloc.
+2. ✅ Add widget tests for the components.
+3. ✅ Migrate other screens to the BLoC pattern.
+4. ✅ Update the README with the BLoC pattern.
+
+---
+
+## References
 
 - [BLoC Library](https://bloclibrary.dev/)
 - [Flutter BLoC Package](https://pub.dev/packages/flutter_bloc)
 - [Effective BLoC Pattern](https://verygood.ventures/blog/effective-bloc-pattern)
-- [REFACTORING_BLOC.md](./REFACTORING_BLOC.md) - Guia detalhado
+- [REFACTORING_BLOC.md](./REFACTORING_BLOC.md) - Detailed guide
 
 ---
 
-**Status:** ✅ **TODOS OS COMENTÁRIOS ATENDIDOS**
+**Status:** ✅ **ALL FEEDBACK ADDRESSED**
 
 **Commits:**
-- `4451857` - Refatoração principal
-- `78af81e` - Documentação
+- `4451857` - Main refactoring
+- `78af81e` - Documentation
 
-**Autor:** @copilot  
-**Data:** Dezembro 2024
+**Author:** @copilot
+**Date:** December 2024

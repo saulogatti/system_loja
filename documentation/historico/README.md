@@ -1,10 +1,10 @@
-# Documentação histórica
+# Historical Documentation
 
-Material antigo (notas de PR, summaries e arquitetura superada).
+Old material (PR notes, summaries, and superseded architecture).
 
-**Não use estes arquivos como padrão de implementação.**
+**Do not use these files as an implementation standard.**
 
-Fontes canônicas atuais:
+Current canonical sources:
 - `README.md`, `CONTRIBUTING.md`, `flutter_rules.md`
 - `.github/copilot-instructions.md`
-- Guias vivos em `documentation/`: `DRIFT_ARCHITECTURE.md`, `DRIFT_MIGRATION.md`, `INTERFACES_ARCHITECTURE.md`, `VALIDATION_SYSTEM.md`, `CODE_GENERATOR_USAGE.md`, `TESTING_VALIDATION.md`, `guides/styleguide.md`
+- Current guides in `documentation/`: `DRIFT_ARCHITECTURE.md`, `DRIFT_MIGRATION.md`, `INTERFACES_ARCHITECTURE.md`, `VALIDATION_SYSTEM.md`, `CODE_GENERATOR_USAGE.md`, `TESTING_VALIDATION.md`, `guides/styleguide.md`

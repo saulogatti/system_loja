@@ -1,8 +1,8 @@
-# DTOs e cache
+# DTOs and Cache
 
-JSON para importação/exportação e cache em arquivo — **não** é a persistência principal da loja.
+JSON for import/export and file caching — **not** the store's primary persistence mechanism.
 
-- `lib/data/entry/` — DTOs `json_serializable`
-- `lib/data/converter/` — ponte domínio ↔ JSON/Drift
-- `lib/data/cache/` — cache e backup de arquivos
-- `lib/data/models/` — modelos de persistência auxiliares
+- `lib/data/entry/` — `json_serializable` DTOs
+- `lib/data/converter/` — domain ↔ JSON/Drift bridge
+- `lib/data/cache/` — file cache and backup
+- `lib/data/models/` — supporting persistence models

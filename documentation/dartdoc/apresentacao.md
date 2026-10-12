@@ -1,5 +1,5 @@
-# Apresentação
+# Presentation
 
-Telas (`@RoutePage`) e o roteador `auto_route`. BLoC/Cubit e widgets internos não entram nesta documentação gerada.
+Screens (`@RoutePage`) and the `auto_route` router. BLoC/Cubit and internal widgets are not included in this generated documentation.
 
-Navegação de páginas com `auto_route`; `Navigator` só para dialogs, bottom sheets e modais.
+Use `auto_route` for page navigation; use `Navigator` only for dialogs, bottom sheets, and modals.

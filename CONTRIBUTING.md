@@ -1,284 +1,284 @@
-# Guia de Contribuição - System Loja
+# Contribution Guide - System Loja
 
-## Bem-vindo!
+## Welcome!
 
-Obrigado por considerar contribuir para o System Loja! Este documento fornece diretrizes para ajudar você a trabalhar efetivamente no projeto, seja sozinho ou com o GitHub Copilot Coding Agent.
+Thank you for considering contributing to System Loja! This document provides guidelines to help you work effectively on the project, either on your own or with the GitHub Copilot Coding Agent.
 
-## 📋 Índice
+## 📋 Contents
 
-- [Como Usar o GitHub Copilot Coding Agent](#como-usar-o-github-copilot-coding-agent)
-- [Padrões de Código](#padrões-de-código)
-- [Fluxo de Trabalho](#fluxo-de-trabalho)
-- [Como Criar Issues](#como-criar-issues)
-- [Como Criar Pull Requests](#como-criar-pull-requests)
-- [Executando Testes](#executando-testes)
-- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Using the GitHub Copilot Coding Agent](#using-the-github-copilot-coding-agent)
+- [Code Standards](#code-standards)
+- [Workflow](#workflow)
+- [Creating Issues](#creating-issues)
+- [Creating Pull Requests](#creating-pull-requests)
+- [Running Tests](#running-tests)
+- [Project Structure](#project-structure)
 
 ---
 
-## 🤖 Como Usar o GitHub Copilot Coding Agent
+## 🤖 Using the GitHub Copilot Coding Agent
 
-O GitHub Copilot Coding Agent pode ajudar a automatizar tarefas de desenvolvimento neste repositório. Para obter os melhores resultados:
+The GitHub Copilot Coding Agent can help automate development tasks in this repository. For best results:
 
-### Preparação
+### Preparation
 
-1. **Leia a documentação do repositório** antes de criar issues:
-   - `.github/copilot-instructions.md` - Instruções técnicas para o Copilot
-   - `.github/instructions/dartcode.instructions.md` - Padrões de código Dart
-   - Este arquivo (`CONTRIBUTING.md`) - Guia de contribuição geral
+1. **Read the repository documentation** before creating issues:
+   - `.github/copilot-instructions.md` - Technical instructions for Copilot
+   - `.github/instructions/dartcode.instructions.md` - Dart code standards
+   - This file (`CONTRIBUTING.md`) - General contribution guide
 
-2. **Verifique as convenções do projeto**:
-   - **Clean Architecture**: UI → interfaces em `lib/core/interface/` → repositórios em `lib/domain/repository/` → `lib/data/` (Drift, DTOs, mapeadores)
-   - Persistência principal: **SQLite via Drift** (sem backend externo); DTOs JSON em `lib/data/entry/` quando necessário
-   - Documentação em português usando comentários `///`
-   - Material Design 3 para interface
-   - Codegen: `dart run build_runner build` após Freezed / JsonSerializable / Drift / AutoRoute
+2. **Check the project conventions**:
+   - **Clean Architecture**: UI → interfaces in `lib/core/interface/` → repositories in `lib/domain/repository/` → `lib/data/` (Drift, DTOs, mappers)
+   - Primary persistence: **SQLite through Drift** (no external backend); JSON DTOs in `lib/data/entry/` when needed
+   - Documentation in English, using `///` comments
+   - Material Design 3 for the UI
+   - Code generation: `dart run build_runner build` after changes to Freezed / JsonSerializable / Drift / AutoRoute
 
-### Tarefas Ideais para o Copilot Agent
+### Tasks Well Suited to the Copilot Agent
 
-O Copilot Agent é mais eficaz em tarefas bem definidas e de escopo limitado:
+The Copilot Agent is most effective on well-defined tasks with a limited scope:
 
-✅ **Boas tarefas para o Agent:**
-- Adicionar novos campos a modelos existentes
-- Criar validações de formulário
-- Corrigir bugs específicos e bem documentados
-- Refatorar código seguindo padrões estabelecidos
-- Melhorar cobertura de testes
-- Atualizar documentação
-- Implementar features pequenas e incrementais
+✅ **Good tasks for the Agent:**
+- Add new fields to existing models
+- Create form validations
+- Fix specific, well-documented bugs
+- Refactor code according to established standards
+- Improve test coverage
+- Update documentation
+- Implement small, incremental features
 
-❌ **Tarefas a evitar para o Agent:**
-- Mudanças arquiteturais amplas
-- Refatorações em múltiplos módulos
-- Alterações críticas de segurança sem supervisão
-- Tarefas ambíguas ou mal definidas
+❌ **Tasks to avoid assigning to the Agent:**
+- Broad architectural changes
+- Refactoring across multiple modules
+- Critical security changes without supervision
+- Ambiguous or poorly defined tasks
 
-### Como Criar Issues para o Copilot Agent
+### Creating Issues for the Copilot Agent
 
-Para que o Agent trabalhe efetivamente, suas issues devem ser:
+For the Agent to work effectively, issues should be:
 
-1. **Claras e específicas**:
+1. **Clear and specific**:
    ```markdown
-   ❌ Ruim: "Melhorar tela de clientes"
-   ✅ Bom: "Adicionar campo 'Data de Nascimento' ao cadastro de clientes com validação de idade mínima de 18 anos"
+   ❌ Bad: "Improve the customer screen"
+   ✅ Good: "Add a 'Date of Birth' field to customer registration and validate that the customer is at least 18 years old"
    ```
 
-2. **Incluir critérios de aceitação**:
+2. **Include acceptance criteria**:
    ```markdown
-   **Critérios de Aceitação:**
-   - [ ] Campo dataNascimento adicionado ao modelo Cliente
-   - [ ] Validação de idade >= 18 anos implementada
-   - [ ] Campo visível no formulário de cadastro
-   - [ ] Testes unitários para validação criados
-   - [ ] Documentação atualizada em português
+   **Acceptance Criteria:**
+   - [ ] The `dataNascimento` field has been added to the `Cliente` model
+   - [ ] Validation for age >= 18 implemented
+   - [ ] Field displayed in the registration form
+   - [ ] Unit tests for the validation added
+   - [ ] Documentation updated in English
    ```
 
-3. **Especificar arquivos afetados** (quando possível):
+3. **Specify affected files** (when possible):
    ```markdown
-   **Arquivos Esperados:**
+   **Expected Files:**
    - `lib/core/models/cliente.dart`
    - `lib/screens/cliente_screen.dart`
    - `test/models/cliente_test.dart`
    ```
 
-4. **Fornecer contexto necessário**:
+4. **Provide the necessary context**:
    ```markdown
-   **Contexto:**
-   Este campo é necessário para validar a maioridade do cliente antes de
-   permitir compras. O formato deve ser DD/MM/AAAA no formulário, mas
-   armazenado como ISO 8601 no JSON.
+   **Context:**
+   This field is needed to verify that a customer is an adult before
+   allowing purchases. The form should display dates as DD/MM/YYYY, but
+   store them as ISO 8601 in JSON.
    ```
 
-### Revisando Pull Requests do Agent
+### Reviewing Agent Pull Requests
 
-Trate os PRs do Copilot Agent como você trataria código de qualquer desenvolvedor:
+Review Copilot Agent pull requests as you would review any developer's code:
 
-1. **Revise cuidadosamente o código**
-2. **Execute os testes**: `flutter test`
-3. **Teste manualmente** a funcionalidade
-4. **Verifique se segue os padrões** do projeto
-5. **Solicite mudanças** se necessário mencionando `@copilot` nos comentários
-6. **Aprove e merge** somente após validação completa
+1. **Review the code carefully**
+2. **Run the tests**: `flutter test`
+3. **Test the feature manually**
+4. **Check that it follows** the project standards
+5. **Request changes** if needed by mentioning `@copilot` in the comments
+6. **Approve and merge** only after full validation
 
 ---
 
-## 💻 Padrões de Código
+## 💻 Code Standards
 
-### Convenções de Nomenclatura
+### Naming Conventions
 
-- **Arquivos e pastas**: `lowercase_with_underscores`
-- **Classes e Types**: `UpperCamelCase`
-- **Variáveis e funções**: `lowerCamelCase`
-- **Constantes**: `lowerCamelCase` (preferido) ou `UPPER_SNAKE_CASE`
+- **Files and directories**: `lowercase_with_underscores`
+- **Classes and types**: `UpperCamelCase`
+- **Variables and functions**: `lowerCamelCase`
+- **Constants**: `lowerCamelCase` (preferred) or `UPPER_SNAKE_CASE`
 
-### Documentação
+### Documentation
 
-**SEMPRE** documente código público em **português**:
+**ALWAYS** document public code in **English**:
 
 ```dart
-/// Gerencia operações CRUD de clientes via Drift.
+/// Manages customer CRUD operations through Drift.
 ///
-/// Todos os métodos retornam [ResultStatus] — sem propagar exceções para a UI.
+/// All methods return [ResultStatus] — exceptions are not propagated to the UI.
 class CustomerRepository implements ICustomerRepository {
-  /// Busca um cliente pelo ID.
+  /// Finds a customer by ID.
   ///
-  /// Retorna [ResultStatus] com o [Customer] ou mensagem de erro amigável.
+  /// Returns [ResultStatus] with the [Customer] or a user-friendly error message.
   Future<ResultStatus<Customer, String>> buscar({required int id}) async { ... }
 }
 ```
 
-### Padrões Arquiteturais
+### Architectural Standards
 
-#### Camadas (atual)
+#### Layers (current)
 
-- **Interface + ResultStatus**: operações expostas à UI retornam `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, usa `package:meta`); não propagar exceções através de repositório/interface.
-- **Repositórios** (`lib/domain/repository/`): orquestram DAOs e regras; usam `try/catch` internamente e retornam `ResultStatus.error(mensagemErroRepositorio(...))` com mensagens amigáveis (`lib/core/utils/repository_error_mapper.dart`). Dependem de interfaces e de tipos de `lib/core/models/`.
-- **Apresentação** (`lib/screens/`): **não** envolve chamadas ao repositório em `try/catch`; usa `when`/`switch` no `ResultStatus` e emite estado de erro com a mensagem já tratada.
-- **Dados** (`lib/data/`): tabelas/DAOs Drift, DTOs em `entry/` etc., mapeamento registro → domínio; **sem** imports de `domain/` ou `application/`. `CacheManager` é registrado via `GetIt` (DI) — não usar `CacheManager.instance`.
-- **DI**: `setupAppInjection()` em `lib/application/app_injection.dart`; resolver com `appInjection.get<T>()`.
+- **Interface + ResultStatus**: operations exposed to the UI return `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, which uses `package:meta`); do not propagate exceptions through a repository/interface.
+- **Repositories** (`lib/domain/repository/`): coordinate DAOs and rules; use internal `try/catch` blocks and return `ResultStatus.error(mensagemErroRepositorio(...))` with user-friendly messages (`lib/core/utils/repository_error_mapper.dart`). They depend on interfaces and types from `lib/core/models/`.
+- **Presentation** (`lib/screens/`): does **not** wrap repository calls in `try/catch`; uses `when`/`switch` on `ResultStatus` and emits an error state with the already-processed message.
+- **Data** (`lib/data/`): Drift tables/DAOs, DTOs in `entry/`, and record-to-domain mapping; it does **not** import `domain/` or `application/`. `CacheManager` is registered through `GetIt` (DI) — do not use `CacheManager.instance`.
+- **DI**: `setupAppInjection()` in `lib/application/app_injection.dart`; resolve dependencies with `appInjection.get<T>()`.
 
-#### Persistência
+#### Persistence
 
-- **Principal**: Drift (`AppDatabase` schema 12 / `SystemDatabase` schema 1); IDs auto-incrementais onde a tabela usar `autoIncrement()`. `SystemDatabase` aceita `QueryExecutor` opcional no construtor para testes com banco em memória.
-- **DTOs JSON**: em `lib/data/entry/` quando necessário (serialização/importação). Não há pasta `lib/core/managers/`.
+- **Primary**: Drift (`AppDatabase` schema 12 / `SystemDatabase` schema 1); IDs auto-increment where a table uses `autoIncrement()`. `SystemDatabase` accepts an optional `QueryExecutor` in its constructor for in-memory database tests.
+- **JSON DTOs**: in `lib/data/entry/` when needed (serialization/import). There is no `lib/core/managers/` directory.
 
 ### Flutter UI
 
-- **Material Design 3** com `ColorScheme.fromSeed()`
-- **Validação de formulários** com `GlobalKey<FormState>()`
-- **Modal bottom sheets** para detalhes: `showModalBottomSheet()`
-- **SnackBar** para feedback ao usuário
-- **Dispose** de controllers sempre
+- **Material Design 3** with `ColorScheme.fromSeed()`
+- **Form validation** with `GlobalKey<FormState>()`
+- **Modal bottom sheets** for details: `showModalBottomSheet()`
+- **SnackBar** for user feedback
+- Always **dispose** controllers
 
 ---
 
-## 🔄 Fluxo de Trabalho
+## 🔄 Workflow
 
-### Para Desenvolvedores Humanos
+### For Human Developers
 
-1. **Fork** o repositório
-2. **Crie uma branch** para sua feature: `git checkout -b feature/minha-feature`
-3. **Faça commits** frequentes e descritivos
-4. **Gere código** se alterou Freezed/Json/Drift/AutoRoute: `dart run build_runner build`
-5. **Execute os testes**: `flutter test`
-6. **Execute o linter**: `dart analyze`
-7. **Formate o código**: `dart format .`
-8. **Push** para seu fork: `git push origin feature/minha-feature`
-9. **Abra um Pull Request** para o branch `main`
+1. **Fork** the repository.
+2. **Create a branch** for your feature: `git checkout -b feature/minha-feature`
+3. **Make frequent, descriptive commits.**
+4. **Generate code** if you changed Freezed/JSON/Drift/AutoRoute: `dart run build_runner build`
+5. **Run the tests**: `flutter test`
+6. **Run the linter**: `dart analyze`
+7. **Format the code**: `dart format .`
+8. **Push** to your fork: `git push origin feature/minha-feature`
+9. **Open a pull request** against the `main` branch.
 
-### Para o Copilot Coding Agent
+### For the Copilot Coding Agent
 
-1. **Issue atribuída** ao @copilot (automaticamente ou manualmente)
-2. **Agent cria branch** automaticamente
-3. **Agent implementa** as mudanças
-4. **Agent abre PR** para revisão
-5. **Humanos revisam** e solicitam mudanças se necessário
-6. **Agent itera** baseado no feedback
-7. **Humanos aprovam** e fazem merge após validação
+1. **Assign an issue** to @copilot (automatically or manually).
+2. **The Agent creates a branch** automatically.
+3. **The Agent implements** the changes.
+4. **The Agent opens a PR** for review.
+5. **People review** and request changes if needed.
+6. **The Agent iterates** based on feedback.
+7. **People approve and merge** after validation.
 
 ---
 
-## 📝 Como Criar Issues
+## 📝 Creating Issues
 
-Use os templates disponíveis em `.github/ISSUE_TEMPLATE/`:
+Use the templates in `.github/ISSUE_TEMPLATE/`:
 
-- **Bug Report** (`bug_report.md`): Para reportar problemas
-- **Feature Request** (`feature_request.md`): Para sugerir melhorias
+- **Bug Report** (`bug_report.md`): To report problems
+- **Feature Request** (`feature_request.md`): To suggest improvements
 
-### Elementos Importantes
+### Important Elements
 
-Toda issue deve conter:
+Every issue should include:
 
-1. **Título claro e conciso**
-2. **Descrição detalhada** do problema ou feature
-3. **Critérios de aceitação** (especialmente para o Copilot Agent)
-4. **Contexto adicional** (screenshots, logs, exemplos)
-5. **Labels apropriados** (bug, enhancement, documentation, etc.)
+1. **A clear, concise title**
+2. **A detailed description** of the problem or feature
+3. **Acceptance criteria** (especially for the Copilot Agent)
+4. **Additional context** (screenshots, logs, examples)
+5. **Appropriate labels** (bug, enhancement, documentation, etc.)
 
-### Exemplo de Issue Boa
+### Example of a Good Issue
 
 ```markdown
-# Adicionar Validação de Email no Cadastro de Clientes
+# Add Email Validation to Customer Registration
 
-## Descrição
-Atualmente o campo de email aceita qualquer texto. Precisamos validar
-se o email está em formato válido antes de salvar.
+## Description
+The email field currently accepts any text. We need to validate
+that the email is in a valid format before saving.
 
-## Critérios de Aceitação
-- [ ] Validação de formato de email no formulário
-- [ ] Mensagem de erro clara quando email inválido
-- [ ] Não permitir salvar cliente com email inválido
-- [ ] Testes unitários para validação
-- [ ] Documentação atualizada
+## Acceptance Criteria
+- [ ] Validate the email format in the form
+- [ ] Show a clear error message for an invalid email
+- [ ] Do not allow saving a customer with an invalid email
+- [ ] Add unit tests for the validation
+- [ ] Update the documentation
 
-## Arquivos Afetados
+## Affected Files
 - `lib/screens/cliente_screen.dart`
 - `test/screens/cliente_screen_test.dart`
 
-## Contexto Adicional
-Usar regex padrão de validação de email. Mostrar erro abaixo do campo.
+## Additional Context
+Use a standard email validation regex. Show the error below the field.
 ```
 
 ---
 
-## 🔀 Como Criar Pull Requests
+## 🔀 Creating Pull Requests
 
-### Checklist do PR
+### PR Checklist
 
-Antes de criar um PR, certifique-se de:
+Before creating a PR, make sure that:
 
-- [ ] Código segue os padrões do projeto
-- [ ] Todos os testes passam: `flutter test`
-- [ ] Código está formatado: `dart format .`
-- [ ] Sem warnings do linter: `dart analyze`
-- [ ] Documentação atualizada (se aplicável)
-- [ ] Comentários em português
-- [ ] Commits descritivos e organizados
+- [ ] The code follows the project standards.
+- [ ] All tests pass: `flutter test`
+- [ ] The code is formatted: `dart format .`
+- [ ] There are no linter warnings: `dart analyze`
+- [ ] Documentation is updated (if applicable).
+- [ ] Comments are in English.
+- [ ] Commits are descriptive and organized.
 
-### Título e Descrição
+### Title and Description
 
-**Título**: Use prefixos convencionais
-- `feat:` para novas funcionalidades
-- `fix:` para correções de bugs
-- `docs:` para mudanças em documentação
-- `refactor:` para refatorações
-- `test:` para adição/modificação de testes
-- `chore:` para tarefas de manutenção
+**Title**: Use conventional prefixes:
+- `feat:` for new features
+- `fix:` for bug fixes
+- `docs:` for documentation changes
+- `refactor:` for refactoring
+- `test:` for adding/updating tests
+- `chore:` for maintenance tasks
 
-**Descrição**: Explique o que foi feito e por quê
+**Description**: Explain what was done and why.
 ```markdown
-## O que foi feito
-- Adicionado campo dataNascimento ao modelo Cliente
-- Implementada validação de idade mínima
+## What changed
+- Added the `dataNascimento` field to the `Cliente` model
+- Implemented minimum-age validation
 
-## Por que foi feito
-Para garantir que apenas maiores de 18 anos possam ser cadastrados
+## Why
+To ensure that only people aged 18 or older can be registered.
 
-## Como testar
-1. Executar `flutter test`
-2. Abrir tela de clientes
-3. Tentar cadastrar cliente com menos de 18 anos
-4. Verificar que mostra erro de validação
+## How to test
+1. Run `flutter test`
+2. Open the customer screen
+3. Try to register a customer under 18
+4. Verify that a validation error is displayed
 ```
 
 ---
 
-## 🧪 Executando Testes
+## 🧪 Running Tests
 
-### Testes Unitários
+### Unit Tests
 
 ```bash
-# Executar todos os testes
+# Run all tests
 flutter test
 
-# Executar teste específico
+# Run a specific test
 flutter test test/models/cliente_test.dart
 
-# Executar com coverage
+# Run with coverage
 flutter test --coverage
 ```
 
-### Testes Manuais
+### Manual Tests
 
 ```bash
 # Desktop
@@ -286,36 +286,36 @@ flutter run -d windows
 flutter run -d macos
 flutter run -d linux
 
-# Mobile (com emulador/dispositivo)
+# Mobile (with an emulator/device)
 flutter run
 
 # Web
 flutter run -d chrome
 ```
 
-### Validação de Código
+### Code Validation
 
 ```bash
-# Analisar código
+# Analyze code
 dart analyze
 
-# Formatar código
+# Format code
 dart format .
 
-# Verificar formatação sem aplicar
+# Check formatting without applying changes
 dart format --set-exit-if-changed .
 ```
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Project Structure
 
 ```
 system_loja/
 ├── .github/
-│   ├── copilot-instructions.md          # Instruções para Copilot Agent
+│   ├── copilot-instructions.md          # Instructions for the Copilot Agent
 │   ├── instructions/
-│   │   └── dartcode.instructions.md     # Padrões de código Dart
+│   │   └── dartcode.instructions.md     # Dart code standards
 │   └── ISSUE_TEMPLATE/
 │       ├── bug_report.md
 │       └── feature_request.md
@@ -324,43 +324,43 @@ system_loja/
 │   ├── application/
 │   │   └── app_injection.dart           # DI (GetIt)
 │   ├── core/
-│   │   ├── interface/                   # Contratos (ex.: ICustomerRepository)
-│   │   ├── models/                      # Entidades de domínio
-│   │   ├── services/                    # Serviços transversais (quando aplicável)
+│   │   ├── interface/                   # Contracts (e.g. ICustomerRepository)
+│   │   ├── models/                      # Domain entities
+│   │   ├── services/                    # Cross-cutting services (when applicable)
 │   │   └── utils/                       # ResultStatus, helpers
 │   ├── domain/
-│   │   └── repository/                  # Implementações de repositório
+│   │   └── repository/                  # Repository implementations
 │   ├── data/
-│   │   ├── database/                    # Drift: DAOs, tabelas, mapper/, extension/
-│   │   ├── entry/                       # DTOs JSON
+│   │   ├── database/                    # Drift: DAOs, tables, mapper/, extension/
+│   │   ├── entry/                       # JSON DTOs
 │   │   ├── cache/, converter/, models/
-│   └── screens/                         # UI, BLoC/Cubit, rotas
+│   └── screens/                         # UI, BLoC/Cubit, routes
 ├── test/
-│   └── support/                         # Helpers (ex.: AppDatabase em teste)
-├── documentation/                       # Guias Markdown vivos
-│   ├── dartdoc/                         # Páginas-fonte das categorias
-│   └── historico/                       # Material antigo (não canônico)
-├── docs/                                # HTML do `dart doc -o docs/` (GitHub Pages)
+│   └── support/                         # Helpers (e.g. AppDatabase tests)
+├── documentation/                       # Current Markdown guides
+│   ├── dartdoc/                         # Source pages for categories
+│   └── historico/                       # Historical material (non-canonical)
+├── docs/                                # HTML from `dart doc -o docs/` (GitHub Pages)
 ├── dartdoc_options.yaml
 ├── CONTRIBUTING.md
 └── README.md
 ```
 
-### Documentação da API
+### API Documentation
 
 ```bash
 dart doc -o docs/
 ```
 
-Publicação: GitHub Pages com source = branch e pasta `/docs`. Guias longos ficam em `documentation/`, não em `docs/`.
+Publication: GitHub Pages with source = branch and directory `/docs`. Long-form guides belong in `documentation/`, not in `docs/`.
 
-O fluxo principal da aplicação usa SQLite embutido via Drift.
+The application's primary data flow uses embedded SQLite through Drift.
 
 ---
 
-## 🔗 Links Úteis
+## 🔗 Useful Links
 
-- **Documentação Flutter**: https://flutter.dev/docs
+- **Flutter documentation**: https://flutter.dev/docs
 - **Effective Dart**: https://dart.dev/guides/language/effective-dart
 - **Material Design 3**: https://m3.material.io/
 - **GitHub Copilot Docs**: https://docs.github.com/en/copilot
@@ -368,18 +368,18 @@ O fluxo principal da aplicação usa SQLite embutido via Drift.
 
 ---
 
-## 🆘 Precisa de Ajuda?
+## 🆘 Need Help?
 
-- Abra uma issue com a label `question`
-- Revise a documentação em `.github/copilot-instructions.md`
-- Consulte o `README.md` para informações básicas
-
----
-
-## 📄 Licença
-
-Este projeto é de código aberto. Ao contribuir, você concorda que suas contribuições serão licenciadas sob os mesmos termos do projeto.
+- Open an issue with the `question` label.
+- Review the documentation in `.github/copilot-instructions.md`.
+- See `README.md` for basic information.
 
 ---
 
-**Obrigado por contribuir para o System Loja! 🚀**
+## 📄 License
+
+This is an open-source project. By contributing, you agree that your contributions will be licensed under the same terms as the project.
+
+---
+
+**Thank you for contributing to System Loja! 🚀**

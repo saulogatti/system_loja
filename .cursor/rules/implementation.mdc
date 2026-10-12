@@ -1,46 +1,46 @@
 ---
-description: Padrões de implementação - ResultStatus, Drift DAO, BLoC/Freezed, DI, rotas
+description: Implementation standards - ResultStatus, Drift DAO, BLoC/Freezed, DI, routes
 globs: "lib/**"
 ---
 
-# Padrões de Implementação - System Loja
+# Implementation Standards - System Loja
 
-Diretrizes para implementar features, correções e melhorias no código em `lib/`.
+Guidelines for implementing features, fixes, and improvements in the code under `lib/`.
 
-## 1. Contexto arquitetural
+## 1. Architectural Context
 
 - **Framework**: Flutter (Windows, macOS, iOS, Android, Web, Linux).
-- **Persistência**: SQLite via Drift em `lib/data/database/`. DTOs JSON (quando necessário) em `lib/data/entry/` com `json_serializable`.
-- **State management**: BLoC com `flutter_bloc` e `freezed`.
-- **Estrutura**: Screen (Bloc/Cubit) → Interface (`lib/core/interface/`) → Repository (`lib/domain/repository/`) → DAO Drift (`lib/data/database/dao/`) → SQLite.
+- **Persistence**: SQLite through Drift in `lib/data/database/`. JSON DTOs (when needed) in `lib/data/entry/` with `json_serializable`.
+- **State management**: BLoC with `flutter_bloc` and `freezed`.
+- **Structure**: Screen (Bloc/Cubit) → Interface (`lib/core/interface/`) → Repository (`lib/domain/repository/`) → Drift DAO (`lib/data/database/dao/`) → SQLite.
 
 ```
 lib/
 ├── application/
 │   └── app_injection.dart # GetIt / setupAppInjection()
 ├── core/
-│   ├── models/            # Entidades de domínio
-│   ├── interface/         # Contratos (I*Repository)
-│   ├── services/          # Serviços transversais de domínio (quando aplicável)
-│   └── utils/             # result_status.dart, extensões
+│   ├── models/            # Domain entities
+│   ├── interface/         # Contracts (I*Repository)
+│   ├── services/          # Cross-cutting domain services (when applicable)
+│   └── utils/             # result_status.dart, extensions
 ├── domain/
-│   └── repository/        # Implementações de repositório + serviços de domínio
+│   └── repository/        # Repository implementations + domain services
 ├── data/
 │   ├── database/          # AppDatabase, SystemDatabase, DAOs, tables, mapper/
-│   ├── entry/             # DTOs JSON (json_serializable)
+│   ├── entry/             # JSON DTOs (json_serializable)
 │   ├── cache/
 │   ├── converter/
 │   └── models/
-├── screens/               # UI e BLoCs por entidade
+├── screens/               # UI and BLoCs by entity
 └── main.dart
 ```
 
-## 2. Tratamento de erros: ResultStatus
+## 2. Error Handling: ResultStatus
 
-Use **sempre** `ResultStatus<R, E>` para operações que podem falhar (`lib/core/utils/result_status.dart`, usa `package:meta`). **Nunca** lance exceções através das camadas e **nunca** use `ExecutionResult`.
+Always use `ResultStatus<R, E>` for operations that can fail (`lib/core/utils/result_status.dart`, which uses `package:meta`). **Never** throw exceptions across layers and **never** use `ExecutionResult`.
 
-### Repositório (camada `lib/domain/repository/`)
-Repositórios usam `try/catch` internamente e devolvem `ResultStatus.error(...)` com mensagens amigáveis via `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`). **Nunca** relançam exceções para BLoC/Cubit.
+### Repository (`lib/domain/repository/` layer)
+Repositories use internal `try/catch` blocks and return `ResultStatus.error(...)` with user-friendly messages through `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`). They **never** rethrow exceptions to BLoC/Cubit.
 
 ```dart
 Future<ResultStatus<Customer, String>> buscar(int id) async {
@@ -55,8 +55,8 @@ Future<ResultStatus<Customer, String>> buscar(int id) async {
 }
 ```
 
-### Apresentação (camada `lib/screens/`)
-A camada de apresentação **não** envolve chamadas ao repositório em `try/catch`; usa `when` ou `switch` no `ResultStatus` e emite estado de erro com a mensagem já tratada. `try/catch` na UI fica reservado a operações locais (seletor de arquivo, escrita em `File`) que não passam pelo contrato do repositório.
+### Presentation (`lib/screens/` layer)
+The presentation layer does **not** wrap repository calls in `try/catch`; it uses `when` or `switch` on `ResultStatus` and emits an error state with the already-processed message. In the UI, `try/catch` is reserved for local operations (file pickers, writing to `File`) that do not use the repository contract.
 
 ```dart
 final resultado = await repository.buscar(id);
@@ -66,14 +66,14 @@ resultado.when(
 );
 ```
 
-## 3. Drift DAO (dois bancos)
+## 3. Drift DAO (two databases)
 
-Existem **dois bancos**: `AppDatabase` (`app_database.dart`, `schemaVersion => 12`) e `SystemDatabase` (`system_database.dart`, `schemaVersion => 1`).
+There are **two databases**: `AppDatabase` (`app_database.dart`, `schemaVersion => 12`) and `SystemDatabase` (`system_database.dart`, `schemaVersion => 1`).
 
-- **Não** acoplar tabelas a classes de `lib/core/models/` com `@UseRowClass`; usar `XxxRecord` gerado e mapear para domínio em `lib/data/database/mapper/` ou no DAO/repositório.
-- Convenção: tabela `XxxRecords`, linha `XxxRecord`, DAO `XxxDao`.
-- `SystemDatabase` aceita `QueryExecutor` opcional no construtor para testes com banco em memória.
-- `CacheManager` é registrado via `GetIt` (DI); **não** usar `CacheManager.instance`. Repositórios o recebem por injeção de construtor.
+- Do **not** couple tables to classes in `lib/core/models/` with `@UseRowClass`; use the generated `XxxRecord` and map it to the domain in `lib/data/database/mapper/` or in a DAO/repository.
+- Naming convention: table `XxxRecords`, row `XxxRecord`, DAO `XxxDao`.
+- `SystemDatabase` accepts an optional `QueryExecutor` in its constructor for in-memory database tests.
+- `CacheManager` is registered through `GetIt` (DI); do **not** use `CacheManager.instance`. Repositories receive it through constructor injection.
 
 ```dart
 class CustomerRecords extends Table {
@@ -86,21 +86,21 @@ class CustomerRecords extends Table {
 class CustomerDao extends DatabaseAccessor<AppDatabase> with _$CustomerDaoMixin {
   Future<List<Customer>> getAll() async {
     final rows = await select(customerRecords).get();
-    return rows.map((r) => r.toCustomer()).toList(); // ou extensão em mapper/
+    return rows.map((r) => r.toCustomer()).toList(); // or an extension in mapper/
   }
 }
 ```
 
-Ao alterar schema Drift: atualizar `schemaVersion` e migração no banco correto (pré-produção: pode quebrar compatibilidade de dados antigos).
+When changing a Drift schema, update `schemaVersion` and the migration for the correct database (before production, compatibility with old data may be broken).
 
-## 4. Modelos e serialização
+## 4. Models and Serialization
 
-- **Domínio** (`lib/core/models/`): entidades de negócio; evitar acoplamento a Drift. Alguns modelos podem ter `fromJson`/`toJson` quando fizer sentido ao domínio, mas **DTOs de persistência/arquivo** preferir em `lib/data/entry/` ou `lib/data/models/` com `json_serializable`.
-- Após alterar classes geradas: `dart run build_runner build`.
+- **Domain** (`lib/core/models/`): business entities; avoid coupling them to Drift. Some models may have `fromJson`/`toJson` when appropriate for the domain, but prefer placing **persistence/file DTOs** in `lib/data/entry/` or `lib/data/models/` with `json_serializable`.
+- After changing generated classes, run `dart run build_runner build`.
 
-## 5. BLoC com Freezed
+## 5. BLoC with Freezed
 
-Eventos e estados imutáveis com `@freezed` em `lib/screens/[entidade]/bloc/`:
+Define immutable events and states with `@freezed` in `lib/screens/[entity]/bloc/`:
 
 ```dart
 @freezed
@@ -112,22 +112,22 @@ sealed class CustomerBlocState with _$CustomerBlocState {
 }
 ```
 
-Sempre rodar build_runner após alterar eventos/estados freezed.
+Always run build_runner after changing Freezed events/states.
 
-## 6. Navegação e DI
+## 6. Navigation and DI
 
-- **Rotas**: `auto_route` com root em `lib/screens/route/route_app.dart`; gerado em `route_app.gr.dart`. Use `@RoutePage` nas telas.
-- **DI**: Registrar singletons/factories em `setupAppInjection()` em `lib/application/app_injection.dart` (GetIt), chamado no `main()`. Resolver com `appInjection.get<T>()`.
+- **Routes**: `auto_route`, with the root in `lib/screens/route/route_app.dart`; generated in `route_app.gr.dart`. Use `@RoutePage` on screens.
+- **DI**: Register singletons/factories in `setupAppInjection()` in `lib/application/app_injection.dart` (GetIt), called from `main()`. Resolve dependencies with `appInjection.get<T>()`.
 
-Ao alterar rotas ou registros de DI: conferir `setupAppInjection()` e o router em `MaterialApp.router`.
+When changing routes or DI registrations, check `setupAppInjection()` and the router in `MaterialApp.router`.
 
-## 7. Idioma e documentação
+## 7. Language and Documentation
 
-- **Código**: nomes de classes, métodos e variáveis em **inglês**.
-- **Documentação**: comentários `///` em **português**, práticos e diretos.
+- **Code**: class, method, and variable names in **English**.
+- **Documentation**: practical, concise `///` comments in **English**.
 
-## 8. Restrições
+## 8. Restrictions
 
-- Persistência principal é Drift; não introduzir managers JSON como padrão de feature nova.
-- DTOs JSON ficam em `lib/data/entry/` (ou afins), não em uma pasta `managers/`.
-- Não inventar camada UseCase — o projeto usa Interface + Repository.
+- Drift is the primary persistence layer; do not introduce JSON managers as the standard for new features.
+- JSON DTOs belong in `lib/data/entry/` (or related directories), not in a `managers/` directory.
+- Do not introduce a UseCase layer — the project uses Interface + Repository.

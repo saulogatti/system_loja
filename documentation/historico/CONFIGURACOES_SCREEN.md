@@ -1,161 +1,161 @@
-# Tela de Configurações do Sistema
+# System Settings Screen
 
-## Visão Geral
+## Overview
 
-A tela de configurações (`ConfiguracoesScreen`) permite aos administradores ajustar as preferências gerais do sistema, incluindo notificações, aparência, backup, limpeza de dados, segurança e tipo de banco de dados.
+The settings screen (`ConfiguracoesScreen`) allows administrators to adjust general system preferences, including notifications, appearance, backups, data cleanup, security, and database type.
 
-## Estrutura da Interface
+## Interface Structure
 
 ### AppBar
-- **Título**: "Configurações do Sistema"
-- **Ação**: Botão de restaurar configurações padrão (ícone de restauração)
+- **Title**: "System Settings"
+- **Action**: Button to restore default settings (restore icon)
 
-### Corpo (Scrollable)
+### Body (Scrollable)
 
-#### 1. Seção de Notificações 🔔
-Permite configurar alertas do sistema:
+#### 1. Notifications Section 🔔
+Configure system alerts:
 
-- **Ativar notificações** (Switch)
-  - Habilita/desabilita todas as notificações
+- **Enable notifications** (Switch)
+  - Enables/disables all notifications
   
-- **Notificar vendas** (Switch)
-  - Alertas sobre novas vendas realizadas
-  - Desabilitado se notificações estiverem desativadas
+- **Notify about sales** (Switch)
+  - Alerts about new sales
+  - Disabled when notifications are turned off
   
-- **Notificar estoque baixo** (Switch)
-  - Alertas quando produtos atingem limite mínimo
-  - Desabilitado se notificações estiverem desativadas
+- **Notify about low stock** (Switch)
+  - Alerts when products reach the minimum threshold
+  - Disabled when notifications are turned off
   
-- **Limite de estoque baixo** (Slider: 1-50)
-  - Define o número de unidades para disparar alerta
-  - Visível apenas se "Notificar estoque baixo" estiver ativo
+- **Low-stock threshold** (Slider: 1-50)
+  - Sets the number of units that triggers an alert
+  - Visible only when "Notify about low stock" is enabled
 
-#### 2. Seção de Aparência 🎨
-Personalização visual do aplicativo:
+#### 2. Appearance Section 🎨
+Customize the app's appearance:
 
-- **Tema escuro** (Switch)
-  - Alterna entre modo claro e escuro
+- **Dark theme** (Switch)
+  - Toggles between light and dark modes
   
-- **Cor primária** (Seletor)
-  - Escolhe a cor principal do aplicativo
-  - Opções disponíveis:
-    - Azul (#2196F3) - Padrão
-    - Verde (#4CAF50)
-    - Laranja (#FF9800)
-    - Roxo (#9C27B0)
-    - Vermelho (#F44336)
-    - Rosa (#E91E63)
-    - Ciano (#00BCD4)
-    - Índigo (#3F51B5)
+- **Primary color** (Picker)
+  - Selects the app's primary color
+  - Available options:
+    - Blue (#2196F3) - Default
+    - Green (#4CAF50)
+    - Orange (#FF9800)
+    - Purple (#9C27B0)
+    - Red (#F44336)
+    - Pink (#E91E63)
+    - Cyan (#00BCD4)
+    - Indigo (#3F51B5)
 
-#### 3. Seção de Backup 💾
-Gerenciamento de cópias de segurança:
+#### 3. Backup Section 💾
+Manage backups:
 
-- **Backup automático** (Switch)
-  - Habilita backups periódicos
+- **Automatic backup** (Switch)
+  - Enables scheduled backups
   
-- **Frequência de backup** (Seletor)
-  - Opções: Diário, Semanal, Mensal
-  - Visível apenas se backup automático estiver ativo
+- **Backup frequency** (Picker)
+  - Options: Daily, Weekly, Monthly
+  - Visible only when automatic backup is enabled
   
-- **Realizar backup agora** (Botão)
-  - Cria cópia manual dos dados imediatamente
-  - Arquivos salvos em: `data/backups/[timestamp]/`
-  - Inclui: clientes, produtos, notas fiscais, usuários, logs e configurações
+- **Back up now** (Button)
+  - Immediately creates a manual copy of the data
+  - Files are saved in: `data/backups/[timestamp]/`
+  - Includes: customers, products, invoices, users, logs, and settings
 
-#### 4. Seção de Limpeza de Dados 🧹
-Manutenção e remoção de dados:
+#### 4. Data Cleanup Section 🧹
+Maintain and remove data:
 
-- **Limpeza automática de logs** (Switch)
-  - Remove logs antigos automaticamente
+- **Automatic log cleanup** (Switch)
+  - Automatically removes old logs
   
-- **Dias para manter logs** (Slider: 7-365)
-  - Define por quanto tempo manter registros
-  - Visível apenas se limpeza automática estiver ativa
+- **Days to retain logs** (Slider: 7-365)
+  - Sets how long records are retained
+  - Visible only when automatic cleanup is enabled
   
-- **Limpar logs antigos agora** (Botão)
-  - Remove logs com base na configuração atual
-  - Requer confirmação
+- **Clear old logs now** (Button)
+  - Removes logs based on the current setting
+  - Requires confirmation
   
-- **Limpar todos os dados** (Botão - Vermelho)
-  - ⚠️ AÇÃO IRREVERSÍVEL
-  - Remove TODOS os dados do sistema
-  - Requer confirmação dupla com alerta
+- **Clear all data** (Button - Red)
+  - ⚠️ IRREVERSIBLE ACTION
+  - Removes ALL system data
+  - Requires double confirmation with a warning
 
-#### 5. Seção de Segurança 🔒
-Opções de proteção e acesso:
+#### 5. Security Section 🔒
+Protection and access options:
 
-- **Exigir senha** (Switch)
-  - Solicita autenticação ao abrir o aplicativo
+- **Require password** (Switch)
+  - Requests authentication when opening the app
   
-- **Tempo de bloqueio** (Slider: 1-60 minutos)
-  - Tempo de inatividade antes de solicitar senha
-  - Visível apenas se "Exigir senha" estiver ativo
+- **Lock timeout** (Slider: 1-60 minutes)
+  - Inactivity duration before requesting a password
+  - Visible only when "Require password" is enabled
   
-- **Permitir múltiplos usuários** (Switch)
-  - Habilita sistema de gestão de usuários
+- **Allow multiple users** (Switch)
+  - Enables user management
 
-#### 6. Seção de Banco de Dados 🗄️
-Escolha do sistema de persistência:
+#### 6. Database Section 🗄️
+Choose the persistence system:
 
-- **JSON (Arquivos locais)** (Radio)
-  - Leve e simples
-  - Recomendado para uso básico
-  - Padrão do sistema
+- **JSON (Local files)** (Radio)
+  - Lightweight and simple
+  - Recommended for basic use
+  - System default
   
 - **SQL (SQLite)** (Radio)
-  - Mais robusto
-  - Recomendado para grande volume de dados
-  - Requer reinicialização do aplicativo
+  - More robust
+  - Recommended for large amounts of data
+  - Requires restarting the app
 
-**Nota**: Alterar o tipo de banco de dados requer reinicialização do aplicativo.
+**Note**: Changing the database type requires restarting the app.
 
-### Botão de Salvar
-- **Localização**: Parte inferior da tela
-- **Função**: Persiste todas as alterações
-- **Estilo**: Botão destacado com ícone de salvar
-- **Feedback**: SnackBar verde em caso de sucesso, vermelha em caso de erro
+### Save Button
+- **Location**: Bottom of the screen
+- **Function**: Persists all changes
+- **Style**: Prominent button with a save icon
+- **Feedback**: Green SnackBar on success, red on error
 
-## Funcionalidades Especiais
+## Special Features
 
-### Restaurar Padrão
-- Acesso via ícone no AppBar
-- Requer confirmação
-- Restaura TODAS as configurações para valores iniciais
+### Restore Defaults
+- Accessed through the AppBar icon
+- Requires confirmation
+- Restores ALL settings to their initial values
 
-### Validações
-- Todos os valores são validados antes de salvar
-- Feedback visual para cada ação (SnackBars)
-- Indicador de carregamento durante operações assíncronas
+### Validation
+- All values are validated before saving.
+- Each action provides visual feedback (SnackBars).
+- A loading indicator is shown during asynchronous operations.
 
-### Persistência
-- Configurações salvas em: `data/configuracao.json`
-- Carregamento automático ao abrir a tela
-- Thread-safe usando locks de sincronização
+### Persistence
+- Settings are saved in: `data/configuracao.json`
+- Settings load automatically when the screen opens.
+- Thread-safe through synchronization locks.
 
-## Arquivos Relacionados
+## Related Files
 
-### Modelo
-- `lib/core/models/configuracao.dart` - Definição da estrutura de dados
-- `lib/core/models/configuracao.g.dart` - Serialização JSON (gerado)
+### Model
+- `lib/core/models/configuracao.dart` - Data structure definition
+- `lib/core/models/configuracao.g.dart` - JSON serialization (generated)
 
 ### Manager
-- `lib/core/managers/configuracao_manager.dart` - Lógica de negócio
+- `lib/core/managers/configuracao_manager.dart` - Business logic
 
 ### UI
-- `lib/screens/configuracoes_screen.dart` - Interface gráfica
+- `lib/screens/configuracoes_screen.dart` - Graphical interface
 
-### Testes
-- `test/configuracao_manager_test.dart` - 13 testes unitários
+### Tests
+- `test/configuracao_manager_test.dart` - 13 unit tests
 
-## Navegação
+## Navigation
 
-Acesso pela tela inicial (`HomeScreen`):
-- Card "Configurações do Sistema"
-- Ícone: Settings (engrenagem)
-- Cor: Teal
+Access from the home screen (`HomeScreen`):
+- "System Settings" card
+- Icon: Settings (gear)
+- Color: Teal
 
-## Valores Padrão
+## Default Values
 
 ```dart
 Configuracao.padrao() {
@@ -164,7 +164,7 @@ Configuracao.padrao() {
   notificarEstoqueBaixo: true,
   limiteEstoqueBaixo: 10,
   temaEscuro: false,
-  corPrimaria: '#2196F3', // Azul
+  corPrimaria: '#2196F3', // Blue
   backupAutomatico: false,
   frequenciaBackup: 'semanal',
   localBackup: 'data/backups',
@@ -177,39 +177,39 @@ Configuracao.padrao() {
 }
 ```
 
-## Operações Assíncronas
+## Asynchronous Operations
 
-Todas as operações que modificam dados são assíncronas e mostram indicador de carregamento:
-- Salvar configurações
-- Restaurar padrão
-- Realizar backup
-- Limpar logs
-- Limpar todos os dados
+All operations that modify data are asynchronous and display a loading indicator:
+- Save settings
+- Restore defaults
+- Create a backup
+- Clear logs
+- Clear all data
 
-## Tratamento de Erros
+## Error Handling
 
-Todas as operações possuem tratamento de erros com:
+All operations handle errors with:
 - Try-catch blocks
-- Logging de erros
-- Feedback visual ao usuário (SnackBar vermelho)
-- Mensagens descritivas
+- Error logging
+- Visual feedback to the user (red SnackBar)
+- Descriptive messages
 
-## Considerações de UX
+## UX Considerations
 
-1. **Hierarquia Visual**: Cards separados por funcionalidade
-2. **Feedback Imediato**: Switches e sliders atualizam estado instantaneamente
-3. **Confirmações**: Ações destrutivas requerem confirmação explícita
-4. **Acessibilidade**: Labels descritivos em todos os controles
-5. **Responsividade**: SingleChildScrollView para suporte a telas pequenas
-6. **Consistência**: Segue padrão Material Design 3
+1. **Visual hierarchy**: Cards are grouped by functionality.
+2. **Immediate feedback**: Switches and sliders update state instantly.
+3. **Confirmations**: Destructive actions require explicit confirmation.
+4. **Accessibility**: All controls have descriptive labels.
+5. **Responsiveness**: `SingleChildScrollView` supports small screens.
+6. **Consistency**: Follows Material Design 3.
 
-## Melhorias Futuras Possíveis
+## Potential Future Improvements
 
-- [ ] Importar/exportar configurações
-- [ ] Backup automático em nuvem
-- [ ] Mais opções de cores personalizadas
-- [ ] Agendamento de limpezas
-- [ ] Estatísticas de uso de espaço
-- [ ] Preview de tema em tempo real
-- [ ] Suporte a dark mode automático (seguir sistema)
-- [ ] Configurações por módulo (cliente, produto, etc.)
+- [ ] Import/export settings
+- [ ] Automatic cloud backups
+- [ ] More custom color options
+- [ ] Schedule cleanups
+- [ ] Storage usage statistics
+- [ ] Real-time theme preview
+- [ ] Automatic dark mode support (follow system settings)
+- [ ] Per-module settings (customer, product, etc.)

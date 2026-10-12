@@ -1,42 +1,42 @@
-# Instrucoes de Build e Validacao
+# Build and Validation Instructions
 
-## Visao Geral
+## Overview
 
-Este documento centraliza os comandos de geracao de codigo e validacao do projeto.
-Use estas instrucoes apos alterar classes com `@freezed`, `@JsonSerializable`, Drift (tabelas/DAOs) ou rotas do `auto_route`.
+This document collects the project's code-generation and validation commands.
+Use these instructions after changing classes with `@freezed`, `@JsonSerializable`, Drift (tables/DAOs), or `auto_route` routes.
 
-## Geracao de Codigo (Obrigatorio)
+## Code Generation (Required)
 
-Execute no diretorio raiz do projeto:
+Run this command from the project root:
 
 ```bash
 dart run build_runner build
 ```
 
-Arquivos normalmente atualizados pela geracao:
+Files commonly updated by code generation:
 
 - `*.freezed.dart`
-- `*.g.dart` (json_serializable e Drift)
+- `*.g.dart` (json_serializable and Drift)
 - `lib/screens/route/route_app.gr.dart`
 
-## Qualidade
+## Quality Checks
 
-Depois da geracao, rode as validacoes:
+After code generation, run these checks:
 
 ```bash
 dart analyze
 flutter test
 ```
 
-Para validar formatacao sem alterar arquivos:
+To check formatting without changing files:
 
 ```bash
 dart format --set-exit-if-changed .
 ```
 
-## Referencia de Banco (estado atual)
+## Database Reference (Current State)
 
 - `AppDatabase`: `schemaVersion => 12`
 - `SystemDatabase`: `schemaVersion => 1`
 
-Se houver alteracao de schema Drift, atualize o `schemaVersion` no banco correto e a estrategia de migracao correspondente.
+When changing a Drift schema, update `schemaVersion` in the correct database and update its migration strategy.

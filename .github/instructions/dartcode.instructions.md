@@ -1,47 +1,47 @@
 ---
-description: Regras para codigo Dart no System Loja (arquitetura, ResultStatus e Drift)
+description: Dart rules for System Loja (architecture, ResultStatus, and Drift)
 applyTo: '**/*.dart'
 ---
 
-# Regras de codigo Dart
+# Dart Code Rules
 
-## Diretrizes gerais
+## General guidelines
 
-- Seguir Effective Dart.
-- Usar `dart format`.
-- Priorizar legibilidade e simplicidade.
-- Evitar alteracoes fora do escopo da tarefa.
+- Follow Effective Dart.
+- Use `dart format`.
+- Prioritize readability and simplicity.
+- Avoid changes outside the task scope.
 
-## Convencoes do projeto
+## Project conventions
 
-- Codigo em ingles.
-- Comentarios e documentacao `///` em portugues.
-- Fluxo de camadas: Screen -> Interface (`lib/core/interface/`) -> Repository (`lib/domain/repository/`) -> DAO Drift (`lib/data/database/dao/`).
-- `lib/data/` nao deve importar `lib/domain/` nem `lib/application/`.
-- Nao propagar excecoes entre Interface e Repository. Repositorios usam `try/catch` internamente e retornam `ResultStatus.error(mensagemErroRepositorio(...))` com mensagens amigaveis (`lib/core/utils/repository_error_mapper.dart`). A camada de apresentacao nao usa `try/catch` para chamadas ao repositorio.
-- Retornar `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, usa `package:meta`).
-- `CacheManager` registrado via `GetIt` (DI); nao usar `CacheManager.instance`.
+- Code is in English.
+- Comments and `///` documentation are in English.
+- Layer flow: Screen -> Interface (`lib/core/interface/`) -> Repository (`lib/domain/repository/`) -> Drift DAO (`lib/data/database/dao/`).
+- `lib/data/` must not import `lib/domain/` or `lib/application/`.
+- Do not propagate exceptions between Interface and Repository. Repositories use internal `try/catch` blocks and return `ResultStatus.error(mensagemErroRepositorio(...))` with user-friendly messages (`lib/core/utils/repository_error_mapper.dart`). The presentation layer does not use `try/catch` for repository calls.
+- Return `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, which uses `package:meta`).
+- Register `CacheManager` through `GetIt` (DI); do not use `CacheManager.instance`.
 
 ## Drift
 
-- Tabela: `XxxRecords`
-- Linha: `XxxRecord` (gerada)
+- Table: `XxxRecords`
+- Row: `XxxRecord` (generated)
 - DAO: `XxxDao`
-- Nao acoplar tabelas a modelos de `lib/core/` via `@UseRowClass`; mapear registro -> dominio em mapper/DAO/repository.
-- Em alteracao de schema, atualizar `schemaVersion` / migracao no banco correto (pre-producao: breaking changes aceitos).
+- Do not couple tables to models in `lib/core/` with `@UseRowClass`; map records -> domain in a mapper/DAO/repository.
+- When changing a schema, update `schemaVersion` / the migration in the correct database (before production, breaking changes are acceptable).
 
-## Geracao de codigo
+## Code generation
 
-Executar `dart run build_runner build` ao alterar:
+Run `dart run build_runner build` after changing:
 
-- classes com `@freezed`
-- classes com `@JsonSerializable`
-- tabelas/DAOs Drift
-- rotas do AutoRoute
+- classes with `@freezed`
+- classes with `@JsonSerializable`
+- Drift tables/DAOs
+- AutoRoute routes
 
-## Qualidade
+## Quality
 
-Antes de concluir alteracoes Dart, validar:
+Before completing Dart changes, validate with:
 
 ```bash
 dart analyze

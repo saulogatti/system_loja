@@ -1,7 +1,7 @@
-# Serviços
+# Services
 
-Lógica transversal: geração de códigos, relatórios, tema, DI (`setupAppInjection`) e erros sistêmicos.
+Cross-cutting logic: code generation, reports, theming, DI (`setupAppInjection`), and system errors.
 
-Não substituem repositório. Registrar em `setupAppInjection()` e resolver com `appInjection.get<T>()`.
+Services do not replace repositories. Register them in `setupAppInjection()` and resolve them with `appInjection.get<T>()`.
 
-Guia: [Geração de códigos](../CODE_GENERATOR_USAGE.md).
+Guide: [Code Generation](../CODE_GENERATOR_USAGE.md).

@@ -1,93 +1,95 @@
 ---
 name: Feature request
-about: Sugerir uma nova funcionalidade para o projeto
+about: Suggest a new feature for the project
 title: '[FEATURE] '
 labels: 'enhancement'
 assignees: ''
 
 ---
 
-## 💡 Descrição da Feature
+<!-- TODO: verify whether this documentation is out of date -->
 
-<!-- Uma descrição clara e concisa da funcionalidade desejada -->
+## 💡 Feature Description
 
-## 🎯 Problema Relacionado
+<!-- A clear and concise description of the desired feature -->
 
-<!-- Esta feature está relacionada a um problema? Descreva-o -->
-<!-- Ex: Sempre tenho dificuldade quando [...] -->
+## 🎯 Related Problem
 
-## ✨ Solução Proposta
+<!-- Is this feature related to a problem? Describe it. -->
+<!-- Example: I always have difficulty when [...] -->
 
-<!-- Uma descrição clara do que você quer que aconteça -->
+## ✨ Proposed Solution
 
-### Comportamento Esperado
+<!-- A clear description of what you want to happen -->
 
-1. Quando o usuário...
-2. O sistema deve...
-3. E então...
+### Expected Behavior
 
-## 🔄 Alternativas Consideradas
+1. When the user...
+2. The system should...
+3. Then...
 
-<!-- Descreva soluções alternativas ou features que você considerou -->
+## 🔄 Alternatives Considered
 
-## 📂 Arquivos Impactados
+<!-- Describe alternative solutions or features you considered -->
 
-<!-- Liste os arquivos que precisarão ser criados ou modificados -->
+## 📂 Affected Files
 
-**Arquivos Novos:**
+<!-- List the files that will need to be created or modified -->
+
+**New Files:**
 - `lib/core/models/...`
 - `lib/screens/...`
 
-**Arquivos a Modificar:**
-- `lib/domain/repository/...` ou `lib/data/database/...`
+**Files to Modify:**
+- `lib/domain/repository/...` or `lib/data/database/...`
 - `test/...`
 
-## 🎯 Critérios de Aceitação
+## 🎯 Acceptance Criteria
 
-<!-- Defina claramente quando a feature estará completa -->
-- [ ] Modelo de dados criado/atualizado
-- [ ] Lógica de negócio implementada no Manager
-- [ ] Interface de usuário implementada
-- [ ] Validações adicionadas
-- [ ] Testes unitários criados
-- [ ] Testes de integração criados (se aplicável)
-- [ ] Documentação atualizada em português
-- [ ] Funcionalidade testada manualmente
+<!-- Clearly define when the feature will be complete -->
+- [ ] Data model created/updated
+- [ ] Business logic implemented in the Manager
+- [ ] User interface implemented
+- [ ] Validations added
+- [ ] Unit tests created
+- [ ] Integration tests created (if applicable)
+- [ ] Documentation updated in English
+- [ ] Feature tested manually
 
 ## 🎨 Mockups/Wireframes
 
-<!-- Se aplicável, adicione mockups ou wireframes -->
+<!-- If applicable, add mockups or wireframes -->
 
-## 📊 Impacto
+## 📊 Impact
 
-**Complexidade Estimada:** 
-- [ ] Pequena (< 1 dia)
-- [ ] Média (1-3 dias)
-- [ ] Grande (> 3 dias)
+**Estimated Complexity:**
+- [ ] Small (< 1 day)
+- [ ] Medium (1-3 days)
+- [ ] Large (> 3 days)
 
-**Prioridade:**
-- [ ] Baixa
-- [ ] Média
-- [ ] Alta
-- [ ] Crítica
+**Priority:**
+- [ ] Low
+- [ ] Medium
+- [ ] High
+- [ ] Critical
 
-**Compatibilidade:**
-- [ ] Esta feature é compatível com a arquitetura atual
-- [ ] Esta feature requer mudanças arquiteturais
+**Compatibility:**
+- [ ] This feature is compatible with the current architecture
+- [ ] This feature requires architectural changes
 
-## 📝 Contexto Adicional
+## 📝 Additional Context
 
-<!-- Adicione qualquer outro contexto, screenshots ou exemplos sobre a feature -->
+<!-- Add any other context, screenshots, or examples about the feature -->
 
-## 🔗 Recursos Relacionados
+## 🔗 Related Resources
 
-<!-- Links para documentação, exemplos ou outras issues relacionadas -->
+<!-- Links to documentation, examples, or other related issues -->
 
 ---
 
-**💡 Dica para @copilot**: 
-- Siga o padrão Manager para lógica de negócio
-- Use persistência JSON conforme documentado
-- Documente todo o código em português
-- Adicione validações apropriadas
-- Mantenha compatibilidade com Material Design 3
+**💡 Tip for @copilot**:
+- Follow the Manager pattern for business logic
+- Use JSON persistence as documented
+- Write all code documentation in English
+- Add appropriate validations
+- Maintain compatibility with Material Design 3
