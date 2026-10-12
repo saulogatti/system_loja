@@ -232,7 +232,9 @@ class _SalesInvoiceBodyState extends State<_SalesInvoiceBody> {
                         return const SliverToBoxAdapter(
                           child: EmptyWidget(
                             message: 'Nenhum item adicionado',
+                            subMessage: 'Lista de itens vazia.',
                             icon: Icons.remove_shopping_cart,
+                            semanticLabel: 'Lista de itens vazia. Nenhum item adicionado.',
                           ),
                         );
                       }

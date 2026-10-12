@@ -299,3 +299,13 @@
 ## 15-06-2024 - [Missing Confirmation Dialogs on Destructive Inline Actions]
 **Learning:** Destructive inline actions within list tiles (like removing an item from an invoice list via an IconButton) lack confirmation feedback, making accidental deletions easy and jarring.
 **Action:** Always intercept destructive actions on ListTile trailing buttons by presenting an AlertDialog (styled symmetrically with an error-colored ElevatedButton) to confirm user intent before committing the deletion, ensuring the action is deliberate.
+## 06-10-2026 - Consistent Keyboard Navigation
+**Learning:** When users input data sequentially (like filling a sales invoice form), they expect to jump between fields without dismissing the keyboard. Omitting `textInputAction: TextInputAction.next` breaks this flow.
+**Action:** Always check form fields for the appropriate `textInputAction`.
+
+## 08-10-2026 - [EmptyWidget Accessibility Configuration]
+**Learning:** Found instances of `EmptyWidget` used for empty list states where the default message was sufficient visually but lacked explicit contextual announcement for screen readers. Some instances also missed the `subMessage` parameter, reducing the affordance.
+**Action:** Always provide the `semanticLabel` parameter when utilizing `EmptyWidget` to offer complete screen reader context (merging visual message and subMessage) that differs from the default displayed message.
+## 10-10-2026 - EmptyWidget Semantics and Parameters
+**Learning:** Adding named parameters like `subMessage` or `semanticLabel` to custom widgets like `EmptyWidget` without also updating the widget's constructor definition in its source file (e.g., `lib/screens/widgets/empty_widget.dart`) causes compilation errors. Standard Flutter attributes like `Semantics` don't automatically apply if the custom widget hasn't implemented them internally.
+**Action:** When modifying custom project widgets to include new accessibility properties or text fields, always check and update the widget's class definition and `build` method first, or wrap the widget in a `Semantics` node rather than hallucinating parameters.

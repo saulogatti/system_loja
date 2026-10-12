@@ -47,6 +47,7 @@ class _InvoiceNumberFieldState extends State<InvoiceNumberField> {
       return TextFormField(
         readOnly: form.enableCodeGeneration,
         controller: _controller,
+        textInputAction: TextInputAction.next,
         onChanged: context.read<SalesInvoiceCubit>().updateInvoiceNumber,
         decoration: InputDecoration(
           labelText: 'Número da Nota *',

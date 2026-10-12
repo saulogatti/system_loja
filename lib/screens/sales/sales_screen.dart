@@ -174,7 +174,10 @@ class _SalesViewState extends State<SalesView> {
                     child: invoices.isEmpty
                         ? const EmptyWidget(
                             message: 'Nenhuma nota fiscal cadastrada',
+                            subMessage: 'Lista de notas fiscais vazia.',
                             icon: Icons.receipt_long,
+                            semanticLabel:
+                                'Lista de notas fiscais vazia. Nenhuma nota fiscal cadastrada.',
                           )
                         : GridView.builder(
                             padding: const EdgeInsets.all(12),
