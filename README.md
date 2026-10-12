@@ -1,24 +1,24 @@
 # System Loja
 
-Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, categorias, empresa e notas/vendas), com persistência local em SQLite via Drift.
+A cross-platform Flutter application for store management (customers, products, categories, company details, and invoices/sales), with local SQLite persistence through Drift.
 
-## Visão geral
+## Overview
 
-- UI em `lib/screens/`, com BLoC/Cubit (`flutter_bloc`).
-- Fluxo principal: **Screen** → **Interface** (`lib/core/interface/`) → **Repository** (`lib/domain/repository/`) → **DAO Drift** (`lib/data/database/dao/`) → SQLite.
-- DI com `GetIt` via `setupAppInjection()` em `lib/application/app_injection.dart` — resolver com `appInjection.get<T>()`.
-- Navegação com `auto_route` em `lib/screens/route/route_app.dart`.
-- Padrão de retorno entre camadas: `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, usa `package:meta`).
-- Repositórios usam `try/catch` internamente e retornam `ResultStatus.error(...)` com mensagens amigáveis via `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`). A camada de apresentação **não** envolve chamadas ao repositório em `try/catch`; usa `when` ou `switch` em `ResultStatus`.
-- Camada **data** (`lib/data/`): Drift, DTOs/entries JSON, conversões, cache e mapeamento para modelos de `lib/core/models/` — **sem** depender de `lib/domain/` ou `lib/application/` (constantes compartilhadas ficam em `lib/core/` quando necessário).
-- `CacheManager` registrado via `GetIt` (injeção de dependência) — **não** usar `CacheManager.instance`.
+- UI in `lib/screens/`, using BLoC/Cubit (`flutter_bloc`).
+- Main flow: **Screen** → **Interface** (`lib/core/interface/`) → **Repository** (`lib/domain/repository/`) → **Drift DAO** (`lib/data/database/dao/`) → SQLite.
+- Dependency injection with `GetIt` via `setupAppInjection()` in `lib/application/app_injection.dart` — resolve dependencies with `appInjection.get<T>()`.
+- Navigation with `auto_route` in `lib/screens/route/route_app.dart`.
+- Return type between layers: `ResultStatus<R, E>` (`lib/core/utils/result_status.dart`, which uses `package:meta`).
+- Repositories use internal `try/catch` blocks and return `ResultStatus.error(...)` with user-friendly messages via `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`). The presentation layer **does not** wrap repository calls in `try/catch`; it uses `when` or `switch` on `ResultStatus`.
+- **Data** layer (`lib/data/`): Drift, JSON DTOs/entries, conversions, caching, and mapping to models in `lib/core/models/` — it does **not** depend on `lib/domain/` or `lib/application/` (shared constants belong in `lib/core/` when needed).
+- `CacheManager` is registered through `GetIt` (dependency injection) — **do not** use `CacheManager.instance`.
 
-## Requisitos
+## Requirements
 
-- Flutter `>=3.47.0` (conforme `pubspec.yaml`).
+- Flutter `>=3.47.0` (as specified in `pubspec.yaml`).
 - Dart SDK `>=3.13.0 <4.0.0`.
 
-## Setup rápido
+## Quick setup
 
 ```bash
 git clone https://github.com/saulogatti/system_loja.git
@@ -27,7 +27,7 @@ flutter pub get
 dart run build_runner build
 ```
 
-## Executar o app
+## Run the app
 
 ```bash
 # Windows
@@ -39,51 +39,51 @@ flutter run -d linux
 # Web (Chrome)
 flutter run -d chrome
 
-# Web (servidor local)
+# Web (local server)
 flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0
 ```
 
-## Comandos de qualidade
+## Quality checks
 
 ```bash
-# Codegen (obrigatório após alterar Freezed/JsonSerializable/Drift/AutoRoute)
+# Code generation (required after changing Freezed/JsonSerializable/Drift/AutoRoute)
 dart run build_runner build
 
-# Análise estática
+# Static analysis
 dart analyze
 
-# Formatação
+# Formatting
 dart format --set-exit-if-changed .
 
-# Testes
+# Tests
 flutter test
-flutter test test/<arquivo>_test.dart
+flutter test test/<file>_test.dart
 
-# Documentação da API (GitHub Pages)
+# API documentation (GitHub Pages)
 dart doc -o docs/
 ```
 
-## Arquitetura
+## Architecture
 
-### Bancos Drift
+### Drift databases
 
-- `AppDatabase` (`lib/data/database/app_database.dart`) com `schemaVersion => 12`.
-- `SystemDatabase` (`lib/data/database/system_database.dart`) com `schemaVersion => 1`.
+- `AppDatabase` (`lib/data/database/app_database.dart`) with `schemaVersion => 12`.
+- `SystemDatabase` (`lib/data/database/system_database.dart`) with `schemaVersion => 1`.
 
-### Persistência e DTOs
+### Persistence and DTOs
 
-A persistência principal da loja é **SQLite via Drift**. DTOs serializáveis (JSON) ficam em `lib/data/entry/` e afins quando necessário para importação/exportação ou serialização pontual — **não** há pasta `lib/core/managers/` nem managers JSON como padrão de feature nova.
+The store's primary persistence is **SQLite through Drift**. Serializable JSON DTOs live in `lib/data/entry/` and related locations when needed for import/export or occasional serialization — there is **no** `lib/core/managers/` directory, and JSON managers are not the standard pattern for new features.
 
-### Convenções importantes
+### Important conventions
 
-- Não propagar exceções entre Interface/Repository; retornar `ResultStatus`. Repositórios capturam exceções internamente (`try/catch`) e devolvem `ResultStatus.error(mensagemErroRepositorio(...))`. A camada de apresentação não usa `try/catch` para chamadas ao repositório.
-- Drift: tabela `XxxRecords`, linha gerada `XxxRecord`, DAO `XxxDao`. Linhas Drift **não** usam `@UseRowClass` com entidades de `lib/core/`; o mapeamento para domínio fica em extensões/helpers (ex.: `lib/data/database/mapper/`) ou nos DAOs/repositórios, conforme o padrão do projeto.
-- Modelos de negócio em `lib/core/models/`.
-- Código em inglês; documentação e comentários (`///`) em português.
-- `SystemDatabase` aceita `QueryExecutor` opcional no construtor para facilitar testes com banco em memória.
-- Navegação de páginas com `auto_route`; `Navigator` apenas para dialogs/bottom sheets/modais.
+- Do not propagate exceptions between Interface/Repository; return `ResultStatus`. Repositories catch exceptions internally (`try/catch`) and return `ResultStatus.error(mensagemErroRepositorio(...))`. The presentation layer does not use `try/catch` for repository calls.
+- Drift naming: table `XxxRecords`, generated row `XxxRecord`, DAO `XxxDao`. Drift rows do **not** use `@UseRowClass` with entities from `lib/core/`; domain mapping belongs in extensions/helpers (e.g. `lib/data/database/mapper/`) or DAOs/repositories, following the project pattern.
+- Business models are in `lib/core/models/`.
+- Code, documentation, and comments (`///`) are in English.
+- `SystemDatabase` accepts an optional `QueryExecutor` in its constructor to simplify in-memory database tests.
+- Use `auto_route` for page navigation; use `Navigator` only for dialogs, bottom sheets, and modals.
 
-## Estrutura resumida
+## Project structure at a glance
 
 ```text
 lib/
@@ -91,63 +91,63 @@ lib/
   application/
     app_injection.dart   # GetIt / setupAppInjection()
   core/
-    interface/           # contratos (ex.: I*Repository)
+    interface/           # contracts (e.g. I*Repository)
     constants/
-    models/              # entidades de domínio
-    services/            # serviços transversais (quando aplicável)
-    utils/               # ResultStatus, repository_error_mapper, extensões
+    models/              # domain entities
+    services/            # cross-cutting services (when applicable)
+    utils/               # ResultStatus, repository_error_mapper, extensions
   domain/
-    repository/          # implementações dos repositórios
-    *.dart               # serviços de domínio (ex.: geração de código)
+    repository/          # repository implementations
+    *.dart               # domain services (e.g. code generation)
   data/
     database/
       dao/
       table/
       extension/
-      mapper/            # XxxRecord -> modelo de domínio
-    entry/               # DTOs JSON (json_serializable)
+      mapper/            # XxxRecord -> domain model
+    entry/               # JSON DTOs (json_serializable)
     cache/
     converter/
-    models/              # modelos de persistência auxiliares
+    models/              # supporting persistence models
   screens/
     route/
 test/
-  support/               # helpers (ex.: AppDatabase em teste sem path_provider)
+  support/               # helpers (e.g. AppDatabase tests without path_provider)
 documentation/
-  dartdoc/               # páginas-fonte das categorias do dart doc
-  historico/             # material antigo (não usar como padrão)
-docs/                    # HTML gerado (`dart doc -o docs/`) para GitHub Pages
+  dartdoc/               # source pages for dart doc categories
+  historico/             # historical material (not an implementation standard)
+docs/                    # generated HTML (`dart doc -o docs/`) for GitHub Pages
 ```
 
-## Observações importantes
+## Important notes
 
-- No Web, Drift depende de `web/sqlite3.wasm` e `web/drift_worker.js`.
-- Existem testes com falhas pré-existentes no repositório; valide primeiro o escopo alterado antes de tratar falhas fora da tarefa.
-- Testes que instanciam `AppDatabase` na VM podem usar `applicationSupportDirectory` e `tempDirectoryPath` (ver `test/support/test_app_database.dart`) para evitar `path_provider` / `MissingPluginException`.
+- On the Web, Drift depends on `web/sqlite3.wasm` and `web/drift_worker.js`.
+- Some tests in the repository have pre-existing failures; validate the changed scope first before addressing failures outside the task.
+- Tests that instantiate `AppDatabase` on the VM can use `applicationSupportDirectory` and `tempDirectoryPath` (see `test/support/test_app_database.dart`) to avoid `path_provider` / `MissingPluginException`.
 
-## Documentação da API (dartdoc)
+## API documentation (dartdoc)
 
-Gera o site HTML publicado no GitHub Pages (pasta `/docs` do repositório):
+Generate the HTML site published on GitHub Pages (the repository's `/docs` directory):
 
 ```bash
 dart doc -o docs/
 ```
 
-A saída em `docs/` é o site estático. Para navegar localmente, sirva com HTTP (busca e sidebar não funcionam em `file://`).
+The output in `docs/` is a static site. To browse it locally, serve it over HTTP (search and the sidebar do not work with `file://`).
 
-Categorias do sidebar estão em `dartdoc_options.yaml` e nas páginas-fonte `documentation/dartdoc/`.
+Sidebar categories are defined in `dartdoc_options.yaml` and the source pages in `documentation/dartdoc/`.
 
-## Documentação principal
+## Main documentation
 
 - `CONTRIBUTING.md`
 - `.github/copilot-instructions.md`
 - `.github/instructions/dartcode.instructions.md`
 - `AGENTS.md`
-- `flutter_rules.md` (padrão específico deste repositório)
+- `flutter_rules.md` (repository-specific conventions)
 - `documentation/DRIFT_ARCHITECTURE.md`
 - `documentation/DRIFT_MIGRATION.md`
 - `documentation/INTERFACES_ARCHITECTURE.md`
 - `documentation/VALIDATION_SYSTEM.md`
 - `documentation/CODE_GENERATOR_USAGE.md`
 - `documentation/TESTING_VALIDATION.md`
-- `documentation/historico/` — notas e summaries antigos (não canônicos)
+- `documentation/historico/` — historical notes and summaries (non-canonical)

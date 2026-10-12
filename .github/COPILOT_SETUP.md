@@ -1,77 +1,77 @@
 # GitHub Copilot Setup Overview
 
-Este documento fornece uma visão geral completa da configuração do GitHub Copilot para o projeto System Loja.
+This document provides a comprehensive overview of the GitHub Copilot setup for the System Loja project.
 
-## 📋 Índice
+## 📋 Contents
 
-- [Visão Geral](#visão-geral)
-- [Arquivos de Configuração](#arquivos-de-configuração)
+- [Overview](#overview)
+- [Configuration Files](#configuration-files)
 - [Custom Agents](#custom-agents)
 - [Path-Specific Instructions](#path-specific-instructions)
-- [Como Usar](#como-usar)
-- [Manutenção](#manutenção)
+- [How to Use](#how-to-use)
+- [Maintenance](#maintenance)
 
-## Visão Geral
+## Overview
 
-O projeto System Loja está totalmente configurado para trabalhar com GitHub Copilot através de:
+The System Loja project is fully configured to work with GitHub Copilot through:
 
-1. **Instruções Globais** (`.github/copilot-instructions.md`) - Contexto arquitetural e padrões principais
-2. **Custom Agents** (`.github/agents/*.agent.md`) - Agentes especializados para tarefas específicas
-3. **Path-Specific Instructions** (`.github/instructions/*.instructions.md`) - Padrões específicos por tipo de arquivo
-4. **Implementation Guidelines** (`.github/agent-implementation-instructions.md`) - Guia detalhado de implementação
-5. **Commit Message Standards** (`.github/copilot-commit-message-instructions.md`) - Padrões de mensagens de commit
+1. **Global instructions** (`.github/copilot-instructions.md`) - Architectural context and core standards
+2. **Custom agents** (`.github/agents/*.agent.md`) - Specialized agents for specific tasks
+3. **Path-specific instructions** (`.github/instructions/*.instructions.md`) - Standards for specific file types
+4. **Implementation guidelines** (`.github/agent-implementation-instructions.md`) - Detailed implementation guide
+5. **Commit message standards** (`.github/copilot-commit-message-instructions.md`) - Commit message conventions
 
-## Arquivos de Configuração
+## Configuration Files
 
-### 1. Instruções Globais do Repositório
+### 1. Global Repository Instructions
 
-**Arquivo:** `.github/copilot-instructions.md`  
-**Aplica-se a:** Todo o repositório  
-**Conteúdo:**
-- Visão geral da arquitetura (Drift ORM, BLoC, Material 3)
-- **Arquitetura limpa** (obrigatória): domínio em `lib/core/`, dados em `lib/data/`, repositórios em `lib/domain/`
-- **Sem obrigação de compatibilidade retroativa** enquanto o app está em desenvolvimento
-- Padrões críticos (Drift DAO, ResultStatus, Code Generation, repository_error_mapper)
-- Workflows de desenvolvimento
+**File:** `.github/copilot-instructions.md`<br>
+**Applies to:** The entire repository<br>
+**Contents:**
+- Architecture overview (Drift ORM, BLoC, Material 3)
+- **Required Clean Architecture**: domain in `lib/core/`, data in `lib/data/`, repositories in `lib/domain/`
+- **Backward compatibility is not required** while the app is under development
+- Critical patterns (Drift DAO, ResultStatus, code generation, repository_error_mapper)
+- Development workflows
 - Code style requirements
 - Known gotchas
 
-**Quando é usado:** Sempre que o Copilot trabalha no repositório.
+**When used:** Whenever Copilot works in the repository.
 
 ---
 
-### 2. Padrões de Mensagens de Commit
+### 2. Commit Message Standards
 
-**Arquivo:** `.github/copilot-commit-message-instructions.md`  
-**Aplica-se a:** Mensagens de commit  
-**Formato:**
+**File:** `.github/copilot-commit-message-instructions.md`<br>
+**Applies to:** Commit messages<br>
+**Format:**
 ```
-<tipo>: <descrição concisa>
+<type>: <concise description>
 ```
 
-**Tipos comuns:**
-- `feat`: Nova funcionalidade
-- `fix`: Correção de bug
-- `docs`: Atualização de documentação
-- `style`: Formatação/correção de estilo
-- `refactor`: Refatoração de código
-- `test`: Adição ou correção de testes
+**Common types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation update
+- `style`: Formatting/style change
+- `refactor`: Code refactoring
+- `test`: Add or update tests
 
 ---
 
-### 3. Guia de Implementação para Agentes
+### 3. Agent Implementation Guide
 
-**Arquivo:** `.github/agent-implementation-instructions.md`  
-**Aplica-se a:** Todos os agentes (automáticos ou custom)  
-**Conteúdo:**
-- Contexto arquitetural detalhado
-- Padrões obrigatórios (ResultStatus, Models, BLoC, Documentação, repository_error_mapper)
-- Workflow completo de desenvolvimento
-- Convenções de código
-- Estrutura de testes
+**File:** `.github/agent-implementation-instructions.md`<br>
+**Applies to:** All agents (automatic or custom)<br>
+**Contents:**
+- Detailed architectural context
+- Required patterns (ResultStatus, models, BLoC, documentation, repository_error_mapper)
+- Complete development workflow
+- Code conventions
+- Test structure
 - Code review checklist
-- Guia de evitar duplicação de código
-- Troubleshooting comum
+- Guide to avoiding code duplication
+- Common troubleshooting
 
 ---
 
@@ -79,15 +79,15 @@ O projeto System Loja está totalmente configurado para trabalhar com GitHub Cop
 
 ### 🛠️ Flutter Developer
 
-**Arquivo:** `.github/agents/flutter-developer.agent.md`  
-**Especialidade:** Desenvolvimento Flutter/Dart  
-**Use para:**
-- Implementar novas features com Drift ORM + BLoC
-- Corrigir bugs em código Dart/Flutter
-- Refatorar código mantendo compatibilidade
-- Migrar código JSON legacy para Drift ORM
+**File:** `.github/agents/flutter-developer.agent.md`<br>
+**Specialty:** Flutter/Dart development<br>
+**Use for:**
+- Implementing new features with Drift ORM + BLoC
+- Fixing bugs in Dart/Flutter code
+- Refactoring code while maintaining compatibility
+- Migrating legacy JSON code to Drift ORM
 
-**Invocação:**
+**Invocation:**
 ```
 @flutter-developer implement customer registration form with validation
 ```
@@ -96,15 +96,15 @@ O projeto System Loja está totalmente configurado para trabalhar com GitHub Cop
 
 ### 🧪 Test Specialist
 
-**Arquivo:** `.github/agents/test-specialist.agent.md`  
-**Especialidade:** Testes unitários e integração  
-**Use para:**
-- Criar testes unitários para models, repositories e BLoCs
-- Criar testes de integração para fluxos completos
-- Revisar cobertura de testes
-- Corrigir testes quebrados após refatorações
+**File:** `.github/agents/test-specialist.agent.md`<br>
+**Specialty:** Unit and integration testing<br>
+**Use for:**
+- Creating unit tests for models, repositories, and BLoCs
+- Creating integration tests for complete flows
+- Reviewing test coverage
+- Fixing tests broken by refactoring
 
-**Invocação:**
+**Invocation:**
 ```
 @test-specialist create unit tests for CustomerRepository
 ```
@@ -113,15 +113,15 @@ O projeto System Loja está totalmente configurado para trabalhar com GitHub Cop
 
 ### 📚 Documentation Specialist
 
-**Arquivo:** `.github/agents/documentation-specialist.agent.md`  
-**Especialidade:** Documentação técnica  
-**Use para:**
-- Criar/atualizar documentação em `documentation/`
-- Documentar código com `///` doc comments em português
-- Manter README.md atualizado
-- Criar guias para contribuidores
+**File:** `.github/agents/documentation-specialist.agent.md`<br>
+**Specialty:** Technical documentation<br>
+**Use for:**
+- Creating/updating documentation in `documentation/`
+- Writing `///` doc comments in English
+- Keeping `README.md` up to date
+- Creating contributor guides
 
-**Invocação:**
+**Invocation:**
 ```
 @documentation-specialist document the CustomerRepository API
 ```
@@ -130,72 +130,72 @@ O projeto System Loja está totalmente configurado para trabalhar com GitHub Cop
 
 ## Path-Specific Instructions
 
-### Padrões Dart (Effective Dart)
+### Dart Standards (Effective Dart)
 
-**Arquivo:** `.github/instructions/dartcode.instructions.md`  
-**Aplica-se a:** `**/*.dart`  
-**Conteúdo:**
-- Glossário de termos Dart
-- Resumo das regras (Estilo, Ordem, Formatação)
-- Regras de documentação
-- Markdown em doc comments
-- Padrões de escrita
-- Uso de bibliotecas, null safety, strings, coleções
-- Funções e variáveis
-- Membros e construtores
-- Tratamento de erros
-- Assincronismo
+**File:** `.github/instructions/dartcode.instructions.md`<br>
+**Applies to:** `**/*.dart`<br>
+**Contents:**
+- Glossary of Dart terms
+- Summary of rules (style, ordering, formatting)
+- Documentation rules
+- Markdown in doc comments
+- Writing conventions
+- Library usage, null safety, strings, and collections
+- Functions and variables
+- Members and constructors
+- Error handling
+- Asynchrony
 - Design patterns
 
-**Quando é usado:** Sempre que Copilot trabalha com arquivos `.dart`.
+**When used:** Whenever Copilot works with `.dart` files.
 
 ---
 
-## Como Usar
+## How to Use
 
-### Desenvolvimento Normal (Sem Agente Específico)
+### Standard Development (Without a Specific Agent)
 
-Quando você faz uma solicitação ao Copilot sem especificar um agente, ele usa:
-1. Instruções globais (`.github/copilot-instructions.md`)
-2. Path-specific instructions (`.github/instructions/dartcode.instructions.md` para arquivos `.dart`)
+When you ask Copilot for something without specifying an agent, it uses:
+1. Global instructions (`.github/copilot-instructions.md`)
+2. Path-specific instructions (`.github/instructions/dartcode.instructions.md` for `.dart` files)
 3. Implementation guidelines (`.github/agent-implementation-instructions.md`)
 
-**Exemplo:**
+**Example:**
 ```
 Implement a new product registration screen with BLoC
 ```
 
 ---
 
-### Usando Custom Agents
+### Using Custom Agents
 
-Para tarefas especializadas, invoque um custom agent:
+For specialized tasks, invoke a custom agent:
 
-**Desenvolvimento:**
+**Development:**
 ```
 @flutter-developer add quantity field to Product model and update all related code
 ```
 
-**Testes:**
+**Testing:**
 ```
 @test-specialist create comprehensive tests for the new quantity field functionality
 ```
 
-**Documentação:**
+**Documentation:**
 ```
 @documentation-specialist update docs to explain the new quantity field feature
 ```
 
 ---
 
-### Workflow Recomendado
+### Recommended Workflow
 
-1. **Implementação:** Use `@flutter-developer` para desenvolver a feature
-2. **Testes:** Use `@test-specialist` para criar testes
-3. **Documentação:** Use `@documentation-specialist` para documentar
-4. **Review:** Peça ao Copilot para revisar o código completo
+1. **Implementation:** Use `@flutter-developer` to build the feature.
+2. **Testing:** Use `@test-specialist` to create tests.
+3. **Documentation:** Use `@documentation-specialist` to document the work.
+4. **Review:** Ask Copilot to review the complete code.
 
-**Exemplo completo:**
+**Complete example:**
 ```
 Step 1: @flutter-developer implement discount field in Product with validation
 Step 2: @test-specialist create tests for discount field validation
@@ -205,21 +205,21 @@ Step 4: Review the changes and ensure all tests pass
 
 ---
 
-## Manutenção
+## Maintenance
 
-### Atualizando Instruções
+### Updating Instructions
 
-Quando atualizar qualquer arquivo de instruções:
+When updating any instruction file:
 
-1. **Teste as mudanças** criando uma issue de exemplo
-2. **Verifique consistência** com outros arquivos de instruções
-3. **Documente** mudanças significativas no commit
-4. **Atualize este documento** se necessário
+1. **Test the changes** by creating a sample issue.
+2. **Check consistency** with other instruction files.
+3. **Document** significant changes in the commit.
+4. **Update this document** if necessary.
 
-### Adicionando Novo Custom Agent
+### Adding a Custom Agent
 
-1. Crie arquivo `.github/agents/[agent-name].agent.md`
-2. Use a estrutura YAML + Markdown:
+1. Create a `.github/agents/[agent-name].agent.md` file.
+2. Use the YAML + Markdown structure:
    ```yaml
    ---
    name: Agent Name
@@ -233,14 +233,14 @@ Quando atualizar qualquer arquivo de instruções:
    
    # Instructions...
    ```
-3. Atualize `.github/agents/README.md`
-4. Atualize este documento
-5. Teste com issues reais
+3. Update `.github/agents/README.md`.
+4. Update this document.
+5. Test with real issues.
 
-### Adicionando Path-Specific Instructions
+### Adding Path-Specific Instructions
 
-1. Crie arquivo `.github/instructions/[name].instructions.md`
-2. Adicione YAML frontmatter com `applyTo` pattern:
+1. Create a `.github/instructions/[name].instructions.md` file.
+2. Add YAML front matter with an `applyTo` pattern:
    ```yaml
    ---
    applyTo: '**/*.ext'
@@ -248,45 +248,45 @@ Quando atualizar qualquer arquivo de instruções:
    
    # Instructions...
    ```
-3. Atualize este documento
+3. Update this document.
 
 ---
 
-## Hierarquia de Aplicação
+## Application Hierarchy
 
 ```
 ┌─────────────────────────────────────────────────┐
 │ Global Copilot Instructions                     │
 │ (.github/copilot-instructions.md)               │
-│ - Aplica-se a todo o repositório                │
-│ - Sempre ativo                                   │
+│ - Applies to the entire repository              │
+│ - Always active                                  │
 └─────────────────────────────────────────────────┘
                        ↓
 ┌─────────────────────────────────────────────────┐
 │ Path-Specific Instructions                      │
 │ (.github/instructions/*.instructions.md)        │
-│ - Aplica-se a arquivos específicos              │
-│ - Ativo quando trabalhando com esses arquivos   │
+│ - Applies to specific files                     │
+│ - Active when working with those files          │
 └─────────────────────────────────────────────────┘
                        ↓
 ┌─────────────────────────────────────────────────┐
-│ Custom Agent (se invocado)                      │
+│ Custom Agent (if invoked)                       │
 │ (.github/agents/*.agent.md)                     │
-│ - Instruções especializadas adicionais          │
-│ - Apenas quando explicitamente invocado         │
+│ - Additional specialized instructions           │
+│ - Only when explicitly invoked                  │
 └─────────────────────────────────────────────────┘
                        ↓
 ┌─────────────────────────────────────────────────┐
 │ Implementation Guidelines                       │
 │ (.github/agent-implementation-instructions.md)  │
-│ - Guia detalhado para todos os agentes          │
-│ - Sempre disponível                             │
+│ - Detailed guide for all agents                 │
+│ - Always available                              │
 └─────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Recursos Adicionais
+## Additional Resources
 
 - **GitHub Docs:** [Creating custom agents](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-custom-agents)
 - **Best Practices:** [How to write a great agents.md](https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/)
@@ -294,15 +294,15 @@ Quando atualizar qualquer arquivo de instruções:
 
 ---
 
-## Feedback e Melhorias
+## Feedback and Improvements
 
-Se você encontrar problemas com as instruções do Copilot ou tiver sugestões de melhoria:
+If you find issues with Copilot instructions or have suggestions for improvement:
 
-1. Abra uma issue com label `copilot-instructions`
-2. Descreva o problema ou sugestão
-3. Inclua exemplos de prompts e resultados esperados vs. obtidos
+1. Open an issue with the `copilot-instructions` label.
+2. Describe the issue or suggestion.
+3. Include examples of prompts and expected versus actual results.
 
 ---
 
-**Última atualização:** Março 2026  
-**Mantido por:** Time de desenvolvimento System Loja
+**Last updated:** March 2026<br>
+**Maintained by:** System Loja development team

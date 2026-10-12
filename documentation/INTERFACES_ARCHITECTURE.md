@@ -1,25 +1,25 @@
-# Arquitetura de Interfaces
+# Interface Architecture
 
-## Indice
+## Contents
 
-- [Visao Geral](#visao-geral)
-- [Fluxo de Camadas](#fluxo-de-camadas)
-- [Interfaces Principais](#interfaces-principais)
-- [Padroes de Retorno e Erro](#padroes-de-retorno-e-erro)
-- [Registro no GetIt](#registro-no-getit)
-- [Boas Praticas](#boas-praticas)
-- [Referencias](#referencias)
+- [Overview](#overview)
+- [Layer Flow](#layer-flow)
+- [Main Interfaces](#main-interfaces)
+- [Return and Error Standards](#return-and-error-standards)
+- [GetIt Registration](#getit-registration)
+- [Best Practices](#best-practices)
+- [References](#references)
 
-## Visao Geral
+## Overview
 
-As interfaces em `lib/core/interface/` definem os contratos entre a camada de apresentacao e os repositorios/servicos.
-A implementacao concreta fica fora da UI e e resolvida por injecao de dependencia.
+Interfaces in `lib/core/interface/` define contracts between the presentation layer and repositories/services.
+Concrete implementations are kept outside the UI and resolved through dependency injection.
 
-## Fluxo de Camadas
+## Layer Flow
 
 Screen (BLoC/Cubit) -> Interface (`lib/core/interface/`) -> Repository (`lib/domain/repository/`) -> DAO Drift (`lib/data/database/dao/`) -> SQLite.
 
-## Interfaces Principais
+## Main Interfaces
 
 - `ICustomerRepository`
 - `ICompanyRepository`
@@ -32,20 +32,20 @@ Screen (BLoC/Cubit) -> Interface (`lib/core/interface/`) -> Repository (`lib/dom
 - `ISystemRepository`
 - `IAnalyticsRepository`
 
-Alem dos repositorios, `lib/core/interface/` tambem define contratos de servicos compartilhados:
+In addition to repositories, `lib/core/interface/` also defines contracts for shared services:
 
-- `ISettingsService` - configuracoes de tema da aplicacao (cor primaria, modo claro/escuro).
-- `ISystemErrorManager` - consulta e limpeza de erros de sistema em cache.
+- `ISettingsService` - application theme settings (primary color, light/dark mode).
+- `ISystemErrorManager` - querying and clearing cached system errors.
 
-As interfaces permanecem em `lib/core/interface/` e suas implementacoes em `lib/domain/repository/`.
+Interfaces remain in `lib/core/interface/`, and their implementations are in `lib/domain/repository/`.
 
-## Padroes de Retorno e Erro
+## Return and Error Standards
 
-- Operacoes de repositorio retornam `ResultStatus<R, E>`.
-- Repositorios capturam excecoes internamente e retornam `ResultStatus.error(...)` com mensagem amigavel.
-- A camada de apresentacao nao deve envolver chamadas de repositorio em `try/catch`; deve tratar o `ResultStatus` com `when`/`switch`.
+- Repository operations return `ResultStatus<R, E>`.
+- Repositories catch exceptions internally and return `ResultStatus.error(...)` with a user-friendly message.
+- The presentation layer must not wrap repository calls in `try/catch`; it should handle `ResultStatus` with `when`/`switch`.
 
-Exemplo resumido:
+Brief example:
 
 ```dart
 final result = await repository.getAllCustomers();
@@ -55,11 +55,11 @@ result.when(
 );
 ```
 
-## Registro no GetIt
+## GetIt Registration
 
-As dependencias sao registradas em `setupAppInjection()` no arquivo `lib/application/app_injection.dart`.
+Dependencies are registered in `setupAppInjection()` in `lib/application/app_injection.dart`.
 
-Exemplo:
+Example:
 
 ```dart
 appInjection.registerSingleton<ICustomerRepository>(
@@ -70,15 +70,15 @@ appInjection.registerSingleton<ICustomerRepository>(
 );
 ```
 
-## Boas Praticas
+## Best Practices
 
-- Manter contratos de interface enxutos e orientados ao caso de uso.
-- Evitar vazamento de detalhes de persistencia (DAO, Companion, SQL) para camadas acima.
-- Manter nomenclatura consistente entre interface e implementacao.
-- Priorizar metodos assincronos para operacoes de I/O.
-- Em novos fluxos, evitar expandir caminhos legados baseados em managers JSON.
+- Keep interface contracts concise and use-case oriented.
+- Avoid leaking persistence details (DAO, Companion, SQL) to higher layers.
+- Keep naming consistent between the interface and its implementation.
+- Prefer asynchronous methods for I/O operations.
+- Avoid extending legacy flows based on JSON managers in new workflows.
 
-## Referencias
+## References
 
 - `README.md`
 - `.github/copilot-instructions.md`

@@ -69,7 +69,7 @@ Successfully implemented a dedicated company editing screen as requested in the 
 - **Formatting**: Follows custom TextInputFormatter pattern
 
 ### ✅ Code Style Compliance
-- Portuguese documentation (/// comments)
+- English documentation (`///` comments)
 - English code (variables, methods, classes)
 - Follows Effective Dart guidelines
 - Proper const usage

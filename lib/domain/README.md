@@ -1,35 +1,36 @@
-# Serviços de Domínio do System Loja
+<!-- TODO: Verify whether this documentation is outdated -->
+# System Loja Domain Services
 
-Este diretório contém serviços de domínio e implementações de repositórios que orquestram DAOs e regras de negócio.
+This directory contains domain services and repository implementations that orchestrate DAOs and business rules.
 
-## Serviços Disponíveis
+## Available Services
 
 ### CodeGeneratorService
 
-**Arquivo**: `code_generator_service.dart`
+**File**: `code_generator_service.dart`
 
-**Propósito**: Geração automática e validação de códigos únicos para produtos e notas fiscais.
+**Purpose**: Automatic generation and validation of unique product and invoice codes.
 
-**Principais Funcionalidades**:
-- Geração de códigos de produto no formato `PRD-YYYYMMDD-NNNN`
-- Geração de números de nota fiscal no formato `NF-YYYYMMDD-NNNN`
-- Validação de códigos personalizados fornecidos pelo usuário
-- Verificação de duplicatas no banco de dados
-- Garantia de unicidade através de verificação no banco
+**Main Features**:
+- Generates product codes in the `PRD-YYYYMMDD-NNNN` format.
+- Generates invoice numbers in the `NF-YYYYMMDD-NNNN` format.
+- Validates user-provided custom codes.
+- Checks the database for duplicates.
+- Ensures uniqueness through database checks.
 
-**Quando usar**:
-- ✅ Ao criar um novo produto sem código definido
-- ✅ Ao criar uma nova nota fiscal sem número definido
-- ✅ Ao validar códigos fornecidos pelo usuário antes de salvar
-- ✅ Ao verificar se um código já existe no sistema
+**When to Use**:
+- ✅ When creating a product without a predefined code.
+- ✅ When creating an invoice without a predefined number.
+- ✅ When validating user-provided codes before saving.
+- ✅ When checking whether a code already exists in the system.
 
-**Como usar**:
+**How to Use**:
 
 ```dart
-// Acesso direto
+// Direct access
 final codeGenerator = appInjection.get<CodeGeneratorService>();
 
-// Via repository (recomendado)
+// Through the repository (recommended)
 final productRepository =  appInjection.get<ProductRepository>();
 final code = await productRepository.generateProductCode();
 
@@ -37,20 +38,20 @@ final salesRepository = appInjection.get<SalesRepository>();
 final invoiceNumber = await salesRepository.generateInvoiceNumber();
 ```
 
-**Documentação completa**: Ver `/documentation/CODE_GENERATOR_USAGE.md`
+**Complete documentation**: See `/documentation/CODE_GENERATOR_USAGE.md`.
 
-**Testes**: Ver `/test/code_generator_service_test.dart`
+**Tests**: See `/test/code_generator_service_test.dart`.
 
 ---
 
-## Padrões de Implementação
+## Implementation Patterns
 
-### Injeção de Dependência
+### Dependency Injection
 
-Registre serviços e repositórios em `setupAppInjection()` (`lib/application/app_injection.dart`) e resolva com `appInjection.get<T>()`:
+Register services and repositories in `setupAppInjection()` (`lib/application/app_injection.dart`) and resolve them with `appInjection.get<T>()`:
 
 ```dart
-// Em lib/application/app_injection.dart (dentro de setupAppInjection)
+// In lib/application/app_injection.dart (inside setupAppInjection)
 appInjection.registerLazySingleton<MeuServicoService>(
   () => MeuServicoService(
     dependencia1: appInjection.get(),
@@ -58,32 +59,32 @@ appInjection.registerLazySingleton<MeuServicoService>(
   ),
 );
 
-// Uso
+// Usage
 final servico = appInjection.get<MeuServicoService>();
 ```
 
-### Documentação
+### Documentation
 
-Todos os serviços devem:
-1. Ter comentários `///` em português descrevendo sua funcionalidade
-2. Documentar todos os métodos públicos
-3. Incluir exemplos de uso quando apropriado
-4. Ter testes unitários cobrindo cenários principais
+All services must:
+1. Have `///` comments in English describing their functionality.
+2. Document all public methods.
+3. Include usage examples when appropriate.
+4. Have unit tests covering key scenarios.
 
-### Nomenclatura
+### Naming
 
-- Classes de serviço devem terminar com `Service` (ex: `CodeGeneratorService`)
-- Métodos devem ser verbos claros em inglês (ex: `generateProductCode`, `validateInvoiceNumber`)
-- Comentários e strings de usuário devem estar em português
+- Service classes should end with `Service` (e.g., `CodeGeneratorService`).
+- Methods should use clear English verbs (e.g., `generateProductCode`, `validateInvoiceNumber`).
+- Comments and user-facing strings should be in English.
 
-### Estrutura Típica de um Serviço
+### Typical Service Structure
 
 ```dart
 import 'dependencies';
 
-/// Descrição breve do serviço.
+/// Brief service description.
 ///
-/// Descrição detalhada de funcionalidades e casos de uso.
+/// Detailed description of its features and use cases.
 class MeuServicoService {
   final Dependency1 _dependency1;
   final Dependency2 _dependency2;
@@ -94,21 +95,21 @@ class MeuServicoService {
   })  : _dependency1 = dependency1,
         _dependency2 = dependency2;
 
-  /// Descrição do método.
+  /// Method description.
   ///
-  /// [param1] Descrição do parâmetro.
-  /// Retorna descrição do retorno.
+  /// [param1] Description of the parameter.
+  /// Returns a description of the result.
   Future<ReturnType> publicMethod(ParamType param1) async {
-    // Implementação
+    // Implementation
   }
 
-  /// Método auxiliar privado
+  /// Private helper method.
   TypeReturn _privateHelper(ParamType param) {
-    // Implementação
+    // Implementation
   }
 }
 
-/// Classes auxiliares relacionadas ao serviço
+/// Helper classes related to the service.
 class ServiceResult {
   final bool isSuccess;
   final String message;
@@ -120,9 +121,9 @@ class ServiceResult {
 }
 ```
 
-## Testes
+## Tests
 
-Cada serviço deve ter seu arquivo de teste correspondente em `/test/`:
+Each service should have a corresponding test file in `/test/`:
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
@@ -132,70 +133,70 @@ void main() {
   late MeuServicoService service;
 
   setUp(() {
-    // Setup antes de cada teste
+    // Set up before each test.
     service = MeuServicoService(...);
   });
 
   tearDown(() {
-    // Cleanup após cada teste
+    // Clean up after each test.
   });
 
   group('MeuServicoService', () {
-    test('deve fazer algo específico', () async {
-      // Arrange
+    test('should perform a specific action', () async {
+      // Arrange.
       final input = ...;
 
-      // Act
+      // Act.
       final result = await service.metodo(input);
 
-      // Assert
+      // Assert.
       expect(result, equals(esperado));
     });
   });
 }
 ```
 
-## Diretrizes de Desenvolvimento
+## Development Guidelines
 
-### Quando Criar um Novo Serviço
+### When to Create a New Service
 
-Crie um novo serviço quando:
-- ✅ A funcionalidade é usada por múltiplos repositórios ou telas
-- ✅ A lógica é complexa e merece ser isolada
-- ✅ A funcionalidade não se encaixa naturalmente em um repository
-- ✅ Você precisa coordenar múltiplas fontes de dados
+Create a new service when:
+- ✅ The feature is used by multiple repositories or screens.
+- ✅ The logic is complex and deserves to be isolated.
+- ✅ The feature does not naturally belong in a repository.
+- ✅ You need to coordinate multiple data sources.
 
-**NÃO** crie um serviço quando:
-- ❌ A lógica é específica de um único repository (coloque no repository)
-- ❌ É apenas uma função auxiliar simples (use utils)
-- ❌ É transformação de dados (use extensions)
-- ❌ É validação simples (use validators em utils)
+Do **NOT** create a service when:
+- ❌ The logic is specific to a single repository (put it in the repository).
+- ❌ It is a simple helper function (use utils).
+- ❌ It is a data transformation (use extensions).
+- ❌ It is simple validation (use validators in utils).
 
-### Diferença entre Service e Repository
+### Difference Between a Service and a Repository
 
-| Aspecto | Service | Repository |
+| Aspect | Service | Repository |
 |---------|---------|------------|
-| **Propósito** | Lógica de negócio transversal | Acesso a dados de uma entidade |
-| **Dependências** | Pode depender de múltiplos DAOs/APIs | Geralmente um DAO principal |
-| **Escopo** | Múltiplas entidades/domínios | Uma entidade específica |
-| **Exemplo** | CodeGeneratorService, NotificationService | ProductRepository, CustomerRepository |
+| **Purpose** | Cross-cutting business logic | Data access for an entity |
+| **Dependencies** | May depend on multiple DAOs/APIs | Usually one primary DAO |
+| **Scope** | Multiple entities/domains | One specific entity |
+| **Example** | CodeGeneratorService, NotificationService | ProductRepository, CustomerRepository |
 
-### Performance e Async
+### Performance and Asynchrony
 
-- Use `async/await` para operações assíncronas
-- Evite operações síncronas que bloqueiam a UI
-- Para operações pesadas, considere usar isolates
-- Cache resultados quando apropriado
+- Use `async/await` for asynchronous operations.
+- Avoid synchronous operations that block the UI.
+- Consider isolates for expensive operations.
+- Cache results when appropriate.
 
-### Tratamento de Erros
+### Error Handling
 
-Repositórios e serviços devem:
-1. Usar `try/catch` internamente — **nunca** relançar exceções para BLoC/Cubit
-2. Retornar `ResultStatus<R, String>` com mensagens amigáveis via `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`)
-3. Logar erros quando apropriado (via `LoggerClassMixin` ou similar)
-4. Fornecer mensagens de erro claras em português
+Repositories and services should:
+1. Use internal `try/catch` blocks — **never** rethrow exceptions to BLoC/Cubit.
+2. Return `ResultStatus<R, String>` with user-friendly messages through `mensagemErroRepositorio()` (`lib/core/utils/repository_error_mapper.dart`).
+3. Log errors when appropriate (through `LoggerClassMixin` or similar).
+4. Provide clear error messages in English.
 
-Exemplo (repositório):
+Example (repository):
 ```dart
 Future<ResultStatus<Customer, String>> buscar(int id) async {
   try {
@@ -209,21 +210,21 @@ Future<ResultStatus<Customer, String>> buscar(int id) async {
 }
 ```
 
-A camada de apresentação **não** envolve chamadas ao repositório em `try/catch`; usa `when` ou `switch` no `ResultStatus`.
+The presentation layer does **not** wrap repository calls in `try/catch`; it uses `when` or `switch` on `ResultStatus`.
 
-## Contribuindo
+## Contributing
 
-Ao adicionar um novo serviço:
+When adding a new service:
 
-1. ✅ Crie o arquivo em `lib/domain/nome_servico_service.dart`
-2. ✅ Documente todos os métodos públicos em português
-3. ✅ Registre em `setupAppInjection()` (`lib/application/app_injection.dart`)
-4. ✅ Crie testes em `test/nome_servico_service_test.dart`
-5. ✅ Atualize este README com informações do novo serviço
-6. ✅ Se complexo, crie documentação adicional em `/documentation/` (guias vivos; históricos vão para `documentation/historico/`)
+1. ✅ Create the file in `lib/domain/service_name_service.dart`.
+2. ✅ Document all public methods in English.
+3. ✅ Register it in `setupAppInjection()` (`lib/application/app_injection.dart`).
+4. ✅ Add tests in `test/service_name_service_test.dart`.
+5. ✅ Update this README with information about the new service.
+6. ✅ If it is complex, add supporting documentation in `/documentation/` (living guides; historical material belongs in `documentation/historico/`).
 
-## Recursos Adicionais
+## Additional Resources
 
-- **Documentação de Arquitetura**: `/.github/copilot-instructions.md`
-- **Padrões de Código Dart**: `/.github/instructions/dartcode.instructions.md`
-- **Build Runner**: Execute `dart run build_runner build` após mudanças em serviços que usam geração de código
+- **Architecture documentation**: `/.github/copilot-instructions.md`
+- **Dart code standards**: `/.github/instructions/dartcode.instructions.md`
+- **Build Runner**: Run `dart run build_runner build` after changes to services that use code generation.

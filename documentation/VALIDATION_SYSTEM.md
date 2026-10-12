@@ -1,30 +1,30 @@
-# Sistema de Validação e Formatação
+# Validation and Formatting System
 
-Este documento descreve o sistema de validação de campos e formatação de entrada implementado no System Loja.
+This document describes the field-validation and input-formatting system implemented in System Loja.
 
-## Visão Geral
+## Overview
 
-O sistema fornece validadores reutilizáveis e formatadores de entrada para garantir que os dados inseridos pelos usuários sejam válidos e consistentes. Isso melhora a experiência do usuário e a integridade dos dados.
+The system provides reusable validators and input formatters to ensure that user-entered data is valid and consistent. This improves the user experience and data integrity.
 
-## Componentes
+## Components
 
-### 1. Validadores (`lib/screens/utils/validators.dart`)
+### 1. Validators (`lib/screens/utils/validators.dart`)
 
-Os validadores são funções que retornam `null` se o valor for válido, ou uma mensagem de erro caso contrário.
+Validators are functions that return `null` when a value is valid, or an error message otherwise.
 
-#### Validadores Disponíveis
+#### Available Validators
 
 ##### `validatePrice(String? value)`
-Valida preços monetários.
+Validates monetary prices.
 
-**Regras:**
-- Não pode ser vazio
-- Deve ser um número válido
-- Não pode ser negativo
-- Máximo de 2 casas decimais
-- Aceita vírgula ou ponto como separador decimal
+**Rules:**
+- Must not be empty.
+- Must be a valid number.
+- Must not be negative.
+- Maximum of 2 decimal places.
+- Accepts a comma or period as the decimal separator.
 
-**Exemplo:**
+**Example:**
 ```dart
 TextFormField(
   validator: validatePrice,
@@ -32,26 +32,26 @@ TextFormField(
 )
 ```
 
-**Valores Aceitos:**
+**Accepted values:**
 - `10.50` ✅
 - `10,50` ✅
 - `0` ✅
 - `100` ✅
 
-**Valores Rejeitados:**
-- `-10.50` ❌ (negativo)
-- `abc` ❌ (não numérico)
-- `10.505` ❌ (mais de 2 decimais)
+**Rejected values:**
+- `-10.50` ❌ (negative)
+- `abc` ❌ (not numeric)
+- `10.505` ❌ (more than 2 decimal places)
 
 ##### `validateQuantity(String? value)`
-Valida quantidades e contagens.
+Validates quantities and counts.
 
-**Regras:**
-- Não pode ser vazio
-- Deve ser um número inteiro válido
-- Não pode ser negativo
+**Rules:**
+- Must not be empty.
+- Must be a valid integer.
+- Must not be negative.
 
-**Exemplo:**
+**Example:**
 ```dart
 TextFormField(
   validator: validateQuantity,
@@ -60,9 +60,9 @@ TextFormField(
 ```
 
 ##### `validateStock(String? value)`
-Valida valores de estoque (idêntico a `validateQuantity`).
+Validates stock values (identical to `validateQuantity`).
 
-**Exemplo:**
+**Example:**
 ```dart
 TextFormField(
   validator: validateStock,
@@ -71,15 +71,15 @@ TextFormField(
 ```
 
 ##### `validateProductCode(String? value)`
-Valida códigos de produto.
+Validates product codes.
 
-**Regras:**
-- Não pode ser vazio
-- Mínimo de 3 caracteres
-- Máximo de 20 caracteres
-- Apenas letras, números e hífens
+**Rules:**
+- Must not be empty.
+- Minimum of 3 characters.
+- Maximum of 20 characters.
+- Letters, numbers, and hyphens only.
 
-**Exemplo:**
+**Example:**
 ```dart
 TextFormField(
   validator: validateProductCode,
@@ -87,20 +87,20 @@ TextFormField(
 )
 ```
 
-**Valores Aceitos:**
+**Accepted values:**
 - `ABC-123` ✅
 - `PROD001` ✅
 - `12345` ✅
 
-**Valores Rejeitados:**
-- `AB` ❌ (muito curto)
-- `ABC@123` ❌ (caractere inválido)
-- `ABC_123` ❌ (underscore não permitido)
+**Rejected values:**
+- `AB` ❌ (too short)
+- `ABC@123` ❌ (invalid character)
+- `ABC_123` ❌ (underscores are not allowed)
 
 ##### `validateRequired(String? value, String fieldName)`
-Valida campos obrigatórios.
+Validates required fields.
 
-**Exemplo:**
+**Example:**
 ```dart
 TextFormField(
   validator: (value) => validateRequired(value, 'Nome'),
@@ -109,9 +109,9 @@ TextFormField(
 ```
 
 ##### `validateMinLength(String? value, int minLength, String fieldName)`
-Valida comprimento mínimo.
+Validates the minimum length.
 
-**Exemplo:**
+**Example:**
 ```dart
 TextFormField(
   validator: (value) => validateMinLength(value, 3, 'Nome'),
@@ -120,9 +120,9 @@ TextFormField(
 ```
 
 ##### `combineValidators(List<String? Function(String?)> validators)`
-Combina múltiplos validadores.
+Combines multiple validators.
 
-**Exemplo:**
+**Example:**
 ```dart
 TextFormField(
   validator: combineValidators([
@@ -133,22 +133,22 @@ TextFormField(
 )
 ```
 
-### 2. Formatadores de Entrada (`lib/screens/utils/input_formatters.dart`)
+### 2. Input Formatters (`lib/screens/utils/input_formatters.dart`)
 
-Os formatadores aplicam regras de formatação automaticamente enquanto o usuário digita, filtrando caracteres inválidos.
+Formatters automatically apply formatting rules as the user types, filtering out invalid characters.
 
-#### Formatadores Disponíveis
+#### Available Formatters
 
 ##### `PriceInputFormatter()`
-Formata campos de preço.
+Formats price fields.
 
-**Características:**
-- Permite apenas números e separador decimal (ponto ou vírgula)
-- Converte vírgula para ponto automaticamente
-- Limita a 2 casas decimais
-- Permite apenas um separador decimal
+**Features:**
+- Allows only numbers and a decimal separator (period or comma).
+- Automatically converts commas to periods.
+- Limits input to 2 decimal places.
+- Allows only one decimal separator.
 
-**Exemplo:**
+**Example:**
 ```dart
 TextFormField(
   inputFormatters: [PriceInputFormatter()],
@@ -157,19 +157,19 @@ TextFormField(
 )
 ```
 
-**Comportamento:**
+**Behavior:**
 - Input: `10,50` → Output: `10.50`
 - Input: `10.505` → Output: `10.50`
 - Input: `R$ 10.50` → Output: `10.50`
 
 ##### `QuantityInputFormatter()`
-Formata campos de quantidade.
+Formats quantity fields.
 
-**Características:**
-- Permite apenas dígitos
-- Remove qualquer caractere não numérico
+**Features:**
+- Allows digits only.
+- Removes any non-numeric characters.
 
-**Exemplo:**
+**Example:**
 ```dart
 TextFormField(
   inputFormatters: [QuantityInputFormatter()],
@@ -178,19 +178,19 @@ TextFormField(
 )
 ```
 
-**Comportamento:**
+**Behavior:**
 - Input: `10.5` → Output: `105`
 - Input: `10a5` → Output: `105`
 
 ##### `ProductCodeInputFormatter()`
-Formata códigos de produto.
+Formats product codes.
 
-**Características:**
-- Permite apenas letras, números e hífens
-- Converte para maiúsculas automaticamente
-- Remove espaços e caracteres especiais
+**Features:**
+- Allows only letters, numbers, and hyphens.
+- Automatically converts text to uppercase.
+- Removes spaces and special characters.
 
-**Exemplo:**
+**Example:**
 ```dart
 TextFormField(
   inputFormatters: [ProductCodeInputFormatter()],
@@ -198,17 +198,17 @@ TextFormField(
 )
 ```
 
-**Comportamento:**
+**Behavior:**
 - Input: `abc-123` → Output: `ABC-123`
 - Input: `ABC 123` → Output: `ABC123`
 - Input: `ABC@123` → Output: `ABC123`
 
-### 3. Exceções Customizadas
+### 3. Custom Exceptions
 
 #### `ValidationException` (`lib/core/exceptions/validation_exception.dart`)
-Representa erros de validação com mensagens detalhadas.
+Represents validation errors with detailed messages.
 
-**Exemplo:**
+**Example:**
 ```dart
 throw ValidationException(
   'Preço inválido',
@@ -219,18 +219,18 @@ throw ValidationException(
 ```
 
 #### `ProductException` (`lib/core/exceptions/product_exception.dart`)
-Representa erros específicos de operações com produtos.
+Represents errors specific to product operations.
 
-**Exemplo:**
+**Example:**
 ```dart
 throw ProductException.invalidPrice('PROD-001', -10.50);
 throw ProductException.duplicateCode('PROD-001');
 throw ProductException.insufficientStock('PROD-001', available: 5, requested: 10);
 ```
 
-## Uso Prático
+## Practical Usage
 
-### Exemplo Completo: Campo de Preço
+### Complete Example: Price Field
 
 ```dart
 TextFormField(
@@ -247,7 +247,7 @@ TextFormField(
 )
 ```
 
-### Exemplo Completo: Campo de Quantidade
+### Complete Example: Quantity Field
 
 ```dart
 TextFormField(
@@ -264,7 +264,7 @@ TextFormField(
 )
 ```
 
-### Exemplo Completo: Validadores Combinados
+### Complete Example: Combined Validators
 
 ```dart
 TextFormField(
@@ -280,89 +280,89 @@ TextFormField(
 )
 ```
 
-## Telas Atualizadas
+## Updated Screens
 
-As seguintes telas já foram atualizadas para usar o novo sistema de validação:
+The following screens have been updated to use the new validation system:
 
-1. **Produtos** (`lib/screens/products/product_screen.dart`)
-   - Campo de preço: `PriceInputFormatter` + `validatePrice`
-   - Campo de estoque: `QuantityInputFormatter` + `validateStock`
-   - Campo de código: `ProductCodeInputFormatter` + `validateProductCode`
+1. **Products** (`lib/screens/products/product_screen.dart`)
+   - Price field: `PriceInputFormatter` + `validatePrice`
+   - Stock field: `QuantityInputFormatter` + `validateStock`
+   - Code field: `ProductCodeInputFormatter` + `validateProductCode`
 
-2. **Vendas** (`lib/screens/sales/sales_screen.dart`)
-   - Campo de quantidade: `QuantityInputFormatter` + validação de estoque
-   - Campos obrigatórios: `validateRequired`
+2. **Sales** (`lib/screens/sales/sales_screen.dart`)
+   - Quantity field: `QuantityInputFormatter` + stock validation
+   - Required fields: `validateRequired`
 
-3. **Clientes** (`lib/screens/person_registration/customer_edit_view.dart`)
-   - Campo de nome: validação combinada (required + minLength)
+3. **Customers** (`lib/screens/person_registration/customer_edit_view.dart`)
+   - Name field: combined validation (required + minLength)
 
-4. **Usuários** (`lib/screens/configuracoes/usuario_screen.dart`)
-   - Campo de nome: validação combinada (required + minLength)
+4. **Users** (`lib/screens/configuracoes/usuario_screen.dart`)
+   - Name field: combined validation (required + minLength)
 
-## Testes
+## Tests
 
-Os validadores e formatadores possuem testes abrangentes:
+The validators and formatters have comprehensive tests:
 
-- **Validadores**: `test/validators_test.dart` (40+ casos de teste)
-- **Formatadores**: `test/input_formatters_test.dart` (35+ casos de teste)
+- **Validators**: `test/validators_test.dart` (40+ test cases)
+- **Formatters**: `test/input_formatters_test.dart` (35+ test cases)
 
-Execute os testes com:
+Run the tests with:
 ```bash
 flutter test test/validators_test.dart
 flutter test test/input_formatters_test.dart
 ```
 
-## Boas Práticas
+## Best Practices
 
-1. **Sempre combine formatadores com validadores**
-   - Formatadores previnem entrada inválida
-   - Validadores garantem que o valor final é correto
+1. **Always combine formatters with validators.**
+   - Formatters prevent invalid input.
+   - Validators ensure the final value is correct.
 
-2. **Use helper text para orientar o usuário**
-   - Forneça exemplos de formato esperado
-   - Indique limitações (ex: estoque disponível)
+2. **Use helper text to guide the user.**
+   - Provide examples of the expected format.
+   - Indicate limitations (e.g., available stock).
 
-3. **Mensagens de erro específicas**
-   - Use os validadores fornecidos que já têm mensagens claras
-   - Evite mensagens genéricas como "Valor inválido"
+3. **Use specific error messages.**
+   - Use the provided validators, which already have clear messages.
+   - Avoid generic messages such as "Invalid value".
 
-4. **Validação progressiva**
-   - Use `combineValidators` para aplicar múltiplas regras em ordem
-   - A primeira regra que falhar retorna sua mensagem
+4. **Validate progressively.**
+   - Use `combineValidators` to apply multiple rules in order.
+   - The first failing rule returns its message.
 
-5. **Consistência**
-   - Use os mesmos validadores e formatadores em contextos similares
-   - Mantenha o padrão de mensagens de erro
+5. **Be consistent.**
+   - Use the same validators and formatters in similar contexts.
+   - Maintain a consistent error-message style.
 
-## Próximos Passos
+## Next Steps
 
-Para adicionar validação a uma nova tela:
+To add validation to a new screen:
 
-1. Importe os utilitários necessários:
+1. Import the required utilities:
    ```dart
    import 'package:system_loja/core/utils/validators.dart';
    import 'package:system_loja/core/utils/input_formatters.dart';
    ```
 
-2. Adicione formatadores aos campos:
+2. Add formatters to the fields:
    ```dart
    inputFormatters: [PriceInputFormatter()],
    ```
 
-3. Adicione validadores aos campos:
+3. Add validators to the fields:
    ```dart
    validator: validatePrice,
    ```
 
-4. Teste a validação manualmente e adicione testes automatizados se necessário.
+4. Test validation manually and add automated tests as needed.
 
-## Contribuindo
+## Contributing
 
-Ao adicionar novos validadores ou formatadores:
+When adding validators or formatters:
 
-1. Documente o comportamento esperado
-2. Adicione exemplos de uso
-3. Escreva testes abrangentes
-4. Atualize esta documentação
-5. Mantenha mensagens de erro em português
-6. Siga o padrão existente de nomenclatura
+1. Document the expected behavior.
+2. Add usage examples.
+3. Write comprehensive tests.
+4. Update this documentation.
+5. Keep user-facing error messages in Portuguese.
+6. Follow the existing naming conventions.

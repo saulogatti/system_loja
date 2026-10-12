@@ -1,20 +1,20 @@
 ---
-description: Estrutura e padrões de testes - unitários, integração, nomenclatura
+description: Test structure and standards - unit, integration, and naming
 globs: "test/**"
 ---
 
-# Padrões de Testes - System Loja
+# Testing Standards - System Loja
 
-Estrutura e convenções para testes no projeto.
+Project test structure and conventions.
 
-## Localização e nomenclatura
+## Location and Naming
 
-- Testes em `test/` seguindo a estrutura do `lib/`.
-- Nomenclatura: `[arquivo_origem]_test.dart` (ex.: `customer_repository_test.dart`).
+- Tests belong in `test/`, mirroring the structure of `lib/`.
+- Naming: `[source_file]_test.dart` (e.g. `customer_repository_test.dart`).
 
-## Tipos de teste
+## Test Types
 
-### Testes de model (serialização)
+### Model Tests (Serialization)
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
@@ -22,7 +22,7 @@ import 'package:system_loja/core/models/customer.dart';
 
 void main() {
   group('Customer', () {
-    test('serialização JSON roundtrip', () {
+    test('JSON serialization roundtrip', () {
       final customer = Customer(id: 1, name: 'João Silva', cpf: '12345678900');
       final json = customer.toJson();
       final restored = Customer.fromJson(json);
@@ -33,9 +33,9 @@ void main() {
 }
 ```
 
-### Testes de DAO (Drift)
+### DAO Tests (Drift)
 
-`AppDatabase` usa `drift_flutter`, que no primeiro open configura `sqlite3.tempDirectory` via `path_provider` — em `flutter test` na VM isso falha sem plugin. **Padrão do projeto**: injetar diretório de dados e temp com os helpers em `test/support/test_app_database.dart`. `SystemDatabase` aceita `QueryExecutor` opcional no construtor, permitindo `NativeDatabase.memory()` diretamente:
+`AppDatabase` uses `drift_flutter`, which configures `sqlite3.tempDirectory` through `path_provider` on its first open — this fails in VM `flutter test` runs without a plugin. **Project standard**: inject the data and temporary directories using the helpers in `test/support/test_app_database.dart`. `SystemDatabase` accepts an optional `QueryExecutor` in its constructor, so `NativeDatabase.memory()` can be passed directly:
 
 ```dart
 import 'support/test_app_database.dart';
@@ -54,7 +54,7 @@ tearDown(() async {
 });
 ```
 
-Para `SystemDatabase`, é possível passar o executor diretamente:
+For `SystemDatabase`, you can pass the executor directly:
 
 ```dart
 late SystemDatabase systemDb;
@@ -68,34 +68,34 @@ tearDown(() async {
 });
 ```
 
-### Testes de repository
+### Repository Tests
 
-Usar mocks (Mockito): `@GenerateMocks([Classe])`, rodar `dart run build_runner build` para gerar `.mocks.dart`, usar `when`/`verify` nos testes.
+Use mocks (Mockito): add `@GenerateMocks([Class])`, run `dart run build_runner build` to generate `.mocks.dart`, and use `when`/`verify` in tests.
 
-### Testes de BLoC / Cubit
+### BLoC / Cubit Tests
 
-Usar `flutter_test` (e Mockito para dependências). O pacote `bloc_test` **não** está no `pubspec.yaml` — não introduzir como dependência obrigatória nesta regra. Preferir testar sequências de estados com o padrão já usado no repositório (ex.: `sales_invoice_cubit_test.dart`).
+Use `flutter_test` (and Mockito for dependencies). The `bloc_test` package is **not** in `pubspec.yaml` — do not introduce it as a required dependency in this rule. Prefer testing state sequences using the pattern already present in the repository (e.g. `sales_invoice_cubit_test.dart`).
 
-## Padrões obrigatórios
+## Required Standards
 
-- Use `setUp` e `tearDown` apropriadamente; feche recursos (database, streams) no `tearDown`.
-- Use `expect` com matchers claros (`equals`, `isA`, `hasLength`).
-- Organize testes em `group`s lógicos.
-- Nomenclatura de testes em português, formato: `'[ação] [comportamento esperado]'` (ex.: `'inserir cliente retorna ID válido'`).
-- Use mocks para dependências externas; não use `await Future.delayed` arbitrários — em widget tests use `pump`/`pumpAndSettle`.
-- Não deixe testes com `skip: true` sem justificativa.
+- Use `setUp` and `tearDown` appropriately; close resources (databases, streams) in `tearDown`.
+- Use `expect` with clear matchers (`equals`, `isA`, `hasLength`).
+- Organize tests into logical `group`s.
+- Write test names in English, using the format `'[action] [expected behavior]'` (e.g. `'insert customer returns a valid ID'`).
+- Use mocks for external dependencies; do not use arbitrary `await Future.delayed` calls — use `pump`/`pumpAndSettle` in widget tests.
+- Do not leave tests with `skip: true` without justification.
 
-## Comandos
+## Commands
 
 ```bash
 flutter test
-flutter test test/<arquivo>_test.dart
+flutter test test/<file>_test.dart
 flutter test --coverage
 dart run build_runner build
 ```
 
-## Restrições
+## Restrictions
 
-- Não modifique código de produção sem necessidade.
-- Sempre limpe recursos em `tearDown`.
-- Mocks gerados com build_runner quando usar `@GenerateMocks`.
+- Do not modify production code unnecessarily.
+- Always clean up resources in `tearDown`.
+- Generate mocks with build_runner when using `@GenerateMocks`.

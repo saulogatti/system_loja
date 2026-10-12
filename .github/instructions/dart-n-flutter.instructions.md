@@ -1,6 +1,6 @@
 ---
 
-> **Neste repositório (system_loja):** navegação de páginas usa **`auto_route`** (não `go_router`). Estado: `flutter_bloc`. DI: `appInjection` / GetIt. Persistência: Drift. Em conflito com este guia genérico, prevalecem `flutter_rules.md` e `.github/copilot-instructions.md`.
+> **In this repository (system_loja):** page navigation uses **`auto_route`** (not `go_router`). State management: `flutter_bloc`. DI: `appInjection` / GetIt. Persistence: Drift. If this generic guide conflicts with project conventions, `flutter_rules.md` and `.github/copilot-instructions.md` take precedence.
 
 description: 'Instructions for writing Dart and Flutter code following the official recommendations.'
 applyTo: '**/*.dart'
@@ -10,9 +10,9 @@ applyTo: '**/*.dart'
 
 Best practices recommended by the Dart and Flutter teams. These instructions were taken from [Effective Dart](https://dart.dev/effective-dart)
 
-## Regras do repositório System Loja
+## System Loja Repository Rules
 
-Consulte `.github/copilot-instructions.md`: o código deve seguir **arquitetura limpa** (domínio em `lib/core/`, dados em `lib/data/`, repositórios em `lib/domain/`). **Não é obrigatório** manter compatibilidade com JSON/modelos/schemas antigos — o app ainda está em desenvolvimento; refactors maiores são aceitáveis para manter as fronteiras de camada corretas.
+See `.github/copilot-instructions.md`: code must follow **Clean Architecture** (domain in `lib/core/`, data in `lib/data/`, repositories in `lib/domain/`). Maintaining compatibility with old JSON/models/schemas is **not required** — the app is still under development, and larger refactors are acceptable to preserve correct layer boundaries.
 
 ## Effective Dart
 

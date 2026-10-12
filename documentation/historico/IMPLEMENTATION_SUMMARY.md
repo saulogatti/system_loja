@@ -1,38 +1,38 @@
-# Implementação do Gerador de Código - Resumo
+# Code Generator Implementation - Summary
 
-## 📋 Visão Geral
+## 📋 Overview
 
-Foi implementado um **sistema completo de geração e validação de códigos únicos** para produtos e notas fiscais no System Loja. A implementação segue os padrões de arquitetura limpa do projeto, utilizando Drift ORM e injeção de dependências.
+This document summarizes a **complete system for generating and validating unique codes** for products and invoices in System Loja. The implementation follows the project's Clean Architecture patterns, using Drift ORM and dependency injection.
 
-## ✨ Funcionalidades Implementadas
+## ✨ Implemented Features
 
-### 1. Serviço de Geração de Código (CodeGeneratorService)
+### 1. Code Generation Service (CodeGeneratorService)
 
-**Localização**: `lib/core/services/code_generator_service.dart`
+**Location**: `lib/core/services/code_generator_service.dart`
 
-Funcionalidades principais:
-- ✅ Geração automática de códigos de produto no formato `PRD-YYYYMMDD-NNNN`
-- ✅ Geração automática de números de nota fiscal no formato `NF-YYYYMMDD-NNNN`
-- ✅ Validação de códigos personalizados fornecidos pelo usuário
-- ✅ Verificação de duplicatas no banco de dados
-- ✅ Resolução automática de colisões (incremento automático)
-- ✅ Limite de segurança para evitar loops infinitos
+Main features:
+- ✅ Automatically generates product codes in the `PRD-YYYYMMDD-NNNN` format.
+- ✅ Automatically generates invoice numbers in the `NF-YYYYMMDD-NNNN` format.
+- ✅ Validates user-provided custom codes.
+- ✅ Checks the database for duplicates.
+- ✅ Automatically resolves collisions (increments the sequence).
+- ✅ Uses a safety limit to prevent infinite loops.
 
-### 2. Métodos nos DAOs
+### 2. DAO Methods
 
 #### ProductDao (`lib/data/database/dao/product_dao.dart`)
 ```dart
-Future<Product?> getByCode(String code)        // Buscar produto por código
-Future<bool> codeExists(String code)           // Verificar se código existe
+Future<Product?> getByCode(String code)        // Find a product by code
+Future<bool> codeExists(String code)           // Check whether the code exists
 ```
 
 #### InvoiceDao (`lib/data/database/dao/invoice_dao.dart`)
 ```dart
-Future<Invoice?> getByInvoiceNumber(String invoiceNumber)  // Buscar nota por número
-Future<bool> invoiceNumberExists(String invoiceNumber)     // Verificar se número existe
+Future<Invoice?> getByInvoiceNumber(String invoiceNumber)  // Find an invoice by number
+Future<bool> invoiceNumberExists(String invoiceNumber)     // Check whether the number exists
 ```
 
-### 3. Métodos nos Repositórios
+### 3. Repository Methods
 
 #### ProductRepository (`lib/domain/repository/product_repository.dart`)
 ```dart
@@ -46,89 +46,89 @@ Future<ResultStatus<String, String>> generateInvoiceNumber()                 // 
 Future<ResultStatus<bool, String>> validateInvoiceNumber(String)             // Validar número customizado
 ```
 
-### 4. Injeção de Dependências
+### 4. Dependency Injection
 
-**Arquivo**: `lib/application/app_injection.dart`
+**File**: `lib/application/app_injection.dart`
 
-O `CodeGeneratorService` foi registrado e está disponível globalmente:
+`CodeGeneratorService` is registered and available through dependency injection:
 ```dart
 final codeGenerator = appInjection.get<CodeGeneratorService>();
 ```
 
-### 5. Testes Completos
+### 5. Comprehensive Tests
 
-**Arquivo**: `test/code_generator_service_test.dart`
+**File**: `test/code_generator_service_test.dart`
 
-Cobertura de testes:
-- ✅ 22 testes unitários
-- ✅ Geração de códigos de produto
-- ✅ Geração de números de nota fiscal
-- ✅ Validação de códigos personalizados
-- ✅ Verificação de duplicatas
-- ✅ Mensagens de erro
-- ✅ Tratamento de colisões
+Test coverage:
+- ✅ 22 unit tests.
+- ✅ Product code generation.
+- ✅ Invoice number generation.
+- ✅ Custom code validation.
+- ✅ Duplicate checks.
+- ✅ Error messages.
+- ✅ Collision handling.
 
-### 6. Documentação Completa
+### 6. Complete Documentation
 
-#### Guia de Uso (`docs/CODE_GENERATOR_USAGE.md`)
-- Exemplos detalhados de uso
-- Integração com UI (widget Flutter)
-- Regras de validação
-- Tabela de mensagens de erro
-- Tratamento de colisões
-- Performance
-- Migração de código legado
+#### Usage Guide (`docs/CODE_GENERATOR_USAGE.md`)
+- Detailed usage examples.
+- UI integration (Flutter widget).
+- Validation rules.
+- Error-message table.
+- Collision handling.
+- Performance.
+- Legacy code migration.
 
-#### Exemplos de Código (`lib/core/services/code_generator_examples.dart`)
-8 exemplos práticos completos:
-1. Criar produto com código automático
-2. Criar produto com código personalizado
-3. Criar produto com validação e fallback
-4. Criar nota fiscal com número automático
-5. Criar nota fiscal com número personalizado
-6. Verificar existência de código
-7. Gerar múltiplos códigos em lote
-8. Tratamento completo com try-catch
+#### Code Examples (`lib/core/services/code_generator_examples.dart`)
+8 complete practical examples:
+1. Create a product with an automatically generated code.
+2. Create a product with a custom code.
+3. Create a product with validation and fallback.
+4. Create an invoice with an automatically generated number.
+5. Create an invoice with a custom number.
+6. Check whether a code exists.
+7. Generate multiple codes in a batch.
+8. Handle errors with try-catch.
 
-#### Documentação de Serviços (`lib/core/services/README.md`)
-- Visão geral dos serviços disponíveis
-- Padrões de implementação
-- Diretrizes de desenvolvimento
-- Diferença entre Service e Repository
-- Como contribuir
+#### Service Documentation (`lib/core/services/README.md`)
+- Overview of available services.
+- Implementation patterns.
+- Development guidelines.
+- Differences between Services and Repositories.
+- How to contribute.
 
-## 🎯 Como Usar
+## 🎯 How to Use
 
-### Caso de Uso 1: Produto com Código Automático
+### Use Case 1: Product with an Automatic Code
 
 ```dart
 final productRepository = appInjection.get<IProductRepository>();
 
-// Gerar código automático
+// Generate a code automatically
 final code = await productRepository.generateProductCode();
-// Retorna: "PRD-20260123-0001"
+// Returns: "PRD-20260123-0001"
 
-// Criar produto
+// Create a product
 final product = Product(
   name: 'Notebook Dell',
   code: code,
   price: 3500.00,
-  // ... outros campos
+  // ... other fields
 );
 
 await productRepository.saveProduct(product);
 ```
 
-### Caso de Uso 2: Produto com Código Personalizado
+### Use Case 2: Product with a Custom Code
 
 ```dart
 final productRepository = appInjection.get<IProductRepository>();
 
-// Validar código fornecido pelo usuário
+// Validate the code provided by the user
 final validation = await productRepository.validateProductCode('MEU-CODIGO-001');
 
 if (validation.isSuccessful) {
-  // Código válido - pode usar
+  // The code is valid and can be used
   final product = Product(
     name: 'Notebook Dell',
     code: 'MEU-CODIGO-001',
@@ -136,38 +136,38 @@ if (validation.isSuccessful) {
   );
   await productRepository.saveProduct(product);
 } else {
-  // Mostrar erro: validation.asError
+  // Show the error: validation.asError
   print('Erro: ${validation.asError}');
 }
 ```
 
-### Caso de Uso 3: Nota Fiscal com Número Automático
+### Use Case 3: Invoice with an Automatic Number
 
 ```dart
 final salesRepository = appInjection.get<ISalesRepository>();
 
-// Gerar número automático
+// Generate a number automatically
 final invoiceNumberResult = await salesRepository.generateInvoiceNumber();
 if (invoiceNumberResult.hasError) {
   print('Erro: ${invoiceNumberResult.asError}');
   return;
 }
 final invoiceNumber = invoiceNumberResult.asSuccess;
-// Retorna: "NF-20260123-0001"
+// Returns: "NF-20260123-0001"
 
-// Criar nota fiscal
+// Create an invoice
 final invoice = Invoice(
   id: -1,
   data: InvoiceData(
     invoiceNumber: invoiceNumber,
-    // ... outros campos
+    // ... other fields
   ),
 );
 
 await salesRepository.saveSale(invoice);
 ```
 
-### Caso de Uso 4: Interface com Toggle Auto/Manual
+### Use Case 4: UI with an Automatic/Manual Toggle
 
 ```dart
 class ProductFormWidget extends StatefulWidget {
@@ -188,7 +188,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Toggle para escolher entre auto/manual
+        // Toggle to choose between automatic and manual generation
         SwitchListTile(
           title: Text('Gerar código automaticamente'),
           value: _useAutoCode,
@@ -200,7 +200,7 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
           },
         ),
 
-        // Campo de código (desabilitado se auto)
+        // Code field (disabled when automatic generation is enabled)
         TextField(
           controller: _codeController,
           enabled: !_useAutoCode,
@@ -220,171 +220,171 @@ class _ProductFormWidgetState extends State<ProductFormWidget> {
 }
 ```
 
-## 📁 Estrutura de Arquivos
+## 📁 File Structure
 
 ```
 system_loja/
 ├── lib/
 │   ├── core/
 │   │   ├── services/
-│   │   │   ├── code_generator_service.dart      [NOVO] ⭐
-│   │   │   ├── code_generator_examples.dart     [NOVO] 📝
-│   │   │   └── README.md                        [NOVO] 📚
+│   │   │   ├── code_generator_service.dart      [NEW] ⭐
+│   │   │   ├── code_generator_examples.dart     [NEW] 📝
+│   │   │   └── README.md                        [NEW] 📚
 │   │   └── repository/
-│   │       ├── product_repository.dart          [MODIFICADO] ✏️
-│   │       └── sales_repository.dart            [MODIFICADO] ✏️
+│   │       ├── product_repository.dart          [MODIFIED] ✏️
+│   │       └── sales_repository.dart            [MODIFIED] ✏️
 │   ├── data/
 │   │   └── database/
 │   │       └── dao/
-│   │           ├── product_dao.dart             [MODIFICADO] ✏️
-│   │           └── invoice_dao.dart             [MODIFICADO] ✏️
+│   │           ├── product_dao.dart             [MODIFIED] ✏️
+│   │           └── invoice_dao.dart             [MODIFIED] ✏️
 │   └── screens/
 │       └── injection/
-│           └── app_injection.dart               [MODIFICADO] ✏️
+│           └── app_injection.dart               [MODIFIED] ✏️
 ├── test/
-│   └── code_generator_service_test.dart         [NOVO] 🧪
+│   └── code_generator_service_test.dart         [NEW] 🧪
 └── docs/
-    └── CODE_GENERATOR_USAGE.md                  [NOVO] 📖
+    └── CODE_GENERATOR_USAGE.md                  [NEW] 📖
 ```
 
-## 🚀 Próximos Passos
+## 🚀 Next Steps
 
-Para finalizar a implementação, execute os seguintes comandos quando o ambiente Flutter/Dart estiver disponível:
+To complete the implementation, run the following commands when the Flutter/Dart environment is available:
 
-### 1. Gerar Código com Build Runner
+### 1. Generate Code with Build Runner
 
 ```bash
 dart run build_runner build
 ```
 
-Isto gerará os arquivos `.g.dart` necessários para:
-- Serialização JSON dos modelos
-- DAOs do Drift
-- Estados e eventos do BLoC com Freezed
+This generates the required `.g.dart` files for:
+- Model JSON serialization.
+- Drift DAOs.
+- BLoC states and events with Freezed.
 
-### 2. Executar Testes
+### 2. Run Tests
 
 ```bash
-# Executar todos os testes
+# Run all tests
 flutter test
 
-# Executar apenas testes do CodeGeneratorService
+# Run only the CodeGeneratorService tests
 flutter test test/code_generator_service_test.dart
 ```
 
-### 3. Verificar Análise Estática
+### 3. Run Static Analysis
 
 ```bash
-# Análise de código
+# Analyze the code
 flutter analyze
 
-# Formatar código
+# Format the code
 dart format lib/ test/
 ```
 
-## 📊 Cobertura de Testes
+## 📊 Test Coverage
 
-Os testes cobrem os seguintes cenários:
+The tests cover the following scenarios:
 
-### Produtos:
-- ✅ Geração de código único
-- ✅ Formato correto (PRD-YYYYMMDD-NNNN)
-- ✅ Códigos sequenciais diferentes
-- ✅ Verificação de existência
-- ✅ Validação de código vazio
-- ✅ Validação de tamanho mínimo/máximo
-- ✅ Validação de código duplicado
-- ✅ Validação de código válido
+### Products:
+- ✅ Unique code generation.
+- ✅ Correct format (PRD-YYYYMMDD-NNNN).
+- ✅ Distinct sequential codes.
+- ✅ Existence checks.
+- ✅ Empty-code validation.
+- ✅ Minimum/maximum length validation.
+- ✅ Duplicate-code validation.
+- ✅ Valid-code validation.
 
-### Notas Fiscais:
-- ✅ Geração de número único
-- ✅ Formato correto (NF-YYYYMMDD-NNNN)
-- ✅ Números sequenciais diferentes
-- ✅ Verificação de existência
-- ✅ Validação de número vazio
-- ✅ Validação de tamanho mínimo/máximo
-- ✅ Validação de número duplicado
-- ✅ Validação de número válido
+### Invoices:
+- ✅ Unique number generation.
+- ✅ Correct format (NF-YYYYMMDD-NNNN).
+- ✅ Distinct sequential numbers.
+- ✅ Existence checks.
+- ✅ Empty-number validation.
+- ✅ Minimum/maximum length validation.
+- ✅ Duplicate-number validation.
+- ✅ Valid-number validation.
 
-## 🔒 Garantias de Segurança
+## 🔒 Safety Guarantees
 
-1. **Unicidade**: A coluna `code` em `ProductsRecords` possui constraint `UNIQUE` no banco de dados
-2. **Validação**: Todos os códigos são verificados antes de serem retornados
-3. **Limite de segurança**: Loop de geração limitado a 9999 tentativas para evitar loops infinitos
-4. **Fallback**: Se o limite for atingido, usa timestamp em milissegundos para garantir unicidade
-5. **Transações**: Operações de insert/update são atômicas através do Drift
+1. **Uniqueness**: The `code` column in `ProductsRecords` has a database `UNIQUE` constraint.
+2. **Validation**: Every code is checked before being returned.
+3. **Safety limit**: Code generation is limited to 9999 attempts to prevent infinite loops.
+4. **Fallback**: If the limit is reached, a timestamp in milliseconds is used to ensure uniqueness.
+5. **Transactions**: Insert/update operations are atomic through Drift.
 
-## 📝 Convenções Seguidas
+## 📝 Conventions Followed
 
-- ✅ **Código em inglês**: Variáveis, métodos e classes
-- ✅ **Documentação em português**: Comentários `///` e strings de usuário
-- ✅ **Padrão Repository**: Acesso a dados através de repositórios
-- ✅ **Padrão DAO**: Drift DAOs para operações de banco
-- ✅ **Injeção de Dependências**: AppInjection singleton
-- ✅ **Testes completos**: Cobertura de todos os cenários
-- ✅ **Documentação abrangente**: Guias, exemplos e READMEs
+- ✅ **Code in English**: Variables, methods, and classes.
+- ✅ **Documentation in English**: `///` comments and user-facing strings.
+- ✅ **Repository pattern**: Data access through repositories.
+- ✅ **DAO pattern**: Drift DAOs for database operations.
+- ✅ **Dependency injection**: AppInjection singleton.
+- ✅ **Comprehensive tests**: Coverage of all scenarios.
+- ✅ **Extensive documentation**: Guides, examples, and READMEs.
 
-## 🎓 Recursos de Aprendizado
+## 🎓 Learning Resources
 
-Para entender melhor a implementação:
+To learn more about the implementation:
 
-1. **Guia de Uso Completo**: `/docs/CODE_GENERATOR_USAGE.md`
-2. **Exemplos Práticos**: `/lib/core/services/code_generator_examples.dart`
-3. **Testes Unitários**: `/test/code_generator_service_test.dart`
-4. **Documentação de Serviços**: `/lib/core/services/README.md`
-5. **Arquitetura do Projeto**: `/.github/copilot-instructions.md`
+1. **Complete usage guide**: `/docs/CODE_GENERATOR_USAGE.md`
+2. **Practical examples**: `/lib/core/services/code_generator_examples.dart`
+3. **Unit tests**: `/test/code_generator_service_test.dart`
+4. **Service documentation**: `/lib/core/services/README.md`
+5. **Project architecture**: `/.github/copilot-instructions.md`
 
-## 💡 Dicas de Implementação
+## 💡 Implementation Tips
 
-### Para Desenvolvedores Frontend:
+### For Frontend Developers:
 
-Ao criar telas de cadastro:
-1. Adicione um toggle "Gerar código automaticamente"
-2. Desabilite o campo de código quando toggle estiver ativo
-3. Adicione botão de refresh para regenerar código
-4. Valide códigos personalizados antes de salvar
-5. Mostre mensagens de erro claras ao usuário
+When creating registration screens:
+1. Add a "Generate code automatically" toggle.
+2. Disable the code field when the toggle is active.
+3. Add a refresh button to regenerate the code.
+4. Validate custom codes before saving.
+5. Show clear error messages to the user.
 
-### Para Desenvolvedores Backend:
+### For Backend Developers:
 
-Ao processar registros:
-1. Use `repository.generateProductCode()` em vez de criar códigos manualmente
-2. Sempre valide códigos fornecidos pelo usuário
-3. Trate erros de duplicata adequadamente
-4. Considere transações ao salvar múltiplos registros
+When processing records:
+1. Use `repository.generateProductCode()` instead of creating codes manually.
+2. Always validate user-provided codes.
+3. Handle duplicate errors appropriately.
+4. Consider transactions when saving multiple records.
 
-### Para Testadores:
+### For Testers:
 
-Cenários para testar:
-1. Criar produto sem fornecer código
-2. Criar produto com código personalizado válido
-3. Tentar criar produto com código duplicado
-4. Criar múltiplos produtos rapidamente (teste de colisão)
-5. Validar códigos com caracteres especiais
-6. Validar códigos muito longos/curtos
+Scenarios to test:
+1. Create a product without providing a code.
+2. Create a product with a valid custom code.
+3. Try to create a product with a duplicate code.
+4. Create multiple products quickly (collision test).
+5. Validate codes with special characters.
+6. Validate codes that are too long or too short.
 
-## ✅ Checklist de Implementação
+## ✅ Implementation Checklist
 
-- [x] CodeGeneratorService criado
-- [x] Métodos adicionados aos DAOs
-- [x] Métodos adicionados aos Repositórios
-- [x] Serviço registrado no AppInjection
-- [x] Testes unitários completos
-- [x] Documentação de uso
-- [x] Exemplos de código
-- [x] README de serviços
-- [ ] Build runner executado (requer Flutter/Dart)
-- [ ] Testes executados (requer Flutter/Dart)
+- [x] CodeGeneratorService created.
+- [x] Methods added to DAOs.
+- [x] Methods added to repositories.
+- [x] Service registered in AppInjection.
+- [x] Unit tests completed.
+- [x] Usage documentation added.
+- [x] Code examples added.
+- [x] Service README added.
+- [ ] Build runner executed (requires Flutter/Dart).
+- [ ] Tests executed (requires Flutter/Dart).
 
-## 📞 Suporte
+## 📞 Support
 
-Em caso de dúvidas:
-1. Consulte a documentação em `/docs/CODE_GENERATOR_USAGE.md`
-2. Veja os exemplos em `code_generator_examples.dart`
-3. Verifique os testes em `code_generator_service_test.dart`
-4. Leia o README em `lib/core/services/README.md`
+For questions:
+1. Consult `/docs/CODE_GENERATOR_USAGE.md`.
+2. Review the examples in `code_generator_examples.dart`.
+3. Check the tests in `code_generator_service_test.dart`.
+4. Read `lib/core/services/README.md`.
 
 ---
 
-**Status**: ✅ Implementação completa e testada
-**Próximo passo**: Executar build_runner quando Flutter/Dart estiver disponível
+**Status**: ✅ Implementation complete and tested
+**Next step**: Run build_runner when Flutter/Dart is available

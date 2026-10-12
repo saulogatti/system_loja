@@ -1,55 +1,55 @@
 ---
 name: flutter-bloc-widget-builder
-description: "Cria e refatora telas Flutter com BLoC/Cubit no System Loja seguindo Clean Architecture, ResultStatus e widgets pequenos. Use quando precisar implementar screen, form, list, dialog, estado de UI, separacao presentation/domain/data, ou reduzir arquivos grandes sem perder legibilidade."
-argument-hint: "Descreva a tela/fluxo e o comportamento esperado"
+description: "Creates and refactors Flutter screens with BLoC/Cubit in System Loja, following Clean Architecture, ResultStatus, and small-widget practices. Use when implementing screens, forms, lists, dialogs, UI states, presentation/domain/data boundaries, or reducing large files without losing readability."
+argument-hint: "Describe the screen/flow and expected behavior"
 ---
 
 # Flutter Bloc Widget Builder
 
-## Objetivo
+## Objective
 
-Implementar e refatorar UI Flutter com BLoC/Cubit no contexto do System Loja, mantendo separacao de camadas, estados previsiveis e codigo facil de manter.
+Implement and refactor Flutter UI with BLoC/Cubit in the System Loja context, maintaining layer separation, predictable states, and maintainable code.
 
-## Quando usar
+## When to Use
 
-- Criar uma nova tela com estado e eventos.
-- Refatorar uma tela grande para widgets menores.
-- Ajustar fluxo de loading, sucesso, vazio e erro.
-- Migrar UI para seguir fronteiras de Clean Architecture.
+- Create a new screen with state and events.
+- Refactor a large screen into smaller widgets.
+- Adjust loading, success, empty, and error flows.
+- Migrate UI to follow Clean Architecture boundaries.
 
-## Processo
+## Process
 
-1. Entender o fluxo da funcionalidade e mapear estados de UI necessarios.
-2. Verificar estrutura atual da feature e preservar padrao do projeto quando ja estiver adequada.
-3. Definir fronteiras de camada:
-- presentation: screen, bloc/cubit, widgets e interacoes de UI.
-- domain/core: contratos, entidades e regras de negocio.
-- data: DTOs, Drift, mapeadores e persistencia.
-4. Implementar estado de apresentacao explicito (loading, success, empty, error).
-5. Extrair widgets quando build ficar longo, denso ou com responsabilidades misturadas.
-6. Aplicar regras do projeto para erros e repositorios:
-- repositorios retornam ResultStatus.
-- UI/BLoC trata retorno via when/switch, sem try/catch para chamada de repositorio.
-7. Garantir injecao por GetIt e evitar acoplamento de presentation com implementacoes concretas.
-8. Finalizar com validacao de legibilidade e manutencao.
+1. Understand the feature flow and identify the required UI states.
+2. Check the current feature structure and preserve existing project patterns when appropriate.
+3. Define layer boundaries:
+   - presentation: screens, BLoC/Cubit, widgets, and UI interactions.
+   - domain/core: contracts, entities, and business rules.
+   - data: DTOs, Drift, mappers, and persistence.
+4. Implement explicit presentation states (loading, success, empty, error).
+5. Extract widgets when a `build` method becomes long, dense, or mixes responsibilities.
+6. Apply project error-handling and repository rules:
+   - repositories return `ResultStatus`.
+   - UI/BLoC handles results with `when`/`switch`, without `try/catch` around repository calls.
+7. Use GetIt for dependency injection and avoid coupling presentation to concrete implementations.
+8. Finish by checking readability and maintainability.
 
-## Regras especificas do System Loja
+## System Loja-Specific Rules
 
-- Seguir Clean Architecture conforme instrucoes do workspace.
-- Nao colocar regra de negocio em widget.
-- Nao chamar DAO/Drift diretamente na camada de apresentacao.
-- Evitar abstrações genericas antes de uma segunda necessidade real.
-- Manter comentarios curtos e em portugues apenas quando a intencao nao for obvia.
+- Follow Clean Architecture as defined by the workspace instructions.
+- Do not put business rules in widgets.
+- Do not call DAOs/Drift directly from the presentation layer.
+- Avoid generic abstractions until a second concrete use case exists.
+- Keep comments concise and in English, adding them only when the intent is not obvious.
 
-## Checklist de qualidade
+## Quality Checklist
 
-- A tela renderiza com clareza: loading, success, empty e error.
-- BLoC/Cubit tem eventos/metodos com intencao explicita.
-- Widgets possuem responsabilidade unica e parametros objetivos.
-- Fluxo de dependencia vai de presentation para contratos, nao para implementacoes.
-- O resultado final ficou mais simples que o estado inicial.
+- The screen clearly renders loading, success, empty, and error states.
+- BLoC/Cubit events and methods have explicit intent.
+- Widgets have a single responsibility and clear parameters.
+- Dependencies flow from presentation to contracts, not implementations.
+- The final result is simpler than the initial state.
 
-## Referencias
+## References
 
-- Estrutura sugerida de feature: [template de feature](references/flutter-feature-template.md)
-- Regras globais de projeto: .github/copilot-instructions.md
+- Suggested feature structure: [feature template](references/flutter-feature-template.md)
+- Global project rules: `.github/copilot-instructions.md`

@@ -1,5 +1,5 @@
-# Modelos de domínio
+# Domain Models
 
-Entidades de negócio em `lib/core/models/`. Não acoplam tabelas Drift (`XxxRecord`) nem DTOs JSON.
+Business entities in `lib/core/models/`. They are not coupled to Drift tables (`XxxRecord`) or JSON DTOs.
 
-Serialização de arquivo/importação fica em `lib/data/entry/` e `lib/data/models/`.
+File/import serialization belongs in `lib/data/entry/` and `lib/data/models/`.

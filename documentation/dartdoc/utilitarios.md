@@ -1,5 +1,5 @@
-# Utilitários
+# Utilities
 
-`ResultStatus`, mapeamento de erros de repositório, constantes, exceções de validação e extensões.
+`ResultStatus`, repository error mapping, constants, validation exceptions, and extensions.
 
-A apresentação usa `when`/`switch` em `ResultStatus`; repositórios usam `try/catch` internamente.
+The presentation layer uses `when`/`switch` on `ResultStatus`; repositories use internal `try/catch` blocks.

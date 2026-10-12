@@ -1,7 +1,7 @@
-# Contratos
+# Contracts
 
-Interfaces em `lib/core/interface/` consumidas pela apresentação.
+Interfaces in `lib/core/interface/` consumed by the presentation layer.
 
-A UI resolve `appInjection.get<IXxxRepository>()` e trata o retorno com `when`/`switch` em `ResultStatus` — sem `try/catch` nas chamadas de repositório.
+The UI resolves `appInjection.get<IXxxRepository>()` and handles the result with `when`/`switch` on `ResultStatus` — without `try/catch` around repository calls.
 
-Guia: `docs/INTERFACES_ARCHITECTURE.md`.
+Guide: `docs/INTERFACES_ARCHITECTURE.md`.

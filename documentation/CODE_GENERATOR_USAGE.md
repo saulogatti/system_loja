@@ -1,41 +1,41 @@
-# Gerador de Código - Documentação de Uso
+# Code Generator - Usage Guide
 
-## Visão Geral
+## Overview
 
-O `CodeGeneratorService` é um serviço que fornece geração automática de códigos únicos para produtos e notas fiscais no System Loja. Ele garante que códigos não sejam duplicados e permite que usuários forneçam seus próprios códigos personalizados após validação.
+`CodeGeneratorService` automatically generates unique codes for products and invoices in System Loja. It prevents duplicate codes and allows users to provide custom codes after validation.
 
-## Características
+## Features
 
-- ✅ Geração automática de códigos únicos para produtos
-- ✅ Geração automática de números únicos para notas fiscais
-- ✅ Validação de códigos personalizados fornecidos pelo usuário
-- ✅ Verificação de duplicatas no banco de dados
-- ✅ Formato padronizado e legível
-- ✅ Integração com Drift ORM
+- ✅ Automatic generation of unique product codes
+- ✅ Automatic generation of unique invoice numbers
+- ✅ Validation of user-provided custom codes
+- ✅ Duplicate checks against the database
+- ✅ Standardized, readable format
+- ✅ Integration with Drift ORM
 
-## Formatos de Código
+## Code Formats
 
-### Produtos
-**Formato**: `PRD-YYYYMMDD-NNNN`
+### Products
+**Format**: `PRD-YYYYMMDD-NNNN`
 
-**Exemplos**:
-- `PRD-20260123-0001` - Primeiro produto do dia 23/01/2026
-- `PRD-20260123-0002` - Segundo produto do dia 23/01/2026
+**Examples**:
+- `PRD-20260123-0001` - First product on 23/01/2026
+- `PRD-20260123-0002` - Second product on 23/01/2026
 
-### Notas Fiscais
-**Formato**: `NF-YYYYMMDD-NNNN`
+### Invoices
+**Format**: `NF-YYYYMMDD-NNNN`
 
-**Exemplos**:
-- `NF-20260123-0001` - Primeira nota fiscal do dia 23/01/2026
-- `NF-20260123-0002` - Segunda nota fiscal do dia 23/01/2026
+**Examples**:
+- `NF-20260123-0001` - First invoice on 23/01/2026
+- `NF-20260123-0002` - Second invoice on 23/01/2026
 
-## Como Usar
+## How to Use
 
-### 1. Acessar o Serviço
+### 1. Access the Service
 
-O serviço está registrado no **GetIt** (`appInjection`) após `setupAppInjection()` e pode ser acessado de várias formas:
+The service is registered with **GetIt** (`appInjection`) after `setupAppInjection()` and can be accessed in several ways:
 
-#### Opção A: Diretamente via GetIt
+#### Option A: Directly through GetIt
 ```dart
 import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/domain/code_generator_service.dart';
@@ -43,28 +43,28 @@ import 'package:system_loja/domain/code_generator_service.dart';
 final codeGenerator = appInjection.get<CodeGeneratorService>();
 ```
 
-#### Opção B: Via ProductRepository
+#### Option B: Through ProductRepository
 ```dart
 import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 
 final productRepository = appInjection.get<IProductRepository>();
 
-// Gerar código
+// Generate a code
 final code = await productRepository.generateProductCode();
 
-// Validar código customizado
+// Validate a custom code
 final validationResult = await productRepository.validateProductCode('MEU-CODIGO-001');
 ```
 
-#### Opção C: Via SalesRepository
+#### Option C: Through SalesRepository
 ```dart
 import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_sales_repository.dart';
 
 final salesRepository = appInjection.get<ISalesRepository>();
 
-// Gerar número de nota
+// Generate an invoice number
 final invoiceNumberResult = await salesRepository.generateInvoiceNumber();
 if (invoiceNumberResult.isSuccessful) {
   print('Número gerado: ${invoiceNumberResult.asSuccess}');
@@ -72,46 +72,46 @@ if (invoiceNumberResult.isSuccessful) {
   print('Erro ao gerar número: ${invoiceNumberResult.asError}');
 }
 
-// Validar número customizado
+// Validate a custom invoice number
 final validationResult = await salesRepository.validateInvoiceNumber('NF-CUSTOM-001');
 ```
 
-### 2. Gerar Código de Produto Automaticamente
+### 2. Generate a Product Code Automatically
 
 ```dart
 import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_product_repository.dart';
 
-// Via repositório (recomendado)
+// Through the repository (recommended)
 final productRepository = appInjection.get<IProductRepository>();
 final code = await productRepository.generateProductCode();
 
-// Criar produto com o código gerado
+// Create a product with the generated code
 final product = Product(
   name: 'Notebook Dell',
   description: 'Notebook Dell Inspiron 15',
   price: 3500.00,
   stockQuantity: 10,
   categoryId: 1,
-  code: code, // Usar o código gerado
+  code: code,   // Use the generated code
 );
 
 await productRepository.saveProduct(product);
 ```
 
-### 3. Usar Código Personalizado para Produto
+### 3. Use a Custom Product Code
 
 ```dart
 final productRepository = appInjection.get<IProductRepository>();
 
-// Código fornecido pelo usuário
+// Code provided by the user
 final customCode = 'NOTEBOOK-DELL-001';
 
-// Validar o código antes de usar
+// Validate the code before using it
 final validation = await productRepository.validateProductCode(customCode);
 
 if (validation.isSuccessful) {
-  // Código válido, pode usar
+  // The code is valid and can be used
   final product = Product(
     name: 'Notebook Dell',
     description: 'Notebook Dell Inspiron 15',
@@ -123,18 +123,18 @@ if (validation.isSuccessful) {
 
   await productRepository.saveProduct(product);
 } else {
-  // Código inválido, mostrar erro ao usuário
+  // The code is invalid; show an error to the user
   print('Erro: ${validation.asError}');
-  // Exemplo: "Código já existe no banco de dados"
+  // Example: "Código já existe no banco de dados"
 }
 ```
 
-### 4. Gerar Número de Nota Fiscal Automaticamente
+### 4. Generate an Invoice Number Automatically
 
 ```dart
 final salesRepository = appInjection.get<ISalesRepository>();
 
-// Gerar número de nota automaticamente
+// Generate an invoice number automatically
 final invoiceNumberResult = await salesRepository.generateInvoiceNumber();
 if (invoiceNumberResult.hasError) {
   print('Erro: ${invoiceNumberResult.asError}');
@@ -142,11 +142,11 @@ if (invoiceNumberResult.hasError) {
 }
 final invoiceNumber = invoiceNumberResult.asSuccess;
 
-// Criar nota fiscal com o número gerado
+// Create an invoice with the generated number
 final invoice = Invoice(
   id: -1,
   data: InvoiceData(
-    invoiceNumber: invoiceNumber, // Usar o número gerado
+    invoiceNumber: invoiceNumber,     // Use the generated number
     customerId: 1,
     customerName: 'João Silva',
     customerCpf: '12345678900',
@@ -166,19 +166,19 @@ final invoice = Invoice(
 await salesRepository.saveSale(invoice);
 ```
 
-### 5. Usar Número Personalizado para Nota Fiscal
+### 5. Use a Custom Invoice Number
 
 ```dart
 final salesRepository = appInjection.get<ISalesRepository>();
 
-// Número fornecido pelo usuário
+// Number provided by the user
 final customNumber = 'NF-VENDA-ESPECIAL-001';
 
-// Validar o número antes de usar
+// Validate the number before using it
 final validation = await salesRepository.validateInvoiceNumber(customNumber);
 
 if (validation.isSuccessful) {
-  // Número válido, pode usar
+  // The number is valid and can be used
   final invoice = Invoice(
     id: -1,
     data: InvoiceData(
@@ -201,15 +201,15 @@ if (validation.isSuccessful) {
 
   await salesRepository.saveSale(invoice);
 } else {
-  // Número inválido, mostrar erro ao usuário
+  // The number is invalid; show an error to the user
   print('Erro: ${validation.asError}');
-  // Exemplo: "Número da nota já existe no banco de dados"
+  // Example: "Número da nota já existe no banco de dados"
 }
 ```
 
-## Integração com Interface de Usuário (UI)
+## User Interface (UI) Integration
 
-### Exemplo: Tela de Cadastro de Produto
+### Example: Product Registration Screen
 
 ```dart
 class ProductRegistrationScreen extends StatefulWidget {
@@ -234,10 +234,10 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     String code;
 
     if (_useAutoCode) {
-      // Usar código gerado automaticamente
+      // Use the automatically generated code
       code = await _productRepository.generateProductCode();
     } else {
-      // Validar código fornecido pelo usuário
+      // Validate the code provided by the user
       final validation = await _productRepository.validateProductCode(
         _codeController.text,
       );
@@ -252,7 +252,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       code = _codeController.text;
     }
 
-    // Criar e salvar produto com o código validado
+    // Create and save the product with the validated code
     final product = Product(
       name: _nameController.text,
       description: _descriptionController.text,
@@ -264,7 +264,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
 
     await _productRepository.saveProduct(product);
 
-    // Mostrar sucesso
+    // Show a success message
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Produto salvo com sucesso!')),
     );
@@ -278,7 +278,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            // Toggle para escolher entre código automático ou manual
+            // Toggle to choose between an automatic or manual code
             SwitchListTile(
               title: Text('Gerar código automaticamente'),
               value: _useAutoCode,
@@ -294,7 +294,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
               },
             ),
 
-            // Campo de código (desabilitado se auto)
+            // Code field (disabled when automatic generation is enabled)
             TextField(
               controller: _codeController,
               enabled: !_useAutoCode,
@@ -309,7 +309,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
               ),
             ),
 
-            // ... outros campos ...
+            // ... other fields ...
 
             ElevatedButton(
               onPressed: _saveProduct,
@@ -323,85 +323,85 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
 }
 ```
 
-## Regras de Validação
+## Validation Rules
 
-### Códigos de Produto
+### Product Codes
 
-- ✅ **Mínimo**: 3 caracteres
-- ✅ **Máximo**: 50 caracteres
-- ✅ **Não pode ser vazio**
-- ✅ **Deve ser único** no banco de dados
+- ✅ **Minimum**: 3 characters
+- ✅ **Maximum**: 50 characters
+- ✅ **Must not be empty**
+- ✅ **Must be unique** in the database
 
-### Números de Nota Fiscal
+### Invoice Numbers
 
-- ✅ **Mínimo**: 3 caracteres
-- ✅ **Máximo**: 50 caracteres
-- ✅ **Não pode ser vazio**
-- ✅ **Deve ser único** no banco de dados
+- ✅ **Minimum**: 3 characters
+- ✅ **Maximum**: 50 characters
+- ✅ **Must not be empty**
+- ✅ **Must be unique** in the database
 
-## Mensagens de Erro
+## Error Messages
 
-### Validação de Código de Produto
+### Product Code Validation
 
-| Situação | Mensagem |
+| Condition | Message |
 |----------|----------|
-| Código vazio | "Código não pode ser vazio" |
-| Código muito curto | "Código deve ter no mínimo 3 caracteres" |
-| Código muito longo | "Código deve ter no máximo 50 caracteres" |
-| Código duplicado | "Código já existe no banco de dados" |
-| Código válido | "Código válido" |
+| Empty code | "Código não pode ser vazio" |
+| Code too short | "Código deve ter no mínimo 3 caracteres" |
+| Code too long | "Código deve ter no máximo 50 caracteres" |
+| Duplicate code | "Código já existe no banco de dados" |
+| Valid code | "Código válido" |
 
-### Validação de Número de Nota Fiscal
+### Invoice Number Validation
 
-| Situação | Mensagem |
+| Condition | Message |
 |----------|----------|
-| Número vazio | "Número da nota não pode ser vazio" |
-| Número muito curto | "Número da nota deve ter no mínimo 3 caracteres" |
-| Número muito longo | "Número da nota deve ter no máximo 50 caracteres" |
-| Número duplicado | "Número da nota já existe no banco de dados" |
-| Número válido | "Número da nota válido" |
+| Empty number | "Número da nota não pode ser vazio" |
+| Number too short | "Número da nota deve ter no mínimo 3 caracteres" |
+| Number too long | "Número da nota deve ter no máximo 50 caracteres" |
+| Duplicate number | "Número da nota já existe no banco de dados" |
+| Valid number | "Número da nota válido" |
 
-## Tratamento de Colisões
+## Collision Handling
 
-O serviço implementa um mecanismo automático de resolução de colisões:
+The service implements an automatic collision-resolution mechanism:
 
-1. **Tentativa incremental**: Se um código já existe, incrementa o contador (0001 → 0002 → 0003...)
-2. **Limite de segurança**: Após 9999 tentativas, adiciona timestamp em milissegundos
-3. **Verificação no banco**: Cada código é verificado no banco antes de ser retornado
+1. **Incremental retry**: If a code already exists, the counter is incremented (0001 → 0002 → 0003...)
+2. **Safety limit**: After 9999 attempts, a timestamp in milliseconds is added
+3. **Database check**: Each code is checked against the database before being returned
 
-## Testes
+## Tests
 
-O serviço possui cobertura completa de testes unitários em `test/code_generator_service_test.dart`:
+The service has comprehensive unit-test coverage in `test/code_generator_service_test.dart`:
 
-- ✅ Geração de códigos de produto
-- ✅ Geração de números de nota fiscal
-- ✅ Validação de códigos personalizados
-- ✅ Verificação de duplicatas
-- ✅ Tratamento de colisões
-- ✅ Mensagens de erro adequadas
+- ✅ Product code generation
+- ✅ Invoice number generation
+- ✅ Custom code validation
+- ✅ Duplicate checks
+- ✅ Collision handling
+- ✅ Appropriate error messages
 
-Para executar os testes:
+Run the tests with:
 
 ```bash
 flutter test test/code_generator_service_test.dart
 ```
 
-## Migração de Código Legado
+## Legacy Code Migration
 
-Se você tem produtos ou notas fiscais com códigos no formato antigo, eles continuarão funcionando normalmente. O serviço apenas garante que novos códigos sejam únicos, independentemente do formato.
+Products or invoices with codes in the old format continue to work normally. The service only ensures that new codes are unique, regardless of format.
 
 ## Performance
 
-- **Geração de código**: O(n) onde n é o número de colisões (raramente > 1)
-- **Validação**: O(1) - Uma única query no banco
-- **Verificação de duplicata**: O(1) - Query indexada no banco
+- **Code generation**: O(n), where n is the number of collisions (rarely > 1)
+- **Validation**: O(1) — a single database query
+- **Duplicate check**: O(1) — an indexed database query
 
-A coluna `code` em `ProductsRecords` possui constraint `UNIQUE`, garantindo integridade no nível do banco de dados.
+The `code` column in `ProductsRecords` has a `UNIQUE` constraint, ensuring database-level integrity.
 
-## Suporte
+## Support
 
-Para dúvidas ou problemas, consulte:
-- Código fonte: `lib/domain/code_generator_service.dart`
-- DI: `lib/application/app_injection.dart`
-- Testes: `test/code_generator_service_test.dart`
-- Repositórios: `lib/domain/repository/product_repository.dart` e `lib/domain/repository/sales_repository.dart`
+For questions or issues, see:
+- Source code: `lib/domain/code_generator_service.dart`
+- Dependency injection: `lib/application/app_injection.dart`
+- Tests: `test/code_generator_service_test.dart`
+- Repositories: `lib/domain/repository/product_repository.dart` and `lib/domain/repository/sales_repository.dart`

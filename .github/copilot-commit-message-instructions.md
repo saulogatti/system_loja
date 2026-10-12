@@ -1,26 +1,26 @@
-## Commit message padrao
+## Commit Message Standard
 
-Use sempre o formato:
+Always use this format:
 
-`<tipo>: <descricao concisa>`
+`<type>: <concise description>`
 
-### Tipos aceitos
+### Accepted Types
 
-- `feat`: nova funcionalidade
-- `fix`: correcao de bug
-- `docs`: documentacao
-- `style`: mudanca de estilo/formatacao sem alterar logica
-- `refactor`: refatoracao sem mudar comportamento
-- `test`: criacao/ajuste de testes
+- `feat`: new feature
+- `fix`: bug fix
+- `docs`: documentation
+- `style`: style/formatting change without changing logic
+- `refactor`: refactoring without changing behavior
+- `test`: create or update tests
 
-### Regras
+### Rules
 
-- Mensagem em portugues.
-- Descricao curta, objetiva e orientada ao impacto.
-- Quando fizer sentido, incluir nome da classe/modulo alterado.
+- Write commit messages in English.
+- Keep descriptions concise, objective, and impact-oriented.
+- When useful, include the name of the changed class/module.
 
-### Exemplos
+### Examples
 
-- `fix: corrigir validacao de estoque em InvoiceRepository`
-- `feat: adicionar filtro por categoria na ProductScreen`
-- `docs: atualizar fluxo de build no README`
+- `fix: correct stock validation in InvoiceRepository`
+- `feat: add category filter to ProductScreen`
+- `docs: update build workflow in README`
