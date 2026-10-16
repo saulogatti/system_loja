@@ -402,7 +402,6 @@ class _MovementSection extends StatelessWidget {
                       ),
                     ],
                   ),
-                  onTap: onTap,
                 ),
               );
             }),
