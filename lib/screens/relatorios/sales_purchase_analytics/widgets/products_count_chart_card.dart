@@ -5,7 +5,6 @@ import 'package:system_loja/screens/relatorios/sales_purchase_analytics/bloc/sal
 import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 class ProductsCountChartCard extends StatelessWidget {
-
   const ProductsCountChartCard({required this.points, super.key});
   final List<AnalyticsPoint> points;
 
@@ -33,7 +32,11 @@ class ProductsCountChartCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             if (points.isEmpty || maxCount <= 0)
-              const EmptyWidget(message: 'Sem dados para exibir.', icon: Icons.bar_chart_outlined)
+              const EmptyWidget(
+                message: 'Sem dados para exibir.',
+                icon: Icons.bar_chart_outlined,
+                semanticLabel: 'Sem dados para exibir.',
+              )
             else
               SizedBox(
                 height: 170,
@@ -67,7 +70,6 @@ class ProductsCountChartCard extends StatelessWidget {
 }
 
 class _MiniBar extends StatelessWidget {
-
   const _MiniBar({
     required this.label,
     required this.value,

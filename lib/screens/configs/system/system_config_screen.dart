@@ -206,7 +206,9 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
           if (_measurementUnits.isEmpty)
             const EmptyWidget(
               message: 'Nenhuma unidade adicionada.',
+              subMessage: 'Lista de unidades vazia.',
               icon: Icons.straighten_outlined,
+              semanticLabel: 'Lista de unidades vazia. Nenhuma unidade adicionada.',
             )
           else
             Wrap(
