@@ -41,6 +41,7 @@ dependencies:
 
   material_ui: ^1.7.0
   collection: ^1.19.1
+  lumen_kit: ^1.0.0
 dev_dependencies:
   freezed: ^4.0.1
 
