@@ -1,7 +1,8 @@
-# targets:
-#   $default:
-#     builders:
-#       json_serializable:
-#         options:
-#           explicit_to_json: true
-#           checked: true
+targets:
+  $default:
+    builders:
+      source_gen:combining_builder:
+        options:
+          preamble: |
+            // coverage:ignore-file
+            // ignore_for_file: cast_nullable_to_non_nullable, unnecessary_null_checks, unused_element, unnecessary_lambdas, inference_failure_on_collection_literal

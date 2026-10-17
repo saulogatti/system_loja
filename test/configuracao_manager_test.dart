@@ -34,6 +34,7 @@ void main() {
 
     await manager.clearOldLogs();
     await manager.updateAppSettings(AppSettings.createDefaultSettings());
+    await manager.deleteAllData();
   });
 
   group('ConfiguracaoManager - Operações Básicas', () {
@@ -103,8 +104,7 @@ void main() {
       expect(resultado.isSuccessful, isTrue);
       expect(Directory('data/backups').existsSync(), isTrue);
 
-      File('data/clientes.json').deleteSync();
-      File('data/produtos.json').deleteSync();
+      Directory('data/').deleteSync(recursive: true);
     });
 
     test('Deve lidar com backup sem arquivos existentes', () async {
@@ -112,6 +112,8 @@ void main() {
 
       // Deve retornar sucesso mesmo sem arquivos para backup
       expect(resultado.isSuccessful, isTrue);
+      expect(Directory('data/backups').existsSync(), isTrue);
+      Directory('data/backups').deleteSync(recursive: true);
     });
   });
 

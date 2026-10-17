@@ -192,6 +192,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
             textCapitalization: TextCapitalization.characters,
             onSubmitted: (_) => _addMeasurementUnit(),
             decoration: InputDecoration(
+              labelText: 'Nova unidade',
               hintText: 'Ex.: UN, KG, CX',
               border: const OutlineInputBorder(),
               suffixIcon: IconButton(
@@ -206,7 +207,9 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
           if (_measurementUnits.isEmpty)
             const EmptyWidget(
               message: 'Nenhuma unidade adicionada.',
+              subMessage: 'Lista de unidades vazia.',
               icon: Icons.straighten_outlined,
+              semanticLabel: 'Lista de unidades vazia. Nenhuma unidade adicionada.',
             )
           else
             Wrap(

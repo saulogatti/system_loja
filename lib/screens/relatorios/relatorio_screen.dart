@@ -177,7 +177,9 @@ class _EstoqueTab extends StatelessWidget {
                     children: const [
                       EmptyWidget(
                         message: 'Nenhum produto cadastrado',
+                        subMessage: 'Lista de produtos vazia.',
                         icon: Icons.inventory_2_outlined,
+                        semanticLabel: 'Lista de produtos vazia. Nenhum produto cadastrado.',
                       ),
                     ],
                   )
@@ -353,7 +355,12 @@ class _MovementSection extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           if (movements.isEmpty)
-            const EmptyWidget(message: 'Nenhum registro encontrado.', icon: Icons.search_off)
+            const EmptyWidget(
+              message: 'Nenhum registro encontrado.',
+              subMessage: 'Nenhuma movimentação registrada.',
+              icon: Icons.search_off,
+              semanticLabel: 'Nenhuma movimentação registrada. Nenhum registro encontrado.',
+            )
           else
             ...movements.map((movement) {
               final invoice = movement.invoice;
@@ -395,7 +402,6 @@ class _MovementSection extends StatelessWidget {
                       ),
                     ],
                   ),
-                  onTap: onTap,
                 ),
               );
             }),
@@ -524,7 +530,12 @@ class _NotasFiscaisTabState extends State<_NotasFiscaisTab> {
                       physics: const AlwaysScrollableScrollPhysics(),
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                       children: [
-                        EmptyWidget(message: emptyMessage, icon: Icons.receipt_long_outlined),
+                        EmptyWidget(
+                          message: emptyMessage,
+                          subMessage: 'Lista vazia.',
+                          icon: Icons.receipt_long_outlined,
+                          semanticLabel: 'Lista vazia. $emptyMessage',
+                        ),
                       ],
                     )
                   : GridView.builder(

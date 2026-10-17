@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lumen_kit/components.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:system_loja/application/app_injection.dart';
 import 'package:system_loja/core/interface/i_category_repository.dart';
 import 'package:system_loja/core/models/product_category.dart';
 import 'package:system_loja/screens/categories/cubit/category_cubit.dart';
 import 'package:system_loja/screens/categories/cubit/category_state.dart';
-import 'package:system_loja/screens/widgets/empty_widget.dart';
 
 /// Tela de gerenciamento de categorias de produtos.
 ///
@@ -93,12 +93,10 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
   Widget _buildCategoryList(List<ProductCategory> categories) {
     if (categories.isEmpty) {
-      return const EmptyWidget(
-        message: 'Nenhuma categoria cadastrada',
-        subMessage: 'Toque no botão + para adicionar',
+      return const LumenEmptyState(
+        title: 'Nenhuma categoria cadastrada',
         icon: Icons.category_outlined,
-        semanticLabel:
-            'Lista de categorias vazia. Nenhuma categoria cadastrada. Toque no botão + para adicionar.',
+        message: 'Lista de categorias vazia. Nenhuma categoria cadastrada. Toque no botão + para adicionar.',
       );
     }
 
@@ -107,7 +105,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       padding: const EdgeInsets.all(16),
       itemBuilder: (context, index) {
         final category = categories[index];
-        return Card(
+        return LumenCard(
           child: ListTile(
             leading: ExcludeSemantics(
               child: CircleAvatar(

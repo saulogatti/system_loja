@@ -48,6 +48,7 @@ class _LogsAnalyticsScreenState extends State<LogsAnalyticsScreen> {
           case LogsError(:final message):
             return Center(
               child: Semantics(
+                tooltip: 'Tentar novamente',
                 button: true,
                 child: ElevatedButton.icon(
                   onPressed: () {
@@ -59,7 +60,7 @@ class _LogsAnalyticsScreenState extends State<LogsAnalyticsScreen> {
                     'Erro ao carregar logs: $message\nToque para tentar novamente',
                     textAlign: TextAlign.center,
                   ),
-                  tooltip: 'Tentar novamente',
+
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Theme.of(context).colorScheme.onError,
                     backgroundColor: Theme.of(context).colorScheme.error,

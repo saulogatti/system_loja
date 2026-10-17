@@ -117,7 +117,11 @@ class SalesPurchaseDonutCard extends StatelessWidget {
                   ),
                   if (total <= 0) ...[
                     const SizedBox(height: 10),
-                    const EmptyWidget(message: message, icon: Icons.pie_chart_outline),
+                    const EmptyWidget(
+                      message: message,
+                      icon: Icons.pie_chart_outline,
+                      semanticLabel: message,
+                    ),
                   ],
                 ],
               ),
@@ -366,7 +370,11 @@ class _DonutZoomDialog extends StatelessWidget {
                 ),
                 if (total <= 0) ...[
                   const SizedBox(height: 12),
-                  const EmptyWidget(message: message, icon: Icons.pie_chart_outline),
+                  const EmptyWidget(
+                    message: message,
+                    icon: Icons.pie_chart_outline,
+                    semanticLabel: message,
+                  ),
                 ],
               ],
             ),
