@@ -192,6 +192,7 @@ class _SystemConfigScreenState extends State<SystemConfigScreen> {
             textCapitalization: TextCapitalization.characters,
             onSubmitted: (_) => _addMeasurementUnit(),
             decoration: InputDecoration(
+              labelText: 'Nova unidade',
               hintText: 'Ex.: UN, KG, CX',
               border: const OutlineInputBorder(),
               suffixIcon: IconButton(

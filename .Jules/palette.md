@@ -313,3 +313,6 @@
 ## 28-10-2026 - EmptyWidget Semantics Implementation Details
 **Learning:** Found that when passing custom properties like `semanticLabel` to custom project widgets like `EmptyWidget`, if the project hasn't implemented that parameter in its class definition yet, adding it to the constructor calls will cause a build failure. The `semanticLabel` property must be declared inside the widget class and utilized within its internal `Semantics` wrapper.
 **Action:** Verify the internal definition of a custom widget before adding missing accessibility parameters to its call sites, ensuring both the calls and the widget implementation are updated in tandem to prevent compilation errors.
+## 17-10-2026 - Adicionando labelText em TextFields apenas com hintText
+**Learning:** TextFields (ou TextFormFields) configurados apenas com `hintText` perdem o contexto visual quando o usuário começa a digitar. Para melhor usabilidade (rótulo flutuante) e para fornecer informações semânticas a leitores de tela de forma nativa, é fundamental ter o `labelText`.
+**Action:** Ao adicionar ou revisar campos de formulário, garantir que a propriedade `labelText` do `InputDecoration` sempre seja especificada, mesmo que exista um `hintText` detalhado.
