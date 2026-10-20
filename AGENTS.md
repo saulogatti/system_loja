@@ -4,6 +4,7 @@
 
 The canonical workspace instructions are in `.github/copilot-instructions.md`.
 This file serves only as supplementary environment guidance for running on Linux in Cursor Cloud.
+Use `lumen_kit` for design widgets and UI components.
 
 ## Prerequisites
 
