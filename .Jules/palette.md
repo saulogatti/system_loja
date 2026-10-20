@@ -145,7 +145,9 @@
 ## 24-06-2026 - Enhancing Form Field UX with TextCapitalization
 **Learning:** Text inputs capturing user names or multi-line descriptions often require manual capitalization, increasing typing friction and hindering the user flow. Using native keyboard support to auto-capitalize correctly enhances the feeling of polish.
 **Action:** Always provide `textCapitalization: TextCapitalization.words` for proper nouns (like item names, categories, and people) and `textCapitalization: TextCapitalization.sentences` for multiline descriptions or notes, letting the system keyboard do the heavy lifting automatically.
-## 24-06-2026 - Balanced Form Actions and Secondary Button Styling\n**Learning:** Hardcoding `ElevatedButton` with a grey background for secondary actions like "Cancelar" creates visual imbalance and violates standard Material guidelines. Furthermore, when form footers lack equal spacing (e.g. not wrapping actions in `Expanded`), it breaks the aesthetic rhythm of the form.\n**Action:** Use `OutlinedButton` for secondary/cancel actions. Always wrap grouped form actions (like Save and Cancel) in `Expanded` widgets within a `Row` to ensure equal width distribution, resulting in a cleaner and more professional UI.
+## 24-06-2026 - Balanced Form Actions and Secondary Button Styling
+**Learning:** Hardcoding `ElevatedButton` with a grey background for secondary actions like "Cancelar" creates visual imbalance and violates standard Material guidelines. Furthermore, when form footers lack equal spacing (e.g. not wrapping actions in `Expanded`), it breaks the aesthetic rhythm of the form.
+**Action:** Use `OutlinedButton` for secondary/cancel actions. Always wrap grouped form actions (like Save and Cancel) in `Expanded` widgets within a `Row` to ensure equal width distribution, resulting in a cleaner and more professional UI.
 ## 26-06-2024 - Auto-expanding Multiline Text Fields
 
 **Learning:** Forcing multiline fields like "descriptions" to a fixed `maxLines` limits the input area and forces users to scroll within a small box. Using `minLines` together with `maxLines: null` makes the field auto-expand gracefully as the user types, improving native-like form usability.
@@ -316,3 +318,6 @@
 ## 17-10-2026 - Adicionando labelText em TextFields apenas com hintText
 **Learning:** TextFields (ou TextFormFields) configurados apenas com `hintText` perdem o contexto visual quando o usuário começa a digitar. Para melhor usabilidade (rótulo flutuante) e para fornecer informações semânticas a leitores de tela de forma nativa, é fundamental ter o `labelText`.
 **Action:** Ao adicionar ou revisar campos de formulário, garantir que a propriedade `labelText` do `InputDecoration` sempre seja especificada, mesmo que exista um `hintText` detalhado.
+## 28-10-2026 - [Form Field Keyboard UX - Organization Name]
+**Learning:** In Flutter, `TextInputType.organization` does not exist. While `TextInputType.text` is commonly used as a fallback for organization or company name fields, using `TextInputType.name` is more appropriate as it optimizes the keyboard for proper nouns, complementing the `AutofillHints.organizationName`.
+**Action:** Use `TextInputType.name` for organization or company name fields instead of `TextInputType.text`.
