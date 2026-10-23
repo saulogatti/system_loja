@@ -4094,10 +4094,11 @@ class $$CategoriesRecordsTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (productsRecordsRefs)
-                    await $_getPrefetchedData<
+                    await $_getPrefetchedDataByColumns<
                       CategoriesRecord,
                       $CategoriesRecordsTable,
-                      ProductsRecord
+                      ProductsRecord,
+                      $ProductsRecordsTable
                     >(
                       currentTable: table,
                       referencedTable: $$CategoriesRecordsTableReferences
@@ -4108,8 +4109,8 @@ class $$CategoriesRecordsTableTableManager
                             table,
                             p0,
                           ).productsRecordsRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.categoryId == item.id),
+                      currentColumn: 'id',
+                      referencedColumn: 'category_id',
                       typedResults: items,
                     ),
                 ];
