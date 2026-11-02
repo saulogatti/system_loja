@@ -321,3 +321,7 @@
 ## 28-10-2026 - [Form Field Keyboard UX - Organization Name]
 **Learning:** In Flutter, `TextInputType.organization` does not exist. While `TextInputType.text` is commonly used as a fallback for organization or company name fields, using `TextInputType.name` is more appropriate as it optimizes the keyboard for proper nouns, complementing the `AutofillHints.organizationName`.
 **Action:** Use `TextInputType.name` for organization or company name fields instead of `TextInputType.text`.
+
+## 02-11-2026 - [Avoid Hardcoded Colors for Visual Consistency]
+**Learning:** Found multiple instances of `Colors.green` hardcoded for positive feedback (e.g., success `SnackBar` backgrounds and `CircleAvatar`s in product details). Hardcoded colors conflict with dark mode and break global application themes, leading to accessibility issues and inconsistent visual experiences.
+**Action:** For UI components and actions, always use semantic theme colors rather than hardcoding. Avoid `backgroundColor: Colors.green` on `SnackBar`s (rely on default theming) or `CircleAvatar`s (use `Theme.of(context).colorScheme.primaryContainer`).

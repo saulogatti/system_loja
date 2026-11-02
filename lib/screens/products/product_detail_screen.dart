@@ -57,21 +57,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     listener: (context, state) {
       switch (state) {
         case ProductStateUpdateSuccess():
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Produto atualizado com sucesso!'),
-              backgroundColor: Colors.green,
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Produto atualizado com sucesso!')));
           ProductListScreen.requestReload();
           context.router.maybePop(true);
         case ProductStateDeleteSuccess():
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Produto deletado com sucesso!'),
-              backgroundColor: Colors.green,
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Produto deletado com sucesso!')));
           ProductListScreen.requestReload();
           context.router.maybePop(true);
         case ProductStateError(:final message):
@@ -109,11 +103,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Ícone e nome do produto
-                const Center(
+                Center(
                   child: CircleAvatar(
                     radius: 50,
-                    backgroundColor: Colors.green,
-                    child: Icon(Icons.inventory_2, size: 50, color: Colors.white),
+                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                    child: Icon(
+                      Icons.inventory_2,
+                      size: 50,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
