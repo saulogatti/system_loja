@@ -40,28 +40,19 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           loading: () {},
           loaded: (_) {},
           created: (_) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Categoria criada com sucesso'),
-                backgroundColor: Colors.green,
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Categoria criada com sucesso')));
           },
           updated: (_) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Categoria atualizada com sucesso'),
-                backgroundColor: Colors.green,
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Categoria atualizada com sucesso')));
           },
           deleted: (_) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Categoria removida com sucesso'),
-                backgroundColor: Colors.green,
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Categoria removida com sucesso')));
           },
           error: (message) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -96,7 +87,8 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
       return const LumenEmptyState(
         title: 'Nenhuma categoria cadastrada',
         icon: Icons.category_outlined,
-        message: 'Lista de categorias vazia. Nenhuma categoria cadastrada. Toque no botão + para adicionar.',
+        message:
+            'Lista de categorias vazia. Nenhuma categoria cadastrada. Toque no botão + para adicionar.',
       );
     }
 
