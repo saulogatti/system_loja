@@ -325,3 +325,7 @@
 ## 02-11-2026 - [Avoid Hardcoded Colors for Visual Consistency]
 **Learning:** Found multiple instances of `Colors.green` hardcoded for positive feedback (e.g., success `SnackBar` backgrounds and `CircleAvatar`s in product details). Hardcoded colors conflict with dark mode and break global application themes, leading to accessibility issues and inconsistent visual experiences.
 **Action:** For UI components and actions, always use semantic theme colors rather than hardcoding. Avoid `backgroundColor: Colors.green` on `SnackBar`s (rely on default theming) or `CircleAvatar`s (use `Theme.of(context).colorScheme.primaryContainer`).
+
+## 03-11-2026 - [Consistent Actions Layout in Dialogs]
+**Learning:** Solitary secondary actions (like 'Cancelar') inside `AlertDialog`s implemented as simple `TextButton`s break visual symmetry and decrease touch target size when compared to grouped dialog actions.
+**Action:** Always wrap single secondary action buttons inside `AlertDialog`s in a `SizedBox(width: double.maxFinite)` containing a `Row` with `Expanded` `OutlinedButton`s to maintain consistent full-width design and generous touch targets.

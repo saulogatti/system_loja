@@ -72,7 +72,19 @@ class SelectProductDialog extends StatelessWidget {
             ),
     ),
     actions: [
-      TextButton(onPressed: () => context.router.maybePop(), child: const Text('Cancelar')),
+      SizedBox(
+        width: double.maxFinite,
+        child: Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () => context.router.maybePop(),
+                child: const Text('Cancelar'),
+              ),
+            ),
+          ],
+        ),
+      ),
     ],
   );
 
