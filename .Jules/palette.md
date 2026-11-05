@@ -329,3 +329,7 @@
 ## 03-11-2026 - [Consistent Actions Layout in Dialogs]
 **Learning:** Solitary secondary actions (like 'Cancelar') inside `AlertDialog`s implemented as simple `TextButton`s break visual symmetry and decrease touch target size when compared to grouped dialog actions.
 **Action:** Always wrap single secondary action buttons inside `AlertDialog`s in a `SizedBox(width: double.maxFinite)` containing a `Row` with `Expanded` `OutlinedButton`s to maintain consistent full-width design and generous touch targets.
+
+## 05-11-2026 - [Consolidating Data Row Reading in Invoice Bottom Sheet]
+**Learning:** When displaying dynamic data lists (like invoice items) or simple key-value pairs in a BottomSheet, failing to wrap the structural row with merged Semantics causes screen readers to disjointedly announce the quantity, pause, announce the name, pause, and then the total, frustrating the user.
+**Action:** Use Semantics(label: '$label: $value', excludeSemantics: true) around the structural row to consolidate the information into a single cohesive spoken announcement for screen readers. Apply this pattern to any repeating list of data rows or key-value summary rows.
