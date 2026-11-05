@@ -126,23 +126,28 @@ class InvoiceOverviewBottomSheet extends StatelessWidget {
                   ...data.items.map(
                     (item) => Padding(
                       padding: const EdgeInsets.only(bottom: 6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '${item.quantity}× ${item.productName}',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                              overflow: TextOverflow.ellipsis,
+                      child: Semantics(
+                        label:
+                            '${item.quantity} vezes ${item.productName}, R\$ ${item.totalValue.toStringAsFixed(2)}',
+                        excludeSemantics: true,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${item.quantity}× ${item.productName}',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'R\$ ${item.totalValue.toStringAsFixed(2)}',
-                            style: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
-                          ),
-                        ],
+                            Text(
+                              'R\$ ${item.totalValue.toStringAsFixed(2)}',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
