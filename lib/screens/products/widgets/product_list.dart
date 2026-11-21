@@ -9,12 +9,8 @@ import 'package:system_loja/screens/widgets/empty_widget.dart';
 ///
 /// Exibe os produtos em formato de lista com cards ou mensagem quando vazio.
 class ProductList extends StatelessWidget {
+  const ProductList({required this.products, required this.onProductTap, super.key});
 
-  const ProductList({
-    required this.products,
-    required this.onProductTap,
-    super.key,
-  });
   /// Espaçamento padrão entre título e lista
   static const double _defaultSpacing = 16;
   static const SliverGridDelegateWithMaxCrossAxisExtent _gridDelegate =
@@ -30,42 +26,41 @@ class ProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const Text(
-          'Produtos Cadastrados',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: _defaultSpacing),
-        if (products.isEmpty)
-          const EmptyWidget(
-            message: 'Nenhum produto cadastrado',
-            subMessage: 'Lista de produtos vazia.',
-            icon: Icons.inventory_2_outlined,
-            semanticLabel:
-                'Lista de produtos vazia. Nenhum produto cadastrado.',
-          )
-        else
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.only(bottom: 16),
-              gridDelegate: _gridDelegate,
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return CardListItem(
-                  colorAvatar: Colors.green,
-                  title: product.name,
-                  subTitle:
-                      'Código: ${product.code}\n${product.price.toFormattedPrice()} - Estoque: ${product.stockQuantity}',
-                  margin: EdgeInsets.zero,
-                  onTap: () => onProductTap(product),
-                );
-              },
-            ),
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      const Text(
+        'Produtos Cadastrados',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: _defaultSpacing),
+      if (products.isEmpty)
+        const EmptyWidget(
+          message: 'Nenhum produto cadastrado',
+          subMessage: 'Lista de produtos vazia.',
+          icon: Icons.inventory_2_outlined,
+          semanticLabel: 'Lista de produtos vazia. Nenhum produto cadastrado.',
+        )
+      else
+        Expanded(
+          child: GridView.builder(
+            padding: const EdgeInsets.only(bottom: 16),
+            gridDelegate: _gridDelegate,
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return CardListItem(
+                colorAvatar: Theme.of(context).colorScheme.primaryContainer,
+                title: product.name,
+                subTitle:
+                    'Código: ${product.code}\n${product.price.toFormattedPrice()} - Estoque: ${product.stockQuantity}',
+                margin: EdgeInsets.zero,
+                onTap: () => onProductTap(product),
+              );
+            },
           ),
-      ],
-    );
+        ),
+    ],
+  );
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {

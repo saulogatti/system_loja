@@ -22,9 +22,9 @@ class ProductInfoScreen extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) => BlocProvider<ProductCubit>(
-      create: (_) => ProductCubit(appInjection.get<IProductRepository>()),
-      child: this,
-    );
+    create: (_) => ProductCubit(appInjection.get<IProductRepository>()),
+    child: this,
+  );
 }
 
 class _ProductInfoScreenState extends State<ProductInfoScreen> {
@@ -40,46 +40,43 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
 
   @override
   Widget build(BuildContext context) => BlocListener<ProductCubit, ProductState>(
-      listener: (context, state) {
-        if (state is ProductStateInsertSuccess) {
-          _mostrarSucesso(_mensagemSucesso);
-          context.router.maybePop(true);
-        }
-        if (state is ProductStateError) {
-          _mostrarErro(state.message);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Cadastro de Produto'),
-          leading: const AutoLeadingButton(),
-        ),
-        body: BlocBuilder<ProductCubit, ProductState>(
-          builder: (context, state) {
-            final isLoading = state is ProductStateLoading;
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: ProductForm(
-                isLoading: isLoading,
-                formKey: _formKey,
-                nomeController: _nomeController,
-                codigoController: _codigoController,
-                precoController: _precoController,
-                estoqueController: _estoqueController,
-                descricaoController: _descricaoController,
-                selectedCategoryId: _selectedCategoryId,
-                onCategoryChanged: (categoryId) {
-                  setState(() {
-                    _selectedCategoryId = categoryId;
-                  });
-                },
-                onSubmit: _adicionarProduto,
-              ),
-            );
-          },
-        ),
+    listener: (context, state) {
+      if (state is ProductStateInsertSuccess) {
+        _mostrarSucesso(_mensagemSucesso);
+        context.router.maybePop(true);
+      }
+      if (state is ProductStateError) {
+        _mostrarErro(state.message);
+      }
+    },
+    child: Scaffold(
+      appBar: AppBar(title: const Text('Cadastro de Produto'), leading: const AutoLeadingButton()),
+      body: BlocBuilder<ProductCubit, ProductState>(
+        builder: (context, state) {
+          final isLoading = state is ProductStateLoading;
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: ProductForm(
+              isLoading: isLoading,
+              formKey: _formKey,
+              nomeController: _nomeController,
+              codigoController: _codigoController,
+              precoController: _precoController,
+              estoqueController: _estoqueController,
+              descricaoController: _descricaoController,
+              selectedCategoryId: _selectedCategoryId,
+              onCategoryChanged: (categoryId) {
+                setState(() {
+                  _selectedCategoryId = categoryId;
+                });
+              },
+              onSubmit: _adicionarProduto,
+            ),
+          );
+        },
       ),
-    );
+    ),
+  );
 
   @override
   void dispose() {
@@ -132,8 +129,6 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
 
   /// Exibe mensagem de sucesso em SnackBar.
   void _mostrarSucesso(String mensagem) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(mensagem), backgroundColor: Colors.green));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(mensagem)));
   }
 }

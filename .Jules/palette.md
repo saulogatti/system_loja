@@ -321,3 +321,15 @@
 ## 28-10-2026 - [Form Field Keyboard UX - Organization Name]
 **Learning:** In Flutter, `TextInputType.organization` does not exist. While `TextInputType.text` is commonly used as a fallback for organization or company name fields, using `TextInputType.name` is more appropriate as it optimizes the keyboard for proper nouns, complementing the `AutofillHints.organizationName`.
 **Action:** Use `TextInputType.name` for organization or company name fields instead of `TextInputType.text`.
+
+## 02-11-2026 - [Avoid Hardcoded Colors for Visual Consistency]
+**Learning:** Found multiple instances of `Colors.green` hardcoded for positive feedback (e.g., success `SnackBar` backgrounds and `CircleAvatar`s in product details). Hardcoded colors conflict with dark mode and break global application themes, leading to accessibility issues and inconsistent visual experiences.
+**Action:** For UI components and actions, always use semantic theme colors rather than hardcoding. Avoid `backgroundColor: Colors.green` on `SnackBar`s (rely on default theming) or `CircleAvatar`s (use `Theme.of(context).colorScheme.primaryContainer`).
+
+## 03-11-2026 - [Consistent Actions Layout in Dialogs]
+**Learning:** Solitary secondary actions (like 'Cancelar') inside `AlertDialog`s implemented as simple `TextButton`s break visual symmetry and decrease touch target size when compared to grouped dialog actions.
+**Action:** Always wrap single secondary action buttons inside `AlertDialog`s in a `SizedBox(width: double.maxFinite)` containing a `Row` with `Expanded` `OutlinedButton`s to maintain consistent full-width design and generous touch targets.
+
+## 05-11-2026 - [Consolidating Data Row Reading in Invoice Bottom Sheet]
+**Learning:** When displaying dynamic data lists (like invoice items) or simple key-value pairs in a BottomSheet, failing to wrap the structural row with merged Semantics causes screen readers to disjointedly announce the quantity, pause, announce the name, pause, and then the total, frustrating the user.
+**Action:** Use Semantics(label: '$label: $value', excludeSemantics: true) around the structural row to consolidate the information into a single cohesive spoken announcement for screen readers. Apply this pattern to any repeating list of data rows or key-value summary rows.

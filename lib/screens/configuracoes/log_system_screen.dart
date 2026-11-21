@@ -137,9 +137,18 @@ class _LogSystemScreenState extends State<LogSystemScreen> {
                           'Código: ${log.code}\nMensagem: ${log.message}\nDetalhes: ${log.stackTrace}',
                         ),
                         actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: const Text('Fechar'),
+                          SizedBox(
+                            width: double.maxFinite,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: OutlinedButton(
+                                    onPressed: () => Navigator.of(context).pop(),
+                                    child: const Text('Fechar'),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

@@ -10,65 +10,78 @@ import 'package:system_loja/core/models/user.dart';
 ///
 /// Exibe todas as informações do usuário em um dialog modal.
 class UsuarioDetailsDialog extends StatelessWidget {
-
   const UsuarioDetailsDialog({required this.usuario, super.key});
   final User usuario;
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-      title: Text(usuario.name),
-      content: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildDetailRow(context, 'ID', usuario.id.toString()),
-            _buildDetailRow(context, 'Email', usuario.email ?? 'N/A'),
-            _buildDetailRow(
-              context,
-              'Nível de Permissão',
-              AuthorizationLevel.values
-                  .firstWhere((level) => level.value == usuario.permission)
-                  .toDisplayName(),
-            ),
-            _buildDetailRow(
-              context,
-              'Data de Cadastro',
-              DateFormat('dd/MM/yyyy HH:mm:ss').format(usuario.registrationDate),
-            ),
-            _buildDetailRow(
-              context,
-              'Última Atualização',
-              DateFormat('dd/MM/yyyy HH:mm:ss').format(usuario.lastUpdatedDate),
-            ),
-          ],
-        ),
+    title: Text(usuario.name),
+    content: SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildDetailRow(context, 'ID', usuario.id.toString()),
+          _buildDetailRow(context, 'Email', usuario.email ?? 'N/A'),
+          _buildDetailRow(
+            context,
+            'Nível de Permissão',
+            AuthorizationLevel.values
+                .firstWhere((level) => level.value == usuario.permission)
+                .toDisplayName(),
+          ),
+          _buildDetailRow(
+            context,
+            'Data de Cadastro',
+            DateFormat('dd/MM/yyyy HH:mm:ss').format(usuario.registrationDate),
+          ),
+          _buildDetailRow(
+            context,
+            'Última Atualização',
+            DateFormat('dd/MM/yyyy HH:mm:ss').format(usuario.lastUpdatedDate),
+          ),
+        ],
       ),
-      actions: [TextButton(onPressed: () => context.router.maybePop(), child: const Text('Fechar'))],
-    );
-
-  Widget _buildDetailRow(BuildContext context, String label, String value) => Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Semantics(
-        label: '$label: $value',
-        excludeSemantics: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    ),
+    actions: [
+      SizedBox(
+        width: double.maxFinite,
+        child: Row(
           children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontSize: 12,
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () => context.router.maybePop(),
+                child: const Text('Fechar'),
               ),
             ),
-            const SizedBox(height: 4),
-            Text(value, style: const TextStyle(fontSize: 16)),
           ],
         ),
       ),
-    );
+    ],
+  );
+
+  Widget _buildDetailRow(BuildContext context, String label, String value) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Semantics(
+      label: '$label: $value',
+      excludeSemantics: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(value, style: const TextStyle(fontSize: 16)),
+        ],
+      ),
+    ),
+  );
 
   /// Mostra o dialog de detalhes do usuário
   static void show(BuildContext context, User usuario) {
