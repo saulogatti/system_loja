@@ -13,7 +13,6 @@ import 'package:system_loja/screens/relatorios/sales_purchase_analytics/widgets/
 import 'package:system_loja/screens/relatorios/sales_purchase_analytics/widgets/summary_cards.dart';
 
 class LoadedBody extends StatefulWidget {
-
   const LoadedBody({required this.state, super.key});
   final SalesPurchaseAnalyticsLoaded state;
 
@@ -30,41 +29,6 @@ class LoadedBody extends StatefulWidget {
 class _LoadedBodyState extends State<LoadedBody> {
   GridSortOrder _sortOrder = GridSortOrder.recentes;
 
-  List<AnalyticsPoint> _sortedPoints() {
-    final points = widget.state.points.toList();
-
-    if (widget.state.grouping == SalesPurchaseGrouping.byDate) {
-      points.sort((a, b) {
-        final ak = _dateSortKey(a.label);
-        final bk = _dateSortKey(b.label);
-        if (ak == null && bk == null) return 0;
-        if (ak == null) return 1;
-        if (bk == null) return -1;
-        return ak.compareTo(bk);
-      });
-    } else {
-      points.sort(
-        (a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()),
-      );
-    }
-
-    if (_sortOrder == GridSortOrder.recentes) {
-      return points.reversed.toList();
-    }
-    return points;
-  }
-
-  int? _dateSortKey(String label) {
-    // Esperado: DD/MM. Fallback: null (vai pro fim sem crash).
-    final parts = label.split('/');
-    if (parts.length != 2) return null;
-    final dd = int.tryParse(parts[0]);
-    final mm = int.tryParse(parts[1]);
-    if (dd == null || mm == null) return null;
-    if (dd < 1 || dd > 31 || mm < 1 || mm > 12) return null;
-    return mm * 100 + dd;
-  }
-
   @override
   Widget build(BuildContext context) {
     final state = widget.state;
@@ -72,9 +36,7 @@ class _LoadedBodyState extends State<LoadedBody> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<SalesPurchaseAnalyticsBloc>().add(
-          ChangeSalesPurchaseGrouping(state.grouping),
-        );
+        context.read<SalesPurchaseAnalyticsBloc>().add(ChangeSalesPurchaseGrouping(state.grouping));
       },
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -82,9 +44,7 @@ class _LoadedBodyState extends State<LoadedBody> {
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverToBoxAdapter(
-              child: GroupingSegmentedControl(current: state.grouping),
-            ),
+            sliver: SliverToBoxAdapter(child: GroupingSegmentedControl(current: state.grouping)),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverPadding(
@@ -139,10 +99,7 @@ class _LoadedBodyState extends State<LoadedBody> {
 
                   return Column(
                     children: [
-                      for (final tile in tiles) ...[
-                        tile,
-                        const SizedBox(height: 12),
-                      ],
+                      for (final tile in tiles) ...[tile, const SizedBox(height: 12)],
                     ],
                   );
                 },
@@ -166,15 +123,45 @@ class _LoadedBodyState extends State<LoadedBody> {
               ),
               delegate: SliverChildBuilderDelegate((context, index) {
                 final point = sortedPoints[index];
-                return ComparisonBarTile(
-                  point: point,
-                  maxValue: state.maxValue,
-                );
+                return ComparisonBarTile(point: point, maxValue: state.maxValue);
               }, childCount: sortedPoints.length),
             ),
           ),
         ],
       ),
     );
+  }
+
+  int? _dateSortKey(String label) {
+    // Esperado: DD/MM. Fallback: null (vai pro fim sem crash).
+    final parts = label.split('/');
+    if (parts.length != 2) return null;
+    final dd = int.tryParse(parts[0]);
+    final mm = int.tryParse(parts[1]);
+    if (dd == null || mm == null) return null;
+    if (dd < 1 || dd > 31 || mm < 1 || mm > 12) return null;
+    return mm * 100 + dd;
+  }
+
+  List<AnalyticsPoint> _sortedPoints() {
+    final points = widget.state.points.toList();
+
+    if (widget.state.grouping == SalesPurchaseGrouping.byDate) {
+      points.sort((a, b) {
+        final ak = _dateSortKey(a.label);
+        final bk = _dateSortKey(b.label);
+        if (ak == null && bk == null) return 0;
+        if (ak == null) return 1;
+        if (bk == null) return -1;
+        return ak.compareTo(bk);
+      });
+    } else {
+      points.sort((a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()));
+    }
+
+    if (_sortOrder == GridSortOrder.recentes) {
+      return points.reversed.toList();
+    }
+    return points;
   }
 }
