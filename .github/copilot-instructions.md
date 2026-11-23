@@ -67,3 +67,10 @@ Use these instructions as a quick supplement to `README.md`, `CONTRIBUTING.md`, 
 - `documentation/TESTING_VALIDATION.md`
 - `documentation/historico/` (historical material; non-canonical)
 - `flutter_rules.md`
+
+<!-- mermaid-ai-skills:start -->
+## Mermaid Diagrams
+
+When the user asks to create, edit, or visualize a diagram, follow the
+instructions in `.github/instructions/mermaid.instructions.md`.
+<!-- mermaid-ai-skills:end -->

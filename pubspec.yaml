@@ -4,7 +4,7 @@ version: 0.0.1
 publish_to: "none"
 
 environment:
-  sdk: ">=3.13.0 <4.0.0"
+  sdk: ">=3.14.0 <4.0.0"
   flutter: ">=3.47.0 <4.0.0"
 
 dependencies:
@@ -14,14 +14,14 @@ dependencies:
     sdk: flutter
 
   path_provider: ^2.1.6
-  synchronized: ^3.5.0
+  synchronized: ^3.6.1+1
   path: ^1.9.1
   bcrypt: ^1.2.0
   json_annotation: ^4.12.0
 
   async: ^2.13.1
   meta: ^1.19.0
-  crypto: ^3.0.7
+  crypto: ^3.0.8
   flutter_bloc: ^9.1.1
   bloc: ^9.2.1
   freezed_annotation: ^3.1.0
@@ -31,17 +31,17 @@ dependencies:
 
   auto_route: ^11.2.0
   intl: ^0.20.3
-  drift: ^2.35.3
+  drift: ^2.35.4
   drift_flutter: ^0.3.1
   sqlite3_flutter_libs: ^0.6.0+eol
   file_selector: ^1.1.0
-  sqlite3: ^3.8.0
+  sqlite3: ^3.9.2
   get_it: ^9.3.0
-  archive: ^4.5.2
+  archive: ^4.7.1
 
-  material_ui: ^1.8.0
+  material_ui: ^1.11.1
   collection: ^1.19.1
-  lumen_kit: ^1.0.0
+  lumen_kit: ^1.5.0
 dev_dependencies:
   freezed: ^4.0.1
 
@@ -50,7 +50,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   build_runner: ^2.16.1
   json_serializable: ^6.15.2
-  drift_dev: ^2.35.2
+  drift_dev: ^2.35.3
   auto_route_generator: ^10.6.0
   mockito: ^5.8.1
 flutter:
