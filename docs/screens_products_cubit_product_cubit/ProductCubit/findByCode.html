@@ -80,16 +80,10 @@ um estado contendo o resultado da busca.</p>
   final result = await _productRepository.findByCode(codigo);
   switch (result) {
     case ResultSuccess(result: final produto):
-      emit(
-        ProductState.error(
-          message: &#39;Funcionalidade não implementada: ${produto.name}&#39;,
-        ),
-      );
+      emit(ProductState.error(message: &#39;Funcionalidade não implementada: ${produto.name}&#39;));
 
     case ResultError(resultError: final errorMessage):
-      emit(
-        ProductState.error(message: &#39;Erro ao buscar produto: $errorMessage&#39;),
-      );
+      emit(ProductState.error(message: &#39;Erro ao buscar produto: $errorMessage&#39;));
   }
 }</code></pre>
 </section>

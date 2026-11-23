@@ -103,7 +103,8 @@ the <a href="../../screens_sales_cubit_sales_invoice_state/SalesInvoiceState/has
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&amp;&amp;other is SalesInvoiceState&amp;&amp;(identical(other.form, form) || other.form == form));
+  final _this = this as SalesInvoiceState;
+  return identical(this, other) || (other.runtimeType == runtimeType&amp;&amp;other is SalesInvoiceState&amp;&amp;(identical(other.form, _this.form) || other.form == _this.form));
 }</code></pre>
 </section>
 

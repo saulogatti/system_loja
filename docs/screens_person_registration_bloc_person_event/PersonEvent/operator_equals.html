@@ -103,7 +103,8 @@ the <a href="../../screens_person_registration_bloc_person_event/PersonEvent/has
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&amp;&amp;other is PersonEvent&amp;&amp;(identical(other.formData, formData) || other.formData == formData));
+  final _this = this as PersonEvent;
+  return identical(this, other) || (other.runtimeType == runtimeType&amp;&amp;other is PersonEvent&amp;&amp;(identical(other.formData, _this.formData) || other.formData == _this.formData));
 }</code></pre>
 </section>
 

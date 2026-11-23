@@ -104,7 +104,10 @@ like <a href="https://api.flutter.dev/flutter/dart-collection/HashSet-class.html
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-int get hashCode =&gt; Object.hash(runtimeType,form);</code></pre>
+int get hashCode {
+  final _this = this as SalesInvoiceState;
+  return Object.hash(runtimeType,_this.form);
+}</code></pre>
 </section>
 
   </section>

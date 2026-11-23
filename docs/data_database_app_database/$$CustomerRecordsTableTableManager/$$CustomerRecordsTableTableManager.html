@@ -118,7 +118,16 @@
               registrationDate: registrationDate,
             ),
         withReferenceMapper: (p0) =&gt; p0
-            .map((e) =&gt; (e.readTable(table), BaseReferences(db, table, e)))
+            .map(
+              (e) =&gt; (
+                e.readTable&lt;$CustomerRecordsTable, CustomerRecord&gt;(table),
+                BaseReferences&lt;
+                  _$AppDatabase,
+                  $CustomerRecordsTable,
+                  CustomerRecord
+                &gt;(db, table, e),
+              ),
+            )
             .toList(),
         prefetchHooksCallback: null,
       ),

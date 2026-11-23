@@ -72,11 +72,7 @@
     case ResultSuccess(result: final produtos):
       emit(ProductState.loaded(produtos: produtos.toList()));
     case ResultError(resultError: final errorMessage):
-      emit(
-        ProductState.error(
-          message: &#39;Erro ao carregar produtos: $errorMessage&#39;,
-        ),
-      );
+      emit(ProductState.error(message: &#39;Erro ao carregar produtos: $errorMessage&#39;));
   }
 }</code></pre>
 </section>

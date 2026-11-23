@@ -115,7 +115,9 @@ Widget build(BuildContext context) =&gt; AlertDialog(
     child: products.isEmpty
         ? const EmptyWidget(
             message: &#39;Nenhum produto disponível&#39;,
+            subMessage: &#39;Não há produtos para adicionar.&#39;,
             icon: Icons.inventory_2_outlined,
+            semanticLabel: &#39;Não há produtos para adicionar. Nenhum produto disponível.&#39;,
           )
         : ListView.builder(
             shrinkWrap: true,
@@ -149,7 +151,17 @@ Widget build(BuildContext context) =&gt; AlertDialog(
                   subtitle: Text(
                     &#39;R\$ ${product.price.toStringAsFixed(2)} - Estoque: ${product.stockQuantity}&#39;,
                   ),
-                  trailing: Icon(stockIcon, color: stockColor),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(stockIcon, color: stockColor),
+                      const SizedBox(width: 8),
+                      Icon(
+                        Icons.chevron_right,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ],
+                  ),
                   onTap: () =&gt; context.router.maybePop(product),
                 ),
               );
@@ -157,7 +169,19 @@ Widget build(BuildContext context) =&gt; AlertDialog(
           ),
   ),
   actions: [
-    TextButton(onPressed: () =&gt; context.router.maybePop(), child: const Text(&#39;Cancelar&#39;)),
+    SizedBox(
+      width: double.maxFinite,
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlinedButton(
+              onPressed: () =&gt; context.router.maybePop(),
+              child: const Text(&#39;Cancelar&#39;),
+            ),
+          ),
+        ],
+      ),
+    ),
   ],
 );</code></pre>
 </section>

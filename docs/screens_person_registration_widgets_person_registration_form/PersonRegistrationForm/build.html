@@ -132,6 +132,7 @@ Widget build(BuildContext context) {
                   value: type,
                   label: Text(type.displayName),
                   icon: Icon(type == PersonType.individual ? Icons.person : Icons.business),
+                  tooltip: &#39;Cadastrar como ${type.displayName}&#39;,
                 ),
               )
               .toList(),
@@ -152,7 +153,12 @@ Widget build(BuildContext context) {
             },
           ],
           textInputAction: TextInputAction.next,
-          decoration: InputDecoration(labelText: &#39;${selectedPersonType.nameLabel} *&#39;),
+          decoration: InputDecoration(
+            labelText: &#39;${selectedPersonType.nameLabel} *&#39;,
+            border: const OutlineInputBorder(),
+            hintText: isIndividual ? &#39;Ex: João da Silva&#39; : &#39;Ex: Empresa Silva LTDA&#39;,
+            prefixIcon: Icon(isIndividual ? Icons.person : Icons.business),
+          ),
           validator: (value) =&gt; combineValidators([
             (v) =&gt; validateRequired(v, selectedPersonType.nameLabel),
             (v) =&gt; validateMinLength(v, 3, selectedPersonType.nameLabel),

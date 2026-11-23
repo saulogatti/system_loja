@@ -114,11 +114,13 @@ Widget build(BuildContext context) =&gt; SegmentedButton&lt;SalesPurchaseGroupin
       value: SalesPurchaseGrouping.byDate,
       label: Text(&#39;Por Data&#39;),
       icon: Icon(Icons.calendar_today),
+      tooltip: &#39;Agrupar por data&#39;,
     ),
     ButtonSegment(
       value: SalesPurchaseGrouping.byProduct,
       label: Text(&#39;Por Produto&#39;),
       icon: Icon(Icons.inventory_2),
+      tooltip: &#39;Agrupar por produto&#39;,
     ),
   ],
   selected: {current},

@@ -85,7 +85,8 @@ mainly for debugging or logging.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 String toString() {
-  return &#39;SalesInvoiceFormData(invoiceType: $invoiceType, paymentMethod: $paymentMethod, person: $person, linesByProductId: $linesByProductId, orderedProductIds: $orderedProductIds, enableCodeGeneration: $enableCodeGeneration, invoiceNumber: $invoiceNumber, isSubmitting: $isSubmitting)&#39;;
+  final _this = this as SalesInvoiceFormData;
+  return &#39;SalesInvoiceFormData(invoiceType: ${_this.invoiceType}, paymentMethod: ${_this.paymentMethod}, person: ${_this.person}, linesByProductId: ${_this.linesByProductId}, orderedProductIds: ${_this.orderedProductIds}, enableCodeGeneration: ${_this.enableCodeGeneration}, invoiceNumber: ${_this.invoiceNumber}, isSubmitting: ${_this.isSubmitting})&#39;;
 }</code></pre>
 </section>
 

@@ -109,36 +109,37 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) =&gt; Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      const Text(
-        &#39;Usuários Cadastrados&#39;,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  crossAxisAlignment: CrossAxisAlignment.stretch,
+  children: [
+    const Text(
+      &#39;Usuários Cadastrados&#39;,
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    ),
+    const SizedBox(height: 16),
+    if (usuarios.isEmpty)
+      const EmptyWidget(
+        message: &#39;Nenhum usuário cadastrado&#39;,
+        icon: Icons.people_outline,
+        subMessage: &#39;Lista de usuários vazia.&#39;,
+        semanticLabel: &#39;Lista de usuários vazia. Nenhum usuário cadastrado.&#39;,
+      )
+    else
+      ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: usuarios.length,
+        itemBuilder: (context, index) {
+          final usuario = usuarios[index];
+          return UsuarioListItem(
+            usuario: usuario,
+            onEdit: () =&gt; onEdit(usuario),
+            onDelete: () =&gt; onDelete(usuario),
+            onTap: () =&gt; onTap(usuario),
+          );
+        },
       ),
-      const SizedBox(height: 16),
-      if (usuarios.isEmpty)
-        const EmptyWidget(
-          message: &#39;Nenhum usuário cadastrado&#39;,
-          icon: Icons.people_outline,
-          subMessage: &#39;Lista de usuários vazia.&#39;,
-        )
-      else
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: usuarios.length,
-          itemBuilder: (context, index) {
-            final usuario = usuarios[index];
-            return UsuarioListItem(
-              usuario: usuario,
-              onEdit: () =&gt; onEdit(usuario),
-              onDelete: () =&gt; onDelete(usuario),
-              onTap: () =&gt; onTap(usuario),
-            );
-          },
-        ),
-    ],
-  );</code></pre>
+  ],
+);</code></pre>
 </section>
 
 

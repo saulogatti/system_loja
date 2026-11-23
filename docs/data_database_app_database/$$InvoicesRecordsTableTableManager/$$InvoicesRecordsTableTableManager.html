@@ -142,7 +142,16 @@
               type: type,
             ),
         withReferenceMapper: (p0) =&gt; p0
-            .map((e) =&gt; (e.readTable(table), BaseReferences(db, table, e)))
+            .map(
+              (e) =&gt; (
+                e.readTable&lt;$InvoicesRecordsTable, InvoicesRecord&gt;(table),
+                BaseReferences&lt;
+                  _$AppDatabase,
+                  $InvoicesRecordsTable,
+                  InvoicesRecord
+                &gt;(db, table, e),
+              ),
+            )
             .toList(),
         prefetchHooksCallback: null,
       ),

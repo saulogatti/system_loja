@@ -109,42 +109,41 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) =&gt; Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      const Text(
-        &#39;Produtos Cadastrados&#39;,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
-      const SizedBox(height: _defaultSpacing),
-      if (products.isEmpty)
-        const EmptyWidget(
-          message: &#39;Nenhum produto cadastrado&#39;,
-          subMessage: &#39;Lista de produtos vazia.&#39;,
-          icon: Icons.inventory_2_outlined,
-          semanticLabel:
-              &#39;Lista de produtos vazia. Nenhum produto cadastrado.&#39;,
-        )
-      else
-        Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.only(bottom: 16),
-            gridDelegate: _gridDelegate,
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return CardListItem(
-                colorAvatar: Colors.green,
-                title: product.name,
-                subTitle:
-                    &#39;Código: ${product.code}\n${product.price.toFormattedPrice()} - Estoque: ${product.stockQuantity}&#39;,
-                margin: EdgeInsets.zero,
-                onTap: () =&gt; onProductTap(product),
-              );
-            },
-          ),
+  crossAxisAlignment: CrossAxisAlignment.stretch,
+  children: [
+    const Text(
+      &#39;Produtos Cadastrados&#39;,
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    ),
+    const SizedBox(height: _defaultSpacing),
+    if (products.isEmpty)
+      const EmptyWidget(
+        message: &#39;Nenhum produto cadastrado&#39;,
+        subMessage: &#39;Lista de produtos vazia.&#39;,
+        icon: Icons.inventory_2_outlined,
+        semanticLabel: &#39;Lista de produtos vazia. Nenhum produto cadastrado.&#39;,
+      )
+    else
+      Expanded(
+        child: GridView.builder(
+          padding: const EdgeInsets.only(bottom: 16),
+          gridDelegate: _gridDelegate,
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            final product = products[index];
+            return CardListItem(
+              colorAvatar: Theme.of(context).colorScheme.primaryContainer,
+              title: product.name,
+              subTitle:
+                  &#39;Código: ${product.code}\n${product.price.toFormattedPrice()} - Estoque: ${product.stockQuantity}&#39;,
+              margin: EdgeInsets.zero,
+              onTap: () =&gt; onProductTap(product),
+            );
+          },
         ),
-    ],
-  );</code></pre>
+      ),
+  ],
+);</code></pre>
 </section>
 
 

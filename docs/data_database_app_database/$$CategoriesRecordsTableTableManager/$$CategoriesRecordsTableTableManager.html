@@ -111,7 +111,7 @@
         withReferenceMapper: (p0) =&gt; p0
             .map(
               (e) =&gt; (
-                e.readTable(table),
+                e.readTable&lt;$CategoriesRecordsTable, CategoriesRecord&gt;(table),
                 $$CategoriesRecordsTableReferences(db, table, e),
               ),
             )
@@ -126,10 +126,11 @@
             getPrefetchedDataCallback: (items) async {
               return [
                 if (productsRecordsRefs)
-                  await $_getPrefetchedData&lt;
+                  await $_getPrefetchedDataByColumns&lt;
                     CategoriesRecord,
                     $CategoriesRecordsTable,
-                    ProductsRecord
+                    ProductsRecord,
+                    $ProductsRecordsTable
                   &gt;(
                     currentTable: table,
                     referencedTable: $$CategoriesRecordsTableReferences
@@ -140,8 +141,8 @@
                           table,
                           p0,
                         ).productsRecordsRefs,
-                    referencedItemsForCurrentItem: (item, referencedItems) =&gt;
-                        referencedItems.where((e) =&gt; e.categoryId == item.id),
+                    currentColumn: &#39;id&#39;,
+                    referencedColumn: &#39;category_id&#39;,
                     typedResults: items,
                   ),
               ];

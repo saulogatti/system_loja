@@ -109,30 +109,25 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) =&gt; Center(
-    child: Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.error_outline,
-            color: Theme.of(context).colorScheme.error,
-            size: 48,
-          ),
-          const SizedBox(height: 12),
-          Text(message, textAlign: TextAlign.center),
-          const SizedBox(height: 16),
-          FilledButton.icon(
-            onPressed: () =&gt; context.read&lt;SalesPurchaseAnalyticsBloc&gt;().add(
-              const LoadSalesPurchaseAnalytics(),
-            ),
-            icon: const Icon(Icons.refresh),
-            label: const Text(&#39;Tentar novamente&#39;),
-          ),
-        ],
-      ),
+  child: Padding(
+    padding: const EdgeInsets.all(24),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.error_outline, color: Theme.of(context).colorScheme.error, size: 48),
+        const SizedBox(height: 12),
+        Text(message, textAlign: TextAlign.center),
+        const SizedBox(height: 16),
+        FilledButton.icon(
+          onPressed: () =&gt;
+              context.read&lt;SalesPurchaseAnalyticsBloc&gt;().add(const LoadSalesPurchaseAnalytics()),
+          icon: const Icon(Icons.refresh),
+          label: const Text(&#39;Tentar novamente&#39;),
+        ),
+      ],
     ),
-  );</code></pre>
+  ),
+);</code></pre>
 </section>
 
 

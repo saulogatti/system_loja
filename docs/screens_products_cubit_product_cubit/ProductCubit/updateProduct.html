@@ -88,17 +88,12 @@ a lista de produtos após a atualização.</p>
         case ResultError(resultError: final errorMessage):
           emit(
             ProductState.error(
-              message:
-                  &#39;Erro ao carregar produtos após atualização: $errorMessage&#39;,
+              message: &#39;Erro ao carregar produtos após atualização: $errorMessage&#39;,
             ),
           );
       }
     case ResultError(resultError: final errorMessage):
-      emit(
-        ProductState.error(
-          message: &#39;Erro ao atualizar produto: $errorMessage&#39;,
-        ),
-      );
+      emit(ProductState.error(message: &#39;Erro ao atualizar produto: $errorMessage&#39;));
   }
 }</code></pre>
 </section>

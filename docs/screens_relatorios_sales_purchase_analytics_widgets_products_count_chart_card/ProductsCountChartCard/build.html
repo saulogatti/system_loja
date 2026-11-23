@@ -131,7 +131,11 @@ Widget build(BuildContext context) {
           ),
           const SizedBox(height: 12),
           if (points.isEmpty || maxCount &lt;= 0)
-            const EmptyWidget(message: &#39;Sem dados para exibir.&#39;, icon: Icons.bar_chart_outlined)
+            const EmptyWidget(
+              message: &#39;Sem dados para exibir.&#39;,
+              icon: Icons.bar_chart_outlined,
+              semanticLabel: &#39;Sem dados para exibir.&#39;,
+            )
           else
             SizedBox(
               height: 170,

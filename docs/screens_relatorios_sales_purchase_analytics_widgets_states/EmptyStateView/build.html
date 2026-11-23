@@ -117,10 +117,10 @@ Widget build(BuildContext context) {
   return EmptyWidget(
     message: &#39;Nenhum dado encontrado $groupingText.&#39;,
     icon: Icons.bar_chart,
+    semanticLabel: &#39;Nenhum dado encontrado $groupingText.&#39;,
     action: OutlinedButton.icon(
-      onPressed: () =&gt; context.read&lt;SalesPurchaseAnalyticsBloc&gt;().add(
-        const LoadSalesPurchaseAnalytics(),
-      ),
+      onPressed: () =&gt;
+          context.read&lt;SalesPurchaseAnalyticsBloc&gt;().add(const LoadSalesPurchaseAnalytics()),
       icon: const Icon(Icons.refresh),
       label: const Text(&#39;Recarregar&#39;),
     ),

@@ -96,12 +96,14 @@ disponível e emite um estado de sucesso ao concluir.</p>
   required bool codeGenerate,
   int? categoryId,
 }) async {
+  var newCode = codigo;
   if (codeGenerate) {
-    codigo = await _productRepository.generateProductCode();
+    assert(newCode.isNotEmpty, &#39;Para gerar codigo o atual precisa ser vazio&#39;);
+    newCode = await _productRepository.generateProductCode();
   }
   final produto = Product(
     name: nome,
-    code: codigo,
+    code: newCode,
     price: preco,
     stockQuantity: estoque,
     description: descricao,
@@ -112,11 +114,7 @@ disponível e emite um estado de sucesso ao concluir.</p>
   switch (resultSave) {
     case ResultSuccess(result: final saved):
       if (!saved) {
-        emit(
-          ProductState.error(
-            message: &#39;Erro ao adicionar produto: operação falhou&#39;,
-          ),
-        );
+        emit(ProductState.error(message: &#39;Erro ao adicionar produto: operação falhou&#39;));
         return;
       }
       final result = await _productRepository.fetchProducts();
@@ -124,18 +122,10 @@ disponível e emite um estado de sucesso ao concluir.</p>
         case ResultSuccess(result: final produtos):
           emit(ProductState.insertSuccess(produtos: produtos.toList()));
         case ResultError(resultError: final errorMessage):
-          emit(
-            ProductState.error(
-              message: &#39;Erro ao adicionar produto: $errorMessage&#39;,
-            ),
-          );
+          emit(ProductState.error(message: &#39;Erro ao adicionar produto: $errorMessage&#39;));
       }
     case ResultError(resultError: final errorMessage):
-      emit(
-        ProductState.error(
-          message: &#39;Erro ao adicionar produto: $errorMessage&#39;,
-        ),
-      );
+      emit(ProductState.error(message: &#39;Erro ao adicionar produto: $errorMessage&#39;));
   }
 }</code></pre>
 </section>

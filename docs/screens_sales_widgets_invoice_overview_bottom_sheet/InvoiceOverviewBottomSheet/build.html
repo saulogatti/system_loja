@@ -117,102 +117,102 @@ Widget build(BuildContext context) {
     minChildSize: 0.4,
     maxChildSize: 0.9,
     builder: (_, scrollController) =&gt; Padding(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.outlineVariant,
-                  borderRadius: BorderRadius.circular(2),
-                ),
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.outlineVariant,
+                borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.receipt_long,
-                    size: 28,
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        &#39;NF ${data.invoiceNumber}&#39;,
-                        style: Theme.of(context).textTheme.titleLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        &#39;ID: ${invoice.id}&#39;,
-                        style: Theme.of(context).textTheme.bodySmall
-                            ?.copyWith(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                            ),
-                      ),
-                    ],
-                  ),
+                child: Icon(
+                  Icons.receipt_long,
+                  size: 28,
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
                 ),
-              ],
-            ),
-            const Divider(height: 32),
-            Expanded(
-              child: ListView(
-                controller: scrollController,
-                children: [
-                  _InfoRow(
-                    icon: data.customerId != null
-                        ? Icons.person_outline
-                        : Icons.business_outlined,
-                    label: data.customerId != null ? &#39;Cliente&#39; : &#39;Empresa&#39;,
-                    value: data.personDisplayName,
-                  ),
-                  _InfoRow(
-                    icon: Icons.badge_outlined,
-                    label: data.customerId != null ? &#39;CPF&#39; : &#39;CNPJ&#39;,
-                    value: data.personDocument,
-                  ),
-                  _InfoRow(
-                    icon: Icons.payment_outlined,
-                    label: &#39;Forma de Pagamento&#39;,
-                    value: data.paymentMethod,
-                  ),
-                  _InfoRow(
-                    icon: Icons.calendar_today_outlined,
-                    label: &#39;Data de Emissão&#39;,
-                    value: data.issueDate.toFormattedDate(),
-                  ),
-                  _InfoRow(
-                    icon: Icons.attach_money,
-                    label: &#39;Valor Total&#39;,
-                    value: &#39;R\$ ${data.totalValue.toStringAsFixed(2)}&#39;,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    &#39;Itens (${data.items.length})&#39;,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      &#39;NF ${data.invoiceNumber}&#39;,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  ...data.items.map(
-                    (item) =&gt; Padding(
-                      padding: const EdgeInsets.only(bottom: 6),
+                    Text(
+                      &#39;ID: ${invoice.id}&#39;,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const Divider(height: 32),
+          Expanded(
+            child: ListView(
+              controller: scrollController,
+              children: [
+                _InfoRow(
+                  icon: data.customerId != null ? Icons.person_outline : Icons.business_outlined,
+                  label: data.customerId != null ? &#39;Cliente&#39; : &#39;Empresa&#39;,
+                  value: data.personDisplayName,
+                ),
+                _InfoRow(
+                  icon: Icons.badge_outlined,
+                  label: data.customerId != null ? &#39;CPF&#39; : &#39;CNPJ&#39;,
+                  value: data.personDocument,
+                ),
+                _InfoRow(
+                  icon: Icons.payment_outlined,
+                  label: &#39;Forma de Pagamento&#39;,
+                  value: data.paymentMethod,
+                ),
+                _InfoRow(
+                  icon: Icons.calendar_today_outlined,
+                  label: &#39;Data de Emissão&#39;,
+                  value: data.issueDate.toFormattedDate(),
+                ),
+                _InfoRow(
+                  icon: Icons.attach_money,
+                  label: &#39;Valor Total&#39;,
+                  value: &#39;R\$ ${data.totalValue.toStringAsFixed(2)}&#39;,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  &#39;Itens (${data.items.length})&#39;,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                ...data.items.map(
+                  (item) =&gt; Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Semantics(
+                      label:
+                          &#39;${item.quantity} vezes ${item.productName}, R\$ ${item.totalValue.toStringAsFixed(2)}&#39;,
+                      excludeSemantics: true,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -225,24 +225,23 @@ Widget build(BuildContext context) {
                           ),
                           Text(
                             &#39;R\$ ${item.totalValue.toStringAsFixed(2)}&#39;,
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.w600),
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            TextButton(
-              onPressed: () =&gt; Navigator.of(context).pop(),
-              child: const Text(&#39;Fechar&#39;),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 16),
+          TextButton(onPressed: () =&gt; Navigator.of(context).pop(), child: const Text(&#39;Fechar&#39;)),
+        ],
       ),
+    ),
   );
 }</code></pre>
 </section>

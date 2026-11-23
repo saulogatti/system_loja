@@ -44,30 +44,30 @@
       
 <section class="desc markdown">
   <h1 id="system-loja">System Loja</h1>
-<p>Aplicativo Flutter multiplataforma para gerenciamento de loja (clientes, produtos, categorias, empresa e notas/vendas), com persistência local em SQLite via Drift.</p>
-<h2 id="viso-geral">Visão geral</h2>
+<p>A cross-platform Flutter application for store management (customers, products, categories, company details, and invoices/sales), with local SQLite persistence through Drift.</p>
+<h2 id="overview">Overview</h2>
 <ul>
-<li>UI em <code>lib/screens/</code>, com BLoC/Cubit (<code>flutter_bloc</code>).</li>
-<li>Fluxo principal: <strong>Screen</strong> → <strong>Interface</strong> (<code>lib/core/interface/</code>) → <strong>Repository</strong> (<code>lib/domain/repository/</code>) → <strong>DAO Drift</strong> (<code>lib/data/database/dao/</code>) → SQLite.</li>
-<li>DI com <code>GetIt</code> via <code>setupAppInjection()</code> em <code>lib/application/app_injection.dart</code> — resolver com <code>appInjection.get&lt;T&gt;()</code>.</li>
-<li>Navegação com <code>auto_route</code> em <code>lib/screens/route/route_app.dart</code>.</li>
-<li>Padrão de retorno entre camadas: <code>ResultStatus&lt;R, E&gt;</code> (<code>lib/core/utils/result_status.dart</code>, usa <code>package:meta</code>).</li>
-<li>Repositórios usam <code>try/catch</code> internamente e retornam <code>ResultStatus.error(...)</code> com mensagens amigáveis via <code>mensagemErroRepositorio()</code> (<code>lib/core/utils/repository_error_mapper.dart</code>). A camada de apresentação <strong>não</strong> envolve chamadas ao repositório em <code>try/catch</code>; usa <code>when</code> ou <code>switch</code> em <code>ResultStatus</code>.</li>
-<li>Camada <strong>data</strong> (<code>lib/data/</code>): Drift, DTOs/entries JSON, conversões, cache e mapeamento para modelos de <code>lib/core/models/</code> — <strong>sem</strong> depender de <code>lib/domain/</code> ou <code>lib/application/</code> (constantes compartilhadas ficam em <code>lib/core/</code> quando necessário).</li>
-<li><code>CacheManager</code> registrado via <code>GetIt</code> (injeção de dependência) — <strong>não</strong> usar <code>CacheManager.instance</code>.</li>
+<li>UI in <code>lib/screens/</code>, using BLoC/Cubit (<code>flutter_bloc</code>).</li>
+<li>Main flow: <strong>Screen</strong> → <strong>Interface</strong> (<code>lib/core/interface/</code>) → <strong>Repository</strong> (<code>lib/domain/repository/</code>) → <strong>Drift DAO</strong> (<code>lib/data/database/dao/</code>) → SQLite.</li>
+<li>Dependency injection with <code>GetIt</code> via <code>setupAppInjection()</code> in <code>lib/application/app_injection.dart</code> — resolve dependencies with <code>appInjection.get&lt;T&gt;()</code>.</li>
+<li>Navigation with <code>auto_route</code> in <code>lib/screens/route/route_app.dart</code>.</li>
+<li>Return type between layers: <code>ResultStatus&lt;R, E&gt;</code> (<code>lib/core/utils/result_status.dart</code>, which uses <code>package:meta</code>).</li>
+<li>Repositories use internal <code>try/catch</code> blocks and return <code>ResultStatus.error(...)</code> with user-friendly messages via <code>mensagemErroRepositorio()</code> (<code>lib/core/utils/repository_error_mapper.dart</code>). The presentation layer <strong>does not</strong> wrap repository calls in <code>try/catch</code>; it uses <code>when</code> or <code>switch</code> on <code>ResultStatus</code>.</li>
+<li><strong>Data</strong> layer (<code>lib/data/</code>): Drift, JSON DTOs/entries, conversions, caching, and mapping to models in <code>lib/core/models/</code> — it does <strong>not</strong> depend on <code>lib/domain/</code> or <code>lib/application/</code> (shared constants belong in <code>lib/core/</code> when needed).</li>
+<li><code>CacheManager</code> is registered through <code>GetIt</code> (dependency injection) — <strong>do not</strong> use <code>CacheManager.instance</code>.</li>
 </ul>
-<h2 id="requisitos">Requisitos</h2>
+<h2 id="requirements">Requirements</h2>
 <ul>
-<li>Flutter <code>&gt;=3.47.0</code> (conforme <code>pubspec.yaml</code>).</li>
+<li>Flutter <code>&gt;=3.47.0</code> (as specified in <code>pubspec.yaml</code>).</li>
 <li>Dart SDK <code>&gt;=3.13.0 &lt;4.0.0</code>.</li>
 </ul>
-<h2 id="setup-rpido">Setup rápido</h2>
+<h2 id="quick-setup">Quick setup</h2>
 <pre class="language-bash"><code class="language-bash">git clone https://github.com/saulogatti/system_loja.git
 cd system_loja
 flutter pub get
 dart run build_runner build
 </code></pre>
-<h2 id="executar-o-app">Executar o app</h2>
+<h2 id="run-the-app">Run the app</h2>
 <pre class="language-bash"><code class="language-bash"># Windows
 flutter run -d windows
 
@@ -77,102 +77,102 @@ flutter run -d linux
 # Web (Chrome)
 flutter run -d chrome
 
-# Web (servidor local)
+# Web (local server)
 flutter run -d web-server --web-port=8080 --web-hostname=0.0.0.0
 </code></pre>
-<h2 id="comandos-de-qualidade">Comandos de qualidade</h2>
-<pre class="language-bash"><code class="language-bash"># Codegen (obrigatório após alterar Freezed/JsonSerializable/Drift/AutoRoute)
+<h2 id="quality-checks">Quality checks</h2>
+<pre class="language-bash"><code class="language-bash"># Code generation (required after changing Freezed/JsonSerializable/Drift/AutoRoute)
 dart run build_runner build
 
-# Análise estática
+# Static analysis
 dart analyze
 
-# Formatação
+# Formatting
 dart format --set-exit-if-changed .
 
-# Testes
+# Tests
 flutter test
-flutter test test/&lt;arquivo&gt;_test.dart
+flutter test test/&lt;file&gt;_test.dart
 
-# Documentação da API (GitHub Pages)
+# API documentation (GitHub Pages)
 dart doc -o docs/
 </code></pre>
-<h2 id="arquitetura">Arquitetura</h2>
-<h3 id="bancos-drift">Bancos Drift</h3>
+<h2 id="architecture">Architecture</h2>
+<h3 id="drift-databases">Drift databases</h3>
 <ul>
-<li><code>AppDatabase</code> (<code>lib/data/database/app_database.dart</code>) com <code>schemaVersion =&gt; 12</code>.</li>
-<li><code>SystemDatabase</code> (<code>lib/data/database/system_database.dart</code>) com <code>schemaVersion =&gt; 1</code>.</li>
+<li><code>AppDatabase</code> (<code>lib/data/database/app_database.dart</code>) with <code>schemaVersion =&gt; 12</code>.</li>
+<li><code>SystemDatabase</code> (<code>lib/data/database/system_database.dart</code>) with <code>schemaVersion =&gt; 1</code>.</li>
 </ul>
-<h3 id="persistncia-e-dtos">Persistência e DTOs</h3>
-<p>A persistência principal da loja é <strong>SQLite via Drift</strong>. DTOs serializáveis (JSON) ficam em <code>lib/data/entry/</code> e afins quando necessário para importação/exportação ou serialização pontual — <strong>não</strong> há pasta <code>lib/core/managers/</code> nem managers JSON como padrão de feature nova.</p>
-<h3 id="convenes-importantes">Convenções importantes</h3>
+<h3 id="persistence-and-dtos">Persistence and DTOs</h3>
+<p>The store's primary persistence is <strong>SQLite through Drift</strong>. Serializable JSON DTOs live in <code>lib/data/entry/</code> and related locations when needed for import/export or occasional serialization — there is <strong>no</strong> <code>lib/core/managers/</code> directory, and JSON managers are not the standard pattern for new features.</p>
+<h3 id="important-conventions">Important conventions</h3>
 <ul>
-<li>Não propagar exceções entre Interface/Repository; retornar <code>ResultStatus</code>. Repositórios capturam exceções internamente (<code>try/catch</code>) e devolvem <code>ResultStatus.error(mensagemErroRepositorio(...))</code>. A camada de apresentação não usa <code>try/catch</code> para chamadas ao repositório.</li>
-<li>Drift: tabela <code>XxxRecords</code>, linha gerada <code>XxxRecord</code>, DAO <code>XxxDao</code>. Linhas Drift <strong>não</strong> usam <code>@UseRowClass</code> com entidades de <code>lib/core/</code>; o mapeamento para domínio fica em extensões/helpers (ex.: <code>lib/data/database/mapper/</code>) ou nos DAOs/repositórios, conforme o padrão do projeto.</li>
-<li>Modelos de negócio em <code>lib/core/models/</code>.</li>
-<li>Código em inglês; documentação e comentários (<code>///</code>) em português.</li>
-<li><code>SystemDatabase</code> aceita <code>QueryExecutor</code> opcional no construtor para facilitar testes com banco em memória.</li>
-<li>Navegação de páginas com <code>auto_route</code>; <code>Navigator</code> apenas para dialogs/bottom sheets/modais.</li>
+<li>Do not propagate exceptions between Interface/Repository; return <code>ResultStatus</code>. Repositories catch exceptions internally (<code>try/catch</code>) and return <code>ResultStatus.error(mensagemErroRepositorio(...))</code>. The presentation layer does not use <code>try/catch</code> for repository calls.</li>
+<li>Drift naming: table <code>XxxRecords</code>, generated row <code>XxxRecord</code>, DAO <code>XxxDao</code>. Drift rows do <strong>not</strong> use <code>@UseRowClass</code> with entities from <code>lib/core/</code>; domain mapping belongs in extensions/helpers (e.g. <code>lib/data/database/mapper/</code>) or DAOs/repositories, following the project pattern.</li>
+<li>Business models are in <code>lib/core/models/</code>.</li>
+<li>Code, documentation, and comments (<code>///</code>) are in English.</li>
+<li><code>SystemDatabase</code> accepts an optional <code>QueryExecutor</code> in its constructor to simplify in-memory database tests.</li>
+<li>Use <code>auto_route</code> for page navigation; use <code>Navigator</code> only for dialogs, bottom sheets, and modals.</li>
 </ul>
-<h2 id="estrutura-resumida">Estrutura resumida</h2>
+<h2 id="project-structure-at-a-glance">Project structure at a glance</h2>
 <pre class="language-text"><code class="language-text">lib/
   main.dart
   application/
     app_injection.dart   # GetIt / setupAppInjection()
   core/
-    interface/           # contratos (ex.: I*Repository)
+    interface/           # contracts (e.g. I*Repository)
     constants/
-    models/              # entidades de domínio
-    services/            # serviços transversais (quando aplicável)
-    utils/               # ResultStatus, repository_error_mapper, extensões
+    models/              # domain entities
+    services/            # cross-cutting services (when applicable)
+    utils/               # ResultStatus, repository_error_mapper, extensions
   domain/
-    repository/          # implementações dos repositórios
-    *.dart               # serviços de domínio (ex.: geração de código)
+    repository/          # repository implementations
+    *.dart               # domain services (e.g. code generation)
   data/
     database/
       dao/
       table/
       extension/
-      mapper/            # XxxRecord -&gt; modelo de domínio
-    entry/               # DTOs JSON (json_serializable)
+      mapper/            # XxxRecord -&gt; domain model
+    entry/               # JSON DTOs (json_serializable)
     cache/
     converter/
-    models/              # modelos de persistência auxiliares
+    models/              # supporting persistence models
   screens/
     route/
 test/
-  support/               # helpers (ex.: AppDatabase em teste sem path_provider)
+  support/               # helpers (e.g. AppDatabase tests without path_provider)
 documentation/
-  dartdoc/               # páginas-fonte das categorias do dart doc
-  historico/             # material antigo (não usar como padrão)
-docs/                    # HTML gerado (`dart doc -o docs/`) para GitHub Pages
+  dartdoc/               # source pages for dart doc categories
+  historico/             # historical material (not an implementation standard)
+docs/                    # generated HTML (`dart doc -o docs/`) for GitHub Pages
 </code></pre>
-<h2 id="observaes-importantes">Observações importantes</h2>
+<h2 id="important-notes">Important notes</h2>
 <ul>
-<li>No Web, Drift depende de <code>web/sqlite3.wasm</code> e <code>web/drift_worker.js</code>.</li>
-<li>Existem testes com falhas pré-existentes no repositório; valide primeiro o escopo alterado antes de tratar falhas fora da tarefa.</li>
-<li>Testes que instanciam <code>AppDatabase</code> na VM podem usar <code>applicationSupportDirectory</code> e <code>tempDirectoryPath</code> (ver <code>test/support/test_app_database.dart</code>) para evitar <code>path_provider</code> / <code>MissingPluginException</code>.</li>
+<li>On the Web, Drift depends on <code>web/sqlite3.wasm</code> and <code>web/drift_worker.js</code>.</li>
+<li>Some tests in the repository have pre-existing failures; validate the changed scope first before addressing failures outside the task.</li>
+<li>Tests that instantiate <code>AppDatabase</code> on the VM can use <code>applicationSupportDirectory</code> and <code>tempDirectoryPath</code> (see <code>test/support/test_app_database.dart</code>) to avoid <code>path_provider</code> / <code>MissingPluginException</code>.</li>
 </ul>
-<h2 id="documentao-da-api-dartdoc">Documentação da API (dartdoc)</h2>
-<p>Gera o site HTML publicado no GitHub Pages (pasta <code>/docs</code> do repositório):</p>
+<h2 id="api-documentation-dartdoc">API documentation (dartdoc)</h2>
+<p>Generate the HTML site published on GitHub Pages (the repository's <code>/docs</code> directory):</p>
 <pre class="language-bash"><code class="language-bash">dart doc -o docs/
 </code></pre>
-<p>A saída em <code>docs/</code> é o site estático. Para navegar localmente, sirva com HTTP (busca e sidebar não funcionam em <code>file://</code>).</p>
-<p>Categorias do sidebar estão em <code>dartdoc_options.yaml</code> e nas páginas-fonte <code>documentation/dartdoc/</code>.</p>
-<h2 id="documentao-principal">Documentação principal</h2>
+<p>The output in <code>docs/</code> is a static site. To browse it locally, serve it over HTTP (search and the sidebar do not work with <code>file://</code>).</p>
+<p>Sidebar categories are defined in <code>dartdoc_options.yaml</code> and the source pages in <code>documentation/dartdoc/</code>.</p>
+<h2 id="main-documentation">Main documentation</h2>
 <ul>
 <li><code>CONTRIBUTING.md</code></li>
 <li><code>.github/copilot-instructions.md</code></li>
 <li><code>.github/instructions/dartcode.instructions.md</code></li>
 <li><code>AGENTS.md</code></li>
-<li><code>flutter_rules.md</code> (padrão específico deste repositório)</li>
+<li><code>flutter_rules.md</code> (repository-specific conventions)</li>
 <li><code>documentation/DRIFT_ARCHITECTURE.md</code></li>
 <li><code>documentation/DRIFT_MIGRATION.md</code></li>
 <li><code>documentation/INTERFACES_ARCHITECTURE.md</code></li>
 <li><code>documentation/VALIDATION_SYSTEM.md</code></li>
 <li><code>documentation/CODE_GENERATOR_USAGE.md</code></li>
 <li><code>documentation/TESTING_VALIDATION.md</code></li>
-<li><code>documentation/historico/</code> — notas e summaries antigos (não canônicos)</li>
+<li><code>documentation/historico/</code> — historical notes and summaries (non-canonical)</li>
 </ul>
 </section>
 

@@ -144,7 +144,7 @@ is of type <a href="https://api.flutter.dev/flutter/widgets/IconData-class.html"
 </ul>
 <p>If none of these subclasses apply, use the <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsProperty-class.html">DiagnosticsProperty</a>
 constructor or in rare cases create your own <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsProperty-class.html">DiagnosticsProperty</a>
-subclass as in the case for <a href="https://api.flutter.dev/flutter/painting/TransformProperty-class.html">TransformProperty</a> which handles <a href="https://pub.dev/documentation/vector_math/2.4.2/vector_math_64/Matrix4-class.html">Matrix4</a>
+subclass as in the case for <a href="https://api.flutter.dev/flutter/painting/TransformProperty-class.html">TransformProperty</a> which handles <a href="https://pub.dev/documentation/vector_math/2.4.4/vector_math_64/Matrix4-class.html">Matrix4</a>
 that represent transforms. Generally any property value with a good
 <code>toString</code> method implementation works fine using <a href="https://api.flutter.dev/flutter/foundation/DiagnosticsProperty-class.html">DiagnosticsProperty</a>
 directly.</p>
@@ -287,14 +287,24 @@ void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   super.debugFillProperties(properties);
   properties.add(DiagnosticsProperty&lt;GlobalKey&lt;FormState&gt;&gt;(&#39;formKey&#39;, formKey));
   properties.add(EnumProperty&lt;PersonType&gt;(&#39;selectedPersonType&#39;, selectedPersonType));
-  properties.add(ObjectFlagProperty&lt;ValueChanged&lt;PersonType?&gt;&gt;.has(&#39;onPersonTypeChanged&#39;, onPersonTypeChanged));
+  properties.add(
+    ObjectFlagProperty&lt;ValueChanged&lt;PersonType?&gt;&gt;.has(&#39;onPersonTypeChanged&#39;, onPersonTypeChanged),
+  );
   properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;nameController&#39;, nameController));
-  properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;documentController&#39;, documentController));
+  properties.add(
+    DiagnosticsProperty&lt;TextEditingController&gt;(&#39;documentController&#39;, documentController),
+  );
   properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;emailController&#39;, emailController));
   properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;phoneController&#39;, phoneController));
-  properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;streetController&#39;, streetController));
-  properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;zipCodeController&#39;, zipCodeController));
-  properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;neighborhoodController&#39;, neighborhoodController));
+  properties.add(
+    DiagnosticsProperty&lt;TextEditingController&gt;(&#39;streetController&#39;, streetController),
+  );
+  properties.add(
+    DiagnosticsProperty&lt;TextEditingController&gt;(&#39;zipCodeController&#39;, zipCodeController),
+  );
+  properties.add(
+    DiagnosticsProperty&lt;TextEditingController&gt;(&#39;neighborhoodController&#39;, neighborhoodController),
+  );
   properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;cityController&#39;, cityController));
   properties.add(DiagnosticsProperty&lt;TextEditingController&gt;(&#39;stateController&#39;, stateController));
   properties.add(ObjectFlagProperty&lt;VoidCallback&gt;.has(&#39;onSubmit&#39;, onSubmit));

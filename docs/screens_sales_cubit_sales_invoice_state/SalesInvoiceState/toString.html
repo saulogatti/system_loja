@@ -85,7 +85,8 @@ mainly for debugging or logging.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 String toString() {
-  return &#39;SalesInvoiceState(form: $form)&#39;;
+  final _this = this as SalesInvoiceState;
+  return &#39;SalesInvoiceState(form: ${_this.form})&#39;;
 }</code></pre>
 </section>
 

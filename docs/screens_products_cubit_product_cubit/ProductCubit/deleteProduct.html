@@ -86,16 +86,11 @@ Emite um estado de sucesso ao concluir a exclusão.</p>
           emit(ProductState.deleteSuccess(produtos: produtos.toList()));
         case ResultError(resultError: final errorMessage):
           emit(
-            ProductState.error(
-              message:
-                  &#39;Erro ao carregar produtos após exclusão: $errorMessage&#39;,
-            ),
+            ProductState.error(message: &#39;Erro ao carregar produtos após exclusão: $errorMessage&#39;),
           );
       }
     case ResultError(resultError: final errorMessage):
-      emit(
-        ProductState.error(message: &#39;Erro ao deletar produto: $errorMessage&#39;),
-      );
+      emit(ProductState.error(message: &#39;Erro ao deletar produto: $errorMessage&#39;));
   }
 }</code></pre>
 </section>

@@ -124,7 +124,18 @@
               unitPrice: unitPrice,
             ),
         withReferenceMapper: (p0) =&gt; p0
-            .map((e) =&gt; (e.readTable(table), BaseReferences(db, table, e)))
+            .map(
+              (e) =&gt; (
+                e.readTable&lt;$InvoiceItemsRecordsTable, InvoiceItemsRecord&gt;(
+                  table,
+                ),
+                BaseReferences&lt;
+                  _$AppDatabase,
+                  $InvoiceItemsRecordsTable,
+                  InvoiceItemsRecord
+                &gt;(db, table, e),
+              ),
+            )
             .toList(),
         prefetchHooksCallback: null,
       ),

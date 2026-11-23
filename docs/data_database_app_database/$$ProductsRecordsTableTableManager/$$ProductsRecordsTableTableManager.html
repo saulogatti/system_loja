@@ -124,7 +124,7 @@
         withReferenceMapper: (p0) =&gt; p0
             .map(
               (e) =&gt; (
-                e.readTable(table),
+                e.readTable&lt;$ProductsRecordsTable, ProductsRecord&gt;(table),
                 $$ProductsRecordsTableReferences(db, table, e),
               ),
             )
@@ -150,19 +150,15 @@
                   &gt;
                 &gt;(state) {
                   if (categoryId) {
-                    state =
-                        state.withJoin(
-                              currentTable: table,
-                              currentColumn: table.categoryId,
-                              referencedTable:
-                                  $$ProductsRecordsTableReferences
-                                      ._categoryIdTable(db),
-                              referencedColumn:
-                                  $$ProductsRecordsTableReferences
-                                      ._categoryIdTable(db)
-                                      .id,
-                            )
-                            as T;
+                    state = state.withJoin(
+                      currentTable: table,
+                      currentColumn: table.categoryId,
+                      referencedTable: $$ProductsRecordsTableReferences
+                          ._categoryIdTable(db),
+                      referencedColumn: $$ProductsRecordsTableReferences
+                          ._categoryIdTable(db)
+                          .id,
+                    ) as T;
                   }
 
                   return state;

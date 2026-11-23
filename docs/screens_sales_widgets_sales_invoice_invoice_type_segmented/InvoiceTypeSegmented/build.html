@@ -114,11 +114,13 @@ Widget build(BuildContext context) =&gt; SegmentedButton&lt;InvoiceType&gt;(
       value: InvoiceType.exit,
       label: Text(&#39;Saída (Venda)&#39;),
       icon: Icon(Icons.arrow_upward),
+      tooltip: &#39;Registrar saída de mercadorias&#39;,
     ),
     ButtonSegment&lt;InvoiceType&gt;(
       value: InvoiceType.entry,
       label: Text(&#39;Entrada (Compra)&#39;),
       icon: Icon(Icons.arrow_downward),
+      tooltip: &#39;Registrar entrada de mercadorias&#39;,
     ),
   ],
   selected: {invoiceType},

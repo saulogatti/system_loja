@@ -120,7 +120,16 @@
               userName: userName,
             ),
         withReferenceMapper: (p0) =&gt; p0
-            .map((e) =&gt; (e.readTable(table), BaseReferences(db, table, e)))
+            .map(
+              (e) =&gt; (
+                e.readTable&lt;$LogsRecordsTable, LogsRecord&gt;(table),
+                BaseReferences&lt;
+                  _$SystemDatabase,
+                  $LogsRecordsTable,
+                  LogsRecord
+                &gt;(db, table, e),
+              ),
+            )
             .toList(),
         prefetchHooksCallback: null,
       ),

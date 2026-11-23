@@ -123,7 +123,44 @@ Widget build(BuildContext context) {
       trailing: IconButton(
         tooltip: &#39;Remover ${product.name}&#39;,
         icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
-        onPressed: onDelete,
+        onPressed: () {
+          showDialog&lt;void&gt;(
+            context: context,
+            builder: (dialogContext) =&gt; AlertDialog(
+              title: const Text(&#39;Confirmar Remoção&#39;),
+              content: Text(&#39;Tem certeza que deseja remover ${product.name} da nota?&#39;),
+              actions: [
+                SizedBox(
+                  width: double.maxFinite,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () =&gt; Navigator.of(dialogContext).pop(),
+                          child: const Text(&#39;Cancelar&#39;),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop();
+                            onDelete();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).colorScheme.error,
+                            foregroundColor: Theme.of(context).colorScheme.onError,
+                          ),
+                          child: const Text(&#39;Remover&#39;),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     ),
   );

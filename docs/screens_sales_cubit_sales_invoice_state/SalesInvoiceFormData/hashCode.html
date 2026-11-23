@@ -104,7 +104,10 @@ like <a href="https://api.flutter.dev/flutter/dart-collection/HashSet-class.html
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-int get hashCode =&gt; Object.hash(runtimeType,invoiceType,paymentMethod,person,const DeepCollectionEquality().hash(linesByProductId),const DeepCollectionEquality().hash(orderedProductIds),enableCodeGeneration,invoiceNumber,isSubmitting);</code></pre>
+int get hashCode {
+  final _this = this as SalesInvoiceFormData;
+  return Object.hash(runtimeType,_this.invoiceType,_this.paymentMethod,_this.person,const DeepCollectionEquality().hash(_this.linesByProductId),const DeepCollectionEquality().hash(_this.orderedProductIds),_this.enableCodeGeneration,_this.invoiceNumber,_this.isSubmitting);
+}</code></pre>
 </section>
 
   </section>

@@ -109,21 +109,23 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) =&gt; SegmentedButton&lt;GridSortOrder&gt;(
-    segments: const [
-      ButtonSegment(
-        value: GridSortOrder.recentes,
-        label: Text(&#39;Recentes&#39;),
-        icon: Icon(Icons.schedule),
-      ),
-      ButtonSegment(
-        value: GridSortOrder.antigos,
-        label: Text(&#39;Antigos&#39;),
-        icon: Icon(Icons.history),
-      ),
-    ],
-    selected: {current},
-    onSelectionChanged: (selection) =&gt; onChanged(selection.first),
-  );</code></pre>
+  segments: const [
+    ButtonSegment(
+      value: GridSortOrder.recentes,
+      label: Text(&#39;Recentes&#39;),
+      icon: Icon(Icons.schedule),
+      tooltip: &#39;Ordenar do mais recente para o mais antigo&#39;,
+    ),
+    ButtonSegment(
+      value: GridSortOrder.antigos,
+      label: Text(&#39;Antigos&#39;),
+      icon: Icon(Icons.history),
+      tooltip: &#39;Ordenar do mais antigo para o mais recente&#39;,
+    ),
+  ],
+  selected: {current},
+  onSelectionChanged: (selection) =&gt; onChanged(selection.first),
+);</code></pre>
 </section>
 
 

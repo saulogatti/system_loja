@@ -114,7 +114,16 @@
               rowid: rowid,
             ),
         withReferenceMapper: (p0) =&gt; p0
-            .map((e) =&gt; (e.readTable(table), BaseReferences(db, table, e)))
+            .map(
+              (e) =&gt; (
+                e.readTable&lt;$AddressRecordsTable, AddressRecord&gt;(table),
+                BaseReferences&lt;
+                  _$AppDatabase,
+                  $AddressRecordsTable,
+                  AddressRecord
+                &gt;(db, table, e),
+              ),
+            )
             .toList(),
         prefetchHooksCallback: null,
       ),
